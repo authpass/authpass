@@ -1,0 +1,3 @@
+[submodule "deps/kdbx.dart"]
+	path = deps/kdbx.dart
+	url = ../kdbx.dart
