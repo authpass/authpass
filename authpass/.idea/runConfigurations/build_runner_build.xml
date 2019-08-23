@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build_runner build" type="BashConfigurationType" factoryName="Bash">
+    <module name="authpass" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="INTERPRETER_PATH" value="/bin/bash" />
+    <option name="PROJECT_INTERPRETER" value="false" />
+    <option name="WORKING_DIRECTORY" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SCRIPT_NAME" value="flutter" />
+    <option name="PARAMETERS" value="packages pub run build_runner build --delete-conflicting-outputs" />
+    <method v="2" />
+  </configuration>
+</component>

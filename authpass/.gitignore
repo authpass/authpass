@@ -1,3 +1,33 @@
+# https://gist.github.com/hpoul/b78f7a1b3cde988f3ce4d12e954367eb
+#
+# IDEA: Allow some configuration, which is shared across users.
+
+/.idea/*
+!.idea/runConfigurations
+!.idea/runConfigurations/*
+!.idea/vcs.xml
+!.idea/dictionaries
+!.idea/dictionaries/*
+!.idea/inspectionProfiles/*
+!.idea/codeStyles
+!.idea/codeStyles/*
+*.iml
+
+# Java/Kotlin/Android
+
+/.gradle
+/build
+/out
+
+# JavaScript/Node.JS
+
+/node_modules
+
+#### project specific ignores below
+
+
+## original from flutter.
+
 # Miscellaneous
 *.class
 *.log
@@ -8,12 +38,6 @@
 .buildlog/
 .history
 .svn/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line

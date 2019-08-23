@@ -20,8 +20,23 @@ dependencies:
   flutter:
     sdk: flutter
   kdbx:
-    path: deps/kdbx.dart
+    path: ../deps/kdbx.dart
+  simple_form_field_validator:
+    git:
+      url: https://github.com/hpoul/flutter_utils.git
+      path: packages/simple_form_field_validator
+      ref: 4c65f09005a1086525ebe2ae004eccdc2dd56fe1
   logging: '>=0.11.3+2 <1.0.0'
+  logging_appenders: ^0.2.2
+  file_picker: ^1.3.8
+  json_annotation: ^3.0.0
+  built_value: ^6.7.0
+  simple_json_persistence: ^0.1.1+1
+  provider: ^3.1.0
+  http: ^0.12.0+2
+  meta: '>=1.0.0 <2.0.0'
+  clock: ^1.0.1
+#  path: ^1.6.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -30,8 +45,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic: ^1.7.0
-
+  json_serializable: ^3.2.2
+  build_runner: ^1.6.7
+  built_value_generator: ^6.7.0
+  pedantic: '>=1.7.0'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
