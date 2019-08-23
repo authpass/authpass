@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
@@ -17,11 +18,13 @@ void initIsolate() {
   PrintAppender().attachToLogger(Logger.root);
 }
 
-void main() {
+void main() => throw Exception('Run some env/*.dart');
+
+Future<void> startApp(Env env) async {
   initIsolate();
   _logger.info('Initialized logger.');
-  runZoned<Future<void>>(() async {
-    runApp(AuthPassApp());
+  await runZoned<Future<void>>(() async {
+    runApp(AuthPassApp(env: env));
   }, onError: (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
   }, zoneSpecification: ZoneSpecification(
@@ -33,12 +36,22 @@ void main() {
 }
 
 class AuthPassApp extends StatefulWidget {
+  const AuthPassApp({Key key, @required this.env}) : super(key: key);
+
+  final Env env;
+
   @override
   _AuthPassAppState createState() => _AuthPassAppState();
 }
 
 class _AuthPassAppState extends State<AuthPassApp> {
-  final _deps = Deps();
+  Deps _deps;
+
+  @override
+  void initState() {
+    super.initState();
+    _deps = Deps(env: widget.env);
+  }
 
   @override
   Widget build(BuildContext context) {

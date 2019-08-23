@@ -94,3 +94,12 @@
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+
+
+**/gradle_home/caches/
+**/gradle_home/daemon/
+**/gradle_home/native/
+**/gradle_home/wrapper/
+**/gradle_home/notifications/
+

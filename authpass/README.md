@@ -1,16 +1,27 @@
 # authpass
 
-A new Flutter project.
+AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdbx 3.x) compatible.
 
-## Getting Started
+## Roadmap/TODOs
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* [x] Read/Decrypt kdbx 3.x using password
+* [x] download of kdbx files through url
+* [ ] Decrypt with keyfile
+* [ ] kdbx 4 support (missing argon2) compatibility
+* [x] Parse decrypted XML/handle protected values
+* [x] Flutter scaffold for mobile (ios/android)
+* [ ] Flutter scaffold for desktop (mac/win/linux)
+* [x] List of password entries
+* [ ] Search through entries
+* [ ] Entry details
+* [ ] mobile: copy usernames, passwords
+* [ ] mobile: integrate with biometrics (fingerprint)
+* [ ] mac: Auto-Type
+* [ ] Auto-lock after x minutes of inactivity.
+* [ ] Integration of basic analytics and error reporting
+* [ ] Editing existing entries
+* [ ] Saving of changes into kdbx file.
+* [ ] Creating of new kdbx files.
+* [ ] Syncing of kdbx files via custom cloud service and QR codes.
+* [ ] Syncing with cloud services like dropbox or google drive?
+* [ ] CI pipeline/continous builds, releases
