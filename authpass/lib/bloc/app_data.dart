@@ -63,7 +63,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               ..name = dbName;
           } else if (fileSource is FileSourceUrl) {
             b
-              ..sourceType = OpenedFilesSourceType.Local
+              ..sourceType = OpenedFilesSourceType.Url
               ..sourcePath = fileSource.url.toString()
               ..name = dbName;
           } else {
@@ -114,6 +114,7 @@ class AppDataBloc {
   Future<void> openedFile(FileSource file, {@required String name}) async {
     return update((b) {
       final openedFile = OpenedFile.fromFileSource(file, name);
+      b.previousFiles.removeWhere((file) => file == openedFile);
       b.previousFiles.add(openedFile);
     });
   }
