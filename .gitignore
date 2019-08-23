@@ -1,3 +1,4 @@
 /.blackbox/pubring.gpg~
 /.blackbox/pubring.kbx~
 /.blackbox/secring.gpg
+/authpass/_tools/secrets/gradle_home/upload-key.jks
