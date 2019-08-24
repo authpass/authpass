@@ -1,0 +1,44 @@
+addons:
+  ssh_known_hosts: gitlab.com
+jobs:
+  include:
+  - os: osx
+    osx_image: xcode11
+    env:
+    - TARGET_PLATFORM=ios
+    - GPG=gpg
+    - FASTLANE_SKIP_UPLOAD=true
+  - os: linux
+    language: android
+    #dist: xenial
+    dist: trusty
+    android:
+      components:
+      - tools
+      - platform-tools
+      - android-27
+      - build-tools-28.0.3
+      licenses:
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+      - 'platforms;android-27'
+      - 'platforms;android-28'
+    before_install:
+      - sudo apt-get install -y gnupg2
+      - yes | sdkmanager "platforms;android-27"
+      - yes | sdkmanager "platforms;android-28"
+      - gem update --system
+      - gem install fastlane --no-document --quiet
+    env:
+    - TARGET_PLATFORM=android
+    - GPG=gpg2
+before_install:
+- which gpg
+- which gpg2 || echo "gpg2 not found."
+- gpg --version
+- echo Test
+install:
+- "./authpass/_tools/ci-install-deps.sh ${TARGET_PLATFORM}"
+script:
+- $GPG -v --import <(echo $SECRET_KEY)
+- "./authpass/_tools/ci-release.sh ${TARGET_PLATFORM}"
