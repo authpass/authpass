@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:authpass/bloc/app_data.dart';
@@ -8,6 +9,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -38,6 +40,7 @@ void main() => throw Exception('Run some env/*.dart');
 
 Future<void> startApp(Env env) async {
   initIsolate();
+  _setTargetPlatformForDesktop();
   _logger.info('Initialized logger.');
   await runZoned<Future<void>>(() async {
     runApp(AuthPassApp(env: env));
@@ -49,6 +52,22 @@ Future<void> startApp(Env env) async {
       return parent.fork(zone, specification, zoneValues);
     },
   ));
+}
+
+/// If the current platform is desktop, override the default platform to
+/// a supported platform (iOS for macOS, Android for Linux and Windows).
+/// Otherwise, do nothing.
+void _setTargetPlatformForDesktop() {
+  TargetPlatform targetPlatform;
+  if (Platform.isMacOS) {
+    targetPlatform = TargetPlatform.iOS;
+  } else if (Platform.isLinux || Platform.isWindows) {
+    targetPlatform = TargetPlatform.android;
+  }
+  _logger.info('targetPlatform: $targetPlatform');
+  if (targetPlatform != null) {
+    debugDefaultTargetPlatformOverride = targetPlatform;
+  }
 }
 
 class AuthPassApp extends StatefulWidget {

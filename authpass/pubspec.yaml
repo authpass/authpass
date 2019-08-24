@@ -42,6 +42,12 @@ dependencies:
   clipboard_manager: ^0.0.4
   tuple: ^1.0.2
 
+  # desktop/macos
+  file_chooser:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/file_chooser
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2

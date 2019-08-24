@@ -8,6 +8,8 @@ import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 part 'app_data.g.dart';
 
@@ -106,10 +108,20 @@ Serializers serializers = (_$serializers.toBuilder()
     .build();
 
 class AppDataBloc {
-  final store = SimpleJsonPersistence<AppData>.forType(
+  final store = SimpleJsonPersistence.getForTypeSync(
     (json) => serializers.deserializeWith(AppData.serializer, json),
     defaultCreator: () => AppData(),
+    baseDirectoryBuilder: () =>
+        Platform.isIOS || Platform.isAndroid ? getApplicationDocumentsDirectory() : _getDesktopDirectory(),
   );
+
+  static Future<Directory> _getDesktopDirectory() async {
+    // https://stackoverflow.com/a/32937974/109219
+    final userHome = Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
+    final dataDir = Directory(path.join(userHome, '.authpass', 'data'));
+    await dataDir.create(recursive: true);
+    return dataDir;
+  }
 
   Future<void> openedFile(FileSource file, {@required String name}) async {
     return update((b) {

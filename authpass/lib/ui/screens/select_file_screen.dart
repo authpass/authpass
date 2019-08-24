@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:file_chooser/file_chooser.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:authpass/bloc/app_data.dart';
@@ -71,9 +72,17 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
                 icon: Icon(Icons.file_upload),
                 child: const Text('Select File'),
                 onPressed: () async {
-                  final path = await FilePicker.getFilePath(type: FileType.ANY);
-                  if (path != null) {
-                    await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(File(path))));
+                  if (Platform.isIOS || Platform.isAndroid) {
+                    final path = await FilePicker.getFilePath(type: FileType.ANY);
+                    if (path != null) {
+                      await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(File(path))));
+                    }
+                  } else {
+                    showOpenPanel((result, paths) async {
+                      if (result == FileChooserResult.ok) {
+                        await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(File(paths[0]))));
+                      }
+                    });
                   }
                 },
               ),
