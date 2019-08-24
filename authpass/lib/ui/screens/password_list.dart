@@ -208,7 +208,7 @@ class _PasswordListContentState extends State<PasswordListContent> {
               ),
             ),
             confirmDismiss: (direction) async {
-              if (direction == DismissDirection.startToEnd) {
+              if (direction == DismissDirection.endToStart) {
                 await ClipboardManager.copyToClipBoard(entry.strings['UserName'].getText());
                 Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
               } else {
