@@ -4,6 +4,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:isolate/isolate_runner.dart';
@@ -177,13 +178,56 @@ class _PasswordListContentState extends State<PasswordListContent> {
         itemCount: entries.length,
         itemBuilder: (context, index) {
           final entry = entries[index];
-          return ListTile(
-            leading: Icon(Icons.lock_open),
-            title: Text.rich(
-                _highlightFilterQuery(commonFields.title.stringValue(entry)) ?? const TextSpan(text: '(no title)')),
+          return Dismissible(
+            key: ValueKey(entry.uuid),
+            resizeDuration: null,
+            background: Container(
+              alignment: Alignment.centerLeft,
+              color: Colors.lightBlueAccent,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(Icons.lock),
+                  const SizedBox(height: 4),
+                  const Text('Copy Password'),
+                ],
+              ),
+            ),
+            secondaryBackground: Container(
+              alignment: Alignment.centerRight,
+              color: Colors.limeAccent,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(Icons.account_circle),
+                  const SizedBox(height: 4),
+                  const Text('Copy User Name'),
+                ],
+              ),
+            ),
+            confirmDismiss: (direction) async {
+              if (direction == DismissDirection.startToEnd) {
+                await ClipboardManager.copyToClipBoard(entry.strings['UserName'].getText());
+                Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
+              } else {
+                await ClipboardManager.copyToClipBoard(entry.strings['Password'].getText());
+                Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied password.')));
+              }
+              return false;
+            },
+            child: ListTile(
+              leading: Icon(Icons.supervisor_account),
+              title: Text.rich(
+                  _highlightFilterQuery(commonFields.title.stringValue(entry)) ?? const TextSpan(text: '(no title)')),
 //            subtitle: Text(commonFields.url.stringValue(entry) ?? '(no website)'),
-            subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
-                const TextSpan(text: '(no website)')),
+              subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
+                  const TextSpan(text: '(no website)')),
+              onTap: () {
+                // TODO open entry.
+              },
+            ),
           );
         },
       ),
