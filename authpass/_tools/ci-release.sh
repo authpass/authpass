@@ -38,5 +38,5 @@ cd ${root}
 export PATH=${DEPS}/flutter/bin:$PATH
 
 GIT_SSH_COMMAND='ssh -i _tools/deploy-key/github-deploy-key' \
-    GIT_PUSH_REMOTE='git@github.com:hpoul/finalyzer-game.git' \
+    GIT_PUSH_REMOTE='git@github.com:hpoul/authpass.git' \
     ./release.sh "$@"
