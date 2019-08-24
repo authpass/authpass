@@ -1,1 +1,2 @@
+authpass-ci-key
 herbert@poul.at
