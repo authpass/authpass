@@ -15,19 +15,25 @@ jobs:
     dist: trusty
     android:
       components:
-      - tools
-      - platform-tools
-      - android-27
-      - build-tools-28.0.3
+        - tools
+        - platform-tools
+        - android-28
+        - android-29
+        - build-tools-28.0.3
+        - build-tools-29.0.2
       licenses:
-      - android-sdk-license-.+
-      - google-gdk-license-.+
-      - platforms;android-27
-      - platforms;android-28
+        - 'android-sdk-license-.+'
+        - 'google-gdk-license-.+'
+        - '.+'
+        - platforms;android-29
+        - platforms;android-28
     before_install:
+    #- sdkmanager --version
     - sudo apt-get install -y gnupg2
     - yes | sdkmanager "platforms;android-27"
-    - yes | sdkmanager "platforms;android-28"
+    - time yes | sdkmanager "platforms;android-28"
+    - time yes | sdkmanager "platforms;android-29"
+    # - time yes | sdkmanager --licenses
     - gem update --system
     - gem install fastlane --no-document --quiet
     env:
