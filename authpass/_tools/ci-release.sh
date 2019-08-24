@@ -6,7 +6,7 @@ set -xeu
 
 DEPS=${DEPS:-~/deps}
 
-root=`git rev-parse --show-toplevel`
+root="${0%/*}/.."
 
 cd ${root}
 

@@ -4,7 +4,7 @@ set -exu
 
 DEPS=${DEPS:-~/deps}
 
-root="${0%/*}"
+root="${0%/*}/.."
 
 echo "Installing blackbox into $DEPS" 
 mkdir -p ${DEPS}
