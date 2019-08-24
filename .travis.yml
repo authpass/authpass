@@ -4,6 +4,8 @@ jobs:
   include:
   - os: osx
     osx_image: xcode11
+    # https://github.com/travis-ci/travis-conditions/issues/13#issuecomment-414734455
+    if:  1 != 1
     env:
     - TARGET_PLATFORM=ios
     - GPG=gpg

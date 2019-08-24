@@ -43,7 +43,7 @@ case "$1" in
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
         flutter build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber
         cd android
-        #fastlane beta
+        fastlane beta
     ;;
     *)
         echo "Unsupported command $1"
