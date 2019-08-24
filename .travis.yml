@@ -34,7 +34,7 @@ jobs:
 before_install:
 - openssl aes-256-cbc -K $encrypted_83630750896a_key -iv $encrypted_83630750896a_iv
   -in .travis_sec/BLACKBOX_KEY.txt.enc -out .travis_sec/BLACKBOX_KEY.txt -d
-- $GPG -v --import < .travis_sec/BLACKBOX_KEY.txt
+- "$GPG -v --import < .travis_sec/BLACKBOX_KEY.txt"
 - which gpg
 - which gpg2 || echo "gpg2 not found."
 - gpg --version

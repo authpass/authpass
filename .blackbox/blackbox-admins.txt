@@ -1,3 +1,2 @@
-authpass-ci-key
 authpass-ci-key@m.poul.at
 herbert@poul.at
