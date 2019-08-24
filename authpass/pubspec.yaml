@@ -38,6 +38,7 @@ dependencies:
   clock: ^1.0.1
   intl: ^0.15.8
 #  path: ^1.6.4
+  isolate: ^2.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

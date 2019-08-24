@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
@@ -16,6 +17,20 @@ final _logger = Logger('main');
 void initIsolate() {
   Logger.root.level = Level.ALL;
   PrintAppender().attachToLogger(Logger.root);
+  final isolateDebug = '${Isolate.current.debugName} (${Isolate.current.hashCode})';
+  _logger.info('Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
+
+  Isolate.current.addOnExitListener(RawReceivePort((dynamic val) {
+    print('exiting isolate $isolateDebug');
+  }).sendPort);
+
+  final exitPort = ReceivePort();
+  exitPort.listen((dynamic data) {
+    _logger.info('Exiting isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode}');
+  }, onDone: () {
+    _logger.info('Done $isolateDebug');
+  });
+  Isolate.current.addOnExitListener(exitPort.sendPort, response: 'exit');
 }
 
 void main() => throw Exception('Run some env/*.dart');
