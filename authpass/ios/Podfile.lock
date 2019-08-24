@@ -1,4 +1,6 @@
 PODS:
+  - clipboard_manager (0.0.3):
+    - Flutter
   - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -6,11 +8,14 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - clipboard_manager (from `.symlinks/plugins/clipboard_manager/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 EXTERNAL SOURCES:
+  clipboard_manager:
+    :path: ".symlinks/plugins/clipboard_manager/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
@@ -19,10 +24,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
+  clipboard_manager: f4800834e62cc26b1cc4e0a92a35cd452dd8b827
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
 
-PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
+PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
 
 COCOAPODS: 1.7.5
