@@ -299,7 +299,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 decoration: InputDecoration(labelText: 'Password'),
                 autocorrect: false,
                 autofocus: true,
-                autovalidate: true,
+                autovalidate: _invalidPassword != null,
                 obscureText: true,
                 validator: SValidator.notEmpty(msg: 'Please enter your password.') +
                     SValidator.invalidValue(invalidValue: _invalidPassword, message: 'Invalid password'),

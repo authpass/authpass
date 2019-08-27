@@ -7,7 +7,8 @@ set -xeu
 DEPS=${DEPS} # must be defined by environment.
 
 #FLUTTER_VERSION=v1.2.1-stable
-FLUTTER_VERSION='v1.7.8+hotfix.4-stable'
+#FLUTTER_VERSION='v1.7.8+hotfix.4-stable'
+FLUTTER_VERSION='v1.9.5-dev'
 FLUTTER_PLATFORM=macos
 FLUTTER_EXT=zip
 

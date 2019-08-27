@@ -64,7 +64,7 @@ class KdbxBloc with ChangeNotifier {
 
   Future<void> openFile(FileSource file, Credentials credentials) async {
     final kdbxFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
-    await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName);
+    await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
     _openedFiles.value = _openedFiles.value + [kdbxFile];
   }
 

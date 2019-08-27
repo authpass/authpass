@@ -3,19 +3,19 @@ import 'package:kdbx/kdbx.dart';
 import 'package:meta/meta.dart';
 
 class CommonField {
-  const CommonField({
-    @required this.key,
+  CommonField({
+    @required String key,
     @required this.displayName,
     this.includeInSearch = false,
     this.protect = false,
-  });
+  }) : key = KdbxKey(key);
 
-  final String key;
+  final KdbxKey key;
   final String displayName;
   final bool includeInSearch;
   final bool protect;
 
-  String stringValue(KdbxEntry entry) => entry.strings[key]?.getText();
+  String stringValue(KdbxEntry entry) => entry.getString(key)?.getText();
 }
 
 class CommonFields {
@@ -27,11 +27,15 @@ class CommonFields {
           CommonField(key: 'URL', displayName: loc.fieldWebsite, includeInSearch: true),
         ];
 
-  CommonField get title => _fieldByKey('Title');
-  CommonField get url => _fieldByKey('URL');
-  CommonField get userName => _fieldByKey('UserName');
+  CommonField get title => _fieldByKeyString('Title');
+  CommonField get url => _fieldByKeyString('URL');
+  CommonField get userName => _fieldByKeyString('UserName');
+  CommonField get password => _fieldByKeyString('Password');
 
   final List<CommonField> fields;
 
-  CommonField _fieldByKey(String key) => fields.firstWhere((f) => f.key == key);
+  bool isCommon(KdbxKey key) => fields.firstWhere((f) => f.key == key, orElse: () => null) != null;
+
+  CommonField _fieldByKeyString(String key) => _fieldByKey(KdbxKey(key));
+  CommonField _fieldByKey(KdbxKey key) => fields.firstWhere((f) => f.key == key);
 }

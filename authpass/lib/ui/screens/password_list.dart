@@ -1,13 +1,11 @@
-import 'dart:isolate';
-
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:isolate/isolate_runner.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -55,18 +53,24 @@ class PasswordListFilterIsolateRunner {
   }
 
   static List<KdbxEntry> filter(String query) {
+    return filterEntries(PasswordListFilterIsolateRunner._instance._allEntries, query);
+  }
+
+  static List<KdbxEntry> filterEntries(List<KdbxEntry> _allEntries, String query, {int maxResults = 30}) {
     _logger.info('We have to filter for $query');
-    return PasswordListFilterIsolateRunner._instance._allEntries
+    return _allEntries
         .where((entry) => matches(entry, query))
+        // take no more than 30 for now.
+        .take(maxResults)
         .toList(growable: false);
   }
 
-  static const searchFields = ['Title', 'URL', 'UserName'];
+  static final searchFields = [KdbxKey('Title'), KdbxKey('URL'), KdbxKey('UserName')];
 
   static bool matches(KdbxEntry entry, String filterQuery) {
     final query = filterQuery.toLowerCase();
     return searchFields
-        .where((field) => entry.strings[field]?.getText()?.toLowerCase()?.contains(query) == true)
+        .where((field) => entry.getString(field)?.getText()?.toLowerCase()?.contains(query) == true)
         .isNotEmpty;
   }
 }
@@ -74,21 +78,22 @@ class PasswordListFilterIsolateRunner {
 class _PasswordListContentState extends State<PasswordListContent> {
   List<KdbxEntry> _filteredEntries;
   String _filterQuery;
-  final _isolateRunner = IsolateRunner.spawn();
+
+//  final _isolateRunner = IsolateRunner.spawn();
 
   @override
   void initState() {
     super.initState();
     _logger.finer('Initializing password list content.');
-    _isolateRunner.then((runner) => runner.run(PasswordListFilterIsolateRunner.init, widget.entries)).then((result) {
-      _logger.finer('Initializd filter isolate $result');
-    });
+//    _isolateRunner.then((runner) => runner.run(PasswordListFilterIsolateRunner.init, widget.entries)).then((result) {
+//      _logger.finer('Initializd filter isolate $result');
+//    });
   }
 
   @override
   void dispose() {
     _logger.info('Disposing isolate runner.');
-    _isolateRunner.then<void>((runner) => runner.close());
+//    _isolateRunner.then<void>((runner) => runner.close());
     super.dispose();
   }
 
@@ -141,6 +146,7 @@ class _PasswordListContentState extends State<PasswordListContent> {
         icon: Icon(Icons.arrow_back),
         onPressed: () {
           setState(() {
+            _filterQuery = null;
             _filteredEntries = null;
           });
         },
@@ -149,10 +155,7 @@ class _PasswordListContentState extends State<PasswordListContent> {
         style: theme.textTheme.title,
         onChanged: (newQuery) async {
           _logger.info('query changed to $newQuery');
-          final entries = await _isolateRunner.then((runner) {
-            _logger.info('Got runner, starting filter.');
-            return runner.run(PasswordListFilterIsolateRunner.filter, newQuery);
-          });
+          final entries = PasswordListFilterIsolateRunner.filterEntries(widget.entries, newQuery);
           setState(() {
             _filterQuery = newQuery;
             _filteredEntries = entries;
@@ -209,10 +212,10 @@ class _PasswordListContentState extends State<PasswordListContent> {
             ),
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.endToStart) {
-                await ClipboardManager.copyToClipBoard(entry.strings['UserName'].getText());
+                await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
                 Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
               } else {
-                await ClipboardManager.copyToClipBoard(entry.strings['Password'].getText());
+                await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
                 Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied password.')));
               }
               return false;
@@ -225,7 +228,7 @@ class _PasswordListContentState extends State<PasswordListContent> {
               subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
                   const TextSpan(text: '(no website)')),
               onTap: () {
-                // TODO open entry.
+                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
               },
             ),
           );
@@ -243,7 +246,7 @@ class _PasswordListContentState extends State<PasswordListContent> {
     }
     //RegExp.escape(text).allMatches(string)
     int previousMatchEnd = 0;
-    List<TextSpan> spans = [];
+    final List<TextSpan> spans = [];
     for (final match in _filterQuery.allMatches(text)) {
       spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
       spans.add(TextSpan(text: text.substring(match.start, match.end), style: TextStyle(fontWeight: FontWeight.bold)));
