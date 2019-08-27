@@ -6,8 +6,10 @@ set -xeu
 
 DEPS=${DEPS} # must be defined by environment.
 
+FLUTTER_CHANNEL='stable'
 #FLUTTER_VERSION=v1.2.1-stable
 #FLUTTER_VERSION='v1.7.8+hotfix.4-stable'
+FLUTTER_CHANNEL='dev'
 FLUTTER_VERSION='v1.9.5-dev'
 FLUTTER_PLATFORM=macos
 FLUTTER_EXT=zip
@@ -21,12 +23,12 @@ esac
 
 pushd ${DEPS}
 echo "Downloading ${FLUTTER_PLATFORM}/flutter_${FLUTTER_PLATFORM}_${FLUTTER_VERSION}.${FLUTTER_EXT}"
-curl -o flutter.${FLUTTER_EXT} https://storage.googleapis.com/flutter_infra/releases/stable/${FLUTTER_PLATFORM}/flutter_${FLUTTER_PLATFORM}_${FLUTTER_VERSION}.${FLUTTER_EXT}
+curl -o flutter.${FLUTTER_EXT} https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/${FLUTTER_PLATFORM}/flutter_${FLUTTER_PLATFORM}_${FLUTTER_VERSION}.${FLUTTER_EXT}
 
 if test "${FLUTTER_EXT}" = "zip" ; then
     unzip flutter.zip | tail
 else
-    tar xf flutter.${FLUTTER_EXT} | tail
+    tar xf flutter.${FLUTTER_EXT}
 fi
 
 popd

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:authpass/bloc/app_data.dart';
@@ -65,7 +66,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
         const SizedBox(height: 16),
         _fileLoader != null
             ? const CircularProgressIndicator()
-            : RaisedButton(
+            : PrimaryButton(
+                icon: Icon(Icons.file_upload),
                 child: const Text('Select File'),
                 onPressed: () async {
                   final path = await FilePicker.getFilePath(type: FileType.ANY);
@@ -77,14 +79,39 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
         const SizedBox(
           height: 4,
         ),
-        LinkButton(
-          onPressed: () async {
-            final source = await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
-            if (source != null) {
-              _loadAndGoToCredentials(source);
-            }
-          },
-          child: const Text('Download from URL'),
+        IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: LinkButton(
+                  onPressed: () async {
+                    final source =
+                        await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
+                    if (source != null) {
+                      _loadAndGoToCredentials(source);
+                    }
+                  },
+                  child: const Text('Download from URL'),
+                ),
+              ),
+              VerticalDivider(
+                indent: 8,
+                endIndent: 8,
+                color: Theme.of(context).primaryColor,
+              ),
+              Expanded(
+                child: LinkButton(
+                  onPressed: () {
+//                    KdbxFormat.create(credentials, name)
+                  },
+//              icon: Icon(Icons.create_new_folder),
+                  child: const Text('Start from scratch'),
+                ),
+              )
+            ],
+          ),
         ),
         const SizedBox(height: 8),
         IntrinsicWidth(

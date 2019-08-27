@@ -1,4 +1,5 @@
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -29,11 +30,10 @@ class EntryDetailsScreen extends StatelessWidget {
         child: Container(
 //          decoration: BoxDecoration(border: Border(top: BorderSide())),
           padding: const EdgeInsets.all(16) + EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-          child: RaisedButton.icon(
+          child: PrimaryButton(
             onPressed: () {},
             icon: Icon(Icons.save),
-            label: const Text('Save'),
-            color: Theme.of(context).primaryColor,
+            child: const Text('Save'),
           ),
         ),
       ),
@@ -159,6 +159,7 @@ class _EntryFieldState extends State<EntryField> {
                   suffixIcon: _isProtected ? Icon(Icons.lock) : null,
                   labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
                 ),
+                keyboardType: widget.commonField?.keyboardType,
                 controller: _controller,
                 obscureText: _isProtected,
               ),
