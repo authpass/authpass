@@ -308,6 +308,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('AuthPass - Credentials'),
@@ -317,9 +318,24 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text('Enter the password for:'),
+                  Text(widget.kdbxFilePath.displayName, style: theme.textTheme.display1),
+                  Text(
+                    widget.kdbxFilePath.displayPath,
+                    style: theme.textTheme.caption,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(32),
 //              constraints: BoxConstraints.expand(),
               child: TextFormField(
                 controller: _controller,
@@ -330,43 +346,19 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 obscureText: true,
                 validator: SValidator.notEmpty(msg: 'Please enter your password.') +
                     SValidator.invalidValue(invalidValue: _invalidPassword, message: 'Invalid password'),
+                onEditingComplete: () {
+                  _tryUnlock();
+                },
               ),
             ),
             Container(
               alignment: Alignment.centerRight,
               child: _loadingFile != null
-                  ? const Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator())
+                  ? const Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator())
                   : LinkButton(
                       child: const Text('Continue'),
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          final kdbxBloc = Provider.of<Deps>(context).kdbxBloc;
-                          final pw = _controller.text;
-                          try {
-                            _loadingFile =
-                                kdbxBloc.openFile(widget.kdbxFilePath, Credentials(ProtectedValue.fromString(pw)));
-                            setState(() {});
-                            await _loadingFile;
-                            await Navigator.of(context).pushAndRemoveUntil(PasswordList.route(), (route) => false);
-                          } on KdbxInvalidKeyException catch (e, stackTrace) {
-                            _logger.fine('Invalid credentials. ($pw)', e, stackTrace);
-                            setState(() {
-                              _invalidPassword = pw;
-                              _formKey.currentState.validate();
-                            });
-                          } catch (e, stackTrace) {
-                            _logger.fine('Unable to open kdbx file.', e, stackTrace);
-                            DialogUtils.showSimpleAlertDialog(
-                              context,
-                              'Unable to open File',
-                              'Unknown error while trying to open file. $e',
-                            );
-                          } finally {
-                            setState(() {
-                              _loadingFile = null;
-                            });
-                          }
-                        }
+                        await _tryUnlock();
                       },
                     ),
             ),
@@ -374,5 +366,35 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _tryUnlock() async {
+    if (_formKey.currentState.validate()) {
+      final kdbxBloc = Provider.of<Deps>(context).kdbxBloc;
+      final pw = _controller.text;
+      try {
+        _loadingFile = kdbxBloc.openFile(widget.kdbxFilePath, Credentials(ProtectedValue.fromString(pw)));
+        setState(() {});
+        await _loadingFile;
+        await Navigator.of(context).pushAndRemoveUntil(PasswordList.route(), (route) => false);
+      } on KdbxInvalidKeyException catch (e, stackTrace) {
+        _logger.fine('Invalid credentials. ($pw)', e, stackTrace);
+        setState(() {
+          _invalidPassword = pw;
+          _formKey.currentState.validate();
+        });
+      } catch (e, stackTrace) {
+        _logger.fine('Unable to open kdbx file.', e, stackTrace);
+        DialogUtils.showSimpleAlertDialog(
+          context,
+          'Unable to open File',
+          'Unknown error while trying to open file. $e',
+        );
+      } finally {
+        setState(() {
+          _loadingFile = null;
+        });
+      }
+    }
   }
 }

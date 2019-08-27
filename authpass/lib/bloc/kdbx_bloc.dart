@@ -8,11 +8,27 @@ import 'package:kdbx/kdbx.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
 
 final _logger = Logger('kdbx_bloc');
 
 abstract class FileSource {
+  FileSource({@required this.databaseName});
+
   Uint8List _cached;
+
+  /// If known should return the name of the database in the file. Otherwise the bare file name.
+  @protected
+  final String databaseName;
+
+  String get displayName => databaseName ?? displayNameFromPath;
+
+  /// The database name to display if [databaseName] is unknown.
+  @protected
+  String get displayNameFromPath;
+
+  /// Exact path to the file source.
+  String get displayPath;
 
   @protected
   Future<Uint8List> load();
@@ -21,7 +37,7 @@ abstract class FileSource {
 }
 
 class FileSourceLocal extends FileSource {
-  FileSourceLocal(this.file);
+  FileSourceLocal(this.file, {String databaseName}) : super(databaseName: databaseName);
 
   final File file;
 
@@ -29,10 +45,16 @@ class FileSourceLocal extends FileSource {
   Future<Uint8List> load() async {
     return await file.readAsBytes() as Uint8List;
   }
+
+  @override
+  String get displayPath => file.absolute.path;
+
+  @override
+  String get displayNameFromPath => path.basenameWithoutExtension(displayPath);
 }
 
 class FileSourceUrl extends FileSource {
-  FileSourceUrl(this.url);
+  FileSourceUrl(this.url, {String databaseName}) : super(databaseName: databaseName);
 
   final Uri url;
 
@@ -41,6 +63,12 @@ class FileSourceUrl extends FileSource {
     final response = await http.readBytes(url);
     return response;
   }
+
+  @override
+  String get displayPath => url.replace(queryParameters: <String, dynamic>{}, fragment: '').toString();
+
+  @override
+  String get displayNameFromPath => path.basenameWithoutExtension(url.path);
 }
 
 class KdbxBloc with ChangeNotifier {
