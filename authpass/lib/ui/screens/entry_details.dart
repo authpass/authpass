@@ -152,6 +152,7 @@ class _EntryFieldState extends State<EntryField> {
           children: <Widget>[
             Expanded(
               child: TextField(
+                maxLines: null,
                 decoration: InputDecoration(
                   fillColor: const Color(0xfff0f0f0),
                   filled: true,
