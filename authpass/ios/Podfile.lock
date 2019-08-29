@@ -1,6 +1,8 @@
 PODS:
   - clipboard_manager (0.0.3):
     - Flutter
+  - file_chooser (0.0.1):
+    - Flutter
   - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -9,6 +11,7 @@ PODS:
 
 DEPENDENCIES:
   - clipboard_manager (from `.symlinks/plugins/clipboard_manager/ios`)
+  - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -16,6 +19,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   clipboard_manager:
     :path: ".symlinks/plugins/clipboard_manager/ios"
+  file_chooser:
+    :path: ".symlinks/plugins/file_chooser/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
@@ -25,6 +30,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   clipboard_manager: f4800834e62cc26b1cc4e0a92a35cd452dd8b827
+  file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259

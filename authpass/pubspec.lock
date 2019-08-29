@@ -201,9 +201,9 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/file_chooser"
-      ref: HEAD
-      resolved-ref: "2932e25986430a773125369d5d7ebf63140bd9c7"
-      url: "https://github.com/google/flutter-desktop-embedding.git"
+      ref: android-dummy-plugin
+      resolved-ref: e6567f921c03fac0865c7d2710f2f6066d3c1a0c
+      url: "https://github.com/hpoul/flutter-desktop-embedding.git"
     source: git
     version: "0.0.1"
   file_picker:

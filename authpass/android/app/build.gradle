@@ -56,6 +56,9 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
         }
+        debug {
+            project.flutter.target = 'lib/env/development.dart'
+        }
     }
 }
 

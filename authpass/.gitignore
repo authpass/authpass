@@ -103,3 +103,6 @@
 **/gradle_home/wrapper/
 **/gradle_home/notifications/
 
+
+flutter_export_environment.sh
+
