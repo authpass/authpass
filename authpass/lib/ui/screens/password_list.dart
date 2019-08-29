@@ -3,6 +3,7 @@ import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -118,7 +119,13 @@ class _PasswordListContentState extends State<PasswordListContent> {
             }
           },
           itemBuilder: (context) => const [
-            PopupMenuItem(value: OverFlowMenuItems.lock, child: Text('Lock Files')),
+            PopupMenuItem(
+              value: OverFlowMenuItems.lock,
+              child: ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text('Lock Files'),
+              ),
+            ),
           ],
         )
       ],
@@ -171,69 +178,96 @@ class _PasswordListContentState extends State<PasswordListContent> {
     );
   }
 
+  Widget _buildListPrefix() {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final unsupportedWrite = kdbxBloc.openedFilesWithSources.firstWhere(
+      (f) => f.value.dirtyObjects.isNotEmpty && !f.key.supportsWrite,
+      orElse: () => null,
+    );
+    if (unsupportedWrite == null) {
+      return null;
+    }
+    return UnsupportedWrite(source: unsupportedWrite.key);
+  }
+
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? widget.entries;
+    final listPrefix = _buildListPrefix();
     return Scaffold(
       appBar: _filteredEntries == null ? _buildDefaultAppBar(context) : _buildFilterAppBar(context),
-      body: ListView.builder(
-        itemCount: entries.length,
-        itemBuilder: (context, index) {
-          final entry = entries[index];
-          return Dismissible(
-            key: ValueKey(entry.uuid),
-            resizeDuration: null,
-            background: Container(
-              alignment: Alignment.centerLeft,
-              color: Colors.lightBlueAccent,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(Icons.lock),
-                  const SizedBox(height: 4),
-                  const Text('Copy Password'),
-                ],
-              ),
-            ),
-            secondaryBackground: Container(
-              alignment: Alignment.centerRight,
-              color: Colors.limeAccent,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(Icons.account_circle),
-                  const SizedBox(height: 4),
-                  const Text('Copy User Name'),
-                ],
-              ),
-            ),
-            confirmDismiss: (direction) async {
-              if (direction == DismissDirection.endToStart) {
-                await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
-              } else {
-                await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied password.')));
-              }
-              return false;
-            },
-            child: ListTile(
-              leading: Icon(Icons.supervisor_account),
-              title: Text.rich(
-                  _highlightFilterQuery(commonFields.title.stringValue(entry)) ?? const TextSpan(text: '(no title)')),
-//            subtitle: Text(commonFields.url.stringValue(entry) ?? '(no website)'),
-              subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
-                  const TextSpan(text: '(no website)')),
-              onTap: () {
+      body: widget.entries.isEmpty
+          ? NoPasswordsEmptyView(
+              onPrimaryButtonPressed: () {
+                final kdbxBloc = Provider.of<KdbxBloc>(context);
+                final entry = kdbxBloc.createEntry();
                 Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
               },
+            )
+          : ListView.builder(
+              itemCount: entries.length + (listPrefix != null ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (listPrefix != null) {
+                  if (index == 0) {
+                    return listPrefix;
+                  }
+                  index--;
+                }
+                final entry = entries[index];
+                return Dismissible(
+                  key: ValueKey(entry.uuid),
+                  resizeDuration: null,
+                  background: Container(
+                    alignment: Alignment.centerLeft,
+                    color: Colors.lightBlueAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(Icons.lock),
+                        const SizedBox(height: 4),
+                        const Text('Copy Password'),
+                      ],
+                    ),
+                  ),
+                  secondaryBackground: Container(
+                    alignment: Alignment.centerRight,
+                    color: Colors.limeAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(Icons.account_circle),
+                        const SizedBox(height: 4),
+                        const Text('Copy User Name'),
+                      ],
+                    ),
+                  ),
+                  confirmDismiss: (direction) async {
+                    if (direction == DismissDirection.endToStart) {
+                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
+                      Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
+                    } else {
+                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
+                      Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied password.')));
+                    }
+                    return false;
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.supervisor_account),
+                    title: Text.rich(_highlightFilterQuery(commonFields.title.stringValue(entry)) ??
+                        const TextSpan(text: '(no title)')),
+//            subtitle: Text(commonFields.url.stringValue(entry) ?? '(no website)'),
+                    subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
+                        const TextSpan(text: '(no website)')),
+                    onTap: () {
+                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+                    },
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -268,5 +302,83 @@ class _PasswordListContentState extends State<PasswordListContent> {
 //      previousMatchEnd = match.end;
 //      return spans;
 //    }).toList(growable: false));
+  }
+}
+
+class NoPasswordsEmptyView extends StatelessWidget {
+  const NoPasswordsEmptyView({Key key, this.onPrimaryButtonPressed}) : super(key: key);
+
+  final VoidCallback onPrimaryButtonPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text('🤗️', style: TextStyle(fontSize: 64)),
+          const SizedBox(height: 16),
+          const Text('You do not have any password in your database yet.'),
+          const SizedBox(height: 16),
+          PrimaryButton(
+            child: const Text('Add Password'),
+            onPressed: onPrimaryButtonPressed,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class UnsupportedWrite extends StatelessWidget {
+  const UnsupportedWrite({Key key, this.source}) : super(key: key);
+
+  final FileSource source;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        color: const Color(0xffffe9e9),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.warning, color: const Color(0xffff0000)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  children: [
+                    Text('You have changes in "${source.displayName}", which '
+                        'does not support writing of changes.'),
+                    const SizedBox(height: 4),
+                    Text(source.displayPath, style: theme.textTheme.caption),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+//                        FlatButton(
+//                          child: const Text('Dismiss'),
+//                          onPressed: () {},
+//                        ),
+                        FlatButton(
+                          child: const Text('Save locally'),
+                          onPressed: () {
+                            final bloc = Provider.of<KdbxBloc>(context);
+                            bloc.saveLocally(source);
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

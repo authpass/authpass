@@ -1,12 +1,16 @@
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/async_utils.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:provider/provider.dart';
 
-class EntryDetailsScreen extends StatelessWidget {
+class EntryDetailsScreen extends StatefulWidget {
   const EntryDetailsScreen({Key key, @required this.entry}) : super(key: key);
 
   static Route<void> route({@required KdbxEntry entry}) => MaterialPageRoute(
@@ -18,12 +22,26 @@ class EntryDetailsScreen extends StatelessWidget {
   final KdbxEntry entry;
 
   @override
+  _EntryDetailsScreenState createState() => _EntryDetailsScreenState();
+}
+
+class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateMixin {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(entry.label ?? ''),
+        title: Text(widget.entry.label ?? ''),
       ),
-      body: EntryDetails(entry: entry),
+//      floatingActionButton: FloatingActionButton(
+//        child: Icon(Icons.add),
+//        onPressed: () {},
+//      ),
+      body: Form(
+        key: _formKey,
+        child: EntryDetails(entry: widget.entry),
+      ),
       bottomNavigationBar: Material(
         elevation: 8,
 //        color: Colors.green,
@@ -31,7 +49,15 @@ class EntryDetailsScreen extends StatelessWidget {
 //          decoration: BoxDecoration(border: Border(top: BorderSide())),
           padding: const EdgeInsets.all(16) + EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
           child: PrimaryButton(
-            onPressed: () {},
+            onPressed: asyncTaskCallback(() async {
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                final kdbxBloc = Provider.of<KdbxBloc>(context);
+                if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
+                  await kdbxBloc.saveFile(widget.entry.file);
+                }
+              }
+            }),
             icon: Icon(Icons.save),
             child: const Text('Save'),
           ),
@@ -88,6 +114,23 @@ class _EntryDetailsState extends State<EntryDetails> {
                     nonCommonKeys.map((key) => EntryField(entry: widget.entry, fieldKey: key.key)),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
+              LinkButton(
+                icon: Icon(Icons.add_circle_outline),
+                child: const Text('Add Field'),
+                onPressed: () async {
+                  final String key = await SimplePromptDialog.showPrompt(
+                    context,
+                    const SimplePromptDialog(
+                      title: 'Adding new Field',
+                      labelText: 'Enter a name for the field',
+                    ),
+                  );
+                  if (key != null && key.isNotEmpty) {
+                    widget.entry.setString(KdbxKey(key), PlainValue(''));
+                    setState(() {});
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -121,7 +164,7 @@ class _EntryFieldState extends State<EntryField> {
       _isProtected = true;
       _controller = TextEditingController(text: 'Protected');
     } else {
-      _controller = TextEditingController(text: _value.getText());
+      _controller = TextEditingController(text: _value?.getText() ?? '');
     }
   }
 
@@ -151,7 +194,7 @@ class _EntryFieldState extends State<EntryField> {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: TextField(
+              child: TextFormField(
                 maxLines: null,
                 decoration: InputDecoration(
                   fillColor: const Color(0xfff0f0f0),
@@ -162,8 +205,51 @@ class _EntryFieldState extends State<EntryField> {
                 keyboardType: widget.commonField?.keyboardType,
                 controller: _controller,
                 obscureText: _isProtected,
+                onSaved: (value) {
+                  final newValue = _value is ProtectedValue ? ProtectedValue.fromString(value) : PlainValue(value);
+                  widget.entry.setString(widget.fieldKey, newValue);
+                },
               ),
             ),
+            PopupMenuButton<int>(
+              icon: Icon(Icons.more_vert),
+              offset: const Offset(0, 32),
+              onSelected: (val) {
+                // TODO implement actions
+                DialogUtils.showSimpleAlertDialog(context, null, 'TODO, sorry.');
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: const ListTile(
+                    leading: Icon(Icons.content_copy),
+                    title: Text('Copy'),
+                  ),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                  value: 0,
+                  child: const ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text('Rename'),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: const ListTile(
+                    leading: Icon(Icons.enhanced_encryption),
+                    title: Text('Protect Value'),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: const ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('Delete'),
+                  ),
+                ),
+              ],
+            )
 //            IconButton(
 //              icon: Icon(Icons.content_copy),
 //              tooltip: 'Copy to clipboard',

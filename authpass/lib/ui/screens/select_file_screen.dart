@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:path/path.dart' as path;
 
@@ -104,7 +105,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
               Expanded(
                 child: LinkButton(
                   onPressed: () {
-//                    KdbxFormat.create(credentials, name)
+                    Navigator.of(context).push(CreateFile.route());
                   },
 //              icon: Icon(Icons.create_new_folder),
                   child: const Text('Start from scratch'),
@@ -385,7 +386,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         });
       } catch (e, stackTrace) {
         _logger.fine('Unable to open kdbx file.', e, stackTrace);
-        DialogUtils.showSimpleAlertDialog(
+        await DialogUtils.showSimpleAlertDialog(
           context,
           'Unable to open File',
           'Unknown error while trying to open file. $e',

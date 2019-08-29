@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({Key key, this.child, this.onPressed, this.icon}) : super(key: key);
+  const PrimaryButton({
+    Key key,
+    this.child,
+    this.onPressed,
+    this.icon,
+    this.large = true,
+  }) : super(key: key);
 
   final Widget child;
   final VoidCallback onPressed;
   final Icon icon;
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
             ],
           );
     return Theme(
-      data: _createMainButtonTheme(Theme.of(context)),
+      data: _createMainButtonTheme(Theme.of(context), large: large),
       child: RaisedButton(
 //                    color: Theme.of(context).primaryColor,
         elevation: 0,
@@ -32,16 +39,18 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-ThemeData _createMainButtonTheme(ThemeData themeData) => themeData.copyWith(
+ThemeData _createMainButtonTheme(ThemeData themeData, {bool large = true}) => themeData.copyWith(
       buttonTheme: themeData.buttonTheme.copyWith(
         buttonColor: themeData.primaryColor,
         textTheme: ButtonTextTheme.primary,
 //      disabledColor: AuthPassTheme.disabledPrimaryColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
+        padding: large
+            ? const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 16,
+              )
+            : null,
       ),
-      textTheme: themeData.textTheme.apply(fontSizeFactor: 1.4),
+      textTheme: large ? themeData.textTheme.apply(fontSizeFactor: 1.4) : themeData.textTheme,
     );
