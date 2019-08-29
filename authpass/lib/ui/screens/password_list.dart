@@ -14,10 +14,20 @@ import 'package:provider/provider.dart';
 final _logger = Logger('password_list');
 
 class PasswordList extends StatelessWidget {
+  const PasswordList({Key key, @required this.onEntrySelected}) : super(key: key);
+
+  static const routeSettings = RouteSettings(name: '/passwordList');
+
   static Route<void> route() => MaterialPageRoute(
-        settings: const RouteSettings(name: '/passwordList'),
-        builder: (context) => PasswordList(),
+        settings: routeSettings,
+        builder: (context) => PasswordList(
+          onEntrySelected: (entry) {
+            Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+          },
+        ),
       );
+
+  final void Function(KdbxEntry) onEntrySelected;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +35,7 @@ class PasswordList extends StatelessWidget {
     final allEntries = kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
     return PasswordListContent(
       entries: allEntries,
+      onEntrySelected: onEntrySelected,
     );
   }
 }
@@ -34,9 +45,14 @@ enum OverFlowMenuItems {
 }
 
 class PasswordListContent extends StatefulWidget {
-  const PasswordListContent({Key key, this.entries}) : super(key: key);
+  const PasswordListContent({
+    Key key,
+    @required this.entries,
+    @required this.onEntrySelected,
+  }) : super(key: key);
 
   final List<KdbxEntry> entries;
+  final void Function(KdbxEntry) onEntrySelected;
 
   @override
   _PasswordListContentState createState() => _PasswordListContentState();
@@ -202,7 +218,8 @@ class _PasswordListContentState extends State<PasswordListContent> {
               onPrimaryButtonPressed: () {
                 final kdbxBloc = Provider.of<KdbxBloc>(context);
                 final entry = kdbxBloc.createEntry();
-                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+//                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+                widget.onEntrySelected(entry);
               },
             )
           : ListView.builder(
@@ -258,11 +275,11 @@ class _PasswordListContentState extends State<PasswordListContent> {
                     leading: Icon(Icons.supervisor_account),
                     title: Text.rich(_highlightFilterQuery(commonFields.title.stringValue(entry)) ??
                         const TextSpan(text: '(no title)')),
-//            subtitle: Text(commonFields.url.stringValue(entry) ?? '(no website)'),
                     subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
                         const TextSpan(text: '(no website)')),
                     onTap: () {
-                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+                      widget.onEntrySelected(entry);
                     },
                   ),
                 );

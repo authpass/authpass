@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:authpass/ui/screens/create_file.dart';
+import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:path/path.dart' as path;
@@ -386,7 +387,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         _loadingFile = kdbxBloc.openFile(widget.kdbxFilePath, Credentials(ProtectedValue.fromString(pw)));
         setState(() {});
         await _loadingFile;
-        await Navigator.of(context).pushAndRemoveUntil(PasswordList.route(), (route) => false);
+        await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
         _logger.fine('Invalid credentials. ($pw)', e, stackTrace);
         setState(() {

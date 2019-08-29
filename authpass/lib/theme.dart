@@ -19,6 +19,10 @@ class AuthPassTheme {
   });
 }
 
+abstract class Breakpoints {
+  static const TABLET_WIDTH = 720;
+}
+
 ThemeData createTheme() {
   return ThemeData(
     primarySwatch: AuthPassTheme.primarySwatch,
