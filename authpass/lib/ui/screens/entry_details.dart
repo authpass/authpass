@@ -218,32 +218,32 @@ class _EntryFieldState extends State<EntryField> {
                 // TODO implement actions
                 DialogUtils.showSimpleAlertDialog(context, null, 'TODO, sorry.');
               },
-              itemBuilder: (context) => [
+              itemBuilder: (context) => const [
                 PopupMenuItem(
                   value: 1,
-                  child: const ListTile(
+                  child: ListTile(
                     leading: Icon(Icons.content_copy),
                     title: Text('Copy'),
                   ),
                 ),
-                const PopupMenuDivider(),
+                PopupMenuDivider(),
                 PopupMenuItem(
                   value: 0,
-                  child: const ListTile(
+                  child: ListTile(
                     leading: Icon(Icons.edit),
                     title: Text('Rename'),
                   ),
                 ),
                 PopupMenuItem(
                   value: 1,
-                  child: const ListTile(
+                  child: ListTile(
                     leading: Icon(Icons.enhanced_encryption),
                     title: Text('Protect Value'),
                   ),
                 ),
                 PopupMenuItem(
                   value: 1,
-                  child: const ListTile(
+                  child: ListTile(
                     leading: Icon(Icons.delete),
                     title: Text('Delete'),
                   ),

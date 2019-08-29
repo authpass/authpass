@@ -12,6 +12,7 @@ jobs:
     - FASTLANE_SKIP_UPLOAD=true
   - os: linux
     language: android
+    if: branch = master
     dist: trusty
     android:
       components:
