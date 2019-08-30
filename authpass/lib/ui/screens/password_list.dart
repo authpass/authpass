@@ -3,10 +3,12 @@ import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -92,9 +94,10 @@ class PasswordListFilterIsolateRunner {
   }
 }
 
-class _PasswordListContentState extends State<PasswordListContent> {
+class _PasswordListContentState extends State<PasswordListContent> with StreamSubscriberMixin {
   List<KdbxEntry> _filteredEntries;
   String _filterQuery;
+  final FocusNode _filterFocusNode = FocusNode();
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
@@ -108,9 +111,28 @@ class _PasswordListContentState extends State<PasswordListContent> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    subscriptions.cancelSubscriptions();
+    final shortcuts = Provider.of<KeyboardShortcutEvents>(context);
+    handleSubscription(shortcuts.shortcutEvents.listen((event) {
+      if (event.type == KeyboardShortcutType.search) {
+        setState(() {
+          _filterQuery = '';
+          _filteredEntries = widget.entries;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _filterFocusNode.requestFocus();
+          });
+        });
+      }
+    }));
+  }
+
+  @override
   void dispose() {
     _logger.info('Disposing isolate runner.');
 //    _isolateRunner.then<void>((runner) => runner.close());
+    _filterFocusNode.dispose();
     super.dispose();
   }
 
@@ -176,6 +198,7 @@ class _PasswordListContentState extends State<PasswordListContent> {
       ),
       title: TextField(
         style: theme.textTheme.title,
+        focusNode: _filterFocusNode,
         onChanged: (newQuery) async {
           _logger.info('query changed to $newQuery');
           final entries = PasswordListFilterIsolateRunner.filterEntries(widget.entries, newQuery);

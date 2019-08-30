@@ -225,6 +225,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_async_utils:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: c0205050e93a5a31aa0843a3f25773e09c118261
+      url: "git@github.com:hpoul/flutter_async_utils.git"
+    source: git
+    version: "0.0.1"
+  flutter_svg:
+    dependency: "direct main"
+    description:
+      name: flutter_svg
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -398,6 +414,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
+  path_drawing:
+    dependency: transitive
+    description:
+      name: path_drawing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   path_provider:
     dependency: transitive
     description:
@@ -631,4 +661,4 @@ packages:
     version: "2.1.16"
 sdks:
   dart: ">=2.4.0 <3.0.0"
-  flutter: ">=0.1.4 <2.0.0"
+  flutter: ">=1.5.9-pre.94 <2.0.0"

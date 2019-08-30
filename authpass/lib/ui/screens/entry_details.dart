@@ -1,12 +1,15 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:provider/provider.dart';
 
@@ -76,15 +79,43 @@ class EntryDetails extends StatefulWidget {
   _EntryDetailsState createState() => _EntryDetailsState();
 }
 
-class _EntryDetailsState extends State<EntryDetails> {
+class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin {
   final List<EntryField> fields = [];
 
   void _initTextControllers() {}
 
+  void _initShortcutListener(KeyboardShortcutEvents events, CommonFields commonFields) {
+    handleSubscription(events.shortcutEvents.listen((event) {
+      if (event.type == KeyboardShortcutType.copyPassword) {
+        _copyField(commonFields.password);
+      } else if (event.type == KeyboardShortcutType.copyUsername) {
+        _copyField(commonFields.userName);
+      }
+    }));
+  }
+
+  void _copyField(CommonField commonField) async {
+    final value = widget.entry.getString(commonField.key);
+    Scaffold.of(context).hideCurrentSnackBar();
+    if (value != null && value.getText() != null) {
+      await Clipboard.setData(ClipboardData(text: value.getText()));
+//      await ClipboardManager.copyToClipBoard(value.getText());
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${commonField.displayName} copied.'),
+      ));
+    } else {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${commonField.displayName} is empty.'),
+      ));
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    subscriptions.cancelSubscriptions();
     _initTextControllers();
+    _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context), Provider.of<CommonFields>(context));
   }
 
   @override
@@ -162,7 +193,7 @@ class _EntryFieldState extends State<EntryField> {
     _value = widget.entry.getString(widget.fieldKey);
     if (_value is ProtectedValue) {
       _isProtected = true;
-      _controller = TextEditingController(text: 'Protected');
+      _controller = TextEditingController();
     } else {
       _controller = TextEditingController(text: _value?.getText() ?? '');
     }
@@ -194,22 +225,39 @@ class _EntryFieldState extends State<EntryField> {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: TextFormField(
-                maxLines: null,
-                decoration: InputDecoration(
-                  fillColor: const Color(0xfff0f0f0),
-                  filled: true,
-                  suffixIcon: _isProtected ? Icon(Icons.lock) : null,
-                  labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
-                ),
-                keyboardType: widget.commonField?.keyboardType,
-                controller: _controller,
-                obscureText: _isProtected,
-                onSaved: (value) {
-                  final newValue = _value is ProtectedValue ? ProtectedValue.fromString(value) : PlainValue(value);
-                  widget.entry.setString(widget.fieldKey, newValue);
-                },
-              ),
+              child: _isProtected
+                  ? Row(children: [
+                      const SizedBox(width: 12),
+                      Text('${widget.commonField?.displayName ?? widget.fieldKey.key}:',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      LinkButton(
+                        child: const Text('Protected field. Click here to view and modify.'),
+                        onPressed: () {
+                          setState(() {
+                            _controller.text = _value?.getText() ?? '';
+                            _isProtected = false;
+                          });
+                        },
+                      ),
+                    ])
+                  : TextFormField(
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        fillColor: const Color(0xfff0f0f0),
+                        filled: true,
+                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
+                        labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                      ),
+                      keyboardType: widget.commonField?.keyboardType,
+                      controller: _controller,
+                      obscureText: _isProtected,
+                      onSaved: (value) {
+                        final newValue =
+                            _value is ProtectedValue ? ProtectedValue.fromString(value) : PlainValue(value);
+                        widget.entry.setString(widget.fieldKey, newValue);
+                      },
+                    ),
             ),
             PopupMenuButton<int>(
               icon: Icon(Icons.more_vert),
