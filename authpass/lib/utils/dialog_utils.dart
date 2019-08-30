@@ -23,9 +23,10 @@ class DialogUtils {
 }
 
 class SimplePromptDialog extends StatefulWidget {
-  const SimplePromptDialog({Key key, this.title, this.labelText}) : super(key: key);
+  const SimplePromptDialog({Key key, this.title, this.labelText, this.initialValue = ''}) : super(key: key);
   final String title;
   final String labelText;
+  final String initialValue;
 
   static Future<String> showPrompt(BuildContext context, SimplePromptDialog dialog) =>
       showDialog<String>(context: context, builder: (context) => dialog);
@@ -35,7 +36,13 @@ class SimplePromptDialog extends StatefulWidget {
 }
 
 class _SimplePromptDialogState extends State<SimplePromptDialog> {
-  final _controller = TextEditingController();
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialValue);
+  }
 
   @override
   Widget build(BuildContext context) {

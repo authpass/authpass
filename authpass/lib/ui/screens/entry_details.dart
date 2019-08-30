@@ -10,7 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+
+final _logger = Logger('entry_details');
 
 class EntryDetailsScreen extends StatefulWidget {
   const EntryDetailsScreen({Key key, @required this.entry}) : super(key: key);
@@ -138,27 +141,22 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
                       entry: widget.entry,
                       fieldKey: f.key,
                       commonField: f,
+                      onChangedMetadata: () => setState(() {}),
                     ),
                   )
                   .followedBy(
-                    nonCommonKeys.map((key) => EntryField(entry: widget.entry, fieldKey: key.key)),
+                    nonCommonKeys.map((key) => EntryField(
+                          entry: widget.entry,
+                          fieldKey: key.key,
+                          onChangedMetadata: () => setState(() {}),
+                        )),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
-              LinkButton(
-                icon: Icon(Icons.add_circle_outline),
-                child: const Text('Add Field'),
-                onPressed: () async {
-                  final String key = await SimplePromptDialog.showPrompt(
-                    context,
-                    const SimplePromptDialog(
-                      title: 'Adding new Field',
-                      labelText: 'Enter a name for the field',
-                    ),
-                  );
-                  if (key != null && key.isNotEmpty) {
-                    widget.entry.setString(KdbxKey(key), PlainValue(''));
-                    setState(() {});
-                  }
+              AddFieldButton(
+                onAddField: (key) {
+                  final cf = commonFields[key];
+                  widget.entry.setString(key, cf?.protect == true ? ProtectedValue.fromString('') : PlainValue(''));
+                  setState(() {});
                 },
               ),
             ],
@@ -169,12 +167,91 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
   }
 }
 
+class AddFieldButton extends StatefulWidget {
+  const AddFieldButton({Key key, @required this.onAddField}) : super(key: key);
+
+  final void Function(KdbxKey key) onAddField;
+
+  @override
+  _AddFieldButtonState createState() => _AddFieldButtonState();
+}
+
+class _AddFieldButtonState extends State<AddFieldButton> {
+  @override
+  Widget build(BuildContext context) {
+    return LinkButton(
+      icon: Icon(Icons.add_circle_outline),
+      child: const Text('Add Field'),
+      onPressed: () async {
+        final rb = context.findRenderObject() as RenderBox;
+        final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+        final RelativeRect position = RelativeRect.fromRect(
+          Rect.fromPoints(
+            rb.localToGlobal(Offset.zero, ancestor: overlay),
+            rb.localToGlobal(rb.size.bottomRight(Offset.zero), ancestor: overlay),
+          ),
+          Offset.zero & overlay.size,
+        );
+        final commonFields = Provider.of<CommonFields>(context);
+        final custom = CommonField(
+          displayName: 'Custom Field',
+          key: '__custom',
+        );
+        final fields = commonFields.fields.followedBy([custom]).map(
+          (f) => PopupMenuItem(
+            value: f.key,
+            child: ListTile(leading: Icon(f.icon), title: Text(f.displayName)),
+          ),
+        );
+        final key = await showMenu<KdbxKey>(
+          context: context,
+          position: position,
+          items: [
+            ...fields,
+          ],
+          initialValue: custom.key,
+        );
+        if (key != null) {
+          if (key == custom.key) {
+            await _selectCustomKey();
+          } else {
+            widget.onAddField(key);
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> _selectCustomKey() async {
+    final String key = await SimplePromptDialog.showPrompt(
+      context,
+      const SimplePromptDialog(
+        title: 'Adding new Field',
+        labelText: 'Enter a name for the field',
+      ),
+    );
+    if (key != null && key.isNotEmpty) {
+      widget.onAddField(KdbxKey(key));
+    }
+  }
+}
+
 class EntryField extends StatefulWidget {
-  const EntryField({Key key, @required this.entry, @required this.fieldKey, this.commonField}) : super(key: key);
+  const EntryField({
+    Key key,
+    @required this.entry,
+    @required this.fieldKey,
+    this.commonField,
+    @required this.onChangedMetadata,
+  })  : assert(entry != null),
+        assert(fieldKey != null),
+        assert(onChangedMetadata != null),
+        super(key: key);
 
   final KdbxEntry entry;
   final KdbxKey fieldKey;
   final CommonField commonField;
+  final VoidCallback onChangedMetadata;
 
   @override
   _EntryFieldState createState() => _EntryFieldState();
@@ -276,12 +353,28 @@ class _EntryFieldState extends State<EntryField> {
                 switch (val) {
                   case EntryAction.copy:
                     await Clipboard.setData(ClipboardData(text: _value.getText()));
-                    return;
+                    break;
                   case EntryAction.rename:
+                    final String key = await SimplePromptDialog.showPrompt(
+                      context,
+                      SimplePromptDialog(
+                        title: 'Renaming field',
+                        labelText: 'Enter the new name for the field',
+                        initialValue: widget.fieldKey.key,
+                      ),
+                    );
+                    if (key != null) {
+                      widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
+                      widget.onChangedMetadata();
+                    }
+                    break;
                   case EntryAction.protect:
-                  case EntryAction.delete:
                     await DialogUtils.showSimpleAlertDialog(context, null, 'TODO, sorry.');
-                    return;
+                    break;
+                  case EntryAction.delete:
+                    widget.entry.removeString(widget.fieldKey);
+                    widget.onChangedMetadata();
+                    break;
                 }
               },
               itemBuilder: (context) => const [
