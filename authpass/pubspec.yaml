@@ -39,7 +39,7 @@ dependencies:
   intl: ^0.15.8
 #  path: ^1.6.4
   isolate: ^2.0.2
-  clipboard_manager: ^0.0.4
+#  clipboard_manager: ^0.0.4
   tuple: ^1.0.2
   flutter_async_utils:
     git:

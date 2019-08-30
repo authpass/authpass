@@ -5,7 +5,6 @@ import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -94,7 +93,7 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
     }));
   }
 
-  void _copyField(CommonField commonField) async {
+  Future<void> _copyField(CommonField commonField) async {
     final value = widget.entry.getString(commonField.key);
     Scaffold.of(context).hideCurrentSnackBar();
     if (value != null && value.getText() != null) {
@@ -181,6 +180,13 @@ class EntryField extends StatefulWidget {
   _EntryFieldState createState() => _EntryFieldState();
 }
 
+enum EntryAction {
+  copy,
+  rename,
+  protect,
+  delete,
+}
+
 class _EntryFieldState extends State<EntryField> {
   TextEditingController _controller;
   bool _isProtected = false;
@@ -217,7 +223,8 @@ class _EntryFieldState extends State<EntryField> {
         ),
       ),
       confirmDismiss: (direction) async {
-        await ClipboardManager.copyToClipBoard(_value.getText());
+//        await ClipboardManager.copyToClipBoard(_value.getText());
+        await Clipboard.setData(ClipboardData(text: _value.getText()));
         return false;
       },
       child: Padding(
@@ -231,14 +238,16 @@ class _EntryFieldState extends State<EntryField> {
                       Text('${widget.commonField?.displayName ?? widget.fieldKey.key}:',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       const SizedBox(width: 4),
-                      LinkButton(
-                        child: const Text('Protected field. Click here to view and modify.'),
-                        onPressed: () {
-                          setState(() {
-                            _controller.text = _value?.getText() ?? '';
-                            _isProtected = false;
-                          });
-                        },
+                      Expanded(
+                        child: LinkButton(
+                          child: const Text('Protected field. Click here to view and modify.'),
+                          onPressed: () {
+                            setState(() {
+                              _controller.text = _value?.getText() ?? '';
+                              _isProtected = false;
+                            });
+                          },
+                        ),
                       ),
                     ])
                   : TextFormField(
@@ -259,16 +268,25 @@ class _EntryFieldState extends State<EntryField> {
                       },
                     ),
             ),
-            PopupMenuButton<int>(
+            PopupMenuButton<EntryAction>(
               icon: Icon(Icons.more_vert),
               offset: const Offset(0, 32),
-              onSelected: (val) {
+              onSelected: (val) async {
                 // TODO implement actions
-                DialogUtils.showSimpleAlertDialog(context, null, 'TODO, sorry.');
+                switch (val) {
+                  case EntryAction.copy:
+                    await Clipboard.setData(ClipboardData(text: _value.getText()));
+                    return;
+                  case EntryAction.rename:
+                  case EntryAction.protect:
+                  case EntryAction.delete:
+                    await DialogUtils.showSimpleAlertDialog(context, null, 'TODO, sorry.');
+                    return;
+                }
               },
               itemBuilder: (context) => const [
                 PopupMenuItem(
-                  value: 1,
+                  value: EntryAction.copy,
                   child: ListTile(
                     leading: Icon(Icons.content_copy),
                     title: Text('Copy'),
@@ -276,21 +294,21 @@ class _EntryFieldState extends State<EntryField> {
                 ),
                 PopupMenuDivider(),
                 PopupMenuItem(
-                  value: 0,
+                  value: EntryAction.rename,
                   child: ListTile(
                     leading: Icon(Icons.edit),
                     title: Text('Rename'),
                   ),
                 ),
                 PopupMenuItem(
-                  value: 1,
+                  value: EntryAction.protect,
                   child: ListTile(
                     leading: Icon(Icons.enhanced_encryption),
                     title: Text('Protect Value'),
                   ),
                 ),
                 PopupMenuItem(
-                  value: 1,
+                  value: EntryAction.delete,
                   child: ListTile(
                     leading: Icon(Icons.delete),
                     title: Text('Delete'),

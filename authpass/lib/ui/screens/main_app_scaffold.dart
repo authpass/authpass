@@ -22,8 +22,10 @@ class MainAppScaffold extends StatelessWidget {
     if (mediaQuery.size.width >= Breakpoints.TABLET_WIDTH) {
       return KeyboardHandler(child: MainAppTabletScaffold());
     }
-    return Navigator(
-      onGenerateRoute: _onGenerateRoute,
+    return KeyboardHandler(
+      child: Navigator(
+        onGenerateRoute: _onGenerateRoute,
+      ),
     );
   }
 

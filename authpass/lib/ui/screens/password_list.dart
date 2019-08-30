@@ -5,8 +5,8 @@ import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
@@ -286,10 +286,14 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   ),
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.endToStart) {
-                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
+//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
+                      await Clipboard.setData(
+                          ClipboardData(text: entry.getString(commonFields.userName.key).getText()));
                       Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
                     } else {
-                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
+//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
+                      await Clipboard.setData(
+                          ClipboardData(text: entry.getString(commonFields.password.key).getText()));
                       Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied password.')));
                     }
                     return false;
