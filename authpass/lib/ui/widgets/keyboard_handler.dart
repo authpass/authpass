@@ -103,7 +103,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 //            }
 
             // for now do everything hard coded, until flutters actions & co get a bit easier to understand.. :-)
-            final modifiers = key.data.modifiersPressed.keys;
+            final modifiers = key.data.modifiersPressed.keys
+                // we don't care about a few modifiers..
+                .where((modifier) => ![ModifierKey.functionModifier, ModifierKey.numLockModifier].contains(modifier))
+                .toList();
             final character = key.logicalKey;
             _logger.info('RawKeyboardListener.onKey: $modifiers + $character ($key)');
             if (modifiers.length == 1 &&
@@ -112,14 +115,24 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                 LogicalKeyboardKey.keyF: const KeyboardShortcut(type: KeyboardShortcutType.search),
                 LogicalKeyboardKey.keyB: const KeyboardShortcut(type: KeyboardShortcutType.copyUsername),
                 LogicalKeyboardKey.keyC: const KeyboardShortcut(type: KeyboardShortcutType.copyPassword),
+                LogicalKeyboardKey.keyP: const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
+                LogicalKeyboardKey.keyN: const KeyboardShortcut(type: KeyboardShortcutType.moveDown),
               };
               final shortcut = mapping[character];
               if (shortcut != null) {
                 _keyboardShortcutEvents._shortcutEvents.add(shortcut);
               }
             } else if (modifiers.isEmpty) {
+              _logger.finer('modifiers is empty.. now check which key it is.');
               if (character == LogicalKeyboardKey.tab) {
                 WidgetsBinding.instance.focusManager.primaryFocus.nextFocus();
+                // TODO(flutterbug) see https://github.com/flutter/flutter/issues/36976
+              } else if (character == LogicalKeyboardKey.arrowUp || character.keyId == 0x0000f700) {
+                _keyboardShortcutEvents._shortcutEvents.add(const KeyboardShortcut(type: KeyboardShortcutType.moveUp));
+              } else if (character == LogicalKeyboardKey.arrowDown || character.keyId == 0x0000f701) {
+                _logger.info('moving down.');
+                _keyboardShortcutEvents._shortcutEvents
+                    .add(const KeyboardShortcut(type: KeyboardShortcutType.moveDown));
               }
             }
           }
@@ -140,6 +153,8 @@ enum KeyboardShortcutType {
   search,
   copyPassword,
   copyUsername,
+  moveUp,
+  moveDown,
 }
 
 class KeyboardShortcut {

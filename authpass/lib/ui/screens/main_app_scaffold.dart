@@ -7,6 +7,7 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +46,7 @@ class MainAppTabletScaffold extends StatefulWidget {
 
 class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
+  KdbxEntry _selectedEntry;
 
   @override
   void initState() {
@@ -70,11 +72,17 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
         SizedBox(
           width: 256,
           child: PasswordList(
-            onEntrySelected: (entry) {
-              _navigatorKey.currentState.pushAndRemoveUntil(
-                EntryDetailsScreen.route(entry: entry),
-                (route) => route.isFirst,
-              );
+            selectedEntry: _selectedEntry,
+            onEntrySelected: (entry, type) {
+              if (_selectedEntry != entry) {
+                _navigatorKey.currentState.pushAndRemoveUntil(
+                  EntryDetailsScreen.route(entry: entry),
+                  (route) => route.isFirst,
+                );
+                setState(() {
+                  _selectedEntry = entry;
+                });
+              }
             },
           ),
         ),

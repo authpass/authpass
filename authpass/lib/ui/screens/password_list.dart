@@ -16,20 +16,23 @@ import 'package:provider/provider.dart';
 final _logger = Logger('password_list');
 
 class PasswordList extends StatelessWidget {
-  const PasswordList({Key key, @required this.onEntrySelected}) : super(key: key);
+  const PasswordList({Key key, @required this.onEntrySelected, this.selectedEntry}) : super(key: key);
 
   static const routeSettings = RouteSettings(name: '/passwordList');
 
   static Route<void> route() => MaterialPageRoute(
         settings: routeSettings,
         builder: (context) => PasswordList(
-          onEntrySelected: (entry) {
-            Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+          onEntrySelected: (entry, type) {
+            if (type == EntrySelectionType.activeOpen) {
+              Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+            }
           },
         ),
       );
 
-  final void Function(KdbxEntry) onEntrySelected;
+  final KdbxEntry selectedEntry;
+  final void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class PasswordList extends StatelessWidget {
     final allEntries = kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
     return PasswordListContent(
       entries: allEntries,
+      selectedEntry: selectedEntry,
       onEntrySelected: onEntrySelected,
     );
   }
@@ -46,15 +50,25 @@ enum OverFlowMenuItems {
   lock,
 }
 
+enum EntrySelectionType {
+  /// entry was highlighted (e.g. via search or up/down arrows) must not switch context.
+  passiveHighlight,
+
+  /// entry was actively selected by the user (e.g. via tap).
+  activeOpen,
+}
+
 class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
     Key key,
     @required this.entries,
     @required this.onEntrySelected,
+    this.selectedEntry,
   }) : super(key: key);
 
   final List<KdbxEntry> entries;
-  final void Function(KdbxEntry) onEntrySelected;
+  final void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected;
+  final KdbxEntry selectedEntry;
 
   @override
   _PasswordListContentState createState() => _PasswordListContentState();
@@ -124,8 +138,29 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
             _filterFocusNode.requestFocus();
           });
         });
+      } else if (event.type == KeyboardShortcutType.moveUp) {
+        _selectNextEntry(-1);
+      } else if (event.type == KeyboardShortcutType.moveDown) {
+        _selectNextEntry(1);
       }
     }));
+  }
+
+  void _selectNextEntry(int next) {
+    final entries = _filteredEntries ?? widget.entries;
+    if (entries.isEmpty) {
+      return;
+    }
+    final idx = entries.indexOf(widget.selectedEntry);
+    // right now we ignore the fact that the user might select a list item which is not in view.
+    // https://github.com/flutter/flutter/issues/12319
+    if (idx < 0) {
+      widget.onEntrySelected(entries.first, EntrySelectionType.passiveHighlight);
+    } else {
+      // new Index, modulo entry length to make sure we wrap around the end..
+      final newIndex = (idx + next) % entries.length;
+      widget.onEntrySelected(entries[newIndex], EntrySelectionType.passiveHighlight);
+    }
   }
 
   @override
@@ -205,6 +240,10 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
           setState(() {
             _filterQuery = newQuery;
             _filteredEntries = entries;
+            if (_filteredEntries.isNotEmpty &&
+                (widget.selectedEntry == null || !_filteredEntries.contains(widget.selectedEntry))) {
+              widget.onEntrySelected(_filteredEntries.first, EntrySelectionType.passiveHighlight);
+            }
           });
         },
         autofocus: true,
@@ -242,7 +281,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                 final kdbxBloc = Provider.of<KdbxBloc>(context);
                 final entry = kdbxBloc.createEntry();
 //                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                widget.onEntrySelected(entry);
+                widget.onEntrySelected(entry, EntrySelectionType.activeOpen);
               },
             )
           : ListView.builder(
@@ -255,6 +294,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   index--;
                 }
                 final entry = entries[index];
+                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
                 return Dismissible(
                   key: ValueKey(entry.uuid),
                   resizeDuration: null,
@@ -298,16 +338,25 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                     }
                     return false;
                   },
-                  child: ListTile(
-                    leading: Icon(Icons.supervisor_account),
-                    title: Text.rich(_highlightFilterQuery(commonFields.title.stringValue(entry)) ??
-                        const TextSpan(text: '(no title)')),
-                    subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
-                        const TextSpan(text: '(no website)')),
-                    onTap: () {
+                  child: Container(
+                    decoration: widget.selectedEntry != entry
+                        ? null
+                        : BoxDecoration(
+                            color: Colors.white,
+                            border: Border(right: BorderSide(color: Theme.of(context).primaryColor, width: 4)),
+                          ),
+                    child: ListTile(
+                      leading: Icon(Icons.supervisor_account),
+                      selected: widget.selectedEntry == entry,
+                      title: Text.rich(_highlightFilterQuery(commonFields.title.stringValue(entry)) ??
+                          const TextSpan(text: '(no title)')),
+                      subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
+                          const TextSpan(text: '(no website)')),
+                      onTap: () {
 //                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                      widget.onEntrySelected(entry);
-                    },
+                        widget.onEntrySelected(entry, EntrySelectionType.activeOpen);
+                      },
+                    ),
                   ),
                 );
               },
