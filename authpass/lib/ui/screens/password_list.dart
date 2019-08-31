@@ -108,9 +108,10 @@ class PasswordListFilterIsolateRunner {
   }
 }
 
-class _PasswordListContentState extends State<PasswordListContent> with StreamSubscriberMixin {
+class _PasswordListContentState extends State<PasswordListContent> with StreamSubscriberMixin, WidgetsBindingObserver {
   List<KdbxEntry> _filteredEntries;
   String _filterQuery;
+  final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
 
 //  final _isolateRunner = IsolateRunner.spawn();
@@ -122,6 +123,21 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
 //    _isolateRunner.then((runner) => runner.run(PasswordListFilterIsolateRunner.init, widget.entries)).then((result) {
 //      _logger.finer('Initializd filter isolate $result');
 //    });
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _selectAllFilter() => _filterTextEditingController.selection =
+      TextSelection(baseOffset: 0, extentOffset: _filterTextEditingController.text.length);
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    _logger.finer('didChangeAppLifecycleState($state)');
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _selectAllFilter();
+      });
+    }
   }
 
   @override
@@ -132,8 +148,11 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     handleSubscription(shortcuts.shortcutEvents.listen((event) {
       if (event.type == KeyboardShortcutType.search) {
         setState(() {
-          _filterQuery = '';
-          _filteredEntries = widget.entries;
+          if (_filterQuery == null || _filteredEntries == null) {
+            _filterQuery ??= '';
+            _filteredEntries = widget.entries;
+          }
+          _selectAllFilter();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _filterFocusNode.requestFocus();
           });
@@ -168,6 +187,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     _logger.info('Disposing isolate runner.');
 //    _isolateRunner.then<void>((runner) => runner.close());
     _filterFocusNode.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -234,6 +254,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
       title: TextField(
         style: theme.textTheme.title,
         focusNode: _filterFocusNode,
+        controller: _filterTextEditingController,
         onChanged: (newQuery) async {
           _logger.info('query changed to $newQuery');
           final entries = PasswordListFilterIsolateRunner.filterEntries(widget.entries, newQuery);

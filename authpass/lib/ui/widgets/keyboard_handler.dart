@@ -117,6 +117,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                 LogicalKeyboardKey.keyC: const KeyboardShortcut(type: KeyboardShortcutType.copyPassword),
                 LogicalKeyboardKey.keyP: const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
                 LogicalKeyboardKey.keyN: const KeyboardShortcut(type: KeyboardShortcutType.moveDown),
+                LogicalKeyboardKey.keyG: const KeyboardShortcut(type: KeyboardShortcutType.generatePassword),
               };
               final shortcut = mapping[character];
               if (shortcut != null) {
@@ -155,6 +156,7 @@ enum KeyboardShortcutType {
   copyUsername,
   moveUp,
   moveDown,
+  generatePassword,
 }
 
 class KeyboardShortcut {

@@ -107,7 +107,7 @@ packages:
     source: hosted
     version: "6.7.0"
   charcode:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: charcode
       url: "https://pub.dartlang.org"

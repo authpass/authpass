@@ -5,6 +5,7 @@ import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -264,9 +265,11 @@ enum EntryAction {
   delete,
 }
 
-class _EntryFieldState extends State<EntryField> {
+class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   TextEditingController _controller;
   bool _isProtected = false;
+  final FocusNode _focusNode = FocusNode();
+  CommonFields _commonFields;
 
   StringValue _value;
 
@@ -277,15 +280,39 @@ class _EntryFieldState extends State<EntryField> {
     if (_value is ProtectedValue) {
       _isProtected = true;
       _controller = TextEditingController();
+      _focusNode.addListener(_focusNodeChanged);
     } else {
       _controller = TextEditingController(text: _value?.getText() ?? '');
     }
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _commonFields = Provider.of<CommonFields>(context);
+    if (widget.fieldKey == _commonFields.password.key) {
+      handleSubscription(Provider.of<KeyboardShortcutEvents>(context).shortcutEvents.listen((event) {
+        _generatePassword();
+      }));
+    }
+  }
+
+  void _focusNodeChanged() {
+    _logger.info('Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
+    if (!_focusNode.hasFocus) {
+      setState(() {
+        _isProtected = true;
+        _logger.finer('${widget.fieldKey} _isProtected= $_isProtected');
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _logger.finer('building ${widget.fieldKey} ($_isProtected)');
+    final commonFields = Provider.of<CommonFields>(context);
     return Dismissible(
-      key: ValueKey(widget.key),
+      key: ValueKey(widget.fieldKey),
       background: Container(
         alignment: Alignment.centerLeft,
         color: Colors.lightBlueAccent,
@@ -310,29 +337,44 @@ class _EntryFieldState extends State<EntryField> {
           children: <Widget>[
             Expanded(
               child: _isProtected
-                  ? Row(children: [
-                      const SizedBox(width: 12),
-                      Text('${widget.commonField?.displayName ?? widget.fieldKey.key}:',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: LinkButton(
-                          child: const Text('Protected field. Click here to view and modify.'),
-                          onPressed: () {
-                            setState(() {
-                              _controller.text = _value?.getText() ?? '';
-                              _isProtected = false;
-                            });
-                          },
-                        ),
+                  ? InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                        filled: true,
                       ),
-                    ])
+                      child: LinkButton(
+                        child: const Text('Protected field. Click here to view and modify.'),
+                        onPressed: () {
+                          setState(() {
+                            _controller.text = _value?.getText() ?? '';
+                            _controller.selection =
+                                TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+                            _isProtected = false;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _focusNode.requestFocus();
+                              _logger.finer('requesting focus.');
+                            });
+                          });
+                        },
+                      ),
+                    )
                   : TextFormField(
                       maxLines: null,
+                      focusNode: _focusNode,
                       decoration: InputDecoration(
                         fillColor: const Color(0xfff0f0f0),
                         filled: true,
-                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
+                        suffixIcon: widget.fieldKey == commonFields.password.key
+                            ? IconButton(
+//                            padding: EdgeInsets.zero,
+                                tooltip: 'Generate Password (cmd+g)',
+                                icon: Icon(Icons.refresh),
+                                onPressed: () {
+                                  _logger.fine('pressed button.');
+                                  _generatePassword();
+                                })
+                            : null,
+//                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
                         labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
                       ),
                       keyboardType: widget.commonField?.keyboardType,
@@ -422,9 +464,20 @@ class _EntryFieldState extends State<EntryField> {
     );
   }
 
+  void _generatePassword() {
+    setState(() {
+      _isProtected = false;
+      _controller.text =
+          PasswordGenerator.singleton().generatePassword(CharacterSet.alphaNumeric + CharacterSet.numeric, 16);
+      _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      _focusNode.requestFocus();
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 }
