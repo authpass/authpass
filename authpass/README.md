@@ -4,7 +4,7 @@ AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdb
 
 ## Roadmap/TODOs
 
-see also https://github.com/hpoul/authpass/issues
+see also https://github.com/authpass/authpass/issues
 
 * [x] Read/Decrypt kdbx 3.x using password
 * [x] download of kdbx files through url

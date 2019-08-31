@@ -38,5 +38,5 @@ fi
 export PATH=${DEPS}/flutter/bin:$PATH
 
 GIT_SSH_COMMAND="ssh -i \"$github_key\"" \
-    GIT_PUSH_REMOTE='git@github.com:hpoul/authpass.git' \
+    GIT_PUSH_REMOTE='git@github.com:authpass/authpass.git' \
     ./_tools/release.sh "$@"
