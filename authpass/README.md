@@ -1,6 +1,8 @@
-# authpass
+# AuthPass.app - Open Source Password Manager for mobile and desktop
 
 AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdbx 3.x) compatible.
+
+![Mac OS Screenshot](_docs/authpass-screenshot-mac-os.png)
 
 ## Roadmap/TODOs
 
