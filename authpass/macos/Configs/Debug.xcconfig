@@ -1,2 +1,4 @@
 #include "../Flutter/Flutter-Debug.xcconfig"
 #include "Warnings.xcconfig"
+
+FLUTTER_TARGET=lib/env/development.dart
