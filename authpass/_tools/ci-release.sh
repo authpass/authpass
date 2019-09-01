@@ -32,7 +32,14 @@ if test "$1" == "ios" ; then
     # make sure cocoapods is up to date.
     pod repo update
 fi
-
+if test "$1" == "macos" ; then
+    # make sure cocoapods is up to date.
+    pod repo update
+    # upgrade to flutter master channel
+    flutter channel master
+    flutter upgrade
+    flutter config --enable-macos-desktop
+fi
 
 # Flutter was installed by `install_flutter.sh` in `ci-install-deps.sh`.
 export PATH=${DEPS}/flutter/bin:$PATH

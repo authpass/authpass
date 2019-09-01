@@ -39,6 +39,10 @@ case "$1" in
         cd ios
         fastlane beta
     ;;
+    macos)
+        flutter build macos -t lib/env/production.dart --release --build-number $buildnumber
+
+    ;;
     android)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
         flutter build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber

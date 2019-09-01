@@ -1,0 +1,19 @@
+osx_instance:
+  image: mojave-xcode-10.2
+
+task:
+  environment:
+#    MATCH_PASSWORD: ENCRYPTED[86b4539e73b13ad24735f8674d7774c706f106d27dbd4fd6461422a23012a04d54720287397e8ae845140ca2f95ca105]
+#    FASTLANE_PASSWORD: ENCRYPTED[76d316dbc11362c5e2861544e8b074e4f88660277be032725e4348d98c560da68d1a07cad7087c9ef07f8220c8798090]
+#    SSH_KEY: ENCRYPTED[055289168322f4c2e3154f1ac439774a15d49d4e0447f25ff4078ca740d4b0515e7b0465a77724fd0997c654c57e62d8]
+    GPG_PRIVATE_KEY: ENCRYPTED[2335bd0f1cea1ea95ad8c1e6b60f5e864a9fe1ae361fc9c07e07527506f2a2bf170ca02029a6f34c2082c976cb6ef165]
+  install_script:
+    - brew install gnupg
+    - git clone https://github.com/mipmip/blackbox && cd blackbox && make manual-install && cd ..
+    - gpg -v --import <(echo "$GPG_PRIVATE_KEY")
+    - ./authpass/_tools/ci-install-deps.sh ios
+#  release_ios_script:
+#    - ./_tools/ci-release.sh ios
+  release_macos_script:
+    - ./authpass/_tools/ci-release.sh macos
+
