@@ -1,4 +1,2 @@
 #include "../Flutter/Flutter-Release.xcconfig"
 #include "Warnings.xcconfig"
-
-FLUTTER_TARGET=lib/env/production.dart
