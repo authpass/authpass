@@ -292,7 +292,9 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     _commonFields = Provider.of<CommonFields>(context);
     if (widget.fieldKey == _commonFields.password.key) {
       handleSubscription(Provider.of<KeyboardShortcutEvents>(context).shortcutEvents.listen((event) {
-        _generatePassword();
+        if (event.type == KeyboardShortcutType.generatePassword) {
+          _generatePassword();
+        }
       }));
     }
   }
