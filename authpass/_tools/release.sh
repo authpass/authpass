@@ -28,6 +28,7 @@ fi
 
 buildnumber=${FORCE_BUILDNUMBER:-}
 if test -z "$buildnumber" ; then
+    git status
 	buildnumber=`./git-buildnumber.sh generate`
 else
 	echo "WARNING: forcing buildnumber $buildnumber"
@@ -43,7 +44,10 @@ case "$1" in
         # on mac os there is right now no --build-number argument :-(
         #flutter build macos -t lib/env/production.dart --release --build-number $buildnumber
         sed -i .bak 's/^\(version: [0-9\\.]*\).*$/\1+'$buildnumber'/' pubspec.yaml
-        cat pubspec.yaml | grep version | grep "+$buildnumber$"  || echo "Buildnumber replacement was not successful." && exit 1
+        cat pubspec.yaml | grep version | grep "+$buildnumber$"  || (
+            echo "Buildnumber replacement was not successful." && exit 1
+        )
+        flutter pub get
         flutter build macos -t lib/env/production.dart --release
     ;;
     android)
