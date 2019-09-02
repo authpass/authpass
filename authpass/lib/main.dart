@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/env/_base.dart';
@@ -95,6 +96,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
     return MultiProvider(
       providers: [
         Provider<Deps>.value(value: _deps),
+        Provider<Analytics>.value(value: _deps.analytics),
         Provider<AuthPassLocalizations>.value(value: authPassLocalizations),
         Provider<CommonFields>.value(value: CommonFields(authPassLocalizations)),
         StreamProvider<AppData>(

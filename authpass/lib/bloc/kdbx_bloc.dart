@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/main.dart';
 import 'package:flutter/foundation.dart';
@@ -97,11 +98,13 @@ class FileExistsException extends KdbxException {}
 class KdbxBloc with ChangeNotifier {
   KdbxBloc({
     @required this.appDataBloc,
+    @required this.analytics,
   }) {
     _openedFiles.addListener(notifyListeners);
   }
 
   final AppDataBloc appDataBloc;
+  final Analytics analytics;
 
   final _openedFiles = ValueNotifier<Map<FileSource, KdbxFile>>({});
 
@@ -116,8 +119,9 @@ class KdbxBloc with ChangeNotifier {
 
   Future<void> openFile(FileSource file, Credentials credentials) async {
     final kdbxFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
-    await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
+    final appData = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
     _openedFiles.value = {..._openedFiles.value, file: kdbxFile};
+    analytics.events.trackOpenFile(type: appData.previousFiles.last.sourceType);
   }
 
   void closeAllFiles() {

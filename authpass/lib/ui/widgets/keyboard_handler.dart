@@ -86,7 +86,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider.value(
+    return Provider<KeyboardShortcutEvents>.value(
       value: _keyboardShortcutEvents,
       child: RawKeyboardListener(
         focusNode: _focusNode,

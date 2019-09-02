@@ -16,4 +16,6 @@ abstract class Env {
   }
 
   String get name => runtimeType.toString();
+
+  String get analyticsAmplitudeApiKey => null;
 }

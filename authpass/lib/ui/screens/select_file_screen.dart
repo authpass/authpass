@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
@@ -32,6 +33,7 @@ class SelectFileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<Analytics>(context).events.trackLaunch();
     return Scaffold(
       appBar: AppBar(
         title: const Text('AuthPass - Select KeePass File'),
