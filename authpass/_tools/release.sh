@@ -48,7 +48,7 @@ case "$1" in
             echo "Buildnumber replacement was not successful." && exit 1
         )
         flutter pub get
-        flutter build macos -t lib/env/production.dart --release
+        flutter build macos -v -t lib/env/production.dart --release
     ;;
     android)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home

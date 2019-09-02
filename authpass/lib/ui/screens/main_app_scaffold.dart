@@ -1,4 +1,6 @@
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/password_list.dart';
@@ -25,6 +27,7 @@ class MainAppScaffold extends StatelessWidget {
     }
     return KeyboardHandler(
       child: Navigator(
+        observers: [AnalyticsNavigatorObserver(Provider.of<Analytics>(context))],
         onGenerateRoute: _onGenerateRoute,
       ),
     );

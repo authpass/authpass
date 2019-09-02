@@ -1,3 +1,6 @@
 [submodule "deps/kdbx.dart"]
 	path = deps/kdbx.dart
 	url = ../kdbx.dart
+[submodule "deps/analytics_events"]
+	path = deps/analytics_events
+	url = ../../hpoul/analytics_events

@@ -123,7 +123,7 @@ class AppDataBloc {
     return dataDir;
   }
 
-  Future<void> openedFile(FileSource file, {@required String name}) async {
+  Future<AppData> openedFile(FileSource file, {@required String name}) async {
     return update((b) {
       final openedFile = OpenedFile.fromFileSource(file, name);
       b.previousFiles.removeWhere((file) => file == openedFile);

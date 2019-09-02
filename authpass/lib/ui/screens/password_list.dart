@@ -1,3 +1,4 @@
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
@@ -62,13 +63,19 @@ class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
     Key key,
     @required this.entries,
-    @required this.onEntrySelected,
+    @required void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected,
     this.selectedEntry,
-  }) : super(key: key);
+  })  : _onEntrySelected = onEntrySelected,
+        super(key: key);
 
   final List<KdbxEntry> entries;
-  final void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected;
+  final void Function(KdbxEntry entry, EntrySelectionType type) _onEntrySelected;
   final KdbxEntry selectedEntry;
+
+  void onEntrySelected(BuildContext context, KdbxEntry entry, EntrySelectionType type) {
+    _onEntrySelected(entry, type);
+    Provider.of<Analytics>(context).events.trackSelectEntry(type: type);
+  }
 
   @override
   _PasswordListContentState createState() => _PasswordListContentState();
@@ -174,11 +181,11 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     // right now we ignore the fact that the user might select a list item which is not in view.
     // https://github.com/flutter/flutter/issues/12319
     if (idx < 0) {
-      widget.onEntrySelected(entries.first, EntrySelectionType.passiveHighlight);
+      widget.onEntrySelected(context, entries.first, EntrySelectionType.passiveHighlight);
     } else {
       // new Index, modulo entry length to make sure we wrap around the end..
       final newIndex = (idx + next) % entries.length;
-      widget.onEntrySelected(entries[newIndex], EntrySelectionType.passiveHighlight);
+      widget.onEntrySelected(context, entries[newIndex], EntrySelectionType.passiveHighlight);
     }
   }
 
@@ -263,7 +270,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
             _filteredEntries = entries;
             if (_filteredEntries.isNotEmpty &&
                 (widget.selectedEntry == null || !_filteredEntries.contains(widget.selectedEntry))) {
-              widget.onEntrySelected(_filteredEntries.first, EntrySelectionType.passiveHighlight);
+              widget.onEntrySelected(context, _filteredEntries.first, EntrySelectionType.passiveHighlight);
             }
           });
         },
@@ -302,7 +309,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                 final kdbxBloc = Provider.of<KdbxBloc>(context);
                 final entry = kdbxBloc.createEntry();
 //                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                widget.onEntrySelected(entry, EntrySelectionType.activeOpen);
+                widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
               },
             )
           : ListView.builder(
@@ -315,7 +322,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   index--;
                 }
                 final entry = entries[index];
-                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
+//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
                 return Dismissible(
                   key: ValueKey(entry.uuid),
                   resizeDuration: null,
@@ -375,7 +382,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                           const TextSpan(text: '(no website)')),
                       onTap: () {
 //                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                        widget.onEntrySelected(entry, EntrySelectionType.activeOpen);
+                        widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
                       },
                     ),
                   ),

@@ -7,6 +7,8 @@ task:
 #    FASTLANE_PASSWORD: ENCRYPTED[76d316dbc11362c5e2861544e8b074e4f88660277be032725e4348d98c560da68d1a07cad7087c9ef07f8220c8798090]
 #    SSH_KEY: ENCRYPTED[055289168322f4c2e3154f1ac439774a15d49d4e0447f25ff4078ca740d4b0515e7b0465a77724fd0997c654c57e62d8]
     GPG_PRIVATE_KEY: ENCRYPTED[3e98456bd7de7351ad2072dc7c0f2db89354cd54f4dcc23071cec4cd47bfff1afe30ee2593226a8ec8c134b1772a5d21]
+  submodule_script:
+    - git submodule update --init
   install_script:
     - brew install gnupg
     - git clone https://github.com/mipmip/blackbox && cd blackbox && make manual-install && cd ..

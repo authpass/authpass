@@ -1,3 +1,4 @@
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
@@ -330,6 +331,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       ),
       confirmDismiss: (direction) async {
 //        await ClipboardManager.copyToClipBoard(_value.getText());
+        Provider.of<Analytics>(context).events.trackCopyField(key: widget.fieldKey.key);
         await Clipboard.setData(ClipboardData(text: _value.getText()));
         return false;
       },
