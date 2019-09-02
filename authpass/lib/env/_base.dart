@@ -18,4 +18,6 @@ abstract class Env {
   String get name => runtimeType.toString();
 
   String get analyticsAmplitudeApiKey => null;
+//  String get analyticsGoogleAnalyticsId => 'G-HNGCPDXTSW';
+  String get analyticsGoogleAnalyticsId => 'UA-91100035-7';
 }

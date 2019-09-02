@@ -1,43 +1,22 @@
 PODS:
-  - amplitude_flutter (0.0.1):
-    - Flutter
-  - device_info (0.0.1):
-    - Flutter
   - file_chooser (0.0.1):
     - Flutter
   - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - sqflite (0.0.1):
-    - Flutter
-    - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
-  - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
   - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
-
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - FMDB
 
 EXTERNAL SOURCES:
-  amplitude_flutter:
-    :path: ".symlinks/plugins/amplitude_flutter/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
   file_chooser:
     :path: ".symlinks/plugins/file_chooser/ios"
   file_picker:
@@ -48,19 +27,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  amplitude_flutter: 751cb63e6431fd950b5aa91a0ad084f1d13bc744
-  device_info: 3ebad48f726348f69abd802f3334a8d1ed795fbd
   file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   package_info: 78cabb3c322943c55d39676f4a5bfc748c01d055
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
-  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
 
 PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
 

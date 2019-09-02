@@ -42,11 +42,20 @@ void main() => throw Exception('Run some env/*.dart');
 Future<void> startApp(Env env) async {
   initIsolate();
   _setTargetPlatformForDesktop();
-  _logger.info('Initialized logger.');
+  _logger.info('Initialized logger. (${Platform.operatingSystem}, ${Platform.operatingSystemVersion}');
+
+  FlutterError.onError = (errorDetails) {
+    _logger.shout(
+        'Unhandled Flutter framework (${errorDetails.library}) error.', errorDetails.exception, errorDetails.stack);
+    _logger.fine(errorDetails.summary.toString());
+    Analytics.trackError(errorDetails.summary.toString(), true);
+  };
+
   await runZoned<Future<void>>(() async {
     runApp(AuthPassApp(env: env));
   }, onError: (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
+    Analytics.trackError(error.toString(), true);
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone, ZoneSpecification specification, Map zoneValues) {
       print('Forking zone.');
@@ -106,10 +115,46 @@ class _AuthPassAppState extends State<AuthPassApp> {
         ListenableProvider.value(value: _deps.kdbxBloc),
       ],
       child: MaterialApp(
+        navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
         theme: createTheme(),
         home: SelectFileScreen(),
       ),
     );
+  }
+}
+
+class AnalyticsNavigatorObserver extends NavigatorObserver {
+  AnalyticsNavigatorObserver(this.analytics);
+
+  final Analytics analytics;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
+    super.didPush(route, previousRoute);
+    _sendScreenView(route);
+  }
+
+  @override
+  void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    _sendScreenView(newRoute);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+    super.didPop(route, previousRoute);
+    _sendScreenView(previousRoute);
+  }
+
+  String _screenNameFor(Route route) {
+    return route?.settings?.name;
+  }
+
+  void _sendScreenView(Route route) {
+    final screenName = _screenNameFor(route);
+    if (screenName != null) {
+      analytics.trackScreen(route.settings.name);
+    }
   }
 }

@@ -37,7 +37,9 @@ dependencies:
       ref: master
   flutter_svg: ^0.14.0
   charcode: ^1.1.2
-  amplitude_flutter: ^1.0.1
+  usage: ^3.4.1
+  package_info: ^0.4.0+6
+  path_provider: ^1.2.0
   analytics_event_gen:
     path: ../deps/analytics_events/analytics_event_gen
   # desktop/macos
