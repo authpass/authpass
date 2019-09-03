@@ -10,6 +10,7 @@ import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -80,6 +81,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
   void initState() {
     super.initState();
     _deps = Deps(env: widget.env);
+    PathUtils.runAppFinished.complete(true);
   }
 
   @override

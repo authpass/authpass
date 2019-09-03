@@ -132,6 +132,10 @@ class QuickUnlockStorage {
   Future<BiometricStorageFile> _storageFile() => _storageFileCached ??= BiometricStorage().getStorage('QuickUnlock');
 
   Future<void> updateQuickUnlockFile(Map<FileSource, Credentials> fileCredentials) async {
+    if (!(await supportsBiometricKeyStore())) {
+      _logger.severe('updateQuickUnlockFile must not be called when biometric store is not supported.');
+      return;
+    }
     final quickUnlockCredentials = fileCredentials.map(
       (key, value) => MapEntry(key.uuid, base64.encode(value.getHash())),
     );
@@ -149,6 +153,10 @@ class QuickUnlockStorage {
   }
 
   Future<Map<FileSource, Credentials>> loadQuickUnlockFile(AppDataBloc appDataBloc) async {
+    if (!(await supportsBiometricKeyStore())) {
+      _logger.fine('Biometric store not supported. no quickunlock.');
+      return {};
+    }
     final storage = await _storageFile();
     final jsonContent = await storage.read();
     if (jsonContent == null) {

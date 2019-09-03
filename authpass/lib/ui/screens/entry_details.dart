@@ -2,16 +2,19 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/password_generator.dart';
+import 'package:authpass/utils/predefined_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -132,6 +135,8 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
 
     final nonCommonKeys = widget.entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
 
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -141,6 +146,41 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
           right: false,
           child: Column(
             children: <Widget>[
+              const SizedBox(height: 16),
+              Card(
+                elevation: 8,
+                child: InkWell(
+                  onTap: () async {
+                    final newIcon = await IconSelectorDialog.show(context, initialSelection: widget.entry.icon.get());
+                    if (newIcon != null) {
+                      setState(() {
+                        widget.entry.icon.set(newIcon);
+                      });
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                      height: 64,
+                      width: 64,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: CenteredIcon(
+                          icon: PredefinedIcons.iconFor(widget.entry.icon.get()),
+                          size: 48,
+                          color: theme.primaryColor,
+                        ),
+//                        child: Icon(
+//                          PredefinedIcons.iconFor(widget.entry.icon.get()),
+//                          size: 40,
+//                          color: theme.primaryColor,
+//                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
               ...commonFields.fields
                   .map(
                     (f) => EntryField(
@@ -168,6 +208,34 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Workaround for centered icons. see https://github.com/flutter/flutter/issues/24054#issuecomment-439167235
+class CenteredIcon extends StatelessWidget {
+  const CenteredIcon({
+    Key key,
+    @required this.icon,
+    this.color,
+    this.size,
+  }) : super(key: key);
+
+  final IconData icon;
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      String.fromCharCode(icon.codePoint),
+      style: TextStyle(
+        inherit: false,
+        fontSize: size,
+        fontFamily: icon.fontFamily,
+        package: icon.fontPackage,
+        color: color,
       ),
     );
   }

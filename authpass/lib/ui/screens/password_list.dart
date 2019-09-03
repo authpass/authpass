@@ -7,6 +7,7 @@ import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/predefined_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -370,7 +371,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                             border: Border(right: BorderSide(color: Theme.of(context).primaryColor, width: 4)),
                           ),
                     child: ListTile(
-                      leading: Icon(Icons.supervisor_account),
+                      leading: Icon(PredefinedIcons.iconFor(entry.icon.get())),
                       selected: widget.selectedEntry == entry,
                       title: Text.rich(_highlightFilterQuery(commonFields.title.stringValue(entry)) ??
                           const TextSpan(text: '(no title)')),

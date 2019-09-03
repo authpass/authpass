@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -8,6 +10,8 @@ class PathUtils {
   PathUtils._();
 
   static final PathUtils _instance = PathUtils._();
+  static final Completer<bool> runAppFinished = Completer<bool>();
+  static Future<bool> get waitForRunAppFinished => runAppFinished.future;
 
   Future<Directory> getAppDataDirectory() async {
     return Platform.isIOS || Platform.isAndroid ? getApplicationDocumentsDirectory() : _getDesktopDirectory();
