@@ -104,7 +104,7 @@ class FileExistsException extends KdbxException {}
 class QuickUnlockStorage {
   QuickUnlockStorage();
 
-  bool _supported = null;
+  bool _supported;
 
   Future<bool> supportsBiometricKeyStore() async {
     if (_supported != null) {

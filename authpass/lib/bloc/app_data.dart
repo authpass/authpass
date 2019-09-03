@@ -1,14 +1,13 @@
 import 'dart:io';
 
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 import 'package:uuid/uuid.dart';
 
@@ -128,20 +127,12 @@ class AppDataBloc {
   final store = SimpleJsonPersistence.getForTypeSync(
     (json) => serializers.deserializeWith(AppData.serializer, json),
     defaultCreator: () => AppData(),
-    baseDirectoryBuilder: () =>
-        Platform.isIOS || Platform.isAndroid ? getApplicationDocumentsDirectory() : _getDesktopDirectory(),
+    baseDirectoryBuilder: () => PathUtils().getAppDataDirectory(),
   );
 
   static final _uuid = Uuid();
-  static String createUuid() => _uuid.v4();
 
-  static Future<Directory> _getDesktopDirectory() async {
-    // https://stackoverflow.com/a/32937974/109219
-    final userHome = Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
-    final dataDir = Directory(path.join(userHome, '.authpass', 'data'));
-    await dataDir.create(recursive: true);
-    return dataDir;
-  }
+  static String createUuid() => _uuid.v4();
 
   Future<OpenedFile> openedFile(FileSource file, {@required String name}) async {
     final openedFile = OpenedFile.fromFileSource(file, name);
