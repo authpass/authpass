@@ -150,7 +150,7 @@ class QuickUnlockStorage {
       if (file == null) {
         return null;
       }
-      return MapEntry(file.toFileSource(), HashCredentials(base64.decode(entry.key)));
+      return MapEntry(file.toFileSource(), HashCredentials(base64.decode(entry.value as String)));
     }).where((e) => e != null));
   }
 }

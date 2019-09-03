@@ -25,3 +25,7 @@ cd $basedir/macos/
 bundle exec fastlane hptpest # notarize
 
 ```
+
+## Resources
+
+* https://mobile-security.gitbook.io/mobile-security-testing-guide/android-testing-guide/0x05f-testing-local-authentication
