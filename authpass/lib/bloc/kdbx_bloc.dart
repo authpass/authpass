@@ -182,7 +182,7 @@ class KdbxBloc with ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock}) async {
+  Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
     final kdbxFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
     final openedFile = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
     _openedFiles.value = {..._openedFiles.value, file: kdbxFile};
