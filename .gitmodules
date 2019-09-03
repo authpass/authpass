@@ -4,3 +4,6 @@
 [submodule "deps/analytics_events"]
 	path = deps/analytics_events
 	url = ../../hpoul/analytics_events
+[submodule "deps/biometric_storage"]
+	path = deps/biometric_storage
+	url = ../biometric_storage.git

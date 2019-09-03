@@ -15,10 +15,11 @@ part 'analytics.g.dart';
 final _logger = Logger('analytics');
 
 class Analytics {
-  static const _APP_NAME = 'AuthPass';
   Analytics({@required this.env}) {
     _init();
   }
+
+  static const _APP_NAME = 'AuthPass';
 
   static void trackError(String description, bool fatal) {
     _errorGa?.sendException(description, fatal: fatal);

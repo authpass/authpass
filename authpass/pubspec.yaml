@@ -43,6 +43,8 @@ dependencies:
   analytics_event_gen:
     path: ../deps/analytics_events/analytics_event_gen
   # desktop/macos
+  biometric_storage:
+    path: ../deps/biometric_storage
   file_chooser:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
@@ -51,6 +53,7 @@ dependencies:
 #      ref: android-dummy-plugin
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
+  uuid: ^2.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

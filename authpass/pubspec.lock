@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.0"
+  biometric_storage:
+    dependency: "direct main"
+    description:
+      path: "../deps/biometric_storage"
+      relative: true
+    source: path
+    version: "0.0.1+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -632,7 +639,7 @@ packages:
     source: hosted
     version: "3.4.1"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       url: "https://pub.dartlang.org"

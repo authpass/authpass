@@ -1,6 +1,5 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
-import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';

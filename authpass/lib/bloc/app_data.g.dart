@@ -44,7 +44,18 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
     ];
-
+    if (object.uuid != null) {
+      result
+        ..add('uuid')
+        ..add(serializers.serialize(object.uuid,
+            specifiedType: const FullType(String)));
+    }
+    if (object.biometricStoreName != null) {
+      result
+        ..add('biometricStoreName')
+        ..add(serializers.serialize(object.biometricStoreName,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -59,6 +70,10 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'uuid':
+          result.uuid = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'lastOpenedAt':
           result.lastOpenedAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
@@ -74,6 +89,10 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
           break;
         case 'name':
           result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'biometricStoreName':
+          result.biometricStoreName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -128,6 +147,8 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
 
 class _$OpenedFile extends OpenedFile {
   @override
+  final String uuid;
+  @override
   final DateTime lastOpenedAt;
   @override
   final OpenedFilesSourceType sourceType;
@@ -135,12 +156,19 @@ class _$OpenedFile extends OpenedFile {
   final String sourcePath;
   @override
   final String name;
+  @override
+  final String biometricStoreName;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder) updates]) =>
       (new OpenedFileBuilder()..update(updates)).build();
 
   _$OpenedFile._(
-      {this.lastOpenedAt, this.sourceType, this.sourcePath, this.name})
+      {this.uuid,
+      this.lastOpenedAt,
+      this.sourceType,
+      this.sourcePath,
+      this.name,
+      this.biometricStoreName})
       : super._() {
     if (lastOpenedAt == null) {
       throw new BuiltValueNullFieldError('OpenedFile', 'lastOpenedAt');
@@ -167,30 +195,42 @@ class _$OpenedFile extends OpenedFile {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is OpenedFile &&
+        uuid == other.uuid &&
         sourceType == other.sourceType &&
         sourcePath == other.sourcePath &&
-        name == other.name;
+        name == other.name &&
+        biometricStoreName == other.biometricStoreName;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, sourceType.hashCode), sourcePath.hashCode), name.hashCode));
+        $jc(
+            $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
+                sourcePath.hashCode),
+            name.hashCode),
+        biometricStoreName.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('OpenedFile')
+          ..add('uuid', uuid)
           ..add('lastOpenedAt', lastOpenedAt)
           ..add('sourceType', sourceType)
           ..add('sourcePath', sourcePath)
-          ..add('name', name))
+          ..add('name', name)
+          ..add('biometricStoreName', biometricStoreName))
         .toString();
   }
 }
 
 class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   _$OpenedFile _$v;
+
+  String _uuid;
+  String get uuid => _$this._uuid;
+  set uuid(String uuid) => _$this._uuid = uuid;
 
   DateTime _lastOpenedAt;
   DateTime get lastOpenedAt => _$this._lastOpenedAt;
@@ -210,14 +250,21 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
+  String _biometricStoreName;
+  String get biometricStoreName => _$this._biometricStoreName;
+  set biometricStoreName(String biometricStoreName) =>
+      _$this._biometricStoreName = biometricStoreName;
+
   OpenedFileBuilder();
 
   OpenedFileBuilder get _$this {
     if (_$v != null) {
+      _uuid = _$v.uuid;
       _lastOpenedAt = _$v.lastOpenedAt;
       _sourceType = _$v.sourceType;
       _sourcePath = _$v.sourcePath;
       _name = _$v.name;
+      _biometricStoreName = _$v.biometricStoreName;
       _$v = null;
     }
     return this;
@@ -240,10 +287,12 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   _$OpenedFile build() {
     final _$result = _$v ??
         new _$OpenedFile._(
+            uuid: uuid,
             lastOpenedAt: lastOpenedAt,
             sourceType: sourceType,
             sourcePath: sourcePath,
-            name: name);
+            name: name,
+            biometricStoreName: biometricStoreName);
     replace(_$result);
     return _$result;
   }

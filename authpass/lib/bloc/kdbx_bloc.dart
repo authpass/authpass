@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/main.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kdbx/kdbx.dart';
@@ -15,9 +17,11 @@ import 'package:path_provider/path_provider.dart';
 final _logger = Logger('kdbx_bloc');
 
 abstract class FileSource {
-  FileSource({@required this.databaseName});
+  FileSource({@required this.databaseName, @required this.uuid});
 
   Uint8List _cached;
+
+  final String uuid;
 
   /// If known should return the name of the database in the file. Otherwise the bare file name.
   @protected
@@ -37,13 +41,15 @@ abstract class FileSource {
 
   @protected
   Future<Uint8List> load();
+
   Future<void> write(Uint8List bytes);
 
   Future<Uint8List> content() async => _cached ??= await load();
 }
 
 class FileSourceLocal extends FileSource {
-  FileSourceLocal(this.file, {String databaseName}) : super(databaseName: databaseName);
+  FileSourceLocal(this.file, {String databaseName, @required String uuid})
+      : super(databaseName: databaseName, uuid: uuid);
 
   final File file;
 
@@ -66,7 +72,7 @@ class FileSourceLocal extends FileSource {
 }
 
 class FileSourceUrl extends FileSource {
-  FileSourceUrl(this.url, {String databaseName}) : super(databaseName: databaseName);
+  FileSourceUrl(this.url, {String databaseName, @required String uuid}) : super(databaseName: databaseName, uuid: uuid);
 
   final Uri url;
 
@@ -95,6 +101,60 @@ class FileSourceUrl extends FileSource {
 
 class FileExistsException extends KdbxException {}
 
+class QuickUnlockStorage {
+  QuickUnlockStorage();
+
+  bool _supported = null;
+
+  Future<bool> supportsBiometricKeyStore() async {
+    if (_supported != null) {
+      return _supported;
+    }
+    final canAuthenticate = await BiometricStorage().canAuthenticate();
+    _logger.finer('supportBiometricKeyStore: $canAuthenticate');
+    return _supported = (canAuthenticate == CanAuthenticateResponse.success);
+  }
+
+  Future<BiometricStorageFile> _storageFileCached;
+
+  Future<BiometricStorageFile> _storageFile() => _storageFileCached ??= BiometricStorage().getStorage('QuickUnlock');
+
+  Future<void> updateQuickUnlockFile(Map<FileSource, Credentials> fileCredentials) async {
+    final quickUnlockCredentials = fileCredentials.map(
+      (key, value) => MapEntry(key.uuid, base64.encode(value.getHash())),
+    );
+    _logger.fine('Getting storage file.');
+    final storage = await _storageFile();
+    _logger.fine('got storage, writing credentials.');
+    try {
+      await storage.write(json.encode(quickUnlockCredentials));
+    } catch (e, stackTrace) {
+      _logger.severe('Error while writing quick unlock credentials.', e, stackTrace);
+      rethrow;
+    } finally {
+      _logger.finer('all done.');
+    }
+  }
+
+  Future<Map<FileSource, Credentials>> loadQuickUnlockFile(AppDataBloc appDataBloc) async {
+    final storage = await _storageFile();
+    final jsonContent = await storage.read();
+    if (jsonContent == null) {
+      _logger.finer('No quick unlock available.');
+      return {};
+    }
+    final map = json.decode(jsonContent) as Map<String, dynamic>;
+    final appData = await appDataBloc.store.load();
+    return Map.fromEntries(map.entries.map((entry) {
+      final file = appData.recentFileByUuid(entry.key);
+      if (file == null) {
+        return null;
+      }
+      return MapEntry(file.toFileSource(), HashCredentials(base64.decode(entry.key)));
+    }).where((e) => e != null));
+  }
+}
+
 class KdbxBloc with ChangeNotifier {
   KdbxBloc({
     @required this.appDataBloc,
@@ -105,11 +165,16 @@ class KdbxBloc with ChangeNotifier {
 
   final AppDataBloc appDataBloc;
   final Analytics analytics;
+  final quickUnlockStorage = QuickUnlockStorage();
 
   final _openedFiles = ValueNotifier<Map<FileSource, KdbxFile>>({});
+  final _openedFilesQuickUnlock = <FileSource>{};
 
   Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources => _openedFiles.value.entries;
+
   List<KdbxFile> get openedFiles => _openedFiles.value.values.toList();
+
+  Future<int> _quickUnlockCheckRunning;
 
   @override
   void dispose() {
@@ -117,12 +182,37 @@ class KdbxBloc with ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> openFile(FileSource file, Credentials credentials) async {
+  Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock}) async {
     final kdbxFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
-    final appData = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
+    final openedFile = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
     _openedFiles.value = {..._openedFiles.value, file: kdbxFile};
-    analytics.events.trackOpenFile(type: appData.previousFiles.last.sourceType);
+    analytics.events.trackOpenFile(type: openedFile.sourceType);
+
+    if (addToQuickUnlock) {
+      _openedFilesQuickUnlock.add(file);
+      _logger.fine('adding file to quick unlock.');
+      final openedFiles = _openedFiles.value;
+      await quickUnlockStorage.updateQuickUnlockFile(Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
+        final openedFile = openedFiles[fileSource];
+        if (openedFile == null) {
+          _logger.warning('File was closed, but was still listed in quick unlock files.');
+        }
+        return MapEntry(fileSource, openedFile.credentials);
+      })));
+    }
   }
+
+  Future<int> reopenQuickUnlock() => _quickUnlockCheckRunning ??= (() async {
+        _logger.finer('Checking quick unlock.');
+        final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
+        for (final file in unlockFiles.entries) {
+          await openFile(file.key, file.value);
+        }
+        _openedFilesQuickUnlock.clear();
+        _openedFilesQuickUnlock.addAll(unlockFiles.keys);
+        return unlockFiles.length;
+      })()
+          .whenComplete(() => _quickUnlockCheckRunning = null);
 
   void closeAllFiles() {
     _openedFiles.value = {};
@@ -163,7 +253,8 @@ class KdbxBloc with ChangeNotifier {
     final fileName = '$databaseName.kdbx';
     final appDir = await getApplicationDocumentsDirectory();
     await appDir.create(recursive: true);
-    final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)), databaseName: databaseName);
+    final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
+        databaseName: databaseName, uuid: AppDataBloc.createUuid());
     if (localSource.file.existsSync()) {
       throw FileExistsException();
     }

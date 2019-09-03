@@ -59,6 +59,30 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
   Future<dynamic> _fileLoader;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkQuickUnlock();
+  }
+
+  @override
+  void didUpdateWidget(covariant SelectFileWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _logger.finer('didUpdateWidget --- ${oldWidget != widget}');
+    if (oldWidget != widget) {
+      _checkQuickUnlock();
+    }
+  }
+
+  Future<void> _checkQuickUnlock() async {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final opened = await kdbxBloc.reopenQuickUnlock();
+    _logger.info('opened $opened files with quick unlock.');
+    if (opened > 0 && kdbxBloc.openedFiles.isNotEmpty) {
+      await Navigator.of(context).push(MainAppScaffold.route());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     return Column(
@@ -77,12 +101,14 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
                   if (Platform.isIOS || Platform.isAndroid) {
                     final path = await FilePicker.getFilePath(type: FileType.ANY);
                     if (path != null) {
-                      await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(File(path))));
+                      await Navigator.of(context)
+                          .push(CredentialsScreen.route(FileSourceLocal(File(path), uuid: AppDataBloc.createUuid())));
                     }
                   } else {
                     showOpenPanel((result, paths) async {
                       if (result == FileChooserResult.ok) {
-                        await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(File(paths[0]))));
+                        await Navigator.of(context).push(
+                            CredentialsScreen.route(FileSourceLocal(File(paths[0]), uuid: AppDataBloc.createUuid())));
                       }
                     });
                   }
@@ -283,7 +309,7 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              Navigator.of(context).pop(FileSourceUrl(_enteredUrl));
+              Navigator.of(context).pop(FileSourceUrl(_enteredUrl, uuid: AppDataBloc.createUuid()));
             } else {
               Navigator.of(context).pop();
             }
@@ -318,6 +344,25 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   final _controller = TextEditingController();
   Future<void> _loadingFile;
 
+  KdbxBloc _kdbxBloc;
+  bool _biometricQuickUnlockSupported = false;
+  bool _biometricQuickUnlockActivated;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _kdbxBloc = Provider.of<KdbxBloc>(context);
+    _kdbxBloc.quickUnlockStorage.supportsBiometricKeyStore().then((bool biometricQuickUnlock) => setState(() {
+          _biometricQuickUnlockSupported = biometricQuickUnlock;
+          _biometricQuickUnlockActivated ??= true;
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -347,7 +392,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
             ),
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(32),
+              padding: const EdgeInsets.only(top: 32, right: 32, left: 32),
 //              constraints: BoxConstraints.expand(),
               child: TextFormField(
                 controller: _controller,
@@ -363,6 +408,23 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 },
               ),
             ),
+            ...(_biometricQuickUnlockSupported
+                ? [
+                    Container(
+                      child: CheckboxListTile(
+                        value: _biometricQuickUnlockActivated,
+                        dense: true,
+                        title: const Text(
+                          'Save Password with biometric key store?',
+                          textAlign: TextAlign.right,
+                        ),
+                        onChanged: (value) => setState(() {
+                          _biometricQuickUnlockActivated = value;
+                        }),
+                      ),
+                    ),
+                  ]
+                : []),
             Container(
               alignment: Alignment.centerRight,
               child: _loadingFile != null
@@ -385,7 +447,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       final kdbxBloc = Provider.of<Deps>(context).kdbxBloc;
       final pw = _controller.text;
       try {
-        _loadingFile = kdbxBloc.openFile(widget.kdbxFilePath, Credentials(ProtectedValue.fromString(pw)));
+        _loadingFile = kdbxBloc.openFile(widget.kdbxFilePath, Credentials(ProtectedValue.fromString(pw)),
+            addToQuickUnlock: _biometricQuickUnlockActivated ?? false);
         setState(() {});
         await _loadingFile;
         await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
