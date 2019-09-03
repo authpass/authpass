@@ -15,21 +15,25 @@ class LoggingUtils {
 
   static final _instance = LoggingUtils._();
 
-  final _rotatingFileLogger = AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
-    final logsDir = await PathUtils().getLogDirectory();
-    final appLogFile = File(path.join(logsDir.path, 'app.log'));
-    await appLogFile.parent.create(recursive: true);
-    _logger.fine('Logging into $appLogFile');
-    return RotatingFileAppender(
-      rotateAtSizeBytes: 10 * 1024 * 1024,
-      baseFilePath: appLogFile.path,
-    );
-  });
+  AsyncInitializingLogHandler<RotatingFileAppender> _rotatingFileLoggerCached;
+  AsyncInitializingLogHandler<RotatingFileAppender> get _rotatingFileLogger =>
+      _rotatingFileLoggerCached ??= AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
+        final logsDir = await PathUtils().getLogDirectory();
+        final appLogFile = File(path.join(logsDir.path, 'app.log'));
+        await appLogFile.parent.create(recursive: true);
+        _logger.fine('Logging into $appLogFile');
+        return RotatingFileAppender(
+          rotateAtSizeBytes: 10 * 1024 * 1024,
+          baseFilePath: appLogFile.path,
+        );
+      });
 
-  void setupLogging({bool fromMainIsolate}) {
+  void setupLogging({bool fromMainIsolate = false}) {
     Logger.root.level = Level.ALL;
     PrintAppender().attachToLogger(Logger.root);
-    _rotatingFileLogger.attachToLogger(Logger.root);
+    if (fromMainIsolate) {
+      _rotatingFileLogger.attachToLogger(Logger.root);
+    }
     final isolateDebug = '${Isolate.current.debugName} (${Isolate.current.hashCode})';
     _logger.info('Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
 
