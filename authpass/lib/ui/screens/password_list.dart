@@ -48,10 +48,6 @@ class PasswordList extends StatelessWidget {
   }
 }
 
-enum OverFlowMenuItems {
-  lock,
-}
-
 enum EntrySelectionType {
   /// entry was highlighted (e.g. via search or up/down arrows) must not switch context.
   passiveHighlight,

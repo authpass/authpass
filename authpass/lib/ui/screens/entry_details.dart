@@ -399,7 +399,6 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
               icon: Icon(Icons.more_vert),
               offset: const Offset(0, 32),
               onSelected: (val) async {
-                // TODO implement actions
                 switch (val) {
                   case EntryAction.copy:
                     await Clipboard.setData(ClipboardData(text: _value.getText()));
@@ -419,7 +418,15 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                     }
                     break;
                   case EntryAction.protect:
-                    await DialogUtils.showSimpleAlertDialog(context, null, 'TODO, sorry.');
+                    setState(() {
+                      if (_isProtected) {
+                        _isProtected = false;
+                        _value = PlainValue(_value?.getText() ?? '');
+                      } else {
+                        _isProtected = true;
+                        _value = ProtectedValue.fromString(_value?.getText() ?? '');
+                      }
+                    });
                     break;
                   case EntryAction.delete:
                     widget.entry.removeString(widget.fieldKey);
@@ -427,16 +434,16 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                     break;
                 }
               },
-              itemBuilder: (context) => const [
-                PopupMenuItem(
+              itemBuilder: (context) => [
+                const PopupMenuItem(
                   value: EntryAction.copy,
                   child: ListTile(
                     leading: Icon(Icons.content_copy),
                     title: Text('Copy'),
                   ),
                 ),
-                PopupMenuDivider(),
-                PopupMenuItem(
+                const PopupMenuDivider(),
+                const PopupMenuItem(
                   value: EntryAction.rename,
                   child: ListTile(
                     leading: Icon(Icons.edit),
@@ -446,11 +453,11 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                 PopupMenuItem(
                   value: EntryAction.protect,
                   child: ListTile(
-                    leading: Icon(Icons.enhanced_encryption),
-                    title: Text('Protect Value'),
+                    leading: Icon(_isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
+                    title: Text(_isProtected ? 'Unprotect value' : 'Protect Value'),
                   ),
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: EntryAction.delete,
                   child: ListTile(
                     leading: Icon(Icons.delete),
@@ -477,6 +484,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       _isProtected = false;
       _controller.text =
           PasswordGenerator.singleton().generatePassword(CharacterSet.alphaNumeric + CharacterSet.numeric, 16);
+      _value = ProtectedValue.fromString(_controller.text);
       _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       _focusNode.requestFocus();
     });
