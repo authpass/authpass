@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+final _logger = Logger('authpass.dialog_utils');
 
 class DialogUtils {
   static Future<dynamic> showSimpleAlertDialog(BuildContext context, String title, String content) {
@@ -19,6 +25,16 @@ class DialogUtils {
             ],
           );
         });
+  }
+
+  static Future<void> openUrl(String url) async {
+    if (Platform.isIOS || Platform.isAndroid) {
+      if (await canLaunch(url)) {
+        await launch(url, forceSafariVC: false, forceWebView: false);
+      }
+    } else {
+      _logger.warning('We do not yet support opening of URLs on desktop.');
+    }
   }
 }
 

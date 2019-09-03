@@ -19,8 +19,6 @@ class Analytics {
     _init();
   }
 
-  static const _APP_NAME = 'AuthPass';
-
   static void trackError(String description, bool fatal) {
     _errorGa?.sendException(description, fatal: fatal);
   }
@@ -37,13 +35,13 @@ class Analytics {
   };
 
   Future<void> _init() async {
-    final info = await _getPackageInfo();
+    final info = await env.getAppInfo();
     _logger.fine('Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName}');
     if (env.analyticsGoogleAnalyticsId != null) {
       final docsDir = await getApplicationDocumentsDirectory();
       _ga = usage.AnalyticsIO(
         env.analyticsGoogleAnalyticsId,
-        info.appName ?? _APP_NAME,
+        info.appName,
         '${info.version}+${info.buildNumber}',
         documentDirectory: docsDir,
       );
@@ -71,18 +69,6 @@ class Analytics {
   void trackScreen(String screenName) {
     _logger.finer('trackScreen($screenName)');
     _ga?.sendScreenView(screenName);
-  }
-
-  Future<PackageInfo> _getPackageInfo() async {
-    if (Platform.isIOS || Platform.isAndroid) {
-      return await PackageInfo.fromPlatform();
-    }
-    return PackageInfo(
-      appName: _APP_NAME,
-      packageName: 'design.codeux.authpass',
-      version: '0.0.0',
-      buildNumber: '0',
-    );
   }
 }
 

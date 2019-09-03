@@ -4,6 +4,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -37,6 +38,9 @@ class SelectFileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('AuthPass - Select KeePass File'),
+        actions: <Widget>[
+          AuthPassAboutDialog.createAboutPopupAction(context),
+        ],
       ),
       body: Container(
         alignment: Alignment.center,
@@ -57,6 +61,7 @@ class SelectFileWidget extends StatefulWidget {
 
 class _SelectFileWidgetState extends State<SelectFileWidget> {
   Future<dynamic> _fileLoader;
+  bool _successfulQuickUnlock = false;
 
   @override
   void didChangeDependencies() {
@@ -73,14 +78,25 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
     }
   }
 
-  Future<void> _checkQuickUnlock() async {
-    final kdbxBloc = Provider.of<KdbxBloc>(context);
-    final opened = await kdbxBloc.reopenQuickUnlock();
-    _logger.info('opened $opened files with quick unlock.');
-    if (opened > 0 && kdbxBloc.openedFiles.isNotEmpty) {
-      await Navigator.of(context).push(MainAppScaffold.route());
-    }
-  }
+  Future<void> _checkQuickUnlock() => _fileLoader ??= (() async {
+        if (_successfulQuickUnlock) {
+          _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
+          return;
+        }
+        _logger.finer('opening quick unlock. $_successfulQuickUnlock $mounted');
+        final kdbxBloc = Provider.of<KdbxBloc>(context);
+        final opened = await kdbxBloc.reopenQuickUnlock();
+        _logger.info('opened $opened files with quick unlock.');
+        _successfulQuickUnlock = true;
+        if (opened > 0 && kdbxBloc.openedFiles.isNotEmpty) {
+          await Navigator.of(context).push(MainAppScaffold.route());
+        }
+      })()
+          .whenComplete(() {
+        setState(() {
+          _fileLoader = null;
+        });
+      });
 
   @override
   Widget build(BuildContext context) {

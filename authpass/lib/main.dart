@@ -88,6 +88,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
     final authPassLocalizations = AuthPassLocalizations();
     return MultiProvider(
       providers: [
+        Provider<Env>.value(value: _deps.env),
         Provider<Deps>.value(value: _deps),
         Provider<Analytics>.value(value: _deps.analytics),
         Provider<AuthPassLocalizations>.value(value: authPassLocalizations),

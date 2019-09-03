@@ -2,6 +2,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
@@ -209,21 +210,20 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                 _filteredEntries = widget.entries;
               });
             }),
-        PopupMenuButton<OverFlowMenuItems>(
+        PopupMenuButton<VoidCallback>(
           onSelected: (item) {
-            switch (item) {
-              case OverFlowMenuItems.lock:
+            item();
+          },
+          itemBuilder: (context) => [
+            AuthPassAboutDialog.createAboutMenuItem(context),
+            PopupMenuItem(
+              value: () {
                 Provider.of<KdbxBloc>(context).closeAllFiles();
                 Navigator.of(context).pushAndRemoveUntil(SelectFileScreen.route, (_) => false);
-                break;
-            }
-          },
-          itemBuilder: (context) => const [
-            PopupMenuItem(
-              value: OverFlowMenuItems.lock,
+              },
               child: ListTile(
                 leading: Icon(Icons.exit_to_app),
-                title: Text('Lock Files'),
+                title: const Text('Lock Files'),
               ),
             ),
           ],

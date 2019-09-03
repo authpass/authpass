@@ -45,6 +45,18 @@ abstract class FileSource {
   Future<void> write(Uint8List bytes);
 
   Future<Uint8List> content() async => _cached ??= await load();
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other is FileSource) {
+      assert(uuid != null);
+      return other.uuid == uuid;
+    }
+    return super == other;
+  }
+
+  @override
+  int get hashCode => uuid.hashCode;
 }
 
 class FileSourceLocal extends FileSource {
@@ -202,15 +214,19 @@ class KdbxBloc with ChangeNotifier {
     }
   }
 
+  bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
+
   Future<int> reopenQuickUnlock() => _quickUnlockCheckRunning ??= (() async {
         _logger.finer('Checking quick unlock.');
         final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
-        for (final file in unlockFiles.entries) {
+        int filesOpened = 0;
+        for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
           await openFile(file.key, file.value);
+          filesOpened++;
         }
         _openedFilesQuickUnlock.clear();
         _openedFilesQuickUnlock.addAll(unlockFiles.keys);
-        return unlockFiles.length;
+        return filesOpened;
       })()
           .whenComplete(() => _quickUnlockCheckRunning = null);
 

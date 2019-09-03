@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -40,6 +41,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.entry.label ?? ''),
+        actions: <Widget>[
+          AuthPassAboutDialog.createAboutPopupAction(context),
+        ],
       ),
 //      floatingActionButton: FloatingActionButton(
 //        child: Icon(Icons.add),

@@ -58,6 +58,7 @@ android {
         }
         debug {
             project.flutter.target = 'lib/env/development.dart'
+            applicationIdSuffix = '.debug'
         }
     }
 }
