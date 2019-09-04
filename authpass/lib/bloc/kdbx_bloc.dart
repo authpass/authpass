@@ -176,6 +176,13 @@ class QuickUnlockStorage {
   }
 }
 
+/// response to [KdbxBloc.readKdbxFile] will either bei an exception OR a file.
+class ReadFileResponse {
+  ReadFileResponse(this.file, this.exception);
+  final KdbxFile file;
+  final dynamic exception;
+}
+
 class KdbxBloc {
   KdbxBloc({
     @required this.appDataBloc,
@@ -202,7 +209,11 @@ class KdbxBloc {
   }
 
   Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
-    final kdbxFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
+    final kdbxReadFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
+    if (kdbxReadFile.exception != null) {
+      throw kdbxReadFile.exception;
+    }
+    final kdbxFile = kdbxReadFile.file;
     final openedFile = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
     _openedFiles.value = {..._openedFiles.value, file: kdbxFile};
     analytics.events.trackOpenFile(type: openedFile.sourceType);
@@ -241,13 +252,18 @@ class KdbxBloc {
     _openedFiles.value = {};
   }
 
-  static Future<KdbxFile> readKdbxFile(KdbxReadArgs readArgs) async {
-    initIsolate();
-    _logger.finer('reading kdbx file ...');
-    final fileContent = await readArgs.fileSource.content();
-    final kdbxFile = KdbxFormat.read(fileContent, readArgs.credentials);
-    _logger.finer('done reading');
-    return kdbxFile;
+  static Future<ReadFileResponse> readKdbxFile(KdbxReadArgs readArgs) async {
+    try {
+      initIsolate();
+      _logger.finer('reading kdbx file ...');
+      final fileContent = await readArgs.fileSource.content();
+      final kdbxFile = KdbxFormat.read(fileContent, readArgs.credentials);
+      _logger.finer('done reading');
+      return ReadFileResponse(kdbxFile, null);
+    } catch (e, stackTrace) {
+      _logger.warning('Error while reading kdbx file.');
+      return ReadFileResponse(null, e);
+    }
   }
 
   /// Creates a new file in the application document directory by the given name.

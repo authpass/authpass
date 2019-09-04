@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -109,15 +111,26 @@ class _SimplePromptDialogState extends State<SimplePromptDialog> {
     return AlertDialog(
       title: widget.title == null ? null : Text(widget.title),
       content: Container(
-        child: TextField(
-          controller: _controller,
-          decoration: InputDecoration(
-            labelText: widget.labelText,
-          ),
-          autofocus: true,
-          onEditingComplete: () {
-            Navigator.of(context).pop(_controller.text);
-          },
+        child: Row(
+          children: <Widget>[
+            IconButton(
+                icon: Icon(FontAwesomeIcons.paste),
+                onPressed: () async {
+                  _controller.text = (await Clipboard.getData('text/plain')).text;
+                }),
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  labelText: widget.labelText,
+                ),
+                autofocus: true,
+                onEditingComplete: () {
+                  Navigator.of(context).pop(_controller.text);
+                },
+              ),
+            ),
+          ],
         ),
       ),
       actions: <Widget>[
