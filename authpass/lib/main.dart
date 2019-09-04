@@ -99,7 +99,10 @@ class _AuthPassAppState extends State<AuthPassApp> {
           builder: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,
         ),
-        ListenableProvider.value(value: _deps.kdbxBloc),
+        StreamProvider(
+          builder: (context) => _deps.kdbxBloc.openedFilesChanged.map((_) => _deps.kdbxBloc),
+          initialData: _deps.kdbxBloc,
+        ),
       ],
       child: MaterialApp(
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],

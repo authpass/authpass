@@ -32,7 +32,7 @@ class AuthPassAboutDialog extends StatelessWidget {
               ),
               UrlLink(
                 caption: 'Also make sure to visit our website',
-                url: 'https://anlage.app/',
+                url: 'https://authpass.app/',
               ),
               UrlLink(
                 caption: 'And Open Source Project',

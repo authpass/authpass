@@ -15,6 +15,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('password_list');
 
@@ -40,12 +41,22 @@ class PasswordList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
-    final allEntries = kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
-    return PasswordListContent(
-      entries: allEntries,
-      selectedEntry: selectedEntry,
-      onEntrySelected: onEntrySelected,
-    );
+    final streams = kdbxBloc.openedFiles.map((file) => file.dirtyObjectsChanged);
+    return StreamBuilder<bool>(
+        stream: Observable.merge(streams).map((x) => true),
+        builder: (context, snapshot) {
+          final watch = Stopwatch()..start();
+          final allEntries =
+              kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
+          allEntries.sort((a, b) => a.label.toLowerCase().compareTo(b.label?.toLowerCase()));
+          watch.stop();
+          _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
+          return PasswordListContent(
+            entries: allEntries,
+            selectedEntry: selectedEntry,
+            onEntrySelected: onEntrySelected,
+          );
+        });
   }
 }
 

@@ -160,8 +160,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
                   onPressed: () {
                     Navigator.of(context).push(CreateFile.route());
                   },
-//              icon: Icon(Icons.create_new_folder),
-                  child: const Text('Start from scratch'),
+                  icon: Icon(Icons.create_new_folder),
+                  child: const Expanded(child: Text('New to KeePass?\nCreate New Password Database', softWrap: true)),
                 ),
               )
             ],

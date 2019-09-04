@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:authpass/utils/path_utils.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:usage/usage_io.dart' as usage;
@@ -38,7 +39,7 @@ class Analytics {
     final info = await env.getAppInfo();
     _logger.fine('Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName}');
     if (env.analyticsGoogleAnalyticsId != null) {
-      final docsDir = await getApplicationDocumentsDirectory();
+      final docsDir = await PathUtils().getAppDataDirectory();
       _ga = usage.AnalyticsIO(
         env.analyticsGoogleAnalyticsId,
         info.appName,

@@ -2,6 +2,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -336,6 +337,7 @@ enum EntryAction {
   rename,
   protect,
   delete,
+  show,
 }
 
 class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
@@ -345,6 +347,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   CommonFields _commonFields;
 
   StringValue _value;
+  String get _valueCurrent => (_isProtected ? null : _controller.text) ?? _value.getText();
 
   @override
   void initState() {
@@ -404,7 +407,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       confirmDismiss: (direction) async {
 //        await ClipboardManager.copyToClipBoard(_value.getText());
         Provider.of<Analytics>(context).events.trackCopyField(key: widget.fieldKey.key);
-        await Clipboard.setData(ClipboardData(text: _value.getText()));
+        await Clipboard.setData(ClipboardData(text: _valueCurrent));
         return false;
       },
       child: Padding(
@@ -489,16 +492,23 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                     setState(() {
                       if (_isProtected) {
                         _isProtected = false;
-                        _value = PlainValue(_value?.getText() ?? '');
+                        _value = PlainValue(_valueCurrent ?? '');
                       } else {
                         _isProtected = true;
-                        _value = ProtectedValue.fromString(_value?.getText() ?? '');
+                        _value = ProtectedValue.fromString(_valueCurrent ?? '');
                       }
                     });
                     break;
                   case EntryAction.delete:
                     widget.entry.removeString(widget.fieldKey);
                     widget.onChangedMetadata();
+                    break;
+                  case EntryAction.show:
+                    FullScreenHud.show(context, (context) {
+                      return FullScreenHud(
+                        value: _valueCurrent,
+                      );
+                    });
                     break;
                 }
               },
@@ -530,6 +540,14 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                   child: ListTile(
                     leading: Icon(Icons.delete),
                     title: Text('Delete'),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: EntryAction.show,
+                  child: ListTile(
+//                    leading: Icon(Icons.present_to_all),
+                    leading: Icon(FontAwesomeIcons.qrcode),
+                    title: Text('Present'),
                   ),
                 ),
               ],

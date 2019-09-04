@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/main.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('kdbx_bloc');
 
@@ -175,31 +176,29 @@ class QuickUnlockStorage {
   }
 }
 
-class KdbxBloc with ChangeNotifier {
+class KdbxBloc {
   KdbxBloc({
     @required this.appDataBloc,
     @required this.analytics,
-  }) {
-    _openedFiles.addListener(notifyListeners);
-  }
+  });
 
   final AppDataBloc appDataBloc;
   final Analytics analytics;
   final quickUnlockStorage = QuickUnlockStorage();
 
-  final _openedFiles = ValueNotifier<Map<FileSource, KdbxFile>>({});
+  final _openedFiles = BehaviorSubject<Map<FileSource, KdbxFile>>.seeded({});
   final _openedFilesQuickUnlock = <FileSource>{};
 
   Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources => _openedFiles.value.entries;
 
   List<KdbxFile> get openedFiles => _openedFiles.value.values.toList();
+  ValueObservable<Map<FileSource, KdbxFile>> get openedFilesChanged => _openedFiles.stream;
 
   Future<int> _quickUnlockCheckRunning;
 
-  @override
   void dispose() {
-    _openedFiles.dispose();
-    super.dispose();
+    _openedFiles.close();
+//    super.dispose();
   }
 
   Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
@@ -275,7 +274,7 @@ class KdbxBloc with ChangeNotifier {
 
   Future<FileSourceLocal> _localFileSourceForDbName(String databaseName) async {
     final fileName = '$databaseName.kdbx';
-    final appDir = await getApplicationDocumentsDirectory();
+    final appDir = await PathUtils().getAppDataDirectory();
     await appDir.create(recursive: true);
     final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
         databaseName: databaseName, uuid: AppDataBloc.createUuid());
