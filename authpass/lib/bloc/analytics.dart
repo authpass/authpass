@@ -1,15 +1,13 @@
 import 'dart:io';
 
-import 'package:authpass/utils/path_utils.dart';
-import 'package:package_info/package_info.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:usage/usage_io.dart' as usage;
 import 'package:analytics_event_gen/analytics_event_gen.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:usage/usage_io.dart' as usage;
 
 part 'analytics.g.dart';
 

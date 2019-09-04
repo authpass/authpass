@@ -10,7 +10,6 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/password_generator.dart';
-import 'package:authpass/utils/predefined_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -39,6 +38,7 @@ class EntryDetailsScreen extends StatefulWidget {
 
 class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateMixin {
   final _formKey = GlobalKey<FormState>();
+  bool _isDirty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +53,28 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
 //        child: Icon(Icons.add),
 //        onPressed: () {},
 //      ),
-      body: Form(
-        key: _formKey,
-        child: EntryDetails(entry: widget.entry),
+      body: WillPopScope(
+        child: Form(
+          key: _formKey,
+          child: EntryDetails(entry: widget.entry),
+          onChanged: () {
+            if (!_isDirty) {
+              setState(() => _isDirty = true);
+            }
+          },
+        ),
+        onWillPop: () async {
+          if (!_isDirty && !widget.entry.isDirty) {
+            return true;
+          }
+          return await DialogUtils.showConfirmDialog(
+            context: context,
+            params: ConfirmDialogParams(
+                title: 'Unsaved Changes',
+                content: 'There are still unsaved changes. Do you want to discard changes?',
+                positiveButtonText: 'Discard Changes'),
+          );
+        },
       ),
       bottomNavigationBar: Material(
         elevation: 8,
@@ -64,15 +83,18 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
 //          decoration: BoxDecoration(border: Border(top: BorderSide())),
           padding: const EdgeInsets.all(16) + EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
           child: PrimaryButton(
-            onPressed: asyncTaskCallback(() async {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                final kdbxBloc = Provider.of<KdbxBloc>(context);
-                if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
-                  await kdbxBloc.saveFile(widget.entry.file);
-                }
-              }
-            }),
+            onPressed: !_isDirty && !widget.entry.isDirty
+                ? null
+                : asyncTaskCallback(() async {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      final kdbxBloc = Provider.of<KdbxBloc>(context);
+                      if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
+                        await kdbxBloc.saveFile(widget.entry.file);
+                        setState(() => _isDirty = false);
+                      }
+                    }
+                  }),
             icon: Icon(Icons.save),
             child: const Text('Save'),
           ),
@@ -136,8 +158,6 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
 
     final nonCommonKeys = widget.entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
 
-    final theme = Theme.of(context);
-
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -148,38 +168,11 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
           child: Column(
             children: <Widget>[
               const SizedBox(height: 16),
-              Card(
-                elevation: 8,
-                child: InkWell(
-                  onTap: () async {
-                    final newIcon = await IconSelectorDialog.show(context, initialSelection: widget.entry.icon.get());
-                    if (newIcon != null) {
-                      setState(() {
-                        widget.entry.icon.set(newIcon);
-                      });
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      height: 64,
-                      width: 64,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CenteredIcon(
-                          icon: PredefinedIcons.iconFor(widget.entry.icon.get()),
-                          size: 48,
-                          color: theme.primaryColor,
-                        ),
-//                        child: Icon(
-//                          PredefinedIcons.iconFor(widget.entry.icon.get()),
-//                          size: 40,
-//                          color: theme.primaryColor,
-//                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              IconSelectorFormField(
+                initialValue: widget.entry.icon.get(),
+                onSaved: (icon) {
+                  widget.entry.icon.set(icon);
+                },
               ),
               const SizedBox(height: 32),
               ...commonFields.fields
@@ -209,34 +202,6 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Workaround for centered icons. see https://github.com/flutter/flutter/issues/24054#issuecomment-439167235
-class CenteredIcon extends StatelessWidget {
-  const CenteredIcon({
-    Key key,
-    @required this.icon,
-    this.color,
-    this.size,
-  }) : super(key: key);
-
-  final IconData icon;
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      String.fromCharCode(icon.codePoint),
-      style: TextStyle(
-        inherit: false,
-        fontSize: size,
-        fontFamily: icon.fontFamily,
-        package: icon.fontPackage,
-        color: color,
       ),
     );
   }

@@ -36,6 +36,50 @@ class DialogUtils {
       _logger.warning('We do not yet support opening of URLs on desktop.');
     }
   }
+
+  static Future<bool> showConfirmDialog({
+    @required BuildContext context,
+    @required ConfirmDialogParams params,
+  }) {
+    return showDialog<bool>(context: context, builder: (context) => ConfirmDialog(params: params));
+  }
+}
+
+class ConfirmDialogParams {
+  ConfirmDialogParams({
+    this.title,
+    @required this.content,
+    this.positiveButtonText = 'Ok',
+    this.negativeButtonText = 'Cancel',
+  });
+
+  final String title;
+  final String content;
+  final String positiveButtonText;
+  final String negativeButtonText;
+}
+
+class ConfirmDialog extends StatelessWidget {
+  const ConfirmDialog({Key key, this.params}) : super(key: key);
+  final ConfirmDialogParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: params.title != null ? Text(params.title) : null,
+      content: Text(params.content),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(params.negativeButtonText),
+        ),
+        FlatButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(params.positiveButtonText),
+        ),
+      ],
+    );
+  }
 }
 
 class SimplePromptDialog extends StatefulWidget {

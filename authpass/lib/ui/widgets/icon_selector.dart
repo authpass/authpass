@@ -1,3 +1,4 @@
+import 'package:authpass/ui/widgets/centered_icon.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -114,6 +115,58 @@ class IconSelectorIcon extends StatelessWidget {
         onTap: onTap,
         child: Icon(iconData, color: isSelected ? null : theme.primaryColor),
       ),
+    );
+  }
+}
+
+class IconSelectorFormField extends StatelessWidget {
+  const IconSelectorFormField({
+    Key key,
+    @required this.initialValue,
+    @required this.onSaved,
+  }) : super(key: key);
+  final KdbxIcon initialValue;
+  final void Function(KdbxIcon icon) onSaved;
+
+  @override
+  Widget build(BuildContext context) {
+    return FormField<KdbxIcon>(
+      builder: (formFieldState) {
+        final theme = Theme.of(context);
+        return Card(
+          elevation: 8,
+          child: InkWell(
+            onTap: () async {
+              final newIcon = await IconSelectorDialog.show(context, initialSelection: formFieldState.value);
+              if (newIcon != null) {
+                formFieldState.didChange(newIcon);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                height: 64,
+                width: 64,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: CenteredIcon(
+                    icon: PredefinedIcons.iconFor(formFieldState.value),
+                    size: 48,
+                    color: theme.primaryColor,
+                  ),
+//                        child: Icon(
+//                          PredefinedIcons.iconFor(widget.entry.icon.get()),
+//                          size: 40,
+//                          color: theme.primaryColor,
+//                        ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      initialValue: initialValue,
+      onSaved: onSaved,
     );
   }
 }
