@@ -14,6 +14,11 @@ class FileSearchResponse {
   final List<FileSearchMatch> matches;
   @JsonKey(name: 'has_more')
   final bool hasMore;
+
+  @override
+  String toString() {
+    return 'FileSearchResponse{matches: $matches, hasMore: $hasMore}';
+  }
 }
 
 @JsonSerializable(nullable: false)
@@ -23,6 +28,23 @@ class FileSearchMatch {
   });
   factory FileSearchMatch.fromJson(Map<String, dynamic> json) => _$FileSearchMatchFromJson(json);
   Map<String, dynamic> toJson() => _$FileSearchMatchToJson(this);
+
+  @JsonKey(name: 'metadata')
+  final FileMetadataV2 metadata;
+
+  @override
+  String toString() {
+    return 'FileSearchMatch{metadata: $metadata}';
+  }
+}
+
+@JsonSerializable(nullable: false)
+class FileMetadataV2 {
+  FileMetadataV2({
+    this.metadata,
+  });
+  factory FileMetadataV2.fromJson(Map<String, dynamic> json) => _$FileMetadataV2FromJson(json);
+  Map<String, dynamic> toJson() => _$FileMetadataV2ToJson(this);
 
   final FileMetadata metadata;
 }
@@ -41,4 +63,9 @@ class FileMetadata {
   final String name;
   @JsonKey(name: 'path_display')
   final String pathDisplay;
+
+  @override
+  String toString() {
+    return 'FileMetadata{id: $id, name: $name, pathDisplay: $pathDisplay}';
+  }
 }

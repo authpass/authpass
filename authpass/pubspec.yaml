@@ -56,7 +56,12 @@ dependencies:
   googleapis_auth: ^0.2.10
 
   # dropbox
-  oauth2: ^1.3.0
+  #oauth2: ^1.3.0
+  oauth2:
+    #path: /Users/herbert/dev/patches/oauth2
+    git:
+      url: https://github.com/authpass/oauth2.git
+      ref: 508e542284733bbf0e0515d8ef0bbb5d39d47021
 
   # FDE
   file_chooser:
@@ -83,6 +88,7 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^3.2.2
   build_runner: ^1.6.7
+  builder_static_text: ^0.0.1
   built_value_generator: ^6.7.0
   pedantic: '>=1.7.0'
 #

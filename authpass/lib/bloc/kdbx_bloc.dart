@@ -261,7 +261,7 @@ class KdbxBloc {
       _logger.finer('done reading');
       return ReadFileResponse(kdbxFile, null);
     } catch (e, stackTrace) {
-      _logger.warning('Error while reading kdbx file.');
+      _logger.warning('Error while reading kdbx file.', e, stackTrace);
       return ReadFileResponse(null, e);
     }
   }

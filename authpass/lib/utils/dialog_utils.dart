@@ -114,10 +114,12 @@ class _SimplePromptDialogState extends State<SimplePromptDialog> {
         child: Row(
           children: <Widget>[
             IconButton(
-                icon: Icon(FontAwesomeIcons.paste),
-                onPressed: () async {
-                  _controller.text = (await Clipboard.getData('text/plain')).text;
-                }),
+              tooltip: 'Paste from clipboard',
+              icon: Icon(FontAwesomeIcons.paste),
+              onPressed: () async {
+                _controller.text = (await Clipboard.getData('text/plain')).text;
+              },
+            ),
             Expanded(
               child: TextField(
                 controller: _controller,

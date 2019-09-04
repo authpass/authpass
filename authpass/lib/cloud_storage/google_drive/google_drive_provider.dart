@@ -15,7 +15,7 @@ class GoogleDriveProvider extends CloudStorageProvider {
 
   @override
   Future<bool> startAuth(prompt) async {
-    final id = ClientId(env.googleClientId, env.googleClientSecret);
+    final id = ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
     final scopes = [DriveApi.DriveScope];
 
     _client = await clientViaUserConsentManual(id, scopes, prompt);
@@ -32,8 +32,28 @@ class GoogleDriveProvider extends CloudStorageProvider {
       q: SearchQueryTerm('name', QOperator.contains, 'kdbx').toQuery(),
     );
     _logger.fine('Got file results: ${files.files.map((f) => '${f.id}: ${f.name}')}');
+    SearchResponse(
+      (srb) => srb
+        ..hasMore = files.nextPageToken != null
+        ..results.addAll(
+          files.files.map(
+            (f) => CloudStorageEntity(
+              (b) => b
+                ..id = f.id
+                ..type = CloudStorageEntityType.file
+                ..name = f.name,
+            ),
+          ),
+        ),
+    );
     return null;
   }
+
+  @override
+  bool get isAuthenticated => _client != null;
+
+  @override
+  String get displayName => 'Google Drive';
 }
 
 class QOperator {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:authpass/main.dart';
 import 'package:built_value/built_value.dart';
+import 'package:meta/meta.dart';
 import 'package:package_info/package_info.dart';
 
 part '_base.g.dart';
@@ -25,6 +26,23 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   String get versionLabel => '$version+$buildNumber';
 }
 
+class EnvSecrets {
+  const EnvSecrets({
+    @required this.analyticsAmplitudeApiKey,
+    @required this.analyticsGoogleAnalyticsId,
+    @required this.googleClientId,
+    @required this.googleClientSecret,
+    @required this.dropboxKey,
+    @required this.dropboxSecret,
+  });
+  final String analyticsAmplitudeApiKey;
+  final String analyticsGoogleAnalyticsId;
+  final String googleClientId;
+  final String googleClientSecret;
+  final String dropboxKey;
+  final String dropboxSecret;
+}
+
 abstract class Env {
   Env(this.type) {
     value = this;
@@ -33,21 +51,15 @@ abstract class Env {
   static Env value;
 
   final EnvType type;
+  EnvSecrets get secrets;
 
   Future<void> start() async {
     await startApp(this);
   }
 
   String get name => runtimeType.toString();
+  bool get featureCloudStorage => false;
 
-  String get analyticsAmplitudeApiKey => null;
-//  String get analyticsGoogleAnalyticsId => 'G-HNGCPDXTSW';
-  String get analyticsGoogleAnalyticsId => 'UA-91100035-7';
-
-  String get googleClientId => 'TODO';
-  String get googleClientSecret => 'TODO';
-  String get dropboxKey => 'TODO';
-  String get dropboxSecret => 'TODO';
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();
     return AppInfo((b) => b

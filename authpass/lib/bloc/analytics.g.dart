@@ -25,3 +25,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackCopyField({String key}) =>
       trackEvent('copyField', <String, dynamic>{'key': key});
 }
+
+// **************************************************************************
+// StaticTextGenerator
+// **************************************************************************
+
+// ignore_for_file: implicit_dynamic_parameter,strong_mode_implicit_dynamic_parameter,strong_mode_implicit_dynamic_variable,non_constant_identifier_names,unused_element

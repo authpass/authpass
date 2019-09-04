@@ -36,10 +36,10 @@ class Analytics {
   Future<void> _init() async {
     final info = await env.getAppInfo();
     _logger.fine('Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName}');
-    if (env.analyticsGoogleAnalyticsId != null) {
+    if (env.secrets.analyticsGoogleAnalyticsId != null) {
       final docsDir = await PathUtils().getAppDataDirectory();
       _ga = usage.AnalyticsIO(
-        env.analyticsGoogleAnalyticsId,
+        env.secrets.analyticsGoogleAnalyticsId,
         info.appName,
         '${info.version}+${info.buildNumber}',
         documentDirectory: docsDir,

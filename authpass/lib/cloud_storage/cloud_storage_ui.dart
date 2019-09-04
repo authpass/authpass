@@ -1,8 +1,10 @@
 import 'package:authpass/cloud_storage/cloud_storage.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,8 +27,6 @@ class CloudStorageSelector extends StatefulWidget {
 }
 
 class _CloudStorageSelectorState extends State<CloudStorageSelector> {
-  CloudStorageProvider _drive;
-
   @override
   void initState() {
     super.initState();
@@ -36,13 +36,11 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Google Drive'),
+        title: Text('CloudStorage - ${widget.provider.displayName}'),
       ),
-      body: Center(
-        child: _drive == null
-            ? CloudStorageAuthentication(drive: widget.provider, onSuccess: () => setState(() {}))
-            : GoogleDriveSearch(provider: _drive),
-      ),
+      body: widget.provider.isAuthenticated != true
+          ? Center(child: CloudStorageAuthentication(drive: widget.provider, onSuccess: () => setState(() {})))
+          : Center(child: GoogleDriveSearch(provider: widget.provider)),
     );
   }
 }
@@ -96,19 +94,81 @@ class GoogleDriveSearch extends StatefulWidget {
   _GoogleDriveSearchState createState() => _GoogleDriveSearchState();
 }
 
-class _GoogleDriveSearchState extends State<GoogleDriveSearch> {
+class _GoogleDriveSearchState extends State<GoogleDriveSearch> with TaskStateMixin {
+  final _searchController = TextEditingController(text: 'kdbx');
+  SearchResponse _searchResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    _search();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        LinkButton(
-          child: const Text('Search'),
-          onPressed: () {
-            widget.provider.searchKdbx();
-          },
+    return LayoutBuilder(
+      builder: (context, constraints) => ConstrainedBox(
+        constraints: constraints.copyWith(maxWidth: 320),
+        child: Column(
+//      mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Search Query',
+                      ),
+                      controller: _searchController,
+                    ),
+                  ),
+                  IconButton(icon: Icon(Icons.search), onPressed: () => _search()),
+                ],
+              ),
+            ),
+            task != null
+                ? const CircularProgressIndicator()
+                : _searchResponse == null ? Container() : SearchResultListView(response: _searchResponse),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+
+  Future<void> _search() => asyncRunTask(
+        () async {
+          final results = await widget.provider.searchKdbx();
+          _logger.fine('Got results:');
+          for (final result in results.results) {
+            _logger.fine('${result.name} (${result.id}');
+          }
+          setState(() {
+            _searchResponse = results;
+          });
+        },
+      );
+}
+
+class SearchResultListView extends StatelessWidget {
+  const SearchResultListView({Key key, @required this.response}) : super(key: key);
+
+  final SearchResponse response;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        itemBuilder: (context, itemId) {
+          final entity = response.results[itemId];
+          return ListTile(
+            leading: Icon(FontAwesomeIcons.file),
+            title: Text(entity.name),
+          );
+        },
+        itemCount: response.results.length,
+      ),
     );
   }
 }

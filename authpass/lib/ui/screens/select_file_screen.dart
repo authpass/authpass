@@ -105,24 +105,31 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
+    final env = Provider.of<Env>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         const Text('Please select a KeePass (.kdbx) file.'),
         const Text('(Currently only kdbx 3 is supported)'),
-        LinkButton(
-          child: const Text('Google Drive'),
-          onPressed: () {
-            Navigator.of(context).push(CloudStorageSelector.route(GoogleDriveProvider(env: Provider.of<Env>(context))));
-          },
-        ),
-        LinkButton(
-          child: const Text('Dropbox'),
-          onPressed: () {
-            Navigator.of(context).push(CloudStorageSelector.route(DropboxProvider(env: Provider.of<Env>(context))));
-          },
-        ),
+        ...(!env.featureCloudStorage
+            ? []
+            : [
+                LinkButton(
+                  child: const Text('Google Drive'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(CloudStorageSelector.route(GoogleDriveProvider(env: Provider.of<Env>(context))));
+                  },
+                ),
+                LinkButton(
+                  child: const Text('Dropbox'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(CloudStorageSelector.route(DropboxProvider(env: Provider.of<Env>(context))));
+                  },
+                ),
+              ]),
         const SizedBox(height: 16),
         _fileLoader != null
             ? const CircularProgressIndicator()
