@@ -6,3 +6,4 @@
 git-buildnumber.sh
 /authpass/_tools/secrets/api-project-284252947431-83b019c3ca1e.json
 /authpass/_tools/deploy-key/github-deploy-key
+/authpass/lib/env/secrets.dart
