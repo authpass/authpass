@@ -4,6 +4,10 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
+import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
@@ -107,6 +111,18 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
       children: <Widget>[
         const Text('Please select a KeePass (.kdbx) file.'),
         const Text('(Currently only kdbx 3 is supported)'),
+        LinkButton(
+          child: const Text('Google Drive'),
+          onPressed: () {
+            Navigator.of(context).push(CloudStorageSelector.route(GoogleDriveProvider(env: Provider.of<Env>(context))));
+          },
+        ),
+        LinkButton(
+          child: const Text('Dropbox'),
+          onPressed: () {
+            Navigator.of(context).push(CloudStorageSelector.route(DropboxProvider(env: Provider.of<Env>(context))));
+          },
+        ),
         const SizedBox(height: 16),
         _fileLoader != null
             ? const CircularProgressIndicator()
@@ -475,7 +491,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           _formKey.currentState.validate();
         });
       } catch (e, stackTrace) {
-        _logger.fine('Unable to open kdbx file.', e, stackTrace);
+        _logger.fine('Unable to open kdbx file. ', e, stackTrace);
         await DialogUtils.showSimpleAlertDialog(
           context,
           'Unable to open File',

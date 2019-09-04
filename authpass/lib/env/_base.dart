@@ -44,6 +44,10 @@ abstract class Env {
 //  String get analyticsGoogleAnalyticsId => 'G-HNGCPDXTSW';
   String get analyticsGoogleAnalyticsId => 'UA-91100035-7';
 
+  String get googleClientId => 'TODO';
+  String get googleClientSecret => 'TODO';
+  String get dropboxKey => 'TODO';
+  String get dropboxSecret => 'TODO';
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();
     return AppInfo((b) => b
