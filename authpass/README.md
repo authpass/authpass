@@ -9,6 +9,7 @@ see [../README.md](../README.md) for details.
 ```
 flutter channel master && flutter upgrade
 flutter clean
+# Update buildnumber in `pubspec.yaml`(?)
 flutter build macos -t lib/env/production.dart --release
 
 cd build/macos/Build/Products/Release/
