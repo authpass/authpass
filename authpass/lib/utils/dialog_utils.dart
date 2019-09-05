@@ -29,13 +29,12 @@ class DialogUtils {
         });
   }
 
-  static Future<void> openUrl(String url) async {
-    if (Platform.isIOS || Platform.isAndroid) {
-      if (await canLaunch(url)) {
-        await launch(url, forceSafariVC: false, forceWebView: false);
-      }
+  static Future<bool> openUrl(String url) async {
+    if (await canLaunch(url)) {
+      return await launch(url, forceSafariVC: false, forceWebView: false);
     } else {
-      _logger.warning('We do not yet support opening of URLs on desktop.');
+      _logger.severe('Unable to launch url $url');
+      return false;
     }
   }
 

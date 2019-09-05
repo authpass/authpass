@@ -59,7 +59,7 @@ class CloudStorageAuthentication extends StatelessWidget {
         try {
           final auth = await drive.startAuth((uri) async {
             _logger.fine('Launching authentication url $uri');
-            if (await canLaunch(uri)) {
+            if (await DialogUtils.openUrl(uri)) {
               await launch(uri);
 //              await DialogUtils.showConfirmDialog(context: null, params: null)
               return await SimplePromptDialog.showPrompt(
