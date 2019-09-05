@@ -10,6 +10,7 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/password_generator.dart';
+import 'package:built_value/built_value.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -92,6 +93,13 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
                       if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
                         await kdbxBloc.saveFile(widget.entry.file);
                         setState(() => _isDirty = false);
+                      } else {
+                        await DialogUtils.showSimpleAlertDialog(
+                          context,
+                          null,
+                          'Sorry this database does not support saving. '
+                          'Please open a local database file.',
+                        );
                       }
                     }
                   }),

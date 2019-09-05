@@ -48,7 +48,7 @@ class PasswordList extends StatelessWidget {
           final watch = Stopwatch()..start();
           final allEntries =
               kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
-          allEntries.sort((a, b) => a.label.toLowerCase().compareTo(b.label?.toLowerCase()));
+          allEntries.sort((a, b) => (a.label?.toLowerCase() ?? '').compareTo(b.label?.toLowerCase() ?? ''));
           watch.stop();
           _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
           return PasswordListContent(
@@ -397,6 +397,16 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                 );
               },
             ),
+      floatingActionButton: widget.entries.isEmpty || _filterQuery != null
+          ? null
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                final kdbxBloc = Provider.of<KdbxBloc>(context);
+                final entry = kdbxBloc.createEntry();
+                widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+              },
+            ),
     );
   }
 
@@ -443,18 +453,23 @@ class NoPasswordsEmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(32.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text('🤗️', style: TextStyle(fontSize: 64)),
-          const SizedBox(height: 16),
-          const Text('You do not have any password in your database yet.'),
-          const SizedBox(height: 16),
-          PrimaryButton(
-            child: const Text('Add Password'),
-            onPressed: onPrimaryButtonPressed,
-          ),
-        ],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('🤗️', style: TextStyle(fontSize: 64)),
+            const SizedBox(height: 16),
+            const Text(
+              'You do not have any password in your database yet.',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            PrimaryButton(
+              child: const Text('Add Password'),
+              onPressed: onPrimaryButtonPressed,
+            ),
+          ],
+        ),
       ),
     );
   }

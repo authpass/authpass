@@ -1,0 +1,8 @@
+targets:
+  $default:
+    builders:
+      builder_static_text|static_text:
+        generate_for:
+          - lib/**/*.dart
+        options:
+          content: '// ignore_for_file: implicit_dynamic_parameter,strong_mode_implicit_dynamic_parameter,strong_mode_implicit_dynamic_variable,non_constant_identifier_names,unused_element'
