@@ -1,4 +1,4 @@
-import 'package:authpass/cloud_storage/cloud_storage.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';

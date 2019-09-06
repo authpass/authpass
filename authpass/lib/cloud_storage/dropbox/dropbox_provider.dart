@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:authpass/cloud_storage/cloud_storage.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_models.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:logging/logging.dart';

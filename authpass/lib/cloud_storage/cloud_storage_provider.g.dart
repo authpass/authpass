@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cloud_storage.dart';
+part of 'cloud_storage_provider.dart';
 
 // **************************************************************************
 // AnalyticsEventGenerator

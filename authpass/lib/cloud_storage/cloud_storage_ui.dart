@@ -1,4 +1,4 @@
-import 'package:authpass/cloud_storage/cloud_storage.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';

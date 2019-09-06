@@ -8,3 +8,5 @@ git-buildnumber.sh
 /authpass/_tools/deploy-key/github-deploy-key
 /authpass/lib/env/secrets.dart
 development_hp.dart
+/tmp
+
