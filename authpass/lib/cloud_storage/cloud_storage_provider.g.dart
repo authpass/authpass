@@ -19,12 +19,15 @@ class _$CloudStorageEntity extends CloudStorageEntity {
   final CloudStorageEntityType type;
   @override
   final String name;
+  @override
+  final String path;
 
   factory _$CloudStorageEntity(
           [void Function(CloudStorageEntityBuilder) updates]) =>
       (new CloudStorageEntityBuilder()..update(updates)).build();
 
-  _$CloudStorageEntity._({this.id, this.type, this.name}) : super._() {
+  _$CloudStorageEntity._({this.id, this.type, this.name, this.path})
+      : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('CloudStorageEntity', 'id');
     }
@@ -51,12 +54,14 @@ class _$CloudStorageEntity extends CloudStorageEntity {
     return other is CloudStorageEntity &&
         id == other.id &&
         type == other.type &&
-        name == other.name;
+        name == other.name &&
+        path == other.path;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, id.hashCode), type.hashCode), name.hashCode));
+    return $jf($jc($jc($jc($jc(0, id.hashCode), type.hashCode), name.hashCode),
+        path.hashCode));
   }
 
   @override
@@ -64,7 +69,8 @@ class _$CloudStorageEntity extends CloudStorageEntity {
     return (newBuiltValueToStringHelper('CloudStorageEntity')
           ..add('id', id)
           ..add('type', type)
-          ..add('name', name))
+          ..add('name', name)
+          ..add('path', path))
         .toString();
   }
 }
@@ -85,6 +91,10 @@ class CloudStorageEntityBuilder
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
+  String _path;
+  String get path => _$this._path;
+  set path(String path) => _$this._path = path;
+
   CloudStorageEntityBuilder();
 
   CloudStorageEntityBuilder get _$this {
@@ -92,6 +102,7 @@ class CloudStorageEntityBuilder
       _id = _$v.id;
       _type = _$v.type;
       _name = _$v.name;
+      _path = _$v.path;
       _$v = null;
     }
     return this;
@@ -112,8 +123,8 @@ class CloudStorageEntityBuilder
 
   @override
   _$CloudStorageEntity build() {
-    final _$result =
-        _$v ?? new _$CloudStorageEntity._(id: id, type: type, name: name);
+    final _$result = _$v ??
+        new _$CloudStorageEntity._(id: id, type: type, name: name, path: path);
     replace(_$result);
     return _$result;
   }

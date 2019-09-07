@@ -1,5 +1,7 @@
+import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
-import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,8 @@ class CloudStorageSelector extends StatefulWidget {
   @override
   _CloudStorageSelectorState createState() => _CloudStorageSelectorState();
 
-  static Route<String> route(CloudStorageProvider provider) => MaterialPageRoute(
+  static Route<FileSourceCloudStorage> route(CloudStorageProvider provider) =>
+      MaterialPageRoute<FileSourceCloudStorage>(
         settings: const RouteSettings(name: '/cloudStorage/selector'),
         builder: (context) => CloudStorageSelector(
           provider: provider,
@@ -30,6 +33,7 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   @override
   void initState() {
     super.initState();
+    widget.provider.loadSavedAuth().then((val) => setState(() {}));
   }
 
   @override
@@ -39,62 +43,74 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
         title: Text('CloudStorage - ${widget.provider.displayName}'),
       ),
       body: widget.provider.isAuthenticated != true
-          ? Center(child: CloudStorageAuthentication(drive: widget.provider, onSuccess: () => setState(() {})))
-          : Center(child: GoogleDriveSearch(provider: widget.provider)),
+          ? Center(child: CloudStorageAuthentication(provider: widget.provider, onSuccess: () => setState(() {})))
+          : Center(child: CloudStorageSearch(provider: widget.provider)),
     );
   }
 }
 
 class CloudStorageAuthentication extends StatelessWidget {
-  const CloudStorageAuthentication({Key key, @required this.drive, this.onSuccess}) : super(key: key);
+  const CloudStorageAuthentication({Key key, @required this.provider, this.onSuccess}) : super(key: key);
 
-  final CloudStorageProvider drive;
+  final CloudStorageProvider provider;
   final void Function() onSuccess;
 
   @override
   Widget build(BuildContext context) {
-    return LinkButton(
-      child: const Text('Auth'),
-      onPressed: () async {
-        try {
-          final auth = await drive.startAuth((uri) async {
-            _logger.fine('Launching authentication url $uri');
-            if (await DialogUtils.openUrl(uri)) {
-              await launch(uri);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        PrimaryButton(
+          icon: Icon(FontAwesomeIcons.signInAlt),
+          child: Text('Login to ${provider.displayName}'),
+          onPressed: () async {
+            try {
+              final auth = await provider.startAuth((uri) async {
+                _logger.fine('Launching authentication url $uri');
+                if (await DialogUtils.openUrl(uri)) {
+//                  await launch(uri);
 //              await DialogUtils.showConfirmDialog(context: null, params: null)
-              return await SimplePromptDialog.showPrompt(
-                  context,
-                  const SimplePromptDialog(
-                    title: 'Google Drive Authentication',
-                    labelText: 'Authentication Code',
-                  ));
-            } else {
-              await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
-              return null;
+                  return await SimplePromptDialog.showPrompt(
+                    context,
+                    const SimplePromptDialog(
+                      title: 'Google Drive Authentication',
+                      labelText: 'Authentication Code',
+                    ),
+                  );
+                } else {
+                  await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
+                  return null;
+                }
+              });
+              _logger.fine('finished launching. $auth');
+              onSuccess();
+            } catch (e, stackTrace) {
+              _logger.severe('Error while authenticating.', e, stackTrace);
+              await DialogUtils.showSimpleAlertDialog(
+                  context, 'Error while authenticating', 'Error while trying to authenticate fo google drive. $e');
             }
-          });
-          _logger.fine('finished launching. $auth');
-          onSuccess();
-        } catch (e, stackTrace) {
-          _logger.severe('Error while authenticating.', e, stackTrace);
-          await DialogUtils.showSimpleAlertDialog(
-              context, 'Error while authenticating', 'Error while trying to authenticate fo google drive. $e');
-        }
-      },
+          },
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'You will be redirected to authenticate AuthPass to access your data.',
+          style: Theme.of(context).textTheme.caption,
+        ),
+      ],
     );
   }
 }
 
-class GoogleDriveSearch extends StatefulWidget {
-  const GoogleDriveSearch({Key key, this.provider}) : super(key: key);
+class CloudStorageSearch extends StatefulWidget {
+  const CloudStorageSearch({Key key, this.provider}) : super(key: key);
 
   final CloudStorageProvider provider;
 
   @override
-  _GoogleDriveSearchState createState() => _GoogleDriveSearchState();
+  _CloudStorageSearchState createState() => _CloudStorageSearchState();
 }
 
-class _GoogleDriveSearchState extends State<GoogleDriveSearch> with TaskStateMixin {
+class _CloudStorageSearchState extends State<CloudStorageSearch> with TaskStateMixin {
   final _searchController = TextEditingController(text: 'kdbx');
   SearchResponse _searchResponse;
 
@@ -122,6 +138,7 @@ class _GoogleDriveSearchState extends State<GoogleDriveSearch> with TaskStateMix
                         labelText: 'Search Query',
                       ),
                       controller: _searchController,
+                      onEditingComplete: _search,
                     ),
                   ),
                   IconButton(icon: Icon(Icons.search), onPressed: () => _search()),
@@ -130,7 +147,19 @@ class _GoogleDriveSearchState extends State<GoogleDriveSearch> with TaskStateMix
             ),
             task != null
                 ? const CircularProgressIndicator()
-                : _searchResponse == null ? Container() : SearchResultListView(response: _searchResponse),
+                : _searchResponse == null
+                    ? Container()
+                    : SearchResultListView(
+                        response: _searchResponse,
+                        onTap: (entity) {
+                          final source = FileSourceCloudStorage(
+                            provider: widget.provider,
+                            fileInfo: entity.toSimpleFileInfo(),
+                            uuid: AppDataBloc.createUuid(),
+                          );
+                          Navigator.of(context).pop(source);
+                        },
+                      ),
           ],
         ),
       ),
@@ -139,7 +168,7 @@ class _GoogleDriveSearchState extends State<GoogleDriveSearch> with TaskStateMix
 
   Future<void> _search() => asyncRunTask(
         () async {
-          final results = await widget.provider.searchKdbx();
+          final results = await widget.provider.search(name: _searchController.text);
           _logger.fine('Got results:');
           for (final result in results.results) {
             _logger.fine('${result.name} (${result.id}');
@@ -152,9 +181,10 @@ class _GoogleDriveSearchState extends State<GoogleDriveSearch> with TaskStateMix
 }
 
 class SearchResultListView extends StatelessWidget {
-  const SearchResultListView({Key key, @required this.response}) : super(key: key);
+  const SearchResultListView({Key key, @required this.response, this.onTap}) : super(key: key);
 
   final SearchResponse response;
+  final void Function(CloudStorageEntity entity) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +195,8 @@ class SearchResultListView extends StatelessWidget {
           return ListTile(
             leading: Icon(FontAwesomeIcons.file),
             title: Text(entity.name),
+            subtitle: entity.path == null ? null : Text(entity.path),
+            onTap: () => onTap(entity),
           );
         },
         itemCount: response.results.length,

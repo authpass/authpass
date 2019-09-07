@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -13,7 +15,7 @@ import 'package:uuid/uuid.dart';
 
 part 'app_data.g.dart';
 
-enum OpenedFilesSourceType { Local, Url }
+enum OpenedFilesSourceType { Local, Url, CloudStorage }
 
 class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
   SimpleEnumSerializer(this.enumValues);
@@ -45,6 +47,9 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   OpenedFile._();
 
   static Serializer<OpenedFile> get serializer => _$openedFileSerializer;
+
+  static const SOURCE_CLOUD_STORAGE_ID = 'storageId';
+  static const SOURCE_CLOUD_STORAGE_DATA = 'data';
 
   /// unique id to identify this open file across sessions.
   @nullable
@@ -80,18 +85,35 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               ..sourceType = OpenedFilesSourceType.Url
               ..sourcePath = fileSource.url.toString()
               ..name = dbName;
+          } else if (fileSource is FileSourceCloudStorage) {
+            b
+              ..sourceType = OpenedFilesSourceType.CloudStorage
+              ..sourcePath = json.encode({
+                SOURCE_CLOUD_STORAGE_ID: fileSource.provider.id,
+                SOURCE_CLOUD_STORAGE_DATA: fileSource.fileInfo,
+              })
+              ..name = dbName;
           } else {
             throw ArgumentError.value(fileSource, 'fileSource', 'Unsupported file type ${fileSource.runtimeType}');
           }
         },
       );
 
-  FileSource toFileSource() {
+  FileSource toFileSource(CloudStorageBloc cloudStorageBloc) {
     switch (sourceType) {
       case OpenedFilesSourceType.Local:
         return FileSourceLocal(File(sourcePath), uuid: uuid ?? AppDataBloc.createUuid());
       case OpenedFilesSourceType.Url:
         return FileSourceUrl(Uri.parse(sourcePath), uuid: uuid ?? AppDataBloc.createUuid());
+      case OpenedFilesSourceType.CloudStorage:
+        final sourceInfo = json.decode(sourcePath) as Map<String, dynamic>;
+        final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String;
+        final provider = cloudStorageBloc.providerById(storageId);
+        if (provider == null) {
+          throw StateError('Invalid cloud storage provider id $storageId');
+        }
+        return provider.toFileSource((sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map).cast<String, String>(),
+            uuid: uuid ?? AppDataBloc.createUuid());
     }
     throw ArgumentError.value(sourceType, 'sourceType', 'Unsupported value.');
   }

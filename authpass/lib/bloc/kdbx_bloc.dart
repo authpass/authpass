@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
@@ -112,11 +114,40 @@ class FileSourceUrl extends FileSource {
   bool get supportsWrite => false;
 }
 
+class FileSourceCloudStorage extends FileSource {
+  FileSourceCloudStorage({@required this.provider, @required this.fileInfo, String databaseName, @required String uuid})
+      : super(databaseName: databaseName, uuid: uuid);
+
+  final CloudStorageProvider provider;
+
+  final Map<String, String> fileInfo;
+
+  @override
+  String get displayNameFromPath => provider.displayNameFromPath(fileInfo);
+
+  @override
+  String get displayPath => provider.displayPath(fileInfo);
+
+  @override
+  Future<Uint8List> load() {
+    return provider.loadFile(fileInfo);
+  }
+
+  @override
+  bool get supportsWrite => true;
+
+  @override
+  Future<void> write(Uint8List bytes) {
+    return provider.saveFile(fileInfo, bytes);
+  }
+}
+
 class FileExistsException extends KdbxException {}
 
 class QuickUnlockStorage {
-  QuickUnlockStorage();
+  QuickUnlockStorage({@required this.cloudStorageBloc});
 
+  CloudStorageBloc cloudStorageBloc;
   bool _supported;
 
   Future<bool> supportsBiometricKeyStore() async {
@@ -171,7 +202,7 @@ class QuickUnlockStorage {
       if (file == null) {
         return null;
       }
-      return MapEntry(file.toFileSource(), HashCredentials(base64.decode(entry.value as String)));
+      return MapEntry(file.toFileSource(cloudStorageBloc), HashCredentials(base64.decode(entry.value as String)));
     }).where((e) => e != null));
   }
 }
@@ -187,11 +218,13 @@ class KdbxBloc {
   KdbxBloc({
     @required this.appDataBloc,
     @required this.analytics,
-  });
+    @required this.cloudStorageBloc,
+  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc);
 
   final AppDataBloc appDataBloc;
   final Analytics analytics;
-  final quickUnlockStorage = QuickUnlockStorage();
+  final CloudStorageBloc cloudStorageBloc;
+  final QuickUnlockStorage quickUnlockStorage;
 
   final _openedFiles = BehaviorSubject<Map<FileSource, KdbxFile>>.seeded({});
   final _openedFilesQuickUnlock = <FileSource>{};
@@ -209,7 +242,9 @@ class KdbxBloc {
   }
 
   Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
-    final kdbxReadFile = await compute(readKdbxFile, KdbxReadArgs(file, credentials), debugLabel: 'readKdbxFile');
+    final fileContent = await file.content();
+    final kdbxReadFile =
+        await compute(readKdbxFile, KdbxReadArgs(fileContent, credentials), debugLabel: 'readKdbxFile');
     if (kdbxReadFile.exception != null) {
       throw kdbxReadFile.exception;
     }
@@ -256,13 +291,13 @@ class KdbxBloc {
     try {
       initIsolate();
       _logger.finer('reading kdbx file ...');
-      final fileContent = await readArgs.fileSource.content();
+      final fileContent = await readArgs.content;
       final kdbxFile = KdbxFormat.read(fileContent, readArgs.credentials);
       _logger.finer('done reading');
       return ReadFileResponse(kdbxFile, null);
     } catch (e, stackTrace) {
       _logger.warning('Error while reading kdbx file.', e, stackTrace);
-      return ReadFileResponse(null, e);
+      return ReadFileResponse(null, e.toString());
     }
   }
 
@@ -340,8 +375,8 @@ class KdbxBloc {
 }
 
 class KdbxReadArgs {
-  KdbxReadArgs(this.fileSource, this.credentials);
+  KdbxReadArgs(this.content, this.credentials);
 
-  final FileSource fileSource;
+  final Uint8List content;
   final Credentials credentials;
 }

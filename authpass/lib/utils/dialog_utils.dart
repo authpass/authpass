@@ -96,13 +96,42 @@ class SimplePromptDialog extends StatefulWidget {
   _SimplePromptDialogState createState() => _SimplePromptDialogState();
 }
 
-class _SimplePromptDialogState extends State<SimplePromptDialog> {
+class _SimplePromptDialogState extends State<SimplePromptDialog> with WidgetsBindingObserver {
   TextEditingController _controller;
+  AppLifecycleState _previousState;
+  String _previousClipboard;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialValue);
+    WidgetsBinding.instance.addObserver(this);
+    _readClipboard();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Future<void> _readClipboard({bool setIfChanged = false}) async {
+    final text = (await Clipboard.getData('text/plain'))?.text;
+    if (setIfChanged && text != _previousClipboard && text != null) {
+      _controller.text = text;
+      _controller.selection = TextSelection(baseOffset: 0, extentOffset: text.length);
+    }
+    _previousClipboard = text;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    _logger.fine('lifecycle state changed to $state (was: $_previousState)');
+    if (state == AppLifecycleState.resumed) {
+      _readClipboard();
+    }
+    _previousState = state;
   }
 
   @override

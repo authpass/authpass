@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
@@ -95,6 +96,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
         Provider<Analytics>.value(value: _deps.analytics),
         Provider<AuthPassLocalizations>.value(value: authPassLocalizations),
         Provider<CommonFields>.value(value: CommonFields(authPassLocalizations)),
+        Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
         StreamProvider<AppData>(
           builder: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,

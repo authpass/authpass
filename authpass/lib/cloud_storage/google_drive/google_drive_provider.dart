@@ -1,35 +1,93 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
 
 class GoogleDriveProvider extends CloudStorageProvider {
-  GoogleDriveProvider({@required this.env});
+  GoogleDriveProvider({@required this.env, @required CloudStorageHelper helper}) : super(helper: helper);
 
   final Env env;
   AutoRefreshingAuthClient _client;
 
+  static const _scopes = [DriveApi.DriveScope];
+  ClientId get _clientId => ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
+
+  @override
+  Future<bool> loadSavedAuth() async {
+    final accessCredentials = await _loadAccessCredentials();
+    if (accessCredentials != null) {
+      _client = autoRefreshingClient(_clientId, accessCredentials, Client());
+      _client.credentialUpdates.listen(_credentialsChanged);
+      return true;
+    }
+    return false;
+  }
+
   @override
   Future<bool> startAuth(prompt) async {
-    final id = ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
-    final scopes = [DriveApi.DriveScope];
-
-    _client = await clientViaUserConsentManual(id, scopes, prompt);
+    _client = await clientViaUserConsentManual(_clientId, _scopes, prompt);
+    _client.credentialUpdates.listen(_credentialsChanged);
+    _credentialsChanged(_client.credentials);
     _logger.finer('Finished user consent.');
     return true;
   }
 
+  void _credentialsChanged(AccessCredentials credentials) {
+    final jsonString = <String, dynamic>{
+      'accessToken': _accessTokenToJson(credentials.accessToken),
+      'refreshToken': credentials.refreshToken,
+      'idToken': credentials.idToken,
+      'scopes': credentials.scopes,
+    };
+    storeCredentials(json.encode(jsonString));
+  }
+
+  Map<String, dynamic> _accessTokenToJson(AccessToken at) => <String, dynamic>{
+        'type': at.type,
+        'data': at.data,
+        'expiry': at.expiry.toString(),
+      };
+
+  AccessToken _accessTokenFromJson(Map<String, dynamic> map) {
+    return AccessToken(
+      map['type'] as String,
+      map['data'] as String,
+      DateTime.parse(map['expiry'] as String),
+    );
+  }
+
+  Future<AccessCredentials> _loadAccessCredentials() async {
+    final jsonString = await loadCredentials();
+    if (jsonString == null) {
+      return null;
+    }
+    final map = json.decode(jsonString) as Map<String, dynamic>;
+    return AccessCredentials(
+      _accessTokenFromJson(map['accessToken'] as Map<String, dynamic>),
+      map['refreshToken'] as String,
+      (map['scopes'] as List).cast<String>(),
+      idToken: map['idToken'] as String,
+    );
+  }
+
   @override
-  Future<SearchResponse> searchKdbx() async {
+  Future<SearchResponse> search({String name = 'kdbx'}) async {
     assert(_client != null);
     final driveApi = DriveApi(_client);
-    _logger.fine('Query: ${SearchQueryTerm('name', QOperator.contains, 'kdbx').toQuery()}');
+    _logger.fine('Query: ${SearchQueryTerm('name', QOperator.contains, name).toQuery()}');
     final files = await driveApi.files.list(
-      q: SearchQueryTerm('name', QOperator.contains, 'kdbx').toQuery(),
+      q: SearchQueryTerm('name', QOperator.contains, name).toQuery(),
     );
     _logger.fine('Got file results: ${files.files.map((f) => '${f.id}: ${f.name}')}');
     SearchResponse(
@@ -54,6 +112,31 @@ class GoogleDriveProvider extends CloudStorageProvider {
 
   @override
   String get displayName => 'Google Drive';
+
+  @override
+  IconData get displayIcon => FontAwesomeIcons.googleDrive;
+
+  @override
+  Future<Uint8List> loadEntity(CloudStorageEntity file) async {
+    final driveApi = DriveApi(_client);
+    final dynamic response = await driveApi.files.get(file.id, downloadOptions: DownloadOptions.FullMedia);
+    final media = response as Media;
+    final bytes = BytesBuilder(copy: false);
+    // ignore: prefer_foreach
+    await for (final chunk in media.stream) {
+      bytes.add(chunk);
+    }
+    return bytes.toBytes();
+  }
+
+  @override
+  Future<void> saveEntity(CloudStorageEntity file, Uint8List bytes) async {
+    final driveApi = DriveApi(_client);
+    final byteStream = ByteStream.fromBytes(bytes);
+    final updatedFile = await driveApi.files.update(null, file.id, uploadMedia: Media(byteStream, bytes.lengthInBytes));
+    _logger.fine('Successfully saved file ${updatedFile.name}');
+    return;
+  }
 }
 
 class QOperator {

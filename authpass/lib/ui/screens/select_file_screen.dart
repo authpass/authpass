@@ -6,14 +6,11 @@ import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
-import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
-import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
-import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
@@ -148,6 +145,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     final env = Provider.of<Env>(context);
+    final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     return ProgressOverlay(
       hasProgress: false,
       child: Column(
@@ -156,44 +154,44 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
         children: <Widget>[
           const Text('Please select a KeePass (.kdbx) file.'),
           const Text('(Currently only kdbx 3 is supported)'),
-          ...(!env.featureCloudStorage
-              ? []
-              : [
-                  LinkButton(
-                    child: const Text('Google Drive'),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(CloudStorageSelector.route(GoogleDriveProvider(env: Provider.of<Env>(context))));
-                    },
-                  ),
-                  LinkButton(
-                    child: const Text('Dropbox'),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(CloudStorageSelector.route(DropboxProvider(env: Provider.of<Env>(context))));
-                    },
-                  ),
-                ]),
           const SizedBox(height: 16),
-          SelectFileAction(
-            icon: FontAwesomeIcons.hdd,
-            label: 'Open File',
-            onPressed: () async {
-              if (Platform.isIOS || Platform.isAndroid) {
-                final path = await FilePicker.getFilePath(type: FileType.ANY);
-                if (path != null) {
-                  await Navigator.of(context)
-                      .push(CredentialsScreen.route(FileSourceLocal(File(path), uuid: AppDataBloc.createUuid())));
-                }
-              } else {
-                showOpenPanel((result, paths) async {
-                  if (result == FileChooserResult.ok) {
-                    await Navigator.of(context)
-                        .push(CredentialsScreen.route(FileSourceLocal(File(paths[0]), uuid: AppDataBloc.createUuid())));
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 16,
+            children: <Widget>[
+              SelectFileAction(
+                icon: FontAwesomeIcons.hdd,
+                label: 'Open\nLocal File',
+                onPressed: () async {
+                  if (Platform.isIOS || Platform.isAndroid) {
+                    final path = await FilePicker.getFilePath(type: FileType.ANY);
+                    if (path != null) {
+                      await Navigator.of(context)
+                          .push(CredentialsScreen.route(FileSourceLocal(File(path), uuid: AppDataBloc.createUuid())));
+                    }
+                  } else {
+                    showOpenPanel((result, paths) async {
+                      if (result == FileChooserResult.ok) {
+                        await Navigator.of(context).push(
+                            CredentialsScreen.route(FileSourceLocal(File(paths[0]), uuid: AppDataBloc.createUuid())));
+                      }
+                    });
                   }
-                });
-              }
-            },
+                },
+              ),
+              ...cloudStorageBloc.availableCloudStorage.map(
+                (cs) => SelectFileAction(
+                  icon: cs.displayIcon,
+                  label: 'Load from ${cs.displayName}',
+                  onPressed: () async {
+                    final source = await Navigator.of(context).push(CloudStorageSelector.route(cs));
+                    if (source != null) {
+                      await Navigator.of(context).push(CredentialsScreen.route(source));
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
           const SizedBox(
             height: 4,
@@ -250,11 +248,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
                               (f) => OpenedFileTile(
                                 openedFile: f,
                                 onPressed: () {
-                                  final source = f.toFileSource();
+                                  final source = f.toFileSource(Provider.of<CloudStorageBloc>(context));
                                   if (source is FileSourceUrl) {
                                     _loadAndGoToCredentials(source);
                                   } else {
-                                    Navigator.of(context).push(CredentialsScreen.route(f.toFileSource()));
+                                    Navigator.of(context).push(CredentialsScreen.route(
+                                        f.toFileSource(Provider.of<CloudStorageBloc>(context))));
                                   }
                                 },
                               ),
@@ -347,18 +346,41 @@ class SelectFileAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    final theme = Theme.of(context);
+    return SizedBox(
+      width: 120,
+      height: 96,
+      child: Material(
 //      shape: Border.all(),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      color: Colors.green,
-      child: InkWell(
-        onTap: onPressed,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(icon),
-            Text(label),
-          ],
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        color: theme.primaryColor,
+        elevation: 4,
+        child: InkWell(
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DefaultTextStyle(
+              style: theme.primaryTextTheme.body1,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    icon,
+                    color: theme.primaryTextTheme.body1.color.withOpacity(0.8),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: theme.primaryTextTheme.body1.copyWith(letterSpacing: 0.9),
+                    strutStyle: StrutStyle(leading: 0.2),
+//                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
