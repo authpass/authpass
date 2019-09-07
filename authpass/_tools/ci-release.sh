@@ -30,7 +30,8 @@ if test "$1" == "ios" ; then
     source _tools/secrets/fastlane_match_password
     set -x
 
-    cd ios && fastlane match appstore --readonly && cd ..
+    # no need for calling fastlane match, will be done during `fastlane beta`
+    #cd ios && fastlane match appstore --readonly && cd ..
 
     # make sure cocoapods is up to date.
     pod repo update
@@ -43,6 +44,8 @@ if test "$1" == "macos" ; then
     flutter upgrade
     flutter config --enable-macos-desktop
 fi
+
+pwd
 
 GIT_SSH_COMMAND="ssh -i \"$github_key\"" \
     GIT_PUSH_REMOTE='git@github.com:authpass/authpass.git' \
