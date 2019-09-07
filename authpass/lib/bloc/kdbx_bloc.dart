@@ -270,28 +270,42 @@ class KdbxBloc {
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
 
   Future<int> reopenQuickUnlock() => _quickUnlockCheckRunning ??= (() async {
-        _logger.finer('Checking quick unlock.');
-        final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
-        int filesOpened = 0;
-        for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
-          await openFile(file.key, file.value);
-          filesOpened++;
+        try {
+          _logger.finer('Checking quick unlock.');
+          final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
+          int filesOpened = 0;
+          for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
+            await openFile(file.key, file.value);
+            filesOpened++;
+          }
+          _openedFilesQuickUnlock.clear();
+          _openedFilesQuickUnlock.addAll(unlockFiles.keys);
+          return filesOpened;
+        } on AuthException catch (e, stackTrace) {
+          if (e.code == AuthExceptionCode.userCanceled) {
+            _logger.info('User canceled quick unlock.');
+            return 0;
+          }
+          _logger.severe('Error during quick unlock.', e, stackTrace);
+          return 0;
         }
-        _openedFilesQuickUnlock.clear();
-        _openedFilesQuickUnlock.addAll(unlockFiles.keys);
-        return filesOpened;
       })()
           .whenComplete(() => _quickUnlockCheckRunning = null);
 
   void closeAllFiles() {
+    _logger.finer('Closing all files, clearing quick unlock.');
+    analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
     _openedFiles.value = {};
+    // clear all quick unlock data.
+    _openedFilesQuickUnlock.clear();
+    quickUnlockStorage.updateQuickUnlockFile({});
   }
 
   static Future<ReadFileResponse> readKdbxFile(KdbxReadArgs readArgs) async {
     try {
       initIsolate();
       _logger.finer('reading kdbx file ...');
-      final fileContent = await readArgs.content;
+      final fileContent = readArgs.content;
       final kdbxFile = KdbxFormat.read(fileContent, readArgs.credentials);
       _logger.finer('done reading');
       return ReadFileResponse(kdbxFile, null);

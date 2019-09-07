@@ -79,4 +79,6 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackSelectEntry({EntrySelectionType type});
 
   void trackCopyField({@required String key});
+
+  void trackCloseAllFiles({int count});
 }

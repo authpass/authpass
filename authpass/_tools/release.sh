@@ -38,6 +38,7 @@ case "$1" in
     ios)
         flutter build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
         cd ios
+        sudo fastlane run update_fastlane
         fastlane beta
     ;;
     macos)

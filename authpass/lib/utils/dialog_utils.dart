@@ -129,7 +129,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog> with WidgetsBin
     super.didChangeAppLifecycleState(state);
     _logger.fine('lifecycle state changed to $state (was: $_previousState)');
     if (state == AppLifecycleState.resumed) {
-      _readClipboard();
+      _readClipboard(setIfChanged: true);
     }
     _previousState = state;
   }
