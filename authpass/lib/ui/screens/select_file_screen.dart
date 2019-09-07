@@ -4,6 +4,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
@@ -20,6 +21,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
@@ -39,6 +41,7 @@ class SelectFileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<Analytics>(context).events.trackLaunch();
+    final cloudBloc = CloudStorageBloc(Provider.of<Env>(context));
     return Scaffold(
       appBar: AppBar(
         title: const Text('AuthPass - Select KeePass File'),
@@ -46,10 +49,49 @@ class SelectFileScreen extends StatelessWidget {
           AuthPassAboutDialog.createAboutPopupAction(context),
         ],
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: const SelectFileWidget(),
+      body: Provider<CloudStorageBloc>.value(
+        value: cloudBloc,
+        child: Container(
+          alignment: Alignment.center,
+          child: const SelectFileWidget(),
+        ),
       ),
+    );
+  }
+}
+
+class ProgressOverlay extends StatelessWidget {
+  const ProgressOverlay({Key key, @required this.child, this.hasProgress}) : super(key: key);
+
+  final dynamic hasProgress;
+  final Widget child;
+
+  bool get _hasProgress => hasProgress is bool ? hasProgress as bool : hasProgress != null;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        child,
+        AnimatedCrossFade(
+          firstChild: Container(
+            color: Colors.black12,
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xefffffff),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                padding: const EdgeInsets.all(32),
+                child: const CircularProgressIndicator(),
+              ),
+            ),
+          ),
+          secondChild: Container(),
+          crossFadeState: _hasProgress ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 200),
+        )
+      ],
     );
   }
 }
@@ -106,122 +148,123 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     final env = Provider.of<Env>(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        const Text('Please select a KeePass (.kdbx) file.'),
-        const Text('(Currently only kdbx 3 is supported)'),
-        ...(!env.featureCloudStorage
-            ? []
-            : [
-                LinkButton(
-                  child: const Text('Google Drive'),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(CloudStorageSelector.route(GoogleDriveProvider(env: Provider.of<Env>(context))));
-                  },
-                ),
-                LinkButton(
-                  child: const Text('Dropbox'),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(CloudStorageSelector.route(DropboxProvider(env: Provider.of<Env>(context))));
-                  },
-                ),
-              ]),
-        const SizedBox(height: 16),
-        _fileLoader != null
-            ? const CircularProgressIndicator()
-            : PrimaryButton(
-                icon: Icon(Icons.file_upload),
-                child: const Text('Select File'),
-                onPressed: () async {
-                  if (Platform.isIOS || Platform.isAndroid) {
-                    final path = await FilePicker.getFilePath(type: FileType.ANY);
-                    if (path != null) {
-                      await Navigator.of(context)
-                          .push(CredentialsScreen.route(FileSourceLocal(File(path), uuid: AppDataBloc.createUuid())));
-                    }
-                  } else {
-                    showOpenPanel((result, paths) async {
-                      if (result == FileChooserResult.ok) {
-                        await Navigator.of(context).push(
-                            CredentialsScreen.route(FileSourceLocal(File(paths[0]), uuid: AppDataBloc.createUuid())));
-                      }
-                    });
+    return ProgressOverlay(
+      hasProgress: false,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          const Text('Please select a KeePass (.kdbx) file.'),
+          const Text('(Currently only kdbx 3 is supported)'),
+          ...(!env.featureCloudStorage
+              ? []
+              : [
+                  LinkButton(
+                    child: const Text('Google Drive'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(CloudStorageSelector.route(GoogleDriveProvider(env: Provider.of<Env>(context))));
+                    },
+                  ),
+                  LinkButton(
+                    child: const Text('Dropbox'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(CloudStorageSelector.route(DropboxProvider(env: Provider.of<Env>(context))));
+                    },
+                  ),
+                ]),
+          const SizedBox(height: 16),
+          SelectFileAction(
+            icon: FontAwesomeIcons.hdd,
+            label: 'Open File',
+            onPressed: () async {
+              if (Platform.isIOS || Platform.isAndroid) {
+                final path = await FilePicker.getFilePath(type: FileType.ANY);
+                if (path != null) {
+                  await Navigator.of(context)
+                      .push(CredentialsScreen.route(FileSourceLocal(File(path), uuid: AppDataBloc.createUuid())));
+                }
+              } else {
+                showOpenPanel((result, paths) async {
+                  if (result == FileChooserResult.ok) {
+                    await Navigator.of(context)
+                        .push(CredentialsScreen.route(FileSourceLocal(File(paths[0]), uuid: AppDataBloc.createUuid())));
                   }
-                },
-              ),
-        const SizedBox(
-          height: 4,
-        ),
-        IntrinsicHeight(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Expanded(
-                child: LinkButton(
-                  onPressed: () async {
-                    final source =
-                        await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
-                    if (source != null) {
-                      _loadAndGoToCredentials(source);
-                    }
-                  },
-                  child: const Text('Download from URL'),
-                ),
-              ),
-              VerticalDivider(
-                indent: 8,
-                endIndent: 8,
-                color: Theme.of(context).primaryColor,
-              ),
-              Expanded(
-                child: LinkButton(
-                  onPressed: () {
-                    Navigator.of(context).push(CreateFile.route());
-                  },
-                  icon: Icon(Icons.create_new_folder),
-                  child: const Expanded(child: Text('New to KeePass?\nCreate New Password Database', softWrap: true)),
-                ),
-              )
-            ],
+                });
+              }
+            },
           ),
-        ),
-        const SizedBox(height: 8),
-        IntrinsicWidth(
-          stepWidth: 100,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                'Last opened files:',
-                style: Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              ...ListTile.divideTiles(
-                  context: context,
-                  tiles: appData?.previousFiles?.reversed?.take(5)?.map(
-                            (f) => OpenedFileTile(
-                              openedFile: f,
-                              onPressed: () {
-                                final source = f.toFileSource();
-                                if (source is FileSourceUrl) {
-                                  _loadAndGoToCredentials(source);
-                                } else {
-                                  Navigator.of(context).push(CredentialsScreen.route(f.toFileSource()));
-                                }
-                              },
-                            ),
-                          ) ??
-                      [const Text('No files have been opened yet.')]),
-            ],
+          const SizedBox(
+            height: 4,
           ),
-        ),
-      ],
+          IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  child: LinkButton(
+                    onPressed: () async {
+                      final source =
+                          await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
+                      if (source != null) {
+                        _loadAndGoToCredentials(source);
+                      }
+                    },
+                    child: const Text('Download from URL'),
+                  ),
+                ),
+                VerticalDivider(
+                  indent: 8,
+                  endIndent: 8,
+                  color: Theme.of(context).primaryColor,
+                ),
+                Expanded(
+                  child: LinkButton(
+                    onPressed: () {
+                      Navigator.of(context).push(CreateFile.route());
+                    },
+                    icon: Icon(Icons.create_new_folder),
+                    child: const Expanded(child: Text('New to KeePass?\nCreate New Password Database', softWrap: true)),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          IntrinsicWidth(
+            stepWidth: 100,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  'Last opened files:',
+                  style: Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                ...ListTile.divideTiles(
+                    context: context,
+                    tiles: appData?.previousFiles?.reversed?.take(5)?.map(
+                              (f) => OpenedFileTile(
+                                openedFile: f,
+                                onPressed: () {
+                                  final source = f.toFileSource();
+                                  if (source is FileSourceUrl) {
+                                    _loadAndGoToCredentials(source);
+                                  } else {
+                                    Navigator.of(context).push(CredentialsScreen.route(f.toFileSource()));
+                                  }
+                                },
+                              ),
+                            ) ??
+                        [const Text('No files have been opened yet.')]),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -288,6 +331,33 @@ class OpenedFileTile extends StatelessWidget {
 //              Divider(),
               ],
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SelectFileAction extends StatelessWidget {
+  const SelectFileAction({Key key, this.icon, this.label, this.onPressed}) : super(key: key);
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+//      shape: Border.all(),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      color: Colors.green,
+      child: InkWell(
+        onTap: onPressed,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(icon),
+            Text(label),
           ],
         ),
       ),

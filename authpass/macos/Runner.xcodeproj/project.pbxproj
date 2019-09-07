@@ -426,6 +426,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass;
 				PRODUCT_NAME = AuthPass;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -557,6 +558,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass;
 				PRODUCT_NAME = AuthPass;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -583,6 +585,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass;
 				PRODUCT_NAME = AuthPass;
 				PROVISIONING_PROFILE_SPECIFIER = "AuthPass Mac App Store";

@@ -1,4 +1,6 @@
 PODS:
+  - biometric_storage (0.0.1):
+    - FlutterMacOS
   - file_chooser (0.0.2):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
@@ -6,11 +8,14 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - biometric_storage (from `Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos`)
   - file_chooser (from `Flutter/ephemeral/.symlinks/plugins/file_chooser/macos`)
   - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
   - url_launcher_fde (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_fde/macos`)
 
 EXTERNAL SOURCES:
+  biometric_storage:
+    :path: Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos
   file_chooser:
     :path: Flutter/ephemeral/.symlinks/plugins/file_chooser/macos
   FlutterMacOS:
@@ -19,10 +24,11 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_fde/macos
 
 SPEC CHECKSUMS:
+  biometric_storage: ecdb7121134e025b5217a084a5d9aa17d6ec5042
   file_chooser: 24432cf5dc836722b05c11c2a0a30d19c3c9b996
   FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9
   url_launcher_fde: 2e3afc0d9c7c0dfe63e0ef42030ec62d56096b38
 
-PODFILE CHECKSUM: 2c44d578a2acaaed0401d0d3bb20d04d4b080703
+PODFILE CHECKSUM: 3d7f23e3a499e4f844c299df7bc01f656165c909
 
 COCOAPODS: 1.7.5

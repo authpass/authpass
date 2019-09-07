@@ -31,6 +31,7 @@ abstract class CloudStorageProvider {
   /// whether we are initialized, authenticated and ready for requests.
   bool get isAuthenticated;
 
+  String get id => runtimeType.toString();
   String get displayName;
   Future<bool> startAuth(PromptUserForCode prompt);
   Future<SearchResponse> searchKdbx();

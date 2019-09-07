@@ -76,7 +76,7 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
-      ref: 9b41a30c2a31d907d070f76fc665c300016a3356
+      ref: c748cc68eedc7060109db50965951d5209aa0ce0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -58,7 +58,7 @@ abstract class Env {
   }
 
   String get name => runtimeType.toString();
-  bool get featureCloudStorage => false;
+  bool get featureCloudStorage => true;
 
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();
