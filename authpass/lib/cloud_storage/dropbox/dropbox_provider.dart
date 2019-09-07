@@ -13,35 +13,57 @@ import 'package:oauth2/oauth2.dart' as oauth2;
 
 final _logger = Logger('authpass.dropbox_provider');
 
-class DropboxProvider extends CloudStorageProvider {
+class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   DropboxProvider({@required this.env, @required CloudStorageHelper helper}) : super(helper: helper);
-
-  oauth2.Client _client;
 
   static const String _oauthEndpoint = 'https://www.dropbox.com/oauth2/authorize';
   static const String _oauthToken = 'https://api.dropboxapi.com/oauth2/token';
 
   Env env;
 
+//  Future<oauth2.Client> _requireAuthenticatedClient() async {
+//    return _client ??= await _loadStoredCredentials().then((client) async {
+//      if (client == null) {
+//        throw LoadFileException('Unable to load dropbox credentials.');
+//      }
+//      return client;
+//    });
+//  }
+//
+//  Future<oauth2.Client> _loadStoredCredentials() async {
+//    final credentialsJson = await loadCredentials();
+//    _logger.finer('Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}');
+//    if (credentialsJson == null) {
+//      return null;
+//    }
+//    final credentials = oauth2.Credentials.fromJson(credentialsJson);
+//    return oauth2.Client(
+//      credentials,
+//      identifier: env.secrets.dropboxKey,
+//      secret: env.secrets.dropboxSecret,
+//      onCredentialsRefreshed: _onCredentialsRefreshed,
+//    );
+//  }
+//
+//  @override
+//  Future<bool> loadSavedAuth() async {
+//    _client = await _loadStoredCredentials();
+//    return isAuthenticated;
+//  }
+
   @override
-  Future<bool> loadSavedAuth() async {
-    final credentialsJson = await loadCredentials();
-    _logger.finer('Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}');
-    if (credentialsJson != null) {
-      final credentials = oauth2.Credentials.fromJson(credentialsJson);
-      _client = oauth2.Client(
-        credentials,
-        identifier: env.secrets.dropboxKey,
-        secret: env.secrets.dropboxSecret,
-        onCredentialsRefreshed: _onCredentialsRefreshed,
-      );
-      return true;
-    }
-    return false;
+  oauth2.Client clientWithStoredCredentials(String stored) {
+    final credentials = oauth2.Credentials.fromJson(stored);
+    return oauth2.Client(
+      credentials,
+      identifier: env.secrets.dropboxKey,
+      secret: env.secrets.dropboxSecret,
+      onCredentialsRefreshed: _onCredentialsRefreshed,
+    );
   }
 
   @override
-  Future<bool> startAuth(prompt) async {
+  Future<oauth2.Client> clientFromAuthenticationFlow(prompt) async {
     final grant = oauth2.AuthorizationCodeGrant(
       env.secrets.dropboxKey,
       Uri.parse(_oauthEndpoint),
@@ -55,11 +77,11 @@ class DropboxProvider extends CloudStorageProvider {
     final code = await prompt(url.toString());
     if (code == null) {
       _logger.warning('User cancelled authorization. (did not provide code)');
-      return false;
+      return null;
     }
-    _client = await grant.handleAuthorizationCode(code);
-    _onCredentialsRefreshed(_client.credentials);
-    return true;
+    final client = await grant.handleAuthorizationCode(code);
+    _onCredentialsRefreshed(client.credentials);
+    return client;
   }
 
   void _onCredentialsRefreshed(oauth2.Credentials credentials) {
@@ -70,7 +92,8 @@ class DropboxProvider extends CloudStorageProvider {
   @override
   Future<SearchResponse> search({String name = 'kdbx'}) async {
     final searchUri = Uri.parse('https://api.dropboxapi.com/2/files/search_v2');
-    final response = await _client.post(
+    final client = await requireAuthenticatedClient();
+    final response = await client.post(
       searchUri,
       headers: {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
@@ -105,9 +128,6 @@ class DropboxProvider extends CloudStorageProvider {
   }
 
   @override
-  bool get isAuthenticated => _client != null;
-
-  @override
   String get displayName => 'Dropbox';
 
   @override
@@ -115,10 +135,11 @@ class DropboxProvider extends CloudStorageProvider {
 
   @override
   Future<Uint8List> loadEntity(CloudStorageEntity file) async {
+    final client = await requireAuthenticatedClient();
     final downloadUrl = Uri.parse('https://content.dropboxapi.com/2/files/download');
     final apiArg = json.encode(<String, String>{'path': '${file.id}'});
     _logger.finer('Downloading file with id ${file.id}');
-    final response = await _client.post(downloadUrl, headers: {'Dropbox-API-Arg': apiArg});
+    final response = await client.post(downloadUrl, headers: {'Dropbox-API-Arg': apiArg});
     _logger.finer(
         'downloaded file. status:${response.statusCode} byte length: ${response.bodyBytes.lengthInBytes} --- headers: ${response.headers}');
     if (response.statusCode ~/ 100 != 2) {
@@ -144,12 +165,12 @@ class DropboxProvider extends CloudStorageProvider {
       // TODO we should probably change this to 'update' and add the old revision.
       'mode': 'overwrite',
     });
-    await _client.post(uploadUrl,
+    final client = await requireAuthenticatedClient();
+    await client.post(uploadUrl,
         headers: {
           HttpHeaders.contentTypeHeader: ContentType.binary.toString(),
           'Dropbox-API-Arg': apiArg,
         },
         body: bytes);
-    return null;
   }
 }

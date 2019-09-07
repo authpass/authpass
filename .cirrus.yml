@@ -14,8 +14,8 @@ task:
     - git clone https://github.com/mipmip/blackbox && cd blackbox && make manual-install && cd ..
     - gpg -v --import <(echo "$GPG_PRIVATE_KEY")
     - ./authpass/_tools/ci-install-deps.sh ios
-#  release_ios_script:
-#    - ./_tools/ci-release.sh ios
-  release_macos_script:
-    - ./authpass/_tools/ci-release.sh macos
+  release_ios_script:
+    - ./authpass/_tools/ci-release.sh ios
+#  release_macos_script:
+#    - ./authpass/_tools/ci-release.sh macos
 

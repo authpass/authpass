@@ -158,6 +158,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 16,
+            runSpacing: 16,
             children: <Widget>[
               SelectFileAction(
                 icon: FontAwesomeIcons.hdd,

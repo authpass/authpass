@@ -14,33 +14,29 @@ import 'package:meta/meta.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
 
-class GoogleDriveProvider extends CloudStorageProvider {
+class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
   GoogleDriveProvider({@required this.env, @required CloudStorageHelper helper}) : super(helper: helper);
 
   final Env env;
-  AutoRefreshingAuthClient _client;
 
   static const _scopes = [DriveApi.DriveScope];
   ClientId get _clientId => ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
 
   @override
-  Future<bool> loadSavedAuth() async {
-    final accessCredentials = await _loadAccessCredentials();
-    if (accessCredentials != null) {
-      _client = autoRefreshingClient(_clientId, accessCredentials, Client());
-      _client.credentialUpdates.listen(_credentialsChanged);
-      return true;
-    }
-    return false;
+  Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow(prompt) async {
+    final client = await clientViaUserConsentManual(_clientId, _scopes, prompt);
+    client.credentialUpdates.listen(_credentialsChanged);
+    _credentialsChanged(client.credentials);
+    _logger.finer('Finished user consent.');
+    return client;
   }
 
   @override
-  Future<bool> startAuth(prompt) async {
-    _client = await clientViaUserConsentManual(_clientId, _scopes, prompt);
-    _client.credentialUpdates.listen(_credentialsChanged);
-    _credentialsChanged(_client.credentials);
-    _logger.finer('Finished user consent.');
-    return true;
+  AutoRefreshingAuthClient clientWithStoredCredentials(String stored) {
+    final accessCredentials = _parseAccessCredentials(stored);
+    final client = autoRefreshingClient(_clientId, accessCredentials, Client());
+    client.credentialUpdates.listen(_credentialsChanged);
+    return client;
   }
 
   void _credentialsChanged(AccessCredentials credentials) {
@@ -67,11 +63,7 @@ class GoogleDriveProvider extends CloudStorageProvider {
     );
   }
 
-  Future<AccessCredentials> _loadAccessCredentials() async {
-    final jsonString = await loadCredentials();
-    if (jsonString == null) {
-      return null;
-    }
+  AccessCredentials _parseAccessCredentials(String jsonString) {
     final map = json.decode(jsonString) as Map<String, dynamic>;
     return AccessCredentials(
       _accessTokenFromJson(map['accessToken'] as Map<String, dynamic>),
@@ -83,8 +75,7 @@ class GoogleDriveProvider extends CloudStorageProvider {
 
   @override
   Future<SearchResponse> search({String name = 'kdbx'}) async {
-    assert(_client != null);
-    final driveApi = DriveApi(_client);
+    final driveApi = DriveApi(await requireAuthenticatedClient());
     _logger.fine('Query: ${SearchQueryTerm('name', QOperator.contains, name).toQuery()}');
     final files = await driveApi.files.list(
       q: SearchQueryTerm('name', QOperator.contains, name).toQuery(),
@@ -108,9 +99,6 @@ class GoogleDriveProvider extends CloudStorageProvider {
   }
 
   @override
-  bool get isAuthenticated => _client != null;
-
-  @override
   String get displayName => 'Google Drive';
 
   @override
@@ -118,7 +106,7 @@ class GoogleDriveProvider extends CloudStorageProvider {
 
   @override
   Future<Uint8List> loadEntity(CloudStorageEntity file) async {
-    final driveApi = DriveApi(_client);
+    final driveApi = DriveApi(await requireAuthenticatedClient());
     final dynamic response = await driveApi.files.get(file.id, downloadOptions: DownloadOptions.FullMedia);
     final media = response as Media;
     final bytes = BytesBuilder(copy: false);
@@ -131,7 +119,7 @@ class GoogleDriveProvider extends CloudStorageProvider {
 
   @override
   Future<void> saveEntity(CloudStorageEntity file, Uint8List bytes) async {
-    final driveApi = DriveApi(_client);
+    final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
     final updatedFile = await driveApi.files.update(null, file.id, uploadMedia: Media(byteStream, bytes.lengthInBytes));
     _logger.fine('Successfully saved file ${updatedFile.name}');

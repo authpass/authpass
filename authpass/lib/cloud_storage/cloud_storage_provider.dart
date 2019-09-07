@@ -6,9 +6,12 @@ import 'package:biometric_storage/biometric_storage.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart' show IconData;
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 part 'cloud_storage_provider.g.dart';
+
+final _logger = Logger('authpass.cloud_storage_provider');
 
 class LoadFileException implements Exception {
   LoadFileException(this.message);
@@ -137,4 +140,48 @@ abstract class CloudStorageProvider {
 
   Future<Uint8List> loadEntity(CloudStorageEntity file);
   Future<void> saveEntity(CloudStorageEntity file, Uint8List bytes);
+}
+
+abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
+  CloudStorageProviderClientBase({CloudStorageHelper helper}) : super(helper: helper);
+
+  T _client;
+
+  @override
+  bool get isAuthenticated => _client != null;
+
+  @protected
+  Future<T> requireAuthenticatedClient() async {
+    return _client ??= await _loadStoredCredentials().then((client) async {
+      if (client == null) {
+        throw LoadFileException('Unable to load dropbox credentials.');
+      }
+      return client;
+    });
+  }
+
+  Future<T> _loadStoredCredentials() async {
+    final credentialsJson = await loadCredentials();
+    _logger.finer('Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}');
+    if (credentialsJson == null) {
+      return null;
+    }
+    return clientWithStoredCredentials(credentialsJson);
+  }
+
+  @override
+  Future<bool> startAuth(PromptUserForCode prompt) async {
+    _client = await clientFromAuthenticationFlow(prompt);
+    return isAuthenticated;
+  }
+
+  T clientWithStoredCredentials(String stored);
+
+  Future<T> clientFromAuthenticationFlow(PromptUserForCode prompt);
+
+  @override
+  Future<bool> loadSavedAuth() async {
+    _client = await _loadStoredCredentials();
+    return isAuthenticated;
+  }
 }
