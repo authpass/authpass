@@ -1,5 +1,6 @@
 authpass/_tools/deploy-key/github-deploy-key
 authpass/_tools/secrets/api-project-284252947431-83b019c3ca1e.json
+authpass/_tools/secrets/fastlane_match_certificates_id_rsa
 authpass/_tools/secrets/fastlane_match_password
 authpass/_tools/secrets/gradle_home/gradle.properties
 authpass/_tools/secrets/gradle_home/upload-key.jks

@@ -11,3 +11,6 @@ development_hp.dart
 /tmp
 
 /authpass/_tools/secrets/fastlane_match_password
+/authpass/ios/vendor
+
+/authpass/_tools/secrets/fastlane_match_certificates_id_rsa
