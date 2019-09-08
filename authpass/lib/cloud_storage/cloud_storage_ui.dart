@@ -57,46 +57,50 @@ class CloudStorageAuthentication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        PrimaryButton(
-          icon: Icon(FontAwesomeIcons.signInAlt),
-          child: Text('Login to ${provider.displayName}'),
-          onPressed: () async {
-            try {
-              final auth = await provider.startAuth((uri) async {
-                _logger.fine('Launching authentication url $uri');
-                if (await DialogUtils.openUrl(uri)) {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          PrimaryButton(
+            icon: Icon(FontAwesomeIcons.signInAlt),
+            child: Text('Login to ${provider.displayName}'),
+            onPressed: () async {
+              try {
+                final auth = await provider.startAuth((uri) async {
+                  _logger.fine('Launching authentication url $uri');
+                  if (await DialogUtils.openUrl(uri)) {
 //                  await launch(uri);
 //              await DialogUtils.showConfirmDialog(context: null, params: null)
-                  return await SimplePromptDialog.showPrompt(
-                    context,
-                    const SimplePromptDialog(
-                      title: 'Google Drive Authentication',
-                      labelText: 'Authentication Code',
-                    ),
-                  );
-                } else {
-                  await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
-                  return null;
-                }
-              });
-              _logger.fine('finished launching. $auth');
-              onSuccess();
-            } catch (e, stackTrace) {
-              _logger.severe('Error while authenticating.', e, stackTrace);
-              await DialogUtils.showSimpleAlertDialog(
-                  context, 'Error while authenticating', 'Error while trying to authenticate fo google drive. $e');
-            }
-          },
-        ),
-        const SizedBox(height: 16),
-        Text(
-          'You will be redirected to authenticate AuthPass to access your data.',
-          style: Theme.of(context).textTheme.caption,
-        ),
-      ],
+                    return await SimplePromptDialog.showPrompt(
+                      context,
+                      const SimplePromptDialog(
+                        title: 'Google Drive Authentication',
+                        labelText: 'Authentication Code',
+                      ),
+                    );
+                  } else {
+                    await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
+                    return null;
+                  }
+                });
+                _logger.fine('finished launching. $auth');
+                onSuccess();
+              } catch (e, stackTrace) {
+                _logger.severe('Error while authenticating.', e, stackTrace);
+                await DialogUtils.showSimpleAlertDialog(
+                    context, 'Error while authenticating', 'Error while trying to authenticate fo google drive. $e');
+              }
+            },
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'You will be redirected to authenticate AuthPass to access your data.',
+            style: Theme.of(context).textTheme.caption,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

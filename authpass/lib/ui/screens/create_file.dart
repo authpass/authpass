@@ -4,6 +4,7 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _databaseName = TextEditingController(text: 'PersonalPasswords');
   final TextEditingController _password = TextEditingController();
+  final FocusNode _passwordFocus = FocusNode();
   bool _passwordObscured = true;
 
   @override
@@ -32,7 +34,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -43,6 +45,8 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
                   suffixText: '.kdbx',
                   filled: true,
                 ),
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (val) => _passwordFocus.requestFocus(),
                 validator: (val) {
                   if (val.isEmpty) {
                     return 'Please enter a name for your new database.';
@@ -55,6 +59,8 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
               TextFormField(
                 controller: _password,
                 obscureText: _passwordObscured,
+                focusNode: _passwordFocus,
+                onFieldSubmitted: (val) => _submit(),
                 decoration: InputDecoration(
                   labelText: 'Select a secure master Password. Make sure to remember it.',
                   filled: true,
@@ -82,28 +88,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
                     : PrimaryButton(
                         large: false,
                         child: const Text('Create Database'),
-                        onPressed: asyncTaskCallback(() async {
-                          if (_formKey.currentState.validate()) {
-                            final kdbxBloc = Provider.of<KdbxBloc>(context);
-                            try {
-                              final created = await kdbxBloc.createFile(
-                                password: _password.text,
-                                databaseName: _databaseName.text,
-                                openAfterCreate: true,
-                              );
-                              assert(created != null);
-                              await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
-                            } on FileExistsException catch (_) {
-                              await DialogUtils.showSimpleAlertDialog(
-                                context,
-                                'File Exists',
-                                'Error while trying to create database. '
-                                    'File already exists. Please choose another name',
-                              );
-                              rethrow;
-                            }
-                          }
-                        }),
+                        onPressed: _submit,
                       ),
               ),
             ],
@@ -112,4 +97,27 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
       ),
     );
   }
+
+  void _submit() => asyncTaskCallback(() async {
+        if (_formKey.currentState.validate()) {
+          final kdbxBloc = Provider.of<KdbxBloc>(context);
+          try {
+            final created = await kdbxBloc.createFile(
+              password: _password.text,
+              databaseName: _databaseName.text,
+              openAfterCreate: true,
+            );
+            assert(created != null);
+            await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
+          } on FileExistsException catch (_) {
+            await DialogUtils.showSimpleAlertDialog(
+              context,
+              'File Exists',
+              'Error while trying to create database. '
+                  'File already exists. Please choose another name',
+            );
+            rethrow;
+          }
+        }
+      });
 }

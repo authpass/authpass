@@ -247,15 +247,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
                     context: context,
                     tiles: appData?.previousFiles?.reversed?.take(5)?.map(
                               (f) => OpenedFileTile(
-                                openedFile: f,
+                                openedFile: f.toFileSource(cloudStorageBloc),
                                 onPressed: () {
-                                  final source = f.toFileSource(Provider.of<CloudStorageBloc>(context));
-                                  if (source is FileSourceUrl) {
-                                    _loadAndGoToCredentials(source);
-                                  } else {
-                                    Navigator.of(context).push(CredentialsScreen.route(
-                                        f.toFileSource(Provider.of<CloudStorageBloc>(context))));
-                                  }
+                                  final source = f.toFileSource(cloudStorageBloc);
+                                  _loadAndGoToCredentials(source);
                                 },
                               ),
                             ) ??
@@ -268,13 +263,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
     );
   }
 
-  void _loadAndGoToCredentials(FileSourceUrl source) {
+  void _loadAndGoToCredentials(FileSource source) {
     setState(() {
       _fileLoader = source.load().then((value) {
         return Navigator.of(context).push(CredentialsScreen.route(source));
       }).catchError((dynamic error, StackTrace stackTrace) {
-        _logger.fine('Error while trying to download from '
-            '${FormatUtils.anonymizeUrl(source.url.toString())}');
+        _logger.fine('Error while trying to load file source $source');
         return Future<dynamic>.error(error, stackTrace);
       }).whenComplete(() {
         setState(() {
@@ -288,7 +282,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
 class OpenedFileTile extends StatelessWidget {
   const OpenedFileTile({Key key, @required this.openedFile, this.onPressed}) : super(key: key);
 
-  final OpenedFile openedFile;
+  final FileSource openedFile;
   final VoidCallback onPressed;
 
   @override
@@ -303,33 +297,26 @@ class OpenedFileTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
 //        crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Icon(Icons.lock),
+            Icon(openedFile.displayIcon),
             const SizedBox(width: 8),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  openedFile.name,
-                  style: TextStyle(color: AuthPassTheme.linkColor),
-                ),
-                ...(openedFile.sourceType == OpenedFilesSourceType.Url
-                    ? [
-                        Text(
-                          '${FormatUtils.anonymizeUrl(openedFile.sourcePath)}',
-                          style: subtitleStyle,
-                        ),
-                      ]
-                    : openedFile.sourceType == OpenedFilesSourceType.Local
-                        ? [
-                            Text(
-                              '${path.basename(openedFile.sourcePath)}',
-                              style: subtitleStyle,
-                            ),
-                          ]
-                        : []),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    openedFile.displayName,
+                    style: TextStyle(color: AuthPassTheme.linkColor),
+                  ),
+                  Text(
+                    '${openedFile.displayPath}',
+                    style: subtitleStyle,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
 //              Divider(),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -502,73 +489,77 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       appBar: AppBar(
         title: const Text('AuthPass - Credentials'),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text('Enter the password for:'),
-                  Text(widget.kdbxFilePath.displayName, style: theme.textTheme.display1),
-                  Text(
-                    widget.kdbxFilePath.displayPath,
-                    style: theme.textTheme.caption,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text('Enter the password for:'),
+                    Text(widget.kdbxFilePath.displayName, style: theme.textTheme.display1),
+                    Text(
+                      widget.kdbxFilePath.displayPath,
+                      style: theme.textTheme.caption,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(top: 32, right: 32, left: 32),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(top: 32, right: 32, left: 32),
 //              constraints: BoxConstraints.expand(),
-              child: TextFormField(
-                controller: _controller,
-                decoration: InputDecoration(labelText: 'Password'),
-                autocorrect: false,
-                autofocus: true,
-                autovalidate: _invalidPassword != null,
-                obscureText: true,
-                validator: SValidator.notEmpty(msg: 'Please enter your password.') +
-                    SValidator.invalidValue(invalidValue: _invalidPassword, message: 'Invalid password'),
-                onEditingComplete: () {
-                  _tryUnlock();
-                },
+                child: TextFormField(
+                  controller: _controller,
+                  decoration: InputDecoration(labelText: 'Password'),
+                  autocorrect: false,
+                  autofocus: true,
+                  autovalidate: _invalidPassword != null,
+                  obscureText: true,
+                  validator: SValidator.notEmpty(msg: 'Please enter your password.') +
+                      SValidator.invalidValue(invalidValue: _invalidPassword, message: 'Invalid password'),
+                  onEditingComplete: () {
+                    FocusScope.of(context).unfocus();
+
+                    _tryUnlock();
+                  },
+                ),
               ),
-            ),
-            ...(_biometricQuickUnlockSupported
-                ? [
-                    Container(
-                      child: CheckboxListTile(
-                        value: _biometricQuickUnlockActivated,
-                        dense: true,
-                        title: const Text(
-                          'Save Password with biometric key store?',
-                          textAlign: TextAlign.right,
+              ...(_biometricQuickUnlockSupported
+                  ? [
+                      Container(
+                        child: CheckboxListTile(
+                          value: _biometricQuickUnlockActivated,
+                          dense: true,
+                          title: const Text(
+                            'Save Password with biometric key store?',
+                            textAlign: TextAlign.right,
+                          ),
+                          onChanged: (value) => setState(() {
+                            _biometricQuickUnlockActivated = value;
+                          }),
                         ),
-                        onChanged: (value) => setState(() {
-                          _biometricQuickUnlockActivated = value;
-                        }),
                       ),
-                    ),
-                  ]
-                : []),
-            Container(
-              alignment: Alignment.centerRight,
-              child: _loadingFile != null
-                  ? const Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator())
-                  : LinkButton(
-                      child: const Text('Continue'),
-                      onPressed: () async {
-                        await _tryUnlock();
-                      },
-                    ),
-            ),
-          ],
+                    ]
+                  : []),
+              Container(
+                alignment: Alignment.centerRight,
+                child: _loadingFile != null
+                    ? const Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator())
+                    : LinkButton(
+                        child: const Text('Continue'),
+                        onPressed: () async {
+                          await _tryUnlock();
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

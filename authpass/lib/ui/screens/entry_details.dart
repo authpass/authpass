@@ -10,7 +10,6 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/password_generator.dart';
-import 'package:built_value/built_value.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -57,7 +56,28 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
       body: WillPopScope(
         child: Form(
           key: _formKey,
-          child: EntryDetails(entry: widget.entry),
+          child: EntryDetails(
+            entry: widget.entry,
+            onSavedPressed: !_isDirty && !widget.entry.isDirty
+                ? null
+                : asyncTaskCallback(() async {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      final kdbxBloc = Provider.of<KdbxBloc>(context);
+                      if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
+                        await kdbxBloc.saveFile(widget.entry.file);
+                        setState(() => _isDirty = false);
+                      } else {
+                        await DialogUtils.showSimpleAlertDialog(
+                          context,
+                          null,
+                          'Sorry this database does not support saving. '
+                          'Please open a local database file.',
+                        );
+                      }
+                    }
+                  }),
+          ),
           onChanged: () {
             if (!_isDirty) {
               setState(() => _isDirty = true);
@@ -77,45 +97,15 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
           );
         },
       ),
-      bottomNavigationBar: Material(
-        elevation: 8,
-//        color: Colors.green,
-        child: Container(
-//          decoration: BoxDecoration(border: Border(top: BorderSide())),
-          padding: const EdgeInsets.all(16) + EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-          child: PrimaryButton(
-            onPressed: !_isDirty && !widget.entry.isDirty
-                ? null
-                : asyncTaskCallback(() async {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      final kdbxBloc = Provider.of<KdbxBloc>(context);
-                      if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
-                        await kdbxBloc.saveFile(widget.entry.file);
-                        setState(() => _isDirty = false);
-                      } else {
-                        await DialogUtils.showSimpleAlertDialog(
-                          context,
-                          null,
-                          'Sorry this database does not support saving. '
-                          'Please open a local database file.',
-                        );
-                      }
-                    }
-                  }),
-            icon: Icon(Icons.save),
-            child: const Text('Save'),
-          ),
-        ),
-      ),
     );
   }
 }
 
 class EntryDetails extends StatefulWidget {
-  const EntryDetails({Key key, @required this.entry}) : super(key: key);
+  const EntryDetails({Key key, @required this.entry, @required this.onSavedPressed}) : super(key: key);
 
   final KdbxEntry entry;
+  final VoidCallback onSavedPressed;
 
   @override
   _EntryDetailsState createState() => _EntryDetailsState();
@@ -172,7 +162,6 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
         child: SafeArea(
           top: false,
           left: false,
-          right: false,
           child: Column(
             children: <Widget>[
               const SizedBox(height: 16),
@@ -206,6 +195,12 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
                   widget.entry.setString(key, cf?.protect == true ? ProtectedValue.fromString('') : PlainValue(''));
                   setState(() {});
                 },
+              ),
+              const SizedBox(height: 16),
+              PrimaryButton(
+                icon: Icon(Icons.save),
+                child: const Text('Save'),
+                onPressed: widget.onSavedPressed,
               ),
             ],
           ),

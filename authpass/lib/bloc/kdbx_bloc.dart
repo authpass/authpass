@@ -10,6 +10,8 @@ import 'package:authpass/main.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
@@ -26,11 +28,14 @@ abstract class FileSource {
 
   final String uuid;
 
-  /// If known should return the name of the database in the file. Otherwise the bare file name.
+  /// If known should return the name of the database, null otherwise.
   @protected
   final String databaseName;
 
+  /// Returns the database name, or if it is not know the bare file name.
   String get displayName => databaseName ?? displayNameFromPath;
+
+  IconData get displayIcon;
 
   /// The database name to display if [databaseName] is unknown.
   @protected
@@ -60,6 +65,12 @@ abstract class FileSource {
 
   @override
   int get hashCode => uuid.hashCode;
+
+  @override
+  String toString() {
+    return 'FileSource{type: $runtimeType, uuid: $uuid, '
+        'databaseName: $databaseName, displayPath: $displayPath}';
+  }
 }
 
 class FileSourceLocal extends FileSource {
@@ -84,6 +95,9 @@ class FileSourceLocal extends FileSource {
 
   @override
   bool get supportsWrite => true;
+
+  @override
+  IconData get displayIcon => FontAwesomeIcons.hdd;
 }
 
 class FileSourceUrl extends FileSource {
@@ -112,6 +126,9 @@ class FileSourceUrl extends FileSource {
 
   @override
   bool get supportsWrite => false;
+
+  @override
+  IconData get displayIcon => FontAwesomeIcons.externalLinkAlt;
 }
 
 class FileSourceCloudStorage extends FileSource {
@@ -140,6 +157,9 @@ class FileSourceCloudStorage extends FileSource {
   Future<void> write(Uint8List bytes) {
     return provider.saveFile(fileInfo, bytes);
   }
+
+  @override
+  IconData get displayIcon => provider.displayIcon;
 }
 
 class FileExistsException extends KdbxException {}
@@ -275,8 +295,16 @@ class KdbxBloc {
           final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
           int filesOpened = 0;
           for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
-            await openFile(file.key, file.value);
-            filesOpened++;
+            try {
+              await openFile(file.key, file.value);
+              filesOpened++;
+            } catch (e, stackTrace) {
+              _logger.severe(
+                  'Panic, error while trying to open file from '
+                  'quick unlock. ignoring file for now. ${file.key}',
+                  e,
+                  stackTrace);
+            }
           }
           _openedFilesQuickUnlock.clear();
           _openedFilesQuickUnlock.addAll(unlockFiles.keys);

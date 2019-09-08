@@ -8,6 +8,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart' show IconData;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
 
 part 'cloud_storage_provider.g.dart';
 
@@ -125,7 +126,7 @@ abstract class CloudStorageProvider {
     return await helper._loadCredentials(id);
   }
 
-  String displayNameFromPath(Map<String, String> fileInfo) => displayPath(fileInfo);
+  String displayNameFromPath(Map<String, String> fileInfo) => path.basename(displayPath(fileInfo));
 
   String displayPath(Map<String, String> fileInfo) => CloudStorageEntity.fromSimpleFileInfo(fileInfo).path;
 
