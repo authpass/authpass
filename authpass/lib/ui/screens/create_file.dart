@@ -60,7 +60,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
                 controller: _password,
                 obscureText: _passwordObscured,
                 focusNode: _passwordFocus,
-                onFieldSubmitted: (val) => _submit(),
+                onFieldSubmitted: (val) => _submitCallback()(),
                 decoration: InputDecoration(
                   labelText: 'Select a secure master Password. Make sure to remember it.',
                   filled: true,
@@ -88,7 +88,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
                     : PrimaryButton(
                         large: false,
                         child: const Text('Create Database'),
-                        onPressed: _submit,
+                        onPressed: _submitCallback(),
                       ),
               ),
             ],
@@ -98,7 +98,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
     );
   }
 
-  void _submit() => asyncTaskCallback(() async {
+  VoidCallback _submitCallback() => asyncTaskCallback(() async {
         if (_formKey.currentState.validate()) {
           final kdbxBloc = Provider.of<KdbxBloc>(context);
           try {

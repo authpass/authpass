@@ -203,15 +203,21 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
-                  child: LinkButton(
-                    onPressed: () async {
-                      final source =
-                          await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
-                      if (source != null) {
-                        _loadAndGoToCredentials(source);
-                      }
-                    },
-                    child: const Text('Download from URL'),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: LinkButton(
+                      onPressed: () async {
+                        final source =
+                            await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
+                        if (source != null) {
+                          _loadAndGoToCredentials(source);
+                        }
+                      },
+                      child: const Text(
+                        'Download from URL',
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
                   ),
                 ),
                 VerticalDivider(
@@ -234,28 +240,31 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
           const SizedBox(height: 8),
           IntrinsicWidth(
             stepWidth: 100,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  'Last opened files:',
-                  style: Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                ...ListTile.divideTiles(
-                    context: context,
-                    tiles: appData?.previousFiles?.reversed?.take(5)?.map(
-                              (f) => OpenedFileTile(
-                                openedFile: f.toFileSource(cloudStorageBloc),
-                                onPressed: () {
-                                  final source = f.toFileSource(cloudStorageBloc);
-                                  _loadAndGoToCredentials(source);
-                                },
-                              ),
-                            ) ??
-                        [const Text('No files have been opened yet.')]),
-              ],
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    'Last opened files:',
+                    style: Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  ...ListTile.divideTiles(
+                      context: context,
+                      tiles: appData?.previousFiles?.reversed?.take(5)?.map(
+                                (f) => OpenedFileTile(
+                                  openedFile: f.toFileSource(cloudStorageBloc),
+                                  onPressed: () {
+                                    final source = f.toFileSource(cloudStorageBloc);
+                                    _loadAndGoToCredentials(source);
+                                  },
+                                ),
+                              ) ??
+                          [const Text('No files have been opened yet.')]),
+                ],
+              ),
             ),
           ),
         ],
