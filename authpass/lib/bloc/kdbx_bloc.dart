@@ -281,9 +281,10 @@ class KdbxBloc {
         final openedFile = openedFiles[fileSource];
         if (openedFile == null) {
           _logger.warning('File was closed, but was still listed in quick unlock files.');
+          return null;
         }
         return MapEntry(fileSource, openedFile.credentials);
-      })));
+      }).where((entry) => entry != null)));
     }
   }
 

@@ -11,6 +11,7 @@ import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
@@ -21,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
@@ -102,8 +102,7 @@ class SelectFileWidget extends StatefulWidget {
   _SelectFileWidgetState createState() => _SelectFileWidgetState();
 }
 
-class _SelectFileWidgetState extends State<SelectFileWidget> {
-  Future<dynamic> _fileLoader;
+class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin {
   bool _successfulQuickUnlock = false;
 
   @override
@@ -121,7 +120,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
     }
   }
 
-  Future<void> _checkQuickUnlock() => _fileLoader ??= (() async {
+  Future<void> _checkQuickUnlock() => asyncRunTask(() async {
         if (_successfulQuickUnlock) {
           _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
           return;
@@ -134,11 +133,6 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
         if (opened > 0 && kdbxBloc.openedFiles.isNotEmpty) {
           await Navigator.of(context).push(MainAppScaffold.route());
         }
-      })()
-          .whenComplete(() {
-        setState(() {
-          _fileLoader = null;
-        });
       });
 
   @override
@@ -147,7 +141,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
     final env = Provider.of<Env>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     return ProgressOverlay(
-      hasProgress: false,
+      hasProgress: task != null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -273,18 +267,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget> {
   }
 
   void _loadAndGoToCredentials(FileSource source) {
-    setState(() {
-      _fileLoader = source.load().then((value) {
-        return Navigator.of(context).push(CredentialsScreen.route(source));
-      }).catchError((dynamic error, StackTrace stackTrace) {
-        _logger.fine('Error while trying to load file source $source');
-        return Future<dynamic>.error(error, stackTrace);
-      }).whenComplete(() {
-        setState(() {
-          _fileLoader = null;
-        });
-      });
-    });
+    asyncRunTask(() => source.content().then((value) {
+          return Navigator.of(context).push(CredentialsScreen.route(source));
+        }).catchError((dynamic error, StackTrace stackTrace) {
+          _logger.fine('Error while trying to load file source $source');
+          return Future<dynamic>.error(error, stackTrace);
+        }));
+    setState(() {});
   }
 }
 
