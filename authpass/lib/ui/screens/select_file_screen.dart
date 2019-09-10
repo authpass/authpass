@@ -75,9 +75,9 @@ class ProgressOverlay extends StatelessWidget {
             color: Colors.black12,
             child: Center(
               child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xefffffff),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                decoration: const BoxDecoration(
+                  color: Color(0xefffffff),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 padding: const EdgeInsets.all(32),
                 child: const CircularProgressIndicator(),
@@ -138,7 +138,6 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
-    final env = Provider.of<Env>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     return ProgressOverlay(
       hasProgress: task != null,
@@ -271,6 +270,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
           return Navigator.of(context).push(CredentialsScreen.route(source));
         }).catchError((dynamic error, StackTrace stackTrace) {
           _logger.fine('Error while trying to load file source $source');
+          DialogUtils.showErrorDialog(context, 'Error while opening file.', 'Unable to open $source.\n$error');
           return Future<dynamic>.error(error, stackTrace);
         }));
     setState(() {});
@@ -360,7 +360,7 @@ class SelectFileAction extends StatelessWidget {
                     label,
                     textAlign: TextAlign.center,
                     style: theme.primaryTextTheme.body1.copyWith(letterSpacing: 0.9),
-                    strutStyle: StrutStyle(leading: 0.2),
+                    strutStyle: const StrutStyle(leading: 0.2),
 //                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -514,7 +514,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
 //              constraints: BoxConstraints.expand(),
                 child: TextFormField(
                   controller: _controller,
-                  decoration: InputDecoration(labelText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   autocorrect: false,
                   autofocus: true,
                   autovalidate: _invalidPassword != null,

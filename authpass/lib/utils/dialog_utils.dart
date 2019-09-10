@@ -29,6 +29,10 @@ class DialogUtils {
         });
   }
 
+  static Future<dynamic> showErrorDialog(BuildContext context, String title, String content) {
+    return showSimpleAlertDialog(context, title, content);
+  }
+
   static Future<bool> openUrl(String url) async {
     if (await canLaunch(url)) {
       return await launch(url, forceSafariVC: false, forceWebView: false);

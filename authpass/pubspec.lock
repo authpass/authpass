@@ -53,10 +53,10 @@ packages:
   biometric_storage:
     dependency: "direct main"
     description:
-      path: "../deps/biometric_storage"
-      relative: true
-    source: path
-    version: "0.2.0"
+      name: biometric_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -126,7 +126,7 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.7.0"
+    version: "6.7.1"
   built_value_generator:
     dependency: "direct dev"
     description:
@@ -233,7 +233,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.8"
+    version: "1.4.0+1"
   fixnum:
     dependency: transitive
     description:
@@ -261,7 +261,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0"
+    version: "0.14.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -350,7 +350,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.8"
+    version: "0.16.0"
   io:
     dependency: transitive
     description:
@@ -389,10 +389,10 @@ packages:
   kdbx:
     dependency: "direct main"
     description:
-      path: "../deps/kdbx.dart"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: kdbx
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   kernel:
     dependency: transitive
     description:
@@ -492,7 +492,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.0"
   pedantic:
     dependency: "direct dev"
     description:
@@ -507,6 +507,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   pointycastle:
     dependency: transitive
     description:
