@@ -6,9 +6,13 @@ PODS:
   - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - macos_secure_bookmarks (0.0.1):
+    - Flutter
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
+    - Flutter
+  - path_provider_fde (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
     - Flutter
@@ -19,9 +23,11 @@ DEPENDENCIES:
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
   - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
+  - macos_secure_bookmarks (from `.symlinks/plugins/macos_secure_bookmarks/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_fde (from `.symlinks/plugins/path_provider_fde/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - url_launcher_fde (from `.symlinks/plugins/url_launcher_fde/ios`)
 
@@ -33,11 +39,15 @@ EXTERNAL SOURCES:
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
+  macos_secure_bookmarks:
+    :path: ".symlinks/plugins/macos_secure_bookmarks/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_fde:
+    :path: ".symlinks/plugins/path_provider_fde/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
   url_launcher_fde:
@@ -48,8 +58,10 @@ SPEC CHECKSUMS:
   file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  macos_secure_bookmarks: e92103d68440bb8e5dc58e5e87956de0be6ce4ad
   package_info: 78cabb3c322943c55d39676f4a5bfc748c01d055
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  path_provider_fde: 71febf5c9c8ddf45466632da27cbf38324ce81bf
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
   url_launcher_fde: 57842a92168588f04dfa4a86edfe5756a6c13d5f
 

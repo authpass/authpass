@@ -68,7 +68,7 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/file_chooser
-      ref: 92c272a6a27bf2daba831703309685d3592cedc6
+      ref: 2925e9659123283151049ad724e6b56710e9e806
 #      ref: android-dummy-plugin
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
@@ -76,14 +76,14 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
-      ref: 92c272a6a27bf2daba831703309685d3592cedc6
+      ref: 2925e9659123283151049ad724e6b56710e9e806
   path_provider_fde:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/path_provider_fde
-      ref: 92c272a6a27bf2daba831703309685d3592cedc6
+      ref: 2925e9659123283151049ad724e6b56710e9e806
 
-  macos_secure_bookmarks: ^0.1.0
+  macos_secure_bookmarks: ^0.1.0+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -105,8 +105,8 @@ dependency_overrides:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/file_chooser
 #  biometric_storage
 #    path: ../deps/biometric_storage
-  macos_secure_bookmarks:
-    path: /Users/herbert/dev/macos_secure_bookmarks
+#  macos_secure_bookmarks:
+#    path: /Users/herbert/dev/macos_secure_bookmarks
 
 
 # For information on the generic Dart part of this file, see the
