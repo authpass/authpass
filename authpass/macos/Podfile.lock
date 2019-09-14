@@ -6,6 +6,8 @@ PODS:
   - FlutterMacOS (1.0.0)
   - macos_secure_bookmarks (0.0.3):
     - FlutterMacOS
+  - path_provider_fde (0.0.1):
+    - FlutterMacOS
   - url_launcher_fde (0.0.1):
     - FlutterMacOS
 
@@ -14,6 +16,7 @@ DEPENDENCIES:
   - file_chooser (from `Flutter/ephemeral/.symlinks/plugins/file_chooser/macos`)
   - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
   - macos_secure_bookmarks (from `Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos`)
+  - path_provider_fde (from `Flutter/ephemeral/.symlinks/plugins/path_provider_fde/macos`)
   - url_launcher_fde (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_fde/macos`)
 
 EXTERNAL SOURCES:
@@ -25,6 +28,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/flutter/darwin-x64
   macos_secure_bookmarks:
     :path: Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos
+  path_provider_fde:
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_fde/macos
   url_launcher_fde:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_fde/macos
 
@@ -33,6 +38,7 @@ SPEC CHECKSUMS:
   file_chooser: 24432cf5dc836722b05c11c2a0a30d19c3c9b996
   FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9
   macos_secure_bookmarks: cff041c4b377fa00941bb901aaec4d27fac5edf2
+  path_provider_fde: ac05eee380688ce8414a9003c3ac2d3c106dcbf8
   url_launcher_fde: 2e3afc0d9c7c0dfe63e0ef42030ec62d56096b38
 
 PODFILE CHECKSUM: 3d7f23e3a499e4f844c299df7bc01f656165c909

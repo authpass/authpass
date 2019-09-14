@@ -222,8 +222,8 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/file_chooser"
-      ref: "41746e8f620fb9ec897c13cef1d8da1d4941a27a"
-      resolved-ref: "41746e8f620fb9ec897c13cef1d8da1d4941a27a"
+      ref: "61d4c56db53b9b2b1af06982d7446ef35ab4239e"
+      resolved-ref: "61d4c56db53b9b2b1af06982d7446ef35ab4239e"
       url: "https://github.com/hpoul/flutter-desktop-embedding.git"
     source: git
     version: "0.0.1"
@@ -500,6 +500,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  path_provider_fde:
+    dependency: "direct main"
+    description:
+      path: "plugins/flutter_plugins/path_provider_fde"
+      ref: "61d4c56db53b9b2b1af06982d7446ef35ab4239e"
+      resolved-ref: "61d4c56db53b9b2b1af06982d7446ef35ab4239e"
+      url: "https://github.com/hpoul/flutter-desktop-embedding.git"
+    source: git
+    version: "0.0.1"
   pedantic:
     dependency: "direct dev"
     description:
@@ -714,8 +723,8 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/flutter_plugins/url_launcher_fde"
-      ref: a419b463ed354e1d02f96915cfdc29ef51913dc5
-      resolved-ref: a419b463ed354e1d02f96915cfdc29ef51913dc5
+      ref: "61d4c56db53b9b2b1af06982d7446ef35ab4239e"
+      resolved-ref: "61d4c56db53b9b2b1af06982d7446ef35ab4239e"
       url: "https://github.com/hpoul/flutter-desktop-embedding.git"
     source: git
     version: "0.0.1"
