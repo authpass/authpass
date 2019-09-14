@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
@@ -166,8 +167,15 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
                   } else {
                     showOpenPanel((result, paths) async {
                       if (result == FileChooserResult.ok) {
-                        await Navigator.of(context).push(
-                            CredentialsScreen.route(FileSourceLocal(File(paths[0]), uuid: AppDataBloc.createUuid())));
+                        String macOsBookmark;
+                        if (Platform.isMacOS) {
+                          macOsBookmark = await SecureBookmarks().bookmark(File(paths[0]));
+                        }
+                        await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(
+                          File(paths[0]),
+                          uuid: AppDataBloc.createUuid(),
+                          macOsSecureBookmark: macOsBookmark,
+                        )));
                       }
                     });
                   }

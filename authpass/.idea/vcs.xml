@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/biometric_storage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/biometric_storage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks" vcs="Git" />
   </component>
 </project>

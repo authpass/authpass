@@ -109,6 +109,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
       child: MaterialApp(
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
+        debugShowCheckedModeBanner: false,
         theme: createTheme(),
         home: SelectFileScreen(),
       ),

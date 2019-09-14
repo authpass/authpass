@@ -69,6 +69,9 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   @nullable
   String get biometricStoreName;
 
+  @nullable
+  String get macOsSecureBookmark;
+
   bool isSameFileAs(OpenedFile other) => other.sourceType == sourceType && other.sourcePath == sourcePath;
 
   static OpenedFile fromFileSource(FileSource fileSource, String dbName) => OpenedFile(
@@ -79,6 +82,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
             b
               ..sourceType = OpenedFilesSourceType.Local
               ..sourcePath = fileSource.file.absolute.path
+              ..macOsSecureBookmark = fileSource.macOsSecureBookmark
               ..name = dbName;
           } else if (fileSource is FileSourceUrl) {
             b
@@ -102,7 +106,11 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   FileSource toFileSource(CloudStorageBloc cloudStorageBloc) {
     switch (sourceType) {
       case OpenedFilesSourceType.Local:
-        return FileSourceLocal(File(sourcePath), uuid: uuid ?? AppDataBloc.createUuid());
+        return FileSourceLocal(
+          File(sourcePath),
+          macOsSecureBookmark: macOsSecureBookmark,
+          uuid: uuid ?? AppDataBloc.createUuid(),
+        );
       case OpenedFilesSourceType.Url:
         return FileSourceUrl(Uri.parse(sourcePath), uuid: uuid ?? AppDataBloc.createUuid());
       case OpenedFilesSourceType.CloudStorage:

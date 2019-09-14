@@ -56,6 +56,12 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
         ..add(serializers.serialize(object.biometricStoreName,
             specifiedType: const FullType(String)));
     }
+    if (object.macOsSecureBookmark != null) {
+      result
+        ..add('macOsSecureBookmark')
+        ..add(serializers.serialize(object.macOsSecureBookmark,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -93,6 +99,10 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
           break;
         case 'biometricStoreName':
           result.biometricStoreName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'macOsSecureBookmark':
+          result.macOsSecureBookmark = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -158,6 +168,8 @@ class _$OpenedFile extends OpenedFile {
   final String name;
   @override
   final String biometricStoreName;
+  @override
+  final String macOsSecureBookmark;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder) updates]) =>
       (new OpenedFileBuilder()..update(updates)).build();
@@ -168,7 +180,8 @@ class _$OpenedFile extends OpenedFile {
       this.sourceType,
       this.sourcePath,
       this.name,
-      this.biometricStoreName})
+      this.biometricStoreName,
+      this.macOsSecureBookmark})
       : super._() {
     if (lastOpenedAt == null) {
       throw new BuiltValueNullFieldError('OpenedFile', 'lastOpenedAt');
@@ -199,17 +212,20 @@ class _$OpenedFile extends OpenedFile {
         sourceType == other.sourceType &&
         sourcePath == other.sourcePath &&
         name == other.name &&
-        biometricStoreName == other.biometricStoreName;
+        biometricStoreName == other.biometricStoreName &&
+        macOsSecureBookmark == other.macOsSecureBookmark;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
-                sourcePath.hashCode),
-            name.hashCode),
-        biometricStoreName.hashCode));
+            $jc(
+                $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
+                    sourcePath.hashCode),
+                name.hashCode),
+            biometricStoreName.hashCode),
+        macOsSecureBookmark.hashCode));
   }
 
   @override
@@ -220,7 +236,8 @@ class _$OpenedFile extends OpenedFile {
           ..add('sourceType', sourceType)
           ..add('sourcePath', sourcePath)
           ..add('name', name)
-          ..add('biometricStoreName', biometricStoreName))
+          ..add('biometricStoreName', biometricStoreName)
+          ..add('macOsSecureBookmark', macOsSecureBookmark))
         .toString();
   }
 }
@@ -255,6 +272,11 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   set biometricStoreName(String biometricStoreName) =>
       _$this._biometricStoreName = biometricStoreName;
 
+  String _macOsSecureBookmark;
+  String get macOsSecureBookmark => _$this._macOsSecureBookmark;
+  set macOsSecureBookmark(String macOsSecureBookmark) =>
+      _$this._macOsSecureBookmark = macOsSecureBookmark;
+
   OpenedFileBuilder();
 
   OpenedFileBuilder get _$this {
@@ -265,6 +287,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
       _sourcePath = _$v.sourcePath;
       _name = _$v.name;
       _biometricStoreName = _$v.biometricStoreName;
+      _macOsSecureBookmark = _$v.macOsSecureBookmark;
       _$v = null;
     }
     return this;
@@ -292,7 +315,8 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
             sourceType: sourceType,
             sourcePath: sourcePath,
             name: name,
-            biometricStoreName: biometricStoreName);
+            biometricStoreName: biometricStoreName,
+            macOsSecureBookmark: macOsSecureBookmark);
     replace(_$result);
     return _$result;
   }
