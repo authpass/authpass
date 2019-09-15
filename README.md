@@ -24,23 +24,23 @@ see also https://github.com/authpass/authpass/issues
   * [x] iOS
   * [x] Android
   * [x] Mac OS
-  * [ ] Windows
-  * [ ] Linux
-* [ ] Decrypt with keyfile
+  * [ ] Windows https://github.com/authpass/authpass/issues/27
+  * [ ] Linux https://github.com/authpass/authpass/issues/26
+* [ ] Decrypt with keyfile https://github.com/authpass/authpass/issues/3
 * [x] List of password entries
 * [x] 👆️ Search through entries
 * [x] 👆️ Entry details
 * [x] 👆️ mobile: copy usernames, passwords
 * [x] mobile: integrate with biometrics (fingerprint)
-* [ ] mac: Auto-Type
-* [ ] 👆️ Auto-lock after x minutes of inactivity.
-* [ ] Integration of basic analytics and error reporting
+* [ ] mac: Auto-Type https://github.com/authpass/authpass/issues/13
+* [ ] 👆️ Auto-lock after x minutes of inactivity. https://github.com/authpass/authpass/issues/14
+* [ ] Integration of basic analytics and error reporting https://github.com/authpass/authpass/issues/15
 * [x] Editing existing entries
 * [x] Saving of changes into kdbx file.
 * [x] Creating of new kdbx files.
-* [ ] Syncing of kdbx files via custom cloud service and QR codes.
+* [ ] Syncing of kdbx files via custom cloud service and QR codes. https://github.com/authpass/authpass/issues/29
 * [x] Syncing with cloud services like dropbox or google drive?
 * [x] 👆️ CI pipeline/continous builds, releases
-* [ ] kdbx 4 support (missing argon2) compatibility
-* [ ] Android: Auto Fill
-* [ ] iOS: Auto Fill
+* [ ] kdbx 4 support (missing argon2) compatibility https://github.com/authpass/authpass/issues/4
+* [ ] Android: Auto Fill https://github.com/authpass/authpass/issues/30
+* [ ] iOS: Auto Fill https://github.com/authpass/authpass/issues/31
