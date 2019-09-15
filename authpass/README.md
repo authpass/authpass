@@ -19,11 +19,11 @@ rm AuthPass.app/Contents/Frameworks/App.framework/Versions/Current
 ls -l AuthPass.app/Contents/Frameworks/App.framework/Versions/
 # </workarorund>
 
-codesign --entitlements ~/dev/authpass/authpass/macos/AuthPass.entitlements --options=runtime -f -v --timestamp --deep -s 'Developer ID Application: TaPo-IT OG (2N9YTZSQBW)' AuthPass.app
+codesign --entitlements ~/dev/authpass/authpass/macos/AuthPass-release.entitlements --options=runtime -f -v --timestamp --deep -s 'Developer ID Application: TaPo-IT OG (2N9YTZSQBW)' AuthPass.app
 
 cd $basedir/macos/
 # bundle install
-bundle exec fastlane hptpest # notarize
+bundle exec fastlane hptest # notarize
 
 ```
 

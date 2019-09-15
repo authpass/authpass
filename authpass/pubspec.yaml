@@ -1,7 +1,7 @@
 name: authpass
 description: Password Manager with support for kdbx 2.x
 
-version: 1.0.2+3
+version: 1.0.3+5
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -68,7 +68,7 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/file_chooser
-      ref: 2925e9659123283151049ad724e6b56710e9e806
+      ref: a73321baa3a0e7c16c66e9180211ae247e63f39c
 #      ref: android-dummy-plugin
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
@@ -76,12 +76,12 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
-      ref: 2925e9659123283151049ad724e6b56710e9e806
+      ref: a73321baa3a0e7c16c66e9180211ae247e63f39c
   path_provider_fde:
     git:
       url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/path_provider_fde
-      ref: 2925e9659123283151049ad724e6b56710e9e806
+      ref: a73321baa3a0e7c16c66e9180211ae247e63f39c
 
   macos_secure_bookmarks: ^0.1.0+1
 
