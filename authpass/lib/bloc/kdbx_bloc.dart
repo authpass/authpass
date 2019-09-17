@@ -22,10 +22,21 @@ import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('kdbx_bloc');
 
+/// Wrapper around loaded file contents. This basically attaches
+/// metadata to the retrieved byte content, e.g. for conflict detection
+/// by having the revision loaded from e.g. dropbox we can assure there
+/// are no conflicts on writing.
+class FileContent {
+  FileContent(this.content, [this.metadata = const <String, dynamic>{}]);
+
+  final Uint8List content;
+  final Map<String, dynamic> metadata;
+}
+
 abstract class FileSource {
   FileSource({@required this.databaseName, @required this.uuid});
 
-  Uint8List _cached;
+  FileContent _cached;
 
   final String uuid;
 
@@ -48,12 +59,25 @@ abstract class FileSource {
   /// whether this file source supports saving of changes.
   bool get supportsWrite;
 
+  /// The metadata which was fetched on the last call to [content].
   @protected
-  Future<Uint8List> load();
+  Map<String, dynamic> get previousMetadata => _cached.metadata;
 
-  Future<void> write(Uint8List bytes);
+  @protected
+  Future<FileContent> load();
 
-  Future<Uint8List> content() async => _cached ??= await load();
+  /// Should write the given contents to the file. when there was a previous
+  /// call to [load] which returned [FileContent.metadata], this will be passe
+  /// into [previousMetadata]
+  @protected
+  Future<Map<String, dynamic>> write(Uint8List bytes, Map<String, dynamic> previousMetadata);
+
+  Future<Uint8List> content() async => (_cached ??= await load()).content;
+
+  Future<void> contentWrite(Uint8List bytes) async {
+    final newMetadata = await write(bytes, _cached?.metadata);
+    _cached = FileContent(bytes, newMetadata);
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -88,22 +112,19 @@ class FileSourceLocal extends FileSource {
   final String macOsSecureBookmark;
 
   @override
-  Future<Uint8List> load() async {
-    return await _accessFile((f) => f.readAsBytes());
+  Future<FileContent> load() async {
+    return await _accessFile((f) async => FileContent(await f.readAsBytes()));
   }
 
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
     if (Platform.isMacOS && macOsSecureBookmark != null) {
-      final resolved =
-          await SecureBookmarks().resolveBookmark(macOsSecureBookmark);
+      final resolved = await SecureBookmarks().resolveBookmark(macOsSecureBookmark);
       _logger.finer('Reading from secure  bookmark. ($resolved)');
       if (resolved != file) {
-        _logger
-            .warning('Stored secure bookmark resolves to a different file than'
-                ' we originally opened. $resolved vs. $file');
+        _logger.warning('Stored secure bookmark resolves to a different file than'
+            ' we originally opened. $resolved vs. $file');
       }
-      final access = await SecureBookmarks()
-          .startAccessingSecurityScopedResource(resolved);
+      final access = await SecureBookmarks().startAccessingSecurityScopedResource(resolved);
       _logger.fine('startAccessingSecurityScopedResource: $access');
       try {
         return await cb(resolved);
@@ -121,8 +142,10 @@ class FileSourceLocal extends FileSource {
   String get displayNameFromPath => path.basenameWithoutExtension(displayPath);
 
   @override
-  Future<void> write(Uint8List bytes) =>
-      _accessFile((f) => f.writeAsBytes(bytes));
+  Future<Map<String, dynamic>> write(Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+    await _accessFile((f) => f.writeAsBytes(bytes));
+    return null;
+  }
 
   @override
   bool get supportsWrite => true;
@@ -132,15 +155,14 @@ class FileSourceLocal extends FileSource {
 }
 
 class FileSourceUrl extends FileSource {
-  FileSourceUrl(this.url, {String databaseName, @required String uuid})
-      : super(databaseName: databaseName, uuid: uuid);
+  FileSourceUrl(this.url, {String databaseName, @required String uuid}) : super(databaseName: databaseName, uuid: uuid);
 
   final Uri url;
 
   @override
-  Future<Uint8List> load() async {
+  Future<FileContent> load() async {
     final response = await http.readBytes(url);
-    return response;
+    return FileContent(response);
   }
 
   @override
@@ -154,8 +176,9 @@ class FileSourceUrl extends FileSource {
   String get displayNameFromPath => path.basenameWithoutExtension(url.path);
 
   @override
-  Future<void> write(Uint8List bytes) =>
-      throw UnsupportedError('Cannot write to urls.');
+  Future<Map<String, dynamic>> write(Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+    throw UnsupportedError('Cannot write to urls.');
+  }
 
   @override
   bool get supportsWrite => false;
@@ -165,11 +188,7 @@ class FileSourceUrl extends FileSource {
 }
 
 class FileSourceCloudStorage extends FileSource {
-  FileSourceCloudStorage(
-      {@required this.provider,
-      @required this.fileInfo,
-      String databaseName,
-      @required String uuid})
+  FileSourceCloudStorage({@required this.provider, @required this.fileInfo, String databaseName, @required String uuid})
       : super(databaseName: databaseName, uuid: uuid);
 
   final CloudStorageProvider provider;
@@ -183,16 +202,14 @@ class FileSourceCloudStorage extends FileSource {
   String get displayPath => provider.displayPath(fileInfo);
 
   @override
-  Future<Uint8List> load() {
-    return provider.loadFile(fileInfo);
-  }
+  Future<FileContent> load() => provider.loadFile(fileInfo);
 
   @override
   bool get supportsWrite => true;
 
   @override
-  Future<void> write(Uint8List bytes) {
-    return provider.saveFile(fileInfo, bytes);
+  Future<Map<String, dynamic>> write(Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+    return provider.saveFile(fileInfo, bytes, previousMetadata);
   }
 
   @override
@@ -218,14 +235,11 @@ class QuickUnlockStorage {
 
   Future<BiometricStorageFile> _storageFileCached;
 
-  Future<BiometricStorageFile> _storageFile() =>
-      _storageFileCached ??= BiometricStorage().getStorage('QuickUnlock');
+  Future<BiometricStorageFile> _storageFile() => _storageFileCached ??= BiometricStorage().getStorage('QuickUnlock');
 
-  Future<void> updateQuickUnlockFile(
-      Map<FileSource, Credentials> fileCredentials) async {
+  Future<void> updateQuickUnlockFile(Map<FileSource, Credentials> fileCredentials) async {
     if (!(await supportsBiometricKeyStore())) {
-      _logger.severe(
-          'updateQuickUnlockFile must not be called when biometric store is not supported.');
+      _logger.severe('updateQuickUnlockFile must not be called when biometric store is not supported.');
       return;
     }
     final quickUnlockCredentials = fileCredentials.map(
@@ -237,16 +251,14 @@ class QuickUnlockStorage {
     try {
       await storage.write(json.encode(quickUnlockCredentials));
     } catch (e, stackTrace) {
-      _logger.severe(
-          'Error while writing quick unlock credentials.', e, stackTrace);
+      _logger.severe('Error while writing quick unlock credentials.', e, stackTrace);
       rethrow;
     } finally {
       _logger.finer('all done.');
     }
   }
 
-  Future<Map<FileSource, Credentials>> loadQuickUnlockFile(
-      AppDataBloc appDataBloc) async {
+  Future<Map<FileSource, Credentials>> loadQuickUnlockFile(AppDataBloc appDataBloc) async {
     if (!(await supportsBiometricKeyStore())) {
       _logger.fine('Biometric store not supported. no quickunlock.');
       return {};
@@ -264,17 +276,17 @@ class QuickUnlockStorage {
       if (file == null) {
         return null;
       }
-      return MapEntry(file.toFileSource(cloudStorageBloc),
-          HashCredentials(base64.decode(entry.value as String)));
+      return MapEntry(file.toFileSource(cloudStorageBloc), HashCredentials(base64.decode(entry.value as String)));
     }).where((e) => e != null));
   }
 }
 
 /// response to [KdbxBloc.readKdbxFile] will either bei an exception OR a file.
 class ReadFileResponse {
-  ReadFileResponse(this.file, this.exception);
+  ReadFileResponse(this.file, this.exception, this.exceptionType);
   final KdbxFile file;
   final dynamic exception;
+  final String exceptionType;
 }
 
 class KdbxBloc {
@@ -282,8 +294,7 @@ class KdbxBloc {
     @required this.appDataBloc,
     @required this.analytics,
     @required this.cloudStorageBloc,
-  }) : quickUnlockStorage =
-            QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc);
+  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc);
 
   final AppDataBloc appDataBloc;
   final Analytics analytics;
@@ -293,12 +304,10 @@ class KdbxBloc {
   final _openedFiles = BehaviorSubject<Map<FileSource, KdbxFile>>.seeded({});
   final _openedFilesQuickUnlock = <FileSource>{};
 
-  Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources =>
-      _openedFiles.value.entries;
+  Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources => _openedFiles.value.entries;
 
   List<KdbxFile> get openedFiles => _openedFiles.value.values.toList();
-  ValueObservable<Map<FileSource, KdbxFile>> get openedFilesChanged =>
-      _openedFiles.stream;
+  ValueObservable<Map<FileSource, KdbxFile>> get openedFilesChanged => _openedFiles.stream;
 
   Future<int> _quickUnlockCheckRunning;
 
@@ -307,18 +316,23 @@ class KdbxBloc {
 //    super.dispose();
   }
 
-  Future<void> openFile(FileSource file, Credentials credentials,
-      {bool addToQuickUnlock = false}) async {
+  Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
     final fileContent = await file.content();
-    final kdbxReadFile = await compute(
-        readKdbxFile, KdbxReadArgs(fileContent, credentials),
-        debugLabel: 'readKdbxFile');
+    final kdbxReadFile =
+        await compute(readKdbxFile, KdbxReadArgs(fileContent, credentials), debugLabel: 'readKdbxFile');
     if (kdbxReadFile.exception != null) {
+      final mapping = <Type, Exception Function()>{
+        KdbxInvalidKeyException: () => KdbxInvalidKeyException(),
+        KdbxCorruptedFileException: () => KdbxCorruptedFileException(''),
+      }.map((key, value) => MapEntry(key.toString(), value));
+      final exception = mapping[kdbxReadFile.exception];
+      if (exception != null) {
+        throw exception();
+      }
       throw kdbxReadFile.exception;
     }
     final kdbxFile = kdbxReadFile.file;
-    final openedFile = await appDataBloc.openedFile(file,
-        name: kdbxFile.body.meta.databaseName.get());
+    final openedFile = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
     _openedFiles.value = {..._openedFiles.value, file: kdbxFile};
     analytics.events.trackOpenFile(type: openedFile.sourceType);
 
@@ -326,12 +340,10 @@ class KdbxBloc {
       _openedFilesQuickUnlock.add(file);
       _logger.fine('adding file to quick unlock.');
       final openedFiles = _openedFiles.value;
-      await quickUnlockStorage.updateQuickUnlockFile(
-          Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
+      await quickUnlockStorage.updateQuickUnlockFile(Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
         final openedFile = openedFiles[fileSource];
         if (openedFile == null) {
-          _logger.warning(
-              'File was closed, but was still listed in quick unlock files.');
+          _logger.warning('File was closed, but was still listed in quick unlock files.');
           return null;
         }
         return MapEntry(fileSource, openedFile.credentials);
@@ -344,11 +356,9 @@ class KdbxBloc {
   Future<int> reopenQuickUnlock() => _quickUnlockCheckRunning ??= (() async {
         try {
           _logger.finer('Checking quick unlock.');
-          final unlockFiles =
-              await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
+          final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
           int filesOpened = 0;
-          for (final file
-              in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
+          for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
             try {
               await openFile(file.key, file.value);
               filesOpened++;
@@ -390,10 +400,10 @@ class KdbxBloc {
       final fileContent = readArgs.content;
       final kdbxFile = KdbxFormat.read(fileContent, readArgs.credentials);
       _logger.finer('done reading');
-      return ReadFileResponse(kdbxFile, null);
+      return ReadFileResponse(kdbxFile, null, null);
     } catch (e, stackTrace) {
       _logger.warning('Error while reading kdbx file.', e, stackTrace);
-      return ReadFileResponse(null, e.toString());
+      return ReadFileResponse(null, e.toString(), e.runtimeType.toString());
     }
   }
 
@@ -411,8 +421,7 @@ class KdbxBloc {
       credentials,
       databaseName,
     );
-    final FileSourceLocal localSource =
-        await _localFileSourceForDbName(databaseName);
+    final FileSourceLocal localSource = await _localFileSourceForDbName(databaseName);
     await localSource.file.writeAsBytes(kdbxFile.save(), flush: true);
     if (openAfterCreate) {
       await openFile(localSource, credentials);
@@ -447,12 +456,11 @@ class KdbxBloc {
   Future<void> saveFile(KdbxFile file, {FileSource toFileSource}) async {
     final fileSource = toFileSource ?? fileSourceForFile(file);
     final bytes = file.save();
-    await fileSource.write(bytes);
+    await fileSource.contentWrite(bytes);
   }
 
   FileSource fileSourceForFile(KdbxFile file) => _openedFiles.value.entries
-      .singleWhere((el) => el.value == file,
-          orElse: () => throw StateError('File not opened?'))
+      .singleWhere((el) => el.value == file, orElse: () => throw StateError('File not opened?'))
       .key;
 
   Future<FileSource> saveLocally(FileSource source) async {

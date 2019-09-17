@@ -1,5 +1,6 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/hud.dart';
@@ -65,7 +66,13 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
                       _formKey.currentState.save();
                       final kdbxBloc = Provider.of<KdbxBloc>(context);
                       if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
-                        await kdbxBloc.saveFile(widget.entry.file);
+                        try {
+                          await kdbxBloc.saveFile(widget.entry.file);
+                        } on StorageException catch (e, stackTrace) {
+                          _logger.warning('Error while saving database.', e, stackTrace);
+                          await DialogUtils.showErrorDialog(context, 'Error while saving', 'Unable to save file: $e');
+                          return;
+                        }
                         setState(() => _isDirty = false);
                       } else {
                         await DialogUtils.showSimpleAlertDialog(

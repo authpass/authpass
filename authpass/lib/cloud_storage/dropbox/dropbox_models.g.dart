@@ -54,6 +54,7 @@ FileMetadata _$FileMetadataFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
     name: json['name'] as String,
     pathDisplay: json['path_display'] as String,
+    rev: json['rev'] as String,
   );
 }
 
@@ -62,6 +63,7 @@ Map<String, dynamic> _$FileMetadataToJson(FileMetadata instance) =>
       'id': instance.id,
       'name': instance.name,
       'path_display': instance.pathDisplay,
+      'rev': instance.rev,
     };
 
 // **************************************************************************

@@ -133,14 +133,21 @@ abstract class CloudStorageProvider {
   FileSource toFileSource(Map<String, String> fileInfo, {@required String uuid}) =>
       FileSourceCloudStorage(provider: this, fileInfo: fileInfo, uuid: uuid);
 
-  Future<Uint8List> loadFile(Map<String, String> fileInfo) =>
+  Future<FileContent> loadFile(Map<String, String> fileInfo) =>
       loadEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo));
 
-  Future<void> saveFile(Map<String, String> fileInfo, Uint8List bytes) =>
-      saveEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo), bytes);
+  /// Saves the given bytes into the file source.
+  /// [previousMetadata] will contain the metadata returned from the last [load] call.
+  /// Can return a new metadata object for the next call.
+  Future<Map<String, dynamic>> saveFile(
+          Map<String, String> fileInfo, Uint8List bytes, Map<String, dynamic> previousMetadata) =>
+      saveEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo), bytes, previousMetadata);
 
-  Future<Uint8List> loadEntity(CloudStorageEntity file);
-  Future<void> saveEntity(CloudStorageEntity file, Uint8List bytes);
+  Future<FileContent> loadEntity(CloudStorageEntity file);
+  Future<Map<String, dynamic>> saveEntity(
+      CloudStorageEntity file, Uint8List bytes, Map<String, dynamic> previousMetadata);
+
+  Future<void> logout();
 }
 
 abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
@@ -150,6 +157,11 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
 
   @override
   bool get isAuthenticated => _client != null;
+
+  @override
+  Future<void> logout() async {
+    _client = null;
+  }
 
   @protected
   Future<T> requireAuthenticatedClient() async {
@@ -184,5 +196,22 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
   Future<bool> loadSavedAuth() async {
     _client = await _loadStoredCredentials();
     return isAuthenticated;
+  }
+}
+
+enum StorageExceptionType {
+  conflict,
+  unknown,
+}
+
+class StorageException implements Exception {
+  StorageException(this.type, this.details);
+
+  final StorageExceptionType type;
+  final String details;
+
+  @override
+  String toString() {
+    return 'StorageException{type: $type, details: $details}';
   }
 }

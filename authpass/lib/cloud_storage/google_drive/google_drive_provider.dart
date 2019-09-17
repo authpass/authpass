@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:flutter/widgets.dart';
@@ -105,7 +106,7 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
   IconData get displayIcon => FontAwesomeIcons.googleDrive;
 
   @override
-  Future<Uint8List> loadEntity(CloudStorageEntity file) async {
+  Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final dynamic response = await driveApi.files.get(file.id, downloadOptions: DownloadOptions.FullMedia);
     final media = response as Media;
@@ -114,16 +115,17 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
     await for (final chunk in media.stream) {
       bytes.add(chunk);
     }
-    return bytes.toBytes();
+    return FileContent(bytes.toBytes());
   }
 
   @override
-  Future<void> saveEntity(CloudStorageEntity file, Uint8List bytes) async {
+  Future<Map<String, dynamic>> saveEntity(
+      CloudStorageEntity file, Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
     final updatedFile = await driveApi.files.update(null, file.id, uploadMedia: Media(byteStream, bytes.lengthInBytes));
     _logger.fine('Successfully saved file ${updatedFile.name}');
-    return;
+    return <String, dynamic>{};
   }
 }
 

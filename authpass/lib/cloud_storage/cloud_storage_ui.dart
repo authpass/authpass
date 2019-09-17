@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('authpass.google_drive_ui');
 
@@ -41,6 +40,17 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
     return Scaffold(
       appBar: AppBar(
         title: Text('CloudStorage - ${widget.provider.displayName}'),
+        actions: widget.provider.isAuthenticated != true
+            ? null
+            : <Widget>[
+                IconButton(
+                  onPressed: () {
+                    widget.provider.logout();
+                    setState(() {});
+                  },
+                  icon: Icon(FontAwesomeIcons.signOutAlt),
+                ),
+              ],
       ),
       body: widget.provider.isAuthenticated != true
           ? Center(child: CloudStorageAuthentication(provider: widget.provider, onSuccess: () => setState(() {})))
