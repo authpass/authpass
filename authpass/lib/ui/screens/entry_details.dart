@@ -426,26 +426,34 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
             children: <Widget>[
               Expanded(
                 child: _isProtected
-                    ? InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
-                          filled: true,
-                        ),
-                        child: LinkButton(
-                          child: const Text('Protected field. Click here to view and modify.'),
-                          onPressed: () {
-                            setState(() {
-                              _controller.text = _value?.getText() ?? '';
-                              _controller.selection =
-                                  TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
-                              _isProtected = false;
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _focusNode.requestFocus();
-                                _logger.finer('requesting focus.');
-                              });
-                            });
-                          },
-                        ),
+                    ? Stack(
+                        children: [
+                          InputDecorator(
+                            decoration: InputDecoration(
+                              prefixIcon: widget.commonField?.icon == null ? null : Icon(widget.commonField.icon),
+                              labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                              filled: true,
+                            ),
+                            child: const Text('*******'),
+                          ),
+                          Positioned.fill(
+                            child: LinkButton(
+                              child: const Text('Protected field. Click here to view and modify.'),
+                              onPressed: () {
+                                setState(() {
+                                  _controller.text = _value?.getText() ?? '';
+                                  _controller.selection =
+                                      TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+                                  _isProtected = false;
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    _focusNode.requestFocus();
+                                    _logger.finer('requesting focus.');
+                                  });
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       )
                     : TextFormField(
                         maxLines: null,
@@ -453,6 +461,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                         decoration: InputDecoration(
                           fillColor: const Color(0xfff0f0f0),
                           filled: true,
+                          prefixIcon: widget.commonField?.icon == null ? null : Icon(widget.commonField.icon),
                           suffixIcon: widget.fieldKey == commonFields.password.key
                               ? IconButton(
 //                            padding: EdgeInsets.zero,
