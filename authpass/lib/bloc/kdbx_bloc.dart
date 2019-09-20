@@ -339,16 +339,21 @@ class KdbxBloc {
     if (addToQuickUnlock) {
       _openedFilesQuickUnlock.add(file);
       _logger.fine('adding file to quick unlock.');
-      final openedFiles = _openedFiles.value;
-      await quickUnlockStorage.updateQuickUnlockFile(Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
-        final openedFile = openedFiles[fileSource];
-        if (openedFile == null) {
-          _logger.warning('File was closed, but was still listed in quick unlock files.');
-          return null;
-        }
-        return MapEntry(fileSource, openedFile.credentials);
-      }).where((entry) => entry != null)));
+      await _updateQuickUnlockStore();
     }
+  }
+
+  /// writes all opened files into secure storage.
+  Future<void> _updateQuickUnlockStore() async {
+    final openedFiles = _openedFiles.value;
+    await quickUnlockStorage.updateQuickUnlockFile(Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
+      final openedFile = openedFiles[fileSource];
+      if (openedFile == null) {
+        _logger.warning('File was closed, but was still listed in quick unlock files.');
+        return null;
+      }
+      return MapEntry(fileSource, openedFile.credentials);
+    }).where((entry) => entry != null)));
   }
 
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
@@ -383,6 +388,19 @@ class KdbxBloc {
         }
       })()
           .whenComplete(() => _quickUnlockCheckRunning = null);
+
+  Future<void> close(KdbxFile file) async {
+    _logger.fine('Close file.');
+    analytics.events.trackCloseFile();
+    final fileSource = fileSourceForFile(file);
+    _openedFiles.value = Map.from(_openedFiles.value)..remove(fileSource);
+    if (_openedFilesQuickUnlock.remove(fileSource)) {
+      _logger.fine('file was in quick unlock. need to persist it.');
+      await _updateQuickUnlockStore();
+    } else {
+      _logger.fine('file was not in quick unlock.');
+    }
+  }
 
   void closeAllFiles() {
     _logger.finer('Closing all files, clearing quick unlock.');
@@ -463,6 +481,8 @@ class KdbxBloc {
   FileSource fileSourceForFile(KdbxFile file) => _openedFiles.value.entries
       .singleWhere((el) => el.value == file, orElse: () => throw StateError('File not opened?'))
       .key;
+
+  KdbxFile fileForFileSource(FileSource fileSource) => _openedFiles.value[fileSource];
 
   Future<FileSource> saveLocally(FileSource source) async {
     final file = _openedFiles.value[source];

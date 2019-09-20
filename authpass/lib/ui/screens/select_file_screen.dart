@@ -31,7 +31,7 @@ import '../../theme.dart';
 final _logger = Logger('select_file_screen');
 
 class SelectFileScreen extends StatelessWidget {
-  static Route<Object> get route => MaterialPageRoute(
+  static Route<Object> route() => MaterialPageRoute(
         settings: const RouteSettings(name: '/selectFile'),
         builder: (context) => SelectFileScreen(),
       );
@@ -126,8 +126,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
           _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
           return;
         }
-        _logger.finer('opening quick unlock. $_successfulQuickUnlock $mounted');
         final kdbxBloc = Provider.of<KdbxBloc>(context);
+        if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
+          _logger.fine('We already have files open. Not attempting quick unlock.');
+          return;
+        }
+        _logger.finer('opening quick unlock. $_successfulQuickUnlock $mounted');
         final opened = await kdbxBloc.reopenQuickUnlock();
         _logger.info('opened $opened files with quick unlock.');
         _successfulQuickUnlock = true;

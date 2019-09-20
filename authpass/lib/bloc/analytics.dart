@@ -88,4 +88,9 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackCloseAllFiles({int count});
 
   void trackUserType({String userType});
+
+  void trackCloseFile();
+
+  /// weird case of empty password list.
+  void trackPasswordListEmpty();
 }

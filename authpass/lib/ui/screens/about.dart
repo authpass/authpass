@@ -1,7 +1,10 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/ui/screens/manage_file.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
+import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -77,18 +80,55 @@ class AuthPassAboutDialog extends StatelessWidget {
       onSelected: (val) => val(),
       itemBuilder: (context) => [
         ...?(builder == null ? null : builder(context)),
-        PopupMenuItem(
-          child: ListTile(
-            leading: Icon(FontAwesomeIcons.random),
-            title: const Text('Generate Password'),
-          ),
-          value: () {
-            Navigator.of(context).push(PasswordGeneratorScreen.route());
-          },
-        ),
-        createAboutMenuItem(context),
+        ...createDefaultPopupMenuItems(context),
       ],
     );
+  }
+
+  static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(BuildContext context) {
+    final openedFiles = Provider.of<KdbxBloc>(context)?.openedFilesWithSources;
+    return [
+      PopupMenuItem(
+        child: ListTile(
+          leading: Icon(FontAwesomeIcons.random),
+          title: const Text('Generate Password'),
+        ),
+        value: () {
+          Navigator.of(context).push(PasswordGeneratorScreen.route());
+        },
+      ),
+      ...?(openedFiles?.isNotEmpty != true
+          ? null
+          : (<PopupMenuEntry<VoidCallback>>[const PopupMenuDivider()]).followedBy(
+              openedFiles.map(
+                (file) => PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(file.key.displayIcon),
+                    title: Text(file.key.displayName),
+                    subtitle: Text(
+                      file.key.displayPath,
+                      maxLines: 3,
+                    ),
+                  ),
+                  value: () {
+                    Navigator.of(context, rootNavigator: true).push(ManageFileScreen.route(file.key));
+                  },
+                ),
+              ),
+            )),
+      PopupMenuItem(
+        child: const ListTile(
+          dense: true,
+          leading: Icon(FontAwesomeIcons.folderPlus),
+          title: Text('Open another File'),
+        ),
+        value: () {
+          Navigator.of(context, rootNavigator: true).push(SelectFileScreen.route());
+        },
+      ),
+      const PopupMenuDivider(),
+      createAboutMenuItem(context)
+    ];
   }
 
   static PopupMenuItem<VoidCallback> createAboutMenuItem(BuildContext context) {

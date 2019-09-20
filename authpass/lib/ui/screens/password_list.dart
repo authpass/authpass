@@ -42,7 +42,21 @@ class PasswordList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
+
     final streams = kdbxBloc.openedFiles.map((file) => file.dirtyObjectsChanged);
+    if (streams.isEmpty) {
+      Provider.of<Analytics>(context).events.trackPasswordListEmpty();
+      return Container(
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: PrimaryButton(
+          child: const Text('Open File'),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
+          },
+        ),
+      );
+    }
     return StreamBuilder<bool>(
         stream: Observable.merge(streams).map((x) => true),
         builder: (context, snapshot) {
@@ -225,11 +239,11 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
             item();
           },
           itemBuilder: (context) => [
-            AuthPassAboutDialog.createAboutMenuItem(context),
+            ...AuthPassAboutDialog.createDefaultPopupMenuItems(context),
             PopupMenuItem(
               value: () {
                 Provider.of<KdbxBloc>(context).closeAllFiles();
-                Navigator.of(context).pushAndRemoveUntil(SelectFileScreen.route, (_) => false);
+                Navigator.of(context).pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
               },
               child: ListTile(
                 leading: Icon(Icons.exit_to_app),
