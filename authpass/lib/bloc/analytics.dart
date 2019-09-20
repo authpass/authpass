@@ -31,6 +31,7 @@ class Analytics {
   static usage.Analytics _errorGa;
   static const _gaPropertyMapping = <String, String>{
     'platform': 'cd1',
+    'userType': 'cd2',
   };
 
   Future<void> _init() async {
@@ -81,4 +82,6 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackCopyField({@required String key});
 
   void trackCloseAllFiles({int count});
+
+  void trackUserType({String userType});
 }

@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,25 @@ class AuthPassAboutDialog extends StatelessWidget {
         builder: (context, snapshot) {
           final appInfo = snapshot.data;
           return AboutDialog(
-            applicationIcon: ImageIcon(
-              const AssetImage('assets/images/logo_icon.png'),
-              color: Theme.of(context).primaryColor,
+            applicationIcon: GestureDetector(
+              onLongPress: () async {
+                final deps = Provider.of<Deps>(context);
+                final appData = await deps.appDataBloc.store.load();
+                final newData = await SimplePromptDialog.showPrompt(
+                    context,
+                    SimplePromptDialog(
+                      labelText: 'debug usertype',
+                      initialValue: appData?.manualUserType ?? '',
+                    ));
+                if (newData != null) {
+                  await deps.appDataBloc.update((b) => b..manualUserType = newData);
+                  deps.analytics.events.trackUserType(userType: newData);
+                }
+              },
+              child: ImageIcon(
+                const AssetImage('assets/images/logo_icon.png'),
+                color: Theme.of(context).primaryColor,
+              ),
             ),
             applicationName: 'AuthPass',
             applicationVersion: appInfo?.versionLabel,

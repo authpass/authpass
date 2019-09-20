@@ -136,6 +136,9 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
 
   BuiltList<OpenedFile> get previousFiles;
 
+  @nullable
+  String get manualUserType;
+
   @override
   Map<String, dynamic> toJson() => serializers.serialize(this) as Map<String, dynamic>;
 

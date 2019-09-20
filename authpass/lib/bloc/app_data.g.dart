@@ -127,7 +127,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
           specifiedType:
               const FullType(BuiltList, const [const FullType(OpenedFile)])),
     ];
-
+    if (object.manualUserType != null) {
+      result
+        ..add('manualUserType')
+        ..add(serializers.serialize(object.manualUserType,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -147,6 +152,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(OpenedFile)]))
               as BuiltList<dynamic>);
+          break;
+        case 'manualUserType':
+          result.manualUserType = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -325,11 +334,13 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
 class _$AppData extends AppData {
   @override
   final BuiltList<OpenedFile> previousFiles;
+  @override
+  final String manualUserType;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
       (new AppDataBuilder()..update(updates)).build();
 
-  _$AppData._({this.previousFiles}) : super._() {
+  _$AppData._({this.previousFiles, this.manualUserType}) : super._() {
     if (previousFiles == null) {
       throw new BuiltValueNullFieldError('AppData', 'previousFiles');
     }
@@ -345,18 +356,21 @@ class _$AppData extends AppData {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AppData && previousFiles == other.previousFiles;
+    return other is AppData &&
+        previousFiles == other.previousFiles &&
+        manualUserType == other.manualUserType;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, previousFiles.hashCode));
+    return $jf($jc($jc(0, previousFiles.hashCode), manualUserType.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppData')
-          ..add('previousFiles', previousFiles))
+          ..add('previousFiles', previousFiles)
+          ..add('manualUserType', manualUserType))
         .toString();
   }
 }
@@ -370,11 +384,17 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set previousFiles(ListBuilder<OpenedFile> previousFiles) =>
       _$this._previousFiles = previousFiles;
 
+  String _manualUserType;
+  String get manualUserType => _$this._manualUserType;
+  set manualUserType(String manualUserType) =>
+      _$this._manualUserType = manualUserType;
+
   AppDataBuilder();
 
   AppDataBuilder get _$this {
     if (_$v != null) {
       _previousFiles = _$v.previousFiles?.toBuilder();
+      _manualUserType = _$v.manualUserType;
       _$v = null;
     }
     return this;
@@ -397,7 +417,10 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   _$AppData build() {
     _$AppData _$result;
     try {
-      _$result = _$v ?? new _$AppData._(previousFiles: previousFiles.build());
+      _$result = _$v ??
+          new _$AppData._(
+              previousFiles: previousFiles.build(),
+              manualUserType: manualUserType);
     } catch (_) {
       String _$failedField;
       try {
