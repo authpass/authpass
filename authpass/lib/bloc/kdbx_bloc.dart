@@ -415,6 +415,7 @@ class KdbxBloc {
     bool openAfterCreate = false,
   }) async {
     assert(password != null);
+    analytics.events.trackCreateFile();
     assert(!(databaseName.endsWith('.kdbx')));
     final credentials = Credentials(ProtectedValue.fromString(password));
     final kdbxFile = KdbxFormat.create(

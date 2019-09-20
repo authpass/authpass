@@ -12,7 +12,7 @@ class PrimaryButton extends StatelessWidget {
 
   final Widget child;
   final VoidCallback onPressed;
-  final Icon icon;
+  final Widget icon;
   final bool large;
 
   @override

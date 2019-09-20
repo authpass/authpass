@@ -16,6 +16,8 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackLaunch() => trackEvent('launch', <String, dynamic>{});
   @override
+  void trackCreateFile() => trackEvent('createFile', <String, dynamic>{});
+  @override
   void trackOpenFile({OpenedFilesSourceType type}) => trackEvent(
       'openFile', <String, dynamic>{'type': type?.toString()?.substring(22)});
   @override

@@ -31,6 +31,7 @@ dependencies:
 #  path: ^1.6.4
   isolate: ^2.0.2
 #  clipboard_manager: ^0.0.4
+  quiver: ^2.0.5
   tuple: ^1.0.2
   flutter_async_utils:
     git:

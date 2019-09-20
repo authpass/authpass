@@ -21,7 +21,7 @@ abstract class CharacterSet {
   static const alphabetAsciiLowerCase = CharacterRange($a, $z);
   static const alphabetAsciiUpperCase = CharacterRange($A, $Z);
   static const numeric = CharacterRange($0, $9);
-  static const alphabetUmlauts = CharacterString('äüöß');
+  static const alphabetUmlauts = CharacterString('äüößÄÜÖ');
   static const specialCharacters = CharacterString(r'''@%+\/$'!#$^?:,.(){}[]~-_''');
 
   static const alphaNumeric = CharacterSetCollection([

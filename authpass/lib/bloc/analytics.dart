@@ -50,11 +50,13 @@ class Analytics {
     }
 
     events.registerTracker((event, params) {
-      _logger.finer('event($event, $params)');
+      final label = params.entries.map((e) => '${e.key}=${e.value}').join(',');
+      _logger.finer('event($event, $params) - label: $label');
 //      _amplitude?.logEvent(name: event, properties: params);
       _ga?.sendEvent(
         'track',
         event,
+        label: label,
         parameters: Map.fromEntries(params.entries.map((entry) {
           final custom = _gaPropertyMapping[entry.key];
           if (custom == null) {
@@ -74,6 +76,8 @@ class Analytics {
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackLaunch();
+
+  void trackCreateFile();
 
   void trackOpenFile({@required OpenedFilesSourceType type});
 
