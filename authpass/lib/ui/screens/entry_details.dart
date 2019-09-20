@@ -19,6 +19,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 final _logger = Logger('entry_details');
 
@@ -119,7 +120,7 @@ class EntryDetails extends StatefulWidget {
 }
 
 class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin {
-  final List<EntryField> fields = [];
+  List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField>> _fieldKeys;
 
   void _initTextControllers() {}
 
@@ -134,6 +135,10 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
   }
 
   Future<void> _copyField(CommonField commonField) async {
+    final field = _fieldKeys.firstWhere((f) => f.item2 == commonField.key, orElse: () => null);
+    if (field != null) {
+      await field.item1.currentState.copyValue();
+    }
     final value = widget.entry.getString(commonField.key);
     Scaffold.of(context).hideCurrentSnackBar();
     if (value != null && value.getText() != null) {
@@ -149,12 +154,30 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
     }
   }
 
+  void _initFields() {
+    final commonFields = Provider.of<CommonFields>(context);
+    final nonCommonKeys = widget.entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
+    _fieldKeys = commonFields.fields
+        .map((f) => Tuple3(GlobalKey<_EntryFieldState>(), f.key, f))
+        .followedBy(nonCommonKeys.map((f) => Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
+        .toList();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     subscriptions.cancelSubscriptions();
+    _initFields();
     _initTextControllers();
     _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context), Provider.of<CommonFields>(context));
+  }
+
+  @override
+  void didUpdateWidget(EntryDetails oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.entry != widget.entry) {
+      _initFields();
+    }
   }
 
   @override
@@ -179,21 +202,15 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
                 },
               ),
               const SizedBox(height: 32),
-              ...commonFields.fields
+              ..._fieldKeys
                   .map(
                     (f) => EntryField(
+                      key: f.item1,
                       entry: widget.entry,
-                      fieldKey: f.key,
-                      commonField: f,
+                      fieldKey: f.item2,
+                      commonField: f.item3,
                       onChangedMetadata: () => setState(() {}),
                     ),
-                  )
-                  .followedBy(
-                    nonCommonKeys.map((key) => EntryField(
-                          entry: widget.entry,
-                          fieldKey: key.key,
-                          onChangedMetadata: () => setState(() {}),
-                        )),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
               AddFieldButton(
@@ -323,6 +340,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 
   StringValue _value;
   String get _valueCurrent => (_isProtected ? null : _controller.text) ?? _value.getText();
+  final GlobalKey<HighlightWidgetState> _highlightWidgetKey = GlobalKey<HighlightWidgetState>();
 
   @override
   void initState() {
@@ -381,152 +399,169 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       ),
       confirmDismiss: (direction) async {
 //        await ClipboardManager.copyToClipBoard(_value.getText());
-        Provider.of<Analytics>(context).events.trackCopyField(key: widget.fieldKey.key);
-        await Clipboard.setData(ClipboardData(text: _valueCurrent));
+        await copyValue();
         return false;
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: _isProtected
-                  ? InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
-                        filled: true,
-                      ),
-                      child: LinkButton(
-                        child: const Text('Protected field. Click here to view and modify.'),
-                        onPressed: () {
-                          setState(() {
-                            _controller.text = _value?.getText() ?? '';
-                            _controller.selection =
-                                TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
-                            _isProtected = false;
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              _focusNode.requestFocus();
-                              _logger.finer('requesting focus.');
+      child: HighlightWidget(
+        key: _highlightWidgetKey,
+        childOnHighlight: Text('Copied!',
+            style: Theme.of(context)
+                .textTheme
+                .body1
+                .copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black,
+                      blurRadius: 1,
+                    )
+                  ],
+                  letterSpacing: 1,
+                )
+                .apply(fontSizeFactor: 1.2)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: _isProtected
+                    ? InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                          filled: true,
+                        ),
+                        child: LinkButton(
+                          child: const Text('Protected field. Click here to view and modify.'),
+                          onPressed: () {
+                            setState(() {
+                              _controller.text = _value?.getText() ?? '';
+                              _controller.selection =
+                                  TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+                              _isProtected = false;
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _focusNode.requestFocus();
+                                _logger.finer('requesting focus.');
+                              });
                             });
-                          });
+                          },
+                        ),
+                      )
+                    : TextFormField(
+                        maxLines: null,
+                        focusNode: _focusNode,
+                        decoration: InputDecoration(
+                          fillColor: const Color(0xfff0f0f0),
+                          filled: true,
+                          suffixIcon: widget.fieldKey == commonFields.password.key
+                              ? IconButton(
+//                            padding: EdgeInsets.zero,
+                                  tooltip: 'Generate Password (cmd+g)',
+                                  icon: Icon(Icons.refresh),
+                                  onPressed: () {
+                                    _logger.fine('pressed button.');
+                                    _generatePassword();
+                                  })
+                              : null,
+//                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
+                          labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                        ),
+                        keyboardType: widget.commonField?.keyboardType,
+                        controller: _controller,
+                        obscureText: _isProtected,
+                        onSaved: (value) {
+                          final newValue =
+                              _value is ProtectedValue ? ProtectedValue.fromString(value) : PlainValue(value);
+                          widget.entry.setString(widget.fieldKey, newValue);
                         },
                       ),
-                    )
-                  : TextFormField(
-                      maxLines: null,
-                      focusNode: _focusNode,
-                      decoration: InputDecoration(
-                        fillColor: const Color(0xfff0f0f0),
-                        filled: true,
-                        suffixIcon: widget.fieldKey == commonFields.password.key
-                            ? IconButton(
-//                            padding: EdgeInsets.zero,
-                                tooltip: 'Generate Password (cmd+g)',
-                                icon: Icon(Icons.refresh),
-                                onPressed: () {
-                                  _logger.fine('pressed button.');
-                                  _generatePassword();
-                                })
-                            : null,
-//                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
-                        labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
-                      ),
-                      keyboardType: widget.commonField?.keyboardType,
-                      controller: _controller,
-                      obscureText: _isProtected,
-                      onSaved: (value) {
-                        final newValue =
-                            _value is ProtectedValue ? ProtectedValue.fromString(value) : PlainValue(value);
-                        widget.entry.setString(widget.fieldKey, newValue);
-                      },
-                    ),
-            ),
-            PopupMenuButton<EntryAction>(
-              icon: Icon(Icons.more_vert),
-              offset: const Offset(0, 32),
-              onSelected: (val) async {
-                switch (val) {
-                  case EntryAction.copy:
-                    await Clipboard.setData(ClipboardData(text: _value.getText()));
-                    break;
-                  case EntryAction.rename:
-                    final String key = await SimplePromptDialog.showPrompt(
-                      context,
-                      SimplePromptDialog(
-                        title: 'Renaming field',
-                        labelText: 'Enter the new name for the field',
-                        initialValue: widget.fieldKey.key,
-                      ),
-                    );
-                    if (key != null) {
-                      widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
-                      widget.onChangedMetadata();
-                    }
-                    break;
-                  case EntryAction.protect:
-                    setState(() {
-                      if (_isProtected) {
-                        _isProtected = false;
-                        _value = PlainValue(_valueCurrent ?? '');
-                      } else {
-                        _isProtected = true;
-                        _value = ProtectedValue.fromString(_valueCurrent ?? '');
-                      }
-                    });
-                    break;
-                  case EntryAction.delete:
-                    widget.entry.removeString(widget.fieldKey);
-                    widget.onChangedMetadata();
-                    break;
-                  case EntryAction.show:
-                    FullScreenHud.show(context, (context) {
-                      return FullScreenHud(
-                        value: _valueCurrent,
+              ),
+              PopupMenuButton<EntryAction>(
+                icon: Icon(Icons.more_vert),
+                offset: const Offset(0, 32),
+                onSelected: (val) async {
+                  switch (val) {
+                    case EntryAction.copy:
+                      await copyValue();
+                      break;
+                    case EntryAction.rename:
+                      final String key = await SimplePromptDialog.showPrompt(
+                        context,
+                        SimplePromptDialog(
+                          title: 'Renaming field',
+                          labelText: 'Enter the new name for the field',
+                          initialValue: widget.fieldKey.key,
+                        ),
                       );
-                    });
-                    break;
-                }
-              },
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: EntryAction.copy,
-                  child: ListTile(
-                    leading: Icon(Icons.content_copy),
-                    title: Text('Copy'),
+                      if (key != null) {
+                        widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
+                        widget.onChangedMetadata();
+                      }
+                      break;
+                    case EntryAction.protect:
+                      setState(() {
+                        if (_isProtected) {
+                          _isProtected = false;
+                          _value = PlainValue(_valueCurrent ?? '');
+                        } else {
+                          _isProtected = true;
+                          _value = ProtectedValue.fromString(_valueCurrent ?? '');
+                        }
+                      });
+                      break;
+                    case EntryAction.delete:
+                      widget.entry.removeString(widget.fieldKey);
+                      widget.onChangedMetadata();
+                      break;
+                    case EntryAction.show:
+                      FullScreenHud.show(context, (context) {
+                        return FullScreenHud(
+                          value: _valueCurrent,
+                        );
+                      });
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: EntryAction.copy,
+                    child: ListTile(
+                      leading: Icon(Icons.content_copy),
+                      title: Text('Copy'),
+                    ),
                   ),
-                ),
-                const PopupMenuDivider(),
-                const PopupMenuItem(
-                  value: EntryAction.rename,
-                  child: ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text('Rename'),
+                  const PopupMenuDivider(),
+                  const PopupMenuItem(
+                    value: EntryAction.rename,
+                    child: ListTile(
+                      leading: Icon(Icons.edit),
+                      title: Text('Rename'),
+                    ),
                   ),
-                ),
-                PopupMenuItem(
-                  value: EntryAction.protect,
-                  child: ListTile(
-                    leading: Icon(_isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
-                    title: Text(_isProtected ? 'Unprotect value' : 'Protect Value'),
+                  PopupMenuItem(
+                    value: EntryAction.protect,
+                    child: ListTile(
+                      leading: Icon(_isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
+                      title: Text(_isProtected ? 'Unprotect value' : 'Protect Value'),
+                    ),
                   ),
-                ),
-                const PopupMenuItem(
-                  value: EntryAction.delete,
-                  child: ListTile(
-                    leading: Icon(Icons.delete),
-                    title: Text('Delete'),
+                  const PopupMenuItem(
+                    value: EntryAction.delete,
+                    child: ListTile(
+                      leading: Icon(Icons.delete),
+                      title: Text('Delete'),
+                    ),
                   ),
-                ),
-                const PopupMenuItem(
-                  value: EntryAction.show,
-                  child: ListTile(
+                  const PopupMenuItem(
+                    value: EntryAction.show,
+                    child: ListTile(
 //                    leading: Icon(Icons.present_to_all),
-                    leading: Icon(FontAwesomeIcons.qrcode),
-                    title: Text('Present'),
+                      leading: Icon(FontAwesomeIcons.qrcode),
+                      title: Text('Present'),
+                    ),
                   ),
-                ),
-              ],
-            )
+                ],
+              )
 //            IconButton(
 //              icon: Icon(Icons.content_copy),
 //              tooltip: 'Copy to clipboard',
@@ -534,7 +569,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 //                ClipboardManager.copyToClipBoard(_value.getText());
 //              },
 //            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -551,10 +587,103 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     });
   }
 
+  Future<bool> copyValue() async {
+    _highlightWidgetKey.currentState.triggerHighlight();
+    Provider.of<Analytics>(context).events.trackCopyField(key: widget.fieldKey.key);
+    await Clipboard.setData(ClipboardData(text: _valueCurrent));
+    return true;
+  }
+
   @override
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+}
+
+class HighlightWidget extends StatefulWidget {
+  const HighlightWidget({Key key, this.child, this.childOnHighlight}) : super(key: key);
+
+  final Widget child;
+  final Widget childOnHighlight;
+
+  @override
+  HighlightWidgetState createState() => HighlightWidgetState();
+}
+
+class HighlightWidgetState extends State<HighlightWidget> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  Animation<Decoration> _decorationAnimation;
+  Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _decorationAnimation == null
+        ? widget.child
+        /* Stack(children: [
+            widget.child,
+            Positioned.fill(
+                child: Opacity(
+              opacity: 0.9,
+              child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.5),
+                    backgroundBlendMode: BlendMode.color,
+                    /*boxShadow: const [BoxShadow(blurRadius: 2)]*/
+                  ),
+                  child: Center(child: widget.childOnHighlight)),
+            ))
+          ])*/
+        : Stack(
+            overflow: Overflow.visible,
+            children: [
+              widget.child,
+              Positioned.fill(
+                top: -4,
+                bottom: -4,
+                child: FadeTransition(
+                  opacity: _opacity,
+                  child: DecoratedBoxTransition(
+                      decoration: _decorationAnimation, child: Center(child: widget.childOnHighlight)),
+                ),
+              ),
+            ],
+          );
+  }
+
+  void triggerHighlight() {
+    final tween = DecorationTween(
+      begin: BoxDecoration(
+        color: Colors.green.withOpacity(0.8),
+//        backgroundBlendMode: BlendMode.color,
+      ),
+      end: BoxDecoration(
+        color: Colors.green.withOpacity(1),
+//        backgroundBlendMode: BlendMode.color,
+      ),
+//      end: const BoxDecoration(color: Color(0xffffffff), backgroundBlendMode: BlendMode.overlay),
+    );
+    setState(() {
+      _decorationAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut).drive(tween);
+      _opacity = CurvedAnimation(parent: _controller, curve: Curves.easeIn).drive(Tween(begin: 1, end: 0));
+      _controller.forward(from: 0);
+    });
   }
 }
