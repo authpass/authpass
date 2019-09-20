@@ -52,17 +52,22 @@ class AuthPassAboutDialog extends StatelessWidget {
     );
   }
 
-  static PopupMenuButton createAboutPopupAction(BuildContext context) {
+  static PopupMenuButton createAboutPopupAction(BuildContext context,
+      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context) builder}) {
     return PopupMenuButton<VoidCallback>(
-        onSelected: (val) => val(),
-        itemBuilder: (context) => [createAboutMenuItem(context)]);
+      onSelected: (val) => val(),
+      itemBuilder: (context) => [
+        ...?(builder == null ? null : builder(context)),
+        createAboutMenuItem(context),
+      ],
+    );
   }
 
   static PopupMenuItem<VoidCallback> createAboutMenuItem(BuildContext context) {
     return PopupMenuItem<VoidCallback>(
-      child: ListTile(
-        leading: const ImageIcon(AssetImage('assets/images/logo_icon.png')),
-        title: const Text('About'),
+      child: const ListTile(
+        leading: ImageIcon(AssetImage('assets/images/logo_icon.png')),
+        title: Text('About'),
       ),
       value: () {
         AuthPassAboutDialog.openDialog(context);
@@ -81,8 +86,7 @@ class UrlLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DecoratedBox(
-      decoration: BoxDecoration(
-          border: Border(bottom: Divider.createBorderSide(context))),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: InkWell(
         onTap: () {
           DialogUtils.openUrl(url);

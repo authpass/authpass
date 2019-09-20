@@ -40,7 +40,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
             children: <Widget>[
               TextFormField(
                 controller: _databaseName,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Name of your new Database',
                   suffixText: '.kdbx',
                   filled: true,

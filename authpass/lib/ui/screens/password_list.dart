@@ -7,6 +7,7 @@ import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,7 +49,8 @@ class PasswordList extends StatelessWidget {
           final watch = Stopwatch()..start();
           final allEntries =
               kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
-          allEntries.sort((a, b) => (a.label?.toLowerCase() ?? '').compareTo(b.label?.toLowerCase() ?? ''));
+          allEntries.sort((a, b) =>
+              EntryFormatUtils.getLabel(a).toLowerCase().compareTo(EntryFormatUtils.getLabel(b).toLowerCase()));
           watch.stop();
           _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
           return PasswordListContent(
@@ -365,12 +367,12 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
                       await Clipboard.setData(
                           ClipboardData(text: entry.getString(commonFields.userName.key).getText()));
-                      Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied userame.')));
+                      Scaffold.of(context).showSnackBar(const SnackBar(content: Text('Copied userame.')));
                     } else {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
                       await Clipboard.setData(
                           ClipboardData(text: entry.getString(commonFields.password.key).getText()));
-                      Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Copied password.')));
+                      Scaffold.of(context).showSnackBar(const SnackBar(content: Text('Copied password.')));
                     }
                     return false;
                   },
@@ -384,10 +386,11 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                     child: ListTile(
                       leading: Icon(PredefinedIcons.iconFor(entry.icon.get())),
                       selected: widget.selectedEntry == entry,
-                      title: Text.rich(_highlightFilterQuery(commonFields.title.stringValue(entry)) ??
+                      title: Text.rich(_highlightFilterQuery(nullIfEmpty(commonFields.title.stringValue(entry))) ??
                           const TextSpan(text: '(no title)')),
-                      subtitle: Text.rich(_highlightFilterQuery(commonFields.userName.stringValue(entry)) ??
-                          const TextSpan(text: '(no website)')),
+                      subtitle: Text.rich(
+                          _highlightFilterQuery(nullIfEmpty(commonFields.userName.stringValue(entry))) ??
+                              const TextSpan(text: '(no website)')),
                       onTap: () {
 //                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
                         widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
@@ -408,6 +411,13 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
               },
             ),
     );
+  }
+
+  static String nullIfEmpty(String value) {
+    if (value?.isEmpty == true) {
+      return null;
+    }
+    return value;
   }
 
   InlineSpan _highlightFilterQuery(String text) {

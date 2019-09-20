@@ -57,6 +57,8 @@ abstract class Env {
     await startApp(this);
   }
 
+  bool get isDebug => type == EnvType.development;
+
   String get name => runtimeType.toString();
   bool get featureCloudStorage => true;
 

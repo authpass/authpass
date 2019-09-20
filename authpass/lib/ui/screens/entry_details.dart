@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/hud.dart';
@@ -10,6 +11,7 @@ import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,11 +46,25 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
 
   @override
   Widget build(BuildContext context) {
+    final env = Provider.of<Env>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.entry.label ?? ''),
+        title: Text(EntryFormatUtils.getLabel(widget.entry)),
         actions: <Widget>[
-          AuthPassAboutDialog.createAboutPopupAction(context),
+          AuthPassAboutDialog.createAboutPopupAction(context,
+              builder: !env.isDebug
+                  ? null
+                  : (context) => [
+                        PopupMenuItem(
+                          child: const ListTile(
+                            leading: Icon(Icons.bug_report),
+                            title: Text('Debug: Copy XML'),
+                          ),
+                          value: () {
+                            Clipboard.setData(ClipboardData(text: widget.entry.toXml().toXmlString(pretty: true)));
+                          },
+                        ),
+                      ]),
         ],
       ),
 //      floatingActionButton: FloatingActionButton(
@@ -183,8 +199,6 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
-
-    final nonCommonKeys = widget.entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
 
     return SingleChildScrollView(
       child: Padding(

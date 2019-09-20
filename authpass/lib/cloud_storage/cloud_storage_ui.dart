@@ -148,7 +148,7 @@ class _CloudStorageSearchState extends State<CloudStorageSearch> with TaskStateM
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Search Query',
                       ),
                       controller: _searchController,
