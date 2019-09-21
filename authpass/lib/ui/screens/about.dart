@@ -86,7 +86,7 @@ class AuthPassAboutDialog extends StatelessWidget {
   }
 
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(BuildContext context) {
-    final openedFiles = Provider.of<KdbxBloc>(context)?.openedFilesWithSources;
+    final openedFiles = Provider.of<KdbxBloc>(context)?.openedFiles?.values;
     return [
       PopupMenuItem(
         child: ListTile(
@@ -103,17 +103,17 @@ class AuthPassAboutDialog extends StatelessWidget {
               openedFiles.map(
                 (file) => PopupMenuItem(
                   child: ListTile(
-                    leading: Icon(file.key.displayIcon),
-                    title: Text(file.key.displayName),
+                    leading: Icon(file.fileSource.displayIcon, color: file.openedFile.color),
+                    title: Text(file.fileSource.displayName),
                     subtitle: Text(
-                      file.key.displayPath,
+                      file.fileSource.displayPath,
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       maxLines: 1,
                     ),
                   ),
                   value: () {
-                    Navigator.of(context, rootNavigator: true).push(ManageFileScreen.route(file.key));
+                    Navigator.of(context, rootNavigator: true).push(ManageFileScreen.route(file.fileSource));
                   },
                 ),
               ),

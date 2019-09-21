@@ -9,7 +9,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
-import 'package:flutter/material.dart' show Color, Colors;
+import 'package:flutter/material.dart' show Color;
 import 'package:meta/meta.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 import 'package:uuid/uuid.dart';
@@ -76,7 +76,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   @nullable
   int get colorCode;
 
-  Color get color => colorCode == null ? Colors.transparent : Color(colorCode);
+  Color get color => colorCode == null ? null : Color(colorCode);
 
   bool isSameFileAs(OpenedFile other) => other.sourceType == sourceType && other.sourcePath == sourcePath;
 
