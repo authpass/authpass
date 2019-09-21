@@ -328,7 +328,8 @@ class KdbxBloc {
   Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources =>
       _openedFiles.value.entries.map((entry) => MapEntry(entry.key, entry.value.kdbxFile));
 
-  List<KdbxFile> get openedFiles => _openedFiles.value.values.map((value) => value.kdbxFile).toList();
+  Map<FileSource, KdbxOpenedFile> get openedFiles => _openedFiles.value;
+  List<KdbxFile> get openedFilesKdbx => _openedFiles.value.values.map((value) => value.kdbxFile).toList();
   ValueObservable<Map<FileSource, KdbxOpenedFile>> get openedFilesChanged => _openedFiles.stream;
 
   Future<int> _quickUnlockCheckRunning;
@@ -515,11 +516,13 @@ class KdbxBloc {
   }
 
   /// Creates a new password entry in the primary kdbx file, in the main root group.
-  KdbxEntry createEntry() {
-    if (openedFiles.isEmpty) {
-      return null;
+  KdbxEntry createEntry([KdbxFile file]) {
+    if (file == null) {
+      if (openedFilesKdbx.isEmpty) {
+        return null;
+      }
+      file = openedFilesKdbx.first;
     }
-    final file = openedFiles.first;
     final rootGroup = file.body.rootGroup;
     final entry = KdbxEntry.create(file, rootGroup);
     rootGroup.addEntry(entry);

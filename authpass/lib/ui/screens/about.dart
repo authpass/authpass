@@ -107,7 +107,9 @@ class AuthPassAboutDialog extends StatelessWidget {
                     title: Text(file.key.displayName),
                     subtitle: Text(
                       file.key.displayPath,
-                      maxLines: 3,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      maxLines: 1,
                     ),
                   ),
                   value: () {
@@ -118,7 +120,6 @@ class AuthPassAboutDialog extends StatelessWidget {
             )),
       PopupMenuItem(
         child: const ListTile(
-          dense: true,
           leading: Icon(FontAwesomeIcons.folderPlus),
           title: Text('Open another File'),
         ),

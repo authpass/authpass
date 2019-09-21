@@ -46,6 +46,7 @@ dependencies:
     path: ../deps/analytics_events/analytics_event_gen
 
   flutter_colorpicker: ^0.2.6
+  flutter_speed_dial: ^1.2.1
 
   # desktop/macos
   biometric_storage: ^0.2.1

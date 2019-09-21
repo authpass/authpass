@@ -425,7 +425,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                 .copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  shadows: [
+                  shadows: const [
                     Shadow(
                       color: Colors.black,
                       blurRadius: 1,

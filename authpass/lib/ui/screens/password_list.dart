@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class PasswordList extends StatelessWidget {
   Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
 
-    final streams = kdbxBloc.openedFiles.map((file) => file.dirtyObjectsChanged);
+    final streams = kdbxBloc.openedFilesKdbx.map((file) => file.dirtyObjectsChanged);
     if (streams.isEmpty) {
       Provider.of<Analytics>(context).events.trackPasswordListEmpty();
       return Container(
@@ -62,7 +63,7 @@ class PasswordList extends StatelessWidget {
         builder: (context, snapshot) {
           final watch = Stopwatch()..start();
           final allEntries =
-              kdbxBloc.openedFiles.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
+              kdbxBloc.openedFilesKdbx.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
           allEntries.sort((a, b) =>
               EntryFormatUtils.getLabel(a).toLowerCase().compareTo(EntryFormatUtils.getLabel(b).toLowerCase()));
           watch.stop();
@@ -145,6 +146,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
   String _filterQuery;
   final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
+  bool _speedDialOpen = false;
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
@@ -405,7 +407,10 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                             ),
                           ),
                     child: ListTile(
-                      leading: Icon(PredefinedIcons.iconFor(entry.icon.get())),
+                      leading: Icon(
+                        PredefinedIcons.iconFor(entry.icon.get()),
+                        color: fileColor,
+                      ),
                       selected: widget.selectedEntry == entry,
                       title: Text.rich(_highlightFilterQuery(nullIfEmpty(commonFields.title.stringValue(entry))) ??
                           const TextSpan(text: '(no title)')),
@@ -423,14 +428,32 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
             ),
       floatingActionButton: widget.entries.isEmpty || _filterQuery != null
           ? null
-          : FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                final kdbxBloc = Provider.of<KdbxBloc>(context);
-                final entry = kdbxBloc.createEntry();
-                widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
-              },
-            ),
+          : kdbxBloc.openedFiles.length == 1
+              ? FloatingActionButton(
+                  child: Icon(Icons.add),
+                  onPressed: () {
+                    final entry = kdbxBloc.createEntry();
+                    widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+                  },
+                )
+              : SpeedDial(
+                  child: Icon(_speedDialOpen ? Icons.close : Icons.add),
+                  onOpen: () => setState(() => _speedDialOpen = true),
+                  onClose: () => setState(() => _speedDialOpen = false),
+                  children: kdbxBloc.openedFiles.values
+                      .map(
+                        (file) => SpeedDialChild(
+                            label: file.fileSource.displayName,
+                            child: Icon(file.fileSource.displayIcon),
+                            backgroundColor:
+                                file.openedFile.colorCode == null ? null : Color(file.openedFile.colorCode),
+                            onTap: () {
+                              final entry = kdbxBloc.createEntry(file.kdbxFile);
+                              widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+                            }),
+                      )
+                      .toList(),
+                ),
     );
   }
 
