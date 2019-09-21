@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
@@ -448,23 +449,41 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                               labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
                               filled: true,
                             ),
-                            child: const Text('*******'),
+                            child: const Text(
+                              '*****************',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           Positioned.fill(
-                            child: LinkButton(
-                              child: const Text('Protected field. Click here to view and modify.'),
-                              onPressed: () {
-                                setState(() {
-                                  _controller.text = _value?.getText() ?? '';
-                                  _controller.selection =
-                                      TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
-                                  _isProtected = false;
-                                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    _focusNode.requestFocus();
-                                    _logger.finer('requesting focus.');
-                                  });
-                                });
-                              },
+                            child: ClipRect(
+                              child: BackdropFilter(
+                                filter: ui.ImageFilter.blur(
+                                  sigmaX: 0.5,
+                                  sigmaY: 0.5,
+                                ),
+                                child: LinkButton(
+                                  child: Container(
+                                    alignment: Alignment.bottomCenter,
+                                    padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16),
+                                    child: const Text(
+                                      'Protected field. Click to reveal.',
+                                      style: TextStyle(shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _controller.text = _value?.getText() ?? '';
+                                      _controller.selection =
+                                          TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+                                      _isProtected = false;
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        _focusNode.requestFocus();
+                                        _logger.finer('requesting focus.');
+                                      });
+                                    });
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ],

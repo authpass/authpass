@@ -398,12 +398,14 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   },
                   child: Container(
                     decoration: widget.selectedEntry != entry
-                        ? BoxDecoration(border: Border(left: BorderSide(color: fileColor, width: 4)))
+                        ? (fileColor == null
+                            ? null
+                            : BoxDecoration(border: Border(left: BorderSide(color: fileColor, width: 4))))
                         : BoxDecoration(
                             color: Colors.white,
                             border: Border(
                               right: BorderSide(color: Theme.of(context).primaryColor, width: 4),
-                              left: BorderSide(color: fileColor, width: 4),
+                              left: fileColor == null ? BorderSide.none : BorderSide(color: fileColor, width: 4),
                             ),
                           ),
                     child: ListTile(
