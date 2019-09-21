@@ -74,6 +74,8 @@ abstract class FileSource {
   @protected
   Future<Map<String, dynamic>> write(Uint8List bytes, Map<String, dynamic> previousMetadata);
 
+  Future<void> contentPreCache() async => await content();
+
   Future<Uint8List> content() async => (_cached ??= await load()).content;
 
   Future<void> contentWrite(Uint8List bytes) async {
@@ -418,8 +420,10 @@ class KdbxBloc {
           int filesOpened = 0;
           for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
             try {
-              progress.progressLabel =
-                  'Opening ${file.key.displayName} ... (${filesOpened + 1} / ${unlockFiles.length})';
+              final fileLabel = '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})';
+              progress.progressLabel = 'Loading $fileLabel';
+              await file.key.contentPreCache();
+              progress.progressLabel = 'Opening $fileLabel';
               await openFile(file.key, file.value);
               filesOpened++;
             } catch (e, stackTrace) {
