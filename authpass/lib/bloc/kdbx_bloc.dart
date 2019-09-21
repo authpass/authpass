@@ -7,6 +7,7 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/main.dart';
+import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -358,13 +359,15 @@ class KdbxBloc {
 
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
 
-  Future<int> reopenQuickUnlock() => _quickUnlockCheckRunning ??= (() async {
+  Future<int> reopenQuickUnlock([TaskProgress progress]) => _quickUnlockCheckRunning ??= (() async {
         try {
           _logger.finer('Checking quick unlock.');
           final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
           int filesOpened = 0;
           for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
             try {
+              progress.progressLabel =
+                  'Opening ${file.key.databaseName} ... (${filesOpened + 1} / ${unlockFiles.length})';
               await openFile(file.key, file.value);
               filesOpened++;
             } catch (e, stackTrace) {

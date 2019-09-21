@@ -59,12 +59,12 @@ class SelectFileScreen extends StatelessWidget {
 }
 
 class ProgressOverlay extends StatelessWidget {
-  const ProgressOverlay({Key key, @required this.child, this.hasProgress}) : super(key: key);
+  const ProgressOverlay({Key key, @required this.child, this.task}) : super(key: key);
 
-  final dynamic hasProgress;
+  final FutureTask task;
   final Widget child;
 
-  bool get _hasProgress => hasProgress is bool ? hasProgress as bool : hasProgress != null;
+  bool get _hasProgress => task != null;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,16 @@ class ProgressOverlay extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 padding: const EdgeInsets.all(32),
-                child: const CircularProgressIndicator(),
+                child: ValueListenableBuilder<FutureTask>(
+                  valueListenable: task,
+                  builder: (context, value, child) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const CircularProgressIndicator(),
+                      ...?(value.progressLabel == null ? null : [Text(value.progressLabel)]),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -103,7 +112,7 @@ class SelectFileWidget extends StatefulWidget {
   _SelectFileWidgetState createState() => _SelectFileWidgetState();
 }
 
-class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin {
+class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStateMixin {
   bool _successfulQuickUnlock = false;
 
   @override
@@ -121,18 +130,19 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
     }
   }
 
-  Future<void> _checkQuickUnlock() => asyncRunTask(() async {
+  Future<void> _checkQuickUnlock() => asyncRunTask((progress) async {
         if (_successfulQuickUnlock) {
           _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
           return;
         }
+        progress.progressLabel = 'Quick unlocking files ...';
         final kdbxBloc = Provider.of<KdbxBloc>(context);
         if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
           _logger.fine('We already have files open. Not attempting quick unlock.');
           return;
         }
         _logger.finer('opening quick unlock. $_successfulQuickUnlock $mounted');
-        final opened = await kdbxBloc.reopenQuickUnlock();
+        final opened = await kdbxBloc.reopenQuickUnlock(progress);
         _logger.info('opened $opened files with quick unlock.');
         _successfulQuickUnlock = true;
         if (opened > 0 && kdbxBloc.openedFiles.isNotEmpty) {
@@ -145,7 +155,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
     final appData = Provider.of<AppData>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     return ProgressOverlay(
-      hasProgress: task != null,
+      task: task,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -278,7 +288,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with TaskStateMixin
   }
 
   void _loadAndGoToCredentials(FileSource source) {
-    asyncRunTask(() => source.content().then((value) {
+    asyncRunTask((progress) => source.content().then((value) {
           return Navigator.of(context).push(CredentialsScreen.route(source));
         }).catchError((dynamic error, StackTrace stackTrace) {
           _logger.fine('Error while trying to load file source $source');
