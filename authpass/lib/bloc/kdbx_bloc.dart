@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -290,31 +291,74 @@ class ReadFileResponse {
   final String exceptionType;
 }
 
+class KdbxOpenedFile {
+  KdbxOpenedFile({
+    @required this.fileSource,
+    @required this.openedFile,
+    @required this.kdbxFile,
+  })  : assert(fileSource != null),
+        assert(openedFile != null),
+        assert(kdbxFile != null);
+
+  final FileSource fileSource;
+  final OpenedFile openedFile;
+  final KdbxFile kdbxFile;
+}
+
 class KdbxBloc {
   KdbxBloc({
     @required this.appDataBloc,
     @required this.analytics,
     @required this.cloudStorageBloc,
-  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc);
+  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc) {
+    _openedFiles
+        .map((value) => Map.fromEntries(value.entries.map((entry) => MapEntry(entry.value.kdbxFile, entry.value))))
+        .listen((data) => _openedFilesByKdbxFile = data);
+  }
 
   final AppDataBloc appDataBloc;
   final Analytics analytics;
   final CloudStorageBloc cloudStorageBloc;
   final QuickUnlockStorage quickUnlockStorage;
 
-  final _openedFiles = BehaviorSubject<Map<FileSource, KdbxFile>>.seeded({});
+  final _openedFiles = BehaviorSubject<Map<FileSource, KdbxOpenedFile>>.seeded({});
+  Map<KdbxFile, KdbxOpenedFile> _openedFilesByKdbxFile;
   final _openedFilesQuickUnlock = <FileSource>{};
 
-  Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources => _openedFiles.value.entries;
+  Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources =>
+      _openedFiles.value.entries.map((entry) => MapEntry(entry.key, entry.value.kdbxFile));
 
-  List<KdbxFile> get openedFiles => _openedFiles.value.values.toList();
-  ValueObservable<Map<FileSource, KdbxFile>> get openedFilesChanged => _openedFiles.stream;
+  List<KdbxFile> get openedFiles => _openedFiles.value.values.map((value) => value.kdbxFile).toList();
+  ValueObservable<Map<FileSource, KdbxOpenedFile>> get openedFilesChanged => _openedFiles.stream;
 
   Future<int> _quickUnlockCheckRunning;
 
   void dispose() {
     _openedFiles.close();
 //    super.dispose();
+  }
+
+  Future<void> updateOpenedFile(KdbxOpenedFile file, void Function(OpenedFileBuilder b) updater) async {
+    final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
+    await appDataBloc.update((b, data) {
+      b
+        ..previousFiles.map((f) {
+          if (!f.isSameFileAs(file.openedFile)) {
+            return f;
+          }
+//          return (f.toBuilder()..update(updater)).build();
+          return updatedFile;
+        });
+    });
+    _openedFiles.value = {
+      ..._openedFiles.value,
+      file.fileSource: KdbxOpenedFile(
+        fileSource: file.fileSource,
+        openedFile: updatedFile,
+        kdbxFile: file.kdbxFile,
+      )
+    };
+    _logger.info('new values: ${_openedFiles.value}');
   }
 
   Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
@@ -334,7 +378,14 @@ class KdbxBloc {
     }
     final kdbxFile = kdbxReadFile.file;
     final openedFile = await appDataBloc.openedFile(file, name: kdbxFile.body.meta.databaseName.get());
-    _openedFiles.value = {..._openedFiles.value, file: kdbxFile};
+    _openedFiles.value = {
+      ..._openedFiles.value,
+      file: KdbxOpenedFile(
+        fileSource: file,
+        openedFile: openedFile,
+        kdbxFile: kdbxFile,
+      )
+    };
     analytics.events.trackOpenFile(type: openedFile.sourceType);
 
     if (addToQuickUnlock) {
@@ -353,7 +404,7 @@ class KdbxBloc {
         _logger.warning('File was closed, but was still listed in quick unlock files.');
         return null;
       }
-      return MapEntry(fileSource, openedFile.credentials);
+      return MapEntry(fileSource, openedFile.kdbxFile.credentials);
     }).where((entry) => entry != null)));
   }
 
@@ -395,7 +446,7 @@ class KdbxBloc {
   Future<void> close(KdbxFile file) async {
     _logger.fine('Close file.');
     analytics.events.trackCloseFile();
-    final fileSource = fileSourceForFile(file);
+    final fileSource = fileForKdbxFile(file).fileSource;
     _openedFiles.value = Map.from(_openedFiles.value)..remove(fileSource);
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
@@ -476,25 +527,27 @@ class KdbxBloc {
   }
 
   Future<void> saveFile(KdbxFile file, {FileSource toFileSource}) async {
-    final fileSource = toFileSource ?? fileSourceForFile(file);
+    final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
     final bytes = file.save();
     await fileSource.contentWrite(bytes);
   }
 
-  FileSource fileSourceForFile(KdbxFile file) => _openedFiles.value.entries
-      .singleWhere((el) => el.value == file, orElse: () => throw StateError('File not opened?'))
-      .key;
+  KdbxOpenedFile fileForKdbxFile(KdbxFile file) =>
+      _openedFilesByKdbxFile[file] ??
+      (() {
+        throw StateError('Missing file source for kdbxFile.');
+      })();
 
-  KdbxFile fileForFileSource(FileSource fileSource) => _openedFiles.value[fileSource];
+  KdbxOpenedFile fileForFileSource(FileSource fileSource) => _openedFiles.value[fileSource];
 
   Future<FileSource> saveLocally(FileSource source) async {
     final file = _openedFiles.value[source];
     if (file == null) {
       throw StateError('file for $source is not open.');
     }
-    final databaseName = file.body.meta.databaseName.get();
+    final databaseName = file.kdbxFile.body.meta.databaseName.get();
     final localSource = await _localFileSourceForDbName(databaseName);
-    await saveFile(file, toFileSource: localSource);
+    await saveFile(file.kdbxFile, toFileSource: localSource);
     _openedFiles.value = {
       ..._openedFiles.value,
       localSource: file,

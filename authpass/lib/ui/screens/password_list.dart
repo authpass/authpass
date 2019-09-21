@@ -325,6 +325,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? widget.entries;
     final listPrefix = _buildListPrefix();
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(
       appBar: _filteredEntries == null ? _buildDefaultAppBar(context) : _buildFilterAppBar(context),
       body: widget.entries.isEmpty
@@ -346,6 +347,9 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   index--;
                 }
                 final entry = entries[index];
+
+                final openedFile = kdbxBloc.fileForKdbxFile(entry.file);
+                final fileColor = openedFile.openedFile.color;
 //                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
                 return Dismissible(
                   key: ValueKey(entry.uuid),
@@ -392,10 +396,13 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   },
                   child: Container(
                     decoration: widget.selectedEntry != entry
-                        ? null
+                        ? BoxDecoration(border: Border(left: BorderSide(color: fileColor, width: 4)))
                         : BoxDecoration(
                             color: Colors.white,
-                            border: Border(right: BorderSide(color: Theme.of(context).primaryColor, width: 4)),
+                            border: Border(
+                              right: BorderSide(color: Theme.of(context).primaryColor, width: 4),
+                              left: BorderSide(color: fileColor, width: 4),
+                            ),
                           ),
                     child: ListTile(
                       leading: Icon(PredefinedIcons.iconFor(entry.icon.get())),

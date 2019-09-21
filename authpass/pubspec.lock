@@ -255,6 +255,13 @@ packages:
       url: "git@github.com:hpoul/flutter_async_utils.git"
     source: git
     version: "0.0.1"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.6"
   flutter_svg:
     dependency: "direct main"
     description:

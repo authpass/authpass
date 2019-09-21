@@ -9,6 +9,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
+import 'package:flutter/material.dart' show Color, Colors;
 import 'package:meta/meta.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 import 'package:uuid/uuid.dart';
@@ -72,9 +73,16 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   @nullable
   String get macOsSecureBookmark;
 
+  @nullable
+  int get colorCode;
+
+  Color get color => colorCode == null ? Colors.transparent : Color(colorCode);
+
   bool isSameFileAs(OpenedFile other) => other.sourceType == sourceType && other.sourcePath == sourcePath;
 
-  static OpenedFile fromFileSource(FileSource fileSource, String dbName) => OpenedFile(
+  static OpenedFile fromFileSource(FileSource fileSource, String dbName,
+          [void Function(OpenedFileBuilder b) customize]) =>
+      OpenedFile(
         (b) {
           b..lastOpenedAt = clock.now().toUtc();
           b..uuid = fileSource.uuid ?? AppDataBloc.createUuid();
@@ -99,6 +107,9 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               ..name = dbName;
           } else {
             throw ArgumentError.value(fileSource, 'fileSource', 'Unsupported file type ${fileSource.runtimeType}');
+          }
+          if (customize != null) {
+            customize(b);
           }
         },
       );
@@ -167,20 +178,21 @@ class AppDataBloc {
 
   static String createUuid() => _uuid.v4();
 
-  Future<OpenedFile> openedFile(FileSource file, {@required String name}) async {
-    final openedFile = OpenedFile.fromFileSource(file, name);
-    await update((b) {
-      // TODO remove potential old storages?
-      b.previousFiles.removeWhere((file) => file.isSameFileAs(openedFile));
-      b.previousFiles.add(openedFile);
-    });
-    return openedFile;
-  }
+  Future<OpenedFile> openedFile(FileSource file, {@required String name}) async => await update((b, data) {
+        final recentFile = data.recentFileByUuid(file.uuid);
+        final colorCode = recentFile?.colorCode;
+        final openedFile = OpenedFile.fromFileSource(file, name, (b) => b..colorCode = colorCode);
+        // TODO remove potential old storages?
+        b.previousFiles.removeWhere((file) => file.isSameFileAs(openedFile));
+        b.previousFiles.add(openedFile);
+        return openedFile;
+      });
 
-  Future<AppData> update(void Function(AppDataBuilder builder) updater) async {
+  Future<T> update<T>(T Function(AppDataBuilder builder, AppData data) updater) async {
     final appData = await store.load();
-    final newAppData = appData.rebuild(updater);
+    T ret;
+    final newAppData = appData.rebuild((b) => ret = updater(b, appData));
     await store.save(newAppData);
-    return newAppData;
+    return ret;
   }
 }

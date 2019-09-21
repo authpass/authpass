@@ -34,7 +34,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                       initialValue: appData?.manualUserType ?? '',
                     ));
                 if (newData != null) {
-                  await deps.appDataBloc.update((b) => b..manualUserType = newData);
+                  await deps.appDataBloc.update((b, _) => b..manualUserType = newData);
                   deps.analytics.events.trackUserType(userType: newData);
                 }
               },

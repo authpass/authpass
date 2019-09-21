@@ -82,7 +82,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
                       final kdbxBloc = Provider.of<KdbxBloc>(context);
-                      if (kdbxBloc.fileSourceForFile(widget.entry.file).supportsWrite) {
+                      if (kdbxBloc.fileForKdbxFile(widget.entry.file).fileSource.supportsWrite) {
                         try {
                           await kdbxBloc.saveFile(widget.entry.file);
                         } on StorageException catch (e, stackTrace) {

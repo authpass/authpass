@@ -62,6 +62,12 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
         ..add(serializers.serialize(object.macOsSecureBookmark,
             specifiedType: const FullType(String)));
     }
+    if (object.colorCode != null) {
+      result
+        ..add('colorCode')
+        ..add(serializers.serialize(object.colorCode,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -104,6 +110,10 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
         case 'macOsSecureBookmark':
           result.macOsSecureBookmark = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'colorCode':
+          result.colorCode = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -179,6 +189,8 @@ class _$OpenedFile extends OpenedFile {
   final String biometricStoreName;
   @override
   final String macOsSecureBookmark;
+  @override
+  final int colorCode;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder) updates]) =>
       (new OpenedFileBuilder()..update(updates)).build();
@@ -190,7 +202,8 @@ class _$OpenedFile extends OpenedFile {
       this.sourcePath,
       this.name,
       this.biometricStoreName,
-      this.macOsSecureBookmark})
+      this.macOsSecureBookmark,
+      this.colorCode})
       : super._() {
     if (lastOpenedAt == null) {
       throw new BuiltValueNullFieldError('OpenedFile', 'lastOpenedAt');
@@ -222,7 +235,8 @@ class _$OpenedFile extends OpenedFile {
         sourcePath == other.sourcePath &&
         name == other.name &&
         biometricStoreName == other.biometricStoreName &&
-        macOsSecureBookmark == other.macOsSecureBookmark;
+        macOsSecureBookmark == other.macOsSecureBookmark &&
+        colorCode == other.colorCode;
   }
 
   @override
@@ -230,11 +244,13 @@ class _$OpenedFile extends OpenedFile {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
-                    sourcePath.hashCode),
-                name.hashCode),
-            biometricStoreName.hashCode),
-        macOsSecureBookmark.hashCode));
+                $jc(
+                    $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
+                        sourcePath.hashCode),
+                    name.hashCode),
+                biometricStoreName.hashCode),
+            macOsSecureBookmark.hashCode),
+        colorCode.hashCode));
   }
 
   @override
@@ -246,7 +262,8 @@ class _$OpenedFile extends OpenedFile {
           ..add('sourcePath', sourcePath)
           ..add('name', name)
           ..add('biometricStoreName', biometricStoreName)
-          ..add('macOsSecureBookmark', macOsSecureBookmark))
+          ..add('macOsSecureBookmark', macOsSecureBookmark)
+          ..add('colorCode', colorCode))
         .toString();
   }
 }
@@ -286,6 +303,10 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   set macOsSecureBookmark(String macOsSecureBookmark) =>
       _$this._macOsSecureBookmark = macOsSecureBookmark;
 
+  int _colorCode;
+  int get colorCode => _$this._colorCode;
+  set colorCode(int colorCode) => _$this._colorCode = colorCode;
+
   OpenedFileBuilder();
 
   OpenedFileBuilder get _$this {
@@ -297,6 +318,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
       _name = _$v.name;
       _biometricStoreName = _$v.biometricStoreName;
       _macOsSecureBookmark = _$v.macOsSecureBookmark;
+      _colorCode = _$v.colorCode;
       _$v = null;
     }
     return this;
@@ -325,7 +347,8 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
             sourcePath: sourcePath,
             name: name,
             biometricStoreName: biometricStoreName,
-            macOsSecureBookmark: macOsSecureBookmark);
+            macOsSecureBookmark: macOsSecureBookmark,
+            colorCode: colorCode);
     replace(_$result);
     return _$result;
   }

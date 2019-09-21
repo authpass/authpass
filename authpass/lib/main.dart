@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/theme.dart';
@@ -101,8 +102,11 @@ class _AuthPassAppState extends State<AuthPassApp> {
           builder: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,
         ),
-        StreamProvider(
-          builder: (context) => _deps.kdbxBloc.openedFilesChanged.map((_) => _deps.kdbxBloc),
+        StreamProvider<KdbxBloc>(
+          builder: (context) => _deps.kdbxBloc.openedFilesChanged.map((_) => _deps.kdbxBloc).doOnData((data) {
+            _logger.info('KdbxBloc updated.');
+          }),
+          updateShouldNotify: (a, b) => true,
           initialData: _deps.kdbxBloc,
         ),
       ],
