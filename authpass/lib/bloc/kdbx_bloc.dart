@@ -367,7 +367,7 @@ class KdbxBloc {
           for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
             try {
               progress.progressLabel =
-                  'Opening ${file.key.databaseName} ... (${filesOpened + 1} / ${unlockFiles.length})';
+                  'Opening ${file.key.displayName} ... (${filesOpened + 1} / ${unlockFiles.length})';
               await openFile(file.key, file.value);
               filesOpened++;
             } catch (e, stackTrace) {

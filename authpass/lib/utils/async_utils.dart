@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger('async_utils');
 
 mixin TaskStateMixin<T extends StatefulWidget> on State<T> {
   Future<dynamic> task;
@@ -30,11 +35,14 @@ mixin TaskStateMixin<T extends StatefulWidget> on State<T> {
 }
 
 class FutureTask with ChangeNotifier implements ValueListenable<FutureTask> {
-  FutureTask({@required this.future, String progressLabel}) : _progressLabel = progressLabel;
+  FutureTask({@required this.future, String progressLabel}) : _progressLabel = progressLabel {
+    _logger.info('Initialized task with $progressLabel');
+  }
   final Future<dynamic> future;
   String _progressLabel;
   set progressLabel(String progressLabel) {
     _progressLabel = progressLabel;
+    _logger.fine('Progress Label chaned to $progressLabel (hasListeners: $hasListeners)');
     notifyListeners();
   }
 
@@ -50,7 +58,9 @@ class _TaskProgressProxy implements TaskProgress {
 
   @override
   set progressLabel(String progressLabel) {
-    _futureTask?.progressLabel = _progressLabel = progressLabel;
+    _progressLabel = progressLabel;
+    _futureTask?.progressLabel = progressLabel;
+    _logger.fine('proxy: label changed to $progressLabel ($_futureTask)');
   }
 }
 
@@ -72,10 +82,17 @@ mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
   }
 
   @protected
-  Future<U> asyncRunTask<U>(Future<U> Function(TaskProgress progress) taskRunner) {
+  Future<U> asyncRunTask<U>(Future<U> Function(TaskProgress progress) taskRunner, {String label}) {
+    if (task != null) {
+      // we have to queue task.
+      _logger.finer('A task is aready running (${task.progressLabel}). queing ($label)');
+      final completer = Completer<U>();
+      task.future.whenComplete(() => completer.complete(asyncRunTask<U>(taskRunner, label: label)));
+      return completer.future;
+    }
     final proxy = _TaskProgressProxy();
     final future = taskRunner(proxy);
-    proxy._futureTask = FutureTask(future: future, progressLabel: proxy._progressLabel);
+    proxy._futureTask = FutureTask(future: future, progressLabel: proxy._progressLabel ?? label);
     setState(() {
       task = proxy._futureTask;
     });

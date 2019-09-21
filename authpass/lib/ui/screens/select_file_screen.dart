@@ -81,16 +81,26 @@ class ProgressOverlay extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 padding: const EdgeInsets.all(32),
-                child: ValueListenableBuilder<FutureTask>(
-                  valueListenable: task,
-                  builder: (context, value, child) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const CircularProgressIndicator(),
-                      ...?(value.progressLabel == null ? null : [Text(value.progressLabel)]),
-                    ],
-                  ),
-                ),
+                child: task == null
+                    ? Container()
+                    : ValueListenableBuilder<FutureTask>(
+                        valueListenable: task,
+                        builder: (context, value, child) {
+                          _logger.info('Generating progress dialog with label ${value?.progressLabel}');
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              const CircularProgressIndicator(),
+                              ...?(value.progressLabel == null
+                                  ? null
+                                  : [
+                                      const SizedBox(height: 16),
+                                      Text(value.progressLabel),
+                                    ]),
+                            ],
+                          );
+                        },
+                      ),
               ),
             ),
           ),
@@ -113,11 +123,13 @@ class SelectFileWidget extends StatefulWidget {
 }
 
 class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStateMixin {
-  bool _successfulQuickUnlock = false;
+  bool _quickUnlockAttempted = false;
+  int counter = 0;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _logger.finer('didChangeDependencies');
     _checkQuickUnlock();
   }
 
@@ -131,24 +143,24 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
   }
 
   Future<void> _checkQuickUnlock() => asyncRunTask((progress) async {
-        if (_successfulQuickUnlock) {
+        if (_quickUnlockAttempted) {
           _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
           return;
         }
+        _quickUnlockAttempted = true;
         progress.progressLabel = 'Quick unlocking files ...';
         final kdbxBloc = Provider.of<KdbxBloc>(context);
         if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
           _logger.fine('We already have files open. Not attempting quick unlock.');
           return;
         }
-        _logger.finer('opening quick unlock. $_successfulQuickUnlock $mounted');
+        _logger.finer('opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
         final opened = await kdbxBloc.reopenQuickUnlock(progress);
         _logger.info('opened $opened files with quick unlock.');
-        _successfulQuickUnlock = true;
         if (opened > 0 && kdbxBloc.openedFiles.isNotEmpty) {
           await Navigator.of(context).push(MainAppScaffold.route());
         }
-      });
+      }, label: 'Quick unlocking files');
 
   @override
   Widget build(BuildContext context) {
@@ -288,13 +300,15 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
   }
 
   void _loadAndGoToCredentials(FileSource source) {
-    asyncRunTask((progress) => source.content().then((value) {
-          return Navigator.of(context).push(CredentialsScreen.route(source));
-        }).catchError((dynamic error, StackTrace stackTrace) {
-          _logger.fine('Error while trying to load file source $source');
-          DialogUtils.showErrorDialog(context, 'Error while opening file.', 'Unable to open $source.\n$error');
-          return Future<dynamic>.error(error, stackTrace);
-        }));
+    asyncRunTask((progress) {
+      return source.content().then((value) {
+        return Navigator.of(context).push(CredentialsScreen.route(source));
+      }).catchError((dynamic error, StackTrace stackTrace) {
+        _logger.fine('Error while trying to load file source $source');
+        DialogUtils.showErrorDialog(context, 'Error while opening file.', 'Unable to open $source.\n$error');
+        return Future<dynamic>.error(error, stackTrace);
+      });
+    }, label: 'Loading file ...');
     setState(() {});
   }
 }
