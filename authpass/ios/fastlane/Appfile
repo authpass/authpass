@@ -2,10 +2,10 @@
 # apple_id("[[APPLE_ID]]") # Your Apple email address
 
 app_identifier("design.codeux.authpass.ios")
-apple_id("herbert.fastlane.autoupload@m.poul.at") # Your Apple email address
+apple_id("herbert.fastlane.uploader@codeux.design") # Your Apple email address
 
-itc_team_id("827760") # App Store Connect Team ID
-team_id("2N9YTZSQBW") # Developer Portal Team ID
+#itc_team_id("827760") # App Store Connect Team ID
+team_id("64ZPC769JY") # Developer Portal Team ID
 
 
 # For more information about the Appfile, see:

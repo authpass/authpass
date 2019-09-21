@@ -1,4 +1,5 @@
 git_url("git@gitlab.com:hpoul/authpass-certificates.git")
+git_branch("authpass_codeuxdesign")
 
 storage_mode("git")
 
