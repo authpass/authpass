@@ -51,9 +51,13 @@ case "$1" in
         flutter pub get
         flutter build macos -v -t lib/env/production.dart --release
     ;;
+    samsungapps)
+        export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
+        flutter build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor samsungapps
+    ;;
     android)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
-        flutter build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber
+        flutter build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
         cd android
         fastlane beta
     ;;

@@ -50,6 +50,26 @@ android {
         }
     }
 
+    flavorDimensions "hpdist"
+
+    productFlavors {
+        samsungapps {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            // and the plugin automatically assigns all the module's flavors to
+            // that dimension.
+            dimension "hpdist"
+            applicationIdSuffix ".samsungapps"
+//            minSdkVersion 23
+//            targetSdkVersion 29
+        }
+        playstore {
+            dimension "hpdist"
+//            minSdkVersion 23
+//            targetSdkVersion 29
+        }
+    }
+
 
     buildTypes {
         release {
