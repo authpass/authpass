@@ -5,21 +5,23 @@ set -xeu
 dir="${0%/*}"
 cd $dir/..
 
-if test -d flutter/bin ; then
-  echo "Adding flutter/bin to PATH"
-  export PATH=$PATH:flutter/bin
-fi
+FLT=flutter
+
 DEPS=${DEPS:-~/deps}
 if test -d ${DEPS}/flutter/bin ; then
     echo "Adding ${DEPS}/flutter/bin to PATH"
     export PATH=${DEPS}/flutter/bin:$PATH
 fi
 
+if test -e ../flutter/bin/flutter ; then
+    FLT=../flutter/bin/flutter
+fi
+
 echo PATH:$PATH
 
 ls ${DEPS}/flutter || echo "Flutter not found"
 
-flutter --version
+$FLT --version
 
 if ! test -e ./git-buildnumber.sh ; then
     curl -s -O https://raw.githubusercontent.com/hpoul/git-buildnumber/v1.0/git-buildnumber.sh
@@ -34,9 +36,10 @@ else
 	echo "WARNING: forcing buildnumber $buildnumber"
 fi
 
+$FLT pub get
 case "$1" in
     ios)
-        flutter build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
+        $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
         cd ios
         sudo fastlane run update_fastlane
         fastlane beta
@@ -48,16 +51,16 @@ case "$1" in
         cat pubspec.yaml | grep version | grep "+$buildnumber$"  || (
             echo "Buildnumber replacement was not successful." && exit 1
         )
-        flutter pub get
-        flutter build macos -v -t lib/env/production.dart --release
+        $FLT pub get
+        $FLT build macos -v -t lib/env/production.dart --release
     ;;
     samsungapps)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
-        flutter build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor samsungapps
+        $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor samsungapps
     ;;
     android)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
-        flutter build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
+        $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
         cd android
         fastlane beta
     ;;
