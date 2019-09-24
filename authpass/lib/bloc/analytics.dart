@@ -47,6 +47,8 @@ class Analytics {
       );
       _errorGa = _ga;
       _ga.setSessionValue(_gaPropertyMapping['platform'], Platform.operatingSystem);
+    } else {
+      _logger.info('No analyics Id defined. Not tracking anyting.');
     }
 
     events.registerTracker((event, params) {

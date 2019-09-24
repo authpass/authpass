@@ -23,7 +23,7 @@ DEPENDENCIES:
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
   - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - macos_secure_bookmarks (from `.symlinks/plugins/macos_secure_bookmarks/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -39,7 +39,7 @@ EXTERNAL SOURCES:
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   macos_secure_bookmarks:
     :path: ".symlinks/plugins/macos_secure_bookmarks/ios"
   package_info:
