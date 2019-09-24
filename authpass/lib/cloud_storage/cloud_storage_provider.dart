@@ -40,6 +40,8 @@ abstract class CloudStorageEntity implements Built<CloudStorageEntity, CloudStor
   @nullable
   String get path;
 
+  String get pathOrBaseName => path ?? name;
+
   static CloudStorageEntity fromSimpleFileInfo(Map<String, String> fileInfo) {
     return CloudStorageEntity(
       (b) => b
@@ -130,7 +132,7 @@ abstract class CloudStorageProvider {
 
   String displayNameFromPath(Map<String, String> fileInfo) => path.basename(displayPath(fileInfo));
 
-  String displayPath(Map<String, String> fileInfo) => CloudStorageEntity.fromSimpleFileInfo(fileInfo).path;
+  String displayPath(Map<String, String> fileInfo) => CloudStorageEntity.fromSimpleFileInfo(fileInfo).pathOrBaseName;
 
   FileSource toFileSource(Map<String, String> fileInfo, {@required String uuid, FileContent initialCachedContent}) =>
       FileSourceCloudStorage(

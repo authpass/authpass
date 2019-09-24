@@ -150,7 +150,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     initialColor: _file.openedFile.color,
                   ).show(context);
                   _logger.fine('Selected color $newColor');
-                  await _kdbxBloc.updateOpenedFile(_file, (b) => b.colorCode = newColor?.value);
+                  _file = await _kdbxBloc.updateOpenedFile(_file, (b) => b.colorCode = newColor?.value);
+                  setState(() {});
                 },
               ),
               ButtonBar(

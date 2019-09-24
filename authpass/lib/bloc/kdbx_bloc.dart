@@ -348,7 +348,7 @@ class KdbxBloc {
 //    super.dispose();
   }
 
-  Future<void> updateOpenedFile(KdbxOpenedFile file, void Function(OpenedFileBuilder b) updater) async {
+  Future<KdbxOpenedFile> updateOpenedFile(KdbxOpenedFile file, void Function(OpenedFileBuilder b) updater) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
     await appDataBloc.update((b, data) {
       b
@@ -360,15 +360,17 @@ class KdbxBloc {
           return updatedFile;
         });
     });
+    final newFile = KdbxOpenedFile(
+      fileSource: file.fileSource,
+      openedFile: updatedFile,
+      kdbxFile: file.kdbxFile,
+    );
     _openedFiles.value = {
       ..._openedFiles.value,
-      file.fileSource: KdbxOpenedFile(
-        fileSource: file.fileSource,
-        openedFile: updatedFile,
-        kdbxFile: file.kdbxFile,
-      )
+      file.fileSource: newFile,
     };
     _logger.info('new values: ${_openedFiles.value}');
+    return newFile;
   }
 
   Future<void> openFile(FileSource file, Credentials credentials, {bool addToQuickUnlock = false}) async {
