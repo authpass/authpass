@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
@@ -25,8 +26,8 @@ class LoadFileException implements Exception {
 }
 
 enum CloudStorageEntityType {
-  file,
   directory,
+  file,
 }
 
 abstract class CloudStorageEntity implements Built<CloudStorageEntity, CloudStorageEntityBuilder> {
@@ -115,6 +116,7 @@ abstract class CloudStorageProvider {
   Future<bool> loadSavedAuth();
   Future<bool> startAuth(PromptUserForCode prompt);
   Future<SearchResponse> search({String name = 'kdbx'});
+  Future<SearchResponse> list({CloudStorageEntity parent});
 
   @protected
   Future<void> storeCredentials(String credentials) async {
@@ -130,8 +132,9 @@ abstract class CloudStorageProvider {
 
   String displayPath(Map<String, String> fileInfo) => CloudStorageEntity.fromSimpleFileInfo(fileInfo).path;
 
-  FileSource toFileSource(Map<String, String> fileInfo, {@required String uuid}) =>
-      FileSourceCloudStorage(provider: this, fileInfo: fileInfo, uuid: uuid);
+  FileSource toFileSource(Map<String, String> fileInfo, {@required String uuid, FileContent initialCachedContent}) =>
+      FileSourceCloudStorage(
+          provider: this, fileInfo: fileInfo, uuid: uuid, initialCachedContent: initialCachedContent);
 
   Future<FileContent> loadFile(Map<String, String> fileInfo) =>
       loadEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo));
@@ -146,6 +149,7 @@ abstract class CloudStorageProvider {
   Future<FileContent> loadEntity(CloudStorageEntity file);
   Future<Map<String, dynamic>> saveEntity(
       CloudStorageEntity file, Uint8List bytes, Map<String, dynamic> previousMetadata);
+  Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes);
 
   Future<void> logout();
 }

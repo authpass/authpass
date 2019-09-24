@@ -7,6 +7,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -36,7 +37,8 @@ class FileContent {
 }
 
 abstract class FileSource {
-  FileSource({@required this.databaseName, @required this.uuid});
+  FileSource({@required this.databaseName, @required this.uuid, FileContent initialCachedContent})
+      : _cached = initialCachedContent;
 
   FileContent _cached;
 
@@ -192,8 +194,13 @@ class FileSourceUrl extends FileSource {
 }
 
 class FileSourceCloudStorage extends FileSource {
-  FileSourceCloudStorage({@required this.provider, @required this.fileInfo, String databaseName, @required String uuid})
-      : super(databaseName: databaseName, uuid: uuid);
+  FileSourceCloudStorage({
+    @required this.provider,
+    @required this.fileInfo,
+    String databaseName,
+    @required String uuid,
+    FileContent initialCachedContent,
+  }) : super(databaseName: databaseName, uuid: uuid, initialCachedContent: initialCachedContent);
 
   final CloudStorageProvider provider;
 
@@ -547,6 +554,39 @@ class KdbxBloc {
 
   KdbxOpenedFile fileForFileSource(FileSource fileSource) => _openedFiles.value[fileSource];
 
+  Future<KdbxOpenedFile> saveAs(KdbxOpenedFile oldFile, FileSource output) async {
+    await saveFile(oldFile.kdbxFile, toFileSource: output);
+    return await _savedAs(oldFile, output);
+  }
+
+  Future<KdbxOpenedFile> _savedAs(KdbxOpenedFile oldFile, FileSource output) async {
+    final oldSource = oldFile.fileSource;
+    final databaseName = oldFile.kdbxFile.body.meta.databaseName.get();
+    final newOpenedFile = await appDataBloc.openedFile(
+      output,
+      name: databaseName,
+      oldFile: oldFile.openedFile,
+    );
+    final newFile = KdbxOpenedFile(
+      fileSource: output,
+      openedFile: newOpenedFile,
+      kdbxFile: oldFile.kdbxFile,
+    );
+    _openedFiles.value = {
+      ..._openedFiles.value,
+      newFile.fileSource: newFile,
+    }..removeWhere((key, value) => key == oldSource);
+    await _updateQuickUnlockStore();
+    return newFile;
+  }
+
+  Future<KdbxOpenedFile> saveAsNewFile(
+      KdbxOpenedFile oldFile, CloudStorageSelectorSaveResult createFileInfo, CloudStorageProvider cs) async {
+    final bytes = oldFile.kdbxFile.save();
+    final entity = await cs.createEntity(createFileInfo, bytes);
+    return await _savedAs(oldFile, entity);
+  }
+
   Future<FileSource> saveLocally(FileSource source) async {
     final file = _openedFiles.value[source];
     if (file == null) {
@@ -554,13 +594,7 @@ class KdbxBloc {
     }
     final databaseName = file.kdbxFile.body.meta.databaseName.get();
     final localSource = await _localFileSourceForDbName(databaseName);
-    await saveFile(file.kdbxFile, toFileSource: localSource);
-    _openedFiles.value = {
-      ..._openedFiles.value,
-      localSource: file,
-    }..removeWhere((key, value) => key == source);
-    await appDataBloc.openedFile(localSource, name: databaseName);
-    return localSource;
+    return (await saveAs(file, localSource)).fileSource;
   }
 }
 

@@ -71,42 +71,44 @@ class ProgressOverlay extends StatelessWidget {
     return Stack(
       children: <Widget>[
         child,
-        AnimatedCrossFade(
-          firstChild: Container(
-            color: Colors.black12,
-            child: Center(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xefffffff),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                padding: const EdgeInsets.all(32),
-                child: task == null
-                    ? Container()
-                    : ValueListenableBuilder<FutureTask>(
-                        valueListenable: task,
-                        builder: (context, value, child) {
-                          _logger.info('Generating progress dialog with label ${value?.progressLabel}');
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              const CircularProgressIndicator(),
-                              ...?(value.progressLabel == null
-                                  ? null
-                                  : [
-                                      const SizedBox(height: 16),
-                                      Text(value.progressLabel),
-                                    ]),
-                            ],
-                          );
-                        },
+        Positioned.fill(
+          child: AnimatedCrossFade(
+            firstChild: task == null
+                ? Container()
+                : Container(
+                    color: Colors.black12,
+                    child: Center(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xefffffff),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        padding: const EdgeInsets.all(32),
+                        child: ValueListenableBuilder<FutureTask>(
+                          valueListenable: task,
+                          builder: (context, value, child) {
+                            _logger.info('Generating progress dialog with label ${value?.progressLabel}');
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const CircularProgressIndicator(),
+                                ...?(value.progressLabel == null
+                                    ? null
+                                    : [
+                                        const SizedBox(height: 16),
+                                        Text(value.progressLabel),
+                                      ]),
+                              ],
+                            );
+                          },
+                        ),
                       ),
-              ),
-            ),
+                    ),
+                  ),
+            secondChild: Container(),
+            crossFadeState: _hasProgress ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 200),
           ),
-          secondChild: Container(),
-          crossFadeState: _hasProgress ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: const Duration(milliseconds: 200),
         )
       ],
     );
@@ -212,9 +214,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                   icon: cs.displayIcon,
                   label: 'Load from ${cs.displayName}',
                   onPressed: () async {
-                    final source = await Navigator.of(context).push(CloudStorageSelector.route(cs));
+                    final source =
+                        await Navigator.of(context).push(CloudStorageSelector.route(cs, CloudStorageLoadConfig()));
                     if (source != null) {
-                      await Navigator.of(context).push(CredentialsScreen.route(source));
+                      await Navigator.of(context).push(CredentialsScreen.route(source.fileSource));
                     }
                   },
                 ),

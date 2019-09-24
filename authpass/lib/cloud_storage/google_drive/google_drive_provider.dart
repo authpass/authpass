@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,13 +78,18 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
 
   @override
   Future<SearchResponse> search({String name = 'kdbx'}) async {
+    return _search(SearchQueryTerm(const SearchQueryField('name'), QOperator.contains, SearchQueryValueLiteral(name)));
+  }
+
+  Future<SearchResponse> _search(SearchQueryTerm search) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
-    _logger.fine('Query: ${SearchQueryTerm('name', QOperator.contains, name).toQuery()}');
+    _logger.fine('Query: ${search.toQuery()}');
     final files = await driveApi.files.list(
-      q: SearchQueryTerm('name', QOperator.contains, name).toQuery(),
+      q: search.toQuery(),
     );
-    _logger.fine('Got file results: ${files.files.map((f) => '${f.id}: ${f.name}')}');
-    SearchResponse(
+    _logger.fine(
+        'Got file results (incomplete:${files.incompleteSearch}): ${files.files.map((f) => '${f.id}: ${f.name} (${f.mimeType})')}');
+    return SearchResponse(
       (srb) => srb
         ..hasMore = files.nextPageToken != null
         ..results.addAll(
@@ -90,13 +97,21 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
             (f) => CloudStorageEntity(
               (b) => b
                 ..id = f.id
-                ..type = CloudStorageEntityType.file
+                ..type = f.mimeType == 'application/vnd.google-apps.folder'
+                    ? CloudStorageEntityType.directory
+                    : CloudStorageEntityType.file
                 ..name = f.name,
             ),
           ),
         ),
     );
-    return null;
+  }
+
+  @override
+  Future<SearchResponse> list({CloudStorageEntity parent}) {
+    return _search(parent == null
+        ? const SearchQueryTerm(SearchQueryValueLiteral('root'), QOperator.in_, SearchQueryField('parents'))
+        : SearchQueryTerm(SearchQueryValueLiteral(parent.id), QOperator.in_, const SearchQueryField('parents')));
   }
 
   @override
@@ -127,36 +142,84 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
     _logger.fine('Successfully saved file ${updatedFile.name}');
     return <String, dynamic>{};
   }
+
+  @override
+  Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
+    final driveApi = DriveApi(await requireAuthenticatedClient());
+    final File metadata = File();
+    metadata.name = saveAs.fileName;
+    if (saveAs.parentId != null) {
+      metadata.parents = [saveAs.parentId];
+    }
+    final byteStream = ByteStream.fromBytes(bytes);
+    final newFile = await driveApi.files.create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));
+    return toFileSource(
+        CloudStorageEntity((b) => b
+          ..id = newFile.id
+          ..name = newFile.name
+          ..type = CloudStorageEntityType.file).toSimpleFileInfo(),
+        uuid: AppDataBloc.createUuid());
+  }
 }
 
+abstract class SearchQueryAtom {
+  String toQuery();
+}
+
+@immutable
 class QOperator {
   const QOperator._(this.op);
 
   final String op;
 
   static const contains = QOperator._('contains');
+  static const eq = QOperator._('=');
+  static const in_ = QOperator._('in');
+  static const and = QOperator._('and');
 }
 
-/// Search query terms
-/// https://developers.google.com/drive/api/v3/search-files
-/// https://developers.google.com/drive/api/v3/reference/query-ref
-class SearchQueryTerm {
-  SearchQueryTerm(this.term, this.operator, this.values);
+class SearchQueryField implements SearchQueryAtom {
+  const SearchQueryField(this.fieldName);
+  final String fieldName;
+  @override
+  String toQuery() => fieldName;
+}
 
-  final String term;
-  final QOperator operator;
-  final Object values;
+class SearchQueryValueLiteral implements SearchQueryAtom {
+  const SearchQueryValueLiteral(this.value);
 
-  String toQuery() {
-    return '$term ${operator.op} ${_quoteValues(values)}';
-  }
+  final Object value;
 
   String _quoteValues(dynamic value) {
     if (value is String) {
       final escaped = value.replaceAllMapped(RegExp(r'''['\\]'''), (match) => '\\${match.group(0)}');
       return "'$escaped'";
+    }
+    if (value is List) {
+      return '[${value.map((dynamic v) => _quoteValues(v)).join(',')}]';
     } else {
       throw StateError('Unsupported type. ${value.runtimeType}');
     }
+  }
+
+  @override
+  String toQuery() => _quoteValues(value);
+}
+
+/// Search query terms
+/// https://developers.google.com/drive/api/v3/search-files
+/// https://developers.google.com/drive/api/v3/reference/query-ref
+class SearchQueryTerm implements SearchQueryAtom {
+  const SearchQueryTerm(this.left, this.operator, this.right);
+
+  final SearchQueryAtom left;
+  final QOperator operator;
+  final SearchQueryAtom right;
+
+  SearchQueryTerm operator &(SearchQueryTerm other) => SearchQueryTerm(this, QOperator.and, other);
+
+  @override
+  String toQuery() {
+    return '${left.toQuery()} ${operator.op} ${right.toQuery()}';
   }
 }

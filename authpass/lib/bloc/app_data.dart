@@ -178,8 +178,11 @@ class AppDataBloc {
 
   static String createUuid() => _uuid.v4();
 
-  Future<OpenedFile> openedFile(FileSource file, {@required String name}) async => await update((b, data) {
-        final recentFile = data.recentFileByUuid(file.uuid);
+  ///
+  /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.
+  Future<OpenedFile> openedFile(FileSource file, {@required String name, OpenedFile oldFile}) async =>
+      await update((b, data) {
+        final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
         final colorCode = recentFile?.colorCode;
         final openedFile = OpenedFile.fromFileSource(file, name, (b) => b..colorCode = colorCode);
         // TODO remove potential old storages?

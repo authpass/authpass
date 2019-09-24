@@ -1,8 +1,20 @@
+import 'dart:io';
+
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/async_utils.dart';
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_colorpicker/block_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 final _logger = Logger('manage_file');
@@ -27,7 +39,7 @@ class ManageFileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(fileSource.displayName),
       ),
-      body: Center(child: ManageFile(fileSource: fileSource)),
+      body: ManageFile(fileSource: fileSource),
     );
   }
 }
@@ -41,7 +53,7 @@ class ManageFile extends StatefulWidget {
   _ManageFileState createState() => _ManageFileState();
 }
 
-class _ManageFileState extends State<ManageFile> {
+class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   KdbxBloc _kdbxBloc;
   KdbxOpenedFile _file;
   final TextEditingController _databaseName = TextEditingController();
@@ -54,13 +66,17 @@ class _ManageFileState extends State<ManageFile> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _init();
+    if (_file == null) {
+      _init();
+    }
   }
 
   @override
   void didUpdateWidget(ManageFile oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _init();
+    if (oldWidget.fileSource != widget.fileSource) {
+      _init();
+    }
   }
 
   void _init() {
@@ -73,50 +89,135 @@ class _ManageFileState extends State<ManageFile> {
   @override
   Widget build(BuildContext context) {
     _logger.finest('Is rebuilding with color ${_file.openedFile.color}');
-    return Container(
-      padding: const EdgeInsets.all(16),
-      constraints: const BoxConstraints(maxWidth: 320),
-//      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            title: TextField(
-              decoration: const InputDecoration(labelText: 'Database Name'),
-              controller: _databaseName,
-            ),
-          ),
-          ListTile(
-            title: const Text('Path'),
-            subtitle: Text(widget.fileSource.displayPath),
-          ),
-          ListTile(
-            title: const Text('Color'),
-            subtitle: const Text('Select a color to distinguish beween files.'),
-            trailing: CircleColor(color: _file.openedFile.color, circleSize: 24),
-            onTap: () async {
-              final newColor = await ColorPickerDialog(
-                initialColor: _file.openedFile.color,
-              ).show(context);
-              _logger.fine('Selected color $newColor');
-              await _kdbxBloc.updateOpenedFile(_file, (b) => b.colorCode = newColor?.value);
-            },
-          ),
-          ButtonBar(
+    final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
+    return ProgressOverlay(
+      task: task,
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          constraints: const BoxConstraints(maxWidth: 320),
+          alignment: Alignment.center,
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              FlatButton(
-                child: const Text('Close/Lock'),
-                onPressed: () async {
-                  await _kdbxBloc.close(_file.kdbxFile);
-                  Navigator.of(context).pop();
+              ListTile(
+                title: TextField(
+                  decoration: const InputDecoration(labelText: 'Database Name'),
+                  controller: _databaseName,
+                ),
+              ),
+              ListTile(
+                title: const Text('Path'),
+                subtitle: Text(_file.fileSource.displayPath),
+                trailing: PopupMenuButton<VoidCallback>(
+                  onSelected: (action) => action(),
+                  itemBuilder: (context) => [
+                    ...?(Platform.isIOS || Platform.isAndroid
+                        ? null
+                        : [
+                            PopupMenuItem(
+                              child: const ListTile(
+                                leading: Icon(FontAwesomeIcons.hdd),
+                                title: Text('Save As...'),
+                                subtitle: Text('Local File'),
+                              ),
+                              value: () {
+                                _saveAsLocalFile();
+                              },
+                            )
+                          ]),
+                    ...cloudStorageBloc.availableCloudStorage.map(
+                      (cs) => PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(cs.displayIcon),
+                          title: const Text('Save As...'),
+                          subtitle: Text('${cs.displayName}'),
+                        ),
+                        value: () {
+                          _saveAsCloudStorage(cs);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: const Text('Color'),
+                subtitle: const Text('Select a color to distinguish beween files.'),
+                trailing: CircleColor(color: _file.openedFile.color, circleSize: 24),
+                onTap: () async {
+                  final newColor = await ColorPickerDialog(
+                    initialColor: _file.openedFile.color,
+                  ).show(context);
+                  _logger.fine('Selected color $newColor');
+                  await _kdbxBloc.updateOpenedFile(_file, (b) => b.colorCode = newColor?.value);
                 },
+              ),
+              ButtonBar(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  FlatButton(
+                    child: const Text('Close/Lock'),
+                    onPressed: () async {
+                      await _kdbxBloc.close(_file.kdbxFile);
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
               )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
+  }
+
+  void _saveAsLocalFile() {
+    if (Platform.isIOS || Platform.isAndroid) {
+      // not yet supported.
+      return;
+    }
+    showSavePanel(
+      (result, paths) async {
+        if (result == FileChooserResult.ok) {
+          final path = paths.first;
+          final outputFile = File(path);
+          String macOsBookmark;
+          if (Platform.isMacOS) {
+            macOsBookmark = await SecureBookmarks().bookmark(outputFile);
+          }
+          final newFile = await _kdbxBloc.saveAs(
+            _file,
+            FileSourceLocal(
+              outputFile,
+              uuid: AppDataBloc.createUuid(),
+              macOsSecureBookmark: macOsBookmark,
+            ),
+          );
+          setState(() {
+            _file = newFile;
+          });
+        }
+      },
+      suggestedFileName: path.basename(widget.fileSource.displayPath),
+      confirmButtonText: 'Save',
+    );
+  }
+
+  Future<void> _saveAsCloudStorage(CloudStorageProvider cs) async {
+    final createFileInfo = await Navigator.of(context).push(CloudStorageSelector.route(
+      cs,
+      CloudStorageBrowserConfig(defaultFileName: path.basename(_file.fileSource.displayPath), isSave: true),
+    ));
+    if (createFileInfo != null) {
+      await asyncRunTask((progress) async {
+        final newFile = await _kdbxBloc.saveAsNewFile(_file, createFileInfo, cs);
+        setState(() {
+          _file = newFile;
+        });
+      });
+//      cs.saveEntity(, bytes, previousMetadata)
+    }
   }
 }
 
