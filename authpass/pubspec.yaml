@@ -35,8 +35,8 @@ dependencies:
   tuple: ^1.0.2
   flutter_async_utils:
     git:
-      url: git@github.com:hpoul/flutter_async_utils.git
-      ref: master
+      url: https://github.com/hpoul/flutter_async_utils.git
+      ref: b452a5be869fb4f824a20e930cc1756eea6ca90e
   flutter_svg: ^0.14.1
   charcode: ^1.1.2
   usage: ^3.4.1

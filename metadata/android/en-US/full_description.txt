@@ -1,0 +1,10 @@
+Easily and securely keep track of all your Passwords!
+
+AuthPass is a stand alone password manager with support for the popular Keepass (kdbx) format. Store your passwords, share across all your devices and easily find them whenever you need to login.
+
+* All your passwords in one place.
+* Generate secure random passwords for each of your accounts.
+* Quick Unlock secured with biometric lock (android only right now)
+* Keep track of your accounts across the web.
+* App available for Mac, iOS,  Android and coming soon to Linux and Windows.
+* Open Source available on https://github.com/authpass/authpass/

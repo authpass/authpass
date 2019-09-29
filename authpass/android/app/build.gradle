@@ -62,19 +62,26 @@ android {
             applicationIdSuffix ".samsungapps"
 //            minSdkVersion 23
 //            targetSdkVersion 29
+            signingConfig signingConfigs.release
         }
         playstore {
             dimension "hpdist"
 //            minSdkVersion 23
 //            targetSdkVersion 29
+            signingConfig signingConfigs.release
         }
+        fdroid {
+            dimension "hpdist"
+            project.flutter.target = 'lib/env/fdroid.dart'
+            applicationIdSuffix = '.fdroid'
+            signingConfig null
+        }
+
     }
 
 
     buildTypes {
         release {
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
         }
         debug {
             project.flutter.target = 'lib/env/development.dart'
@@ -82,6 +89,15 @@ android {
         }
     }
 }
+
+android.applicationVariants.all { variant ->
+    if (variant.flavorName == "fdroid" && variant.buildType.name == "release") {
+        variant.outputs.all { output ->
+            output.outputFileName = "app-fdroid-release.apk"
+        }
+    }
+}
+
 
 flutter {
     source '../..'
