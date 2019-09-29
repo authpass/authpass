@@ -154,7 +154,9 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
   Future<void> _copyField(CommonField commonField) async {
     final field = _fieldKeys.firstWhere((f) => f.item2 == commonField.key, orElse: () => null);
     if (field != null) {
-      await field.item1.currentState.copyValue();
+      if (await field.item1.currentState.copyValue()) {
+        return;
+      }
     }
     final value = widget.entry.getString(commonField.key);
     Scaffold.of(context).hideCurrentSnackBar();
@@ -224,7 +226,9 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
                       entry: widget.entry,
                       fieldKey: f.item2,
                       commonField: f.item3,
-                      onChangedMetadata: () => setState(() {}),
+                      onChangedMetadata: () => setState(() {
+                        _initFields();
+                      }),
                     ),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
@@ -232,6 +236,7 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
                 onAddField: (key) {
                   final cf = commonFields[key];
                   widget.entry.setString(key, cf?.protect == true ? ProtectedValue.fromString('') : PlainValue(''));
+                  _initFields();
                   setState(() {});
                 },
               ),

@@ -23,6 +23,7 @@ platform :ios do
 
 end
 
-lane :hptest do
+lane :notarize do
   notarize(package: '../build/macos/Build/Products/Release/AuthPass.app', bundle_id: 'codeux.design.authpass')
 end
+
