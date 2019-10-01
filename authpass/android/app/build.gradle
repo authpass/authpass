@@ -66,8 +66,11 @@ android {
         }
         playstore {
             dimension "hpdist"
-//            minSdkVersion 23
-//            targetSdkVersion 29
+            signingConfig signingConfigs.release
+        }
+        playstoredev {
+            dimension "hpdist"
+            applicationIdSuffix ".dev"
             signingConfig signingConfigs.release
         }
         fdroid {
