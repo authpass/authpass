@@ -89,6 +89,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
   @override
   Widget build(BuildContext context) {
     // TODO generate localizations.
+    _logger.fine('Building AuthPass App state. route: ${WidgetsBinding.instance.window.defaultRouteName}');
     final authPassLocalizations = AuthPassLocalizations();
     return MultiProvider(
       providers: [

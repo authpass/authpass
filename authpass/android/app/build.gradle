@@ -38,7 +38,7 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -106,9 +106,10 @@ flutter {
 dependencies {
     testImplementation 'junit:junit:4.12'
 
+    implementation "androidx.appcompat:appcompat:1.1.0"
     implementation 'com.github.tony19:logback-android:2.0.0'
     implementation "io.github.microutils:kotlin-logging:1.7.6"
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }

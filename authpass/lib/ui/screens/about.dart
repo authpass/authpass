@@ -4,6 +4,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/manage_file.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
+import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,15 @@ class AuthPassAboutDialog extends StatelessWidget {
         ),
         value: () {
           Navigator.of(context).push(PasswordGeneratorScreen.route());
+        },
+      ),
+      PopupMenuItem(
+        child: const ListTile(
+          leading: Icon(FontAwesomeIcons.cogs),
+          title: Text('Preferences'),
+        ),
+        value: () {
+          Navigator.of(context).push(PreferencesScreen.route());
         },
       ),
       ...?(openedFiles?.isNotEmpty != true

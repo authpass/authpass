@@ -9,6 +9,7 @@ import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
+import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -95,10 +96,20 @@ class PasswordListContent extends StatefulWidget {
         super(key: key);
 
   final List<KdbxEntry> entries;
+  bool get isAutofillSelector => WidgetsBinding.instance.window.defaultRouteName == '/autofill';
   final void Function(KdbxEntry entry, EntrySelectionType type) _onEntrySelected;
   final KdbxEntry selectedEntry;
 
   void onEntrySelected(BuildContext context, KdbxEntry entry, EntrySelectionType type) {
+    if (isAutofillSelector) {
+      if (type == EntrySelectionType.activeOpen) {
+        final cf = Provider.of<CommonFields>(context);
+        final username = entry.getString(cf.userName.key)?.getText();
+        final password = entry.getString(cf.password.key)?.getText();
+        AutofillService().resultWithDataset(label: entry.label, username: username, password: password);
+        return;
+      }
+    }
     _onEntrySelected(entry, type);
     Provider.of<Analytics>(context).events.trackSelectEntry(type: type);
   }
@@ -310,6 +321,22 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     );
   }
 
+  Widget _buildAutofillListPrefix() {
+    if (!widget.isAutofillSelector) {
+      return null;
+    }
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Card(
+        color: Colors.lightGreen,
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text('Select password entry for autofill.'),
+        ),
+      ),
+    );
+  }
+
   Widget _buildListPrefix() {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     final unsupportedWrite = kdbxBloc.openedFilesWithSources.firstWhere(
@@ -326,7 +353,7 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? widget.entries;
-    final listPrefix = _buildListPrefix();
+    final listPrefix = _buildAutofillListPrefix() ?? _buildListPrefix();
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(
       appBar: _filteredEntries == null ? _buildDefaultAppBar(context) : _buildFilterAppBar(context),

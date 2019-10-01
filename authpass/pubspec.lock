@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.0"
+  autofill_service:
+    dependency: "direct main"
+    description:
+      path: "../deps/autofill_service"
+      relative: true
+    source: path
+    version: "0.0.1"
   biometric_storage:
     dependency: "direct main"
     description:

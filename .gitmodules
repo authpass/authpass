@@ -7,3 +7,6 @@
 [submodule "deps/biometric_storage"]
 	path = deps/biometric_storage
 	url = ../biometric_storage.git
+[submodule "deps/autofill_service"]
+	path = deps/autofill_service
+	url = ../autofill_service.git
