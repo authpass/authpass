@@ -4,13 +4,16 @@ jobs:
   include:
   - os: osx
     osx_image: xcode11
+    name: 'iOS Build'
     # https://github.com/travis-ci/travis-conditions/issues/13#issuecomment-414734455
     if:  1 != 1
     env:
     - TARGET_PLATFORM=ios
     - GPG=gpg
     - FASTLANE_SKIP_UPLOAD=true
-  - os: linux
+  - &androidrelease
+    name: 'Android Dev Build'
+    os: linux
     language: android
     if: branch = master
     dist: trusty
@@ -39,7 +42,13 @@ jobs:
     - gem install fastlane --no-document --quiet
     env:
     - TARGET_PLATFORM=android
+    - TARGET_VARIANT=playstoredev
     - GPG=gpg2
+  - <<: *androidrelease
+    name: 'Android Stable Build'
+    if: branch = stable
+    env:
+    - TARGET_VARIANT=android
 before_install:
 #- openssl aes-256-cbc -K $encrypted_83630750896a_key -iv $encrypted_83630750896a_iv
 #  -in .travis_sec/BLACKBOX_KEY.txt.enc -out .travis_sec/BLACKBOX_KEY.txt -d
@@ -53,4 +62,4 @@ install:
 - "$GPG -v --import < .travis_sec/BLACKBOX_KEY.txt"
 - "./authpass/_tools/ci-install-deps.sh ${TARGET_PLATFORM}"
 script:
-- "./authpass/_tools/ci-release.sh ${TARGET_PLATFORM}"
+- "./authpass/_tools/ci-release.sh ${TARGET_PLATFORM} ${TARGET_VARIANT:-$TARGET_PLATFORM}"

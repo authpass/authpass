@@ -25,4 +25,12 @@ platform :android do
     upload_to_play_store(aab: '../build/app/outputs/bundle/playstoreRelease/app-playstore-release.aab', track: 'internal')
   end
 
+  lane :dev do
+    upload_to_play_store(
+      aab: '../build/app/outputs/bundle/playstoredevRelease/app-playstoredev-release.aab',
+      track: 'internal',
+      package_name: 'design.codeux.authpass.dev'
+    )
+  end
+
 end

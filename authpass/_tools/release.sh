@@ -62,7 +62,7 @@ case "$1" in
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
         cd android
-        #fastlane beta
+        fastlane dev
     ;;
     android)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home

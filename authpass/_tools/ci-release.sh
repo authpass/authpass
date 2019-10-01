@@ -7,6 +7,8 @@ set -xeu
 DEPS=${DEPS:-~/deps}
 
 root="${0%/*}/.."
+target_platform="$1"
+target_variant="${2:-$target_platform}"
 
 cd ${root}
 
@@ -22,7 +24,7 @@ ssh-keygen -F gitlab.com > /dev/null || (mkdir -p ~/.ssh && echo "|1|SM9ao9YoaAX
 # Flutter was installed by `install_flutter.sh` in `ci-install-deps.sh`.
 export PATH=${DEPS}/flutter/bin:$PATH
 
-if test "$1" == "ios" ; then
+if test "$target_platform" == "ios" ; then
     eval $(ssh-agent -s)
     cat _tools/secrets/fastlane_match_certificates_id_rsa | ssh-add -
     set +x
@@ -36,7 +38,7 @@ if test "$1" == "ios" ; then
     # make sure cocoapods is up to date.
     pod repo update
 fi
-if test "$1" == "macos" ; then
+if test "$target_platform" == "macos" ; then
     # make sure cocoapods is up to date.
     pod repo update
     # upgrade to flutter master channel
@@ -49,4 +51,4 @@ pwd
 
 GIT_SSH_COMMAND="ssh -i \"$github_key\"" \
     GIT_PUSH_REMOTE='git@github.com:authpass/authpass.git' \
-    ./_tools/release.sh "$@"
+    ./_tools/release.sh "$target_variant"
