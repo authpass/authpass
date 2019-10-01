@@ -10,7 +10,10 @@
 
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+<!--        <item name="android:windowFullscreen">true</item>-->
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
 </resources>

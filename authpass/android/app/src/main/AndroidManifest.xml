@@ -8,8 +8,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher"
-        android:theme="@style/AuthPassAppTheme">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -32,7 +31,7 @@
 
         <service
             android:name="design.codeux.autofill_service.FlutterMyAutofillService"
-            android:label="AuthPass Autofill"
+            android:label="@string/autofill_service_label"
             tools:replace="label">
 
             <meta-data

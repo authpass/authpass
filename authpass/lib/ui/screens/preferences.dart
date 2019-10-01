@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -53,16 +55,27 @@ class _PreferencesBodyState extends State<PreferencesBody> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SwitchListTile(
-          title: const Text('Enable autofill'),
-          value: _autofillStatus == AutofillServiceStatus.enabled,
-          onChanged: _autofillStatus == AutofillServiceStatus.unsupported
-              ? null
-              : (val) async {
-                  await AutofillService().requestSetAutofillService();
-                  await _doInit();
-                },
-        ),
+        ...?(!Platform.isAndroid
+            ? null
+            : [
+                SwitchListTile(
+                  title: const Text('Enable autofill'),
+                  subtitle: _autofillStatus == AutofillServiceStatus.unsupported
+                      ? const Text('Only supported on Android Oreo (8.0) or later.')
+                      : null,
+                  value: _autofillStatus == AutofillServiceStatus.enabled,
+                  onChanged: _autofillStatus == AutofillServiceStatus.unsupported
+                      ? null
+                      : (val) async {
+                          if (val) {
+                            await AutofillService().requestSetAutofillService();
+                          } else {
+                            await AutofillService().disableAutofillServices();
+                          }
+                          await _doInit();
+                        },
+                ),
+              ]),
         ListTile(
           leading: Icon(FontAwesomeIcons.signOutAlt),
           title: const Text('Lock all open files'),
