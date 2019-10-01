@@ -33,6 +33,7 @@ class _PreferencesBodyState extends State<PreferencesBody> {
   KdbxBloc _kdbxBloc;
 
   AutofillServiceStatus _autofillStatus;
+  AutofillPreferences _prefs;
 
   @override
   void initState() {
@@ -41,7 +42,9 @@ class _PreferencesBodyState extends State<PreferencesBody> {
   }
 
   Future<void> _doInit() async {
-    _autofillStatus = await AutofillService().status();
+    final autofill = AutofillService();
+    _autofillStatus = await autofill.status();
+    _prefs = await autofill.getPreferences();
     setState(() {});
   }
 
@@ -55,7 +58,7 @@ class _PreferencesBodyState extends State<PreferencesBody> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ...?(!Platform.isAndroid
+        ...?(!Platform.isAndroid || _prefs == null
             ? null
             : [
                 SwitchListTile(
@@ -74,6 +77,15 @@ class _PreferencesBodyState extends State<PreferencesBody> {
                           }
                           await _doInit();
                         },
+                ),
+                SwitchListTile(
+                  title: const Text('Enable debug'),
+                  subtitle: const Text('Shows for every input field'),
+                  value: _prefs.enableDebug,
+                  onChanged: (val) async {
+                    await AutofillService().setPreferences(AutofillPreferences(enableDebug: val));
+                    await _doInit();
+                  },
                 ),
               ]),
         ListTile(
