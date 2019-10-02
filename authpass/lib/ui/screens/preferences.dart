@@ -5,7 +5,10 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+
+final _logger = Logger('preferences');
 
 class PreferencesScreen extends StatelessWidget {
   static Route<void> route() => MaterialPageRoute(
@@ -62,6 +65,7 @@ class _PreferencesBodyState extends State<PreferencesBody> {
             ? null
             : [
                 SwitchListTile(
+                  secondary: const Icon(FontAwesomeIcons.iCursor),
                   title: const Text('Enable autofill'),
                   subtitle: _autofillStatus == AutofillServiceStatus.unsupported
                       ? const Text('Only supported on Android Oreo (8.0) or later.')
@@ -79,10 +83,12 @@ class _PreferencesBodyState extends State<PreferencesBody> {
                         },
                 ),
                 SwitchListTile(
+                  secondary: const Icon(FontAwesomeIcons.bug),
                   title: const Text('Enable debug'),
                   subtitle: const Text('Shows for every input field'),
                   value: _prefs.enableDebug,
                   onChanged: (val) async {
+                    _logger.fine('Setting debug to $val');
                     await AutofillService().setPreferences(AutofillPreferences(enableDebug: val));
                     await _doInit();
                   },
