@@ -110,8 +110,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     implementation "androidx.appcompat:appcompat:1.1.0"
-    implementation 'com.github.tony19:logback-android:2.0.0'
+
+    // logging
+    implementation "org.slf4j:slf4j-api:1.7.28"
     implementation "io.github.microutils:kotlin-logging:1.7.6"
+    implementation "uk.uuid.slf4j:slf4j-android:1.7.28-0"
 
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
