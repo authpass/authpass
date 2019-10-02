@@ -51,7 +51,9 @@ dependencies:
   flutter_speed_dial: ^1.2.1
 
   # desktop/macos
-  biometric_storage: ^0.2.1
+  #biometric_storage: ^0.2.1
+  biometric_storage:
+    path: ../deps/biometric_storage
   uuid: ^2.0.2
   url_launcher: ^5.1.3
   font_awesome_flutter: ^8.5.0

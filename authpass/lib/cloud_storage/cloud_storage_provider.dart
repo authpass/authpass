@@ -74,7 +74,7 @@ typedef PromptUserForCode = Future<String> Function(String openUri);
 class CloudStorageHelper {
   BiometricStorageFile _storageFile;
   Future<BiometricStorageFile> _getStorageFile() async => _storageFile ??= await BiometricStorage().getStorage(
-        'CloudProvider',
+        'CloudProviderCreds',
         options: StorageFileInitOptions(authenticationRequired: false),
       );
 
