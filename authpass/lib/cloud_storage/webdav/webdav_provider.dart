@@ -77,20 +77,24 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   @override
   Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
     final client = await requireAuthenticatedClient();
-    final uri = _uriForEntity(client, saveAs.parent);
+    final uri = _uriForEntity(client, saveAs.parent).resolve(saveAs.fileName);
+    _logger.finer('Saving to $uri');
     final request = Request('PUT', uri);
     request.headers[HttpHeaders.ifNoneMatchHeader] = '*';
+    request.bodyBytes = bytes;
     final response = await client.send(request);
     await _expectSuccessResponse(response);
     final newMetadata = WebDavFileMetadata(etag: response.headers[HttpHeaders.etagHeader]);
     _logger.finer('Successfully created entity. new metadata: ${newMetadata.toJson()}');
     return toFileSource(
-        _toCloudStorageEntity(
-          client,
-          uri.path,
-          CloudStorageEntityType.file,
-        ).toSimpleFileInfo(),
-        uuid: AppDataBloc.createUuid());
+      _toCloudStorageEntity(
+        client,
+        uri.path,
+        CloudStorageEntityType.file,
+      ).toSimpleFileInfo(),
+      uuid: AppDataBloc.createUuid(),
+      initialCachedContent: FileContent(bytes, newMetadata.toJson()),
+    );
   }
 
   @override
@@ -112,10 +116,9 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 
   Future<SearchResponse> propFind(WebDavClient client, CloudStorageEntity parent) async {
     final parentUri = _uriForEntity(client, parent);
-    final baseUri = Uri.parse(client.credentials.baseUrl);
     final request = Request('PROPFIND', parentUri);
     final body = _propfindRequest();
-    _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
+//    _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
     request.body = body.toXmlString();
     final response = await client.send(request);
 
@@ -123,7 +126,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 
     final bytes = await response.stream.toBytes();
     final doc = xml.parse(utf8.decode(bytes));
-    _logger.finer('Got propfind result: ${doc.toXmlString(pretty: true)}');
+//    _logger.finer('Got propfind result: ${doc.toXmlString(pretty: true)}');
     final entities = doc.findAllElements('response', namespace: 'DAV:');
     _logger.finer('entities: ${entities.length}');
     final cloudStorageEntities = entities
@@ -133,18 +136,18 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
           final resourcetype = entity.findAllElements('resourcetype', namespace: 'DAV:').first;
           final bool isFolder = resourcetype.findElements('collection', namespace: 'DAV:').isNotEmpty;
           final isFile = resourcetype.children.isEmpty;
-          _logger.fine('Got entity: $href ($isFolder,$isFile) (${entity.toXmlString(pretty: true)})');
+//          _logger.fine('Got entity: $href ($isFolder,$isFile) (${entity.toXmlString(pretty: true)})');
           final type = isFolder ? CloudStorageEntityType.directory : isFile ? CloudStorageEntityType.file : null;
           if (type == null) {
             return null;
           }
-          final hrefUri = Uri.parse(href);
-          final hrefResolved = baseUri.resolveUri(hrefUri);
-          if (isFolder && hrefResolved == parentUri) {
+
+          final cse = _toCloudStorageEntity(client, href, type);
+          final uri = _uriForEntity(client, cse);
+          if (uri == parentUri) {
             return null;
           }
-
-          return _toCloudStorageEntity(client, href, type);
+          return cse;
         })
         .where((el) => el != null)
         .toList();
@@ -188,9 +191,14 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
       CloudStorageEntity file, Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
-    final metadata = WebDavFileMetadata.fromJson(previousMetadata);
     final request = Request('PUT', uri);
-    request.headers[HttpHeaders.ifMatchHeader] = metadata.etag;
+    if (previousMetadata == null) {
+      _logger.severe('There was no previous metadata set?! Overwriting blindly.');
+    } else {
+      final metadata = WebDavFileMetadata.fromJson(previousMetadata);
+      request.headers[HttpHeaders.ifMatchHeader] = metadata.etag;
+    }
+    request.bodyBytes = bytes;
     final response = await client.send(request);
     await _expectSuccessResponse(response);
     final newMetadata = WebDavFileMetadata(etag: response.headers[HttpHeaders.etagHeader]);

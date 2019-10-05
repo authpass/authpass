@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
@@ -95,6 +96,10 @@ mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
     proxy._futureTask = FutureTask(future: future, progressLabel: proxy._progressLabel ?? label);
     setState(() {
       task = proxy._futureTask;
+    });
+    future.catchError((dynamic error, StackTrace stackTrace) {
+      DialogUtils.showErrorDialog(context, 'Error while ${label ?? 'running task'}', '$error');
+      return Future<U>.error(error, stackTrace);
     });
     future.whenComplete(() {
       setState(() {

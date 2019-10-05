@@ -353,6 +353,7 @@ enum EntryAction {
 }
 
 class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
+  GlobalKey _formFieldKey = GlobalKey();
   TextEditingController _controller;
   bool _isProtected = false;
   final FocusNode _focusNode = FocusNode();
@@ -494,6 +495,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                         ],
                       )
                     : TextFormField(
+                        key: _formFieldKey,
                         maxLines: null,
                         focusNode: _focusNode,
                         decoration: InputDecoration(
@@ -672,6 +674,16 @@ class HighlightWidgetState extends State<HighlightWidget> with SingleTickerProvi
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
+    _controller.addStatusListener(_animationStatusChanged);
+  }
+
+  void _animationStatusChanged(AnimationStatus status) {
+    _logger.finer('Highlight animation status changed: $status');
+    if (status == AnimationStatus.completed) {
+      setState(() {
+        _decorationAnimation = null;
+      });
+    }
   }
 
   @override
