@@ -28,7 +28,7 @@ import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
 import '../../theme.dart';
 
-final _logger = Logger('select_file_screen');
+final _logger = Logger('authpass.select_file_screen');
 
 class SelectFileScreen extends StatelessWidget {
   static Route<Object> route() => MaterialPageRoute(
@@ -215,7 +215,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                   label: 'Load from ${cs.displayName}',
                   onPressed: () async {
                     final source =
-                        await Navigator.of(context).push(CloudStorageSelector.route(cs, CloudStorageLoadConfig()));
+                        await Navigator.of(context).push(CloudStorageSelector.route(cs, CloudStorageOpenConfig()));
                     if (source != null) {
                       await Navigator.of(context).push(CredentialsScreen.route(source.fileSource));
                     }

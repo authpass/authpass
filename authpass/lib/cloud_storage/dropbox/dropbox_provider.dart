@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -83,7 +84,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final authUrl = grant.getAuthorizationUrl(null);
     final params = Map<String, String>.from(authUrl.queryParameters); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
-    final code = await prompt(url.toString());
+    final code = await oAuthTokenPrompt(prompt, url.toString());
     if (code == null) {
       _logger.warning('User cancelled authorization. (did not provide code)');
       return null;
@@ -97,6 +98,9 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     _logger.fine('Received new credentials from oauth.');
     storeCredentials(credentials.toJson());
   }
+
+  @override
+  bool get supportSearch => true;
 
   @override
   Future<SearchResponse> search({String name = 'kdbx'}) async {

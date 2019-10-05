@@ -1,4 +1,6 @@
 PODS:
+  - autofill_service (0.0.1):
+    - Flutter
   - biometric_storage (0.0.1):
     - Flutter
   - file_chooser (0.0.1):
@@ -20,6 +22,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
   - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -32,6 +35,8 @@ DEPENDENCIES:
   - url_launcher_fde (from `.symlinks/plugins/url_launcher_fde/ios`)
 
 EXTERNAL SOURCES:
+  autofill_service:
+    :path: ".symlinks/plugins/autofill_service/ios"
   biometric_storage:
     :path: ".symlinks/plugins/biometric_storage/ios"
   file_chooser:
@@ -54,6 +59,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_fde/ios"
 
 SPEC CHECKSUMS:
+  autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
   biometric_storage: b142d2ee2048fb67c4f6054d0308363f3258a9c0
   file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245

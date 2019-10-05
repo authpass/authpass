@@ -27,7 +27,7 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
 
   @override
   Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow(prompt) async {
-    final client = await clientViaUserConsentManual(_clientId, _scopes, prompt);
+    final client = await clientViaUserConsentManual(_clientId, _scopes, (uri) => oAuthTokenPrompt(prompt, uri));
     client.credentialUpdates.listen(_credentialsChanged);
     _credentialsChanged(client.credentials);
     _logger.finer('Finished user consent.');
@@ -75,6 +75,9 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
       idToken: map['idToken'] as String,
     );
   }
+
+  @override
+  bool get supportSearch => true;
 
   @override
   Future<SearchResponse> search({String name = 'kdbx'}) async {

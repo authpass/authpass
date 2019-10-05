@@ -1,0 +1,197 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/cloud_storage/webdav/webdav_models.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
+import 'package:http_auth/http_auth.dart';
+import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
+import 'package:xml/xml.dart' as xml;
+
+final _logger = Logger('authpass.webdav_provider');
+
+class AuthenticationException extends StorageException {
+  AuthenticationException(String details) : super(StorageExceptionType.authentication, details);
+}
+
+class WebDavClient extends BasicAuthClient {
+  WebDavClient(this.credentials) : super(credentials.username, credentials.password);
+
+  UserNamePasswordCredentials credentials;
+}
+
+class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
+  WebDavProvider({@required CloudStorageHelper helper}) : super(helper: helper);
+
+  xml.XmlNode _propfindRequest() {
+    final builder = xml.XmlBuilder();
+    builder.processing('xml', 'version="1.0"');
+    builder.element('d:propfind', namespaces: {'DAV:': 'd'}, nest: () {
+      builder.element('d:prop', nest: () {
+        builder.element('d:getlastmodified');
+        builder.element('d:getetag');
+        builder.element('d:getcontenttype');
+        builder.element('d:resourcetype');
+      });
+    });
+    return builder.build();
+  }
+
+  @override
+  Future<WebDavClient> clientFromAuthenticationFlow(prompt) async {
+    final result = await promptUser<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>(
+        prompt, UrlUsernamePasswordPromptData());
+    if (result == null) {
+      _logger.finer('prompt was canceled by user.');
+      return null;
+    }
+    final credentials =
+        UserNamePasswordCredentials(baseUrl: result.url, username: result.username, password: result.password);
+    final client = WebDavClient(credentials);
+
+    // fetch root, to validate credentials.
+    await propFind(client, null);
+
+    await storeCredentials(json.encode(credentials));
+    return client;
+  }
+
+  @override
+  WebDavClient clientWithStoredCredentials(String stored) {
+    final credentials = UserNamePasswordCredentials.fromJson(json.decode(stored) as Map<String, dynamic>);
+    if (credentials != null) {
+      return WebDavClient(credentials);
+    }
+    return null;
+  }
+
+  @override
+  Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) {
+    return null;
+  }
+
+  @override
+  IconData get displayIcon => FontAwesomeIcons.cloudUploadAlt;
+
+  @override
+  String get displayName => 'WebDAV';
+
+  Uri _uriForEntity(WebDavClient client, CloudStorageEntity entity) {
+    final uri = Uri.parse(client.credentials.baseUrl);
+    if (entity != null) {
+      return uri.resolve(entity.path);
+    }
+    return uri;
+  }
+
+  Future<SearchResponse> propFind(WebDavClient client, CloudStorageEntity parent) async {
+    final request = Request('PROPFIND', _uriForEntity(client, parent));
+    final body = _propfindRequest();
+    _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
+    request.body = body.toXmlString();
+    final response = await client.send(request);
+
+    await _expectSuccessResponse(response);
+
+    final bytes = await response.stream.toBytes();
+    final doc = xml.parse(utf8.decode(bytes));
+    _logger.finer('Got propfind result: ${doc.toXmlString(pretty: true)}');
+    final entities = doc.findAllElements('response', namespace: 'DAV:');
+    _logger.finer('entities: ${entities.length}');
+    final cloudStorageEntities = entities
+        .map((entity) {
+          final hrefEls = entity.findAllElements('href', namespace: 'DAV:');
+          final href = hrefEls.isEmpty ? null : hrefEls.first.text;
+          final resourcetype = entity.findAllElements('resourcetype', namespace: 'DAV:').first;
+          bool isFolder = resourcetype.findElements('collection', namespace: 'DAV:').isNotEmpty;
+          bool isFile = resourcetype.children.isEmpty;
+          _logger.fine('Got entity: $href ($isFolder,$isFile) (${entity.toXmlString(pretty: true)})');
+          final type = isFolder ? CloudStorageEntityType.directory : isFile ? CloudStorageEntityType.file : null;
+          if (type == null) {
+            return null;
+          }
+          if (isFolder && href == (parent?.path ?? '/')) {
+            return null;
+          }
+          final hrefUri = Uri.parse(href);
+          final pathSegments = hrefUri.pathSegments.where((val) => val != '');
+          return CloudStorageEntity(
+            (b) => b
+              ..id = href
+              ..type = type
+              ..path = href
+              ..name = pathSegments.isEmpty ? '/' : pathSegments.last,
+          );
+        })
+        .where((el) => el != null)
+        .toList();
+
+    return SearchResponse((b) => b
+      ..results.addAll(cloudStorageEntities)
+      ..hasMore = false);
+  }
+
+  @override
+  Future<SearchResponse> list({CloudStorageEntity parent}) async {
+    final client = await requireAuthenticatedClient();
+    return propFind(client, parent);
+  }
+
+  @override
+  Future<FileContent> loadEntity(CloudStorageEntity file) async {
+    final client = await requireAuthenticatedClient();
+    final uri = _uriForEntity(client, file);
+    final response = await client.get(uri);
+    final metadata = WebDavFileMetadata(etag: response.headers[HttpHeaders.etagHeader]);
+    _logger.finer('Successfully loaded entity with metadata: ${metadata.toJson()}');
+    return FileContent(response.bodyBytes, metadata.toJson());
+  }
+
+  @override
+  Future<Map<String, dynamic>> saveEntity(
+      CloudStorageEntity file, Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+    final client = await requireAuthenticatedClient();
+    final uri = _uriForEntity(client, file);
+    final metadata = WebDavFileMetadata.fromJson(previousMetadata);
+    final request = Request('PUT', uri);
+    request.headers[HttpHeaders.ifMatchHeader] = metadata.etag;
+    final response = await client.send(request);
+    await _expectSuccessResponse(response);
+    final newMetadata = WebDavFileMetadata(etag: response.headers[HttpHeaders.etagHeader]);
+    _logger.finer('Successfully saved entity. new metadata: ${newMetadata.toJson()}');
+    return newMetadata.toJson();
+  }
+
+  Future<void> _expectSuccessResponse(StreamedResponse response) async {
+    if (response.statusCode == 401) {
+      _logger.severe('Authentication error. ${response.statusCode} ${response.headers}');
+      throw AuthenticationException('Provided credentials were invalid. (Server Response ${response.statusCode}');
+    } else if (response.statusCode >= 300 || response.statusCode < 200) {
+      if (response.statusCode == HttpStatus.preconditionFailed) {
+        throw StorageException(StorageExceptionType.conflict, 'Precondition failed.');
+      }
+      final body = utf8.decode(await response.stream.toBytes());
+//      final contentType = ContentType.parse(response.headers[HttpHeaders.contentTypeHeader]);
+//      if (contentType.subType == 'xml') {
+//        final xmlBody = xml.parse(body);
+//        if (xmlBody.rootElement.name.local == 'error') {
+//
+//        }
+//      }
+      _logger.severe('Error during call to webdav endpoint. '
+          '${response.statusCode} ${response.reasonPhrase} (${response.headers})');
+      throw StorageException(
+        StorageExceptionType.unknown,
+        'Error during request. (${response.statusCode} ${response.reasonPhrase})',
+        errorBody: body,
+      );
+    }
+  }
+}

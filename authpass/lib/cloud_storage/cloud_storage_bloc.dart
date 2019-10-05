@@ -1,6 +1,7 @@
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
+import 'package:authpass/cloud_storage/webdav/webdav_provider.dart';
 import 'package:authpass/env/_base.dart';
 
 /// manages available cloud storages.
@@ -15,6 +16,7 @@ class CloudStorageBloc {
         GoogleDriveProvider(env: env, helper: _helper),
       });
     }
+    availableCloudStorage.add(WebDavProvider(helper: _helper));
   }
 
   final Env env;

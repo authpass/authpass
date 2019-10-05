@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
 final _logger = Logger('authpass.google_drive_ui');
 
@@ -47,10 +48,17 @@ class CloudStorageSelector extends StatefulWidget {
 }
 
 class _CloudStorageSelectorState extends State<CloudStorageSelector> {
+  bool _isSearch;
+
   @override
   void initState() {
     super.initState();
     widget.provider.loadSavedAuth().then((val) => setState(() {}));
+    if (widget.browserConfig is CloudStorageBrowserConfig || !(widget.provider.supportSearch)) {
+      _isSearch = false;
+    } else {
+      _isSearch = true;
+    }
   }
 
   @override
@@ -74,8 +82,10 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
       body: widget.provider.isAuthenticated != true
           ? Center(child: CloudStorageAuthentication(provider: widget.provider, onSuccess: () => setState(() {})))
           : Center(
-              child: config is CloudStorageBrowserConfig
-                  ? CloudStorageBrowser(provider: widget.provider, config: config)
+              child: !_isSearch
+                  ? CloudStorageBrowser(
+                      provider: widget.provider,
+                      config: config is CloudStorageBrowserConfig ? config : CloudStorageBrowserConfig(isSave: false))
                   : CloudStorageSearch(provider: widget.provider),
             ),
     );
@@ -100,21 +110,32 @@ class CloudStorageAuthentication extends StatelessWidget {
             child: Text('Login to ${provider.displayName}'),
             onPressed: () async {
               try {
-                final auth = await provider.startAuth((uri) async {
-                  _logger.fine('Launching authentication url $uri');
-                  if (await DialogUtils.openUrl(uri)) {
+                final auth = await provider.startAuth((final prompt) async {
+                  if (prompt is UserAuthenticationPrompt<OAuthTokenResult, OAuthTokenFlowPromptData>) {
+                    final uri = prompt.data.openUri;
+                    _logger.fine('Launching authentication url $uri');
+                    if (await DialogUtils.openUrl(uri)) {
 //                  await launch(uri);
 //              await DialogUtils.showConfirmDialog(context: null, params: null)
-                    return await SimplePromptDialog.showPrompt(
-                      context,
-                      const SimplePromptDialog(
-                        title: 'Google Drive Authentication',
-                        labelText: 'Authentication Code',
-                      ),
-                    );
+                      final code = await SimplePromptDialog.showPrompt(
+                        context,
+                        const SimplePromptDialog(
+                          title: 'Google Drive Authentication',
+                          labelText: 'Authentication Code',
+                        ),
+                      );
+                      prompt.result(OAuthTokenResult(code));
+                    } else {
+                      await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
+                      prompt.result(null);
+                      return;
+                    }
+                  } else if (prompt
+                      is UserAuthenticationPrompt<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>) {
+                    final result = await UrlUsernamePasswordDialog().show(context);
+                    prompt.result(result);
                   } else {
-                    await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
-                    return null;
+                    throw StateError('Unsupported prompt: $prompt');
                   }
                 });
                 _logger.fine('finished launching. $auth');
@@ -231,8 +252,12 @@ class SearchResultListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final length = response.results.length;
     return ListView.builder(
       itemBuilder: (context, itemId) {
+        if (itemId >= length) {
+          return ListTile(title: Text('$length Items in this folder.'));
+        }
         final entity = response.results[itemId];
         return ListTile(
           leading: Icon(entity.type == CloudStorageEntityType.file ? FontAwesomeIcons.file : FontAwesomeIcons.folder),
@@ -241,14 +266,14 @@ class SearchResultListView extends StatelessWidget {
           onTap: () => onTap(entity),
         );
       },
-      itemCount: response.results.length,
+      itemCount: length + 1,
     );
   }
 }
 
 abstract class CloudStorageSelectorConfig<T extends CloudStorageSelectorResult> {}
 
-class CloudStorageLoadConfig extends CloudStorageSelectorConfig<CloudStorageSelectorLoadResult> {}
+class CloudStorageOpenConfig extends CloudStorageSelectorConfig<CloudStorageSelectorLoadResult> {}
 
 class CloudStorageBrowserConfig extends CloudStorageSelectorConfig<CloudStorageSelectorSaveResult> {
   CloudStorageBrowserConfig({this.defaultFileName, this.isSave = true});
@@ -273,23 +298,22 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
   final List<CloudStorageEntity> _folderBreadcrumbs = [];
   final TextEditingController _fileNameController = TextEditingController();
   SearchResponse _response;
+  CloudStorageEntity get _folder => _folderBreadcrumbs.isEmpty ? null : _folderBreadcrumbs.last;
 
   @override
   void initState() {
     super.initState();
     _fileNameController.text = widget.config.defaultFileName;
-    _runSearch();
+    _listFolder();
   }
 
-  CloudStorageEntity get _folder => _folderBreadcrumbs.isEmpty ? null : _folderBreadcrumbs.last;
-
-  Future<void> _runSearch() async {
+  Future<void> _listFolder() async {
     await asyncRunTask((progress) async {
       final response = await widget.provider.list(parent: _folder);
       setState(() {
         _response = response.rebuild((b) => b.results.sort(_compare));
       });
-    });
+    }, label: 'Loading');
   }
 
   int _compare(CloudStorageEntity a, CloudStorageEntity b) {
@@ -312,7 +336,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
               FlatButton.icon(
                 onPressed: () {
                   _folderBreadcrumbs.clear();
-                  _runSearch();
+                  _listFolder();
                 },
                 icon: Icon(FontAwesomeIcons.folderOpen),
                 label: const Text('/'),
@@ -324,7 +348,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                       label: Text(f.name),
                       onPressed: () {
                         _folderBreadcrumbs.removeRange(_folderBreadcrumbs.indexOf(f) + 1, _folderBreadcrumbs.length);
-                        _runSearch();
+                        _listFolder();
                       },
                     ),
                   ]),
@@ -342,40 +366,52 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                       if (item.type == CloudStorageEntityType.directory) {
                         setState(() {
                           _folderBreadcrumbs.add(item);
-                          _runSearch();
+                          _listFolder();
                         });
+                      } else if (!widget.config.isSave) {
+                        final source = FileSourceCloudStorage(
+                          provider: widget.provider,
+                          fileInfo: item.toSimpleFileInfo(),
+                          uuid: AppDataBloc.createUuid(),
+                        );
+                        Navigator.of(context).pop(CloudStorageSelectorLoadResult(source));
                       }
                     },
                   )
-                : const SizedBox.shrink(),
+                : const SizedBox.expand(),
           ),
         ),
-        Material(
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      filled: true,
+        ...?(!widget.config.isSave
+            ? null
+            : [
+                Material(
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              filled: true,
+                            ),
+                            controller: _fileNameController,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        LinkButton(
+                          icon: Icon(FontAwesomeIcons.save),
+                          child: const Text('Save'),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pop(CloudStorageSelectorSaveResult(_folder?.id, _fileNameController.text));
+                          },
+                        )
+                      ],
                     ),
-                    controller: _fileNameController,
                   ),
                 ),
-                const SizedBox(width: 8),
-                LinkButton(
-                  icon: Icon(FontAwesomeIcons.save),
-                  child: const Text('Save'),
-                  onPressed: () {
-                    Navigator.of(context).pop(CloudStorageSelectorSaveResult(_folder?.id, _fileNameController.text));
-                  },
-                )
-              ],
-            ),
-          ),
-        ),
+              ]),
       ],
     );
   }
@@ -385,5 +421,79 @@ class CloudStorageBrowserItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
+  }
+}
+
+class UrlUsernamePasswordDialog extends StatefulWidget {
+  Future<UrlUsernamePasswordResult> show(BuildContext context) =>
+      showDialog<UrlUsernamePasswordResult>(context: context, builder: (_) => this);
+
+  @override
+  _UrlUsernamePasswordDialogState createState() => _UrlUsernamePasswordDialogState();
+}
+
+final _urlRegex = RegExp(r'^https?://');
+
+class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _url = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('WebDAV Settings'),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextFormField(
+              controller: _url,
+              keyboardType: TextInputType.url,
+              decoration: const InputDecoration(
+                labelText: 'Url',
+                helperText: 'Base Url to your WebDAV service.',
+                hintText: 'https://my.nextcloud.com/webdav',
+              ),
+              autocorrect: false,
+              validator: SValidator.notEmpty(msg: 'Please enter a Url') +
+                  SValidator.isTrue(
+                      (str) => _urlRegex.hasMatch(str), 'Please enter a valid url with http:// or https://'),
+            ),
+            TextFormField(
+              controller: _username,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+              ),
+            ),
+            TextFormField(
+              controller: _password,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        FlatButton(
+          child: const Text('Ok'),
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              Navigator.of(context).pop(UrlUsernamePasswordResult(_url.text, _username.text, _password.text));
+            }
+          },
+        ),
+      ],
+    );
   }
 }

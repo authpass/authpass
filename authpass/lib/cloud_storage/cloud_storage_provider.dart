@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -67,7 +68,54 @@ abstract class SearchResponse implements Built<SearchResponse, SearchResponseBui
   bool get hasMore;
 }
 
-typedef PromptUserForCode = Future<String> Function(String openUri);
+enum PromptType {
+  oauthTokenFlow,
+  urlUsernamePassword,
+}
+
+abstract class UserAuthenticationPromptResult {}
+
+class OAuthTokenResult extends UserAuthenticationPromptResult {
+  OAuthTokenResult(this.code);
+  final String code;
+}
+
+class UrlUsernamePasswordResult extends UserAuthenticationPromptResult {
+  UrlUsernamePasswordResult(this.url, this.username, this.password);
+  final String url;
+  final String username;
+  final String password;
+}
+
+abstract class UserAuthenticationPromptData<T extends UserAuthenticationPromptResult> {
+  PromptType get type;
+}
+
+class OAuthTokenFlowPromptData extends UserAuthenticationPromptData<OAuthTokenResult> {
+  OAuthTokenFlowPromptData(this.openUri);
+  @override
+  PromptType get type => PromptType.oauthTokenFlow;
+  final String openUri;
+}
+
+/// Right now this is a pretty WebDAV specific prompt. But anyway.
+class UrlUsernamePasswordPromptData extends UserAuthenticationPromptData<UrlUsernamePasswordResult> {
+  UrlUsernamePasswordPromptData();
+
+  @override
+  PromptType get type => PromptType.urlUsernamePassword;
+}
+
+class UserAuthenticationPrompt<RESULT extends UserAuthenticationPromptResult,
+    U extends UserAuthenticationPromptData<RESULT>> {
+  UserAuthenticationPrompt(this.data, this.result);
+  final U data;
+  final PromptUserResult<RESULT> result;
+}
+
+typedef PromptUserForCode<T extends UserAuthenticationPromptResult, U extends UserAuthenticationPromptData<T>>
+    = Future<void> Function(UserAuthenticationPrompt<T, U> prompt);
+typedef PromptUserResult<T extends UserAuthenticationPromptResult> = void Function(T result);
 
 /// Common functionality shared across all cloud storages,
 /// right now simply storing of oauth tokens.
@@ -115,9 +163,12 @@ abstract class CloudStorageProvider {
   String get id => runtimeType.toString();
   String get displayName;
   IconData get displayIcon;
+  bool get supportSearch => false;
   Future<bool> loadSavedAuth();
   Future<bool> startAuth(PromptUserForCode prompt);
-  Future<SearchResponse> search({String name = 'kdbx'});
+
+  /// make sure to check [supportSearch] before calling this method, otherwise a [UnsupportedError] will be thrown.
+  Future<SearchResponse> search({String name = 'kdbx'}) => throw UnsupportedError('Search not supported');
   Future<SearchResponse> list({CloudStorageEntity parent});
 
   @protected
@@ -157,7 +208,7 @@ abstract class CloudStorageProvider {
 }
 
 abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
-  CloudStorageProviderClientBase({CloudStorageHelper helper}) : super(helper: helper);
+  CloudStorageProviderClientBase({@required CloudStorageHelper helper}) : super(helper: helper);
 
   T _client;
 
@@ -167,6 +218,28 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
   @override
   Future<void> logout() async {
     _client = null;
+  }
+
+  @protected
+  Future<String> oAuthTokenPrompt(PromptUserForCode prompt, String uri) async {
+    final result = await promptUser<OAuthTokenResult, OAuthTokenFlowPromptData>(prompt, OAuthTokenFlowPromptData(uri));
+    return result?.code;
+  }
+
+  Future<RESULT>
+      promptUser<RESULT extends UserAuthenticationPromptResult, U extends UserAuthenticationPromptData<RESULT>>(
+          PromptUserForCode<RESULT, U> prompt, U promptData) {
+    final completer = Completer<RESULT>();
+    prompt(UserAuthenticationPrompt(promptData, (result) {
+      completer.complete(result);
+    })).then((_) {
+      if (!completer.isCompleted) {
+        _logger.severe('prompt callback completed, without calling result code.', null, StackTrace.current);
+      }
+    }).catchError((dynamic error, StackTrace stackTrace) {
+      completer.completeError(error, stackTrace);
+    });
+    return completer.future;
   }
 
   @protected
@@ -208,16 +281,18 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
 enum StorageExceptionType {
   conflict,
   unknown,
+  authentication,
 }
 
 class StorageException implements Exception {
-  StorageException(this.type, this.details);
+  StorageException(this.type, this.details, {this.errorBody});
 
   final StorageExceptionType type;
   final String details;
+  final String errorBody;
 
   @override
   String toString() {
-    return 'StorageException{type: $type, details: $details}';
+    return 'StorageException{type: $type, details: $details, errorBody: $errorBody}';
   }
 }
