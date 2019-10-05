@@ -16,5 +16,5 @@ class FDroid extends Env {
       );
 
   @override
-  bool get featureCloudStorage => false;
+  bool get featureCloudStorageProprietary => false;
 }

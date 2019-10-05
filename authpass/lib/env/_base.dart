@@ -60,7 +60,12 @@ abstract class Env {
   bool get isDebug => type == EnvType.development;
 
   String get name => runtimeType.toString();
-  bool get featureCloudStorage => true;
+
+  /// Support for dropbox, google drive.
+  bool get featureCloudStorageProprietary => true;
+
+  /// Support for WebDAV
+  bool get featureCloudStorageWebDav => true;
 
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();

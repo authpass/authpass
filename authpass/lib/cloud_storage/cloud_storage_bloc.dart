@@ -10,13 +10,15 @@ class CloudStorageBloc {
   CloudStorageBloc(this.env)
       : _helper = CloudStorageHelper(),
         availableCloudStorage = {} {
-    if (env.featureCloudStorage) {
+    if (env.featureCloudStorageProprietary) {
       availableCloudStorage.addAll({
         DropboxProvider(env: env, helper: _helper),
         GoogleDriveProvider(env: env, helper: _helper),
       });
     }
-    availableCloudStorage.add(WebDavProvider(helper: _helper));
+    if (env.featureCloudStorageWebDav) {
+      availableCloudStorage.add(WebDavProvider(helper: _helper));
+    }
   }
 
   final Env env;
