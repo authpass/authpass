@@ -6,6 +6,9 @@ class Development extends Env {
   Development() : super(EnvType.development);
 
   @override
+  String get storageNamespace => 'development';
+
+  @override
   EnvSecrets get secrets => const EnvSecrets(
         analyticsAmplitudeApiKey: null,
         analyticsGoogleAnalyticsId: null,

@@ -8,7 +8,7 @@ import 'package:authpass/env/_base.dart';
 /// BloC is definitely the wrong name here...
 class CloudStorageBloc {
   CloudStorageBloc(this.env)
-      : _helper = CloudStorageHelper(),
+      : _helper = CloudStorageHelper(env),
         availableCloudStorage = {} {
     if (env.featureCloudStorageProprietary) {
       availableCloudStorage.addAll({

@@ -14,6 +14,7 @@ import 'package:http_auth/http_auth.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:xml/xml.dart' as xml;
+import 'package:path/path.dart' as path;
 
 final _logger = Logger('authpass.webdav_provider');
 
@@ -86,13 +87,16 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   Uri _uriForEntity(WebDavClient client, CloudStorageEntity entity) {
     final uri = Uri.parse(client.credentials.baseUrl);
     if (entity != null) {
-      return uri.resolve(entity.path);
+      return uri.resolve(entity.id);
     }
     return uri;
   }
 
   Future<SearchResponse> propFind(WebDavClient client, CloudStorageEntity parent) async {
-    final request = Request('PROPFIND', _uriForEntity(client, parent));
+    final parentUri = _uriForEntity(client, parent);
+    final baseUri = Uri.parse(client.credentials.baseUrl);
+    final basePath = path.joinAll(baseUri.pathSegments);
+    final request = Request('PROPFIND', parentUri);
     final body = _propfindRequest();
     _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
     request.body = body.toXmlString();
@@ -117,16 +121,18 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
           if (type == null) {
             return null;
           }
-          if (isFolder && href == (parent?.path ?? '/')) {
+          final hrefUri = Uri.parse(href);
+          final hrefResolved = baseUri.resolveUri(hrefUri);
+          if (isFolder && hrefResolved == parentUri) {
             return null;
           }
-          final hrefUri = Uri.parse(href);
+
           final pathSegments = hrefUri.pathSegments.where((val) => val != '');
           return CloudStorageEntity(
             (b) => b
               ..id = href
               ..type = type
-              ..path = href
+              ..path = '/' + path.relative(path.joinAll(hrefUri.pathSegments), from: basePath)
               ..name = pathSegments.isEmpty ? '/' : pathSegments.last,
           );
         })

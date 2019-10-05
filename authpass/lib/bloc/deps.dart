@@ -16,6 +16,7 @@ class Deps {
       appDataBloc: appDataBloc,
       analytics: analytics,
       kdbxBloc: KdbxBloc(
+        env: env,
         appDataBloc: appDataBloc,
         analytics: analytics,
         cloudStorageBloc: cloudStorageBloc,

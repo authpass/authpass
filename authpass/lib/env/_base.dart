@@ -61,6 +61,11 @@ abstract class Env {
 
   String get name => runtimeType.toString();
 
+  /// Allows having a "namespace" for different environments.
+  /// e.g. for mac os to have a different configuration for
+  /// debug build vs. production/app store build.
+  String get storageNamespace => null;
+
   /// Support for dropbox, google drive.
   bool get featureCloudStorageProprietary => true;
 

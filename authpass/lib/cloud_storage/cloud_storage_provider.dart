@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
@@ -120,9 +121,13 @@ typedef PromptUserResult<T extends UserAuthenticationPromptResult> = void Functi
 /// Common functionality shared across all cloud storages,
 /// right now simply storing of oauth tokens.
 class CloudStorageHelper {
+  CloudStorageHelper(this.env);
+
+  final Env env;
   BiometricStorageFile _storageFile;
+
   Future<BiometricStorageFile> _getStorageFile() async => _storageFile ??= await BiometricStorage().getStorage(
-        'CloudProviderCreds',
+        '${env.storageNamespace ?? ''}CloudProviderCreds',
         options: StorageFileInitOptions(authenticationRequired: false),
       );
 

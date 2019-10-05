@@ -8,6 +8,7 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -230,9 +231,10 @@ class FileSourceCloudStorage extends FileSource {
 class FileExistsException extends KdbxException {}
 
 class QuickUnlockStorage {
-  QuickUnlockStorage({@required this.cloudStorageBloc});
+  QuickUnlockStorage({@required this.cloudStorageBloc, @required this.env});
 
   CloudStorageBloc cloudStorageBloc;
+  Env env;
   bool _supported;
 
   Future<bool> supportsBiometricKeyStore() async {
@@ -246,7 +248,8 @@ class QuickUnlockStorage {
 
   Future<BiometricStorageFile> _storageFileCached;
 
-  Future<BiometricStorageFile> _storageFile() => _storageFileCached ??= BiometricStorage().getStorage('QuickUnlock');
+  Future<BiometricStorageFile> _storageFile() =>
+      _storageFileCached ??= BiometricStorage().getStorage('${env.storageNamespace ?? ''}QuickUnlock');
 
   Future<void> updateQuickUnlockFile(Map<FileSource, Credentials> fileCredentials) async {
     if (!(await supportsBiometricKeyStore())) {
@@ -316,15 +319,17 @@ class KdbxOpenedFile {
 
 class KdbxBloc {
   KdbxBloc({
+    @required this.env,
     @required this.appDataBloc,
     @required this.analytics,
     @required this.cloudStorageBloc,
-  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc) {
+  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc, env: env) {
     _openedFiles
         .map((value) => Map.fromEntries(value.entries.map((entry) => MapEntry(entry.value.kdbxFile, entry.value))))
         .listen((data) => _openedFilesByKdbxFile = data);
   }
 
+  final Env env;
   final AppDataBloc appDataBloc;
   final Analytics analytics;
   final CloudStorageBloc cloudStorageBloc;
