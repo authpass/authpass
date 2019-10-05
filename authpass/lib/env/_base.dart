@@ -11,7 +11,7 @@ enum EnvType { production, development }
 
 const _DEFAULT_APP_NAME = 'AuthPass';
 const _DEFAULT_VERSION = '1.0.0';
-const _DEFAULT_BUILD_NUMBER = '1';
+const _DEFAULT_BUILD_NUMBER = 1;
 const _DEFAULT_PACKAGE_NAME = 'design.codeux.authpass';
 
 abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
@@ -20,7 +20,7 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
 
   String get appName;
   String get version;
-  String get buildNumber;
+  int get buildNumber;
   String get packageName;
 
   String get versionLabel => '$version+$buildNumber';
@@ -77,7 +77,7 @@ abstract class Env {
     return AppInfo((b) => b
       ..appName = pi?.appName ?? _DEFAULT_APP_NAME
       ..version = pi?.version ?? _DEFAULT_VERSION
-      ..buildNumber = pi?.buildNumber ?? _DEFAULT_BUILD_NUMBER
+      ..buildNumber = int.tryParse(pi?.buildNumber ?? '$_DEFAULT_BUILD_NUMBER') ?? _DEFAULT_BUILD_NUMBER
       ..packageName = pi?.packageName ?? _DEFAULT_PACKAGE_NAME);
   }
 

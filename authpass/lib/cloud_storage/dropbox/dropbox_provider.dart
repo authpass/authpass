@@ -265,7 +265,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   @override
   Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
-    final metadataJson = await _upload(path.join(saveAs.parentId, saveAs.fileName), bytes, update: false);
+    final metadataJson = await _upload(path.join(saveAs.parent?.id, saveAs.fileName), bytes, update: false);
     final metadata = FileMetadata.fromJson(metadataJson);
     return toFileSource(
       metadata.toCloudStorageEntity().toSimpleFileInfo(),

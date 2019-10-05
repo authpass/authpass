@@ -68,6 +68,8 @@ abstract class FileSource {
   @protected
   Map<String, dynamic> get previousMetadata => _cached.metadata;
 
+  String get typeDebug => runtimeType.toString();
+
   @protected
   Future<FileContent> load();
 
@@ -208,6 +210,9 @@ class FileSourceCloudStorage extends FileSource {
   final Map<String, String> fileInfo;
 
   @override
+  String get typeDebug => '$runtimeType:${provider.id}';
+
+  @override
   String get displayNameFromPath => provider.displayNameFromPath(fileInfo);
 
   @override
@@ -231,10 +236,15 @@ class FileSourceCloudStorage extends FileSource {
 class FileExistsException extends KdbxException {}
 
 class QuickUnlockStorage {
-  QuickUnlockStorage({@required this.cloudStorageBloc, @required this.env});
+  QuickUnlockStorage({
+    @required this.cloudStorageBloc,
+    @required this.env,
+    @required this.analytics,
+  });
 
   CloudStorageBloc cloudStorageBloc;
   Env env;
+  Analytics analytics;
   bool _supported;
 
   Future<bool> supportsBiometricKeyStore() async {
@@ -295,7 +305,7 @@ class QuickUnlockStorage {
   }
 }
 
-/// response to [KdbxBloc.readKdbxFile] will either bei an exception OR a file.
+/// response to [KdbxBloc.readKdbxFile] will either be an exception OR a file.
 class ReadFileResponse {
   ReadFileResponse(this.file, this.exception, this.exceptionType);
   final KdbxFile file;
@@ -323,7 +333,7 @@ class KdbxBloc {
     @required this.appDataBloc,
     @required this.analytics,
     @required this.cloudStorageBloc,
-  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc, env: env) {
+  }) : quickUnlockStorage = QuickUnlockStorage(cloudStorageBloc: cloudStorageBloc, env: env, analytics: analytics) {
     _openedFiles
         .map((value) => Map.fromEntries(value.entries.map((entry) => MapEntry(entry.value.kdbxFile, entry.value))))
         .listen((data) => _openedFilesByKdbxFile = data);
@@ -403,7 +413,7 @@ class KdbxBloc {
         kdbxFile: kdbxFile,
       )
     };
-    analytics.events.trackOpenFile(type: openedFile.sourceType);
+    analytics.events.trackOpenFile(type: file.typeDebug);
 
     if (addToQuickUnlock) {
       _openedFilesQuickUnlock.add(file);
@@ -448,6 +458,7 @@ class KdbxBloc {
                   stackTrace);
             }
           }
+          analytics.events.trackQuickUnlock(value: filesOpened);
           _openedFilesQuickUnlock.clear();
           _openedFilesQuickUnlock.addAll(unlockFiles.keys);
           return filesOpened;
@@ -551,6 +562,7 @@ class KdbxBloc {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
     final bytes = file.save();
     await fileSource.contentWrite(bytes);
+    analytics.events.trackSave(type: fileSource.typeDebug, value: bytes.length);
   }
 
   KdbxOpenedFile fileForKdbxFile(KdbxFile file) =>

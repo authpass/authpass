@@ -143,6 +143,18 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.manualUserType,
             specifiedType: const FullType(String)));
     }
+    if (object.firstLaunchedAt != null) {
+      result
+        ..add('firstLaunchedAt')
+        ..add(serializers.serialize(object.firstLaunchedAt,
+            specifiedType: const FullType(DateTime)));
+    }
+    if (object.lastBuildId != null) {
+      result
+        ..add('lastBuildId')
+        ..add(serializers.serialize(object.lastBuildId,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -166,6 +178,14 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'manualUserType':
           result.manualUserType = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'firstLaunchedAt':
+          result.firstLaunchedAt = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime;
+          break;
+        case 'lastBuildId':
+          result.lastBuildId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -359,11 +379,20 @@ class _$AppData extends AppData {
   final BuiltList<OpenedFile> previousFiles;
   @override
   final String manualUserType;
+  @override
+  final DateTime firstLaunchedAt;
+  @override
+  final int lastBuildId;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
       (new AppDataBuilder()..update(updates)).build();
 
-  _$AppData._({this.previousFiles, this.manualUserType}) : super._() {
+  _$AppData._(
+      {this.previousFiles,
+      this.manualUserType,
+      this.firstLaunchedAt,
+      this.lastBuildId})
+      : super._() {
     if (previousFiles == null) {
       throw new BuiltValueNullFieldError('AppData', 'previousFiles');
     }
@@ -381,19 +410,26 @@ class _$AppData extends AppData {
     if (identical(other, this)) return true;
     return other is AppData &&
         previousFiles == other.previousFiles &&
-        manualUserType == other.manualUserType;
+        manualUserType == other.manualUserType &&
+        firstLaunchedAt == other.firstLaunchedAt &&
+        lastBuildId == other.lastBuildId;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, previousFiles.hashCode), manualUserType.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, previousFiles.hashCode), manualUserType.hashCode),
+            firstLaunchedAt.hashCode),
+        lastBuildId.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppData')
           ..add('previousFiles', previousFiles)
-          ..add('manualUserType', manualUserType))
+          ..add('manualUserType', manualUserType)
+          ..add('firstLaunchedAt', firstLaunchedAt)
+          ..add('lastBuildId', lastBuildId))
         .toString();
   }
 }
@@ -412,12 +448,23 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set manualUserType(String manualUserType) =>
       _$this._manualUserType = manualUserType;
 
+  DateTime _firstLaunchedAt;
+  DateTime get firstLaunchedAt => _$this._firstLaunchedAt;
+  set firstLaunchedAt(DateTime firstLaunchedAt) =>
+      _$this._firstLaunchedAt = firstLaunchedAt;
+
+  int _lastBuildId;
+  int get lastBuildId => _$this._lastBuildId;
+  set lastBuildId(int lastBuildId) => _$this._lastBuildId = lastBuildId;
+
   AppDataBuilder();
 
   AppDataBuilder get _$this {
     if (_$v != null) {
       _previousFiles = _$v.previousFiles?.toBuilder();
       _manualUserType = _$v.manualUserType;
+      _firstLaunchedAt = _$v.firstLaunchedAt;
+      _lastBuildId = _$v.lastBuildId;
       _$v = null;
     }
     return this;
@@ -443,7 +490,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _$result = _$v ??
           new _$AppData._(
               previousFiles: previousFiles.build(),
-              manualUserType: manualUserType);
+              manualUserType: manualUserType,
+              firstLaunchedAt: firstLaunchedAt,
+              lastBuildId: lastBuildId);
     } catch (_) {
       String _$failedField;
       try {

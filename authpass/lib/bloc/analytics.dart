@@ -52,20 +52,32 @@ class Analytics {
     }
 
     events.registerTracker((event, params) {
-      final label = params.entries.map((e) => '${e.key}=${e.value}').join(',');
-      _logger.finer('event($event, $params) - label: $label');
+      final eventParams = <String, String>{};
+      int value;
+
+      final labelParams = <String>[];
+      for (final entry in params.entries) {
+        final custom = _gaPropertyMapping[entry.key];
+        if (entry.key == 'value' && entry.value is int) {
+          value = entry.value as int;
+        }
+        if (custom == null) {
+          labelParams.add('${entry.key}=${entry.value}');
+        } else {
+          eventParams[entry.key] = entry.value?.toString();
+        }
+      }
+      labelParams.sort();
+
+      final label = labelParams.join(',');
+      _logger.finer('event($event, $params, value=$value) - label: $label');
 //      _amplitude?.logEvent(name: event, properties: params);
       _ga?.sendEvent(
         'track',
         event,
         label: label,
-        parameters: Map.fromEntries(params.entries.map((entry) {
-          final custom = _gaPropertyMapping[entry.key];
-          if (custom == null) {
-            return null;
-          }
-          return MapEntry(custom, entry.value?.toString());
-        }).where((entry) => entry != null)),
+        value: value,
+        parameters: eventParams,
       );
     });
   }
@@ -81,7 +93,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackCreateFile();
 
-  void trackOpenFile({@required OpenedFilesSourceType type});
+  void trackOpenFile({@required String type});
 
   void trackSelectEntry({EntrySelectionType type});
 
@@ -95,4 +107,8 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   /// weird case of empty password list.
   void trackPasswordListEmpty();
+
+  void trackQuickUnlock({int value});
+
+  void trackSave({@required String type, int value});
 }

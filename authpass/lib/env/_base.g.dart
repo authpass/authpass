@@ -18,7 +18,7 @@ class _$AppInfo extends AppInfo {
   @override
   final String version;
   @override
-  final String buildNumber;
+  final int buildNumber;
   @override
   final String packageName;
 
@@ -88,9 +88,9 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
   String get version => _$this._version;
   set version(String version) => _$this._version = version;
 
-  String _buildNumber;
-  String get buildNumber => _$this._buildNumber;
-  set buildNumber(String buildNumber) => _$this._buildNumber = buildNumber;
+  int _buildNumber;
+  int get buildNumber => _$this._buildNumber;
+  set buildNumber(int buildNumber) => _$this._buildNumber = buildNumber;
 
   String _packageName;
   String get packageName => _$this._packageName;

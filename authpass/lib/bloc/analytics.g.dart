@@ -18,8 +18,8 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackCreateFile() => trackEvent('createFile', <String, dynamic>{});
   @override
-  void trackOpenFile({OpenedFilesSourceType type}) => trackEvent(
-      'openFile', <String, dynamic>{'type': type?.toString()?.substring(22)});
+  void trackOpenFile({String type}) =>
+      trackEvent('openFile', <String, dynamic>{'type': type});
   @override
   void trackSelectEntry({EntrySelectionType type}) => trackEvent('selectEntry',
       <String, dynamic>{'type': type?.toString()?.substring(19)});
@@ -37,6 +37,12 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackPasswordListEmpty() =>
       trackEvent('passwordListEmpty', <String, dynamic>{});
+  @override
+  void trackQuickUnlock({int value}) =>
+      trackEvent('quickUnlock', <String, dynamic>{'value': value});
+  @override
+  void trackSave({String type, int value}) =>
+      trackEvent('save', <String, dynamic>{'type': type, 'value': value});
 }
 
 // **************************************************************************

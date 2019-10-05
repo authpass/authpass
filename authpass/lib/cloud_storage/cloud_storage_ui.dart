@@ -17,8 +17,8 @@ final _logger = Logger('authpass.google_drive_ui');
 abstract class CloudStorageSelectorResult {}
 
 class CloudStorageSelectorSaveResult implements CloudStorageSelectorResult {
-  CloudStorageSelectorSaveResult(this.parentId, this.fileName);
-  final String parentId;
+  CloudStorageSelectorSaveResult(this.parent, this.fileName);
+  final CloudStorageEntity parent;
   final String fileName;
 }
 
@@ -39,7 +39,7 @@ class CloudStorageSelector extends StatefulWidget {
   static Route<T> route<T extends CloudStorageSelectorResult>(CloudStorageProvider provider,
           [CloudStorageSelectorConfig<T> browserConfig]) =>
       MaterialPageRoute<T>(
-        settings: const RouteSettings(name: '/cloudStorage/selector'),
+        settings: RouteSettings(name: '/cloudStorage/selector/${provider.id}'),
         builder: (context) => CloudStorageSelector(
           provider: provider,
           browserConfig: browserConfig,
@@ -404,7 +404,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                           child: const Text('Save'),
                           onPressed: () {
                             Navigator.of(context)
-                                .pop(CloudStorageSelectorSaveResult(_folder?.id, _fileNameController.text));
+                                .pop(CloudStorageSelectorSaveResult(_folder, _fileNameController.text));
                           },
                         )
                       ],

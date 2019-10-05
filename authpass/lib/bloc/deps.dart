@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// Global resources available throughout the app (using [Provider])
 class Deps {
   factory Deps({@required Env env}) {
-    final appDataBloc = AppDataBloc();
+    final appDataBloc = AppDataBloc(env);
     final analytics = Analytics(env: env);
     final cloudStorageBloc = CloudStorageBloc(env);
     return Deps._(

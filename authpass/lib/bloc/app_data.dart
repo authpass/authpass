@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -150,6 +151,14 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   @nullable
   String get manualUserType;
 
+  @nullable
+  DateTime get firstLaunchedAt;
+
+  /// remember which build id was used, so we might be
+  /// able to show a changelog in the future..
+  @nullable
+  int get lastBuildId;
+
   @override
   Map<String, dynamic> toJson() => serializers.serialize(this) as Map<String, dynamic>;
 
@@ -168,15 +177,32 @@ Serializers serializers = (_$serializers.toBuilder()
     .build();
 
 class AppDataBloc {
+  AppDataBloc(this.env) {
+    _init();
+  }
+
+  final Env env;
+
   final store = SimpleJsonPersistence.getForTypeSync(
     (json) => serializers.deserializeWith(AppData.serializer, json),
-    defaultCreator: () => AppData(),
+    defaultCreator: () => AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
     baseDirectoryBuilder: () => PathUtils().getAppDataDirectory(),
   );
 
   static final _uuid = Uuid();
 
   static String createUuid() => _uuid.v4();
+
+  Future<void> _init() async {
+    await Future<dynamic>.delayed(const Duration(seconds: 10));
+    final data = await store.load();
+    final appInfo = await env.getAppInfo();
+    if (data.firstLaunchedAt == null || data.lastBuildId != appInfo.buildNumber) {
+      await update((b, data) => b
+        ..lastBuildId = appInfo.buildNumber
+        ..firstLaunchedAt ??= clock.now().toUtc());
+    }
+  }
 
   ///
   /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.

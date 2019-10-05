@@ -151,8 +151,8 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final File metadata = File();
     metadata.name = saveAs.fileName;
-    if (saveAs.parentId != null) {
-      metadata.parents = [saveAs.parentId];
+    if (saveAs.parent != null) {
+      metadata.parents = [saveAs.parent?.id];
     }
     final byteStream = ByteStream.fromBytes(bytes);
     final newFile = await driveApi.files.create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));

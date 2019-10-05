@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
@@ -74,8 +75,22 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   @override
-  Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) {
-    return null;
+  Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
+    final client = await requireAuthenticatedClient();
+    final uri = _uriForEntity(client, saveAs.parent);
+    final request = Request('PUT', uri);
+    request.headers[HttpHeaders.ifNoneMatchHeader] = '*';
+    final response = await client.send(request);
+    await _expectSuccessResponse(response);
+    final newMetadata = WebDavFileMetadata(etag: response.headers[HttpHeaders.etagHeader]);
+    _logger.finer('Successfully created entity. new metadata: ${newMetadata.toJson()}');
+    return toFileSource(
+        _toCloudStorageEntity(
+          client,
+          uri.path,
+          CloudStorageEntityType.file,
+        ).toSimpleFileInfo(),
+        uuid: AppDataBloc.createUuid());
   }
 
   @override
@@ -87,6 +102,9 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   Uri _uriForEntity(WebDavClient client, CloudStorageEntity entity) {
     final uri = Uri.parse(client.credentials.baseUrl);
     if (entity != null) {
+      if (entity.type == CloudStorageEntityType.directory) {
+        return uri.resolve(entity.id + '/');
+      }
       return uri.resolve(entity.id);
     }
     return uri;
@@ -95,7 +113,6 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   Future<SearchResponse> propFind(WebDavClient client, CloudStorageEntity parent) async {
     final parentUri = _uriForEntity(client, parent);
     final baseUri = Uri.parse(client.credentials.baseUrl);
-    final basePath = path.joinAll(baseUri.pathSegments);
     final request = Request('PROPFIND', parentUri);
     final body = _propfindRequest();
     _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
@@ -114,8 +131,8 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
           final hrefEls = entity.findAllElements('href', namespace: 'DAV:');
           final href = hrefEls.isEmpty ? null : hrefEls.first.text;
           final resourcetype = entity.findAllElements('resourcetype', namespace: 'DAV:').first;
-          bool isFolder = resourcetype.findElements('collection', namespace: 'DAV:').isNotEmpty;
-          bool isFile = resourcetype.children.isEmpty;
+          final bool isFolder = resourcetype.findElements('collection', namespace: 'DAV:').isNotEmpty;
+          final isFile = resourcetype.children.isEmpty;
           _logger.fine('Got entity: $href ($isFolder,$isFile) (${entity.toXmlString(pretty: true)})');
           final type = isFolder ? CloudStorageEntityType.directory : isFile ? CloudStorageEntityType.file : null;
           if (type == null) {
@@ -127,14 +144,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
             return null;
           }
 
-          final pathSegments = hrefUri.pathSegments.where((val) => val != '');
-          return CloudStorageEntity(
-            (b) => b
-              ..id = href
-              ..type = type
-              ..path = '/' + path.relative(path.joinAll(hrefUri.pathSegments), from: basePath)
-              ..name = pathSegments.isEmpty ? '/' : pathSegments.last,
-          );
+          return _toCloudStorageEntity(client, href, type);
         })
         .where((el) => el != null)
         .toList();
@@ -142,6 +152,19 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     return SearchResponse((b) => b
       ..results.addAll(cloudStorageEntities)
       ..hasMore = false);
+  }
+
+  CloudStorageEntity _toCloudStorageEntity(WebDavClient client, String href, CloudStorageEntityType type) {
+    final hrefUri = Uri.parse(href);
+    final basePath = path.joinAll(Uri.parse(client.credentials.baseUrl).pathSegments);
+    final pathSegments = hrefUri.pathSegments.where((val) => val != '');
+    return CloudStorageEntity(
+      (b) => b
+        ..id = href
+        ..type = type
+        ..path = '/' + path.relative(path.joinAll(hrefUri.pathSegments), from: basePath)
+        ..name = pathSegments.isEmpty ? '/' : pathSegments.last,
+    );
   }
 
   @override

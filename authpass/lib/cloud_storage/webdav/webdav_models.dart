@@ -6,10 +6,10 @@ part 'webdav_models.g.dart';
 @JsonSerializable(nullable: false)
 class UserNamePasswordCredentials {
   UserNamePasswordCredentials({
-    @required this.baseUrl,
+    @required String baseUrl,
     @required this.username,
     @required this.password,
-  });
+  }) : baseUrl = _ensureEndsWithSlash(baseUrl);
   factory UserNamePasswordCredentials.fromJson(Map<String, dynamic> json) =>
       _$UserNamePasswordCredentialsFromJson(json);
   Map<String, dynamic> toJson() => _$UserNamePasswordCredentialsToJson(this);
@@ -17,6 +17,13 @@ class UserNamePasswordCredentials {
   final String baseUrl;
   final String username;
   final String password;
+
+  static String _ensureEndsWithSlash(String baseUrl) {
+    if (baseUrl.endsWith('/')) {
+      return baseUrl;
+    }
+    return '$baseUrl/';
+  }
 }
 
 @JsonSerializable(nullable: false)
