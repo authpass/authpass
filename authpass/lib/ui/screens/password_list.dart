@@ -310,6 +310,11 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
               widget.onEntrySelected(context, _filteredEntries.first, EntrySelectionType.passiveHighlight);
             }
           });
+          // TODO this looks a bit like a workaround. But on MacOS we lose focus when
+          //      we show another password entry.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _filterFocusNode.requestFocus();
+          });
         },
         autofocus: true,
         decoration: InputDecoration(
