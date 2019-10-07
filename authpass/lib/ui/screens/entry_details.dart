@@ -353,26 +353,32 @@ enum EntryAction {
 }
 
 class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
-  GlobalKey _formFieldKey = GlobalKey();
+  final GlobalKey _formFieldKey = GlobalKey();
   TextEditingController _controller;
-  bool _isProtected = false;
+  bool _isValueObscured = false;
   final FocusNode _focusNode = FocusNode();
   CommonFields _commonFields;
 
-  StringValue _value;
-  String get _valueCurrent => (_isProtected ? null : _controller.text) ?? _value.getText();
+  StringValue get _fieldValue => widget.entry.getString(widget.fieldKey);
+  set _fieldValue(StringValue value) {
+    widget.entry.setString(widget.fieldKey, value);
+  }
+
+  bool get _isProtected => _fieldValue == null ? widget.commonField?.protect == true : _fieldValue is ProtectedValue;
+  String get _valueCurrent =>
+      (_isValueObscured ? widget.entry.getString(widget.fieldKey)?.getText() : _controller.text) ??
+      _fieldValue?.getText();
   final GlobalKey<HighlightWidgetState> _highlightWidgetKey = GlobalKey<HighlightWidgetState>();
 
   @override
   void initState() {
     super.initState();
-    _value = widget.entry.getString(widget.fieldKey);
-    if (_value is ProtectedValue) {
-      _isProtected = true;
+    _focusNode.addListener(_focusNodeChanged);
+    if (_fieldValue is ProtectedValue || widget.commonField?.protect == true) {
+      _isValueObscured = true;
       _controller = TextEditingController();
-      _focusNode.addListener(_focusNodeChanged);
     } else {
-      _controller = TextEditingController(text: _value?.getText() ?? '');
+      _controller = TextEditingController(text: _fieldValue?.getText() ?? '');
     }
   }
 
@@ -390,18 +396,22 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   }
 
   void _focusNodeChanged() {
+    if (!_isProtected) {
+      return;
+    }
     _logger.info('Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
     if (!_focusNode.hasFocus) {
       setState(() {
-        _isProtected = true;
-        _logger.finer('${widget.fieldKey} _isProtected= $_isProtected');
+        _fieldValue = ProtectedValue.fromString(_controller.text);
+        _isValueObscured = true;
+        _logger.finer('${widget.fieldKey} _isProtected= $_isValueObscured');
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _logger.finer('building ${widget.fieldKey} ($_isProtected)');
+    _logger.finer('building ${widget.fieldKey} ($_isValueObscured)');
     final commonFields = Provider.of<CommonFields>(context);
     return Dismissible(
       key: ValueKey(widget.fieldKey),
@@ -446,7 +456,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: _isProtected
+                child: _isValueObscured
                     ? Stack(
                         children: [
                           InputDecorator(
@@ -478,10 +488,10 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      _controller.text = _value?.getText() ?? '';
+                                      _controller.text = _valueCurrent ?? '';
                                       _controller.selection =
                                           TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
-                                      _isProtected = false;
+                                      _isValueObscured = false;
                                       WidgetsBinding.instance.addPostFrameCallback((_) {
                                         _focusNode.requestFocus();
                                         _logger.finer('requesting focus.');
@@ -517,11 +527,9 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                         ),
                         keyboardType: widget.commonField?.keyboardType,
                         controller: _controller,
-                        obscureText: _isProtected,
                         onSaved: (value) {
-                          final newValue =
-                              _value is ProtectedValue ? ProtectedValue.fromString(value) : PlainValue(value);
-                          widget.entry.setString(widget.fieldKey, newValue);
+                          final newValue = _isProtected ? ProtectedValue.fromString(value) : PlainValue(value);
+                          _fieldValue = newValue;
                         },
                       ),
               ),
@@ -550,11 +558,13 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                     case EntryAction.protect:
                       setState(() {
                         if (_isProtected) {
-                          _isProtected = false;
-                          _value = PlainValue(_valueCurrent ?? '');
+                          _fieldValue = PlainValue(_valueCurrent ?? '');
+                          _isValueObscured = false;
                         } else {
-                          _isProtected = true;
-                          _value = ProtectedValue.fromString(_valueCurrent ?? '');
+                          _logger
+                              .fine('protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
+                          _fieldValue = ProtectedValue.fromString(_valueCurrent ?? '');
+                          _isValueObscured = true;
                         }
                       });
                       break;
@@ -565,7 +575,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                     case EntryAction.show:
                       FullScreenHud.show(context, (context) {
                         return FullScreenHud(
-                          value: _valueCurrent,
+                          value: _valueCurrent ?? '',
                         );
                       });
                       break;
@@ -627,10 +637,10 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 
   void _generatePassword() {
     setState(() {
-      _isProtected = false;
+      _isValueObscured = false;
       _controller.text =
           PasswordGenerator.singleton().generatePassword(CharacterSet.alphaNumeric + CharacterSet.numeric, 16);
-      _value = ProtectedValue.fromString(_controller.text);
+      _fieldValue = ProtectedValue.fromString(_controller.text);
       _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       _focusNode.requestFocus();
     });
@@ -639,7 +649,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   Future<bool> copyValue() async {
     _highlightWidgetKey.currentState.triggerHighlight();
     Provider.of<Analytics>(context).events.trackCopyField(key: widget.fieldKey.key);
-    await Clipboard.setData(ClipboardData(text: _valueCurrent));
+    await Clipboard.setData(ClipboardData(text: _valueCurrent ?? ''));
     return true;
   }
 
