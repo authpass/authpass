@@ -140,6 +140,15 @@ class FileSourceLocal extends FileSource {
       } finally {
         await SecureBookmarks().stopAccessingSecurityScopedResource(resolved);
       }
+    } else if (Platform.isIOS && !file.existsSync()) {
+      // On iOS we must not store the absolute path, but since we do, try to
+      // load it relative from application support.
+      final newFile = File(path.join((await PathUtils().getAppDataDirectory()).path, path.basename(file.path)));
+      _logger.fine('iOS file ${file.path} no longer exists, checking ${newFile.path}');
+      if (newFile.existsSync()) {
+        _logger.fine('... exists.');
+        return cb(newFile);
+      }
     }
     return cb(file);
   }
