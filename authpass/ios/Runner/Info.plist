@@ -26,6 +26,8 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Access to library files and for attaching to items.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
