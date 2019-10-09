@@ -1,15 +1,18 @@
 import 'dart:io';
 
 import 'package:analytics_event_gen/analytics_event_gen.dart';
-import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:device_info/device_info.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:usage/usage_io.dart' as usage;
 
 part 'analytics.g.dart';
+part 'analytics_ua.dart';
 
 final _logger = Logger('analytics');
 
@@ -26,6 +29,7 @@ class Analytics {
   final AnalyticsEvents events = _$AnalyticsEvents();
 
   usage.Analytics _ga;
+  final List<VoidCallback> _gaQ = [];
 
   /// global analytics tracker we use for error reporting.
   static usage.Analytics _errorGa;
@@ -35,18 +39,47 @@ class Analytics {
   };
 
   Future<void> _init() async {
-    final info = await env.getAppInfo();
-    _logger.fine('Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName}');
     if (env.secrets.analyticsGoogleAnalyticsId != null) {
+      if (Platform.isAndroid) {
+        const miscChannel = MethodChannel('app.authpass/misc');
+        final isFirebaseTestLab = await miscChannel.invokeMethod<bool>('isFirebaseTestLab');
+        if (isFirebaseTestLab) {
+          _logger.info('running in firebase test lab. not initializing analytics.');
+          return;
+        }
+      }
+
+      final info = await env.getAppInfo();
+
+      String platformVersion;
+      String deviceInfo;
+      if (Platform.isAndroid) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        platformVersion = androidInfo.version.release;
+        deviceInfo = androidInfo.model;
+      } else if (Platform.isIOS) {
+        final iosInfo = await DeviceInfoPlugin().iosInfo;
+        platformVersion = iosInfo.systemVersion;
+      }
+      final userAgent = _createUserAgent(platformVersion: platformVersion, deviceInfo: deviceInfo);
+      _logger.fine('Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
+          'UserAgent: $userAgent');
+
       final docsDir = await PathUtils().getAppDataDirectory();
       _ga = usage.AnalyticsIO(
         env.secrets.analyticsGoogleAnalyticsId,
         info.appName,
         '${info.version}+${info.buildNumber}',
         documentDirectory: docsDir,
+        userAgent: userAgent,
       );
+      _ga.setSessionValue('ua', userAgent);
       _errorGa = _ga;
       _ga.setSessionValue(_gaPropertyMapping['platform'], Platform.operatingSystem);
+      for (final cb in _gaQ) {
+        cb();
+      }
+      _gaQ.clear();
     } else {
       _logger.info('No analyics Id defined. Not tracking anyting.');
     }
@@ -72,7 +105,7 @@ class Analytics {
       final label = labelParams.join(',');
       _logger.finer('event($event, $params, value=$value) - label: $label');
 //      _amplitude?.logEvent(name: event, properties: params);
-      _ga?.sendEvent(
+      _sendEvent(
         'track',
         event,
         label: label,
@@ -83,8 +116,24 @@ class Analytics {
   }
 
   void trackScreen(String screenName) {
+    if (_ga == null) {
+      _gaQ.add(() {
+        trackScreen(screenName);
+      });
+      return;
+    }
     _logger.finer('trackScreen($screenName)');
     _ga?.sendScreenView(screenName);
+  }
+
+  void _sendEvent(String category, String action, {String label, int value, Map<String, String> parameters}) {
+    if (_ga == null) {
+      _gaQ.add(() {
+        _sendEvent(category, action, label: label, value: value, parameters: parameters);
+      });
+      return;
+    }
+    _ga.sendEvent(category, action, label: label, value: value, parameters: parameters);
   }
 }
 

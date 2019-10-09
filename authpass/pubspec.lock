@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.9"
+  device_info:
+    dependency: "direct main"
+    description:
+      name: device_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0+3"
   dio:
     dependency: transitive
     description:
@@ -759,9 +766,11 @@ packages:
   usage:
     dependency: "direct main"
     description:
-      name: usage
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: custom-user-agent
+      resolved-ref: "748be41f1801916bcfcc651f972763cd48596bce"
+      url: "https://github.com/hpoul/usage.git"
+    source: git
     version: "3.4.1"
   uuid:
     dependency: "direct main"
