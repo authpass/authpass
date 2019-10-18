@@ -76,6 +76,9 @@ class Analytics {
       _ga.setSessionValue('ua', userAgent);
       _errorGa = _ga;
       _ga.setSessionValue(_gaPropertyMapping['platform'], Platform.operatingSystem);
+      // set application id to package name.
+      _ga.setSessionValue('aid', info.packageName);
+
       for (final cb in _gaQ) {
         cb();
       }
