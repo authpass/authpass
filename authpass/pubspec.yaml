@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  kdbx: ^0.2.0
-  #kdbx:
-  #  path: ../deps/kdbx.dart
+#  kdbx: ^0.2.0
+  kdbx:
+    path: ../deps/kdbx.dart
   simple_form_field_validator:
     git:
       url: https://github.com/hpoul/flutter_utils.git

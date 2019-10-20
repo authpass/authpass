@@ -25,6 +25,7 @@ import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
+import 'package:path/path.dart' as path;
 
 import '../../theme.dart';
 
@@ -504,6 +505,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   bool _biometricQuickUnlockSupported = false;
   bool _biometricQuickUnlockActivated;
 
+  File _keyFile;
+
   @override
   void initState() {
     super.initState();
@@ -567,6 +570,33 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   },
                 ),
               ),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(right: 32, left: 32),
+                child: FlatButton.icon(
+//                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  icon: Icon(_keyFile == null ? FontAwesomeIcons.folderOpen : FontAwesomeIcons.edit),
+                  label: Text(_keyFile == null ? 'Use Key File' : path.basename(_keyFile.path)),
+                  onPressed: () async {
+                    if (Platform.isIOS || Platform.isAndroid) {
+                      final path = await FilePicker.getFilePath(type: FileType.ANY);
+                      if (path != null) {
+                        setState(() {
+                          _keyFile = File(path);
+                        });
+                      }
+                    } else {
+                      showOpenPanel((result, paths) async {
+                        if (result == FileChooserResult.ok) {
+                          setState(() {
+                            _keyFile = File(paths[0]);
+                          });
+                        }
+                      });
+                    }
+                  },
+                ),
+              ),
               ...(_biometricQuickUnlockSupported
                   ? [
                       Container(
@@ -606,9 +636,13 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     if (_formKey.currentState.validate()) {
       final kdbxBloc = Provider.of<Deps>(context).kdbxBloc;
       final pw = _controller.text;
+      final keyFileContents = await _keyFile?.readAsBytes();
       try {
-        _loadingFile = kdbxBloc.openFile(widget.kdbxFilePath, Credentials(ProtectedValue.fromString(pw)),
-            addToQuickUnlock: _biometricQuickUnlockActivated ?? false);
+        _loadingFile = kdbxBloc.openFile(
+          widget.kdbxFilePath,
+          Credentials.composite(ProtectedValue.fromString(pw), keyFileContents),
+          addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
+        );
         setState(() {});
         await _loadingFile;
         await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);

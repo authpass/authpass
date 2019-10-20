@@ -424,9 +424,9 @@ packages:
   kdbx:
     dependency: "direct main"
     description:
-      name: kdbx
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../deps/kdbx.dart"
+      relative: true
+    source: path
     version: "0.2.0"
   kernel:
     dependency: transitive
