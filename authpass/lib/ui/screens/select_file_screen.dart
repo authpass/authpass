@@ -561,7 +561,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   autofocus: true,
                   autovalidate: _invalidPassword != null,
                   obscureText: true,
-                  validator: SValidator.notEmpty(msg: 'Please enter your password.') +
+                  validator: (_keyFile == null || _invalidPassword != null
+                          ? SValidator.notEmpty(msg: 'Please enter your password.')
+                          : SValidator<String>([])) +
                       SValidator.invalidValue(invalidValue: _invalidPassword, message: 'Invalid password'),
                   onEditingComplete: () {
                     FocusScope.of(context).unfocus();
@@ -578,18 +580,21 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   icon: Icon(_keyFile == null ? FontAwesomeIcons.folderOpen : FontAwesomeIcons.edit),
                   label: Text(_keyFile == null ? 'Use Key File' : path.basename(_keyFile.path)),
                   onPressed: () async {
+                    _invalidPassword = null;
                     if (Platform.isIOS || Platform.isAndroid) {
                       final path = await FilePicker.getFilePath(type: FileType.ANY);
-                      if (path != null) {
-                        setState(() {
-                          _keyFile = File(path);
-                        });
-                      }
+                      setState(() {
+                        _keyFile = path == null ? null : File(path);
+                      });
                     } else {
                       showOpenPanel((result, paths) async {
                         if (result == FileChooserResult.ok) {
                           setState(() {
                             _keyFile = File(paths[0]);
+                          });
+                        } else if (result == FileChooserResult.cancel) {
+                          setState(() {
+                            _keyFile = null;
                           });
                         }
                       });
@@ -640,7 +645,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       try {
         _loadingFile = kdbxBloc.openFile(
           widget.kdbxFilePath,
-          Credentials.composite(ProtectedValue.fromString(pw), keyFileContents),
+          Credentials.composite(pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
         );
         setState(() {});

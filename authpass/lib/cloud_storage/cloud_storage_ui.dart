@@ -338,13 +338,13 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                   _folderBreadcrumbs.clear();
                   _listFolder();
                 },
-                icon: Icon(FontAwesomeIcons.folderOpen),
+                icon: const Icon(FontAwesomeIcons.folderOpen),
                 label: const Text('/'),
               ),
               ..._folderBreadcrumbs.expand((f) => [
                     const Text('  >  '),
                     FlatButton.icon(
-                      icon: Icon(FontAwesomeIcons.folderOpen),
+                      icon: const Icon(FontAwesomeIcons.folderOpen),
                       label: Text(f.name),
                       onPressed: () {
                         _folderBreadcrumbs.removeRange(_folderBreadcrumbs.indexOf(f) + 1, _folderBreadcrumbs.length);

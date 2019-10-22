@@ -406,7 +406,7 @@ class KdbxBloc {
         KdbxInvalidKeyException: () => KdbxInvalidKeyException(),
         KdbxCorruptedFileException: () => KdbxCorruptedFileException(''),
       }.map((key, value) => MapEntry(key.toString(), value));
-      final exception = mapping[kdbxReadFile.exception];
+      final exception = mapping[kdbxReadFile.exceptionType];
       if (exception != null) {
         throw exception();
       }
