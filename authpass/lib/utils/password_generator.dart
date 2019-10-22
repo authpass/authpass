@@ -24,6 +24,15 @@ abstract class CharacterSet {
   static const alphabetUmlauts = CharacterString('äüößÄÜÖ');
   static const specialCharacters = CharacterString(r'''@%+\/$'!#$^?:,.(){}[]~-_''');
 
+  /// keys used for persisting user selection for default password generator.
+  static const selectableCharacterSets = {
+    'alphabetAsciiLowerCase': alphabetAsciiLowerCase,
+    'alphabetAsciiUpperCase': alphabetAsciiUpperCase,
+    'numeric': numeric,
+    'alphabetUmlauts': alphabetUmlauts,
+    'specialCharacters': specialCharacters,
+  };
+
   static const alphaNumeric = CharacterSetCollection([
     alphabetAsciiLowerCase,
     alphabetAsciiUpperCase,
@@ -35,6 +44,12 @@ abstract class CharacterSet {
   int get length;
 
   CharacterSet operator +(CharacterSet other) => CharacterSetCollection([this, other]);
+
+  static String characterSetIdFor(CharacterSet set) =>
+      selectableCharacterSets.entries.firstWhere((entry) => entry.value == set).key;
+
+  static Set<CharacterSet> characterSetFromIds(Iterable<String> ids) =>
+      ids.map((setId) => CharacterSet.selectableCharacterSets[setId]).toSet();
 }
 
 class CharacterSetCollection extends CharacterSet {

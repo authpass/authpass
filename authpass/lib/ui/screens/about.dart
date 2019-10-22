@@ -90,9 +90,9 @@ class AuthPassAboutDialog extends StatelessWidget {
     final openedFiles = Provider.of<KdbxBloc>(context)?.openedFiles?.values;
     return [
       PopupMenuItem(
-        child: ListTile(
+        child: const ListTile(
           leading: Icon(FontAwesomeIcons.random),
-          title: const Text('Generate Password'),
+          title: Text('Generate Password'),
         ),
         value: () {
           Navigator.of(context).push(PasswordGeneratorScreen.route());

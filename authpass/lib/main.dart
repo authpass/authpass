@@ -99,6 +99,7 @@ class _AuthPassAppState extends State<AuthPassApp> {
         Provider<AuthPassLocalizations>.value(value: authPassLocalizations),
         Provider<CommonFields>.value(value: CommonFields(authPassLocalizations)),
         Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
+        Provider<AppDataBloc>.value(value: _deps.appDataBloc),
         StreamProvider<AppData>(
           builder: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,

@@ -149,6 +149,11 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   BuiltList<OpenedFile> get previousFiles;
 
   @nullable
+  int get passwordGeneratorLength;
+
+  BuiltSet<String> get passwordGeneratorCharacterSets;
+
+  @nullable
   String get manualUserType;
 
   @nullable

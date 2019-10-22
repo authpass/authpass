@@ -1,6 +1,6 @@
 part of 'analytics.dart';
 
-// ignore_for_file: unnecessary_brace_in_string_interps, prefer_final_locals
+// ignore_for_file: always_put_control_body_on_new_line,unnecessary_brace_in_string_interps, prefer_final_locals
 
 // copied from usage plugin and adopted to include android and iOS version.
 String _createUserAgent({String platformVersion, String deviceInfo}) {

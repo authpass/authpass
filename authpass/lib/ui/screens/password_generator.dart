@@ -1,8 +1,10 @@
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:quiver/iterables.dart' as iterables;
 
 class PasswordGeneratorScreen extends StatelessWidget {
@@ -62,6 +64,18 @@ class _GeneratePasswordState extends State<GeneratePassword> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final appData = Provider.of<AppData>(context);
+    _passwordLength = appData.passwordGeneratorLength ?? _passwordLength;
+    if (appData.passwordGeneratorCharacterSets.isNotEmpty) {
+      _selectedCharacterSet
+        ..clear()
+        ..addAll(CharacterSet.characterSetFromIds(appData.passwordGeneratorCharacterSets));
+    }
     _generatePassword();
   }
 
@@ -84,7 +98,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
               decoration: InputDecoration(
                 labelText: 'Password',
                 suffix: IconButton(
-                  icon: Icon(Icons.content_copy),
+                  icon: const Icon(Icons.content_copy),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: _password));
                     Scaffold.of(context)
@@ -151,7 +165,14 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                   Center(
                     child: PrimaryButton(
                       child: Text(widget.doneButtonLabel ?? 'Done'),
-                      onPressed: () => widget.doneButtonOnPressed(_password),
+                      onPressed: () {
+                        final appDataBloc = Provider.of<AppDataBloc>(context);
+                        appDataBloc.update((b, appData) => b
+                          ..passwordGeneratorLength = _passwordLength
+                          ..passwordGeneratorCharacterSets.replace(
+                              _selectedCharacterSet.map<String>((set) => CharacterSet.characterSetIdFor(set))));
+                        widget.doneButtonOnPressed(_password);
+                      },
                       icon: widget.doneButtonIcon ?? Icon(Icons.check_circle_outline),
                       large: false,
                     ),

@@ -17,7 +17,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(OpenedFile.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(OpenedFile)]),
-          () => new ListBuilder<OpenedFile>()))
+          () => new ListBuilder<OpenedFile>())
+      ..addBuilderFactory(
+          const FullType(BuiltSet, const [const FullType(String)]),
+          () => new SetBuilder<String>()))
     .build();
 Serializer<OpenedFile> _$openedFileSerializer = new _$OpenedFileSerializer();
 Serializer<AppData> _$appDataSerializer = new _$AppDataSerializer();
@@ -136,7 +139,17 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
       serializers.serialize(object.previousFiles,
           specifiedType:
               const FullType(BuiltList, const [const FullType(OpenedFile)])),
+      'passwordGeneratorCharacterSets',
+      serializers.serialize(object.passwordGeneratorCharacterSets,
+          specifiedType:
+              const FullType(BuiltSet, const [const FullType(String)])),
     ];
+    if (object.passwordGeneratorLength != null) {
+      result
+        ..add('passwordGeneratorLength')
+        ..add(serializers.serialize(object.passwordGeneratorLength,
+            specifiedType: const FullType(int)));
+    }
     if (object.manualUserType != null) {
       result
         ..add('manualUserType')
@@ -174,6 +187,17 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(OpenedFile)]))
               as BuiltList<dynamic>);
+          break;
+        case 'passwordGeneratorLength':
+          result.passwordGeneratorLength = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'passwordGeneratorCharacterSets':
+          result.passwordGeneratorCharacterSets.replace(serializers.deserialize(
+                  value,
+                  specifiedType:
+                      const FullType(BuiltSet, const [const FullType(String)]))
+              as BuiltSet<dynamic>);
           break;
         case 'manualUserType':
           result.manualUserType = serializers.deserialize(value,
@@ -378,6 +402,10 @@ class _$AppData extends AppData {
   @override
   final BuiltList<OpenedFile> previousFiles;
   @override
+  final int passwordGeneratorLength;
+  @override
+  final BuiltSet<String> passwordGeneratorCharacterSets;
+  @override
   final String manualUserType;
   @override
   final DateTime firstLaunchedAt;
@@ -389,12 +417,18 @@ class _$AppData extends AppData {
 
   _$AppData._(
       {this.previousFiles,
+      this.passwordGeneratorLength,
+      this.passwordGeneratorCharacterSets,
       this.manualUserType,
       this.firstLaunchedAt,
       this.lastBuildId})
       : super._() {
     if (previousFiles == null) {
       throw new BuiltValueNullFieldError('AppData', 'previousFiles');
+    }
+    if (passwordGeneratorCharacterSets == null) {
+      throw new BuiltValueNullFieldError(
+          'AppData', 'passwordGeneratorCharacterSets');
     }
   }
 
@@ -410,6 +444,9 @@ class _$AppData extends AppData {
     if (identical(other, this)) return true;
     return other is AppData &&
         previousFiles == other.previousFiles &&
+        passwordGeneratorLength == other.passwordGeneratorLength &&
+        passwordGeneratorCharacterSets ==
+            other.passwordGeneratorCharacterSets &&
         manualUserType == other.manualUserType &&
         firstLaunchedAt == other.firstLaunchedAt &&
         lastBuildId == other.lastBuildId;
@@ -418,7 +455,13 @@ class _$AppData extends AppData {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, previousFiles.hashCode), manualUserType.hashCode),
+        $jc(
+            $jc(
+                $jc(
+                    $jc($jc(0, previousFiles.hashCode),
+                        passwordGeneratorLength.hashCode),
+                    passwordGeneratorCharacterSets.hashCode),
+                manualUserType.hashCode),
             firstLaunchedAt.hashCode),
         lastBuildId.hashCode));
   }
@@ -427,6 +470,9 @@ class _$AppData extends AppData {
   String toString() {
     return (newBuiltValueToStringHelper('AppData')
           ..add('previousFiles', previousFiles)
+          ..add('passwordGeneratorLength', passwordGeneratorLength)
+          ..add(
+              'passwordGeneratorCharacterSets', passwordGeneratorCharacterSets)
           ..add('manualUserType', manualUserType)
           ..add('firstLaunchedAt', firstLaunchedAt)
           ..add('lastBuildId', lastBuildId))
@@ -442,6 +488,18 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _$this._previousFiles ??= new ListBuilder<OpenedFile>();
   set previousFiles(ListBuilder<OpenedFile> previousFiles) =>
       _$this._previousFiles = previousFiles;
+
+  int _passwordGeneratorLength;
+  int get passwordGeneratorLength => _$this._passwordGeneratorLength;
+  set passwordGeneratorLength(int passwordGeneratorLength) =>
+      _$this._passwordGeneratorLength = passwordGeneratorLength;
+
+  SetBuilder<String> _passwordGeneratorCharacterSets;
+  SetBuilder<String> get passwordGeneratorCharacterSets =>
+      _$this._passwordGeneratorCharacterSets ??= new SetBuilder<String>();
+  set passwordGeneratorCharacterSets(
+          SetBuilder<String> passwordGeneratorCharacterSets) =>
+      _$this._passwordGeneratorCharacterSets = passwordGeneratorCharacterSets;
 
   String _manualUserType;
   String get manualUserType => _$this._manualUserType;
@@ -462,6 +520,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   AppDataBuilder get _$this {
     if (_$v != null) {
       _previousFiles = _$v.previousFiles?.toBuilder();
+      _passwordGeneratorLength = _$v.passwordGeneratorLength;
+      _passwordGeneratorCharacterSets =
+          _$v.passwordGeneratorCharacterSets?.toBuilder();
       _manualUserType = _$v.manualUserType;
       _firstLaunchedAt = _$v.firstLaunchedAt;
       _lastBuildId = _$v.lastBuildId;
@@ -490,6 +551,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _$result = _$v ??
           new _$AppData._(
               previousFiles: previousFiles.build(),
+              passwordGeneratorLength: passwordGeneratorLength,
+              passwordGeneratorCharacterSets:
+                  passwordGeneratorCharacterSets.build(),
               manualUserType: manualUserType,
               firstLaunchedAt: firstLaunchedAt,
               lastBuildId: lastBuildId);
@@ -498,6 +562,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       try {
         _$failedField = 'previousFiles';
         previousFiles.build();
+
+        _$failedField = 'passwordGeneratorCharacterSets';
+        passwordGeneratorCharacterSets.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppData', _$failedField, e.toString());

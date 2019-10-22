@@ -1,11 +1,13 @@
 import 'dart:ui' as ui;
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/hud.dart';
+import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -139,8 +141,6 @@ class EntryDetails extends StatefulWidget {
 class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin {
   List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField>> _fieldKeys;
 
-  void _initTextControllers() {}
-
   void _initShortcutListener(KeyboardShortcutEvents events, CommonFields commonFields) {
     handleSubscription(events.shortcutEvents.listen((event) {
       if (event.type == KeyboardShortcutType.copyPassword) {
@@ -177,7 +177,7 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
     final commonFields = Provider.of<CommonFields>(context);
     final nonCommonKeys = widget.entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
     _fieldKeys = commonFields.fields
-        .map((f) => Tuple3(GlobalKey<_EntryFieldState>(), f.key, f))
+        .map((f) => Tuple3(GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'), f.key, f))
         .followedBy(nonCommonKeys.map((f) => Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
         .toList();
   }
@@ -185,16 +185,19 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    subscriptions.cancelSubscriptions();
-    _initFields();
-    _initTextControllers();
-    _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context), Provider.of<CommonFields>(context));
+    _logger.info('_EntryDetailsState.didChangeDependencies');
+    if (_fieldKeys == null) {
+      subscriptions.cancelSubscriptions();
+      _initFields();
+      _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context), Provider.of<CommonFields>(context));
+    }
   }
 
   @override
   void didUpdateWidget(EntryDetails oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.entry != widget.entry) {
+      _logger.info('_EntryDetailsState: widget.entry changed.');
       _initFields();
     }
   }
@@ -350,6 +353,7 @@ enum EntryAction {
   protect,
   delete,
   show,
+  passwordGenerator,
 }
 
 class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
@@ -520,7 +524,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                                   onPressed: () {
                                     _logger.fine('pressed button.');
                                     _generatePassword();
-                                  })
+                                  },
+                                )
                               : null,
 //                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
                           labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
@@ -554,6 +559,9 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                         widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
                         widget.onChangedMetadata();
                       }
+                      break;
+                    case EntryAction.passwordGenerator:
+                      await _launchPasswordGenerator();
                       break;
                     case EntryAction.protect:
                       setState(() {
@@ -597,6 +605,13 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                       title: Text('Rename'),
                     ),
                   ),
+                  const PopupMenuItem(
+                    value: EntryAction.passwordGenerator,
+                    child: ListTile(
+                      leading: Icon(FontAwesomeIcons.random),
+                      title: Text('Password Generator …'),
+                    ),
+                  ),
                   PopupMenuItem(
                     value: EntryAction.protect,
                     child: ListTile(
@@ -635,11 +650,34 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     );
   }
 
-  void _generatePassword() {
+  Future<void> _generatePassword() async {
+    final appData = await Provider.of<AppDataBloc>(context).store.load();
+    final characterSets = CharacterSet.characterSetFromIds(appData.passwordGeneratorCharacterSets);
+    if (characterSets.isEmpty) {
+      characterSets.addAll([CharacterSet.alphaNumeric, CharacterSet.numeric]);
+    }
+    final length = appData.passwordGeneratorLength ?? 16;
+    _generatedPassword(
+      PasswordGenerator.singleton().generatePassword(
+        CharacterSetCollection(characterSets.toList()),
+        length,
+      ),
+    );
+  }
+
+  Future<void> _launchPasswordGenerator() async {
+    final password = await Navigator.of(context).push(PasswordGeneratorScreen.route());
+    if (password != null) {
+      setState(() {
+        _generatedPassword(password);
+      });
+    }
+  }
+
+  void _generatedPassword(String password) {
     setState(() {
       _isValueObscured = false;
-      _controller.text =
-          PasswordGenerator.singleton().generatePassword(CharacterSet.alphaNumeric + CharacterSet.numeric, 16);
+      _controller.text = password;
       _fieldValue = ProtectedValue.fromString(_controller.text);
       _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       _focusNode.requestFocus();
@@ -655,6 +693,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 
   @override
   void dispose() {
+    _logger.fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
