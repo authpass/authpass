@@ -51,6 +51,9 @@ case "$1" in
         cat pubspec.yaml | grep version | grep "+$buildnumber$"  || (
             echo "Buildnumber replacement was not successful." && exit 1
         )
+        version=$(cat pubspec.yaml | grep version | sed "s/version: *//" | cut -d'+' -f 1)
+        sed -i .bak "s/_DEFAULT_VERSION = '.*'/_DEFAULT_VERSION = '$version'/" lib/env/_base.dart
+        sed -i .bak "s/_DEFAULT_BUILD_NUMBER = [0-9]*/_DEFAULT_BUILD_NUMBER = $buildnumber/" lib/env/_base.dart
         $FLT pub get
         $FLT build macos -v -t lib/env/production.dart --release
     ;;
