@@ -1,5 +1,6 @@
 osx_instance:
-  image: mojave-xcode-10.2
+#  image: mojave-xcode-10.2
+  image: mojave-xcode-11.3
 
 task:
   only_if: $BRANCH == "stable"
