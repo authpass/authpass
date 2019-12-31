@@ -30,8 +30,12 @@ fi
 
 buildnumber=${FORCE_BUILDNUMBER:-}
 if test -z "$buildnumber" ; then
+    git --version
     git status
-	buildnumber=`./git-buildnumber.sh generate`
+    echo "DEBUG"
+    git diff-index HEAD
+    echo "diff-index: $?"
+    buildnumber=`./git-buildnumber.sh generate`
 else
 	echo "WARNING: forcing buildnumber $buildnumber"
 fi
