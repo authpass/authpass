@@ -31,7 +31,11 @@ fi
 buildnumber=${FORCE_BUILDNUMBER:-}
 if test -z "$buildnumber" ; then
     git --version
+    echo "=========="
     git status
+    echo "=========="
+    # cleanup uninteresting changes.
+    git checkout -- ../.blackbox
     echo "DEBUG"
     git diff-index HEAD
     echo "diff-index: $?"
@@ -43,6 +47,7 @@ fi
 $FLT pub get
 case "$1" in
     ios)
+        mkdir -p ~/.fastlane/spaceship
         $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
         cd ios
         sudo fastlane run update_fastlane
