@@ -109,43 +109,7 @@ class CloudStorageAuthentication extends StatelessWidget {
             icon: Icon(FontAwesomeIcons.signInAlt),
             child: Text('Login to ${provider.displayName}'),
             onPressed: () async {
-              try {
-                final auth = await provider.startAuth((final prompt) async {
-                  if (prompt is UserAuthenticationPrompt<OAuthTokenResult, OAuthTokenFlowPromptData>) {
-                    final promptData = prompt.data;
-                    final uri = promptData.openUri;
-                    _logger.fine('Launching authentication url $uri');
-                    if (await DialogUtils.openUrl(uri)) {
-//                  await launch(uri);
-//              await DialogUtils.showConfirmDialog(context: null, params: null)
-                      final code = await SimplePromptDialog.showPrompt(
-                        context,
-                        const SimplePromptDialog(
-                          title: 'Google Drive Authentication',
-                          labelText: 'Authentication Code',
-                        ),
-                      );
-                      prompt.result(OAuthTokenResult(code));
-                    } else {
-                      await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
-                      prompt.result(null);
-                      return;
-                    }
-                  } else if (prompt
-                      is UserAuthenticationPrompt<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>) {
-                    final result = await UrlUsernamePasswordDialog().show(context);
-                    prompt.result(result);
-                  } else {
-                    throw StateError('Unsupported prompt: $prompt');
-                  }
-                });
-                _logger.fine('finished launching. $auth');
-                onSuccess();
-              } catch (e, stackTrace) {
-                _logger.severe('Error while authenticating.', e, stackTrace);
-                await DialogUtils.showSimpleAlertDialog(
-                    context, 'Error while authenticating', 'Error while trying to authenticate fo google drive. $e');
-              }
+              await _startLoginFlow(context);
             },
           ),
           const SizedBox(height: 16),
@@ -154,9 +118,58 @@ class CloudStorageAuthentication extends StatelessWidget {
             style: Theme.of(context).textTheme.caption,
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 16),
+          LinkButton(
+            child: const Text(
+              'Enter code',
+              textScaleFactor: 0.75,
+            ),
+            onPressed: () async {
+              await _startLoginFlow(context, forceNoOpenUrl: true);
+            },
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> _startLoginFlow(BuildContext context, {bool forceNoOpenUrl = false}) async {
+    try {
+      final auth = await provider.startAuth((final prompt) async {
+        if (prompt is UserAuthenticationPrompt<OAuthTokenResult, OAuthTokenFlowPromptData>) {
+          final promptData = prompt.data;
+          final uri = promptData.openUri;
+          _logger.fine('Launching authentication url $uri');
+
+          if (!forceNoOpenUrl) {
+            if (!await DialogUtils.openUrl(uri)) {
+              await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
+              prompt.result(null);
+              return;
+            }
+          }
+          final code = await SimplePromptDialog.showPrompt(
+            context,
+            SimplePromptDialog(
+              title: '${provider.displayName} Authentication',
+              labelText: 'Authentication Code',
+            ),
+          );
+          prompt.result(OAuthTokenResult(code));
+        } else if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>) {
+          final result = await UrlUsernamePasswordDialog().show(context);
+          prompt.result(result);
+        } else {
+          throw StateError('Unsupported prompt: $prompt');
+        }
+      });
+      _logger.fine('finished launching. $auth');
+      onSuccess();
+    } catch (e, stackTrace) {
+      _logger.severe('Error while authenticating.', e, stackTrace);
+      await DialogUtils.showSimpleAlertDialog(
+          context, 'Error while authenticating', 'Error while trying to authenticate to ${provider.displayName}. $e');
+    }
   }
 }
 
