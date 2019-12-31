@@ -73,7 +73,10 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   }
 
   @override
-  Future<oauth2.Client> clientFromAuthenticationFlow(prompt) async {
+  Future<oauth2.Client> clientFromAuthenticationFlow<TF extends UserAuthenticationPromptResult,
+      UF extends UserAuthenticationPromptData<TF>>(prompt) async {
+    assert(prompt is PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>);
+    final oAuthPrompt = prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>;
     final grant = oauth2.AuthorizationCodeGrant(
       env.secrets.dropboxKey,
       Uri.parse(_oauthEndpoint),
@@ -84,7 +87,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final authUrl = grant.getAuthorizationUrl(null);
     final params = Map<String, String>.from(authUrl.queryParameters); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
-    final code = await oAuthTokenPrompt(prompt, url.toString());
+    final code = await oAuthTokenPrompt(oAuthPrompt, url.toString());
     if (code == null) {
       _logger.warning('User cancelled authorization. (did not provide code)');
       return null;

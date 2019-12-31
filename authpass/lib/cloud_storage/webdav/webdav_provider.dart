@@ -47,9 +47,12 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   @override
-  Future<WebDavClient> clientFromAuthenticationFlow(prompt) async {
+  Future<WebDavClient> clientFromAuthenticationFlow<TF extends UserAuthenticationPromptResult,
+      UF extends UserAuthenticationPromptData<TF>>(prompt) async {
+    assert(prompt is PromptUserForCode<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>);
+    final urlPrompt = prompt as PromptUserForCode<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>;
     final result = await promptUser<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>(
-        prompt, UrlUsernamePasswordPromptData());
+        urlPrompt, UrlUsernamePasswordPromptData());
     if (result == null) {
       _logger.finer('prompt was canceled by user.');
       return null;

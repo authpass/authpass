@@ -170,7 +170,9 @@ abstract class CloudStorageProvider {
   IconData get displayIcon;
   bool get supportSearch => false;
   Future<bool> loadSavedAuth();
-  Future<bool> startAuth(PromptUserForCode prompt);
+  Future<bool>
+      startAuth<RESULT extends UserAuthenticationPromptResult, DATA extends UserAuthenticationPromptData<RESULT>>(
+          PromptUserForCode<RESULT, DATA> prompt);
 
   /// make sure to check [supportSearch] before calling this method, otherwise a [UnsupportedError] will be thrown.
   Future<SearchResponse> search({String name = 'kdbx'}) => throw UnsupportedError('Search not supported');
@@ -212,10 +214,10 @@ abstract class CloudStorageProvider {
   Future<void> logout();
 }
 
-abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
+abstract class CloudStorageProviderClientBase<CLIENT> extends CloudStorageProvider {
   CloudStorageProviderClientBase({@required CloudStorageHelper helper}) : super(helper: helper);
 
-  T _client;
+  CLIENT _client;
 
   @override
   bool get isAuthenticated => _client != null;
@@ -226,7 +228,8 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
   }
 
   @protected
-  Future<String> oAuthTokenPrompt(PromptUserForCode prompt, String uri) async {
+  Future<String> oAuthTokenPrompt(
+      PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData> prompt, String uri) async {
     final result = await promptUser<OAuthTokenResult, OAuthTokenFlowPromptData>(prompt, OAuthTokenFlowPromptData(uri));
     return result?.code;
   }
@@ -248,7 +251,7 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
   }
 
   @protected
-  Future<T> requireAuthenticatedClient() async {
+  Future<CLIENT> requireAuthenticatedClient() async {
     return _client ??= await _loadStoredCredentials().then((client) async {
       if (client == null) {
         throw LoadFileException('Unable to load dropbox credentials.');
@@ -257,7 +260,7 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
     });
   }
 
-  Future<T> _loadStoredCredentials() async {
+  Future<CLIENT> _loadStoredCredentials() async {
     final credentialsJson = await loadCredentials();
     _logger.finer('Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}');
     if (credentialsJson == null) {
@@ -267,14 +270,17 @@ abstract class CloudStorageProviderClientBase<T> extends CloudStorageProvider {
   }
 
   @override
-  Future<bool> startAuth(PromptUserForCode prompt) async {
+  Future<bool>
+      startAuth<RESULT extends UserAuthenticationPromptResult, DATA extends UserAuthenticationPromptData<RESULT>>(
+          PromptUserForCode<RESULT, DATA> prompt) async {
     _client = await clientFromAuthenticationFlow(prompt);
     return isAuthenticated;
   }
 
-  T clientWithStoredCredentials(String stored);
+  CLIENT clientWithStoredCredentials(String stored);
 
-  Future<T> clientFromAuthenticationFlow(PromptUserForCode prompt);
+  Future<CLIENT> clientFromAuthenticationFlow<TF extends UserAuthenticationPromptResult,
+      UF extends UserAuthenticationPromptData<TF>>(PromptUserForCode<TF, UF> prompt);
 
   @override
   Future<bool> loadSavedAuth() async {

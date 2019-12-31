@@ -112,7 +112,8 @@ class CloudStorageAuthentication extends StatelessWidget {
               try {
                 final auth = await provider.startAuth((final prompt) async {
                   if (prompt is UserAuthenticationPrompt<OAuthTokenResult, OAuthTokenFlowPromptData>) {
-                    final uri = prompt.data.openUri;
+                    final promptData = prompt.data;
+                    final uri = promptData.openUri;
                     _logger.fine('Launching authentication url $uri');
                     if (await DialogUtils.openUrl(uri)) {
 //                  await launch(uri);

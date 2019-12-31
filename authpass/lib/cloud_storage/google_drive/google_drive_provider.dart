@@ -26,8 +26,11 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
   ClientId get _clientId => ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
 
   @override
-  Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow(prompt) async {
-    final client = await clientViaUserConsentManual(_clientId, _scopes, (uri) => oAuthTokenPrompt(prompt, uri));
+  Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow<TF extends UserAuthenticationPromptResult,
+      UF extends UserAuthenticationPromptData<TF>>(prompt) async {
+    assert(prompt is PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>);
+    final oAuthPrompt = prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>;
+    final client = await clientViaUserConsentManual(_clientId, _scopes, (uri) => oAuthTokenPrompt(oAuthPrompt, uri));
     client.credentialUpdates.listen(_credentialsChanged);
     _credentialsChanged(client.credentials);
     _logger.finer('Finished user consent.');
