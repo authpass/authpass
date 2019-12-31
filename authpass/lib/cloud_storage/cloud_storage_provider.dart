@@ -228,8 +228,7 @@ abstract class CloudStorageProviderClientBase<CLIENT> extends CloudStorageProvid
   }
 
   @protected
-  Future<String> oAuthTokenPrompt(
-      PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData> prompt, String uri) async {
+  Future<String> oAuthTokenPrompt(PromptUserForCode<dynamic, dynamic> prompt, String uri) async {
     final result = await promptUser<OAuthTokenResult, OAuthTokenFlowPromptData>(prompt, OAuthTokenFlowPromptData(uri));
     return result?.code;
   }

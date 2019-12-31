@@ -11,7 +11,8 @@ echo "Installing blackbox into $DEPS"
 mkdir -p ${DEPS}
 pushd ${DEPS}
 
-git clone https://github.com/mipmip/blackbox
+#git clone https://github.com/mipmip/blackbox
+git clone https://github.com/StackExchange/blackbox
 
 popd
 
