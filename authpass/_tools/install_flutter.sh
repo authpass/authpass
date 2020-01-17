@@ -9,19 +9,20 @@ DEPS=${DEPS} # must be defined by environment.
 FLUTTER_CHANNEL='stable'
 #FLUTTER_VERSION=v1.2.1-stable
 #FLUTTER_VERSION='v1.7.8+hotfix.4-stable'
-FLUTTER_CHANNEL='dev'
+FLUTTER_CHANNEL='stable'
 #FLUTTER_VERSION='v1.9.5-dev'
 #FLUTTER_VERSION='v1.9.7-dev'
 #FLUTTER_VERSION='v1.10.0-dev'
 FLUTTER_VERSION='v1.12.13+hotfix.5-stable'
-FLUTTER_VERSION_MAC='v1.13.6-dev'
+FLUTTER_MAC_CHANNEL='dev'
+FLUTTER_MAC_VERSION='v1.13.6-dev'
 FLUTTER_PLATFORM=macos
 FLUTTER_EXT=zip
 
 platform="$(uname -s)"
 case "${platform}" in
     Linux*)     FLUTTER_PLATFORM=linux ; FLUTTER_EXT=tar.xz ;;
-    Darwin*)    FLUTTER_PLATFORM=macos ; FLUTTER_VERSION=${FLUTTER_VERSION_MAC} ;;
+    Darwin*)    FLUTTER_PLATFORM=macos ; FLUTTER_VERSION=${FLUTTER_MAC_VERSION} ; FLUTTER_CHANNEL=${FLUTTER_MAC_CHANNEL} ;;
     *)          echo "Unknown platform ${platform}" ; exit 1 ;;
 esac
 

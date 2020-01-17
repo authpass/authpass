@@ -1,7 +1,7 @@
 name: authpass
 description: Password Manager with support for kdbx 2.x
 
-version: 1.3.0+113
+version: 1.3.0+114
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -55,10 +55,9 @@ dependencies:
   flutter_colorpicker: ^0.2.6
   flutter_speed_dial: ^1.2.1
 
-  # desktop/macos
-  #biometric_storage: ^0.2.1
-  biometric_storage:
-    path: ../deps/biometric_storage
+  biometric_storage: ^0.3.1
+#  biometric_storage:
+#    path: ../deps/biometric_storage
   uuid: ^2.0.2
   url_launcher: ^5.1.3
   font_awesome_flutter: ^8.5.0
