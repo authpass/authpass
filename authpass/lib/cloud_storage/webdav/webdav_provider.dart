@@ -137,7 +137,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
           final hrefEls = entity.findAllElements('href', namespace: 'DAV:');
           final href = hrefEls.isEmpty ? null : hrefEls.first.text;
           final resourcetype = entity.findAllElements('resourcetype', namespace: 'DAV:').first;
-          final bool isFolder = resourcetype.findElements('collection', namespace: 'DAV:').isNotEmpty;
+          final isFolder = resourcetype.findElements('collection', namespace: 'DAV:').isNotEmpty;
           final isFile = resourcetype.children.isEmpty;
 //          _logger.fine('Got entity: $href ($isFolder,$isFile) (${entity.toXmlString(pretty: true)})');
           final type = isFolder ? CloudStorageEntityType.directory : isFile ? CloudStorageEntityType.file : null;

@@ -59,7 +59,7 @@ class CharacterSetCollection extends CharacterSet {
 
   @override
   int operator [](int pos) {
-    int i = pos;
+    var i = pos;
     for (final set in sets) {
       if (i < set.length) {
         return set[i];

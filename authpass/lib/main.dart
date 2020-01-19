@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('main');
 
@@ -101,11 +102,11 @@ class _AuthPassAppState extends State<AuthPassApp> {
         Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
         Provider<AppDataBloc>.value(value: _deps.appDataBloc),
         StreamProvider<AppData>(
-          builder: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
+          create: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,
         ),
         StreamProvider<KdbxBloc>(
-          builder: (context) => _deps.kdbxBloc.openedFilesChanged.map((_) => _deps.kdbxBloc).doOnData((data) {
+          create: (context) => _deps.kdbxBloc.openedFilesChanged.map((_) => _deps.kdbxBloc).doOnData((data) {
             _logger.info('KdbxBloc updated.');
           }),
           updateShouldNotify: (a, b) => true,

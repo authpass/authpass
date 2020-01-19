@@ -8,8 +8,8 @@ import Foundation
 import biometric_storage
 import file_chooser
 import macos_secure_bookmarks
-import path_provider_fde
-import url_launcher_fde
+import path_provider_macos
+import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   BiometricStorageMacOSPlugin.register(with: registry.registrar(forPlugin: "BiometricStorageMacOSPlugin"))

@@ -363,7 +363,7 @@ class KdbxBloc {
 
   Map<FileSource, KdbxOpenedFile> get openedFiles => _openedFiles.value;
   List<KdbxFile> get openedFilesKdbx => _openedFiles.value.values.map((value) => value.kdbxFile).toList();
-  ValueObservable<Map<FileSource, KdbxOpenedFile>> get openedFilesChanged => _openedFiles.stream;
+  ValueStream<Map<FileSource, KdbxOpenedFile>> get openedFilesChanged => _openedFiles.stream;
 
   Future<int> _quickUnlockCheckRunning;
 
@@ -450,7 +450,7 @@ class KdbxBloc {
         try {
           _logger.finer('Checking quick unlock.');
           final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
-          int filesOpened = 0;
+          var filesOpened = 0;
           for (final file in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
             try {
               final fileLabel = '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})';
@@ -533,7 +533,7 @@ class KdbxBloc {
       credentials,
       databaseName,
     );
-    final FileSourceLocal localSource = await _localFileSourceForDbName(databaseName);
+    final localSource = await _localFileSourceForDbName(databaseName);
     await localSource.file.writeAsBytes(kdbxFile.save(), flush: true);
     if (openAfterCreate) {
       await openFile(localSource, credentials);

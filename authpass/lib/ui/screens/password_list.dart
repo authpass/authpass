@@ -60,7 +60,7 @@ class PasswordList extends StatelessWidget {
       );
     }
     return StreamBuilder<bool>(
-        stream: Observable.merge(streams).map((x) => true),
+        stream: Rx.merge(streams).map((x) => true),
         builder: (context, snapshot) {
           final watch = Stopwatch()..start();
           final allEntries =
@@ -506,8 +506,8 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
       return TextSpan(text: text);
     }
     //RegExp.escape(text).allMatches(string)
-    int previousMatchEnd = 0;
-    final List<TextSpan> spans = [];
+    var previousMatchEnd = 0;
+    final spans = <TextSpan>[];
     for (final match in _filterQuery.allMatches(text)) {
       spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
       spans.add(TextSpan(text: text.substring(match.start, match.end), style: TextStyle(fontWeight: FontWeight.bold)));

@@ -153,7 +153,7 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
   @override
   Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
-    final File metadata = File();
+    final metadata = File();
     metadata.name = saveAs.fileName;
     if (saveAs.parent != null) {
       metadata.parents = [saveAs.parent?.id];

@@ -15,7 +15,7 @@ const _DEFAULT_BUILD_NUMBER = 1;
 const _DEFAULT_PACKAGE_NAME = 'design.codeux.authpass';
 
 abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
-  factory AppInfo([void updates(AppInfoBuilder b)]) = _$AppInfo;
+  factory AppInfo([void Function(AppInfoBuilder b) updates]) = _$AppInfo;
   AppInfo._();
 
   String get appName;

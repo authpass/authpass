@@ -274,8 +274,8 @@ class _AddFieldButtonState extends State<AddFieldButton> {
       child: const Text('Add Field'),
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
-        final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-        final RelativeRect position = RelativeRect.fromRect(
+        final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+        final position = RelativeRect.fromRect(
           Rect.fromPoints(
             rb.localToGlobal(Offset.zero, ancestor: overlay),
             rb.localToGlobal(rb.size.bottomRight(Offset.zero), ancestor: overlay),
@@ -313,7 +313,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
   }
 
   Future<void> _selectCustomKey() async {
-    final String key = await SimplePromptDialog.showPrompt(
+    final key = await SimplePromptDialog.showPrompt(
       context,
       const SimplePromptDialog(
         title: 'Adding new Field',
@@ -547,7 +547,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                       await copyValue();
                       break;
                     case EntryAction.rename:
-                      final String key = await SimplePromptDialog.showPrompt(
+                      final key = await SimplePromptDialog.showPrompt(
                         context,
                         SimplePromptDialog(
                           title: 'Renaming field',

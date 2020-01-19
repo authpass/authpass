@@ -33,7 +33,7 @@ enum CloudStorageEntityType {
 }
 
 abstract class CloudStorageEntity implements Built<CloudStorageEntity, CloudStorageEntityBuilder> {
-  factory CloudStorageEntity([void updates(CloudStorageEntityBuilder b)]) = _$CloudStorageEntity;
+  factory CloudStorageEntity([void Function(CloudStorageEntityBuilder b) updates]) = _$CloudStorageEntity;
   CloudStorageEntity._();
 
   String get id;
@@ -62,7 +62,7 @@ abstract class CloudStorageEntity implements Built<CloudStorageEntity, CloudStor
 }
 
 abstract class SearchResponse implements Built<SearchResponse, SearchResponseBuilder> {
-  factory SearchResponse([void updates(SearchResponseBuilder b)]) = _$SearchResponse;
+  factory SearchResponse([void Function(SearchResponseBuilder b) updates]) = _$SearchResponse;
   SearchResponse._();
 
   BuiltList<CloudStorageEntity> get results;

@@ -44,7 +44,7 @@ class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
 }
 
 abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
-  factory OpenedFile([void updates(OpenedFileBuilder b)]) = _$OpenedFile;
+  factory OpenedFile([void Function(OpenedFileBuilder b) updates]) = _$OpenedFile;
 
   OpenedFile._();
 
@@ -140,7 +140,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 }
 
 abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
-  factory AppData([void updates(AppDataBuilder b)]) = _$AppData;
+  factory AppData([void Function(AppDataBuilder b) updates]) = _$AppData;
 
   AppData._();
 

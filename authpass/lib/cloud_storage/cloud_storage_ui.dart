@@ -414,7 +414,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                         ),
                         const SizedBox(width: 8),
                         LinkButton(
-                          icon: Icon(FontAwesomeIcons.save),
+                          icon: const Icon(FontAwesomeIcons.save),
                           child: const Text('Save'),
                           onPressed: () {
                             Navigator.of(context)

@@ -4,7 +4,7 @@ part of 'analytics.dart';
 
 // copied from usage plugin and adopted to include android and iOS version.
 String _createUserAgent({String platformVersion, String deviceInfo}) {
-  final String locale = getPlatformLocale() ?? '';
+  final locale = getPlatformLocale() ?? '';
 
   if (Platform.isAndroid) {
     return 'Mozilla/5.0 (Linux; Android $platformVersion; ${deviceInfo ?? 'Mobile'}; ${locale}) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36';
@@ -18,7 +18,7 @@ String _createUserAgent({String platformVersion, String deviceInfo}) {
     return 'Mozilla/5.0 (Linux; Linux; Linux; ${locale})';
   } else {
     // Dart/1.8.0 (macos; macos; macos; en_US)
-    String os = Platform.operatingSystem;
+    final os = Platform.operatingSystem;
     return 'Dart/${getDartVersion()} (${os}; ${os}; ${os}; ${locale})';
   }
 }
@@ -26,12 +26,12 @@ String _createUserAgent({String platformVersion, String deviceInfo}) {
 /// Return the string for the platform's locale; return's `null` if the locale
 /// can't be determined.
 String getPlatformLocale() {
-  String locale = Platform.localeName;
+  var locale = Platform.localeName;
   if (locale == null) return null;
 
   if (locale != null) {
     // Convert `en_US.UTF-8` to `en_US`.
-    int index = locale.indexOf('.');
+    final index = locale.indexOf('.');
     if (index != -1) locale = locale.substring(0, index);
 
     // Convert `en_US` to `en-us`.
@@ -42,8 +42,8 @@ String getPlatformLocale() {
 }
 
 String getDartVersion() {
-  String ver = Platform.version;
-  int index = ver.indexOf(' ');
-  if (index != -1) ver = ver.substring(0, index);
+  final ver = Platform.version;
+  final index = ver.indexOf(' ');
+  if (index != -1) return ver.substring(0, index);
   return ver;
 }
