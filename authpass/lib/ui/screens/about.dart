@@ -46,7 +46,7 @@ class AuthPassAboutDialog extends StatelessWidget {
             ),
             applicationName: 'AuthPass',
             applicationVersion: appInfo?.versionLabel,
-            applicationLegalese: '© by Herbert Poul, 2019',
+            applicationLegalese: '© by Herbert Poul, 2019-2020',
             children: const <Widget>[
               SizedBox(height: 32),
               UrlLink(
