@@ -1,5 +1,5 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
@@ -19,6 +19,7 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
+import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -28,7 +29,6 @@ import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-import 'package:base32/base32.dart';
 
 final _logger = Logger('entry_details');
 

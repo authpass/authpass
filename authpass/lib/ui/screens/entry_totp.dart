@@ -1,11 +1,10 @@
 import 'package:authpass/ui/common_fields.dart';
-import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/utils/otpauth.dart';
+import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:otp/otp.dart';
-import 'package:base32/base32.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class TotpFieldEntry extends StatefulWidget {
@@ -35,7 +34,6 @@ class _TotpFieldEntryState extends State<TotpFieldEntry> {
       builder: (context, snapshot) {
         final now = DateTime.now().toUtc().millisecondsSinceEpoch;
         final elapsed = (now ~/ 1000) % otpAuth.period;
-        final nextToken = otpAuth.period - elapsed;
         final totpCode = OTP.generateTOTPCode(
           secretBase32,
           now,
