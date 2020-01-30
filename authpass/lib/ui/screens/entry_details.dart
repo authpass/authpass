@@ -269,22 +269,15 @@ class _EntryDetailsState extends State<EntryDetails>
               const SizedBox(height: 32),
               ..._fieldKeys
                   .map(
-                    (f) => f.item3 == commonFields.otpAuth
-                        ? TotpField(
-                            key: f.item1,
-                            entry: widget.entry,
-                            fieldKey: f.item2,
-                            commonField: f.item3,
-                          )
-                        : EntryField(
-                            key: f.item1,
-                            entry: widget.entry,
-                            fieldKey: f.item2,
-                            commonField: f.item3,
-                            onChangedMetadata: () => setState(() {
-                              _initFields();
-                            }),
-                          ),
+                    (f) => EntryField(
+                      key: f.item1,
+                      entry: widget.entry,
+                      fieldKey: f.item2,
+                      commonField: f.item3,
+                      onChangedMetadata: () => setState(() {
+                        _initFields();
+                      }),
+                    ),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
               AddFieldButton(
@@ -469,6 +462,9 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           ? widget.entry.getString(widget.fieldKey)?.getText()
           : _controller.text) ??
       _fieldValue?.getText();
+
+  bool get _isOtpAuth => widget.commonField == _commonFields.otpAuth;
+
   final GlobalKey<HighlightWidgetState> _highlightWidgetKey =
       GlobalKey<HighlightWidgetState>();
 
@@ -517,7 +513,6 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   @override
   Widget build(BuildContext context) {
     _logger.finer('building ${widget.fieldKey} ($_isValueObscured)');
-    final commonFields = Provider.of<CommonFields>(context);
     return Dismissible(
       key: ValueKey(widget.fieldKey),
       background: Container(
@@ -561,99 +556,46 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: _isValueObscured
-                    ? Stack(
-                        children: [
-                          InputDecorator(
-                            decoration: InputDecoration(
-                              prefixIcon: widget.commonField?.icon == null
-                                  ? null
-                                  : Icon(widget.commonField.icon),
-                              labelText: widget.commonField?.displayName ??
-                                  widget.fieldKey.key,
-                              filled: true,
-                            ),
-                            child: const Text(
-                              '*****************',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          Positioned.fill(
-                            child: ClipRect(
-                              child: BackdropFilter(
-                                filter: ui.ImageFilter.blur(
-                                  sigmaX: 0.5,
-                                  sigmaY: 0.5,
-                                ),
-                                child: LinkButton(
-                                  child: Container(
-                                    alignment: Alignment.bottomCenter,
-                                    padding: const EdgeInsets.only(
-                                        left: 12.0 + 24.0, bottom: 16),
-                                    child: const Text(
-                                      'Protected field. Click to reveal.',
-                                      style: TextStyle(shadows: [
-                                        Shadow(
-                                            color: Colors.white, blurRadius: 5)
-                                      ]),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _controller.text = _valueCurrent ?? '';
-                                      _controller.selection = TextSelection(
-                                          baseOffset: 0,
-                                          extentOffset:
-                                              _controller.text?.length ?? 0);
-                                      _isValueObscured = false;
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        _focusNode.requestFocus();
-                                        _logger.finer('requesting focus.');
-                                      });
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                child: _isOtpAuth
+                    ? TotpFieldEntry(
+                        entry: widget.entry,
+                        fieldKey: widget.fieldKey,
+                        commonField: widget.commonField,
                       )
-                    : TextFormField(
-                        key: _formFieldKey,
-                        maxLines: null,
-                        focusNode: _focusNode,
-                        decoration: InputDecoration(
-                          fillColor: const Color(0xfff0f0f0),
-                          filled: true,
-                          prefixIcon: widget.commonField?.icon == null
-                              ? null
-                              : Icon(widget.commonField.icon),
-                          suffixIcon:
-                              widget.fieldKey == commonFields.password.key
-                                  ? IconButton(
-//                            padding: EdgeInsets.zero,
-                                      tooltip: 'Generate Password (cmd+g)',
-                                      icon: Icon(Icons.refresh),
-                                      onPressed: () {
-                                        _logger.fine('pressed button.');
-                                        _generatePassword();
-                                      },
-                                    )
-                                  : null,
-//                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
-                          labelText: widget.commonField?.displayName ??
-                              widget.fieldKey.key,
-                        ),
-                        keyboardType: widget.commonField?.keyboardType,
-                        controller: _controller,
-                        onSaved: (value) {
-                          final newValue = _isProtected
-                              ? ProtectedValue.fromString(value)
-                              : PlainValue(value);
-                          _fieldValue = newValue;
-                        },
-                      ),
+                    : _isValueObscured
+                        ? ObscuredEntryField(
+                            onPressed: () {
+                              setState(() {
+                                _controller.text = _valueCurrent ?? '';
+                                _controller.selection = TextSelection(
+                                    baseOffset: 0,
+                                    extentOffset:
+                                        _controller.text?.length ?? 0);
+                                _isValueObscured = false;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  _focusNode.requestFocus();
+                                  _logger.finer('requesting focus.');
+                                });
+                              });
+                            },
+                            fieldKey: widget.fieldKey,
+                            commonField: widget.commonField,
+                          )
+                        : StringEntryField(
+                            onSaved: (value) {
+                              final newValue = _isProtected
+                                  ? ProtectedValue.fromString(value)
+                                  : PlainValue(value);
+                              _fieldValue = newValue;
+                            },
+                            fieldKey: widget.fieldKey,
+                            commonField: widget.commonField,
+                            controller: _controller,
+                            formFieldKey: _formFieldKey,
+                            focusNode: _focusNode,
+                            passwordGeneratorPressed: _generatePassword,
+                          ),
               ),
               PopupMenuButton<EntryAction>(
                 icon: Icon(Icons.more_vert),
@@ -707,7 +649,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                       break;
                   }
                 },
-                itemBuilder: (context) => [
+                itemBuilder: (context) => <PopupMenuEntry<EntryAction>>[
                   const PopupMenuItem(
                     value: EntryAction.copy,
                     child: ListTile(
@@ -755,7 +697,12 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                       title: Text('Present'),
                     ),
                   ),
-                ],
+                ]
+                    .where((item) =>
+                        !_isOtpAuth ||
+                        item is PopupMenuItem &&
+                            (item as PopupMenuItem).value == EntryAction.delete)
+                    .toList(),
               )
 //            IconButton(
 //              icon: Icon(Icons.content_copy),
@@ -824,6 +771,110 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+}
+
+class ObscuredEntryField extends StatelessWidget {
+  const ObscuredEntryField({
+    Key key,
+    @required this.onPressed,
+    @required this.commonField,
+    @required this.fieldKey,
+  }) : super(key: key);
+
+  final CommonField commonField;
+  final KdbxKey fieldKey;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        InputDecorator(
+          decoration: InputDecoration(
+            prefixIcon:
+                commonField?.icon == null ? null : Icon(commonField.icon),
+            labelText: commonField?.displayName ?? fieldKey.key,
+            filled: true,
+          ),
+          child: const Text(
+            '*****************',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        Positioned.fill(
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(
+                sigmaX: 0.5,
+                sigmaY: 0.5,
+              ),
+              child: LinkButton(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16),
+                  child: const Text(
+                    'Protected field. Click to reveal.',
+                    style: TextStyle(
+                        shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
+                  ),
+                ),
+                onPressed: onPressed,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class StringEntryField extends StatelessWidget {
+  const StringEntryField({
+    Key key,
+    @required this.onSaved,
+    @required this.controller,
+    @required this.formFieldKey,
+    @required this.focusNode,
+    @required this.commonField,
+    @required this.fieldKey,
+    @required this.passwordGeneratorPressed,
+  }) : super(key: key);
+
+  final Key formFieldKey;
+  final FocusNode focusNode;
+  final CommonField commonField;
+  final KdbxKey fieldKey;
+  final TextEditingController controller;
+  final FormFieldSetter<String> onSaved;
+  final VoidCallback passwordGeneratorPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final commonFields = Provider.of<CommonFields>(context);
+    return TextFormField(
+      key: formFieldKey,
+      maxLines: null,
+      focusNode: focusNode,
+      decoration: InputDecoration(
+        fillColor: const Color(0xfff0f0f0),
+        filled: true,
+        prefixIcon: commonField?.icon == null ? null : Icon(commonField.icon),
+        suffixIcon: fieldKey == commonFields.password.key
+            ? IconButton(
+//                            padding: EdgeInsets.zero,
+                tooltip: 'Generate Password (cmd+g)',
+                icon: Icon(Icons.refresh),
+                onPressed: passwordGeneratorPressed,
+              )
+            : null,
+//                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
+        labelText: commonField?.displayName ?? fieldKey.key,
+      ),
+      keyboardType: commonField?.keyboardType,
+      controller: controller,
+      onSaved: onSaved,
+    );
   }
 }
 
