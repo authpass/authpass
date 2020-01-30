@@ -27,6 +27,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackCopyField({String key}) =>
       trackEvent('copyField', <String, dynamic>{'key': key});
   @override
+  void trackAddField({String key}) =>
+      trackEvent('addField', <String, dynamic>{'key': key});
+  @override
   void trackCloseAllFiles({int count}) =>
       trackEvent('closeAllFiles', <String, dynamic>{'count': count});
   @override

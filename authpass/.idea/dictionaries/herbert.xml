@@ -8,6 +8,8 @@
       <w>etag</w>
       <w>kdbx</w>
       <w>namespaced</w>
+      <w>otpauth</w>
+      <w>totp</w>
     </words>
   </dictionary>
 </component>

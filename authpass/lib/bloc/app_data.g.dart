@@ -186,7 +186,7 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
           result.previousFiles.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(OpenedFile)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'passwordGeneratorLength':
           result.passwordGeneratorLength = serializers.deserialize(value,
@@ -197,7 +197,7 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
                   value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(String)]))
-              as BuiltSet<dynamic>);
+              as BuiltSet<Object>);
           break;
         case 'manualUserType':
           result.manualUserType = serializers.deserialize(value,

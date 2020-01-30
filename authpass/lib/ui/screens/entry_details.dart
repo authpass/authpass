@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
@@ -6,6 +7,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/entry_totp.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
@@ -15,6 +17,7 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +28,7 @@ import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+import 'package:base32/base32.dart';
 
 final _logger = Logger('entry_details');
 
@@ -43,9 +47,31 @@ class EntryDetailsScreen extends StatefulWidget {
   _EntryDetailsScreenState createState() => _EntryDetailsScreenState();
 }
 
-class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateMixin {
+class _EntryDetailsScreenState extends State<EntryDetailsScreen>
+    with TaskStateMixin, StreamSubscriberMixin {
   final _formKey = GlobalKey<FormState>();
   bool _isDirty = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _registerListener();
+  }
+
+  @override
+  void didUpdateWidget(EntryDetailsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _registerListener();
+  }
+
+  void _registerListener() {
+    subscriptions.cancelSubscriptions();
+    widget.entry.changes.listen((change) {
+      setState(() {
+        _isDirty = change.isDirty || _isDirty;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +90,10 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
                             title: Text('Debug: Copy XML'),
                           ),
                           value: () {
-                            Clipboard.setData(ClipboardData(text: widget.entry.toXml().toXmlString(pretty: true)));
+                            Clipboard.setData(ClipboardData(
+                                text: widget.entry
+                                    .toXml()
+                                    .toXmlString(pretty: true)));
                           },
                         ),
                       ]),
@@ -85,12 +114,17 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
                       final kdbxBloc = Provider.of<KdbxBloc>(context);
-                      if (kdbxBloc.fileForKdbxFile(widget.entry.file).fileSource.supportsWrite) {
+                      if (kdbxBloc
+                          .fileForKdbxFile(widget.entry.file)
+                          .fileSource
+                          .supportsWrite) {
                         try {
                           await kdbxBloc.saveFile(widget.entry.file);
                         } on StorageException catch (e, stackTrace) {
-                          _logger.warning('Error while saving database.', e, stackTrace);
-                          await DialogUtils.showErrorDialog(context, 'Error while saving', 'Unable to save file: $e');
+                          _logger.warning(
+                              'Error while saving database.', e, stackTrace);
+                          await DialogUtils.showErrorDialog(context,
+                              'Error while saving', 'Unable to save file: $e');
                           return;
                         }
                         setState(() => _isDirty = false);
@@ -119,7 +153,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
             context: context,
             params: ConfirmDialogParams(
                 title: 'Unsaved Changes',
-                content: 'There are still unsaved changes. Do you want to discard changes?',
+                content:
+                    'There are still unsaved changes. Do you want to discard changes?',
                 positiveButtonText: 'Discard Changes'),
           );
         },
@@ -129,7 +164,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> with TaskStateM
 }
 
 class EntryDetails extends StatefulWidget {
-  const EntryDetails({Key key, @required this.entry, @required this.onSavedPressed}) : super(key: key);
+  const EntryDetails(
+      {Key key, @required this.entry, @required this.onSavedPressed})
+      : super(key: key);
 
   final KdbxEntry entry;
   final VoidCallback onSavedPressed;
@@ -138,10 +175,12 @@ class EntryDetails extends StatefulWidget {
   _EntryDetailsState createState() => _EntryDetailsState();
 }
 
-class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin {
+class _EntryDetailsState extends State<EntryDetails>
+    with StreamSubscriberMixin {
   List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField>> _fieldKeys;
 
-  void _initShortcutListener(KeyboardShortcutEvents events, CommonFields commonFields) {
+  void _initShortcutListener(
+      KeyboardShortcutEvents events, CommonFields commonFields) {
     handleSubscription(events.shortcutEvents.listen((event) {
       if (event.type == KeyboardShortcutType.copyPassword) {
         _copyField(commonFields.password);
@@ -152,7 +191,8 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
   }
 
   Future<void> _copyField(CommonField commonField) async {
-    final field = _fieldKeys.firstWhere((f) => f.item2 == commonField.key, orElse: () => null);
+    final field = _fieldKeys.firstWhere((f) => f.item2 == commonField.key,
+        orElse: () => null);
     if (field != null) {
       if (await field.item1.currentState.copyValue()) {
         return;
@@ -175,10 +215,14 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
 
   void _initFields() {
     final commonFields = Provider.of<CommonFields>(context);
-    final nonCommonKeys = widget.entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
+    final nonCommonKeys = widget.entry.stringEntries
+        .where((str) => !commonFields.isCommon(str.key));
     _fieldKeys = commonFields.fields
-        .map((f) => Tuple3(GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'), f.key, f))
-        .followedBy(nonCommonKeys.map((f) => Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
+        .where((f) => f.showByDefault || widget.entry.getString(f.key) != null)
+        .map((f) => Tuple3(
+            GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'), f.key, f))
+        .followedBy(nonCommonKeys.map((f) =>
+            Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
         .toList();
   }
 
@@ -189,7 +233,8 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
     if (_fieldKeys == null) {
       subscriptions.cancelSubscriptions();
       _initFields();
-      _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context), Provider.of<CommonFields>(context));
+      _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context),
+          Provider.of<CommonFields>(context));
     }
   }
 
@@ -224,21 +269,44 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
               const SizedBox(height: 32),
               ..._fieldKeys
                   .map(
-                    (f) => EntryField(
-                      key: f.item1,
-                      entry: widget.entry,
-                      fieldKey: f.item2,
-                      commonField: f.item3,
-                      onChangedMetadata: () => setState(() {
-                        _initFields();
-                      }),
-                    ),
+                    (f) => f.item3 == commonFields.otpAuth
+                        ? TotpField(
+                            key: f.item1,
+                            entry: widget.entry,
+                            fieldKey: f.item2,
+                            commonField: f.item3,
+                          )
+                        : EntryField(
+                            key: f.item1,
+                            entry: widget.entry,
+                            fieldKey: f.item2,
+                            commonField: f.item3,
+                            onChangedMetadata: () => setState(() {
+                              _initFields();
+                            }),
+                          ),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
               AddFieldButton(
-                onAddField: (key) {
+                onAddField: (key) async {
                   final cf = commonFields[key];
-                  widget.entry.setString(key, cf?.protect == true ? ProtectedValue.fromString('') : PlainValue(''));
+                  if (cf == commonFields.otpAuth) {
+                    final secret = await _askForTotpSecret(context);
+                    if (secret == null) {
+                      return;
+                    }
+                    widget.entry.setString(key,
+                        ProtectedValue.fromString(secret.toUri().toString()));
+                  } else {
+                    widget.entry.setString(
+                        key,
+                        cf?.protect == true
+                            ? ProtectedValue.fromString('')
+                            : PlainValue(''));
+                  }
+                  Provider.of<Analytics>(context, listen: false)
+                      .events
+                      .trackAddField(key: key.key);
                   _initFields();
                   setState(() {});
                 },
@@ -254,6 +322,29 @@ class _EntryDetailsState extends State<EntryDetails> with StreamSubscriberMixin 
         ),
       ),
     );
+  }
+
+  Future<OtpAuth> _askForTotpSecret(BuildContext context) async {
+    final totpCode = await SimplePromptDialog.showPrompt(
+        context,
+        const SimplePromptDialog(
+          title: 'Time Based Authentication',
+          labelText: 'Please enter time based key.',
+        ));
+    if (totpCode == null) {
+      return null;
+    }
+    try {
+      final cleaned = totpCode?.replaceAll(' ', ''); //?.toUpperCase();
+      final value = base32.decode(cleaned);
+      _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');
+      return OtpAuth(secret: value);
+    } catch (e, stackTrace) {
+      _logger.warning('Invalid base32 code?', e, stackTrace);
+      await DialogUtils.showSimpleAlertDialog(context, 'Invalid key',
+          'Given input is not a valid base32 TOTP code. Please verify your input.');
+      return await _askForTotpSecret(context);
+    }
   }
 }
 
@@ -274,11 +365,13 @@ class _AddFieldButtonState extends State<AddFieldButton> {
       child: const Text('Add Field'),
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
-        final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+        final overlay =
+            Overlay.of(context).context.findRenderObject() as RenderBox;
         final position = RelativeRect.fromRect(
           Rect.fromPoints(
             rb.localToGlobal(Offset.zero, ancestor: overlay),
-            rb.localToGlobal(rb.size.bottomRight(Offset.zero), ancestor: overlay),
+            rb.localToGlobal(rb.size.bottomRight(Offset.zero),
+                ancestor: overlay),
           ),
           Offset.zero & overlay.size,
         );
@@ -368,11 +461,16 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     widget.entry.setString(widget.fieldKey, value);
   }
 
-  bool get _isProtected => _fieldValue == null ? widget.commonField?.protect == true : _fieldValue is ProtectedValue;
+  bool get _isProtected => _fieldValue == null
+      ? widget.commonField?.protect == true
+      : _fieldValue is ProtectedValue;
   String get _valueCurrent =>
-      (_isValueObscured ? widget.entry.getString(widget.fieldKey)?.getText() : _controller.text) ??
+      (_isValueObscured
+          ? widget.entry.getString(widget.fieldKey)?.getText()
+          : _controller.text) ??
       _fieldValue?.getText();
-  final GlobalKey<HighlightWidgetState> _highlightWidgetKey = GlobalKey<HighlightWidgetState>();
+  final GlobalKey<HighlightWidgetState> _highlightWidgetKey =
+      GlobalKey<HighlightWidgetState>();
 
   @override
   void initState() {
@@ -391,7 +489,9 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     super.didChangeDependencies();
     _commonFields = Provider.of<CommonFields>(context);
     if (widget.fieldKey == _commonFields.password.key) {
-      handleSubscription(Provider.of<KeyboardShortcutEvents>(context).shortcutEvents.listen((event) {
+      handleSubscription(Provider.of<KeyboardShortcutEvents>(context)
+          .shortcutEvents
+          .listen((event) {
         if (event.type == KeyboardShortcutType.generatePassword) {
           _generatePassword();
         }
@@ -403,7 +503,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     if (!_isProtected) {
       return;
     }
-    _logger.info('Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
+    _logger.info(
+        'Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
     if (!_focusNode.hasFocus) {
       setState(() {
         _fieldValue = ProtectedValue.fromString(_controller.text);
@@ -465,8 +566,11 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                         children: [
                           InputDecorator(
                             decoration: InputDecoration(
-                              prefixIcon: widget.commonField?.icon == null ? null : Icon(widget.commonField.icon),
-                              labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                              prefixIcon: widget.commonField?.icon == null
+                                  ? null
+                                  : Icon(widget.commonField.icon),
+                              labelText: widget.commonField?.displayName ??
+                                  widget.fieldKey.key,
                               filled: true,
                             ),
                             child: const Text(
@@ -484,19 +588,26 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                                 child: LinkButton(
                                   child: Container(
                                     alignment: Alignment.bottomCenter,
-                                    padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16),
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0 + 24.0, bottom: 16),
                                     child: const Text(
                                       'Protected field. Click to reveal.',
-                                      style: TextStyle(shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
+                                      style: TextStyle(shadows: [
+                                        Shadow(
+                                            color: Colors.white, blurRadius: 5)
+                                      ]),
                                     ),
                                   ),
                                   onPressed: () {
                                     setState(() {
                                       _controller.text = _valueCurrent ?? '';
-                                      _controller.selection =
-                                          TextSelection(baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+                                      _controller.selection = TextSelection(
+                                          baseOffset: 0,
+                                          extentOffset:
+                                              _controller.text?.length ?? 0);
                                       _isValueObscured = false;
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
                                         _focusNode.requestFocus();
                                         _logger.finer('requesting focus.');
                                       });
@@ -515,25 +626,31 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                         decoration: InputDecoration(
                           fillColor: const Color(0xfff0f0f0),
                           filled: true,
-                          prefixIcon: widget.commonField?.icon == null ? null : Icon(widget.commonField.icon),
-                          suffixIcon: widget.fieldKey == commonFields.password.key
-                              ? IconButton(
+                          prefixIcon: widget.commonField?.icon == null
+                              ? null
+                              : Icon(widget.commonField.icon),
+                          suffixIcon:
+                              widget.fieldKey == commonFields.password.key
+                                  ? IconButton(
 //                            padding: EdgeInsets.zero,
-                                  tooltip: 'Generate Password (cmd+g)',
-                                  icon: Icon(Icons.refresh),
-                                  onPressed: () {
-                                    _logger.fine('pressed button.');
-                                    _generatePassword();
-                                  },
-                                )
-                              : null,
+                                      tooltip: 'Generate Password (cmd+g)',
+                                      icon: Icon(Icons.refresh),
+                                      onPressed: () {
+                                        _logger.fine('pressed button.');
+                                        _generatePassword();
+                                      },
+                                    )
+                                  : null,
 //                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
-                          labelText: widget.commonField?.displayName ?? widget.fieldKey.key,
+                          labelText: widget.commonField?.displayName ??
+                              widget.fieldKey.key,
                         ),
                         keyboardType: widget.commonField?.keyboardType,
                         controller: _controller,
                         onSaved: (value) {
-                          final newValue = _isProtected ? ProtectedValue.fromString(value) : PlainValue(value);
+                          final newValue = _isProtected
+                              ? ProtectedValue.fromString(value)
+                              : PlainValue(value);
                           _fieldValue = newValue;
                         },
                       ),
@@ -569,9 +686,10 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                           _fieldValue = PlainValue(_valueCurrent ?? '');
                           _isValueObscured = false;
                         } else {
-                          _logger
-                              .fine('protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
-                          _fieldValue = ProtectedValue.fromString(_valueCurrent ?? '');
+                          _logger.fine(
+                              'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
+                          _fieldValue =
+                              ProtectedValue.fromString(_valueCurrent ?? '');
                           _isValueObscured = true;
                         }
                       });
@@ -615,8 +733,11 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                   PopupMenuItem(
                     value: EntryAction.protect,
                     child: ListTile(
-                      leading: Icon(_isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
-                      title: Text(_isProtected ? 'Unprotect value' : 'Protect Value'),
+                      leading: Icon(_isProtected
+                          ? Icons.no_encryption
+                          : Icons.enhanced_encryption),
+                      title: Text(
+                          _isProtected ? 'Unprotect value' : 'Protect Value'),
                     ),
                   ),
                   const PopupMenuItem(
@@ -652,7 +773,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 
   Future<void> _generatePassword() async {
     final appData = await Provider.of<AppDataBloc>(context).store.load();
-    final characterSets = CharacterSet.characterSetFromIds(appData.passwordGeneratorCharacterSets);
+    final characterSets = CharacterSet.characterSetFromIds(
+        appData.passwordGeneratorCharacterSets);
     if (characterSets.isEmpty) {
       characterSets.addAll([CharacterSet.alphaNumeric, CharacterSet.numeric]);
     }
@@ -666,7 +788,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   }
 
   Future<void> _launchPasswordGenerator() async {
-    final password = await Navigator.of(context).push(PasswordGeneratorScreen.route());
+    final password =
+        await Navigator.of(context).push(PasswordGeneratorScreen.route());
     if (password != null) {
       setState(() {
         _generatedPassword(password);
@@ -679,21 +802,25 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       _isValueObscured = false;
       _controller.text = password;
       _fieldValue = ProtectedValue.fromString(_controller.text);
-      _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      _controller.selection =
+          TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       _focusNode.requestFocus();
     });
   }
 
   Future<bool> copyValue() async {
     _highlightWidgetKey.currentState.triggerHighlight();
-    Provider.of<Analytics>(context).events.trackCopyField(key: widget.fieldKey.key);
+    Provider.of<Analytics>(context)
+        .events
+        .trackCopyField(key: widget.fieldKey.key);
     await Clipboard.setData(ClipboardData(text: _valueCurrent ?? ''));
     return true;
   }
 
   @override
   void dispose() {
-    _logger.fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
+    _logger
+        .fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -701,7 +828,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 }
 
 class HighlightWidget extends StatefulWidget {
-  const HighlightWidget({Key key, this.child, this.childOnHighlight}) : super(key: key);
+  const HighlightWidget({Key key, this.child, this.childOnHighlight})
+      : super(key: key);
 
   final Widget child;
   final Widget childOnHighlight;
@@ -710,7 +838,8 @@ class HighlightWidget extends StatefulWidget {
   HighlightWidgetState createState() => HighlightWidgetState();
 }
 
-class HighlightWidgetState extends State<HighlightWidget> with SingleTickerProviderStateMixin {
+class HighlightWidgetState extends State<HighlightWidget>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   Animation<Decoration> _decorationAnimation;
@@ -769,7 +898,8 @@ class HighlightWidgetState extends State<HighlightWidget> with SingleTickerProvi
                 child: FadeTransition(
                   opacity: _opacity,
                   child: DecoratedBoxTransition(
-                      decoration: _decorationAnimation, child: Center(child: widget.childOnHighlight)),
+                      decoration: _decorationAnimation,
+                      child: Center(child: widget.childOnHighlight)),
                 ),
               ),
             ],
@@ -789,8 +919,11 @@ class HighlightWidgetState extends State<HighlightWidget> with SingleTickerProvi
 //      end: const BoxDecoration(color: Color(0xffffffff), backgroundBlendMode: BlendMode.overlay),
     );
     setState(() {
-      _decorationAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut).drive(tween);
-      _opacity = CurvedAnimation(parent: _controller, curve: Curves.easeIn).drive(Tween(begin: 1, end: 0));
+      _decorationAnimation =
+          CurvedAnimation(parent: _controller, curve: Curves.easeOut)
+              .drive(tween);
+      _opacity = CurvedAnimation(parent: _controller, curve: Curves.easeIn)
+          .drive(Tween(begin: 1, end: 0));
       _controller.forward(from: 0);
     });
   }

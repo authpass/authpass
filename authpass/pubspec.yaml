@@ -4,7 +4,7 @@ description: Password Manager with support for kdbx 2.x
 version: 1.3.0+115
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -64,6 +64,7 @@ dependencies:
   font_awesome_flutter: ^8.5.0
   rxdart: ^0.23.1
   qr_flutter: ^3.2.0
+  otp: ^2.0.3
 
   # WebDAV
   http_auth: ^0.2.9
@@ -101,6 +102,9 @@ dependencies:
 #      ref: a73321baa3a0e7c16c66e9180211ae247e63f39c
 
   macos_secure_bookmarks: ^0.1.0+1
+
+  # UI Utils
+  percent_indicator: ^2.1.1+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

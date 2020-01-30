@@ -12,6 +12,7 @@ class CommonField {
     this.protect = false,
     this.keyboardType,
     this.icon = Icons.label_outline,
+    this.showByDefault = true,
   }) : key = KdbxKey(key);
 
   final KdbxKey key;
@@ -20,8 +21,16 @@ class CommonField {
   final bool protect;
   final TextInputType keyboardType;
   final IconData icon;
+  final bool showByDefault;
 
   String stringValue(KdbxEntry entry) => entry.getString(key)?.getText();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is CommonField && runtimeType == other.runtimeType && key == other.key;
+
+  @override
+  int get hashCode => key.hashCode;
 }
 
 class CommonFields {
@@ -53,7 +62,16 @@ class CommonFields {
             keyboardType: TextInputType.url,
             icon: Icons.link,
           ),
-        ];
+          CommonField(
+            key: 'OTPAuth',
+            displayName: 'One Time Password (Time Based)',
+            icon: Icons.watch_later,
+            protect: true,
+            showByDefault: false,
+          )
+        ] {
+    assert(fields.map((f) => f.key).toSet().length == fields.length);
+  }
 
   CommonField get title => _fieldByKeyString('Title');
 
@@ -62,6 +80,11 @@ class CommonFields {
   CommonField get userName => _fieldByKeyString('UserName');
 
   CommonField get password => _fieldByKeyString('Password');
+
+  /// Secret for TOTP -- content is modeled after
+  /// https://github.com/google/google-authenticator/blob/master/mobile/ios/README
+  /// otpauth://TYPE/LABEL?PARAMETERS
+  CommonField get otpAuth => _fieldByKeyString('OTPAuth');
 
   final List<CommonField> fields;
 
