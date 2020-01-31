@@ -10,7 +10,8 @@ class FileListResponse {
     this.cursor,
     this.hasMore,
   });
-  factory FileListResponse.fromJson(Map<String, dynamic> json) => _$FileListResponseFromJson(json);
+  factory FileListResponse.fromJson(Map<String, dynamic> json) =>
+      _$FileListResponseFromJson(json);
   Map<String, dynamic> toJson() => _$FileListResponseToJson(this);
 
   final List<FileMetadata> entries;
@@ -26,7 +27,8 @@ class FileSearchResponse {
     this.hasMore,
   });
 
-  factory FileSearchResponse.fromJson(Map<String, dynamic> json) => _$FileSearchResponseFromJson(json);
+  factory FileSearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$FileSearchResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$FileSearchResponseToJson(this);
 
@@ -46,7 +48,8 @@ class FileSearchMatch {
     this.metadata,
   });
 
-  factory FileSearchMatch.fromJson(Map<String, dynamic> json) => _$FileSearchMatchFromJson(json);
+  factory FileSearchMatch.fromJson(Map<String, dynamic> json) =>
+      _$FileSearchMatchFromJson(json);
 
   Map<String, dynamic> toJson() => _$FileSearchMatchToJson(this);
 
@@ -65,7 +68,8 @@ class FileMetadataV2 {
     this.metadata,
   });
 
-  factory FileMetadataV2.fromJson(Map<String, dynamic> json) => _$FileMetadataV2FromJson(json);
+  factory FileMetadataV2.fromJson(Map<String, dynamic> json) =>
+      _$FileMetadataV2FromJson(json);
 
   Map<String, dynamic> toJson() => _$FileMetadataV2ToJson(this);
 
@@ -82,7 +86,8 @@ class FileMetadata {
     this.rev,
   });
 
-  factory FileMetadata.fromJson(Map<String, dynamic> json) => _$FileMetadataFromJson(json);
+  factory FileMetadata.fromJson(Map<String, dynamic> json) =>
+      _$FileMetadataFromJson(json);
 
   Map<String, dynamic> toJson() => _$FileMetadataToJson(this);
 
@@ -91,8 +96,9 @@ class FileMetadata {
   /// one of: 'folder' or 'file' or 'deleted'
   @JsonKey(name: '.tag')
   final String tag;
-  CloudStorageEntityType get tagType =>
-      tag == 'folder' ? CloudStorageEntityType.directory : CloudStorageEntityType.file;
+  CloudStorageEntityType get tagType => tag == 'folder'
+      ? CloudStorageEntityType.directory
+      : CloudStorageEntityType.file;
   final String name;
   @JsonKey(name: 'path_display')
   final String pathDisplay;

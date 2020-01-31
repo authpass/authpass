@@ -38,7 +38,8 @@ class PathUtils {
 
   Future<Directory> _getDesktopDirectory() async {
     // https://stackoverflow.com/a/32937974/109219
-    final userHome = Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
+    final userHome =
+        Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
     final dataDir = Directory(path.join(userHome, '.authpass', 'data'));
     await dataDir.create(recursive: true);
     return dataDir;

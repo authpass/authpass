@@ -20,7 +20,8 @@ class CreateFile extends StatefulWidget {
 
 class _CreateFileState extends State<CreateFile> with TaskStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final TextEditingController _databaseName = TextEditingController(text: 'PersonalPasswords');
+  final TextEditingController _databaseName =
+      TextEditingController(text: 'PersonalPasswords');
   final TextEditingController _password = TextEditingController();
   final FocusNode _passwordFocus = FocusNode();
   bool _passwordObscured = true;
@@ -62,10 +63,13 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
                 focusNode: _passwordFocus,
                 onFieldSubmitted: (val) => _submitCallback()(),
                 decoration: InputDecoration(
-                  labelText: 'Select a secure master Password. Make sure to remember it.',
+                  labelText:
+                      'Select a secure master Password. Make sure to remember it.',
                   filled: true,
                   suffix: InkWell(
-                    child: _passwordObscured ? Icon(Icons.lock) : Icon(Icons.lock_open),
+                    child: _passwordObscured
+                        ? Icon(Icons.lock)
+                        : Icon(Icons.lock_open),
                     onTap: () {
                       setState(() {
                         _passwordObscured = !_passwordObscured;
@@ -108,7 +112,8 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
               openAfterCreate: true,
             );
             assert(created != null);
-            await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
+            await Navigator.of(context)
+                .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (_) {
             await DialogUtils.showSimpleAlertDialog(
               context,

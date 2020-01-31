@@ -26,13 +26,15 @@ class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
   final List<T> enumValues;
 
   @override
-  T deserialize(Serializers serializers, Object serialized, {FullType specifiedType = FullType.unspecified}) {
+  T deserialize(Serializers serializers, Object serialized,
+      {FullType specifiedType = FullType.unspecified}) {
     assert(serialized is String);
     return enumValues.singleWhere((val) => val.toString() == serialized);
   }
 
   @override
-  Object serialize(Serializers serializers, T object, {FullType specifiedType = FullType.unspecified}) {
+  Object serialize(Serializers serializers, T object,
+      {FullType specifiedType = FullType.unspecified}) {
     return object?.toString();
   }
 
@@ -44,7 +46,8 @@ class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
 }
 
 abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
-  factory OpenedFile([void Function(OpenedFileBuilder b) updates]) = _$OpenedFile;
+  factory OpenedFile([void Function(OpenedFileBuilder b) updates]) =
+      _$OpenedFile;
 
   OpenedFile._();
 
@@ -79,7 +82,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 
   Color get color => colorCode == null ? null : Color(colorCode);
 
-  bool isSameFileAs(OpenedFile other) => other.sourceType == sourceType && other.sourcePath == sourcePath;
+  bool isSameFileAs(OpenedFile other) =>
+      other.sourceType == sourceType && other.sourcePath == sourcePath;
 
   static OpenedFile fromFileSource(FileSource fileSource, String dbName,
           [void Function(OpenedFileBuilder b) customize]) =>
@@ -107,7 +111,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               })
               ..name = dbName;
           } else {
-            throw ArgumentError.value(fileSource, 'fileSource', 'Unsupported file type ${fileSource.runtimeType}');
+            throw ArgumentError.value(fileSource, 'fileSource',
+                'Unsupported file type ${fileSource.runtimeType}');
           }
           if (customize != null) {
             customize(b);
@@ -124,7 +129,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           uuid: uuid ?? AppDataBloc.createUuid(),
         );
       case OpenedFilesSourceType.Url:
-        return FileSourceUrl(Uri.parse(sourcePath), uuid: uuid ?? AppDataBloc.createUuid());
+        return FileSourceUrl(Uri.parse(sourcePath),
+            uuid: uuid ?? AppDataBloc.createUuid());
       case OpenedFilesSourceType.CloudStorage:
         final sourceInfo = json.decode(sourcePath) as Map<String, dynamic>;
         final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String;
@@ -132,7 +138,9 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         if (provider == null) {
           throw StateError('Invalid cloud storage provider id $storageId');
         }
-        return provider.toFileSource((sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map).cast<String, String>(),
+        return provider.toFileSource(
+            (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
+                .cast<String, String>(),
             uuid: uuid ?? AppDataBloc.createUuid());
     }
     throw ArgumentError.value(sourceType, 'sourceType', 'Unsupported value.');
@@ -165,7 +173,8 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   int get lastBuildId;
 
   @override
-  Map<String, dynamic> toJson() => serializers.serialize(this) as Map<String, dynamic>;
+  Map<String, dynamic> toJson() =>
+      serializers.serialize(this) as Map<String, dynamic>;
 
   OpenedFile recentFileByUuid(String uuid) {
     return previousFiles.firstWhere((f) => f.uuid == uuid, orElse: () => null);
@@ -177,7 +186,8 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   OpenedFile,
 ])
 Serializers serializers = (_$serializers.toBuilder()
-      ..add(SimpleEnumSerializer<OpenedFilesSourceType>(OpenedFilesSourceType.values))
+      ..add(SimpleEnumSerializer<OpenedFilesSourceType>(
+          OpenedFilesSourceType.values))
       ..addPlugin(StandardJsonPlugin()))
     .build();
 
@@ -190,7 +200,8 @@ class AppDataBloc {
 
   final store = SimpleJsonPersistence.getForTypeSync(
     (json) => serializers.deserializeWith(AppData.serializer, json),
-    defaultCreator: () => AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
+    defaultCreator: () =>
+        AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
     baseDirectoryBuilder: () => PathUtils().getAppDataDirectory(),
   );
 
@@ -202,7 +213,8 @@ class AppDataBloc {
     await Future<dynamic>.delayed(const Duration(seconds: 10));
     final data = await store.load();
     final appInfo = await env.getAppInfo();
-    if (data.firstLaunchedAt == null || data.lastBuildId != appInfo.buildNumber) {
+    if (data.firstLaunchedAt == null ||
+        data.lastBuildId != appInfo.buildNumber) {
       await update((b, data) => b
         ..lastBuildId = appInfo.buildNumber
         ..firstLaunchedAt ??= clock.now().toUtc());
@@ -211,18 +223,21 @@ class AppDataBloc {
 
   ///
   /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.
-  Future<OpenedFile> openedFile(FileSource file, {@required String name, OpenedFile oldFile}) async =>
+  Future<OpenedFile> openedFile(FileSource file,
+          {@required String name, OpenedFile oldFile}) async =>
       await update((b, data) {
         final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
         final colorCode = recentFile?.colorCode;
-        final openedFile = OpenedFile.fromFileSource(file, name, (b) => b..colorCode = colorCode);
+        final openedFile = OpenedFile.fromFileSource(
+            file, name, (b) => b..colorCode = colorCode);
         // TODO remove potential old storages?
         b.previousFiles.removeWhere((file) => file.isSameFileAs(openedFile));
         b.previousFiles.add(openedFile);
         return openedFile;
       });
 
-  Future<T> update<T>(T Function(AppDataBuilder builder, AppData data) updater) async {
+  Future<T> update<T>(
+      T Function(AppDataBuilder builder, AppData data) updater) async {
     final appData = await store.load();
     T ret;
     final newAppData = appData.rebuild((b) => ret = updater(b, appData));

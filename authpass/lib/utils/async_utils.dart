@@ -36,14 +36,16 @@ mixin TaskStateMixin<T extends StatefulWidget> on State<T> {
 }
 
 class FutureTask with ChangeNotifier implements ValueListenable<FutureTask> {
-  FutureTask({@required this.future, String progressLabel}) : _progressLabel = progressLabel {
+  FutureTask({@required this.future, String progressLabel})
+      : _progressLabel = progressLabel {
     _logger.info('Initialized task with $progressLabel');
   }
   final Future<dynamic> future;
   String _progressLabel;
   set progressLabel(String progressLabel) {
     _progressLabel = progressLabel;
-    _logger.fine('Progress Label chaned to $progressLabel (hasListeners: $hasListeners)');
+    _logger.fine(
+        'Progress Label chaned to $progressLabel (hasListeners: $hasListeners)');
     notifyListeners();
   }
 
@@ -73,7 +75,8 @@ mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
   FutureTask task;
 
   @protected
-  VoidCallback asyncTaskCallback<U>(Future<U> Function(TaskProgress progress) progress) {
+  VoidCallback asyncTaskCallback<U>(
+      Future<U> Function(TaskProgress progress) progress) {
     if (task != null) {
       return null;
     }
@@ -83,22 +86,28 @@ mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
   }
 
   @protected
-  Future<U> asyncRunTask<U>(Future<U> Function(TaskProgress progress) taskRunner, {String label}) {
+  Future<U> asyncRunTask<U>(
+      Future<U> Function(TaskProgress progress) taskRunner,
+      {String label}) {
     if (task != null) {
       // we have to queue task.
-      _logger.finer('A task is aready running (${task.progressLabel}). queing ($label)');
+      _logger.finer(
+          'A task is aready running (${task.progressLabel}). queing ($label)');
       final completer = Completer<U>();
-      task.future.whenComplete(() => completer.complete(asyncRunTask<U>(taskRunner, label: label)));
+      task.future.whenComplete(
+          () => completer.complete(asyncRunTask<U>(taskRunner, label: label)));
       return completer.future;
     }
     final proxy = _TaskProgressProxy();
     final future = taskRunner(proxy);
-    proxy._futureTask = FutureTask(future: future, progressLabel: proxy._progressLabel ?? label);
+    proxy._futureTask = FutureTask(
+        future: future, progressLabel: proxy._progressLabel ?? label);
     setState(() {
       task = proxy._futureTask;
     });
     future.catchError((dynamic error, StackTrace stackTrace) {
-      DialogUtils.showErrorDialog(context, 'Error while ${label ?? 'running task'}', '$error');
+      DialogUtils.showErrorDialog(
+          context, 'Error while ${label ?? 'running task'}', '$error');
       return Future<U>.error(error, stackTrace);
     });
     future.whenComplete(() {

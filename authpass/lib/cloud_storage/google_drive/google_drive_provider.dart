@@ -17,21 +17,28 @@ import 'package:meta/meta.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
 
-class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
-  GoogleDriveProvider({@required this.env, @required CloudStorageHelper helper}) : super(helper: helper);
+class GoogleDriveProvider
+    extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
+  GoogleDriveProvider({@required this.env, @required CloudStorageHelper helper})
+      : super(helper: helper);
 
   final Env env;
 
   static const _scopes = [DriveApi.DriveScope];
-  ClientId get _clientId => ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
+  ClientId get _clientId =>
+      ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
 
   @override
-  Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow<TF extends UserAuthenticationPromptResult,
+  Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow<
+      TF extends UserAuthenticationPromptResult,
       UF extends UserAuthenticationPromptData<TF>>(prompt) async {
 //    assert(prompt is PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>);
 //    final oAuthPrompt = prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>;
     final client = await clientViaUserConsentManual(
-        _clientId, _scopes, (uri) => oAuthTokenPrompt(prompt as PromptUserForCode<dynamic, dynamic>, uri));
+        _clientId,
+        _scopes,
+        (uri) => oAuthTokenPrompt(
+            prompt as PromptUserForCode<dynamic, dynamic>, uri));
     client.credentialUpdates.listen(_credentialsChanged);
     _credentialsChanged(client.credentials);
     _logger.finer('Finished user consent.');
@@ -85,7 +92,8 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
 
   @override
   Future<SearchResponse> search({String name = 'kdbx'}) async {
-    return _search(SearchQueryTerm(const SearchQueryField('name'), QOperator.contains, SearchQueryValueLiteral(name)));
+    return _search(SearchQueryTerm(const SearchQueryField('name'),
+        QOperator.contains, SearchQueryValueLiteral(name)));
   }
 
   Future<SearchResponse> _search(SearchQueryTerm search) async {
@@ -117,8 +125,10 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
   @override
   Future<SearchResponse> list({CloudStorageEntity parent}) {
     return _search(parent == null
-        ? const SearchQueryTerm(SearchQueryValueLiteral('root'), QOperator.in_, SearchQueryField('parents'))
-        : SearchQueryTerm(SearchQueryValueLiteral(parent.id), QOperator.in_, const SearchQueryField('parents')));
+        ? const SearchQueryTerm(SearchQueryValueLiteral('root'), QOperator.in_,
+            SearchQueryField('parents'))
+        : SearchQueryTerm(SearchQueryValueLiteral(parent.id), QOperator.in_,
+            const SearchQueryField('parents')));
   }
 
   @override
@@ -130,7 +140,8 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
-    final dynamic response = await driveApi.files.get(file.id, downloadOptions: DownloadOptions.FullMedia);
+    final dynamic response = await driveApi.files
+        .get(file.id, downloadOptions: DownloadOptions.FullMedia);
     final media = response as Media;
     final bytes = BytesBuilder(copy: false);
     // ignore: prefer_foreach
@@ -141,17 +152,19 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
   }
 
   @override
-  Future<Map<String, dynamic>> saveEntity(
-      CloudStorageEntity file, Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+  Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
+      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
-    final updatedFile = await driveApi.files.update(null, file.id, uploadMedia: Media(byteStream, bytes.lengthInBytes));
+    final updatedFile = await driveApi.files.update(null, file.id,
+        uploadMedia: Media(byteStream, bytes.lengthInBytes));
     _logger.fine('Successfully saved file ${updatedFile.name}');
     return <String, dynamic>{};
   }
 
   @override
-  Future<FileSource> createEntity(CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
+  Future<FileSource> createEntity(
+      CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final metadata = File();
     metadata.name = saveAs.fileName;
@@ -159,7 +172,8 @@ class GoogleDriveProvider extends CloudStorageProviderClientBase<AutoRefreshingA
       metadata.parents = [saveAs.parent?.id];
     }
     final byteStream = ByteStream.fromBytes(bytes);
-    final newFile = await driveApi.files.create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));
+    final newFile = await driveApi.files
+        .create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));
     return toFileSource(
         CloudStorageEntity((b) => b
           ..id = newFile.id
@@ -199,7 +213,8 @@ class SearchQueryValueLiteral implements SearchQueryAtom {
 
   String _quoteValues(dynamic value) {
     if (value is String) {
-      final escaped = value.replaceAllMapped(RegExp(r'''['\\]'''), (match) => '\\${match.group(0)}');
+      final escaped = value.replaceAllMapped(
+          RegExp(r'''['\\]'''), (match) => '\\${match.group(0)}');
       return "'$escaped'";
     }
     if (value is List) {
@@ -223,7 +238,8 @@ class SearchQueryTerm implements SearchQueryAtom {
   final QOperator operator;
   final SearchQueryAtom right;
 
-  SearchQueryTerm operator &(SearchQueryTerm other) => SearchQueryTerm(this, QOperator.and, other);
+  SearchQueryTerm operator &(SearchQueryTerm other) =>
+      SearchQueryTerm(this, QOperator.and, other);
 
   @override
   String toQuery() {

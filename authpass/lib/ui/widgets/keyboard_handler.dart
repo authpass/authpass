@@ -105,19 +105,30 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
             // for now do everything hard coded, until flutters actions & co get a bit easier to understand.. :-)
             final modifiers = key.data.modifiersPressed.keys
                 // we don't care about a few modifiers..
-                .where((modifier) => ![ModifierKey.functionModifier, ModifierKey.numLockModifier].contains(modifier))
+                .where((modifier) => ![
+                      ModifierKey.functionModifier,
+                      ModifierKey.numLockModifier
+                    ].contains(modifier))
                 .toList();
             final character = key.logicalKey;
-            _logger.info('RawKeyboardListener.onKey: $modifiers + $character ($key)');
+            _logger.info(
+                'RawKeyboardListener.onKey: $modifiers + $character ($key)');
             if (modifiers.length == 1 &&
-                (modifiers.single == ModifierKey.controlModifier || modifiers.single == ModifierKey.metaModifier)) {
+                (modifiers.single == ModifierKey.controlModifier ||
+                    modifiers.single == ModifierKey.metaModifier)) {
               final mapping = {
-                LogicalKeyboardKey.keyF: const KeyboardShortcut(type: KeyboardShortcutType.search),
-                LogicalKeyboardKey.keyB: const KeyboardShortcut(type: KeyboardShortcutType.copyUsername),
-                LogicalKeyboardKey.keyC: const KeyboardShortcut(type: KeyboardShortcutType.copyPassword),
-                LogicalKeyboardKey.keyP: const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
-                LogicalKeyboardKey.keyN: const KeyboardShortcut(type: KeyboardShortcutType.moveDown),
-                LogicalKeyboardKey.keyG: const KeyboardShortcut(type: KeyboardShortcutType.generatePassword),
+                LogicalKeyboardKey.keyF:
+                    const KeyboardShortcut(type: KeyboardShortcutType.search),
+                LogicalKeyboardKey.keyB: const KeyboardShortcut(
+                    type: KeyboardShortcutType.copyUsername),
+                LogicalKeyboardKey.keyC: const KeyboardShortcut(
+                    type: KeyboardShortcutType.copyPassword),
+                LogicalKeyboardKey.keyP:
+                    const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
+                LogicalKeyboardKey.keyN:
+                    const KeyboardShortcut(type: KeyboardShortcutType.moveDown),
+                LogicalKeyboardKey.keyG: const KeyboardShortcut(
+                    type: KeyboardShortcutType.generatePassword),
               };
               final shortcut = mapping[character];
               if (shortcut != null) {
@@ -128,12 +139,16 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
               if (character == LogicalKeyboardKey.tab) {
                 WidgetsBinding.instance.focusManager.primaryFocus.nextFocus();
                 // TODO(flutterbug) see https://github.com/flutter/flutter/issues/36976
-              } else if (character == LogicalKeyboardKey.arrowUp || character.keyId == 0x0000f700) {
-                _keyboardShortcutEvents._shortcutEvents.add(const KeyboardShortcut(type: KeyboardShortcutType.moveUp));
-              } else if (character == LogicalKeyboardKey.arrowDown || character.keyId == 0x0000f701) {
+              } else if (character == LogicalKeyboardKey.arrowUp ||
+                  character.keyId == 0x0000f700) {
+                _keyboardShortcutEvents._shortcutEvents.add(
+                    const KeyboardShortcut(type: KeyboardShortcutType.moveUp));
+              } else if (character == LogicalKeyboardKey.arrowDown ||
+                  character.keyId == 0x0000f701) {
                 _logger.info('moving down.');
-                _keyboardShortcutEvents._shortcutEvents
-                    .add(const KeyboardShortcut(type: KeyboardShortcutType.moveDown));
+                _keyboardShortcutEvents._shortcutEvents.add(
+                    const KeyboardShortcut(
+                        type: KeyboardShortcutType.moveDown));
               }
             }
           }
@@ -176,7 +191,8 @@ class KeyboardShortcutEvents with StreamSubscriberBase {
     }));
   }
 
-  final StreamController<KeyboardShortcut> _shortcutEvents = StreamController<KeyboardShortcut>.broadcast();
+  final StreamController<KeyboardShortcut> _shortcutEvents =
+      StreamController<KeyboardShortcut>.broadcast();
   Stream<KeyboardShortcut> get shortcutEvents => _shortcutEvents.stream;
 
   void dispose() {

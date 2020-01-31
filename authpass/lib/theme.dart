@@ -5,7 +5,8 @@ class AuthPassTheme {
   static const int _primaryColorValue = 0xFF626bc6;
   static const Color primaryColor = Color(_primaryColorValue);
   static const Color linkColor = primaryColor;
-  static const MaterialColor primarySwatch = MaterialColor(_primaryColorValue, <int, Color>{
+  static const MaterialColor primarySwatch =
+      MaterialColor(_primaryColorValue, <int, Color>{
     50: Color(0xFFecedf8),
     100: Color(0xFFd0d3ee),
     200: Color(0xffb1b5e3),

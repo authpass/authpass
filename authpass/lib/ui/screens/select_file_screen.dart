@@ -60,7 +60,8 @@ class SelectFileScreen extends StatelessWidget {
 }
 
 class ProgressOverlay extends StatelessWidget {
-  const ProgressOverlay({Key key, @required this.child, this.task}) : super(key: key);
+  const ProgressOverlay({Key key, @required this.child, this.task})
+      : super(key: key);
 
   final FutureTask task;
   final Widget child;
@@ -88,7 +89,8 @@ class ProgressOverlay extends StatelessWidget {
                         child: ValueListenableBuilder<FutureTask>(
                           valueListenable: task,
                           builder: (context, value, child) {
-                            _logger.info('Generating progress dialog with label ${value?.progressLabel}');
+                            _logger.info(
+                                'Generating progress dialog with label ${value?.progressLabel}');
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -107,7 +109,9 @@ class ProgressOverlay extends StatelessWidget {
                     ),
                   ),
             secondChild: Container(),
-            crossFadeState: _hasProgress ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            crossFadeState: _hasProgress
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
             duration: const Duration(milliseconds: 200),
           ),
         )
@@ -125,7 +129,8 @@ class SelectFileWidget extends StatefulWidget {
   _SelectFileWidgetState createState() => _SelectFileWidgetState();
 }
 
-class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStateMixin {
+class _SelectFileWidgetState extends State<SelectFileWidget>
+    with FutureTaskStateMixin {
   bool _quickUnlockAttempted = false;
   int counter = 0;
 
@@ -154,10 +159,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
         progress.progressLabel = 'Quick unlocking files ...';
         final kdbxBloc = Provider.of<KdbxBloc>(context);
         if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
-          _logger.fine('We already have files open. Not attempting quick unlock.');
+          _logger
+              .fine('We already have files open. Not attempting quick unlock.');
           return;
         }
-        _logger.finer('opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
+        _logger.finer(
+            'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
         final opened = await kdbxBloc.reopenQuickUnlock(progress);
         _logger.info('opened $opened files with quick unlock.');
         if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
@@ -188,19 +195,23 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                 label: 'Open\nLocal File',
                 onPressed: () async {
                   if (Platform.isIOS || Platform.isAndroid) {
-                    final path = await FilePicker.getFilePath(type: FileType.ANY);
+                    final path =
+                        await FilePicker.getFilePath(type: FileType.ANY);
                     if (path != null) {
-                      await Navigator.of(context)
-                          .push(CredentialsScreen.route(FileSourceLocal(File(path), uuid: AppDataBloc.createUuid())));
+                      await Navigator.of(context).push(CredentialsScreen.route(
+                          FileSourceLocal(File(path),
+                              uuid: AppDataBloc.createUuid())));
                     }
                   } else {
                     showOpenPanel((result, paths) async {
                       if (result == FileChooserResult.ok) {
                         String macOsBookmark;
                         if (Platform.isMacOS) {
-                          macOsBookmark = await SecureBookmarks().bookmark(File(paths[0]));
+                          macOsBookmark =
+                              await SecureBookmarks().bookmark(File(paths[0]));
                         }
-                        await Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(
+                        await Navigator.of(context)
+                            .push(CredentialsScreen.route(FileSourceLocal(
                           File(paths[0]),
                           uuid: AppDataBloc.createUuid(),
                           macOsSecureBookmark: macOsBookmark,
@@ -215,10 +226,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                   icon: cs.displayIcon,
                   label: 'Load from ${cs.displayName}',
                   onPressed: () async {
-                    final source =
-                        await Navigator.of(context).push(CloudStorageSelector.route(cs, CloudStorageOpenConfig()));
+                    final source = await Navigator.of(context).push(
+                        CloudStorageSelector.route(
+                            cs, CloudStorageOpenConfig()));
                     if (source != null) {
-                      await Navigator.of(context).push(CredentialsScreen.route(source.fileSource));
+                      await Navigator.of(context)
+                          .push(CredentialsScreen.route(source.fileSource));
                     }
                   },
                 ),
@@ -238,8 +251,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                     alignment: Alignment.centerRight,
                     child: LinkButton(
                       onPressed: () async {
-                        final source =
-                            await showDialog<FileSourceUrl>(context: context, builder: (context) => SelectUrlDialog());
+                        final source = await showDialog<FileSourceUrl>(
+                            context: context,
+                            builder: (context) => SelectUrlDialog());
                         if (source != null) {
                           _loadAndGoToCredentials(source);
                         }
@@ -262,7 +276,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                       Navigator.of(context).push(CreateFile.route());
                     },
                     icon: Icon(Icons.create_new_folder),
-                    child: const Expanded(child: Text('New to KeePass?\nCreate New Password Database', softWrap: true)),
+                    child: const Expanded(
+                        child: Text(
+                            'New to KeePass?\nCreate New Password Database',
+                            softWrap: true)),
                   ),
                 )
               ],
@@ -279,7 +296,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                 children: <Widget>[
                   Text(
                     'Last opened files:',
-                    style: Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   ...ListTile.divideTiles(
@@ -288,7 +308,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
                                 (f) => OpenedFileTile(
                                   openedFile: f.toFileSource(cloudStorageBloc),
                                   onPressed: () {
-                                    final source = f.toFileSource(cloudStorageBloc);
+                                    final source =
+                                        f.toFileSource(cloudStorageBloc);
                                     _loadAndGoToCredentials(source);
                                   },
                                 ),
@@ -309,7 +330,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
         return Navigator.of(context).push(CredentialsScreen.route(source));
       }).catchError((dynamic error, StackTrace stackTrace) {
         _logger.fine('Error while trying to load file source $source');
-        DialogUtils.showErrorDialog(context, 'Error while opening file.', 'Unable to open $source.\n$error');
+        DialogUtils.showErrorDialog(context, 'Error while opening file.',
+            'Unable to open $source.\n$error');
         return Future<dynamic>.error(error, stackTrace);
       });
     }, label: 'Loading file ...');
@@ -318,15 +340,17 @@ class _SelectFileWidgetState extends State<SelectFileWidget> with FutureTaskStat
 }
 
 class OpenedFileTile extends StatelessWidget {
-  const OpenedFileTile({Key key, @required this.openedFile, this.onPressed}) : super(key: key);
+  const OpenedFileTile({Key key, @required this.openedFile, this.onPressed})
+      : super(key: key);
 
   final FileSource openedFile;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final subtitleStyle =
-        TextStyle(color: ListTileTheme.of(context).textColor ?? Theme.of(context).textTheme.caption.color);
+    final subtitleStyle = TextStyle(
+        color: ListTileTheme.of(context).textColor ??
+            Theme.of(context).textTheme.caption.color);
     return InkWell(
       onTap: onPressed,
       child: Padding(
@@ -364,7 +388,8 @@ class OpenedFileTile extends StatelessWidget {
 }
 
 class SelectFileAction extends StatelessWidget {
-  const SelectFileAction({Key key, this.icon, this.label, this.onPressed}) : super(key: key);
+  const SelectFileAction({Key key, this.icon, this.label, this.onPressed})
+      : super(key: key);
 
   final IconData icon;
   final String label;
@@ -399,7 +424,8 @@ class SelectFileAction extends StatelessWidget {
                   Text(
                     label,
                     textAlign: TextAlign.center,
-                    style: theme.primaryTextTheme.body1.copyWith(letterSpacing: 0.9),
+                    style: theme.primaryTextTheme.body1
+                        .copyWith(letterSpacing: 0.9),
                     strutStyle: const StrutStyle(leading: 0.2),
 //                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -426,13 +452,15 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
     try {
       final uri = Uri.parse(urlString);
       if (!uri.scheme.startsWith('http')) {
-        _logger.fine('User entered url with invalid schema ${FormatUtils.anonymizeUrl(urlString)}');
+        _logger.fine(
+            'User entered url with invalid schema ${FormatUtils.anonymizeUrl(urlString)}');
         return 'Please enter full url starting with http:// or https://';
       }
       _enteredUrl = uri;
       return null;
     } on FormatException catch (e) {
-      _logger.fine('User entered invalid url ${FormatUtils.anonymizeUrl(urlString)}', e);
+      _logger.fine(
+          'User entered invalid url ${FormatUtils.anonymizeUrl(urlString)}', e);
       return 'Please enter a valid url.';
     }
   }
@@ -466,7 +494,8 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              Navigator.of(context).pop(FileSourceUrl(_enteredUrl, uuid: AppDataBloc.createUuid()));
+              Navigator.of(context).pop(
+                  FileSourceUrl(_enteredUrl, uuid: AppDataBloc.createUuid()));
             } else {
               Navigator.of(context).pop();
             }
@@ -516,10 +545,12 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _kdbxBloc = Provider.of<KdbxBloc>(context);
-    _kdbxBloc.quickUnlockStorage.supportsBiometricKeyStore().then((bool biometricQuickUnlock) => setState(() {
-          _biometricQuickUnlockSupported = biometricQuickUnlock;
-          _biometricQuickUnlockActivated ??= true;
-        }));
+    _kdbxBloc.quickUnlockStorage
+        .supportsBiometricKeyStore()
+        .then((bool biometricQuickUnlock) => setState(() {
+              _biometricQuickUnlockSupported = biometricQuickUnlock;
+              _biometricQuickUnlockActivated ??= true;
+            }));
   }
 
   @override
@@ -541,7 +572,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Text('Enter the password for:'),
-                    Text(widget.kdbxFilePath.displayName, style: theme.textTheme.display1),
+                    Text(widget.kdbxFilePath.displayName,
+                        style: theme.textTheme.display1),
                     Text(
                       widget.kdbxFilePath.displayPath,
                       style: theme.textTheme.caption,
@@ -562,9 +594,12 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   autovalidate: _invalidPassword != null,
                   obscureText: true,
                   validator: (_keyFile == null || _invalidPassword != null
-                          ? SValidator.notEmpty(msg: 'Please enter your password.')
+                          ? SValidator.notEmpty(
+                              msg: 'Please enter your password.')
                           : SValidator<String>([])) +
-                      SValidator.invalidValue(invalidValue: _invalidPassword, message: 'Invalid password'),
+                      SValidator.invalidValue(
+                          invalidValue: _invalidPassword,
+                          message: 'Invalid password'),
                   onEditingComplete: () {
                     FocusScope.of(context).unfocus();
 
@@ -577,12 +612,17 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 padding: const EdgeInsets.only(right: 32, left: 32),
                 child: FlatButton.icon(
 //                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  icon: Icon(_keyFile == null ? FontAwesomeIcons.folderOpen : FontAwesomeIcons.edit),
-                  label: Text(_keyFile == null ? 'Use Key File' : path.basename(_keyFile.path)),
+                  icon: Icon(_keyFile == null
+                      ? FontAwesomeIcons.folderOpen
+                      : FontAwesomeIcons.edit),
+                  label: Text(_keyFile == null
+                      ? 'Use Key File'
+                      : path.basename(_keyFile.path)),
                   onPressed: () async {
                     _invalidPassword = null;
                     if (Platform.isIOS || Platform.isAndroid) {
-                      final path = await FilePicker.getFilePath(type: FileType.ANY);
+                      final path =
+                          await FilePicker.getFilePath(type: FileType.ANY);
                       setState(() {
                         _keyFile = path == null ? null : File(path);
                       });
@@ -622,7 +662,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
               Container(
                 alignment: Alignment.centerRight,
                 child: _loadingFile != null
-                    ? const Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator())
+                    ? const Padding(
+                        padding: EdgeInsets.all(32),
+                        child: CircularProgressIndicator())
                     : LinkButton(
                         child: const Text('Continue'),
                         onPressed: () async {
@@ -645,12 +687,14 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       try {
         _loadingFile = kdbxBloc.openFile(
           widget.kdbxFilePath,
-          Credentials.composite(pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
+          Credentials.composite(
+              pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
         );
         setState(() {});
         await _loadingFile;
-        await Navigator.of(context).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
+        await Navigator.of(context)
+            .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
         _logger.fine('Invalid credentials. ($pw)', e, stackTrace);
         setState(() {

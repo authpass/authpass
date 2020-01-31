@@ -31,7 +31,8 @@ class WebDavFileMetadata {
   WebDavFileMetadata({
     @required this.etag,
   });
-  factory WebDavFileMetadata.fromJson(Map<String, dynamic> json) => _$WebDavFileMetadataFromJson(json);
+  factory WebDavFileMetadata.fromJson(Map<String, dynamic> json) =>
+      _$WebDavFileMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$WebDavFileMetadataToJson(this);
 
   final String etag;

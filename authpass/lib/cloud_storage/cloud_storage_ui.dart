@@ -28,7 +28,8 @@ class CloudStorageSelectorLoadResult implements CloudStorageSelectorResult {
 }
 
 class CloudStorageSelector extends StatefulWidget {
-  const CloudStorageSelector({Key key, this.provider, this.browserConfig}) : super(key: key);
+  const CloudStorageSelector({Key key, this.provider, this.browserConfig})
+      : super(key: key);
 
   final CloudStorageProvider provider;
   final CloudStorageSelectorConfig browserConfig;
@@ -36,7 +37,8 @@ class CloudStorageSelector extends StatefulWidget {
   @override
   _CloudStorageSelectorState createState() => _CloudStorageSelectorState();
 
-  static Route<T> route<T extends CloudStorageSelectorResult>(CloudStorageProvider provider,
+  static Route<T> route<T extends CloudStorageSelectorResult>(
+          CloudStorageProvider provider,
           [CloudStorageSelectorConfig<T> browserConfig]) =>
       MaterialPageRoute<T>(
         settings: RouteSettings(name: '/cloudStorage/selector/${provider.id}'),
@@ -54,7 +56,8 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   void initState() {
     super.initState();
     widget.provider.loadSavedAuth().then((val) => setState(() {}));
-    if (widget.browserConfig is CloudStorageBrowserConfig || !(widget.provider.supportSearch)) {
+    if (widget.browserConfig is CloudStorageBrowserConfig ||
+        !(widget.provider.supportSearch)) {
       _isSearch = false;
     } else {
       _isSearch = true;
@@ -80,12 +83,16 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
               ],
       ),
       body: widget.provider.isAuthenticated != true
-          ? Center(child: CloudStorageAuthentication(provider: widget.provider, onSuccess: () => setState(() {})))
+          ? Center(
+              child: CloudStorageAuthentication(
+                  provider: widget.provider, onSuccess: () => setState(() {})))
           : Center(
               child: !_isSearch
                   ? CloudStorageBrowser(
                       provider: widget.provider,
-                      config: config is CloudStorageBrowserConfig ? config : CloudStorageBrowserConfig(isSave: false))
+                      config: config is CloudStorageBrowserConfig
+                          ? config
+                          : CloudStorageBrowserConfig(isSave: false))
                   : CloudStorageSearch(provider: widget.provider),
             ),
     );
@@ -93,7 +100,9 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
 }
 
 class CloudStorageAuthentication extends StatelessWidget {
-  const CloudStorageAuthentication({Key key, @required this.provider, this.onSuccess}) : super(key: key);
+  const CloudStorageAuthentication(
+      {Key key, @required this.provider, this.onSuccess})
+      : super(key: key);
 
   final CloudStorageProvider provider;
   final void Function() onSuccess;
@@ -133,17 +142,20 @@ class CloudStorageAuthentication extends StatelessWidget {
     );
   }
 
-  Future<void> _startLoginFlow(BuildContext context, {bool forceNoOpenUrl = false}) async {
+  Future<void> _startLoginFlow(BuildContext context,
+      {bool forceNoOpenUrl = false}) async {
     try {
       final auth = await provider.startAuth((final prompt) async {
-        if (prompt is UserAuthenticationPrompt<OAuthTokenResult, OAuthTokenFlowPromptData>) {
+        if (prompt is UserAuthenticationPrompt<OAuthTokenResult,
+            OAuthTokenFlowPromptData>) {
           final promptData = prompt.data;
           final uri = promptData.openUri;
           _logger.fine('Launching authentication url $uri');
 
           if (!forceNoOpenUrl) {
             if (!await DialogUtils.openUrl(uri)) {
-              await DialogUtils.showSimpleAlertDialog(context, null, 'Unable to launch url. Please visit $uri');
+              await DialogUtils.showSimpleAlertDialog(
+                  context, null, 'Unable to launch url. Please visit $uri');
               prompt.result(null);
               return;
             }
@@ -156,7 +168,8 @@ class CloudStorageAuthentication extends StatelessWidget {
             ),
           );
           prompt.result(OAuthTokenResult(code));
-        } else if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult, UrlUsernamePasswordPromptData>) {
+        } else if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult,
+            UrlUsernamePasswordPromptData>) {
           final result = await UrlUsernamePasswordDialog().show(context);
           prompt.result(result);
         } else {
@@ -168,7 +181,9 @@ class CloudStorageAuthentication extends StatelessWidget {
     } catch (e, stackTrace) {
       _logger.severe('Error while authenticating.', e, stackTrace);
       await DialogUtils.showSimpleAlertDialog(
-          context, 'Error while authenticating', 'Error while trying to authenticate to ${provider.displayName}. $e');
+          context,
+          'Error while authenticating',
+          'Error while trying to authenticate to ${provider.displayName}. $e');
     }
   }
 }
@@ -182,7 +197,8 @@ class CloudStorageSearch extends StatefulWidget {
   _CloudStorageSearchState createState() => _CloudStorageSearchState();
 }
 
-class _CloudStorageSearchState extends State<CloudStorageSearch> with TaskStateMixin {
+class _CloudStorageSearchState extends State<CloudStorageSearch>
+    with TaskStateMixin {
   final _searchController = TextEditingController(text: 'kdbx');
   SearchResponse _searchResponse;
 
@@ -213,7 +229,8 @@ class _CloudStorageSearchState extends State<CloudStorageSearch> with TaskStateM
                       onEditingComplete: _search,
                     ),
                   ),
-                  IconButton(icon: Icon(Icons.search), onPressed: () => _search()),
+                  IconButton(
+                      icon: Icon(Icons.search), onPressed: () => _search()),
                 ],
               ),
             ),
@@ -230,7 +247,8 @@ class _CloudStorageSearchState extends State<CloudStorageSearch> with TaskStateM
                               fileInfo: entity.toSimpleFileInfo(),
                               uuid: AppDataBloc.createUuid(),
                             );
-                            Navigator.of(context).pop(CloudStorageSelectorLoadResult(source));
+                            Navigator.of(context)
+                                .pop(CloudStorageSelectorLoadResult(source));
                           },
                         ),
                       ),
@@ -242,7 +260,8 @@ class _CloudStorageSearchState extends State<CloudStorageSearch> with TaskStateM
 
   Future<void> _search() => asyncRunTask(
         () async {
-          final results = await widget.provider.search(name: _searchController.text);
+          final results =
+              await widget.provider.search(name: _searchController.text);
           _logger.fine('Got results:');
           for (final result in results.results) {
             _logger.fine('${result.name} (${result.id}');
@@ -274,7 +293,9 @@ class SearchResultListView extends StatelessWidget {
         }
         final entity = response.results[itemId];
         return ListTile(
-          leading: Icon(entity.type == CloudStorageEntityType.file ? FontAwesomeIcons.file : FontAwesomeIcons.folder),
+          leading: Icon(entity.type == CloudStorageEntityType.file
+              ? FontAwesomeIcons.file
+              : FontAwesomeIcons.folder),
           title: Text(entity.name),
           subtitle: entity.path == null ? null : Text(entity.path),
           onTap: () => onTap(entity),
@@ -285,11 +306,14 @@ class SearchResultListView extends StatelessWidget {
   }
 }
 
-abstract class CloudStorageSelectorConfig<T extends CloudStorageSelectorResult> {}
+abstract class CloudStorageSelectorConfig<
+    T extends CloudStorageSelectorResult> {}
 
-class CloudStorageOpenConfig extends CloudStorageSelectorConfig<CloudStorageSelectorLoadResult> {}
+class CloudStorageOpenConfig
+    extends CloudStorageSelectorConfig<CloudStorageSelectorLoadResult> {}
 
-class CloudStorageBrowserConfig extends CloudStorageSelectorConfig<CloudStorageSelectorSaveResult> {
+class CloudStorageBrowserConfig
+    extends CloudStorageSelectorConfig<CloudStorageSelectorSaveResult> {
   CloudStorageBrowserConfig({this.defaultFileName, this.isSave = true});
   final String defaultFileName;
   final bool isSave;
@@ -308,11 +332,13 @@ class CloudStorageBrowser extends StatefulWidget {
   _CloudStorageBrowserState createState() => _CloudStorageBrowserState();
 }
 
-class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTaskStateMixin {
+class _CloudStorageBrowserState extends State<CloudStorageBrowser>
+    with FutureTaskStateMixin {
   final List<CloudStorageEntity> _folderBreadcrumbs = [];
   final TextEditingController _fileNameController = TextEditingController();
   SearchResponse _response;
-  CloudStorageEntity get _folder => _folderBreadcrumbs.isEmpty ? null : _folderBreadcrumbs.last;
+  CloudStorageEntity get _folder =>
+      _folderBreadcrumbs.isEmpty ? null : _folderBreadcrumbs.last;
 
   @override
   void initState() {
@@ -361,7 +387,9 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                       icon: const Icon(FontAwesomeIcons.folderOpen),
                       label: Text(f.name),
                       onPressed: () {
-                        _folderBreadcrumbs.removeRange(_folderBreadcrumbs.indexOf(f) + 1, _folderBreadcrumbs.length);
+                        _folderBreadcrumbs.removeRange(
+                            _folderBreadcrumbs.indexOf(f) + 1,
+                            _folderBreadcrumbs.length);
                         _listFolder();
                       },
                     ),
@@ -388,7 +416,8 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                           fileInfo: item.toSimpleFileInfo(),
                           uuid: AppDataBloc.createUuid(),
                         );
-                        Navigator.of(context).pop(CloudStorageSelectorLoadResult(source));
+                        Navigator.of(context)
+                            .pop(CloudStorageSelectorLoadResult(source));
                       }
                     },
                   )
@@ -417,8 +446,9 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser> with FutureTa
                           icon: const Icon(FontAwesomeIcons.save),
                           child: const Text('Save'),
                           onPressed: () {
-                            Navigator.of(context)
-                                .pop(CloudStorageSelectorSaveResult(_folder, _fileNameController.text));
+                            Navigator.of(context).pop(
+                                CloudStorageSelectorSaveResult(
+                                    _folder, _fileNameController.text));
                           },
                         )
                       ],
@@ -440,10 +470,12 @@ class CloudStorageBrowserItem extends StatelessWidget {
 
 class UrlUsernamePasswordDialog extends StatefulWidget {
   Future<UrlUsernamePasswordResult> show(BuildContext context) =>
-      showDialog<UrlUsernamePasswordResult>(context: context, builder: (_) => this);
+      showDialog<UrlUsernamePasswordResult>(
+          context: context, builder: (_) => this);
 
   @override
-  _UrlUsernamePasswordDialogState createState() => _UrlUsernamePasswordDialogState();
+  _UrlUsernamePasswordDialogState createState() =>
+      _UrlUsernamePasswordDialogState();
 }
 
 final _urlRegex = RegExp(r'^https?://');
@@ -473,8 +505,8 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
               ),
               autocorrect: false,
               validator: SValidator.notEmpty(msg: 'Please enter a Url') +
-                  SValidator.isTrue(
-                      (str) => _urlRegex.hasMatch(str), 'Please enter a valid url with http:// or https://'),
+                  SValidator.isTrue((str) => _urlRegex.hasMatch(str),
+                      'Please enter a valid url with http:// or https://'),
             ),
             TextFormField(
               controller: _username,
@@ -503,7 +535,8 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
           child: const Text('Ok'),
           onPressed: () {
             if (_formKey.currentState.validate()) {
-              Navigator.of(context).pop(UrlUsernamePasswordResult(_url.text, _username.text, _password.text));
+              Navigator.of(context).pop(UrlUsernamePasswordResult(
+                  _url.text, _username.text, _password.text));
             }
           },
         ),

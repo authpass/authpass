@@ -15,10 +15,12 @@ class IconSelectorDialog extends StatefulWidget {
   @override
   _IconSelectorDialogState createState() => _IconSelectorDialogState();
 
-  static Future<KdbxIcon> show(BuildContext context, {KdbxIcon initialSelection}) {
+  static Future<KdbxIcon> show(BuildContext context,
+      {KdbxIcon initialSelection}) {
     return showDialog<KdbxIcon>(
       context: context,
-      builder: (context) => IconSelectorDialog(initialSelection: initialSelection),
+      builder: (context) =>
+          IconSelectorDialog(initialSelection: initialSelection),
     );
   }
 }
@@ -51,7 +53,8 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
 }
 
 class IconSelector extends StatefulWidget {
-  const IconSelector({Key key, @required this.initialSelection}) : super(key: key);
+  const IconSelector({Key key, @required this.initialSelection})
+      : super(key: key);
 
   final KdbxIcon initialSelection;
 
@@ -137,7 +140,8 @@ class IconSelectorFormField extends StatelessWidget {
           elevation: 8,
           child: InkWell(
             onTap: () async {
-              final newIcon = await IconSelectorDialog.show(context, initialSelection: formFieldState.value);
+              final newIcon = await IconSelectorDialog.show(context,
+                  initialSelection: formFieldState.value);
               if (newIcon != null) {
                 formFieldState.didChange(newIcon);
               }

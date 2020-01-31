@@ -68,10 +68,12 @@ class _PreferencesBodyState extends State<PreferencesBody> {
                   secondary: const Icon(FontAwesomeIcons.iCursor),
                   title: const Text('Enable autofill'),
                   subtitle: _autofillStatus == AutofillServiceStatus.unsupported
-                      ? const Text('Only supported on Android Oreo (8.0) or later.')
+                      ? const Text(
+                          'Only supported on Android Oreo (8.0) or later.')
                       : null,
                   value: _autofillStatus == AutofillServiceStatus.enabled,
-                  onChanged: _autofillStatus == AutofillServiceStatus.unsupported
+                  onChanged: _autofillStatus ==
+                          AutofillServiceStatus.unsupported
                       ? null
                       : (val) async {
                           if (val) {
@@ -89,7 +91,8 @@ class _PreferencesBodyState extends State<PreferencesBody> {
                   value: _prefs.enableDebug,
                   onChanged: (val) async {
                     _logger.fine('Setting debug to $val');
-                    await AutofillService().setPreferences(AutofillPreferences(enableDebug: val));
+                    await AutofillService()
+                        .setPreferences(AutofillPreferences(enableDebug: val));
                     await _doInit();
                   },
                 ),
@@ -99,7 +102,8 @@ class _PreferencesBodyState extends State<PreferencesBody> {
           title: const Text('Lock all open files'),
           onTap: () async {
             _kdbxBloc.closeAllFiles();
-            await Navigator.of(context).pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
+            await Navigator.of(context)
+                .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
           },
         ),
       ],

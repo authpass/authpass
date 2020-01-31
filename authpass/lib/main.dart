@@ -30,11 +30,14 @@ void main() => throw Exception('Run some env/*.dart');
 Future<void> startApp(Env env) async {
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
-  _logger.info('Initialized logger. (${Platform.operatingSystem}, ${Platform.operatingSystemVersion}');
+  _logger.info(
+      'Initialized logger. (${Platform.operatingSystem}, ${Platform.operatingSystemVersion}');
 
   FlutterError.onError = (errorDetails) {
     _logger.shout(
-        'Unhandled Flutter framework (${errorDetails.library}) error.', errorDetails.exception, errorDetails.stack);
+        'Unhandled Flutter framework (${errorDetails.library}) error.',
+        errorDetails.exception,
+        errorDetails.stack);
     _logger.fine(errorDetails.summary.toString());
     Analytics.trackError(errorDetails.summary.toString(), true);
   };
@@ -45,7 +48,8 @@ Future<void> startApp(Env env) async {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
   }, zoneSpecification: ZoneSpecification(
-    fork: (Zone self, ZoneDelegate parent, Zone zone, ZoneSpecification specification, Map zoneValues) {
+    fork: (Zone self, ZoneDelegate parent, Zone zone,
+        ZoneSpecification specification, Map zoneValues) {
       print('Forking zone.');
       return parent.fork(zone, specification, zoneValues);
     },
@@ -90,7 +94,8 @@ class _AuthPassAppState extends State<AuthPassApp> {
   @override
   Widget build(BuildContext context) {
     // TODO generate localizations.
-    _logger.fine('Building AuthPass App state. route: ${WidgetsBinding.instance.window.defaultRouteName}');
+    _logger.fine(
+        'Building AuthPass App state. route: ${WidgetsBinding.instance.window.defaultRouteName}');
     final authPassLocalizations = AuthPassLocalizations();
     return MultiProvider(
       providers: [
@@ -98,7 +103,8 @@ class _AuthPassAppState extends State<AuthPassApp> {
         Provider<Deps>.value(value: _deps),
         Provider<Analytics>.value(value: _deps.analytics),
         Provider<AuthPassLocalizations>.value(value: authPassLocalizations),
-        Provider<CommonFields>.value(value: CommonFields(authPassLocalizations)),
+        Provider<CommonFields>.value(
+            value: CommonFields(authPassLocalizations)),
         Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
         Provider<AppDataBloc>.value(value: _deps.appDataBloc),
         StreamProvider<AppData>(
@@ -106,7 +112,9 @@ class _AuthPassAppState extends State<AuthPassApp> {
           initialData: _deps.appDataBloc.store.cachedValue,
         ),
         StreamProvider<KdbxBloc>(
-          create: (context) => _deps.kdbxBloc.openedFilesChanged.map((_) => _deps.kdbxBloc).doOnData((data) {
+          create: (context) => _deps.kdbxBloc.openedFilesChanged
+              .map((_) => _deps.kdbxBloc)
+              .doOnData((data) {
             _logger.info('KdbxBloc updated.');
           }),
           updateShouldNotify: (a, b) => true,

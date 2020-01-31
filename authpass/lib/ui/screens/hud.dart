@@ -48,7 +48,8 @@ class FullScreenHud extends StatelessWidget {
     );
   }
 
-  static void show(BuildContext context, FullScreenHud Function(BuildContext context) builder) {
+  static void show(BuildContext context,
+      FullScreenHud Function(BuildContext context) builder) {
     showDialog<void>(context: context, builder: builder);
   }
 }

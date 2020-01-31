@@ -27,7 +27,10 @@ class CommonField {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is CommonField && runtimeType == other.runtimeType && key == other.key;
+      identical(this, other) ||
+      other is CommonField &&
+          runtimeType == other.runtimeType &&
+          key == other.key;
 
   @override
   int get hashCode => key.hashCode;
@@ -88,12 +91,16 @@ class CommonFields {
 
   final List<CommonField> fields;
 
-  bool isCommon(KdbxKey key) => //fields.firstWhere((f) => f.key == key, orElse: () => null) != null;
+  bool isCommon(
+          KdbxKey
+              key) => //fields.firstWhere((f) => f.key == key, orElse: () => null) != null;
       this[key] != null;
 
-  CommonField operator [](KdbxKey key) => fields.firstWhere((f) => f.key == key, orElse: () => null);
+  CommonField operator [](KdbxKey key) =>
+      fields.firstWhere((f) => f.key == key, orElse: () => null);
 
   CommonField _fieldByKeyString(String key) => _fieldByKey(KdbxKey(key));
 
-  CommonField _fieldByKey(KdbxKey key) => fields.firstWhere((f) => f.key == key);
+  CommonField _fieldByKey(KdbxKey key) =>
+      fields.firstWhere((f) => f.key == key);
 }

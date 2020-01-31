@@ -143,14 +143,17 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
               ),
               ListTile(
                 title: const Text('Color'),
-                subtitle: const Text('Select a color to distinguish beween files.'),
-                trailing: CircleColor(color: _file.openedFile.color, circleSize: 24),
+                subtitle:
+                    const Text('Select a color to distinguish beween files.'),
+                trailing:
+                    CircleColor(color: _file.openedFile.color, circleSize: 24),
                 onTap: () async {
                   final newColor = await ColorPickerDialog(
                     initialColor: _file.openedFile.color,
                   ).show(context);
                   _logger.fine('Selected color $newColor');
-                  _file = await _kdbxBloc.updateOpenedFile(_file, (b) => b.colorCode = newColor?.value);
+                  _file = await _kdbxBloc.updateOpenedFile(
+                      _file, (b) => b.colorCode = newColor?.value);
                   setState(() {});
                 },
               ),
@@ -206,13 +209,17 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   }
 
   Future<void> _saveAsCloudStorage(CloudStorageProvider cs) async {
-    final createFileInfo = await Navigator.of(context).push(CloudStorageSelector.route(
+    final createFileInfo =
+        await Navigator.of(context).push(CloudStorageSelector.route(
       cs,
-      CloudStorageBrowserConfig(defaultFileName: path.basename(_file.fileSource.displayPath), isSave: true),
+      CloudStorageBrowserConfig(
+          defaultFileName: path.basename(_file.fileSource.displayPath),
+          isSave: true),
     ));
     if (createFileInfo != null) {
       await asyncRunTask((progress) async {
-        final newFile = await _kdbxBloc.saveAsNewFile(_file, createFileInfo, cs);
+        final newFile =
+            await _kdbxBloc.saveAsNewFile(_file, createFileInfo, cs);
         setState(() {
           _file = newFile;
         });
@@ -254,7 +261,8 @@ class ColorPickerDialog extends StatefulWidget {
 
   final Color initialColor;
 
-  Future<Color> show(BuildContext context) => showDialog<Color>(context: context, builder: (context) => this);
+  Future<Color> show(BuildContext context) =>
+      showDialog<Color>(context: context, builder: (context) => this);
 
   @override
   _ColorPickerDialogState createState() => _ColorPickerDialogState();
@@ -278,7 +286,8 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   }
 
   void _init() {
-    _selectedColor = _defaultColors.firstWhere((color) => color.value == widget.initialColor?.value,
+    _selectedColor = _defaultColors.firstWhere(
+        (color) => color.value == widget.initialColor?.value,
         orElse: () => widget.initialColor);
   }
 

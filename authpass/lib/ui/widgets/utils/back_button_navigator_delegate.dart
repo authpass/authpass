@@ -15,10 +15,12 @@ class BackButtonNavigatorDelegate extends StatefulWidget {
   final RouteFactory onGenerateRoute;
 
   @override
-  _BackButtonNavigatorDelegateState createState() => _BackButtonNavigatorDelegateState();
+  _BackButtonNavigatorDelegateState createState() =>
+      _BackButtonNavigatorDelegateState();
 }
 
-class _BackButtonNavigatorDelegateState extends State<BackButtonNavigatorDelegate> {
+class _BackButtonNavigatorDelegateState
+    extends State<BackButtonNavigatorDelegate> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override

@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class LinkButton extends StatelessWidget {
-  const LinkButton({Key key, @required this.child, this.onPressed, this.icon, this.padding, this.materialTapTargetSize})
+  const LinkButton(
+      {Key key,
+      @required this.child,
+      this.onPressed,
+      this.icon,
+      this.padding,
+      this.materialTapTargetSize})
       : super(key: key);
 
   final Widget child;

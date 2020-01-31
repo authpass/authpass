@@ -27,7 +27,11 @@ class PasswordGeneratorScreen extends StatelessWidget {
 }
 
 class GeneratePassword extends StatefulWidget {
-  const GeneratePassword({Key key, this.doneButtonIcon, this.doneButtonLabel, this.doneButtonOnPressed})
+  const GeneratePassword(
+      {Key key,
+      this.doneButtonIcon,
+      this.doneButtonLabel,
+      this.doneButtonOnPressed})
       : super(key: key);
 
   final Icon doneButtonIcon;
@@ -74,15 +78,17 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     if (appData.passwordGeneratorCharacterSets.isNotEmpty) {
       _selectedCharacterSet
         ..clear()
-        ..addAll(CharacterSet.characterSetFromIds(appData.passwordGeneratorCharacterSets));
+        ..addAll(CharacterSet.characterSetFromIds(
+            appData.passwordGeneratorCharacterSets));
     }
     _generatePassword();
   }
 
   void _generatePassword() {
     setState(() {
-      _password = PasswordGenerator.singleton()
-          .generatePassword(CharacterSetCollection(_selectedCharacterSet.toList()), _passwordLength);
+      _password = PasswordGenerator.singleton().generatePassword(
+          CharacterSetCollection(_selectedCharacterSet.toList()),
+          _passwordLength);
     });
   }
 
@@ -170,10 +176,12 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                         appDataBloc.update((b, appData) => b
                           ..passwordGeneratorLength = _passwordLength
                           ..passwordGeneratorCharacterSets.replace(
-                              _selectedCharacterSet.map<String>((set) => CharacterSet.characterSetIdFor(set))));
+                              _selectedCharacterSet.map<String>((set) =>
+                                  CharacterSet.characterSetIdFor(set))));
                         widget.doneButtonOnPressed(_password);
                       },
-                      icon: widget.doneButtonIcon ?? Icon(Icons.check_circle_outline),
+                      icon: widget.doneButtonIcon ??
+                          Icon(Icons.check_circle_outline),
                       large: false,
                     ),
                   )
@@ -201,10 +209,14 @@ class SimpleGridWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: iterables
-            .partition(children.followedBy(List.generate(children.length % columns, (_) => Container())), columns)
+            .partition(
+                children.followedBy(List.generate(
+                    children.length % columns, (_) => Container())),
+                columns)
             .map((partition) => Row(
                   mainAxisSize: MainAxisSize.max,
-                  children: partition.map((child) => Expanded(child: child)).toList(),
+                  children:
+                      partition.map((child) => Expanded(child: child)).toList(),
                 ))
             .toList());
   }

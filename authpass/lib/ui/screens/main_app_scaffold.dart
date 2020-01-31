@@ -17,7 +17,8 @@ import 'package:provider/provider.dart';
 final _logger = Logger('main_app_scaffold');
 
 class MainAppScaffold extends StatelessWidget {
-  static MaterialPageRoute<void> route() => MaterialPageRoute(builder: (context) => MainAppScaffold());
+  static MaterialPageRoute<void> route() =>
+      MaterialPageRoute(builder: (context) => MainAppScaffold());
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,9 @@ class MainAppScaffold extends StatelessWidget {
     }
     return KeyboardHandler(
       child: BackButtonNavigatorDelegate(
-        observers: [AnalyticsNavigatorObserver(Provider.of<Analytics>(context))],
+        observers: [
+          AnalyticsNavigatorObserver(Provider.of<Analytics>(context))
+        ],
         onGenerateRoute: _onGenerateRoute,
       ),
     );
@@ -125,7 +128,8 @@ class EmptyStateInitialRoute extends StatelessWidget {
                 child: const Text('Add new Password'),
                 onPressed: () {
                   final newEntry = Provider.of<KdbxBloc>(context).createEntry();
-                  Navigator.of(context).push(EntryDetailsScreen.route(entry: newEntry));
+                  Navigator.of(context)
+                      .push(EntryDetailsScreen.route(entry: newEntry));
                 },
               ),
             ],

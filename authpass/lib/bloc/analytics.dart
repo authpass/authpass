@@ -42,9 +42,11 @@ class Analytics {
     if (env.secrets.analyticsGoogleAnalyticsId != null) {
       if (Platform.isAndroid) {
         const miscChannel = MethodChannel('app.authpass/misc');
-        final isFirebaseTestLab = await miscChannel.invokeMethod<bool>('isFirebaseTestLab');
+        final isFirebaseTestLab =
+            await miscChannel.invokeMethod<bool>('isFirebaseTestLab');
         if (isFirebaseTestLab) {
-          _logger.info('running in firebase test lab. not initializing analytics.');
+          _logger.info(
+              'running in firebase test lab. not initializing analytics.');
           return;
         }
       }
@@ -61,8 +63,10 @@ class Analytics {
         final iosInfo = await DeviceInfoPlugin().iosInfo;
         platformVersion = iosInfo.systemVersion;
       }
-      final userAgent = _createUserAgent(platformVersion: platformVersion, deviceInfo: deviceInfo);
-      _logger.fine('Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
+      final userAgent = _createUserAgent(
+          platformVersion: platformVersion, deviceInfo: deviceInfo);
+      _logger.fine(
+          'Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
           'UserAgent: $userAgent');
 
       final docsDir = await PathUtils().getAppDataDirectory();
@@ -75,7 +79,8 @@ class Analytics {
       );
       _ga.setSessionValue('ua', userAgent);
       _errorGa = _ga;
-      _ga.setSessionValue(_gaPropertyMapping['platform'], Platform.operatingSystem);
+      _ga.setSessionValue(
+          _gaPropertyMapping['platform'], Platform.operatingSystem);
       // set application id to package name.
       _ga.setSessionValue('aid', info.packageName);
 
@@ -129,14 +134,17 @@ class Analytics {
     _ga?.sendScreenView(screenName);
   }
 
-  void _sendEvent(String category, String action, {String label, int value, Map<String, String> parameters}) {
+  void _sendEvent(String category, String action,
+      {String label, int value, Map<String, String> parameters}) {
     if (_ga == null) {
       _gaQ.add(() {
-        _sendEvent(category, action, label: label, value: value, parameters: parameters);
+        _sendEvent(category, action,
+            label: label, value: value, parameters: parameters);
       });
       return;
     }
-    _ga.sendEvent(category, action, label: label, value: value, parameters: parameters);
+    _ga.sendEvent(category, action,
+        label: label, value: value, parameters: parameters);
   }
 }
 

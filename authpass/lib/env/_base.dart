@@ -77,7 +77,9 @@ abstract class Env {
     return AppInfo((b) => b
       ..appName = pi?.appName ?? _DEFAULT_APP_NAME
       ..version = pi?.version ?? _DEFAULT_VERSION
-      ..buildNumber = int.tryParse(pi?.buildNumber ?? '$_DEFAULT_BUILD_NUMBER') ?? _DEFAULT_BUILD_NUMBER
+      ..buildNumber =
+          int.tryParse(pi?.buildNumber ?? '$_DEFAULT_BUILD_NUMBER') ??
+              _DEFAULT_BUILD_NUMBER
       ..packageName = pi?.packageName ?? _DEFAULT_PACKAGE_NAME);
   }
 

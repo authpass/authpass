@@ -17,7 +17,8 @@ class LoggingUtils {
 
   AsyncInitializingLogHandler<RotatingFileAppender> _rotatingFileLoggerCached;
   AsyncInitializingLogHandler<RotatingFileAppender> get _rotatingFileLogger =>
-      _rotatingFileLoggerCached ??= AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
+      _rotatingFileLoggerCached ??=
+          AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
         await PathUtils.waitForRunAppFinished;
         final logsDir = await PathUtils().getLogDirectory();
         final appLogFile = File(path.join(logsDir.path, 'app.log'));
@@ -35,8 +36,10 @@ class LoggingUtils {
     if (fromMainIsolate) {
       _rotatingFileLogger.attachToLogger(Logger.root);
     }
-    final isolateDebug = '${Isolate.current.debugName} (${Isolate.current.hashCode})';
-    _logger.info('Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
+    final isolateDebug =
+        '${Isolate.current.debugName} (${Isolate.current.hashCode})';
+    _logger.info(
+        'Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
 
     Isolate.current.addOnExitListener(RawReceivePort((dynamic val) {
       print('exiting isolate $isolateDebug');
@@ -44,7 +47,8 @@ class LoggingUtils {
 
     final exitPort = ReceivePort();
     exitPort.listen((dynamic data) {
-      _logger.info('Exiting isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode}');
+      _logger.info(
+          'Exiting isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode}');
     }, onDone: () {
       _logger.info('Done $isolateDebug');
     });

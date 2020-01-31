@@ -23,7 +23,9 @@ import 'package:rxdart/rxdart.dart';
 final _logger = Logger('password_list');
 
 class PasswordList extends StatelessWidget {
-  const PasswordList({Key key, @required this.onEntrySelected, this.selectedEntry}) : super(key: key);
+  const PasswordList(
+      {Key key, @required this.onEntrySelected, this.selectedEntry})
+      : super(key: key);
 
   static const routeSettings = RouteSettings(name: '/passwordList');
 
@@ -32,7 +34,8 @@ class PasswordList extends StatelessWidget {
         builder: (context) => PasswordList(
           onEntrySelected: (entry, type) {
             if (type == EntrySelectionType.activeOpen) {
-              Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+              Navigator.of(context)
+                  .push(EntryDetailsScreen.route(entry: entry));
             }
           },
         ),
@@ -45,7 +48,8 @@ class PasswordList extends StatelessWidget {
   Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
 
-    final streams = kdbxBloc.openedFilesKdbx.map((file) => file.dirtyObjectsChanged);
+    final streams =
+        kdbxBloc.openedFilesKdbx.map((file) => file.dirtyObjectsChanged);
     if (streams.isEmpty) {
       Provider.of<Analytics>(context).events.trackPasswordListEmpty();
       return Container(
@@ -54,7 +58,8 @@ class PasswordList extends StatelessWidget {
         child: PrimaryButton(
           child: const Text('Open File'),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
+            Navigator.of(context, rootNavigator: true)
+                .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
           },
         ),
       );
@@ -63,12 +68,15 @@ class PasswordList extends StatelessWidget {
         stream: Rx.merge(streams).map((x) => true),
         builder: (context, snapshot) {
           final watch = Stopwatch()..start();
-          final allEntries =
-              kdbxBloc.openedFilesKdbx.expand((f) => f.body.rootGroup.getAllEntries()).toList(growable: false);
-          allEntries.sort((a, b) =>
-              EntryFormatUtils.getLabel(a).toLowerCase().compareTo(EntryFormatUtils.getLabel(b).toLowerCase()));
+          final allEntries = kdbxBloc.openedFilesKdbx
+              .expand((f) => f.body.rootGroup.getAllEntries())
+              .toList(growable: false);
+          allEntries.sort((a, b) => EntryFormatUtils.getLabel(a)
+              .toLowerCase()
+              .compareTo(EntryFormatUtils.getLabel(b).toLowerCase()));
           watch.stop();
-          _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
+          _logger
+              .finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
           return PasswordListContent(
             entries: allEntries,
             selectedEntry: selectedEntry,
@@ -90,23 +98,28 @@ class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
     Key key,
     @required this.entries,
-    @required void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected,
+    @required
+        void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected,
     this.selectedEntry,
   })  : _onEntrySelected = onEntrySelected,
         super(key: key);
 
   final List<KdbxEntry> entries;
-  bool get isAutofillSelector => WidgetsBinding.instance.window.defaultRouteName == '/autofill';
-  final void Function(KdbxEntry entry, EntrySelectionType type) _onEntrySelected;
+  bool get isAutofillSelector =>
+      WidgetsBinding.instance.window.defaultRouteName == '/autofill';
+  final void Function(KdbxEntry entry, EntrySelectionType type)
+      _onEntrySelected;
   final KdbxEntry selectedEntry;
 
-  void onEntrySelected(BuildContext context, KdbxEntry entry, EntrySelectionType type) {
+  void onEntrySelected(
+      BuildContext context, KdbxEntry entry, EntrySelectionType type) {
     if (isAutofillSelector) {
       if (type == EntrySelectionType.activeOpen) {
         final cf = Provider.of<CommonFields>(context);
         final username = entry.getString(cf.userName.key)?.getText();
         final password = entry.getString(cf.password.key)?.getText();
-        AutofillService().resultWithDataset(label: entry.label, username: username, password: password);
+        AutofillService().resultWithDataset(
+            label: entry.label, username: username, password: password);
         return;
       }
     }
@@ -130,10 +143,13 @@ class PasswordListFilterIsolateRunner {
   }
 
   static List<KdbxEntry> filter(String query) {
-    return filterEntries(PasswordListFilterIsolateRunner._instance._allEntries, query);
+    return filterEntries(
+        PasswordListFilterIsolateRunner._instance._allEntries, query);
   }
 
-  static List<KdbxEntry> filterEntries(List<KdbxEntry> _allEntries, String query, {int maxResults = 30}) {
+  static List<KdbxEntry> filterEntries(
+      List<KdbxEntry> _allEntries, String query,
+      {int maxResults = 30}) {
     _logger.info('We have to filter for $query');
     return _allEntries
         .where((entry) => matches(entry, query))
@@ -142,17 +158,24 @@ class PasswordListFilterIsolateRunner {
         .toList(growable: false);
   }
 
-  static final searchFields = [KdbxKey('Title'), KdbxKey('URL'), KdbxKey('UserName')];
+  static final searchFields = [
+    KdbxKey('Title'),
+    KdbxKey('URL'),
+    KdbxKey('UserName')
+  ];
 
   static bool matches(KdbxEntry entry, String filterQuery) {
     final query = filterQuery.toLowerCase();
     return searchFields
-        .where((field) => entry.getString(field)?.getText()?.toLowerCase()?.contains(query) == true)
+        .where((field) =>
+            entry.getString(field)?.getText()?.toLowerCase()?.contains(query) ==
+            true)
         .isNotEmpty;
   }
 }
 
-class _PasswordListContentState extends State<PasswordListContent> with StreamSubscriberMixin, WidgetsBindingObserver {
+class _PasswordListContentState extends State<PasswordListContent>
+    with StreamSubscriberMixin, WidgetsBindingObserver {
   List<KdbxEntry> _filteredEntries;
   String _filterQuery;
   final _filterTextEditingController = TextEditingController();
@@ -171,8 +194,10 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     WidgetsBinding.instance.addObserver(this);
   }
 
-  void _selectAllFilter() => _filterTextEditingController.selection =
-      TextSelection(baseOffset: 0, extentOffset: _filterTextEditingController.text.length);
+  void _selectAllFilter() =>
+      _filterTextEditingController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: _filterTextEditingController.text.length);
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -219,11 +244,13 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     // right now we ignore the fact that the user might select a list item which is not in view.
     // https://github.com/flutter/flutter/issues/12319
     if (idx < 0) {
-      widget.onEntrySelected(context, entries.first, EntrySelectionType.passiveHighlight);
+      widget.onEntrySelected(
+          context, entries.first, EntrySelectionType.passiveHighlight);
     } else {
       // new Index, modulo entry length to make sure we wrap around the end..
       final newIndex = (idx + next) % entries.length;
-      widget.onEntrySelected(context, entries[newIndex], EntrySelectionType.passiveHighlight);
+      widget.onEntrySelected(
+          context, entries[newIndex], EntrySelectionType.passiveHighlight);
     }
   }
 
@@ -256,7 +283,8 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
             PopupMenuItem(
               value: () {
                 Provider.of<KdbxBloc>(context).closeAllFiles();
-                Navigator.of(context).pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
+                Navigator.of(context)
+                    .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
               },
               child: ListTile(
                 leading: Icon(Icons.exit_to_app),
@@ -301,13 +329,16 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
         controller: _filterTextEditingController,
         onChanged: (newQuery) async {
           _logger.info('query changed to $newQuery');
-          final entries = PasswordListFilterIsolateRunner.filterEntries(widget.entries, newQuery);
+          final entries = PasswordListFilterIsolateRunner.filterEntries(
+              widget.entries, newQuery);
           setState(() {
             _filterQuery = newQuery;
             _filteredEntries = entries;
             if (_filteredEntries.isNotEmpty &&
-                (widget.selectedEntry == null || !_filteredEntries.contains(widget.selectedEntry))) {
-              widget.onEntrySelected(context, _filteredEntries.first, EntrySelectionType.passiveHighlight);
+                (widget.selectedEntry == null ||
+                    !_filteredEntries.contains(widget.selectedEntry))) {
+              widget.onEntrySelected(context, _filteredEntries.first,
+                  EntrySelectionType.passiveHighlight);
             }
           });
           // TODO this looks a bit like a workaround. But on MacOS we lose focus when
@@ -361,14 +392,17 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     final listPrefix = _buildAutofillListPrefix() ?? _buildListPrefix();
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(
-      appBar: _filteredEntries == null ? _buildDefaultAppBar(context) : _buildFilterAppBar(context),
+      appBar: _filteredEntries == null
+          ? _buildDefaultAppBar(context)
+          : _buildFilterAppBar(context),
       body: widget.entries.isEmpty
           ? NoPasswordsEmptyView(
               onPrimaryButtonPressed: () {
                 final kdbxBloc = Provider.of<KdbxBloc>(context);
                 final entry = kdbxBloc.createEntry();
 //                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+                widget.onEntrySelected(
+                    context, entry, EntrySelectionType.activeOpen);
               },
             )
           : ListView.builder(
@@ -417,14 +451,20 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.endToStart) {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                      await Clipboard.setData(
-                          ClipboardData(text: entry.getString(commonFields.userName.key).getText()));
-                      Scaffold.of(context).showSnackBar(const SnackBar(content: Text('Copied userame.')));
+                      await Clipboard.setData(ClipboardData(
+                          text: entry
+                              .getString(commonFields.userName.key)
+                              .getText()));
+                      Scaffold.of(context).showSnackBar(
+                          const SnackBar(content: Text('Copied userame.')));
                     } else {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                      await Clipboard.setData(
-                          ClipboardData(text: entry.getString(commonFields.password.key).getText()));
-                      Scaffold.of(context).showSnackBar(const SnackBar(content: Text('Copied password.')));
+                      await Clipboard.setData(ClipboardData(
+                          text: entry
+                              .getString(commonFields.password.key)
+                              .getText()));
+                      Scaffold.of(context).showSnackBar(
+                          const SnackBar(content: Text('Copied password.')));
                     }
                     return false;
                   },
@@ -432,12 +472,19 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                     decoration: widget.selectedEntry != entry
                         ? (fileColor == null
                             ? null
-                            : BoxDecoration(border: Border(left: BorderSide(color: fileColor, width: 4))))
+                            : BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        color: fileColor, width: 4))))
                         : BoxDecoration(
                             color: Colors.white,
                             border: Border(
-                              right: BorderSide(color: Theme.of(context).primaryColor, width: 4),
-                              left: fileColor == null ? BorderSide.none : BorderSide(color: fileColor, width: 4),
+                              right: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 4),
+                              left: fileColor == null
+                                  ? BorderSide.none
+                                  : BorderSide(color: fileColor, width: 4),
                             ),
                           ),
                     child: ListTile(
@@ -446,14 +493,16 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                         color: fileColor,
                       ),
                       selected: widget.selectedEntry == entry,
-                      title: Text.rich(_highlightFilterQuery(nullIfEmpty(commonFields.title.stringValue(entry))) ??
+                      title: Text.rich(_highlightFilterQuery(nullIfEmpty(
+                              commonFields.title.stringValue(entry))) ??
                           const TextSpan(text: '(no title)')),
-                      subtitle: Text.rich(
-                          _highlightFilterQuery(nullIfEmpty(commonFields.userName.stringValue(entry))) ??
-                              const TextSpan(text: '(no website)')),
+                      subtitle: Text.rich(_highlightFilterQuery(nullIfEmpty(
+                              commonFields.userName.stringValue(entry))) ??
+                          const TextSpan(text: '(no website)')),
                       onTap: () {
 //                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                        widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+                        widget.onEntrySelected(
+                            context, entry, EntrySelectionType.activeOpen);
                       },
                     ),
                   ),
@@ -467,7 +516,8 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                   child: Icon(Icons.add),
                   onPressed: () {
                     final entry = kdbxBloc.createEntry();
-                    widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+                    widget.onEntrySelected(
+                        context, entry, EntrySelectionType.activeOpen);
                   },
                 )
               : SpeedDial(
@@ -479,11 +529,13 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
                         (file) => SpeedDialChild(
                             label: file.fileSource.displayName,
                             child: Icon(file.fileSource.displayIcon),
-                            backgroundColor:
-                                file.openedFile.colorCode == null ? null : Color(file.openedFile.colorCode),
+                            backgroundColor: file.openedFile.colorCode == null
+                                ? null
+                                : Color(file.openedFile.colorCode),
                             onTap: () {
                               final entry = kdbxBloc.createEntry(file.kdbxFile);
-                              widget.onEntrySelected(context, entry, EntrySelectionType.activeOpen);
+                              widget.onEntrySelected(context, entry,
+                                  EntrySelectionType.activeOpen);
                             }),
                       )
                       .toList(),
@@ -510,7 +562,9 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
     final spans = <TextSpan>[];
     for (final match in _filterQuery.allMatches(text)) {
       spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
-      spans.add(TextSpan(text: text.substring(match.start, match.end), style: TextStyle(fontWeight: FontWeight.bold)));
+      spans.add(TextSpan(
+          text: text.substring(match.start, match.end),
+          style: TextStyle(fontWeight: FontWeight.bold)));
       previousMatchEnd = match.end;
     }
     if (previousMatchEnd < text.length) {
@@ -533,7 +587,8 @@ class _PasswordListContentState extends State<PasswordListContent> with StreamSu
 }
 
 class NoPasswordsEmptyView extends StatelessWidget {
-  const NoPasswordsEmptyView({Key key, this.onPrimaryButtonPressed}) : super(key: key);
+  const NoPasswordsEmptyView({Key key, this.onPrimaryButtonPressed})
+      : super(key: key);
 
   final VoidCallback onPrimaryButtonPressed;
 

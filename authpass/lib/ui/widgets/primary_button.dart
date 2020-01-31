@@ -18,7 +18,8 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final childWidget = icon == null
-        ? Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: child)
+        ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8), child: child)
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -39,7 +40,8 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-ThemeData _createMainButtonTheme(ThemeData themeData, {bool large = true}) => themeData.copyWith(
+ThemeData _createMainButtonTheme(ThemeData themeData, {bool large = true}) =>
+    themeData.copyWith(
       buttonTheme: themeData.buttonTheme.copyWith(
         buttonColor: themeData.primaryColor,
         textTheme: ButtonTextTheme.primary,
@@ -52,5 +54,7 @@ ThemeData _createMainButtonTheme(ThemeData themeData, {bool large = true}) => th
               )
             : null,
       ),
-      textTheme: large ? themeData.textTheme.apply(fontSizeFactor: 1.4) : themeData.textTheme,
+      textTheme: large
+          ? themeData.textTheme.apply(fontSizeFactor: 1.4)
+          : themeData.textTheme,
     );
