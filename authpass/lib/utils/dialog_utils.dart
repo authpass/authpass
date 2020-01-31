@@ -8,7 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 final _logger = Logger('authpass.dialog_utils');
 
 class DialogUtils {
-  static Future<dynamic> showSimpleAlertDialog(BuildContext context, String title, String content) {
+  static Future<dynamic> showSimpleAlertDialog(
+      BuildContext context, String title, String content) {
     return showDialog<dynamic>(
         context: context,
         builder: (context) {
@@ -27,7 +28,8 @@ class DialogUtils {
         });
   }
 
-  static Future<dynamic> showErrorDialog(BuildContext context, String title, String content) {
+  static Future<dynamic> showErrorDialog(
+      BuildContext context, String title, String content) {
     return showSimpleAlertDialog(context, title, content);
   }
 
@@ -44,7 +46,8 @@ class DialogUtils {
     @required BuildContext context,
     @required ConfirmDialogParams params,
   }) {
-    return showDialog<bool>(context: context, builder: (context) => ConfirmDialog(params: params));
+    return showDialog<bool>(
+        context: context, builder: (context) => ConfirmDialog(params: params));
   }
 }
 
@@ -86,19 +89,28 @@ class ConfirmDialog extends StatelessWidget {
 }
 
 class SimplePromptDialog extends StatefulWidget {
-  const SimplePromptDialog({Key key, this.title, this.labelText, this.initialValue = ''}) : super(key: key);
+  const SimplePromptDialog({
+    Key key,
+    this.title,
+    this.labelText,
+    this.initialValue = '',
+    this.helperText,
+  }) : super(key: key);
   final String title;
   final String labelText;
+  final String helperText;
   final String initialValue;
 
-  static Future<String> showPrompt(BuildContext context, SimplePromptDialog dialog) =>
+  static Future<String> showPrompt(
+          BuildContext context, SimplePromptDialog dialog) =>
       showDialog<String>(context: context, builder: (context) => dialog);
 
   @override
   _SimplePromptDialogState createState() => _SimplePromptDialogState();
 }
 
-class _SimplePromptDialogState extends State<SimplePromptDialog> with WidgetsBindingObserver {
+class _SimplePromptDialogState extends State<SimplePromptDialog>
+    with WidgetsBindingObserver {
   TextEditingController _controller;
   AppLifecycleState _previousState;
   String _previousClipboard;
@@ -121,7 +133,8 @@ class _SimplePromptDialogState extends State<SimplePromptDialog> with WidgetsBin
     final text = (await Clipboard.getData('text/plain'))?.text;
     if (setIfChanged && text != _previousClipboard && text != null) {
       _controller.text = text;
-      _controller.selection = TextSelection(baseOffset: 0, extentOffset: text.length);
+      _controller.selection =
+          TextSelection(baseOffset: 0, extentOffset: text.length);
     }
     _previousClipboard = text;
   }
@@ -155,6 +168,8 @@ class _SimplePromptDialogState extends State<SimplePromptDialog> with WidgetsBin
                 controller: _controller,
                 decoration: InputDecoration(
                   labelText: widget.labelText,
+                  helperText: widget.helperText,
+                  helperMaxLines: 1,
                 ),
                 autofocus: true,
                 onEditingComplete: () {

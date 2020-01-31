@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:authpass/bloc/analytics.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -163,6 +165,11 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
   }
 }
 
+enum FieldType {
+  string,
+  otp,
+}
+
 class EntryDetails extends StatefulWidget {
   const EntryDetails(
       {Key key, @required this.entry, @required this.onSavedPressed})
@@ -270,6 +277,9 @@ class _EntryDetailsState extends State<EntryDetails>
               ..._fieldKeys
                   .map(
                     (f) => EntryField(
+                      fieldType: f.item3 == commonFields.otpAuth
+                          ? FieldType.otp
+                          : FieldType.string,
                       key: f.item1,
                       entry: widget.entry,
                       fieldKey: f.item2,
@@ -319,11 +329,12 @@ class _EntryDetailsState extends State<EntryDetails>
 
   Future<OtpAuth> _askForTotpSecret(BuildContext context) async {
     final totpCode = await SimplePromptDialog.showPrompt(
-        context,
-        const SimplePromptDialog(
-          title: 'Time Based Authentication',
-          labelText: 'Please enter time based key.',
-        ));
+      context,
+      const SimplePromptDialog(
+        title: 'Time Based Authentication',
+        helperText: 'Please enter time based key.',
+      ),
+    );
     if (totpCode == null) {
       return null;
     }
@@ -415,6 +426,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
 class EntryField extends StatefulWidget {
   const EntryField({
     Key key,
+    @required this.fieldType,
     @required this.entry,
     @required this.fieldKey,
     this.commonField,
@@ -424,13 +436,15 @@ class EntryField extends StatefulWidget {
         assert(onChangedMetadata != null),
         super(key: key);
 
+  final FieldType fieldType;
   final KdbxEntry entry;
   final KdbxKey fieldKey;
   final CommonField commonField;
   final VoidCallback onChangedMetadata;
 
   @override
-  _EntryFieldState createState() => _EntryFieldState();
+  _EntryFieldState createState() =>
+      fieldType == FieldType.otp ? _OtpEntryFieldState() : _EntryFieldState();
 }
 
 enum EntryAction {
@@ -462,8 +476,6 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           ? widget.entry.getString(widget.fieldKey)?.getText()
           : _controller.text) ??
       _fieldValue?.getText();
-
-  bool get _isOtpAuth => widget.commonField == _commonFields.otpAuth;
 
   final GlobalKey<HighlightWidgetState> _highlightWidgetKey =
       GlobalKey<HighlightWidgetState>();
@@ -556,46 +568,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: _isOtpAuth
-                    ? TotpFieldEntry(
-                        entry: widget.entry,
-                        fieldKey: widget.fieldKey,
-                        commonField: widget.commonField,
-                      )
-                    : _isValueObscured
-                        ? ObscuredEntryField(
-                            onPressed: () {
-                              setState(() {
-                                _controller.text = _valueCurrent ?? '';
-                                _controller.selection = TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset:
-                                        _controller.text?.length ?? 0);
-                                _isValueObscured = false;
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  _focusNode.requestFocus();
-                                  _logger.finer('requesting focus.');
-                                });
-                              });
-                            },
-                            fieldKey: widget.fieldKey,
-                            commonField: widget.commonField,
-                          )
-                        : StringEntryField(
-                            onSaved: (value) {
-                              final newValue = _isProtected
-                                  ? ProtectedValue.fromString(value)
-                                  : PlainValue(value);
-                              _fieldValue = newValue;
-                            },
-                            fieldKey: widget.fieldKey,
-                            commonField: widget.commonField,
-                            controller: _controller,
-                            formFieldKey: _formFieldKey,
-                            focusNode: _focusNode,
-                            passwordGeneratorPressed: _generatePassword,
-                          ),
+                child: _buildEntryFieldEditor(),
               ),
               PopupMenuButton<EntryAction>(
                 icon: Icon(Icons.more_vert),
@@ -649,61 +622,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                       break;
                   }
                 },
-                itemBuilder: (context) => <PopupMenuEntry<EntryAction>>[
-                  const PopupMenuItem(
-                    value: EntryAction.copy,
-                    child: ListTile(
-                      leading: Icon(Icons.content_copy),
-                      title: Text('Copy'),
-                    ),
-                  ),
-                  const PopupMenuDivider(),
-                  const PopupMenuItem(
-                    value: EntryAction.rename,
-                    child: ListTile(
-                      leading: Icon(Icons.edit),
-                      title: Text('Rename'),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: EntryAction.passwordGenerator,
-                    child: ListTile(
-                      leading: Icon(FontAwesomeIcons.random),
-                      title: Text('Password Generator …'),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: EntryAction.protect,
-                    child: ListTile(
-                      leading: Icon(_isProtected
-                          ? Icons.no_encryption
-                          : Icons.enhanced_encryption),
-                      title: Text(
-                          _isProtected ? 'Unprotect value' : 'Protect Value'),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: EntryAction.delete,
-                    child: ListTile(
-                      leading: Icon(Icons.delete),
-                      title: Text('Delete'),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: EntryAction.show,
-                    child: ListTile(
-//                    leading: Icon(Icons.present_to_all),
-                      leading: Icon(FontAwesomeIcons.qrcode),
-                      title: Text('Present'),
-                    ),
-                  ),
-                ]
-                    .where((item) =>
-                        !_isOtpAuth ||
-                        item is PopupMenuItem &&
-                            (item as PopupMenuItem).value == EntryAction.delete)
-                    .toList(),
-              )
+                itemBuilder: _buildMenuEntries,
+              ),
 //            IconButton(
 //              icon: Icon(Icons.content_copy),
 //              tooltip: 'Copy to clipboard',
@@ -717,6 +637,55 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       ),
     );
   }
+
+  List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) =>
+      <PopupMenuEntry<EntryAction>>[
+        const PopupMenuItem(
+          value: EntryAction.copy,
+          child: ListTile(
+            leading: Icon(Icons.content_copy),
+            title: Text('Copy'),
+          ),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem(
+          value: EntryAction.rename,
+          child: ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Rename'),
+          ),
+        ),
+        const PopupMenuItem(
+          value: EntryAction.passwordGenerator,
+          child: ListTile(
+            leading: Icon(FontAwesomeIcons.random),
+            title: Text('Password Generator …'),
+          ),
+        ),
+        PopupMenuItem(
+          value: EntryAction.protect,
+          child: ListTile(
+            leading: Icon(
+                _isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
+            title: Text(_isProtected ? 'Unprotect value' : 'Protect Value'),
+          ),
+        ),
+        const PopupMenuItem(
+          value: EntryAction.delete,
+          child: ListTile(
+            leading: Icon(Icons.delete),
+            title: Text('Delete'),
+          ),
+        ),
+        const PopupMenuItem(
+          value: EntryAction.show,
+          child: ListTile(
+//                    leading: Icon(Icons.present_to_all),
+            leading: Icon(FontAwesomeIcons.qrcode),
+            title: Text('Present'),
+          ),
+        ),
+      ];
 
   Future<void> _generatePassword() async {
     final appData = await Provider.of<AppDataBloc>(context).store.load();
@@ -764,6 +733,38 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     return true;
   }
 
+  Widget _buildEntryFieldEditor() => _isValueObscured
+      ? ObscuredEntryFieldEditor(
+          onPressed: () {
+            setState(() {
+              _controller.text = _valueCurrent ?? '';
+              _controller.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+              _isValueObscured = false;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _focusNode.requestFocus();
+                _logger.finer('requesting focus.');
+              });
+            });
+          },
+          fieldKey: widget.fieldKey,
+          commonField: widget.commonField,
+        )
+      : StringEntryFieldEditor(
+          onSaved: (value) {
+            final newValue = _isProtected
+                ? ProtectedValue.fromString(value)
+                : PlainValue(value);
+            _fieldValue = newValue;
+          },
+          fieldKey: widget.fieldKey,
+          commonField: widget.commonField,
+          controller: _controller,
+          formFieldKey: _formFieldKey,
+          focusNode: _focusNode,
+          passwordGeneratorPressed: _generatePassword,
+        );
+
   @override
   void dispose() {
     _logger
@@ -774,8 +775,85 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
   }
 }
 
-class ObscuredEntryField extends StatelessWidget {
-  const ObscuredEntryField({
+class _OtpEntryFieldState extends _EntryFieldState {
+  Timer _timer;
+
+  String _currentOtp;
+
+  /// elapsed seconds since the last period change.
+  int _elapsed;
+
+  /// period in seconds how often the otp changes.
+  int _period;
+
+  void _updateOtp() {
+    final otpAuthUri = widget.entry.getString(widget.fieldKey)?.getText();
+    final otpAuth = OtpAuth.fromUri(Uri.parse(otpAuthUri));
+    final secretBase32 = base32.encode(otpAuth.secret);
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final totpCode = OTP.generateTOTPCodeString(
+      secretBase32,
+      now,
+      algorithm: otpAuth.algorithm,
+      length: otpAuth.digits,
+      interval: otpAuth.period,
+    );
+    setState(() {
+      _elapsed = (now ~/ 1000) % otpAuth.period;
+      _period = otpAuth.period;
+      _currentOtp = totpCode;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _updateOtp();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _updateOtp();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+    _timer = null;
+  }
+
+  @override
+  Future<bool> copyValue() async {
+    _logger.finer('Copying OTP value.');
+    _highlightWidgetKey.currentState.triggerHighlight();
+    Provider.of<Analytics>(context)
+        .events
+        .trackCopyField(key: widget.fieldKey.key);
+    await Clipboard.setData(ClipboardData(text: _currentOtp ?? ''));
+    return true;
+  }
+
+  @override
+  Widget _buildEntryFieldEditor() => OtpFieldEntryEditor(
+        period: _period,
+        elapsed: _elapsed,
+        otpCode: _currentOtp,
+      );
+
+  @override
+  List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) =>
+      super
+          ._buildMenuEntries(context)
+          .where((item) =>
+              item is PopupMenuItem &&
+              const [
+                EntryAction.delete,
+                EntryAction.copy,
+              ].contains((item as PopupMenuItem).value))
+          .toList();
+}
+
+class ObscuredEntryFieldEditor extends StatelessWidget {
+  const ObscuredEntryFieldEditor({
     Key key,
     @required this.onPressed,
     @required this.commonField,
@@ -829,8 +907,8 @@ class ObscuredEntryField extends StatelessWidget {
   }
 }
 
-class StringEntryField extends StatelessWidget {
-  const StringEntryField({
+class StringEntryFieldEditor extends StatelessWidget {
+  const StringEntryFieldEditor({
     Key key,
     @required this.onSaved,
     @required this.controller,

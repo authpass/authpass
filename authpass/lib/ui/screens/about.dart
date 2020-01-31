@@ -35,7 +35,8 @@ class AuthPassAboutDialog extends StatelessWidget {
                       initialValue: appData?.manualUserType ?? '',
                     ));
                 if (newData != null) {
-                  await deps.appDataBloc.update((b, _) => b..manualUserType = newData);
+                  await deps.appDataBloc
+                      .update((b, _) => b..manualUserType = newData);
                   deps.analytics.events.trackUserType(userType: newData);
                 }
               },
@@ -76,7 +77,8 @@ class AuthPassAboutDialog extends StatelessWidget {
   }
 
   static PopupMenuButton createAboutPopupAction(BuildContext context,
-      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context) builder}) {
+      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
+          builder}) {
     return PopupMenuButton<VoidCallback>(
       onSelected: (val) => val(),
       itemBuilder: (context) => [
@@ -86,7 +88,8 @@ class AuthPassAboutDialog extends StatelessWidget {
     );
   }
 
-  static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(BuildContext context) {
+  static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
+      BuildContext context) {
     final openedFiles = Provider.of<KdbxBloc>(context)?.openedFiles?.values;
     return [
       PopupMenuItem(
@@ -109,11 +112,13 @@ class AuthPassAboutDialog extends StatelessWidget {
       ),
       ...?(openedFiles?.isNotEmpty != true
           ? null
-          : (<PopupMenuEntry<VoidCallback>>[const PopupMenuDivider()]).followedBy(
+          : (<PopupMenuEntry<VoidCallback>>[const PopupMenuDivider()])
+              .followedBy(
               openedFiles.map(
                 (file) => PopupMenuItem(
                   child: ListTile(
-                    leading: Icon(file.fileSource.displayIcon, color: file.openedFile.color),
+                    leading: Icon(file.fileSource.displayIcon,
+                        color: file.openedFile.color),
                     title: Text(file.fileSource.displayName),
                     subtitle: Text(
                       file.fileSource.displayPath,
@@ -123,7 +128,8 @@ class AuthPassAboutDialog extends StatelessWidget {
                     ),
                   ),
                   value: () {
-                    Navigator.of(context, rootNavigator: true).push(ManageFileScreen.route(file.fileSource));
+                    Navigator.of(context, rootNavigator: true)
+                        .push(ManageFileScreen.route(file.fileSource));
                   },
                 ),
               ),
@@ -134,7 +140,8 @@ class AuthPassAboutDialog extends StatelessWidget {
           title: Text('Open another File'),
         ),
         value: () {
-          Navigator.of(context, rootNavigator: true).push(SelectFileScreen.route());
+          Navigator.of(context, rootNavigator: true)
+              .push(SelectFileScreen.route());
         },
       ),
       const PopupMenuDivider(),
@@ -165,7 +172,8 @@ class UrlLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DecoratedBox(
-      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
+      decoration: BoxDecoration(
+          border: Border(bottom: Divider.createBorderSide(context))),
       child: InkWell(
         onTap: () {
           DialogUtils.openUrl(url);
