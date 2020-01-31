@@ -57,6 +57,15 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  barcode_scan:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "85cfc7efee91c3444d24435486cf292a32f04499"
+      resolved-ref: "85cfc7efee91c3444d24435486cf292a32f04499"
+      url: "https://github.com/RohitKumarMishra/flutter_barcode_reader.git"
+    source: git
+    version: "1.0.0"
   base32:
     dependency: transitive
     description:

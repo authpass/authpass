@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:authpass/bloc/analytics.dart';
@@ -20,6 +21,7 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -298,6 +300,7 @@ class _EntryDetailsState extends State<EntryDetails>
                     if (secret == null) {
                       return;
                     }
+                    _logger.finer('Got otp auth: $secret');
                     widget.entry.setString(key,
                         ProtectedValue.fromString(secret.toUri().toString()));
                   } else {
@@ -328,6 +331,39 @@ class _EntryDetailsState extends State<EntryDetails>
   }
 
   Future<OtpAuth> _askForTotpSecret(BuildContext context) async {
+    final _cleanOtpCodeCode = (String totpCode) async {
+      try {
+        if (totpCode == null) {
+          return null;
+        }
+        if (totpCode.startsWith('otpauth://')) {
+          return OtpAuth.fromUri(Uri.parse(totpCode));
+        }
+        final cleaned = totpCode?.replaceAll(' ', ''); //?.toUpperCase();
+        final value = base32.decode(cleaned);
+        _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');
+        return OtpAuth(secret: value);
+      } catch (e, stackTrace) {
+        _logger.warning('Invalid base32 code?', e, stackTrace);
+        await DialogUtils.showSimpleAlertDialog(context, 'Invalid key',
+            'Given input is not a valid base32 TOTP code. Please verify your input.');
+        return await _askForTotpSecret(context);
+      }
+    };
+
+    if (Platform.isIOS || Platform.isAndroid) {
+      try {
+        _logger.finer('Opening barcode scanner.');
+//        final barcode = await FlutterBarcodeScanner.scanBarcode(
+//            '#ff6666', 'Cancel', true, ScanMode.QR);
+        final barcode = await BarcodeScanner.scan();
+        if (barcode != null) {
+          return _cleanOtpCodeCode(barcode);
+        }
+      } catch (e, stackTrace) {
+        _logger.warning('Error during barcode scanning.', e, stackTrace);
+      }
+    }
     final totpCode = await SimplePromptDialog.showPrompt(
       context,
       const SimplePromptDialog(
@@ -335,20 +371,7 @@ class _EntryDetailsState extends State<EntryDetails>
         helperText: 'Please enter time based key.',
       ),
     );
-    if (totpCode == null) {
-      return null;
-    }
-    try {
-      final cleaned = totpCode?.replaceAll(' ', ''); //?.toUpperCase();
-      final value = base32.decode(cleaned);
-      _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');
-      return OtpAuth(secret: value);
-    } catch (e, stackTrace) {
-      _logger.warning('Invalid base32 code?', e, stackTrace);
-      await DialogUtils.showSimpleAlertDialog(context, 'Invalid key',
-          'Given input is not a valid base32 TOTP code. Please verify your input.');
-      return await _askForTotpSecret(context);
-    }
+    return _cleanOtpCodeCode(totpCode);
   }
 }
 
@@ -449,6 +472,7 @@ class EntryField extends StatefulWidget {
 
 enum EntryAction {
   copy,
+  copyRawData,
   rename,
   protect,
   delete,
@@ -573,55 +597,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
               PopupMenuButton<EntryAction>(
                 icon: Icon(Icons.more_vert),
                 offset: const Offset(0, 32),
-                onSelected: (val) async {
-                  switch (val) {
-                    case EntryAction.copy:
-                      await copyValue();
-                      break;
-                    case EntryAction.rename:
-                      final key = await SimplePromptDialog.showPrompt(
-                        context,
-                        SimplePromptDialog(
-                          title: 'Renaming field',
-                          labelText: 'Enter the new name for the field',
-                          initialValue: widget.fieldKey.key,
-                        ),
-                      );
-                      if (key != null) {
-                        widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
-                        widget.onChangedMetadata();
-                      }
-                      break;
-                    case EntryAction.passwordGenerator:
-                      await _launchPasswordGenerator();
-                      break;
-                    case EntryAction.protect:
-                      setState(() {
-                        if (_isProtected) {
-                          _fieldValue = PlainValue(_valueCurrent ?? '');
-                          _isValueObscured = false;
-                        } else {
-                          _logger.fine(
-                              'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
-                          _fieldValue =
-                              ProtectedValue.fromString(_valueCurrent ?? '');
-                          _isValueObscured = true;
-                        }
-                      });
-                      break;
-                    case EntryAction.delete:
-                      widget.entry.removeString(widget.fieldKey);
-                      widget.onChangedMetadata();
-                      break;
-                    case EntryAction.show:
-                      FullScreenHud.show(context, (context) {
-                        return FullScreenHud(
-                          value: _valueCurrent ?? '',
-                        );
-                      });
-                      break;
-                  }
-                },
+                onSelected: _handleMenuEntrySelected,
                 itemBuilder: _buildMenuEntries,
               ),
 //            IconButton(
@@ -636,6 +612,59 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
         ),
       ),
     );
+  }
+
+  Future<void> _handleMenuEntrySelected(EntryAction entryAction) async {
+    switch (entryAction) {
+      case EntryAction.copy:
+        await copyValue();
+        break;
+      case EntryAction.copyRawData:
+        // only used by [_OtpEntryFieldState]
+        throw UnsupportedError('Field does not support this action.');
+        break;
+      case EntryAction.rename:
+        final key = await SimplePromptDialog.showPrompt(
+          context,
+          SimplePromptDialog(
+            title: 'Renaming field',
+            labelText: 'Enter the new name for the field',
+            initialValue: widget.fieldKey.key,
+          ),
+        );
+        if (key != null) {
+          widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
+          widget.onChangedMetadata();
+        }
+        break;
+      case EntryAction.passwordGenerator:
+        await _launchPasswordGenerator();
+        break;
+      case EntryAction.protect:
+        setState(() {
+          if (_isProtected) {
+            _fieldValue = PlainValue(_valueCurrent ?? '');
+            _isValueObscured = false;
+          } else {
+            _logger.fine(
+                'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
+            _fieldValue = ProtectedValue.fromString(_valueCurrent ?? '');
+            _isValueObscured = true;
+          }
+        });
+        break;
+      case EntryAction.delete:
+        widget.entry.removeString(widget.fieldKey);
+        widget.onChangedMetadata();
+        break;
+      case EntryAction.show:
+        FullScreenHud.show(context, (context) {
+          return FullScreenHud(
+            value: _valueCurrent ?? '',
+          );
+        });
+        break;
+    }
   }
 
   List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) =>
@@ -786,10 +815,15 @@ class _OtpEntryFieldState extends _EntryFieldState {
   /// period in seconds how often the otp changes.
   int _period;
 
+  @override
+  String get _valueCurrent =>
+      widget.entry.getString(widget.fieldKey)?.getText() ?? '';
+
   void _updateOtp() {
     final otpAuthUri = widget.entry.getString(widget.fieldKey)?.getText();
     final otpAuth = OtpAuth.fromUri(Uri.parse(otpAuthUri));
     final secretBase32 = base32.encode(otpAuth.secret);
+    _logger.fine('uri: $otpAuthUri secret: $secretBase32');
     final now = DateTime.now().millisecondsSinceEpoch;
     final totpCode = OTP.generateTOTPCodeString(
       secretBase32,
@@ -840,6 +874,15 @@ class _OtpEntryFieldState extends _EntryFieldState {
       );
 
   @override
+  Future<void> _handleMenuEntrySelected(EntryAction entryAction) async {
+    if (entryAction == EntryAction.copyRawData) {
+      Clipboard.setData(ClipboardData(text: _valueCurrent));
+      return;
+    }
+    return super._handleMenuEntrySelected(entryAction);
+  }
+
+  @override
   List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) =>
       super
           ._buildMenuEntries(context)
@@ -849,7 +892,15 @@ class _OtpEntryFieldState extends _EntryFieldState {
                 EntryAction.delete,
                 EntryAction.copy,
               ].contains((item as PopupMenuItem).value))
-          .toList();
+          .followedBy([
+        const PopupMenuItem(
+          value: EntryAction.copyRawData,
+          child: ListTile(
+            leading: Icon(Icons.code),
+            title: Text('Copy Secret'),
+          ),
+        )
+      ]).toList();
 }
 
 class ObscuredEntryFieldEditor extends StatelessWidget {

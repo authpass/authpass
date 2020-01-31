@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:base32/base32.dart';
 import 'package:meta/meta.dart';
 import 'package:otp/otp.dart';
 
@@ -8,12 +8,15 @@ extension StringToInt on String {
   int toInt() => int.parse(this);
 }
 
+/// losely based on format from
+/// https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 class OtpAuth {
   const OtpAuth({
     @required this.secret,
     this.algorithm = DEFAULT_ALGORITHM,
     this.digits = DEFAULT_DIGITS,
     this.period = DEFAULT_PERIOD,
+    this.label = '',
   })  : assert(secret != null),
         assert(algorithm != null),
         assert(digits != null),
@@ -23,8 +26,9 @@ class OtpAuth {
     final p = uri.queryParameters;
 
     return OtpAuth(
-      secret: base64.decode(p[PARAM_SECRET]),
-      algorithm: algorithmForString(p[PARAM_ALGORITHM]),
+      label: uri.pathSegments.firstWhere((element) => true, orElse: () => ''),
+      secret: base32.decode(p[PARAM_SECRET]),
+      algorithm: algorithmForString(p[PARAM_ALGORITHM]) ?? DEFAULT_ALGORITHM,
       digits: p[PARAM_DIGITS]?.toInt() ?? DEFAULT_DIGITS,
       period: p[PARAM_PERIOD]?.toInt() ?? DEFAULT_PERIOD,
     );
@@ -53,6 +57,7 @@ class OtpAuth {
       .firstWhere((entry) => entry.value == key, orElse: () => null)
       ?.key;
 
+  final String label;
   final Algorithm algorithm;
   final Uint8List secret;
   final int digits;
@@ -61,12 +66,17 @@ class OtpAuth {
   Uri toUri() => Uri(
         scheme: SCHEME,
         host: TYPE_TOTP,
-        path: '',
+        pathSegments: [label],
         queryParameters: <String, String>{
-          PARAM_SECRET: base64.encode(secret),
+          PARAM_SECRET: base32.encode(secret),
           PARAM_ALGORITHM: algorithms[algorithm],
           PARAM_DIGITS: digits.toString(),
           PARAM_PERIOD: period.toString(),
         },
       );
+
+  @override
+  String toString() {
+    return 'OtpAuth{label: $label, algorithm: $algorithm, digits: $digits, period: $period}';
+  }
 }

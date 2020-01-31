@@ -10,6 +10,8 @@ PODS:
   - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_barcode_scanner (0.1.7):
+    - Flutter
   - macos_secure_bookmarks (0.0.1):
     - Flutter
   - package_info (0.0.1):
@@ -32,6 +34,7 @@ DEPENDENCIES:
   - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
+  - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
   - macos_secure_bookmarks (from `.symlinks/plugins/macos_secure_bookmarks/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -53,6 +56,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
     :path: Flutter
+  flutter_barcode_scanner:
+    :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
   macos_secure_bookmarks:
     :path: ".symlinks/plugins/macos_secure_bookmarks/ios"
   package_info:
@@ -75,6 +80,7 @@ SPEC CHECKSUMS:
   file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_barcode_scanner: c7d23c65b4866f5eaaa1cce1da8d2d1669b57800
   macos_secure_bookmarks: e92103d68440bb8e5dc58e5e87956de0be6ce4ad
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
@@ -83,6 +89,6 @@ SPEC CHECKSUMS:
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
 
-PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+PODFILE CHECKSUM: 0ba44ad07df4ab62269dc769727cf0f12b1e453d
 
 COCOAPODS: 1.8.4
