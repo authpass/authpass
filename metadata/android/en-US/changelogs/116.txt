@@ -1,0 +1,6 @@
+1.4.0:
+* Add support for 2fa (2nd Factor Authentication) based on Time-based One Time Passwords (TOTP).
+* A couple of bug fixes and improvements to error messages.
+
+See also https://authpass.app/articles/time-based-one-time-tokens-for-2nd-factor-otpauth/
+
