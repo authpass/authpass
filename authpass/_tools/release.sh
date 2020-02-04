@@ -5,7 +5,7 @@ set -xeu
 dir="${0%/*}"
 cd $dir/..
 
-FLT=flutter
+FLT=${FLT:-~flutter}
 
 DEPS=${DEPS:-~/deps}
 if test -d ${DEPS}/flutter/bin ; then

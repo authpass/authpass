@@ -166,8 +166,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         _logger.finer(
             'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
         final opened = await kdbxBloc.reopenQuickUnlock(progress);
-        _logger.info('opened $opened files with quick unlock.');
+        _logger.info(
+            'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
         if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
+          _logger.finer('Pushing main app scaffold.');
           await Navigator.of(context).pushReplacement(MainAppScaffold.route());
         }
       }, label: 'Quick unlocking files');
