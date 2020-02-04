@@ -1,0 +1,15 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: build samsungapps apk
+      run: "./authpass/_tools/ci-install-deps.sh android"
+    - name: build samsungapps apk
+      run: "./authpass/_tools/ci-release.sh android samsungapps"
