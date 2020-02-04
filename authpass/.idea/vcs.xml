@@ -6,6 +6,7 @@
     <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/autofill_service" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/biometric_storage" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/autofill_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/barcode_scan" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/biometric_storage" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks" vcs="Git" />
   </component>
