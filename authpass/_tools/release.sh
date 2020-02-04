@@ -5,7 +5,7 @@ set -xeu
 dir="${0%/*}"
 cd $dir/..
 
-FLT=${FLT:-~flutter}
+FLT=${FLT:-flutter}
 
 DEPS=${DEPS:-~/deps}
 if test -d ${DEPS}/flutter/bin ; then
@@ -43,6 +43,8 @@ if test -z "$buildnumber" ; then
 else
 	echo "WARNING: forcing buildnumber $buildnumber"
 fi
+
+echo "::set-output name=appbuildnumber::$buildnumber"
 
 $FLT pub get
 case "$1" in

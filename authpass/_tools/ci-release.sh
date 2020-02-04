@@ -13,7 +13,11 @@ target_variant="${2:-$target_platform}"
 cd ${root}
 
 
-${DEPS}/blackbox/bin/blackbox_postdeploy
+if test -f _tools/secrets/gradle_home/gradle.properties ; then
+    echo "blackbox was already decrypted."
+else
+    ${DEPS}/blackbox/bin/blackbox_postdeploy
+fi
 
 github_key="$(pwd)/_tools/deploy-key/github-deploy-key"
 
