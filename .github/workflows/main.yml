@@ -9,7 +9,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Postdeploy
+      env:
+        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+      run: authpass/_tools/postdeploy.sh
     - name: build samsungapps apk
       run: "./authpass/_tools/ci-install-deps.sh android"
     - name: build samsungapps apk
       run: "./authpass/_tools/ci-release.sh android samsungapps"
+    - uses: actions/upload-artifact@v1
+      with:
+        name: app-samsungapps-release.apk
+        path: authpass/build/app/outputs/apk/samsungapps/release/app-samsungapps-release.apk
+
