@@ -21,6 +21,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackOpenFile({String type}) =>
       trackEvent('openFile', <String, dynamic>{'type': type});
   @override
+  void trackOpenFile2({String generator}) =>
+      trackEvent('openFile2', <String, dynamic>{'generator': generator});
+  @override
   void trackSelectEntry({EntrySelectionType type}) => trackEvent('selectEntry',
       <String, dynamic>{'type': type?.toString()?.substring(19)});
   @override
@@ -46,6 +49,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackSave({String type, int value}) =>
       trackEvent('save', <String, dynamic>{'type': type, 'value': value});
+  @override
+  void trackSaveCount({String generator, int value}) => trackEvent(
+      'saveCount', <String, dynamic>{'generator': generator, 'value': value});
 }
 
 // **************************************************************************

@@ -4,7 +4,7 @@ description: Password Manager with support for kdbx 2.x
 version: 1.4.0+116
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -128,6 +128,8 @@ dev_dependencies:
 #
 dependency_overrides:
   pedantic: ^1.9.0
+  xml: '>=3.7.0 <4.0.0'
+  petitparser: '>=3.0.0 < 4.0.0'
 #  url_launcher_fde:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/flutter_plugins/url_launcher_fde
 #  file_chooser:

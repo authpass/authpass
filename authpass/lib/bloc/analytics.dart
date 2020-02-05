@@ -101,8 +101,7 @@ class Analytics {
         final custom = _gaPropertyMapping[entry.key];
         if (entry.key == 'value' && entry.value is int) {
           value = entry.value as int;
-        }
-        if (custom == null) {
+        } else if (custom == null) {
           labelParams.add('${entry.key}=${entry.value}');
         } else {
           eventParams[entry.key] = entry.value?.toString();
@@ -155,6 +154,8 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackOpenFile({@required String type});
 
+  void trackOpenFile2({@required String generator});
+
   void trackSelectEntry({EntrySelectionType type});
 
   void trackCopyField({@required String key});
@@ -173,4 +174,5 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackQuickUnlock({int value});
 
   void trackSave({@required String type, int value});
+  void trackSaveCount({@required String generator, @required int value});
 }
