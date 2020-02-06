@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/foundation.dart';
@@ -73,6 +74,7 @@ abstract class TaskProgress {
 
 mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
   FutureTask task;
+  final Queue<VoidCallback> _taskQueue = Queue<VoidCallback>();
 
   @protected
   VoidCallback asyncTaskCallback<U>(
@@ -91,13 +93,16 @@ mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
       {String label}) {
     if (task != null) {
       // we have to queue task.
+      final taskProgressLabel = task.progressLabel;
       _logger.finer(
-          'A task is aready running (${task.progressLabel}). queing ($label)');
+          'A task is aready running ($taskProgressLabel). queing ($label)');
       final completer = Completer<U>();
-      task.future.whenComplete(
-          () => completer.complete(asyncRunTask<U>(taskRunner, label: label)));
+      _taskQueue.add(() {
+        completer.complete(asyncRunTask(taskRunner, label: label));
+      });
       return completer.future;
     }
+    _logger.finer('Running task $label');
     final proxy = _TaskProgressProxy();
     final future = taskRunner(proxy);
     proxy._futureTask = FutureTask(
@@ -113,6 +118,11 @@ mixin FutureTaskStateMixin<T extends StatefulWidget> on State<T> {
     future.whenComplete(() {
       setState(() {
         task = null;
+        _logger.fine('Task $label completed. ${_taskQueue.length} queued'
+            ' tasks remaining.');
+        if (_taskQueue.isNotEmpty) {
+          _taskQueue.removeFirst()();
+        }
       });
     });
     return future;

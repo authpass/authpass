@@ -23,6 +23,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 import 'package:path/path.dart' as path;
@@ -169,8 +170,16 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         _logger.info(
             'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
         if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
-          _logger.finer('Pushing main app scaffold.');
-          await Navigator.of(context).pushReplacement(MainAppScaffold.route());
+          _logger.finer('Pushing main app scaffold. (mounted: $mounted)');
+          unawaited(
+              Navigator.of(context).pushReplacement(MainAppScaffold.route()));
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            _logger.finer('post frame callback. $timeStamp / mounted:$mounted');
+            if (mounted) {
+              unawaited(Navigator.of(context)
+                  .pushReplacement(MainAppScaffold.route()));
+            }
+          });
         }
       }, label: 'Quick unlocking files');
 
