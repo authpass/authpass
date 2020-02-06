@@ -133,6 +133,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
       WebDavClient client, CloudStorageEntity parent) async {
     final parentUri = _uriForEntity(client, parent);
     final request = Request('PROPFIND', parentUri);
+    request.headers['Depth'] = '1';
     final body = _propfindRequest();
 //    _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
     request.body = body.toXmlString();
