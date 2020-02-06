@@ -807,13 +807,13 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 class _OtpEntryFieldState extends _EntryFieldState {
   Timer _timer;
 
-  String _currentOtp;
+  String _currentOtp = '';
 
   /// elapsed seconds since the last period change.
-  int _elapsed;
+  int _elapsed = 0;
 
   /// period in seconds how often the otp changes.
-  int _period;
+  int _period = 30;
 
   @override
   String get _valueCurrent =>
@@ -821,22 +821,26 @@ class _OtpEntryFieldState extends _EntryFieldState {
 
   void _updateOtp() {
     final otpAuthUri = widget.entry.getString(widget.fieldKey)?.getText();
-    final otpAuth = OtpAuth.fromUri(Uri.parse(otpAuthUri));
-    final secretBase32 = base32.encode(otpAuth.secret);
-    _logger.fine('uri: $otpAuthUri secret: $secretBase32');
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final totpCode = OTP.generateTOTPCodeString(
-      secretBase32,
-      now,
-      algorithm: otpAuth.algorithm,
-      length: otpAuth.digits,
-      interval: otpAuth.period,
-    );
-    setState(() {
-      _elapsed = (now ~/ 1000) % otpAuth.period;
-      _period = otpAuth.period;
-      _currentOtp = totpCode;
-    });
+    try {
+      final otpAuth = OtpAuth.fromUri(Uri.parse(otpAuthUri));
+      final secretBase32 = base32.encode(otpAuth.secret);
+      _logger.fine('uri: $otpAuthUri secret: $secretBase32');
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final totpCode = OTP.generateTOTPCodeString(
+        secretBase32,
+        now,
+        algorithm: otpAuth.algorithm,
+        length: otpAuth.digits,
+        interval: otpAuth.period,
+      );
+      setState(() {
+        _elapsed = (now ~/ 1000) % otpAuth.period;
+        _period = otpAuth.period;
+        _currentOtp = totpCode;
+      });
+    } on FormatException catch (e, stackTrace) {
+      _logger.severe('Error while decoding otpauth url.', e, stackTrace);
+    }
   }
 
   @override

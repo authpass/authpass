@@ -25,7 +25,11 @@ abstract class Breakpoints {
 }
 
 ThemeData createTheme() {
+  final pageTransitionBuilders = {...const PageTransitionsTheme().builders};
+  pageTransitionBuilders[TargetPlatform.macOS] =
+      const FadeUpwardsPageTransitionsBuilder();
   return ThemeData(
-    primarySwatch: AuthPassTheme.primarySwatch,
-  );
+      primarySwatch: AuthPassTheme.primarySwatch,
+      pageTransitionsTheme:
+          PageTransitionsTheme(builders: pageTransitionBuilders));
 }
