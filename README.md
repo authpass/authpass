@@ -17,7 +17,7 @@ see also https://github.com/authpass/authpass/issues
 [![GitHub issues](https://img.shields.io/github/issues-raw/authpass/authpass)](https://github.com/authpass/authpass/issues)
 
 * [x] Read/Decrypt kdbx 3.x using password
-* [x] download of kdbx files through url
+* [x] Download of kdbx files through url
 * [x] Parse decrypted XML/handle protected values
 * [x] Flutter scaffold for mobile (ios/android)
 * [ ] Platforms
@@ -26,7 +26,7 @@ see also https://github.com/authpass/authpass/issues
   * [x] Mac OS
   * [ ] Windows https://github.com/authpass/authpass/issues/27
   * [ ] Linux https://github.com/authpass/authpass/issues/26
-* [ ] Decrypt with keyfile https://github.com/authpass/authpass/issues/3
+* [x] Decrypt with keyfile https://github.com/authpass/authpass/issues/3
 * [x] List of password entries
 * [x] 👆️ Search through entries
 * [x] 👆️ Entry details
@@ -34,7 +34,6 @@ see also https://github.com/authpass/authpass/issues
 * [x] mobile: integrate with biometrics (fingerprint)
 * [ ] mac: Auto-Type https://github.com/authpass/authpass/issues/13
 * [ ] 👆️ Auto-lock after x minutes of inactivity. https://github.com/authpass/authpass/issues/14
-* [ ] Integration of basic analytics and error reporting https://github.com/authpass/authpass/issues/15
 * [x] Editing existing entries
 * [x] Saving of changes into kdbx file.
 * [x] Creating of new kdbx files.
@@ -42,5 +41,5 @@ see also https://github.com/authpass/authpass/issues
 * [x] Syncing with cloud services like dropbox or google drive?
 * [x] 👆️ CI pipeline/continous builds, releases
 * [ ] kdbx 4 support (missing argon2) compatibility https://github.com/authpass/authpass/issues/4
-* [ ] Android: Auto Fill https://github.com/authpass/authpass/issues/30
+* [x] Android: Auto Fill https://github.com/authpass/authpass/issues/30
 * [ ] iOS: Auto Fill https://github.com/authpass/authpass/issues/31

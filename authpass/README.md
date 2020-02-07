@@ -5,6 +5,23 @@ see [../README.md](../README.md) for details.
 
 ## MacOS Release
 
+### Build with Flutter
+
+```
+# I use `flutter_dev` as an alias to a flutter dev channel.
+
+flutter_dev clean
+flutter_dev pub get
+flutter_dev build macos -t lib/env/production.dart --release
+```
+
+### Open Xcode
+
+Product -> Archive Project.
+
+
+
+### Deprecated:
 
 ```
 flutter channel master && flutter upgrade

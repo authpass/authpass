@@ -139,7 +139,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _logger.finer('didChangeDependencies');
-    _checkQuickUnlock();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _checkQuickUnlock();
+    });
+//      Future<int>.delayed(const Duration(seconds: 5))
+//        .then((value) => _checkQuickUnlock());
+//    _checkQuickUnlock();
   }
 
   @override
@@ -170,16 +175,28 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         _logger.info(
             'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
         if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
+//          if (Platform.isMacOS) {
+//            _logger.fine('Lets chill for a second.');
+//            await Future<int>.delayed(const Duration(seconds: 3));
+//            _logger.fine('calling setState');
+//            setState(() {});
+//            _logger.fine('Lets chill for a second.');
+//            await Future<int>.delayed(const Duration(seconds: 3));
+//          }
           _logger.finer('Pushing main app scaffold. (mounted: $mounted)');
           unawaited(
               Navigator.of(context).pushReplacement(MainAppScaffold.route()));
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            _logger.finer('post frame callback. $timeStamp / mounted:$mounted');
-            if (mounted) {
-              unawaited(Navigator.of(context)
-                  .pushReplacement(MainAppScaffold.route()));
-            }
-          });
+//          WidgetsBinding.instance.scheduleFrameCallback((timeStamp) {
+//            _logger.fine('Frame Callback. adding post frame callback.');
+//            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+//              _logger
+//                  .finer('post frame callback. $timeStamp / mounted:$mounted');
+//              if (mounted) {
+//                unawaited(Navigator.of(context)
+//                    .pushReplacement(MainAppScaffold.route()));
+//              }
+//            });
+//          });
         }
       }, label: 'Quick unlocking files');
 
