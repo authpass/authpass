@@ -405,109 +405,111 @@ class _PasswordListContentState extends State<PasswordListContent>
                     context, entry, EntrySelectionType.activeOpen);
               },
             )
-          : ListView.builder(
-              itemCount: entries.length + (listPrefix != null ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (listPrefix != null) {
-                  if (index == 0) {
-                    return listPrefix;
-                  }
-                  index--;
-                }
-                final entry = entries[index];
-
-                final openedFile = kdbxBloc.fileForKdbxFile(entry.file);
-                final fileColor = openedFile.openedFile.color;
-//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
-                return Dismissible(
-                  key: ValueKey(entry.uuid),
-                  resizeDuration: null,
-                  background: Container(
-                    alignment: Alignment.centerLeft,
-                    color: Colors.lightBlueAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Icon(Icons.lock),
-                        const SizedBox(height: 4),
-                        const Text('Copy Password'),
-                      ],
-                    ),
-                  ),
-                  secondaryBackground: Container(
-                    alignment: Alignment.centerRight,
-                    color: Colors.limeAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Icon(Icons.account_circle),
-                        const SizedBox(height: 4),
-                        const Text('Copy User Name'),
-                      ],
-                    ),
-                  ),
-                  confirmDismiss: (direction) async {
-                    if (direction == DismissDirection.endToStart) {
-//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                      await Clipboard.setData(ClipboardData(
-                          text: entry
-                              .getString(commonFields.userName.key)
-                              .getText()));
-                      Scaffold.of(context).showSnackBar(
-                          const SnackBar(content: Text('Copied userame.')));
-                    } else {
-//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                      await Clipboard.setData(ClipboardData(
-                          text: entry
-                              .getString(commonFields.password.key)
-                              .getText()));
-                      Scaffold.of(context).showSnackBar(
-                          const SnackBar(content: Text('Copied password.')));
+          : Scrollbar(
+              child: ListView.builder(
+                itemCount: entries.length + (listPrefix != null ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (listPrefix != null) {
+                    if (index == 0) {
+                      return listPrefix;
                     }
-                    return false;
-                  },
-                  child: Container(
-                    decoration: widget.selectedEntry != entry
-                        ? (fileColor == null
-                            ? null
-                            : BoxDecoration(
-                                border: Border(
-                                    left: BorderSide(
-                                        color: fileColor, width: 4))))
-                        : BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                              right: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 4),
-                              left: fileColor == null
-                                  ? BorderSide.none
-                                  : BorderSide(color: fileColor, width: 4),
-                            ),
-                          ),
-                    child: ListTile(
-                      leading: Icon(
-                        PredefinedIcons.iconFor(entry.icon.get()),
-                        color: fileColor,
+                    index--;
+                  }
+                  final entry = entries[index];
+
+                  final openedFile = kdbxBloc.fileForKdbxFile(entry.file);
+                  final fileColor = openedFile.openedFile.color;
+//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
+                  return Dismissible(
+                    key: ValueKey(entry.uuid),
+                    resizeDuration: null,
+                    background: Container(
+                      alignment: Alignment.centerLeft,
+                      color: Colors.lightBlueAccent,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(Icons.lock),
+                          const SizedBox(height: 4),
+                          const Text('Copy Password'),
+                        ],
                       ),
-                      selected: widget.selectedEntry == entry,
-                      title: Text.rich(_highlightFilterQuery(nullIfEmpty(
-                              commonFields.title.stringValue(entry))) ??
-                          const TextSpan(text: '(no title)')),
-                      subtitle: Text.rich(_highlightFilterQuery(nullIfEmpty(
-                              commonFields.userName.stringValue(entry))) ??
-                          const TextSpan(text: '(no website)')),
-                      onTap: () {
-//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                        widget.onEntrySelected(
-                            context, entry, EntrySelectionType.activeOpen);
-                      },
                     ),
-                  ),
-                );
-              },
+                    secondaryBackground: Container(
+                      alignment: Alignment.centerRight,
+                      color: Colors.limeAccent,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(Icons.account_circle),
+                          const SizedBox(height: 4),
+                          const Text('Copy User Name'),
+                        ],
+                      ),
+                    ),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
+                        await Clipboard.setData(ClipboardData(
+                            text: entry
+                                .getString(commonFields.userName.key)
+                                .getText()));
+                        Scaffold.of(context).showSnackBar(
+                            const SnackBar(content: Text('Copied userame.')));
+                      } else {
+//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
+                        await Clipboard.setData(ClipboardData(
+                            text: entry
+                                .getString(commonFields.password.key)
+                                .getText()));
+                        Scaffold.of(context).showSnackBar(
+                            const SnackBar(content: Text('Copied password.')));
+                      }
+                      return false;
+                    },
+                    child: Container(
+                      decoration: widget.selectedEntry != entry
+                          ? (fileColor == null
+                              ? null
+                              : BoxDecoration(
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: fileColor, width: 4))))
+                          : BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                right: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 4),
+                                left: fileColor == null
+                                    ? BorderSide.none
+                                    : BorderSide(color: fileColor, width: 4),
+                              ),
+                            ),
+                      child: ListTile(
+                        leading: Icon(
+                          PredefinedIcons.iconFor(entry.icon.get()),
+                          color: fileColor,
+                        ),
+                        selected: widget.selectedEntry == entry,
+                        title: Text.rich(_highlightFilterQuery(nullIfEmpty(
+                                commonFields.title.stringValue(entry))) ??
+                            const TextSpan(text: '(no title)')),
+                        subtitle: Text.rich(_highlightFilterQuery(nullIfEmpty(
+                                commonFields.userName.stringValue(entry))) ??
+                            const TextSpan(text: '(no website)')),
+                        onTap: () {
+//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+                          widget.onEntrySelected(
+                              context, entry, EntrySelectionType.activeOpen);
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
       floatingActionButton: widget.entries.isEmpty || _filterQuery != null
           ? null
