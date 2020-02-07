@@ -78,18 +78,26 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
       children: <Widget>[
         SizedBox(
           width: 384,
-          child: PasswordList(
-            selectedEntry: _selectedEntry,
-            onEntrySelected: (entry, type) {
-              if (_selectedEntry != entry) {
-                _navigatorKey.currentState.pushAndRemoveUntil(
-                  EntryDetailsScreen.route(entry: entry),
-                  (route) => route.isFirst,
-                );
-                setState(() {
-                  _selectedEntry = entry;
-                });
-              }
+          child: Navigator(
+            onGenerateRoute: (settings) {
+              assert(settings.name == Navigator.defaultRouteName);
+              return MaterialPageRoute<void>(
+                settings: settings,
+                builder: (context) => PasswordList(
+                  selectedEntry: _selectedEntry,
+                  onEntrySelected: (entry, type) {
+                    if (_selectedEntry != entry) {
+                      _navigatorKey.currentState.pushAndRemoveUntil(
+                        EntryDetailsScreen.route(entry: entry),
+                        (route) => route.isFirst,
+                      );
+                      setState(() {
+                        _selectedEntry = entry;
+                      });
+                    }
+                  },
+                ),
+              );
             },
           ),
         ),

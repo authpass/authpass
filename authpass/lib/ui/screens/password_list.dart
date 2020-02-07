@@ -4,6 +4,7 @@ import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
+import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -182,6 +183,10 @@ class _PasswordListContentState extends State<PasswordListContent>
   final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
   bool _speedDialOpen = false;
+  KdbxGroup _groupFilter;
+
+  List<KdbxEntry> get _allEntries =>
+      _groupFilter == null ? widget.entries : _groupFilter.getAllEntries();
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
@@ -269,10 +274,22 @@ class _PasswordListContentState extends State<PasswordListContent>
       title: const Text('AuthPass'),
       actions: <Widget>[
         IconButton(
+          icon: Icon(FontAwesomeIcons.sitemap),
+          onPressed: () async {
+            final groupFilter =
+                await Navigator.of(context).push(GroupList.route(null));
+            setState(() {
+              _groupFilter = groupFilter;
+              _filteredEntries = null;
+              _filterTextEditingController.text = '';
+            });
+          },
+        ),
+        IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
               setState(() {
-                _filteredEntries = widget.entries;
+                _filteredEntries = _allEntries;
               });
             }),
         PopupMenuButton<VoidCallback>(
@@ -331,7 +348,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         onChanged: (newQuery) async {
           _logger.info('query changed to $newQuery');
           final entries = PasswordListFilterIsolateRunner.filterEntries(
-              widget.entries, newQuery);
+              _allEntries, newQuery);
           setState(() {
             _filterQuery = newQuery;
             _filteredEntries = entries;
@@ -358,23 +375,47 @@ class _PasswordListContentState extends State<PasswordListContent>
     );
   }
 
-  Widget _buildAutofillListPrefix() {
+  List<Widget> _buildGroupFilterPrefix() {
+    if (_groupFilter == null) {
+      return null;
+    }
+    return [
+      MaterialBanner(
+        backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
+        content: Text('Group: ${_groupFilter.name.get()}'),
+        actions: <Widget>[
+          FlatButton(
+            child: const Text('Clear'),
+            onPressed: () {
+              setState(() {
+                _groupFilter = null;
+              });
+            },
+          )
+        ],
+      ),
+    ];
+  }
+
+  List<Widget> _buildAutofillListPrefix() {
     if (!widget.isAutofillSelector) {
       return null;
     }
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Card(
-        color: Colors.lightGreen,
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text('Select password entry for autofill.'),
+    return const [
+      Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Card(
+          color: Colors.lightGreen,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Select password entry for autofill.'),
+          ),
         ),
       ),
-    );
+    ];
   }
 
-  Widget _buildListPrefix() {
+  List<Widget> _buildListPrefix() {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     final unsupportedWrite = kdbxBloc.openedFilesWithSources.firstWhere(
       (f) => f.value.dirtyObjects.isNotEmpty && !f.key.supportsWrite,
@@ -383,14 +424,18 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (unsupportedWrite == null) {
       return null;
     }
-    return UnsupportedWrite(source: unsupportedWrite.key);
+    return [UnsupportedWrite(source: unsupportedWrite.key)];
   }
 
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
-    final entries = _filteredEntries ?? widget.entries;
-    final listPrefix = _buildAutofillListPrefix() ?? _buildListPrefix();
+    final entries = _filteredEntries ?? _allEntries;
+    final listPrefix = [
+      ...?_buildGroupFilterPrefix(),
+      ...?_buildAutofillListPrefix(),
+      ...?_buildListPrefix(),
+    ];
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(
       appBar: _filteredEntries == null
@@ -412,7 +457,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                 itemBuilder: (context, index) {
                   if (listPrefix != null) {
                     if (index == 0) {
-                      return listPrefix;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: listPrefix,
+                      );
                     }
                     index--;
                   }
