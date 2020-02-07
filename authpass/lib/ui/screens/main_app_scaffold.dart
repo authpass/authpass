@@ -77,7 +77,7 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
     return Row(
       children: <Widget>[
         SizedBox(
-          width: 256,
+          width: 384,
           child: PasswordList(
             selectedEntry: _selectedEntry,
             onEntrySelected: (entry, type) {

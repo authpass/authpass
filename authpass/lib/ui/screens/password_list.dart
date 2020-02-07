@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -469,42 +470,49 @@ class _PasswordListContentState extends State<PasswordListContent>
                       }
                       return false;
                     },
-                    child: Container(
-                      decoration: widget.selectedEntry != entry
-                          ? (fileColor == null
-                              ? null
-                              : BoxDecoration(
-                                  border: Border(
-                                      left: BorderSide(
-                                          color: fileColor, width: 4))))
-                          : BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                right: BorderSide(
-                                    color: Theme.of(context).primaryColor,
-                                    width: 4),
-                                left: fileColor == null
-                                    ? BorderSide.none
-                                    : BorderSide(color: fileColor, width: 4),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        decoration: widget.selectedEntry != entry
+                            ? (fileColor == null
+                                ? null
+                                : BoxDecoration(
+                                    border: Border(
+                                        left: BorderSide(
+                                            color: fileColor, width: 4))))
+                            : BoxDecoration(
+                                color: Colors.white,
+                                border: Border(
+                                  right: BorderSide(
+                                      color: Theme.of(context).primaryColor,
+                                      width: 4),
+                                  left: fileColor == null
+                                      ? BorderSide.none
+                                      : BorderSide(color: fileColor, width: 4),
+                                ),
                               ),
+                        child: ListTile(
+                          leading: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Icon(
+                              PredefinedIcons.iconFor(entry.icon.get()),
+                              color: fileColor,
                             ),
-                      child: ListTile(
-                        leading: Icon(
-                          PredefinedIcons.iconFor(entry.icon.get()),
-                          color: fileColor,
-                        ),
-                        selected: widget.selectedEntry == entry,
-                        title: Text.rich(_highlightFilterQuery(nullIfEmpty(
-                                commonFields.title.stringValue(entry))) ??
-                            const TextSpan(text: '(no title)')),
-                        subtitle: Text.rich(_highlightFilterQuery(nullIfEmpty(
-                                commonFields.userName.stringValue(entry))) ??
-                            const TextSpan(text: '(no website)')),
-                        onTap: () {
+                          ),
+                          selected: widget.selectedEntry == entry,
+                          title: Text.rich(_highlightFilterQuery(nullIfEmpty(
+                                  commonFields.title.stringValue(entry))) ??
+                              const TextSpan(text: '(no title)')),
+                          subtitle: Text.rich(_highlightFilterQuery(nullIfEmpty(
+                                  commonFields.userName.stringValue(entry))) ??
+                              const TextSpan(text: '(no website)')),
+                          dense: true,
+                          onTap: () {
 //                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                          widget.onEntrySelected(
-                              context, entry, EntrySelectionType.activeOpen);
-                        },
+                            widget.onEntrySelected(
+                                context, entry, EntrySelectionType.activeOpen);
+                          },
+                        ),
                       ),
                     ),
                   );
