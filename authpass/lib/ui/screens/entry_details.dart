@@ -12,6 +12,7 @@ import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/entry_totp.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
+import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -259,6 +260,9 @@ class _EntryDetailsState extends State<EntryDetails>
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final vm = EntryViewModel(widget.entry, kdbxBloc);
+    final formatUtils = Provider.of<FormatUtils>(context);
 
     return SingleChildScrollView(
       child: Padding(
@@ -269,11 +273,41 @@ class _EntryDetailsState extends State<EntryDetails>
           child: Column(
             children: <Widget>[
               const SizedBox(height: 16),
-              IconSelectorFormField(
-                initialValue: widget.entry.icon.get(),
-                onSaved: (icon) {
-                  widget.entry.icon.set(icon);
-                },
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(width: 16),
+                  IconSelectorFormField(
+                    initialValue: widget.entry.icon.get(),
+                    onSaved: (icon) {
+                      widget.entry.icon.set(icon);
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(height: 16),
+                        EntryMetaInfo(
+                          label: 'File:',
+                          value: widget.entry.file.body.meta.databaseName.get(),
+                        ),
+                        EntryMetaInfo(
+                          label: 'Group:',
+                          value: vm.groupNames.join(' » '),
+                        ),
+                        EntryMetaInfo(
+                          label: 'Last Modified:',
+                          value: formatUtils.dateFormatFull.format(
+                              vm.entry.times.lastModificationTime.get()),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 32),
               ..._fieldKeys
@@ -372,6 +406,30 @@ class _EntryDetailsState extends State<EntryDetails>
       ),
     );
     return _cleanOtpCodeCode(totpCode);
+  }
+}
+
+class EntryMetaInfo extends StatelessWidget {
+  const EntryMetaInfo({Key key, this.label, this.value}) : super(key: key);
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(height: 2),
+        Text(label, style: theme.textTheme.caption),
+        Text(value,
+            style: theme.textTheme.bodyText1
+                .copyWith(color: theme.textTheme.caption.color)),
+        const SizedBox(height: 2),
+      ],
+    );
   }
 }
 

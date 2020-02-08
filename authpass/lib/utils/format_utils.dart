@@ -1,6 +1,19 @@
+import 'package:intl/intl.dart';
 import 'package:kdbx/kdbx.dart';
+import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
+
+final _logger = Logger('format_utils');
 
 class FormatUtils {
+  FormatUtils({
+    @required String locale,
+  }) : dateFormatFull = DateFormat.yMd(locale).add_Hms() {
+    _logger.finer('Initialized with locale $locale');
+  }
+
+  final DateFormat dateFormatFull;
+
   /// To keep things secure, like URLs we just log the first few characters.
   static String maxLength(String string, int maxLength,
       {String ellipsis = '…'}) {

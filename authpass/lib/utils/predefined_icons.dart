@@ -79,4 +79,8 @@ class PredefinedIcons {
   static IconData iconFor(KdbxIcon icon) {
     return icons[icon.index] ?? FontAwesomeIcons.users;
   }
+
+  static IconData iconForGroup(KdbxIcon icon) {
+    return icons[icon.index] ?? FontAwesomeIcons.folder;
+  }
 }

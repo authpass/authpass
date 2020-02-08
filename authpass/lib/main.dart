@@ -11,6 +11,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:flutter/foundation.dart';
@@ -134,7 +135,11 @@ class _AuthPassAppState extends State<AuthPassApp> {
             displaySize: WidgetsBinding.instance.window.physicalSize,
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
-          return child;
+          final locale = Localizations.localeOf(context);
+          return Provider.value(
+            value: FormatUtils(locale: locale.toString()),
+            child: child,
+          );
         },
         home: SelectFileScreen(),
       ),

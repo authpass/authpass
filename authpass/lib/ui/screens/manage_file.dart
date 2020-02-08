@@ -5,10 +5,12 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_colorpicker/block_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -90,6 +92,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   Widget build(BuildContext context) {
     _logger.finest('Is rebuilding with color ${_file.openedFile.color}');
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
+    final env = Provider.of<Env>(context);
     return ProgressOverlay(
       task: task,
       child: Center(
@@ -166,7 +169,21 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       await _kdbxBloc.close(_file.kdbxFile);
                       Navigator.of(context).pop();
                     },
-                  )
+                  ),
+                  ...?!env.isDebug
+                      ? null
+                      : [
+                          FlatButton(
+                            child: Text(
+                                'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
+                            onPressed: () async {
+                              await Clipboard.setData(ClipboardData(
+                                  text: _file.kdbxFile.body
+                                      .toXml()
+                                      .toXmlString(pretty: true)));
+                            },
+                          )
+                        ],
                 ],
               )
             ],
