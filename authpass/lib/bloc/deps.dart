@@ -31,7 +31,16 @@ class Deps {
     @required this.env,
     @required this.analytics,
     @required this.cloudStorageBloc,
-  });
+  }) {
+    appDataBloc.store.load().then((appData) {
+      final daysSinceLaunch =
+          appData.firstLaunchedAt.difference(DateTime.now()).abs().inDays;
+      analytics.events.trackInit(
+        userType: appData.manualUserType,
+        value: daysSinceLaunch,
+      );
+    });
+  }
 
   final Env env;
   final AppDataBloc appDataBloc;

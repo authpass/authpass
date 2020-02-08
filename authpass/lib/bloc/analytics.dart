@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:analytics_event_gen/analytics_event_gen.dart';
 import 'package:authpass/env/_base.dart';
@@ -77,6 +78,9 @@ class Analytics {
         documentDirectory: docsDir,
         userAgent: userAgent,
       );
+//      _ga.onSend.listen((event) {
+//        _logger.finer('analytics send: $event');
+//      });
       _ga.setSessionValue('ua', userAgent);
       _errorGa = _ga;
       _ga.setSessionValue(
@@ -123,32 +127,48 @@ class Analytics {
   }
 
   void trackScreen(String screenName) {
-    if (_ga == null) {
-      _gaQ.add(() {
-        trackScreen(screenName);
-      });
-      return;
-    }
-    _logger.finer('trackScreen($screenName)');
-    _ga?.sendScreenView(screenName);
+    _requireGa((ga) {
+      _logger.finer('trackScreen($screenName)');
+      ga.sendScreenView(screenName);
+    });
   }
 
   void _sendEvent(String category, String action,
       {String label, int value, Map<String, String> parameters}) {
+    _requireGa((ga) {
+      ga.sendEvent(category, action,
+          label: label, value: value, parameters: parameters);
+    });
+  }
+
+  void updateSizes({
+    Size viewportSize,
+    Size displaySize,
+    double devicePixelRatio,
+  }) {
+    _requireGa((ga) {
+      ga.setSessionValue(
+          'vp', '${viewportSize.width.round()}x${viewportSize.height.round()}');
+      final sr = [displaySize.width, displaySize.height]
+          .map((e) => (e / devicePixelRatio).round())
+          .join('x');
+      ga.setSessionValue('sr', sr);
+    });
+  }
+
+  void _requireGa(void Function(usage.Analytics ga) callback) {
     if (_ga == null) {
-      _gaQ.add(() {
-        _sendEvent(category, action,
-            label: label, value: value, parameters: parameters);
-      });
-      return;
+      _gaQ.add(() => callback(_ga));
+    } else {
+      callback(_ga);
     }
-    _ga.sendEvent(category, action,
-        label: label, value: value, parameters: parameters);
   }
 }
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackLaunch();
+
+  void trackInit({@required String userType, @required int value});
 
   void trackCreateFile();
 

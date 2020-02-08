@@ -127,6 +127,15 @@ class _AuthPassAppState extends State<AuthPassApp> {
         title: 'AuthPass',
         debugShowCheckedModeBanner: false,
         theme: createTheme(),
+        builder: (context, child) {
+          final mq = MediaQuery.of(context);
+          _deps.analytics.updateSizes(
+            viewportSize: mq.size,
+            displaySize: WidgetsBinding.instance.window.physicalSize,
+            devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
+          );
+          return child;
+        },
         home: SelectFileScreen(),
       ),
     );
