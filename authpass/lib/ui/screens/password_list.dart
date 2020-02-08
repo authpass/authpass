@@ -1,6 +1,7 @@
+import 'dart:collection';
+
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
-import 'package:authpass/main.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
@@ -23,6 +24,28 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('password_list');
+
+class EntryViewModel {
+  EntryViewModel(this.entry, this.kdbxBloc)
+      : label = EntryFormatUtils.getLabel(entry),
+        groupNames = _createGroupNames(entry.parent),
+        fileColor = kdbxBloc.fileForKdbxFile(entry.file).openedFile.color;
+
+  final KdbxBloc kdbxBloc;
+  final KdbxEntry entry;
+  final String label;
+  final List<String> groupNames;
+  final Color fileColor;
+
+  static List<String> _createGroupNames(KdbxGroup group) {
+    final queue = Queue<String>();
+    while (group != null) {
+      queue.addFirst(group.name.get());
+      group = group.parent;
+    }
+    return queue.toList();
+  }
+}
 
 class PasswordList extends StatelessWidget {
   const PasswordList(
@@ -72,14 +95,15 @@ class PasswordList extends StatelessWidget {
           final watch = Stopwatch()..start();
           final allEntries = kdbxBloc.openedFilesKdbx
               .expand((f) => f.body.rootGroup.getAllEntries())
+              .map((e) => EntryViewModel(e, kdbxBloc))
               .toList(growable: false);
-          allEntries.sort((a, b) => EntryFormatUtils.getLabel(a)
-              .toLowerCase()
-              .compareTo(EntryFormatUtils.getLabel(b).toLowerCase()));
+          allEntries.sort(
+              (a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
           watch.stop();
           _logger
               .finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
           return PasswordListContent(
+            kdbxBloc: kdbxBloc,
             entries: allEntries,
             selectedEntry: selectedEntry,
             onEntrySelected: onEntrySelected,
@@ -99,6 +123,7 @@ enum EntrySelectionType {
 class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
     Key key,
+    @required this.kdbxBloc,
     @required this.entries,
     @required
         void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected,
@@ -106,7 +131,8 @@ class PasswordListContent extends StatefulWidget {
   })  : _onEntrySelected = onEntrySelected,
         super(key: key);
 
-  final List<KdbxEntry> entries;
+  final KdbxBloc kdbxBloc;
+  final List<EntryViewModel> entries;
   bool get isAutofillSelector =>
       WidgetsBinding.instance.window.defaultRouteName == '/autofill';
   final void Function(KdbxEntry entry, EntrySelectionType type)
@@ -134,23 +160,8 @@ class PasswordListContent extends StatefulWidget {
 }
 
 class PasswordListFilterIsolateRunner {
-  static final _instance = PasswordListFilterIsolateRunner();
-
-  List<KdbxEntry> _allEntries;
-
-  static bool init(List<KdbxEntry> entries) {
-    initIsolate();
-    PasswordListFilterIsolateRunner._instance._allEntries = entries;
-    return true;
-  }
-
-  static List<KdbxEntry> filter(String query) {
-    return filterEntries(
-        PasswordListFilterIsolateRunner._instance._allEntries, query);
-  }
-
-  static List<KdbxEntry> filterEntries(
-      List<KdbxEntry> _allEntries, String query,
+  static List<EntryViewModel> filterEntries(
+      List<EntryViewModel> _allEntries, String query,
       {int maxResults = 30}) {
     _logger.info('We have to filter for $query');
     return _allEntries
@@ -166,27 +177,38 @@ class PasswordListFilterIsolateRunner {
     KdbxKey('UserName')
   ];
 
-  static bool matches(KdbxEntry entry, String filterQuery) {
+  static bool matches(EntryViewModel entry, String filterQuery) {
     final query = filterQuery.toLowerCase();
     return searchFields
-        .where((field) =>
-            entry.getString(field)?.getText()?.toLowerCase()?.contains(query) ==
-            true)
-        .isNotEmpty;
+            .where((field) =>
+                entry.entry
+                    .getString(field)
+                    ?.getText()
+                    ?.toLowerCase()
+                    ?.contains(query) ==
+                true)
+            .isNotEmpty ||
+        entry.groupNames
+            .where((string) => string.toLowerCase().contains(query))
+            .isNotEmpty;
   }
 }
 
 class _PasswordListContentState extends State<PasswordListContent>
     with StreamSubscriberMixin, WidgetsBindingObserver {
-  List<KdbxEntry> _filteredEntries;
+  List<EntryViewModel> _filteredEntries;
   String _filterQuery;
   final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
   bool _speedDialOpen = false;
   KdbxGroup _groupFilter;
 
-  List<KdbxEntry> get _allEntries =>
-      _groupFilter == null ? widget.entries : _groupFilter.getAllEntries();
+  List<EntryViewModel> get _allEntries => _groupFilter == null
+      ? widget.entries
+      : _groupFilter
+          .getAllEntries()
+          .map((e) => EntryViewModel(e, widget.kdbxBloc))
+          .toList();
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
@@ -246,17 +268,17 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (entries.isEmpty) {
       return;
     }
-    final idx = entries.indexOf(widget.selectedEntry);
+    final idx = entries.indexWhere((a) => a.entry == widget.selectedEntry);
     // right now we ignore the fact that the user might select a list item which is not in view.
     // https://github.com/flutter/flutter/issues/12319
     if (idx < 0) {
       widget.onEntrySelected(
-          context, entries.first, EntrySelectionType.passiveHighlight);
+          context, entries.first.entry, EntrySelectionType.passiveHighlight);
     } else {
       // new Index, modulo entry length to make sure we wrap around the end..
       final newIndex = (idx + next) % entries.length;
-      widget.onEntrySelected(
-          context, entries[newIndex], EntrySelectionType.passiveHighlight);
+      widget.onEntrySelected(context, entries[newIndex].entry,
+          EntrySelectionType.passiveHighlight);
     }
   }
 
@@ -355,7 +377,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             if (_filteredEntries.isNotEmpty &&
                 (widget.selectedEntry == null ||
                     !_filteredEntries.contains(widget.selectedEntry))) {
-              widget.onEntrySelected(context, _filteredEntries.first,
+              widget.onEntrySelected(context, _filteredEntries.first.entry,
                   EntrySelectionType.passiveHighlight);
             }
           });
@@ -466,11 +488,11 @@ class _PasswordListContentState extends State<PasswordListContent>
                   }
                   final entry = entries[index];
 
-                  final openedFile = kdbxBloc.fileForKdbxFile(entry.file);
+                  final openedFile = kdbxBloc.fileForKdbxFile(entry.entry.file);
                   final fileColor = openedFile.openedFile.color;
 //                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
                   return Dismissible(
-                    key: ValueKey(entry.uuid),
+                    key: ValueKey(entry.entry.uuid),
                     resizeDuration: null,
                     background: Container(
                       alignment: Alignment.centerLeft,
@@ -502,7 +524,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                       if (direction == DismissDirection.endToStart) {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
                         await Clipboard.setData(ClipboardData(
-                            text: entry
+                            text: entry.entry
                                 .getString(commonFields.userName.key)
                                 .getText()));
                         Scaffold.of(context).showSnackBar(
@@ -510,7 +532,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                       } else {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
                         await Clipboard.setData(ClipboardData(
-                            text: entry
+                            text: entry.entry
                                 .getString(commonFields.password.key)
                                 .getText()));
                         Scaffold.of(context).showSnackBar(
@@ -521,7 +543,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                     child: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: Container(
-                        decoration: widget.selectedEntry != entry
+                        decoration: widget.selectedEntry != entry.entry
                             ? (fileColor == null
                                 ? null
                                 : BoxDecoration(
@@ -539,26 +561,14 @@ class _PasswordListContentState extends State<PasswordListContent>
                                       : BorderSide(color: fileColor, width: 4),
                                 ),
                               ),
-                        child: ListTile(
-                          leading: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Icon(
-                              PredefinedIcons.iconFor(entry.icon.get()),
-                              color: fileColor,
-                            ),
-                          ),
-                          selected: widget.selectedEntry == entry,
-                          title: Text.rich(_highlightFilterQuery(nullIfEmpty(
-                                  commonFields.title.stringValue(entry))) ??
-                              const TextSpan(text: '(no title)')),
-                          subtitle: Text.rich(_highlightFilterQuery(nullIfEmpty(
-                                  commonFields.userName.stringValue(entry))) ??
-                              const TextSpan(text: '(no website)')),
-                          dense: true,
+                        child: PasswordEntryTile(
+                          vm: entry,
+                          isSelected: entry.entry == widget.selectedEntry,
+                          filterQuery: _filterQuery,
                           onTap: () {
 //                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                            widget.onEntrySelected(
-                                context, entry, EntrySelectionType.activeOpen);
+                            widget.onEntrySelected(context, entry.entry,
+                                EntrySelectionType.activeOpen);
                           },
                         ),
                       ),
@@ -600,47 +610,14 @@ class _PasswordListContentState extends State<PasswordListContent>
                 ),
     );
   }
+}
 
-  static String nullIfEmpty(String value) {
-    if (value?.isEmpty == true) {
+extension on String {
+  String nullIfBlank() {
+    if (isEmpty) {
       return null;
     }
-    return value;
-  }
-
-  InlineSpan _highlightFilterQuery(String text) {
-    if (text == null) {
-      return null;
-    }
-    if (_filterQuery == null || _filterQuery.isEmpty) {
-      return TextSpan(text: text);
-    }
-    //RegExp.escape(text).allMatches(string)
-    var previousMatchEnd = 0;
-    final spans = <TextSpan>[];
-    for (final match in _filterQuery.allMatches(text)) {
-      spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
-      spans.add(TextSpan(
-          text: text.substring(match.start, match.end),
-          style: TextStyle(fontWeight: FontWeight.bold)));
-      previousMatchEnd = match.end;
-    }
-    if (previousMatchEnd < text.length) {
-      spans.add(TextSpan(text: text.substring(previousMatchEnd)));
-    }
-    return TextSpan(children: spans);
-
-//    The functional approach was a bit too clever...
-//    int previousMatchEnd = 0;
-//    return TextSpan(
-//        children: _filterQuery.allMatches(text).expand((match) {
-//      final spans = [
-//        TextSpan(text: text.substring(previousMatchEnd, match.start)),
-//        TextSpan(text: text.substring(match.start, match.end), style: TextStyle(fontWeight: FontWeight.bold)),
-//      ];
-//      previousMatchEnd = match.end;
-//      return spans;
-//    }).toList(growable: false));
+    return this;
   }
 }
 
@@ -725,5 +702,115 @@ class UnsupportedWrite extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class PasswordEntryTile extends StatelessWidget {
+  const PasswordEntryTile({
+    Key key,
+    @required this.vm,
+    @required this.isSelected,
+    @required this.filterQuery,
+    this.onTap,
+  }) : super(key: key);
+
+  final EntryViewModel vm;
+  final bool isSelected;
+  final String filterQuery;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final commonFields = Provider.of<CommonFields>(context);
+    final theme = Theme.of(context);
+    final fgColor = isSelected ? theme.primaryColor : null;
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: Icon(
+              PredefinedIcons.iconFor(vm.entry.icon.get()),
+              color: fgColor ?? vm.fileColor ?? Colors.black45,
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  DefaultTextStyle(
+                    style: theme.textTheme.subtitle1.copyWith(
+                        fontWeight: FontWeight.normal, color: fgColor),
+                    child: Text.rich(
+                      _highlightFilterQuery(commonFields.title
+                              .stringValue(vm.entry)
+                              ?.nullIfBlank()) ??
+                          const TextSpan(text: '(no title)'),
+//                      style: theme.textTheme.subtitle1.copyWith(fontWeight: null),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  DefaultTextStyle(
+                    style: theme.textTheme.bodyText1.copyWith(
+                        fontSize: 13,
+                        color: fgColor ?? theme.textTheme.caption.color),
+                    child: Text.rich(
+                      _highlightFilterQuery(
+                            commonFields.userName
+                                .stringValue(vm.entry)
+                                ?.nullIfBlank(),
+                          ) ??
+                          const TextSpan(text: '(no username)'),
+                      style: theme.textTheme.bodyText1.copyWith(
+                          fontSize: 12, color: theme.textTheme.caption.color),
+                    ),
+                  ),
+                  ...?vm.groupNames.length < 2
+                      ? null
+                      : [
+                          Text(
+                            '📁️  ' + vm.groupNames.sublist(1).join(' » '),
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            textAlign: TextAlign.right,
+                            style:
+                                theme.textTheme.caption.copyWith(fontSize: 10),
+                          ),
+                        ],
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  InlineSpan _highlightFilterQuery(String text) {
+    if (text == null) {
+      return null;
+    }
+    if (filterQuery == null || filterQuery.isEmpty) {
+      return TextSpan(text: text);
+    }
+    //RegExp.escape(text).allMatches(string)
+    var previousMatchEnd = 0;
+    final spans = <TextSpan>[];
+    for (final match in filterQuery.allMatches(text)) {
+      spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
+      spans.add(TextSpan(
+          text: text.substring(match.start, match.end),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)));
+      previousMatchEnd = match.end;
+    }
+    if (previousMatchEnd < text.length) {
+      spans.add(TextSpan(text: text.substring(previousMatchEnd)));
+    }
+    return TextSpan(children: spans);
   }
 }
