@@ -798,10 +798,12 @@ class PasswordEntryTile extends StatelessWidget {
     if (filterQuery == null || filterQuery.isEmpty) {
       return TextSpan(text: text);
     }
+    final lcText = text.toLowerCase();
+    final lcFilterQuery = filterQuery.toLowerCase();
     //RegExp.escape(text).allMatches(string)
     var previousMatchEnd = 0;
     final spans = <TextSpan>[];
-    for (final match in filterQuery.allMatches(text)) {
+    for (final match in lcFilterQuery.allMatches(lcText)) {
       spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
       spans.add(TextSpan(
           text: text.substring(match.start, match.end),
