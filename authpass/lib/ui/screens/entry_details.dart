@@ -10,6 +10,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/entry_totp.dart';
+import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/password_list.dart';
@@ -24,6 +25,7 @@ import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:base32/base32.dart';
+import 'package:built_value/built_value.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -71,11 +73,11 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 
   void _registerListener() {
     subscriptions.cancelSubscriptions();
-    widget.entry.changes.listen((change) {
+    handleSubscription(widget.entry.changes.listen((change) {
       setState(() {
         _isDirty = change.isDirty || _isDirty;
       });
-    });
+    }));
   }
 
   @override
@@ -89,6 +91,25 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
               builder: !env.isDebug
                   ? null
                   : (context) => [
+                        PopupMenuItem(
+                          child: const ListTile(
+                            leading: Icon(Icons.delete),
+                            title: Text('Delete'),
+                          ),
+                          value: () {
+                            final oldGroup = widget.entry.parent;
+                            widget.entry.file.deleteEntry(widget.entry);
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: const Text('Deleted entry.'),
+                              action: SnackBarAction(
+                                  label: 'Undo',
+                                  onPressed: () {
+                                    widget.entry.file
+                                        .move(widget.entry, oldGroup);
+                                  }),
+                            ));
+                          },
+                        ),
                         PopupMenuItem(
                           child: const ListTile(
                             leading: Icon(Icons.bug_report),
@@ -234,6 +255,11 @@ class _EntryDetailsState extends State<EntryDetails>
         .followedBy(nonCommonKeys.map((f) =>
             Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
         .toList();
+    _logger.fine('Listing on changes for ${widget.entry.label}');
+    handleSubscription(widget.entry.changes.listen((event) {
+      _logger.fine('Widget entry changed.');
+      setState(() {});
+    }));
   }
 
   @override
@@ -251,6 +277,7 @@ class _EntryDetailsState extends State<EntryDetails>
   @override
   void didUpdateWidget(EntryDetails oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _logger.fine('_EntryDetailsState.didUpdateWidget');
     if (oldWidget.entry != widget.entry) {
       _logger.info('_EntryDetailsState: widget.entry changed.');
       _initFields();
@@ -297,6 +324,27 @@ class _EntryDetailsState extends State<EntryDetails>
                         EntryMetaInfo(
                           label: 'Group:',
                           value: vm.groupNames.join(' » '),
+                          onTap: () async {
+                            // TODO
+                            final file = vm.entry.file;
+                            final newGroup = await Navigator.of(context)
+                                .push(GroupList.route(file.body.rootGroup));
+                            if (newGroup != null) {
+                              final oldGroup = vm.entry.parent;
+                              file.move(vm.entry, newGroup);
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Moved entry into ${newGroup.name.get()}'),
+                                  action: SnackBarAction(
+                                      label: 'Undo',
+                                      onPressed: () {
+                                        file.move(vm.entry, oldGroup);
+                                      }),
+                                ),
+                              );
+                            }
+                          },
                         ),
                         EntryMetaInfo(
                           label: 'Last Modified:',
@@ -410,25 +458,46 @@ class _EntryDetailsState extends State<EntryDetails>
 }
 
 class EntryMetaInfo extends StatelessWidget {
-  const EntryMetaInfo({Key key, this.label, this.value}) : super(key: key);
+  const EntryMetaInfo({
+    Key key,
+    this.label,
+    this.value,
+    this.onTap,
+  }) : super(key: key);
 
   final String label;
   final String value;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(height: 2),
-        Text(label, style: theme.textTheme.caption),
-        Text(value,
-            style: theme.textTheme.bodyText1
-                .copyWith(color: theme.textTheme.caption.color)),
-        const SizedBox(height: 2),
-      ],
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Row(
+//          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            ...?onTap == null
+                ? null
+                : [
+                    const Icon(Icons.edit, size: 16, color: Colors.black45),
+                    const SizedBox(width: 8),
+                  ],
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(label, style: theme.textTheme.caption),
+                Text(value,
+                    style: theme.textTheme.bodyText1
+                        .copyWith(color: theme.textTheme.caption.color)),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

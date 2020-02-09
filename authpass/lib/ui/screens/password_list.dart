@@ -292,9 +292,38 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   AppBar _buildDefaultAppBar(BuildContext context) {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
+        element.key.supportsWrite &&
+        element.value.kdbxFile.dirtyObjects.isNotEmpty);
     return AppBar(
       title: const Text('AuthPass'),
       actions: <Widget>[
+        ...?!isDirty
+            ? null
+            : [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: () async {
+                      final scaffold = Scaffold.of(context);
+                      final savedFiles = <String>[];
+                      for (final entry in kdbxBloc.openedFiles.entries) {
+                        if (entry.key.supportsWrite &&
+                            entry.value.kdbxFile.dirtyObjects.isNotEmpty) {
+                          await kdbxBloc.saveFile(entry.value.kdbxFile);
+                          savedFiles.add(entry.key.displayName);
+                        }
+                      }
+                      scaffold.showSnackBar(
+                        SnackBar(
+                            content: Text(
+                                'Saved files into: ${savedFiles.join(', ')}')),
+                      );
+                    },
+                  ),
+                ),
+              ],
         IconButton(
           icon: Icon(FontAwesomeIcons.sitemap),
           onPressed: () async {
