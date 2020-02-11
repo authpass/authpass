@@ -724,7 +724,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         await Navigator.of(context)
             .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
-        _logger.fine('Invalid credentials. ($pw)', e, stackTrace);
+        _logger.fine('Invalid credentials.', e, stackTrace);
         setState(() {
           _invalidPassword = pw;
           _formKey.currentState.validate();
