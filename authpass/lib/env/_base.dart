@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:authpass/main.dart';
 import 'package:built_value/built_value.dart';
+import 'package:flutter/services.dart';
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:package_info/package_info.dart';
 
 part '_base.g.dart';
+
+final _logger = Logger('_base');
 
 enum EnvType { production, development }
 
@@ -84,9 +88,11 @@ abstract class Env {
   }
 
   Future<PackageInfo> _getPackageInfo() async {
-    if (Platform.isIOS || Platform.isAndroid) {
+    try {
       return await PackageInfo.fromPlatform();
+    } on PlatformException catch (e, stackTrace) {
+      _logger.severe('Error getting package info', e, stackTrace);
+      return null;
     }
-    return null;
   }
 }
