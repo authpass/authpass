@@ -16,6 +16,7 @@ import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -83,14 +84,24 @@ class AuthPassApp extends StatefulWidget {
   _AuthPassAppState createState() => _AuthPassAppState();
 }
 
-class _AuthPassAppState extends State<AuthPassApp> {
+class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Deps _deps;
+  AppData _appData;
 
   @override
   void initState() {
     super.initState();
     _deps = Deps(env: widget.env);
     PathUtils.runAppFinished.complete(true);
+    _appData = _deps.appDataBloc.store.cachedValue;
+    handleSubscription(
+        _deps.appDataBloc.store.onValueChangedAndLoad.listen((appData) {
+      if (_appData != appData) {
+        setState(() {
+          _appData = appData;
+        });
+      }
+    }));
   }
 
   @override
@@ -127,7 +138,10 @@ class _AuthPassAppState extends State<AuthPassApp> {
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
         debugShowCheckedModeBanner: false,
-        theme: createTheme(),
+        theme: authPassLightTheme,
+        darkTheme: authPassDarkTheme,
+        themeMode: _toThemeMode(_appData?.theme),
+//        themeMode: ThemeMode.light,
         builder: (context, child) {
           final mq = MediaQuery.of(context);
           _deps.analytics.updateSizes(
@@ -144,6 +158,19 @@ class _AuthPassAppState extends State<AuthPassApp> {
         home: SelectFileScreen(),
       ),
     );
+  }
+
+  ThemeMode _toThemeMode(AppDataTheme theme) {
+    if (theme == null) {
+      return null;
+    }
+    switch (theme) {
+      case AppDataTheme.light:
+        return ThemeMode.light;
+      case AppDataTheme.dark:
+        return ThemeMode.dark;
+    }
+    throw StateError('Invalid theme $theme');
   }
 }
 

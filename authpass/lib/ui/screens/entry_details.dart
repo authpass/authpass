@@ -1117,7 +1117,7 @@ class StringEntryFieldEditor extends StatelessWidget {
       maxLines: null,
       focusNode: focusNode,
       decoration: InputDecoration(
-        fillColor: const Color(0xfff0f0f0),
+//        fillColor: const Color(0xfff0f0f0),
         filled: true,
         prefixIcon: commonField?.icon == null ? null : Icon(commonField.icon),
         suffixIcon: fieldKey == commonFields.password.key

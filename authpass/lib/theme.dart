@@ -24,12 +24,39 @@ abstract class Breakpoints {
   static const TABLET_WIDTH = 720;
 }
 
-ThemeData createTheme() {
+// during development use getters :-)
+//ThemeData get authPassLightTheme => createTheme();
+//ThemeData get authPassDarkTheme => createDarkTheme();
+final authPassLightTheme = createTheme();
+final authPassDarkTheme = createDarkTheme();
+
+ThemeData customize(ThemeData base) {
   final pageTransitionBuilders = {...const PageTransitionsTheme().builders};
   pageTransitionBuilders[TargetPlatform.macOS] =
       const FadeUpwardsPageTransitionsBuilder();
-  return ThemeData(
-      primarySwatch: AuthPassTheme.primarySwatch,
-      pageTransitionsTheme:
-          PageTransitionsTheme(builders: pageTransitionBuilders));
+  return base.copyWith(
+    pageTransitionsTheme:
+        PageTransitionsTheme(builders: pageTransitionBuilders),
+  );
+}
+
+ThemeData createTheme() {
+  return customize(ThemeData(
+    primarySwatch: AuthPassTheme.primarySwatch,
+  ));
+}
+
+ThemeData createDarkTheme() {
+  final colorScheme = ColorScheme.dark(
+    primary: AuthPassTheme.primaryColor,
+    secondary: AuthPassTheme.primaryColor,
+    secondaryVariant: AuthPassTheme.primarySwatch[700],
+  );
+  return customize(ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: colorScheme,
+    primarySwatch: AuthPassTheme.primarySwatch,
+    accentColor: AuthPassTheme.primaryColor,
+    selectedRowColor: colorScheme.surface,
+  ));
 }

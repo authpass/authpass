@@ -162,6 +162,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.firstLaunchedAt,
             specifiedType: const FullType(DateTime)));
     }
+    if (object.theme != null) {
+      result
+        ..add('theme')
+        ..add(serializers.serialize(object.theme,
+            specifiedType: const FullType(AppDataTheme)));
+    }
     if (object.lastBuildId != null) {
       result
         ..add('lastBuildId')
@@ -206,6 +212,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'firstLaunchedAt':
           result.firstLaunchedAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
+          break;
+        case 'theme':
+          result.theme = serializers.deserialize(value,
+              specifiedType: const FullType(AppDataTheme)) as AppDataTheme;
           break;
         case 'lastBuildId':
           result.lastBuildId = serializers.deserialize(value,
@@ -410,6 +420,8 @@ class _$AppData extends AppData {
   @override
   final DateTime firstLaunchedAt;
   @override
+  final AppDataTheme theme;
+  @override
   final int lastBuildId;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
@@ -421,6 +433,7 @@ class _$AppData extends AppData {
       this.passwordGeneratorCharacterSets,
       this.manualUserType,
       this.firstLaunchedAt,
+      this.theme,
       this.lastBuildId})
       : super._() {
     if (previousFiles == null) {
@@ -449,6 +462,7 @@ class _$AppData extends AppData {
             other.passwordGeneratorCharacterSets &&
         manualUserType == other.manualUserType &&
         firstLaunchedAt == other.firstLaunchedAt &&
+        theme == other.theme &&
         lastBuildId == other.lastBuildId;
   }
 
@@ -458,11 +472,13 @@ class _$AppData extends AppData {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc(0, previousFiles.hashCode),
-                        passwordGeneratorLength.hashCode),
-                    passwordGeneratorCharacterSets.hashCode),
-                manualUserType.hashCode),
-            firstLaunchedAt.hashCode),
+                    $jc(
+                        $jc($jc(0, previousFiles.hashCode),
+                            passwordGeneratorLength.hashCode),
+                        passwordGeneratorCharacterSets.hashCode),
+                    manualUserType.hashCode),
+                firstLaunchedAt.hashCode),
+            theme.hashCode),
         lastBuildId.hashCode));
   }
 
@@ -475,6 +491,7 @@ class _$AppData extends AppData {
               'passwordGeneratorCharacterSets', passwordGeneratorCharacterSets)
           ..add('manualUserType', manualUserType)
           ..add('firstLaunchedAt', firstLaunchedAt)
+          ..add('theme', theme)
           ..add('lastBuildId', lastBuildId))
         .toString();
   }
@@ -511,6 +528,10 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set firstLaunchedAt(DateTime firstLaunchedAt) =>
       _$this._firstLaunchedAt = firstLaunchedAt;
 
+  AppDataTheme _theme;
+  AppDataTheme get theme => _$this._theme;
+  set theme(AppDataTheme theme) => _$this._theme = theme;
+
   int _lastBuildId;
   int get lastBuildId => _$this._lastBuildId;
   set lastBuildId(int lastBuildId) => _$this._lastBuildId = lastBuildId;
@@ -525,6 +546,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
           _$v.passwordGeneratorCharacterSets?.toBuilder();
       _manualUserType = _$v.manualUserType;
       _firstLaunchedAt = _$v.firstLaunchedAt;
+      _theme = _$v.theme;
       _lastBuildId = _$v.lastBuildId;
       _$v = null;
     }
@@ -556,6 +578,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
                   passwordGeneratorCharacterSets.build(),
               manualUserType: manualUserType,
               firstLaunchedAt: firstLaunchedAt,
+              theme: theme,
               lastBuildId: lastBuildId);
     } catch (_) {
       String _$failedField;

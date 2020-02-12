@@ -1,9 +1,9 @@
-import 'dart:io';
-
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -32,11 +32,15 @@ class PreferencesBody extends StatefulWidget {
   _PreferencesBodyState createState() => _PreferencesBodyState();
 }
 
-class _PreferencesBodyState extends State<PreferencesBody> {
+class _PreferencesBodyState extends State<PreferencesBody>
+    with StreamSubscriberMixin {
   KdbxBloc _kdbxBloc;
 
   AutofillServiceStatus _autofillStatus;
-  AutofillPreferences _prefs;
+  AutofillPreferences _autofillPrefs;
+
+  AppDataBloc _appDataBloc;
+  AppData _appData;
 
   @override
   void initState() {
@@ -47,21 +51,33 @@ class _PreferencesBodyState extends State<PreferencesBody> {
   Future<void> _doInit() async {
     final autofill = AutofillService();
     _autofillStatus = await autofill.status();
-    _prefs = await autofill.getPreferences();
+    if (_autofillStatus != AutofillServiceStatus.unsupported) {
+      _autofillPrefs = await autofill.getPreferences();
+    }
     setState(() {});
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _kdbxBloc = Provider.of<KdbxBloc>(context);
+    if (_kdbxBloc == null) {
+      _kdbxBloc = Provider.of<KdbxBloc>(context);
+      _appDataBloc = Provider.of<AppDataBloc>(context);
+      handleSubscription(
+          _appDataBloc.store.onValueChangedAndLoad.listen((appData) {
+        setState(() {
+          _appData = appData;
+        });
+      }));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ...?(!Platform.isAndroid || _prefs == null
+        ...?(_autofillStatus == AutofillServiceStatus.unsupported ||
+                _autofillPrefs == null
             ? null
             : [
                 SwitchListTile(
@@ -88,7 +104,7 @@ class _PreferencesBodyState extends State<PreferencesBody> {
                   secondary: const Icon(FontAwesomeIcons.bug),
                   title: const Text('Enable debug'),
                   subtitle: const Text('Shows for every input field'),
-                  value: _prefs.enableDebug,
+                  value: _autofillPrefs.enableDebug,
                   onChanged: (val) async {
                     _logger.fine('Setting debug to $val');
                     await AutofillService()
@@ -104,6 +120,28 @@ class _PreferencesBodyState extends State<PreferencesBody> {
             _kdbxBloc.closeAllFiles();
             await Navigator.of(context)
                 .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
+          },
+        ),
+        ListTile(
+          leading: Icon(
+            FontAwesomeIcons.lightbulb,
+          ),
+          title: const Text('Theme'),
+          trailing: _appData?.theme == null
+              ? const Text('System Default')
+              : _appData?.theme == AppDataTheme.light
+                  ? const Text('Light')
+                  : const Text('Dark'),
+          onTap: () {
+            if (_appData == null) {
+              return;
+            }
+            final nextTheme = _appData.theme == null
+                ? AppDataTheme.light
+                : _appData.theme == AppDataTheme.light
+                    ? AppDataTheme.dark
+                    : null;
+            _appDataBloc.update((builder, data) => builder.theme = nextTheme);
           },
         ),
       ],

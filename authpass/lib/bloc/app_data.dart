@@ -147,6 +147,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   }
 }
 
+enum AppDataTheme { dark, light }
+
 abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   factory AppData([void Function(AppDataBuilder b) updates]) = _$AppData;
 
@@ -166,6 +168,10 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
 
   @nullable
   DateTime get firstLaunchedAt;
+
+  /// Theme of the app, either light or dark (null means system default)
+  @nullable
+  AppDataTheme get theme;
 
   /// remember which build id was used, so we might be
   /// able to show a changelog in the future..

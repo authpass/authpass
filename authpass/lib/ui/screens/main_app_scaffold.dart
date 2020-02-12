@@ -123,13 +123,26 @@ class EmptyStateInitialRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Ink(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/images/logo_with_text.png'),
+              ...Theme.of(context).brightness == Brightness.light
+                  ? [
+                      Image.asset('assets/images/logo_with_text.png'),
+                    ]
+                  : [
+                      const SizedBox(height: 64),
+                      Image.asset('assets/images/logo_icon.png'),
+                      Text('AuthPass',
+                          style: Theme.of(context).textTheme.headline3),
+                      Text(
+                          'password manager, open source, available on all platforms.',
+                          style: Theme.of(context).textTheme.caption),
+                      const SizedBox(height: 64),
+                    ],
               const Text('Select a password.'),
               const SizedBox(height: 32),
               PrimaryButton(

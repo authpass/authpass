@@ -487,6 +487,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),
     ];
+    final theme = Theme.of(context);
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(
       appBar: _filteredEntries == null
@@ -580,7 +581,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                                         left: BorderSide(
                                             color: fileColor, width: 4))))
                             : BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).selectedRowColor,
                                 border: Border(
                                   right: BorderSide(
                                       color: Theme.of(context).primaryColor,
@@ -621,11 +622,15 @@ class _PasswordListContentState extends State<PasswordListContent>
                   child: Icon(_speedDialOpen ? Icons.close : Icons.add),
                   onOpen: () => setState(() => _speedDialOpen = true),
                   onClose: () => setState(() => _speedDialOpen = false),
+                  overlayColor: theme.brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
                   children: kdbxBloc.openedFiles.values
                       .map(
                         (file) => SpeedDialChild(
                             label: file.fileSource.displayName,
                             child: Icon(file.fileSource.displayIcon),
+                            labelBackgroundColor: Theme.of(context).cardColor,
                             backgroundColor: file.openedFile.colorCode == null
                                 ? null
                                 : Color(file.openedFile.colorCode),
@@ -752,7 +757,10 @@ class PasswordEntryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
     final theme = Theme.of(context);
-    final fgColor = isSelected ? theme.primaryColor : null;
+    final isDarkTheme = theme.brightness == Brightness.dark;
+    final fgColor = isSelected
+        ? isDarkTheme ? theme.primaryColorLight : theme.primaryColorDark
+        : null;
     return InkWell(
       onTap: onTap,
       child: Row(
