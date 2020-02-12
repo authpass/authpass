@@ -194,6 +194,7 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
 Serializers serializers = (_$serializers.toBuilder()
       ..add(SimpleEnumSerializer<OpenedFilesSourceType>(
           OpenedFilesSourceType.values))
+      ..add(SimpleEnumSerializer<AppDataTheme>(AppDataTheme.values))
       ..addPlugin(StandardJsonPlugin()))
     .build();
 

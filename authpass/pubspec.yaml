@@ -48,8 +48,8 @@ dependencies:
   package_info_macos:
     path: ../deps/package_info_macos
   device_info: ^0.4.1+4
-  path_provider: ^1.5.1
-  path_provider_macos: ^0.0.2+1
+  path_provider: ^1.6.0
+  path_provider_macos: ^0.0.3
   analytics_event_gen:
     path: ../deps/analytics_events/analytics_event_gen
   autofill_service:

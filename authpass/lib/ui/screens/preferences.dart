@@ -132,7 +132,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
               : _appData?.theme == AppDataTheme.light
                   ? const Text('Light')
                   : const Text('Dark'),
-          onTap: () {
+          onTap: () async {
             if (_appData == null) {
               return;
             }
@@ -141,7 +141,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 : _appData.theme == AppDataTheme.light
                     ? AppDataTheme.dark
                     : null;
-            _appDataBloc.update((builder, data) => builder.theme = nextTheme);
+            await _appDataBloc
+                .update((builder, data) => builder.theme = nextTheme);
           },
         ),
       ],

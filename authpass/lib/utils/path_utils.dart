@@ -33,7 +33,8 @@ class PathUtils {
   }
 
   Future<Directory> getLogDirectory() async {
-    return Directory(path.join((await getAppDataDirectory()).path, 'logs'));
+    return Directory(
+        path.join((_namespaced(await getTemporaryDirectory())).path, 'logs'));
   }
 
   Future<Directory> _getDesktopDirectory() async {
