@@ -1,15 +1,25 @@
+import 'dart:io';
+
+import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('authpass.dialog_utils');
 
 class DialogUtils {
   static Future<dynamic> showSimpleAlertDialog(
-      BuildContext context, String title, String content) {
+    BuildContext context,
+    String title,
+    String content, {
+    List<Widget> moreActions,
+  }) {
     return showDialog<dynamic>(
         context: context,
         builder: (context) {
@@ -17,6 +27,7 @@ class DialogUtils {
             title: title == null ? null : Text(title),
             content: Text(content),
             actions: <Widget>[
+              ...?moreActions,
               FlatButton(
                 child: const Text('Ok'),
                 onPressed: () {
@@ -30,7 +41,21 @@ class DialogUtils {
 
   static Future<dynamic> showErrorDialog(
       BuildContext context, String title, String content) {
-    return showSimpleAlertDialog(context, title, content);
+    return showSimpleAlertDialog(
+      context,
+      title,
+      content,
+      moreActions: !sendLogsSupported()
+          ? null
+          : [
+              FlatButton(
+                child: const Text('Send Error Report/Help'),
+                onPressed: () {
+                  sendLogs(context);
+                },
+              ),
+            ],
+    );
   }
 
   static Future<bool> openUrl(String url) async {
@@ -47,7 +72,29 @@ class DialogUtils {
     @required ConfirmDialogParams params,
   }) {
     return showDialog<bool>(
-        context: context, builder: (context) => ConfirmDialog(params: params));
+      context: context,
+      builder: (context) => ConfirmDialog(params: params),
+    );
+  }
+
+  static bool sendLogsSupported() => Platform.isIOS || Platform.isAndroid;
+
+  static void sendLogs(BuildContext context) async {
+    final env = Provider.of<Env>(context, listen: false);
+    final loggingUtil = LoggingUtils();
+    final logFiles = loggingUtil.rotatingFileLoggerFiles;
+    final logFileDebug = logFiles
+        .map((file) => '${file.absolute.path}: ${file.statSync()}')
+        .join('\n\n');
+    final email = Email(
+      subject:
+          'Log file for ${await env.getAppInfo()} (${Platform.operatingSystem})',
+      body: '\n\n\n\n====================Available Log Files:\n$logFileDebug',
+      recipients: ['support@authpass.app'],
+      // for now just take the current one.
+      attachmentPath: logFiles.first.absolute.path,
+    );
+    await FlutterEmailSender.send(email);
   }
 }
 

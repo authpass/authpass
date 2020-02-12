@@ -30,6 +30,9 @@ class LoggingUtils {
         );
       });
 
+  List<File> get rotatingFileLoggerFiles =>
+      _rotatingFileLogger.delegatedLogHandler.getAllLogFiles();
+
   void setupLogging({bool fromMainIsolate = false}) {
     Logger.root.level = Level.ALL;
     PrintAppender().attachToLogger(Logger.root);

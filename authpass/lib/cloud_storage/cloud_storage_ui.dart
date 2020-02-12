@@ -180,9 +180,7 @@ class CloudStorageAuthentication extends StatelessWidget {
       onSuccess();
     } catch (e, stackTrace) {
       _logger.severe('Error while authenticating.', e, stackTrace);
-      await DialogUtils.showSimpleAlertDialog(
-          context,
-          'Error while authenticating',
+      await DialogUtils.showErrorDialog(context, 'Error while authenticating',
           'Error while trying to authenticate to ${provider.displayName}. $e');
     }
   }

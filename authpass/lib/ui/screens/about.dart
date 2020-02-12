@@ -145,6 +145,20 @@ class AuthPassAboutDialog extends StatelessWidget {
         },
       ),
       const PopupMenuDivider(),
+      ...?!DialogUtils.sendLogsSupported()
+          ? null
+          : [
+              PopupMenuItem(
+                child: const ListTile(
+                  leading: Icon(Icons.email),
+                  title: Text('Email Support'),
+                  subtitle: Text('Send logs by email/ask for help.'),
+                ),
+                value: () {
+                  DialogUtils.sendLogs(context);
+                },
+              )
+            ],
       createAboutMenuItem(context)
     ];
   }
