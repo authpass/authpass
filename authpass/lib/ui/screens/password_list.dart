@@ -9,6 +9,7 @@ import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -643,15 +644,6 @@ class _PasswordListContentState extends State<PasswordListContent>
                       .toList(),
                 ),
     );
-  }
-}
-
-extension on String {
-  String nullIfBlank() {
-    if (isEmpty) {
-      return null;
-    }
-    return this;
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:authpass/utils/extension_methods.dart';
 
 final _logger = Logger('group_list');
 
@@ -24,7 +25,9 @@ class GroupViewModel {
       : PredefinedIcons.iconForGroup(group.icon.get());
 
   String get name =>
-      isRoot ? file.body.meta.databaseName.get() : group.name.get();
+      (isRoot ? file.body.meta.databaseName.get() : group.name.get())
+          ?.nullIfBlank() ??
+      '(Unnamed)';
 }
 
 class GroupList extends StatelessWidget {
@@ -133,14 +136,14 @@ class GroupList extends StatelessWidget {
   }
 
   List<GroupViewModel> _createViewModel(KdbxBloc kdbxBloc) {
-    if (parent == null) {
-      return kdbxBloc.openedFilesKdbx
-          .map((e) => GroupViewModel(e.body.rootGroup, e, kdbxBloc))
-          .toList();
-    } else {
-      return parent.groups
-          .map((e) => GroupViewModel(e, e.file, kdbxBloc))
-          .toList();
-    }
+    final ret = parent == null
+        ? kdbxBloc.openedFilesKdbx
+            .map((e) => GroupViewModel(e.body.rootGroup, e, kdbxBloc))
+            .toList()
+        : parent.groups
+            .map((e) => GroupViewModel(e, e.file, kdbxBloc))
+            .toList();
+    ret.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    return ret;
   }
 }

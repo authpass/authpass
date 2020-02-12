@@ -1,12 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:base32/base32.dart';
 import 'package:meta/meta.dart';
 import 'package:otp/otp.dart';
-
-extension StringToInt on String {
-  int toInt() => int.parse(this);
-}
 
 /// losely based on format from
 /// https://github.com/google/google-authenticator/wiki/Key-Uri-Format
