@@ -24,8 +24,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackOpenFile({String type}) =>
       trackEvent('openFile', <String, dynamic>{'type': type});
   @override
-  void trackOpenFile2({String generator}) =>
-      trackEvent('openFile2', <String, dynamic>{'generator': generator});
+  void trackOpenFile2({String generator, String version}) => trackEvent(
+      'openFile2',
+      <String, dynamic>{'generator': generator, 'version': version});
   @override
   void trackSelectEntry({EntrySelectionType type}) => trackEvent('selectEntry',
       <String, dynamic>{'type': type?.toString()?.substring(19)});

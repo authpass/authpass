@@ -37,11 +37,13 @@ packages:
     source: hosted
     version: "2.0.11"
   argon2_ffi:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: "../../argon2_ffi"
-      relative: true
-    source: path
+      path: "."
+      ref: bd6aa18a24449e927bc8167c38871a77fcfc9aa4
+      resolved-ref: bd6aa18a24449e927bc8167c38871a77fcfc9aa4
+      url: "https://github.com/authpass/argon2_ffi.git"
+    source: git
     version: "0.0.1"
   args:
     dependency: transitive
