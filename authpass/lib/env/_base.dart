@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:authpass/main.dart';
 import 'package:built_value/built_value.dart';
 import 'package:flutter/services.dart';

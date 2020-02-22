@@ -1,4 +1,6 @@
 PODS:
+  - argon2_ffi (0.0.1):
+    - Flutter
   - autofill_service (0.0.1):
     - Flutter
   - barcode_scan (0.0.1):
@@ -34,6 +36,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - argon2_ffi (from `.symlinks/plugins/argon2_ffi/ios`)
   - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
   - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
@@ -56,6 +59,8 @@ SPEC REPOS:
     - MTBBarcodeScanner
 
 EXTERNAL SOURCES:
+  argon2_ffi:
+    :path: ".symlinks/plugins/argon2_ffi/ios"
   autofill_service:
     :path: ".symlinks/plugins/autofill_service/ios"
   barcode_scan:
@@ -90,6 +95,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
+  argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   biometric_storage: b142d2ee2048fb67c4f6054d0308363f3258a9c0

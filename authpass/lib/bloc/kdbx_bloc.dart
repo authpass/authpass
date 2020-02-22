@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/bloc/kdbx_argon2_ffi.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
@@ -379,6 +380,7 @@ class KdbxBloc {
   final Analytics analytics;
   final CloudStorageBloc cloudStorageBloc;
   final QuickUnlockStorage quickUnlockStorage;
+  final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
 
   final _openedFiles =
       BehaviorSubject<Map<FileSource, KdbxOpenedFile>>.seeded({});
@@ -431,9 +433,11 @@ class KdbxBloc {
   Future<void> openFile(FileSource file, Credentials credentials,
       {bool addToQuickUnlock = false}) async {
     final fileContent = await file.content();
-    final kdbxReadFile = await compute(
-        readKdbxFile, KdbxReadArgs(fileContent, credentials),
-        debugLabel: 'readKdbxFile');
+    final readArgs = KdbxReadArgs(fileContent, credentials);
+//    final kdbxReadFile = await compute(
+//        staticReadKdbxFile, readArgs,
+//        debugLabel: 'readKdbxFile');
+    final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
     if (kdbxReadFile.exception != null) {
       final mapping = <Type, Exception Function()>{
         KdbxInvalidKeyException: () => KdbxInvalidKeyException(),
@@ -546,12 +550,19 @@ class KdbxBloc {
     quickUnlockStorage.updateQuickUnlockFile({});
   }
 
-  static Future<ReadFileResponse> readKdbxFile(KdbxReadArgs readArgs) async {
+  static Future<ReadFileResponse> staticReadKdbxFile(
+      KdbxReadArgs readArgs) async {
+    initIsolate();
+    final kdbxFormat = KdbxFormat(FlutterArgon2());
+    return readKdbxFile(kdbxFormat, readArgs);
+  }
+
+  static Future<ReadFileResponse> readKdbxFile(
+      KdbxFormat kdbxFormat, KdbxReadArgs readArgs) async {
     try {
-      initIsolate();
       _logger.finer('reading kdbx file ...');
       final fileContent = readArgs.content;
-      final kdbxFile = KdbxFormat.read(fileContent, readArgs.credentials);
+      final kdbxFile = kdbxFormat.read(fileContent, readArgs.credentials);
       _logger.finer('done reading');
       return ReadFileResponse(kdbxFile, null, null);
     } catch (e, stackTrace) {
@@ -571,7 +582,7 @@ class KdbxBloc {
     analytics.events.trackCreateFile();
     assert(!(databaseName.endsWith('.kdbx')));
     final credentials = Credentials(ProtectedValue.fromString(password));
-    final kdbxFile = KdbxFormat.create(
+    final kdbxFile = kdbxFormat.create(
       credentials,
       databaseName,
       generator: 'AuthPass',
