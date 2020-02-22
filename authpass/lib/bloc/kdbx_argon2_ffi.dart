@@ -60,7 +60,7 @@ class FlutterArgon2 implements Argon2 {
     final saltArray = allocate<Uint8>(count: salt.length);
     final saltList = saltArray.asTypedList(length);
     saltList.setAll(0, salt);
-    const memoryCost = 1 << 16;
+//    const memoryCost = 1 << 16;
 
 //    _logger.fine('saltArray: ${ByteUtils.toHexList(saltArray.view)}');
 
@@ -69,7 +69,7 @@ class FlutterArgon2 implements Argon2 {
       keyArray.length,
       saltArray,
       salt.length,
-      memoryCost,
+      memory,
       iterations,
       parallelism,
       length,
