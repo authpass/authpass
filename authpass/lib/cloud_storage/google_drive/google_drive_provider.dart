@@ -25,6 +25,7 @@ class GoogleDriveProvider
   final Env env;
 
   static const _scopes = [DriveApi.DriveScope];
+
   ClientId get _clientId =>
       ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
 
@@ -201,7 +202,9 @@ class QOperator {
 
 class SearchQueryField implements SearchQueryAtom {
   const SearchQueryField(this.fieldName);
+
   final String fieldName;
+
   @override
   String toQuery() => fieldName;
 }
