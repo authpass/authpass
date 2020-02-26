@@ -21,3 +21,5 @@ Runner.ipa
 /authpass/macos/Gemfile
 /authpass/macos/Gemfile.lock
 
+.flutter-plugins-dependencies
+Flutter.podspec
