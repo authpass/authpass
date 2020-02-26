@@ -211,7 +211,6 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           const Text('Please select a KeePass (.kdbx) file.'),
-          const Text('(Currently only kdbx 3 is supported)'),
           const SizedBox(height: 16),
           Wrap(
             alignment: WrapAlignment.center,
