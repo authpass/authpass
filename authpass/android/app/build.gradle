@@ -79,6 +79,12 @@ android {
             applicationIdSuffix = '.fdroid'
             signingConfig null
         }
+        // Binary distribution for direct release through github.
+        sideload {
+            dimension "hpdist"
+            applicationIdSuffix = '.sideload'
+            signingConfig signingConfigs.release
+        }
 
     }
 
