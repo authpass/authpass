@@ -52,8 +52,8 @@ case "$1" in
         mkdir -p ~/.fastlane/spaceship
         $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
         cd ios
-        sudo fastlane run update_fastlane
-        fastlane beta
+#        sudo fastlane run update_fastlane
+        bundle exec fastlane beta
     ;;
     macos)
         # on mac os there is right now no --build-number argument :-(

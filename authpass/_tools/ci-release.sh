@@ -41,6 +41,9 @@ if test "$target_platform" == "ios" ; then
 
     # make sure cocoapods is up to date.
     pod repo update
+    pushd ios
+    sudo bundle install
+    popd
 fi
 if test "$target_platform" == "macos" ; then
     # make sure cocoapods is up to date.
