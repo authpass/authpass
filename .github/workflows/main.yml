@@ -7,6 +7,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        flavor: ['samsungapps', 'sideload']
+    
+      fail-fast: true
+
     steps:
     - uses: actions/checkout@v2
     - name: Checkout submodules
@@ -21,16 +27,16 @@ jobs:
       run: authpass/_tools/postdeploy.sh
     - name: ci-install-deps
       run: "./authpass/_tools/ci-install-deps.sh android"
-    - name: build samsungapps apk
+    - name: build ${{ matrix.flavor }} apk
       id: buildapk
       env:
         GIT_AUTHOR_NAME: 'Github Action CI'
         GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
-      run: "./authpass/_tools/ci-release.sh android samsungapps"
+      run: "./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}"
     - uses: actions/upload-artifact@v1
       with:
-        name: app-samsungapps-release-${{steps.buildapk.outputs.appbuildnumber}}.apk
-        path: authpass/build/app/outputs/apk/samsungapps/release/app-samsungapps-release.apk
+        name: app-${{ matrix.flavor }}-release-${{steps.buildapk.outputs.appbuildnumber}}.apk
+        path: authpass/build/app/outputs/apk/${{ matrix.flavor }}/release/app-${{ matrix.flavor }}-release.apk
 
