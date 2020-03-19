@@ -71,6 +71,8 @@ class ProgressOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Stack(
       children: <Widget>[
         child,
@@ -82,9 +84,11 @@ class ProgressOverlay extends StatelessWidget {
                     color: Colors.black12,
                     child: Center(
                       child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xefffffff),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        decoration: BoxDecoration(
+                          color: theme.cardColor
+                              .withAlpha(250), //Color(0xefffffff),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                         ),
                         padding: const EdgeInsets.all(32),
                         child: ValueListenableBuilder<FutureTask>(
@@ -141,6 +145,11 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     _logger.finer('didChangeDependencies');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _checkQuickUnlock();
+    });
+    asyncRunTask((progress) async {
+      progress.progressLabel = 'Lorem ipsum';
+      await Future<int>.delayed(const Duration(hours: 1));
+      return 0;
     });
 //      Future<int>.delayed(const Duration(seconds: 5))
 //        .then((value) => _checkQuickUnlock());

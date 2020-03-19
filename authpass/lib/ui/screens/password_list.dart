@@ -367,18 +367,22 @@ class _PasswordListContentState extends State<PasswordListContent>
     );
   }
 
-  ThemeData appBarTheme(BuildContext context) {
+  ThemeData filterAppBarTheme(BuildContext context) {
     final theme = Theme.of(context);
-    return theme.copyWith(
-      primaryColor: Colors.white,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
-      primaryTextTheme: theme.textTheme,
-    );
+    if (theme.brightness == Brightness.light) {
+      return theme.copyWith(
+        primaryColor: Colors.white,
+        primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+//      primaryColorBrightness: Brightness.light,
+        primaryTextTheme: theme.textTheme,
+      );
+    } else {
+      return theme;
+    }
   }
 
   AppBar _buildFilterAppBar(BuildContext context) {
-    final theme = appBarTheme(context);
+    final theme = filterAppBarTheme(context);
     return AppBar(
       backgroundColor: theme.primaryColor,
       iconTheme: theme.primaryIconTheme,

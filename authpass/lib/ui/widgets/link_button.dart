@@ -20,11 +20,12 @@ class LinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return icon == null
         ? FlatButton(
             child: child,
             onPressed: onPressed,
-            textColor: AuthPassTheme.linkColor,
+            textColor: theme.primaryColor,
             padding: padding,
             materialTapTargetSize: materialTapTargetSize,
           )
@@ -32,7 +33,7 @@ class LinkButton extends StatelessWidget {
             onPressed: onPressed,
             icon: icon,
             label: child,
-            textColor: AuthPassTheme.linkColor,
+            textColor: theme.primaryColor,
             padding: padding,
             materialTapTargetSize: materialTapTargetSize,
           );

@@ -49,10 +49,11 @@ ThemeData createTheme() {
 ThemeData createDarkTheme() {
   final colorScheme = ColorScheme.dark(
     primary: AuthPassTheme.primaryColor,
-    secondary: AuthPassTheme.primaryColor,
-    secondaryVariant: AuthPassTheme.primarySwatch[700],
+    secondary: AuthPassTheme.primarySwatch[300],
+    secondaryVariant: AuthPassTheme.primarySwatch[500],
   );
   return customize(ThemeData(
+    primaryColor: colorScheme.primary,
     brightness: Brightness.dark,
     colorScheme: colorScheme,
     primarySwatch: AuthPassTheme.primarySwatch,
