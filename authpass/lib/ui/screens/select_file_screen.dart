@@ -146,11 +146,6 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _checkQuickUnlock();
     });
-    asyncRunTask((progress) async {
-      progress.progressLabel = 'Lorem ipsum';
-      await Future<int>.delayed(const Duration(hours: 1));
-      return 0;
-    });
 //      Future<int>.delayed(const Duration(seconds: 5))
 //        .then((value) => _checkQuickUnlock());
 //    _checkQuickUnlock();
