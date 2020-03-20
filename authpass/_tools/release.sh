@@ -24,7 +24,7 @@ ls ${DEPS}/flutter || echo "Flutter not found"
 $FLT --version
 
 if ! test -e ./git-buildnumber.sh ; then
-    curl -s -O https://raw.githubusercontent.com/hpoul/git-buildnumber/v1.0/git-buildnumber.sh
+    curl -s -O https://raw.githubusercontent.com/hpoul/git-buildnumber/stable/git-buildnumber.sh
     chmod +x git-buildnumber.sh
 fi
 
