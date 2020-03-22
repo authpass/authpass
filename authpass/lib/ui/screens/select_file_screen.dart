@@ -227,7 +227,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                 onPressed: () async {
                   if (Platform.isIOS || Platform.isAndroid) {
                     final path =
-                        await FilePicker.getFilePath(type: FileType.ANY);
+                        await FilePicker.getFilePath(type: FileType.any);
                     if (path != null) {
                       await Navigator.of(context).push(CredentialsScreen.route(
                           FileSourceLocal(File(path),
@@ -653,7 +653,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                     _invalidPassword = null;
                     if (Platform.isIOS || Platform.isAndroid) {
                       final path =
-                          await FilePicker.getFilePath(type: FileType.ANY);
+                          await FilePicker.getFilePath(type: FileType.any);
                       setState(() {
                         _keyFile = path == null ? null : File(path);
                       });
