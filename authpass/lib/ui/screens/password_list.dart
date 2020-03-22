@@ -153,7 +153,9 @@ class PasswordListContent extends StatefulWidget {
       }
     }
     _onEntrySelected(entry, type);
-    Provider.of<Analytics>(context).events.trackSelectEntry(type: type);
+    Provider.of<Analytics>(context, listen: false)
+        .events
+        .trackSelectEntry(type: type);
   }
 
   @override
@@ -377,7 +379,13 @@ class _PasswordListContentState extends State<PasswordListContent>
         primaryTextTheme: theme.textTheme,
       );
     } else {
-      return theme;
+      return theme.copyWith(
+        textSelectionColor: theme.colorScheme.secondary,
+        textSelectionHandleColor: theme.colorScheme.secondary,
+        //primaryColor: Colors.blue,
+//        cursorColor: Colors.red,
+        cursorColor: Colors.white,
+      );
     }
   }
 
@@ -397,35 +405,40 @@ class _PasswordListContentState extends State<PasswordListContent>
           });
         },
       ),
-      title: TextField(
-        style: theme.textTheme.title,
-        focusNode: _filterFocusNode,
-        controller: _filterTextEditingController,
-        onChanged: (newQuery) async {
-          _logger.info('query changed to $newQuery');
-          final entries = PasswordListFilterIsolateRunner.filterEntries(
-              _allEntries, newQuery);
-          setState(() {
-            _filterQuery = newQuery;
-            _filteredEntries = entries;
-            if (_filteredEntries.isNotEmpty &&
-                (widget.selectedEntry == null ||
-                    !_filteredEntries.contains(widget.selectedEntry))) {
-              widget.onEntrySelected(context, _filteredEntries.first.entry,
-                  EntrySelectionType.passiveHighlight);
-            }
-          });
-          // TODO this looks a bit like a workaround. But on MacOS we lose focus when
-          //      we show another password entry.
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _filterFocusNode.requestFocus();
-          });
-        },
-        autofocus: true,
-        decoration: InputDecoration(
-          hintText: 'Search',
-          border: InputBorder.none,
-          hintStyle: theme.inputDecorationTheme.hintStyle,
+      title: Theme(
+        data: theme,
+        child: TextField(
+          style: theme.textTheme.title,
+          // we also want the same cursorColor for mac/ios
+          cursorColor: theme.cursorColor,
+          focusNode: _filterFocusNode,
+          controller: _filterTextEditingController,
+          onChanged: (newQuery) async {
+            _logger.info('query changed to $newQuery');
+            final entries = PasswordListFilterIsolateRunner.filterEntries(
+                _allEntries, newQuery);
+            setState(() {
+              _filterQuery = newQuery;
+              _filteredEntries = entries;
+              if (_filteredEntries.isNotEmpty &&
+                  (widget.selectedEntry == null ||
+                      !_filteredEntries.contains(widget.selectedEntry))) {
+                widget.onEntrySelected(context, _filteredEntries.first.entry,
+                    EntrySelectionType.passiveHighlight);
+              }
+            });
+            // TODO this looks a bit like a workaround. But on MacOS we lose focus when
+            //      we show another password entry.
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _filterFocusNode.requestFocus();
+            });
+          },
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: 'Search',
+            border: InputBorder.none,
+            hintStyle: theme.inputDecorationTheme.hintStyle,
+          ),
         ),
       ),
     );
@@ -766,7 +779,9 @@ class PasswordEntryTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
             child: Icon(
               PredefinedIcons.iconFor(vm.entry.icon.get()),
-              color: fgColor ?? vm.fileColor ?? Colors.black45,
+              color: fgColor ??
+                  vm.fileColor ??
+                  (isDarkTheme ? Colors.white54 : Colors.black45),
             ),
           ),
           Expanded(

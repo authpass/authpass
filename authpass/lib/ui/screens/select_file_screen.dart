@@ -167,7 +167,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         }
         _quickUnlockAttempted = true;
         progress.progressLabel = 'Quick unlocking files ...';
-        final kdbxBloc = Provider.of<KdbxBloc>(context);
+        final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
         if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
           _logger
               .fine('We already have files open. Not attempting quick unlock.');

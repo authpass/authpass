@@ -54,6 +54,10 @@ ThemeData createDarkTheme() {
   );
   return customize(ThemeData(
     primaryColor: colorScheme.primary,
+    textSelectionHandleColor: AuthPassTheme.primarySwatch[800],
+//    textSelectionColor: Colors.red,
+    toggleableActiveColor: colorScheme.primary,
+//    cursorColor: Colors.red,
     brightness: Brightness.dark,
     colorScheme: colorScheme,
     primarySwatch: AuthPassTheme.primarySwatch,
