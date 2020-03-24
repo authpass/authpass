@@ -48,9 +48,16 @@ dependencies:
     git:
       url: https://github.com/hpoul/usage.git
       ref: custom-user-agent
-  package_info: ^0.4.0+13
-  package_info_macos:
-    path: ../deps/package_info_macos
+  package_info:
+    git:
+      url: https://github.com/hpoul/plugins.git
+      ref: package_info_macos
+      path: packages/package_info
+#  package_info: ^0.4.0+13
+#  package_info_macos:
+#    git:
+#      url: https://github.com/authpass/package_info_macos.git
+##    path: ../deps/package_info_macos
   device_info: ^0.4.1+4
   path_provider: ^1.6.0
   path_provider_macos: ^0.0.3

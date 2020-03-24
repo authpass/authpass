@@ -568,17 +568,12 @@ packages:
   package_info:
     dependency: "direct main"
     description:
-      name: package_info
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0+16"
-  package_info_macos:
-    dependency: "direct main"
-    description:
-      path: "../deps/package_info_macos"
-      relative: true
-    source: path
-    version: "0.0.1"
+      path: "packages/package_info"
+      ref: package_info_macos
+      resolved-ref: "301a6847c4ea078127ec49750ed76c0e2fdbdc5d"
+      url: "https://github.com/hpoul/plugins.git"
+    source: git
+    version: "0.4.1"
   package_resolver:
     dependency: transitive
     description:

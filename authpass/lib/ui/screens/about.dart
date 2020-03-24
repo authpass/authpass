@@ -68,8 +68,8 @@ class AuthPassAboutDialog extends StatelessWidget {
   }
 
   static void openDialog(BuildContext context) {
-    final env = Provider.of<Env>(context);
-    Provider.of<Analytics>(context).trackScreen('/about');
+    final env = Provider.of<Env>(context, listen: false);
+    Provider.of<Analytics>(context, listen: false).trackScreen('/about');
     showDialog<void>(
       context: context,
       builder: (context) => AuthPassAboutDialog(env: env),
@@ -90,7 +90,8 @@ class AuthPassAboutDialog extends StatelessWidget {
 
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
       BuildContext context) {
-    final openedFiles = Provider.of<KdbxBloc>(context)?.openedFiles?.values;
+    final openedFiles =
+        Provider.of<KdbxBloc>(context, listen: false)?.openedFiles?.values;
     return [
       PopupMenuItem(
         child: const ListTile(

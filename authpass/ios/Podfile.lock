@@ -17,12 +17,12 @@ PODS:
   - Flutter (1.0.0)
   - flutter_email_sender (0.0.1):
     - Flutter
+  - flutter_plugin_android_lifecycle (0.0.1):
+    - Flutter
   - macos_secure_bookmarks (0.0.1):
     - Flutter
   - MTBBarcodeScanner (5.0.11)
   - package_info (0.0.1):
-    - Flutter
-  - package_info_macos (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
@@ -45,9 +45,9 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
+  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - macos_secure_bookmarks (from `.symlinks/plugins/macos_secure_bookmarks/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
-  - package_info_macos (from `.symlinks/plugins/package_info_macos/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -77,12 +77,12 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_email_sender:
     :path: ".symlinks/plugins/flutter_email_sender/ios"
+  flutter_plugin_android_lifecycle:
+    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   macos_secure_bookmarks:
     :path: ".symlinks/plugins/macos_secure_bookmarks/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
-  package_info_macos:
-    :path: ".symlinks/plugins/package_info_macos/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   path_provider_macos:
@@ -104,10 +104,10 @@ SPEC CHECKSUMS:
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_email_sender: f787522d0e82f50e5766c1213dbffff22fdcf009
+  flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
   macos_secure_bookmarks: e92103d68440bb8e5dc58e5e87956de0be6ce4ad
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
-  package_info_macos: e2662086e1f037d43a60a690970e4a7ffe68ef12
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
