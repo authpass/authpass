@@ -51,6 +51,46 @@ class MainAppTabletScaffold extends StatefulWidget {
   _MainAppTabletScaffoldState createState() => _MainAppTabletScaffoldState();
 }
 
+/// Workaround for the search text field losing focus when pushing
+/// a second route.
+/// https://github.com/flutter/flutter/issues/53441
+class FocusWorkaroundPageRoute<T> extends MaterialPageRoute<T> {
+  FocusWorkaroundPageRoute({
+    RouteSettings settings,
+    @required WidgetBuilder builder,
+    this.focusNode,
+  }) : super(
+          settings: settings,
+          builder: builder,
+        );
+
+  final FocusNode focusNode;
+
+  @override
+  void install() {
+    super.install();
+    _logger.fine('focusNode: $focusNode');
+    focusNode.addListener(_changedFocus);
+  }
+
+  void _changedFocus() {
+    _logger.finest(
+        'Changed focus. ${focusNode.hasFocus} --- isCurrent:$isCurrent');
+    if (!focusNode.hasFocus) {
+      focusNode.requestFocus();
+    }
+  }
+
+  @override
+  TickerFuture didPush() {
+    final ret = super.didPush();
+    ret.then((value) {
+      focusNode.removeListener(_changedFocus);
+    }); // focusNode.requestFocus());
+    return ret;
+  }
+}
+
 class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
   KdbxEntry _selectedEntry;
@@ -87,10 +127,23 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
                   selectedEntry: _selectedEntry,
                   onEntrySelected: (entry, type) {
                     if (_selectedEntry != entry) {
-                      _navigatorKey.currentState.pushAndRemoveUntil(
-                        EntryDetailsScreen.route(entry: entry),
-                        (route) => route.isFirst,
-                      );
+                      if (type == EntrySelectionType.passiveHighlight) {
+                        _navigatorKey.currentState.pushAndRemoveUntil(
+                          FocusWorkaroundPageRoute<void>(
+                              focusNode: WidgetsBinding
+                                  .instance.focusManager.primaryFocus,
+                              settings: const RouteSettings(name: '/entry'),
+                              builder: (context) => EntryDetailsScreen(
+                                    entry: entry,
+                                  )),
+                          (route) => route.isFirst,
+                        );
+                      } else {
+                        _navigatorKey.currentState.pushAndRemoveUntil(
+                          EntryDetailsScreen.route(entry: entry),
+                          (route) => route.isFirst,
+                        );
+                      }
                       setState(() {
                         _selectedEntry = entry;
                       });

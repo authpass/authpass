@@ -244,8 +244,7 @@ class _EntryDetailsState extends State<EntryDetails>
     }
   }
 
-  void _initFields() {
-    final commonFields = Provider.of<CommonFields>(context);
+  void _initFields(CommonFields commonFields) {
     final nonCommonKeys = widget.entry.stringEntries
         .where((str) => !commonFields.isCommon(str.key));
     _fieldKeys = commonFields.fields
@@ -268,7 +267,7 @@ class _EntryDetailsState extends State<EntryDetails>
     _logger.info('_EntryDetailsState.didChangeDependencies');
     if (_fieldKeys == null) {
       subscriptions.cancelSubscriptions();
-      _initFields();
+      _initFields(Provider.of<CommonFields>(context));
       _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context),
           Provider.of<CommonFields>(context));
     }
@@ -280,7 +279,7 @@ class _EntryDetailsState extends State<EntryDetails>
     _logger.fine('_EntryDetailsState.didUpdateWidget');
     if (oldWidget.entry != widget.entry) {
       _logger.info('_EntryDetailsState: widget.entry changed.');
-      _initFields();
+      _initFields(Provider.of<CommonFields>(context));
     }
   }
 
@@ -369,7 +368,8 @@ class _EntryDetailsState extends State<EntryDetails>
                       fieldKey: f.item2,
                       commonField: f.item3,
                       onChangedMetadata: () => setState(() {
-                        _initFields();
+                        _initFields(
+                            Provider.of<CommonFields>(context, listen: false));
                       }),
                     ),
                   )
@@ -395,7 +395,8 @@ class _EntryDetailsState extends State<EntryDetails>
                   Provider.of<Analytics>(context, listen: false)
                       .events
                       .trackAddField(key: key.key);
-                  _initFields();
+                  _initFields(
+                      Provider.of<CommonFields>(context, listen: false));
                   setState(() {});
                 },
               ),

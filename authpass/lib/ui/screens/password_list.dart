@@ -425,12 +425,12 @@ class _PasswordListContentState extends State<PasswordListContent>
                       !_filteredEntries.contains(widget.selectedEntry))) {
                 widget.onEntrySelected(context, _filteredEntries.first.entry,
                     EntrySelectionType.passiveHighlight);
+//                  // TODO this looks a bit like a workaround. But on MacOS we lose focus when
+//                  //      we show another password entry.
+//                  WidgetsBinding.instance.addPostFrameCallback((_) {
+//                    _filterFocusNode.requestFocus();
+//                  });
               }
-            });
-            // TODO this looks a bit like a workaround. But on MacOS we lose focus when
-            //      we show another password entry.
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _filterFocusNode.requestFocus();
             });
           },
           autofocus: true,
