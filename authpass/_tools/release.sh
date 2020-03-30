@@ -72,6 +72,10 @@ case "$1" in
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
         $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor samsungapps
     ;;
+    huawei)
+        export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
+        $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor huawei
+    ;;
     sideload)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
         $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor sideload

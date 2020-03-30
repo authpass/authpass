@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        flavor: ['samsungapps', 'sideload']
+        flavor: ['samsungapps', 'sideload', 'huawei']
     
       fail-fast: true
 
