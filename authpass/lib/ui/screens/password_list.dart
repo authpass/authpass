@@ -408,7 +408,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       title: Theme(
         data: theme,
         child: TextField(
-          style: theme.textTheme.title,
+          style: theme.textTheme.headline6,
           // we also want the same cursorColor for mac/ios
           cursorColor: theme.cursorColor,
           focusNode: _filterFocusNode,

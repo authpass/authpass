@@ -25,7 +25,6 @@ import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:base32/base32.dart';
-import 'package:built_value/built_value.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -702,7 +701,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
         childOnHighlight: Text('Copied!',
             style: Theme.of(context)
                 .textTheme
-                .body1
+                .bodyText2
                 .copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -1008,7 +1007,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
   @override
   Future<void> _handleMenuEntrySelected(EntryAction entryAction) async {
     if (entryAction == EntryAction.copyRawData) {
-      Clipboard.setData(ClipboardData(text: _valueCurrent));
+      await Clipboard.setData(ClipboardData(text: _valueCurrent));
       return;
     }
     return super._handleMenuEntrySelected(entryAction);

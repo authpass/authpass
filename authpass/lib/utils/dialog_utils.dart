@@ -51,7 +51,10 @@ class DialogUtils {
               FlatButton(
                 child: const Text('Send Error Report/Help'),
                 onPressed: () {
-                  sendLogs(context);
+                  sendLogs(
+                    context,
+                    errorDescription: 'title: $title\ncontent: $content',
+                  );
                 },
               ),
             ],
@@ -79,20 +82,27 @@ class DialogUtils {
 
   static bool sendLogsSupported() => Platform.isIOS || Platform.isAndroid;
 
-  static void sendLogs(BuildContext context) async {
+  static Future<void> sendLogs(
+    BuildContext context, {
+    String errorDescription = '',
+  }) async {
     final env = Provider.of<Env>(context, listen: false);
     final loggingUtil = LoggingUtils();
     final logFiles = loggingUtil.rotatingFileLoggerFiles;
     final logFileDebug = logFiles
         .map((file) => '${file.absolute.path}: ${file.statSync()}')
         .join('\n\n');
+    final details = errorDescription.isEmpty
+        ? ''
+        : '===================\n$errorDescription';
     final email = Email(
-      subject:
-          'Log file for ${await env.getAppInfo()} (${Platform.operatingSystem})',
-      body: '\n\n\n\n====================Available Log Files:\n$logFileDebug',
+      subject: 'Log file for '
+          '${await env.getAppInfo()} (${Platform.operatingSystem})',
+      body: '\n\n\n\n$details\n'
+          '====================Available Log Files:\n$logFileDebug',
       recipients: ['support@authpass.app'],
       // for now just take the current one.
-      attachmentPath: logFiles.first.absolute.path,
+      attachmentPaths: [logFiles.first.absolute.path],
     );
     await FlutterEmailSender.send(email);
   }

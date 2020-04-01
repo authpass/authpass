@@ -53,7 +53,7 @@ class GroupList extends StatelessWidget {
             ? null
             : <Widget>[
                 IconButton(
-                  icon: Icon(FontAwesomeIcons.folderPlus),
+                  icon: const Icon(FontAwesomeIcons.folderPlus),
                   onPressed: () async {
                     final newName = await SimplePromptDialog.showPrompt(
                       context,

@@ -329,7 +329,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     'Last opened files:',
                     style: Theme.of(context)
                         .textTheme
-                        .body1
+                        .bodyText2
                         .copyWith(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
@@ -442,20 +442,21 @@ class SelectFileAction extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: DefaultTextStyle(
-              style: theme.primaryTextTheme.body1,
+              style: theme.primaryTextTheme.bodyText2,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(
                     icon,
-                    color: theme.primaryTextTheme.body1.color.withOpacity(0.8),
+                    color:
+                        theme.primaryTextTheme.bodyText2.color.withOpacity(0.8),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     label,
                     textAlign: TextAlign.center,
-                    style: theme.primaryTextTheme.body1
+                    style: theme.primaryTextTheme.bodyText2
                         .copyWith(letterSpacing: 0.9),
                     strutStyle: const StrutStyle(leading: 0.2),
 //                    style: TextStyle(fontWeight: FontWeight.bold),
@@ -604,7 +605,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   children: <Widget>[
                     const Text('Enter the password for:'),
                     Text(widget.kdbxFilePath.displayName,
-                        style: theme.textTheme.display1),
+                        style: theme.textTheme.headline4),
                     Text(
                       widget.kdbxFilePath.displayPath,
                       style: theme.textTheme.caption,

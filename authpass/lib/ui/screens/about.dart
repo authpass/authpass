@@ -206,7 +206,7 @@ class UrlLink extends StatelessWidget {
               Text(
                 url,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.body1
+                style: theme.textTheme.bodyText2
                     .apply(color: theme.primaryColor, fontSizeFactor: 0.95)
                     .copyWith(fontWeight: FontWeight.bold),
               ),
