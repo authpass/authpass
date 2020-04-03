@@ -58,15 +58,20 @@ case "$1" in
     macos)
         # on mac os there is right now no --build-number argument :-(
         #flutter build macos -t lib/env/production.dart --release --build-number $buildnumber
-        sed -i .bak 's/^\(version: [0-9\\.]*\).*$/\1+'$buildnumber'/' pubspec.yaml
-        cat pubspec.yaml | grep version | grep "+$buildnumber$"  || (
-            echo "Buildnumber replacement was not successful." && exit 1
-        )
-        version=$(cat pubspec.yaml | grep version | sed "s/version: *//" | cut -d'+' -f 1)
-        sed -i .bak "s/_DEFAULT_VERSION = '.*'/_DEFAULT_VERSION = '$version'/" lib/env/_base.dart
-        sed -i .bak "s/_DEFAULT_BUILD_NUMBER = [0-9]*/_DEFAULT_BUILD_NUMBER = $buildnumber/" lib/env/_base.dart
-        $FLT pub get
-        $FLT build macos -v -t lib/env/production.dart --release
+#        sed -i .bak 's/^\(version: [0-9\\.]*\).*$/\1+'$buildnumber'/' pubspec.yaml
+#        cat pubspec.yaml | grep version | grep "+$buildnumber$"  || (
+#            echo "Buildnumber replacement was not successful." && exit 1
+#        )
+#        version=$(cat pubspec.yaml | grep version | sed "s/version: *//" | cut -d'+' -f 1)
+#        sed -i .bak "s/_DEFAULT_VERSION = '.*'/_DEFAULT_VERSION = '$version'/" lib/env/_base.dart
+#        sed -i .bak "s/_DEFAULT_BUILD_NUMBER = [0-9]*/_DEFAULT_BUILD_NUMBER = $buildnumber/" lib/env/_base.dart
+#        $FLT pub get
+        $FLT build macos -v -t lib/env/production.dart --release --build-number $buildnumber
+        echo
+        echo
+        echo 'Now opening workspace in xcode. Click Build -> Archive'
+        echo
+        open macos/Runner.xcworkspace
     ;;
     samsungapps)
         export GRADLE_USER_HOME=$(pwd)/_tools/secrets/gradle_home
