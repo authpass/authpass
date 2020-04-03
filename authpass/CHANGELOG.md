@@ -1,6 +1,11 @@
+# 1.5.5
+
+* Allow changing of database name.
+* Large Screens (Tablet/Desktop): Improved responsiveness of search box.
+
 # 1.5.3
 
-Fixed a few dark mode problems, Fixed potential crash.
+* Fixed a few dark mode problems, Fixed potential crash.
 
 # 1.5.2
 
