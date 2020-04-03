@@ -446,13 +446,10 @@ class _EntryDetailsState extends State<EntryDetails>
         _logger.warning('Error during barcode scanning.', e, stackTrace);
       }
     }
-    final totpCode = await SimplePromptDialog.showPrompt(
-      context,
-      const SimplePromptDialog(
-        title: 'Time Based Authentication',
-        helperText: 'Please enter time based key.',
-      ),
-    );
+    final totpCode = await const SimplePromptDialog(
+      title: 'Time Based Authentication',
+      helperText: 'Please enter time based key.',
+    ).show(context);
     return _cleanOtpCodeCode(totpCode);
   }
 }
@@ -560,13 +557,10 @@ class _AddFieldButtonState extends State<AddFieldButton> {
   }
 
   Future<void> _selectCustomKey() async {
-    final key = await SimplePromptDialog.showPrompt(
-      context,
-      const SimplePromptDialog(
-        title: 'Adding new Field',
-        labelText: 'Enter a name for the field',
-      ),
-    );
+    final key = await const SimplePromptDialog(
+      title: 'Adding new Field',
+      labelText: 'Enter a name for the field',
+    ).show(context);
     if (key != null && key.isNotEmpty) {
       widget.onAddField(KdbxKey(key));
     }
@@ -751,14 +745,11 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
         throw UnsupportedError('Field does not support this action.');
         break;
       case EntryAction.rename:
-        final key = await SimplePromptDialog.showPrompt(
-          context,
-          SimplePromptDialog(
-            title: 'Renaming field',
-            labelText: 'Enter the new name for the field',
-            initialValue: widget.fieldKey.key,
-          ),
-        );
+        final key = await SimplePromptDialog(
+          title: 'Renaming field',
+          labelText: 'Enter the new name for the field',
+          initialValue: widget.fieldKey.key,
+        ).show(context);
         if (key != null) {
           widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
           widget.onChangedMetadata();

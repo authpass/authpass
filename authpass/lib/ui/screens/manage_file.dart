@@ -8,6 +8,7 @@ import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/async_utils.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +59,6 @@ class ManageFile extends StatefulWidget {
 class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   KdbxBloc _kdbxBloc;
   KdbxOpenedFile _file;
-  final TextEditingController _databaseName = TextEditingController();
 
   @override
   void initState() {
@@ -85,12 +85,13 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     _logger.fine('Updating widget. _init()');
     _kdbxBloc = Provider.of<KdbxBloc>(context);
     _file = _kdbxBloc.fileForFileSource(widget.fileSource);
-    _databaseName.text = _file.kdbxFile.body.meta.databaseName.get();
+//    _databaseName.text = _file.kdbxFile.body.meta.databaseName.get();
   }
 
   @override
   Widget build(BuildContext context) {
     _logger.finest('Is rebuilding with color ${_file.openedFile.color}');
+    final databaseName = _file.kdbxFile.body.meta.databaseName.get();
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     final env = Provider.of<Env>(context);
     return ProgressOverlay(
@@ -104,10 +105,17 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: TextField(
-                  decoration: const InputDecoration(labelText: 'Database Name'),
-                  controller: _databaseName,
-                ),
+                title: Text(databaseName),
+                trailing: Icon(Icons.edit),
+                onTap: () async {
+                  final newName = await SimplePromptDialog(
+                    title: 'Enter database name',
+                    initialValue: databaseName,
+                  ).show(context);
+                  setState(() {
+                    _file.kdbxFile.body.meta.databaseName.set(newName);
+                  });
+                },
               ),
               ListTile(
                 title: const Text('Path'),

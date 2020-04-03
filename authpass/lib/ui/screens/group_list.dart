@@ -55,13 +55,10 @@ class GroupList extends StatelessWidget {
                 IconButton(
                   icon: const Icon(FontAwesomeIcons.folderPlus),
                   onPressed: () async {
-                    final newName = await SimplePromptDialog.showPrompt(
-                      context,
-                      const SimplePromptDialog(
-                        title: 'New Group',
-                        labelText: 'Name for the new group',
-                      ),
-                    );
+                    final newName = await const SimplePromptDialog(
+                      title: 'New Group',
+                      labelText: 'Name for the new group',
+                    ).show(context);
                     if (newName != null) {
                       parent.file.createGroup(parent: parent, name: newName);
                     }

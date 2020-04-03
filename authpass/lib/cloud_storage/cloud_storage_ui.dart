@@ -160,13 +160,10 @@ class CloudStorageAuthentication extends StatelessWidget {
               return;
             }
           }
-          final code = await SimplePromptDialog.showPrompt(
-            context,
-            SimplePromptDialog(
-              title: '${provider.displayName} Authentication',
-              labelText: 'Authentication Code',
-            ),
-          );
+          final code = await SimplePromptDialog(
+            title: '${provider.displayName} Authentication',
+            labelText: 'Authentication Code',
+          ).show(context);
           prompt.result(OAuthTokenResult(code));
         } else if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult,
             UrlUsernamePasswordPromptData>) {

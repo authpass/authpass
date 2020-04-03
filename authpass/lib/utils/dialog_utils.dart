@@ -158,9 +158,13 @@ class SimplePromptDialog extends StatefulWidget {
   final String helperText;
   final String initialValue;
 
+  @Deprecated('Use [dialog.show] instead.')
   static Future<String> showPrompt(
           BuildContext context, SimplePromptDialog dialog) =>
-      showDialog<String>(context: context, builder: (context) => dialog);
+      dialog.show(context);
+
+  Future<String> show(BuildContext context) =>
+      showDialog<String>(context: context, builder: (context) => this);
 
   @override
   _SimplePromptDialogState createState() => _SimplePromptDialogState();

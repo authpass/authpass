@@ -28,12 +28,10 @@ class AuthPassAboutDialog extends StatelessWidget {
               onLongPress: () async {
                 final deps = Provider.of<Deps>(context);
                 final appData = await deps.appDataBloc.store.load();
-                final newData = await SimplePromptDialog.showPrompt(
-                    context,
-                    SimplePromptDialog(
-                      labelText: 'debug usertype',
-                      initialValue: appData?.manualUserType ?? '',
-                    ));
+                final newData = await SimplePromptDialog(
+                  labelText: 'debug usertype',
+                  initialValue: appData?.manualUserType ?? '',
+                ).show(context);
                 if (newData != null) {
                   await deps.appDataBloc
                       .update((b, _) => b..manualUserType = newData);
