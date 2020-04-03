@@ -354,9 +354,11 @@ class _PasswordListContentState extends State<PasswordListContent>
             ...AuthPassAboutDialog.createDefaultPopupMenuItems(context),
             PopupMenuItem(
               value: () {
-                Provider.of<KdbxBloc>(context).closeAllFiles();
-                Navigator.of(context)
-                    .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
+                Provider.of<KdbxBloc>(context, listen: false).closeAllFiles();
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  SelectFileScreen.route(skipQuickUnlock: true),
+                  (_) => false,
+                );
               },
               child: ListTile(
                 leading: Icon(Icons.exit_to_app),

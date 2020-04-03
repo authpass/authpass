@@ -39,11 +39,11 @@ class FileContent {
 }
 
 abstract class FileSource {
-  FileSource(
-      {@required this.databaseName,
-      @required this.uuid,
-      FileContent initialCachedContent})
-      : _cached = initialCachedContent;
+  FileSource({
+    @required this.databaseName,
+    @required this.uuid,
+    FileContent initialCachedContent,
+  }) : _cached = initialCachedContent;
 
   FileContent _cached;
 
@@ -73,6 +73,8 @@ abstract class FileSource {
   Map<String, dynamic> get previousMetadata => _cached.metadata;
 
   String get typeDebug => runtimeType.toString();
+
+  FileSource copyWithDatabaseName(String databaseName);
 
   @protected
   Future<FileContent> load();
@@ -182,6 +184,14 @@ class FileSourceLocal extends FileSource {
 
   @override
   IconData get displayIcon => FontAwesomeIcons.hdd;
+
+  @override
+  FileSource copyWithDatabaseName(String databaseName) => FileSourceLocal(
+        file,
+        databaseName: databaseName,
+        uuid: uuid,
+        macOsSecureBookmark: macOsSecureBookmark,
+      );
 }
 
 class FileSourceUrl extends FileSource {
@@ -217,6 +227,13 @@ class FileSourceUrl extends FileSource {
 
   @override
   IconData get displayIcon => FontAwesomeIcons.externalLinkAlt;
+
+  @override
+  FileSource copyWithDatabaseName(String databaseName) => FileSourceUrl(
+        url,
+        uuid: uuid,
+        databaseName: databaseName,
+      );
 }
 
 class FileSourceCloudStorage extends FileSource {
@@ -258,6 +275,16 @@ class FileSourceCloudStorage extends FileSource {
 
   @override
   IconData get displayIcon => provider.displayIcon;
+
+  @override
+  FileSource copyWithDatabaseName(String databaseName) =>
+      FileSourceCloudStorage(
+        provider: provider,
+        fileInfo: fileInfo,
+        uuid: uuid,
+        databaseName: databaseName,
+        initialCachedContent: _cached,
+      );
 }
 
 class FileExistsException extends KdbxException {}
@@ -359,6 +386,26 @@ class KdbxOpenedFile {
   final KdbxFile kdbxFile;
 }
 
+class OpenedKdbxFiles {
+  OpenedKdbxFiles(Map<FileSource, KdbxOpenedFile> files)
+      : _files = Map.unmodifiable(files);
+  final Map<FileSource, KdbxOpenedFile> _files;
+
+  int get length => _files.length;
+
+//  bool get isNotEmpty => _files.isNotEmpty;
+
+  KdbxOpenedFile operator [](FileSource fileSource) => _files[fileSource];
+  Iterable<MapEntry<FileSource, KdbxOpenedFile>> get entries => _files.entries;
+  Iterable<KdbxOpenedFile> get values => _files.values;
+
+  bool containsKey(FileSource file) => _files.containsKey(file);
+
+//  Map<K2, V2> map<K2, V2>(
+//          MapEntry<K2, V2> Function(FileSource key, KdbxOpenedFile value) f) =>
+//      _files.map(f);
+}
+
 class KdbxBloc {
   KdbxBloc({
     @required this.env,
@@ -383,7 +430,7 @@ class KdbxBloc {
   final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
 
   final _openedFiles =
-      BehaviorSubject<Map<FileSource, KdbxOpenedFile>>.seeded({});
+      BehaviorSubject<OpenedKdbxFiles>.seeded(OpenedKdbxFiles({}));
   Map<KdbxFile, KdbxOpenedFile> _openedFilesByKdbxFile;
   final _openedFilesQuickUnlock = <FileSource>{};
 
@@ -391,11 +438,10 @@ class KdbxBloc {
       _openedFiles.value.entries
           .map((entry) => MapEntry(entry.key, entry.value.kdbxFile));
 
-  Map<FileSource, KdbxOpenedFile> get openedFiles => _openedFiles.value;
+  OpenedKdbxFiles get openedFiles => _openedFiles.value;
   List<KdbxFile> get openedFilesKdbx =>
       _openedFiles.value.values.map((value) => value.kdbxFile).toList();
-  ValueStream<Map<FileSource, KdbxOpenedFile>> get openedFilesChanged =>
-      _openedFiles.stream;
+  ValueStream<OpenedKdbxFiles> get openedFilesChanged => _openedFiles.stream;
 
   Future<int> _quickUnlockCheckRunning;
 
@@ -422,10 +468,10 @@ class KdbxBloc {
       openedFile: updatedFile,
       kdbxFile: file.kdbxFile,
     );
-    _openedFiles.value = {
-      ..._openedFiles.value,
+    _openedFiles.value = OpenedKdbxFiles({
+      ..._openedFiles.value._files,
       file.fileSource: newFile,
-    };
+    });
     _logger.info('new values: ${_openedFiles.value}');
     return newFile;
   }
@@ -452,14 +498,14 @@ class KdbxBloc {
     final kdbxFile = kdbxReadFile.file;
     final openedFile = await appDataBloc.openedFile(file,
         name: kdbxFile.body.meta.databaseName.get());
-    _openedFiles.value = {
-      ..._openedFiles.value,
+    _openedFiles.value = OpenedKdbxFiles({
+      ..._openedFiles.value._files,
       file: KdbxOpenedFile(
         fileSource: file,
         openedFile: openedFile,
         kdbxFile: kdbxFile,
       )
-    };
+    });
     analytics.events.trackOpenFile(type: file.typeDebug);
     analytics.events.trackOpenFile2(
       generator: kdbxFile.body.meta.generator.get() ?? 'NULL',
@@ -535,7 +581,8 @@ class KdbxBloc {
     _logger.fine('Close file.');
     analytics.events.trackCloseFile();
     final fileSource = fileForKdbxFile(file).fileSource;
-    _openedFiles.value = Map.from(_openedFiles.value)..remove(fileSource);
+    _openedFiles.value = OpenedKdbxFiles(
+        Map.from(_openedFiles.value._files)..remove(fileSource));
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
       await _updateQuickUnlockStore();
@@ -547,7 +594,7 @@ class KdbxBloc {
   void closeAllFiles() {
     _logger.finer('Closing all files, clearing quick unlock.');
     analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
-    _openedFiles.value = {};
+    _openedFiles.value = OpenedKdbxFiles({});
     // clear all quick unlock data.
     _openedFilesQuickUnlock.clear();
     quickUnlockStorage.updateQuickUnlockFile({});
@@ -676,10 +723,11 @@ class KdbxBloc {
       openedFile: newOpenedFile,
       kdbxFile: oldFile.kdbxFile,
     );
-    _openedFiles.value = {
-      ..._openedFiles.value,
+    _openedFiles.value = OpenedKdbxFiles({
+      ...Map.fromEntries(_openedFiles.value._files.entries
+          .where((entry) => entry.key != oldSource)),
       newFile.fileSource: newFile,
-    }..removeWhere((key, value) => key == oldSource);
+    });
     await _updateQuickUnlockStore();
     return newFile;
   }

@@ -89,7 +89,7 @@ class AuthPassAboutDialog extends StatelessWidget {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
       BuildContext context) {
     final openedFiles =
-        Provider.of<KdbxBloc>(context, listen: false)?.openedFiles?.values;
+        Provider.of<OpenedKdbxFiles>(context, listen: false).values;
     return [
       PopupMenuItem(
         child: const ListTile(

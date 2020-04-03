@@ -38,9 +38,12 @@ class ManageFileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // when changing the database name, we have to refresh the file source.
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final currentFileSource = kdbxBloc.fileForFileSource(fileSource).fileSource;
     return Scaffold(
       appBar: AppBar(
-        title: Text(fileSource.displayName),
+        title: Text(currentFileSource.displayName),
       ),
       body: ManageFile(fileSource: fileSource),
     );
@@ -106,7 +109,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
             children: <Widget>[
               ListTile(
                 title: Text(databaseName),
-                trailing: Icon(Icons.edit),
+                trailing: const Icon(Icons.edit),
                 onTap: () async {
                   final newName = await SimplePromptDialog(
                     title: 'Enter database name',
@@ -115,6 +118,14 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   setState(() {
                     _file.kdbxFile.body.meta.databaseName.set(newName);
                   });
+                  await asyncRunTask((progress) async {
+                    await Future<int>.delayed(
+                        const Duration(milliseconds: 100));
+                    await _kdbxBloc.saveAs(
+                      _file,
+                      _file.fileSource.copyWithDatabaseName(newName),
+                    );
+                  }, label: 'Saving');
                 },
               ),
               ListTile(

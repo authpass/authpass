@@ -133,6 +133,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           updateShouldNotify: (a, b) => true,
           initialData: _deps.kdbxBloc,
         ),
+        StreamProvider<OpenedKdbxFiles>.value(
+          value: _deps.kdbxBloc.openedFilesChanged,
+          initialData: _deps.kdbxBloc.openedFilesChanged.value,
+        )
       ],
       child: MaterialApp(
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],

@@ -11,11 +11,14 @@ import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart' show Color;
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 import 'package:uuid/uuid.dart';
 
 part 'app_data.g.dart';
+
+final _logger = Logger('app_data');
 
 enum OpenedFilesSourceType { Local, Url, CloudStorage }
 
@@ -127,10 +130,14 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           File(sourcePath),
           macOsSecureBookmark: macOsSecureBookmark,
           uuid: uuid ?? AppDataBloc.createUuid(),
+          databaseName: name,
         );
       case OpenedFilesSourceType.Url:
-        return FileSourceUrl(Uri.parse(sourcePath),
-            uuid: uuid ?? AppDataBloc.createUuid());
+        return FileSourceUrl(
+          Uri.parse(sourcePath),
+          uuid: uuid ?? AppDataBloc.createUuid(),
+          databaseName: name,
+        );
       case OpenedFilesSourceType.CloudStorage:
         final sourceInfo = json.decode(sourcePath) as Map<String, dynamic>;
         final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String;
@@ -139,9 +146,10 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           throw StateError('Invalid cloud storage provider id $storageId');
         }
         return provider.toFileSource(
-            (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
-                .cast<String, String>(),
-            uuid: uuid ?? AppDataBloc.createUuid());
+          (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map).cast<String, String>(),
+          uuid: uuid ?? AppDataBloc.createUuid(),
+          databaseName: name,
+        );
     }
     throw ArgumentError.value(sourceType, 'sourceType', 'Unsupported value.');
   }
@@ -237,6 +245,7 @@ class AppDataBloc {
         final colorCode = recentFile?.colorCode;
         final openedFile = OpenedFile.fromFileSource(
             file, name, (b) => b..colorCode = colorCode);
+        _logger.finest('openedFile: $openedFile');
         // TODO remove potential old storages?
         b.previousFiles.removeWhere((file) => file.isSameFileAs(openedFile));
         b.previousFiles.add(openedFile);

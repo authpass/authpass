@@ -206,13 +206,19 @@ abstract class CloudStorageProvider {
   String displayPath(Map<String, String> fileInfo) =>
       CloudStorageEntity.fromSimpleFileInfo(fileInfo).pathOrBaseName;
 
-  FileSource toFileSource(Map<String, String> fileInfo,
-          {@required String uuid, FileContent initialCachedContent}) =>
+  FileSource toFileSource(
+    Map<String, String> fileInfo, {
+    @required String uuid,
+    FileContent initialCachedContent,
+    String databaseName,
+  }) =>
       FileSourceCloudStorage(
-          provider: this,
-          fileInfo: fileInfo,
-          uuid: uuid,
-          initialCachedContent: initialCachedContent);
+        provider: this,
+        fileInfo: fileInfo,
+        uuid: uuid,
+        databaseName: databaseName,
+        initialCachedContent: initialCachedContent,
+      );
 
   Future<FileContent> loadFile(Map<String, String> fileInfo) =>
       loadEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo));

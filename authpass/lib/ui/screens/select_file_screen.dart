@@ -33,10 +33,19 @@ import '../../theme.dart';
 final _logger = Logger('authpass.select_file_screen');
 
 class SelectFileScreen extends StatelessWidget {
-  static Route<Object> route() => MaterialPageRoute(
+  const SelectFileScreen({Key key, this.skipQuickUnlock = false})
+      : assert(skipQuickUnlock != null),
+        super(key: key);
+
+  static Route<Object> route({bool skipQuickUnlock = false}) =>
+      MaterialPageRoute(
         settings: const RouteSettings(name: '/selectFile'),
-        builder: (context) => SelectFileScreen(),
+        builder: (context) => SelectFileScreen(
+          skipQuickUnlock: skipQuickUnlock,
+        ),
       );
+
+  final bool skipQuickUnlock;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +62,9 @@ class SelectFileScreen extends StatelessWidget {
         value: cloudBloc,
         child: Container(
           alignment: Alignment.center,
-          child: const SelectFileWidget(),
+          child: SelectFileWidget(
+            skipQuickUnlock: skipQuickUnlock,
+          ),
         ),
       ),
     );
@@ -128,7 +139,10 @@ class ProgressOverlay extends StatelessWidget {
 class SelectFileWidget extends StatefulWidget {
   const SelectFileWidget({
     Key key,
+    this.skipQuickUnlock = false,
   }) : super(key: key);
+
+  final bool skipQuickUnlock;
 
   @override
   _SelectFileWidgetState createState() => _SelectFileWidgetState();
@@ -142,10 +156,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _logger.finer('didChangeDependencies');
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _checkQuickUnlock();
-    });
+    _logger.finer('didChangeDependencies ${widget.skipQuickUnlock}');
+    if (!widget.skipQuickUnlock) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _checkQuickUnlock();
+      });
+    }
 //      Future<int>.delayed(const Duration(seconds: 5))
 //        .then((value) => _checkQuickUnlock());
 //    _checkQuickUnlock();
@@ -155,7 +171,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   void didUpdateWidget(covariant SelectFileWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     _logger.finer('didUpdateWidget --- ${oldWidget != widget}');
-    if (oldWidget != widget) {
+    if (oldWidget != widget && !widget.skipQuickUnlock) {
       _checkQuickUnlock();
     }
   }
@@ -210,147 +226,151 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     return ProgressOverlay(
       task: task,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          const Text('Please select a KeePass (.kdbx) file.'),
-          const SizedBox(height: 16),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 16,
-            runSpacing: 16,
-            children: <Widget>[
-              SelectFileAction(
-                icon: FontAwesomeIcons.hdd,
-                label: 'Open\nLocal File',
-                onPressed: () async {
-                  if (Platform.isIOS || Platform.isAndroid) {
-                    final path =
-                        await FilePicker.getFilePath(type: FileType.any);
-                    if (path != null) {
-                      await Navigator.of(context).push(CredentialsScreen.route(
-                          FileSourceLocal(File(path),
-                              uuid: AppDataBloc.createUuid())));
-                    }
-                  } else {
-                    showOpenPanel((result, paths) async {
-                      if (result == FileChooserResult.ok) {
-                        String macOsBookmark;
-                        if (Platform.isMacOS) {
-                          macOsBookmark =
-                              await SecureBookmarks().bookmark(File(paths[0]));
-                        }
-                        await Navigator.of(context)
-                            .push(CredentialsScreen.route(FileSourceLocal(
-                          File(paths[0]),
-                          uuid: AppDataBloc.createUuid(),
-                          macOsSecureBookmark: macOsBookmark,
-                        )));
-                      }
-                    });
-                  }
-                },
-              ),
-              ...cloudStorageBloc.availableCloudStorage.map(
-                (cs) => SelectFileAction(
-                  icon: cs.displayIcon,
-                  label: 'Load from ${cs.displayName}',
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            const SizedBox(height: 16),
+            const Text('Please select a KeePass (.kdbx) file.'),
+            const SizedBox(height: 16),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 16,
+              runSpacing: 16,
+              children: <Widget>[
+                SelectFileAction(
+                  icon: FontAwesomeIcons.hdd,
+                  label: 'Open\nLocal File',
                   onPressed: () async {
-                    final source = await Navigator.of(context).push(
-                        CloudStorageSelector.route(
-                            cs, CloudStorageOpenConfig()));
-                    if (source != null) {
-                      await Navigator.of(context)
-                          .push(CredentialsScreen.route(source.fileSource));
+                    if (Platform.isIOS || Platform.isAndroid) {
+                      final path =
+                          await FilePicker.getFilePath(type: FileType.any);
+                      if (path != null) {
+                        await Navigator.of(context).push(
+                            CredentialsScreen.route(FileSourceLocal(File(path),
+                                uuid: AppDataBloc.createUuid())));
+                      }
+                    } else {
+                      showOpenPanel((result, paths) async {
+                        if (result == FileChooserResult.ok) {
+                          String macOsBookmark;
+                          if (Platform.isMacOS) {
+                            macOsBookmark = await SecureBookmarks()
+                                .bookmark(File(paths[0]));
+                          }
+                          await Navigator.of(context)
+                              .push(CredentialsScreen.route(FileSourceLocal(
+                            File(paths[0]),
+                            uuid: AppDataBloc.createUuid(),
+                            macOsSecureBookmark: macOsBookmark,
+                          )));
+                        }
+                      });
                     }
                   },
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: LinkButton(
-                      onPressed: () async {
-                        final source = await showDialog<FileSourceUrl>(
-                            context: context,
-                            builder: (context) => SelectUrlDialog());
-                        if (source != null) {
-                          _loadAndGoToCredentials(source);
-                        }
-                      },
-                      child: const Text(
-                        'Download from URL',
-                        textAlign: TextAlign.right,
+                ...cloudStorageBloc.availableCloudStorage.map(
+                  (cs) => SelectFileAction(
+                    icon: cs.displayIcon,
+                    label: 'Load from ${cs.displayName}',
+                    onPressed: () async {
+                      final source = await Navigator.of(context).push(
+                          CloudStorageSelector.route(
+                              cs, CloudStorageOpenConfig()));
+                      if (source != null) {
+                        await Navigator.of(context)
+                            .push(CredentialsScreen.route(source.fileSource));
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: LinkButton(
+                        onPressed: () async {
+                          final source = await showDialog<FileSourceUrl>(
+                              context: context,
+                              builder: (context) => SelectUrlDialog());
+                          if (source != null) {
+                            _loadAndGoToCredentials(source);
+                          }
+                        },
+                        child: const Text(
+                          'Download from URL',
+                          textAlign: TextAlign.right,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                VerticalDivider(
-                  indent: 8,
-                  endIndent: 8,
-                  color: Theme.of(context).primaryColor,
-                ),
-                Expanded(
-                  child: LinkButton(
-                    onPressed: () {
-                      Navigator.of(context).push(CreateFile.route());
-                    },
-                    icon: Icon(Icons.create_new_folder),
-                    child: const Expanded(
-                        child: Text(
-                            'New to KeePass?\nCreate New Password Database',
-                            softWrap: true)),
+                  VerticalDivider(
+                    indent: 8,
+                    endIndent: 8,
+                    color: Theme.of(context).primaryColor,
                   ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          IntrinsicWidth(
-            stepWidth: 100,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text(
-                    'Last opened files:',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  ...ListTile.divideTiles(
-                      context: context,
-                      tiles: appData?.previousFiles?.reversed?.take(5)?.map(
-                                (f) => OpenedFileTile(
-                                  openedFile: f.toFileSource(cloudStorageBloc),
-                                  onPressed: () {
-                                    final source =
-                                        f.toFileSource(cloudStorageBloc);
-                                    _loadAndGoToCredentials(source);
-                                  },
-                                ),
-                              ) ??
-                          [const Text('No files have been opened yet.')]),
+                  Expanded(
+                    child: LinkButton(
+                      onPressed: () {
+                        Navigator.of(context).push(CreateFile.route());
+                      },
+                      icon: Icon(Icons.create_new_folder),
+                      child: const Expanded(
+                          child: Text(
+                              'New to KeePass?\nCreate New Password Database',
+                              softWrap: true)),
+                    ),
+                  )
                 ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            IntrinsicWidth(
+              stepWidth: 100,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Text(
+                      'Last opened files:',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    ...ListTile.divideTiles(
+                        context: context,
+                        tiles: appData?.previousFiles?.reversed?.take(5)?.map(
+                                  (f) => OpenedFileTile(
+                                    openedFile:
+                                        f.toFileSource(cloudStorageBloc),
+                                    onPressed: () {
+                                      final source =
+                                          f.toFileSource(cloudStorageBloc);
+                                      _loadAndGoToCredentials(source);
+                                    },
+                                  ),
+                                ) ??
+                            [const Text('No files have been opened yet.')]),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -713,7 +733,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
 
   Future<void> _tryUnlock() async {
     if (_formKey.currentState.validate()) {
-      final kdbxBloc = Provider.of<Deps>(context).kdbxBloc;
+      final kdbxBloc = Provider.of<Deps>(context, listen: false).kdbxBloc;
       final pw = _controller.text;
       final keyFileContents = await _keyFile?.readAsBytes();
       try {
