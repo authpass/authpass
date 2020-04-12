@@ -159,7 +159,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             child: child,
           );
         },
-        home: SelectFileScreen(),
+        home: const SelectFileScreen(),
       ),
     );
   }

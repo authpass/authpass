@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:analytics_event_gen/analytics_event_gen.dart';
+import 'package:analytics_event/analytics_event.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/path_utils.dart';

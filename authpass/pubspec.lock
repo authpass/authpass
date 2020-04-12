@@ -15,13 +15,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  analytics_event_gen:
+  analytics_event:
     dependency: "direct main"
+    description:
+      name: analytics_event
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
+  analytics_event_gen:
+    dependency: "direct dev"
     description:
       name: analytics_event_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0+1"
+    version: "0.1.1"
   analyzer:
     dependency: transitive
     description:
