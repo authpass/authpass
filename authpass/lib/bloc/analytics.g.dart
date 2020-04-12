@@ -16,8 +16,12 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackLaunch() => trackEvent('launch', <String, dynamic>{});
   @override
-  void trackInit({String userType, int value}) => trackEvent(
-      'init', <String, dynamic>{'userType': userType, 'value': value});
+  void _trackInit({String userType, String device, int value}) =>
+      trackEvent('_trackInit', <String, dynamic>{
+        'userType': userType,
+        'device': device,
+        'value': value
+      });
   @override
   void trackCreateFile() => trackEvent('createFile', <String, dynamic>{});
   @override

@@ -37,6 +37,7 @@ class Analytics {
   static const _gaPropertyMapping = <String, String>{
     'platform': 'cd1',
     'userType': 'cd2',
+    'device': 'cd3',
   };
 
   Future<void> _init() async {
@@ -114,7 +115,8 @@ class Analytics {
       labelParams.sort();
 
       final label = labelParams.join(',');
-      _logger.finer('event($event, $params, value=$value) - label: $label');
+      _logger
+          .finer('event($event, $eventParams, value=$value) - label: $label');
 //      _amplitude?.logEvent(name: event, properties: params);
       _sendEvent(
         'track',
@@ -165,10 +167,31 @@ class Analytics {
   }
 }
 
+Future<String> deviceInfo() async {
+  // get information about the current device.
+  if (Platform.isAndroid) {
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    return androidInfo.model;
+  }
+  if (Platform.isIOS) {
+    final iosInfo = await DeviceInfoPlugin().iosInfo;
+    return iosInfo.utsname.machine;
+  }
+  return 'unknown (${Platform.operatingSystem})';
+}
+
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackLaunch();
 
-  void trackInit({@required String userType, @required int value});
+  Future<void> trackInit(
+          {@required String userType, @required int value}) async =>
+      _trackInit(userType: userType, device: await deviceInfo(), value: value);
+
+  void _trackInit({
+    @required String userType,
+    @required String device,
+    @required int value,
+  });
 
   void trackCreateFile();
 

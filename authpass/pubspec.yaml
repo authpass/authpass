@@ -61,8 +61,7 @@ dependencies:
   device_info: ^0.4.1+4
   path_provider: ^1.6.0
   path_provider_macos: ^0.0.3
-  analytics_event_gen:
-    path: ../deps/analytics_events/analytics_event_gen
+  analytics_event_gen: ^0.1.0+1
   autofill_service:
     path: ../deps/autofill_service
 
