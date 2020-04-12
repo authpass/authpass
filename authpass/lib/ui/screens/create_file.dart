@@ -104,7 +104,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
 
   VoidCallback _submitCallback() => asyncTaskCallback(() async {
         if (_formKey.currentState.validate()) {
-          final kdbxBloc = Provider.of<KdbxBloc>(context);
+          final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
           try {
             final created = await kdbxBloc.createFile(
               password: _password.text,

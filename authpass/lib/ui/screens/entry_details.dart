@@ -138,7 +138,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 : asyncTaskCallback(() async {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      final kdbxBloc = Provider.of<KdbxBloc>(context);
+                      final kdbxBloc =
+                          Provider.of<KdbxBloc>(context, listen: false);
                       if (kdbxBloc
                           .fileForKdbxFile(widget.entry.file)
                           .fileSource

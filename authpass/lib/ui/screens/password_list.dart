@@ -516,7 +516,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       body: widget.entries.isEmpty
           ? NoPasswordsEmptyView(
               onPrimaryButtonPressed: () {
-                final kdbxBloc = Provider.of<KdbxBloc>(context);
+                final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
                 final entry = kdbxBloc.createEntry();
 //                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
                 widget.onEntrySelected(
