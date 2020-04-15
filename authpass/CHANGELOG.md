@@ -2,6 +2,9 @@
 
 * Allow changing of database name.
 * Large Screens (Tablet/Desktop): Improved responsiveness of search box.
+* Update flutter dependency to 1.17 (beta).
+* Fixed potential crash on iOS file picker. 
+  https://github.com/miguelpruivo/flutter_file_picker/issues/200
 
 # 1.5.3
 
