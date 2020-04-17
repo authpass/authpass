@@ -146,6 +146,10 @@ dependency_overrides:
   pedantic: ^1.9.0
   xml: '>=3.7.0 <4.0.0'
   petitparser: '>=3.0.0 < 4.0.0'
+  pointycastle:
+    git:
+      url: https://github.com/authpass/pointycastle.git
+      ref: ad397429205e1b6dd8baad7729e11ca1ef562c91
 
 #  url_launcher_fde:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/flutter_plugins/url_launcher_fde

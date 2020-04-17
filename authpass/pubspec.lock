@@ -666,11 +666,13 @@ packages:
     source: hosted
     version: "1.0.2"
   pointycastle:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: pointycastle
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: ad397429205e1b6dd8baad7729e11ca1ef562c91
+      resolved-ref: ad397429205e1b6dd8baad7729e11ca1ef562c91
+      url: "https://github.com/authpass/pointycastle.git"
+    source: git
     version: "1.0.2"
   pool:
     dependency: transitive
