@@ -612,7 +612,7 @@ class KdbxBloc {
     try {
       _logger.finer('reading kdbx file ...');
       final fileContent = readArgs.content;
-      final kdbxFile = kdbxFormat.read(fileContent, readArgs.credentials);
+      final kdbxFile = await kdbxFormat.read(fileContent, readArgs.credentials);
       _logger.finer('done reading');
       return ReadFileResponse(kdbxFile, null, null);
     } catch (e, stackTrace) {
@@ -639,7 +639,7 @@ class KdbxBloc {
     );
     final localSource = await _localFileSourceForDbName(databaseName);
     await localSource.file
-        .writeAsBytes(_saveFileToBytes(kdbxFile), flush: true);
+        .writeAsBytes(await _saveFileToBytes(kdbxFile), flush: true);
     if (openAfterCreate) {
       await openFile(localSource, credentials);
     }
@@ -674,7 +674,7 @@ class KdbxBloc {
 
   /// Wrapper around [file.save()], which adds a bit of meta data
   /// before storing it.
-  Uint8List _saveFileToBytes(KdbxFile file) {
+  Future<Uint8List> _saveFileToBytes(KdbxFile file) async {
     final generator = file.body.meta.generator.get();
     if (generator == null || generator.isEmpty) {
       file.body.meta.generator.set('AuthPass');
@@ -684,12 +684,12 @@ class KdbxBloc {
     final newCounter = (int.tryParse(saveCounter) ?? 0) + 1;
     file.body.meta.customData['codeux.design.authpass.save'] = '$newCounter';
     analytics.events.trackSaveCount(generator: generator, value: newCounter);
-    return file.save();
+    return await file.save();
   }
 
   Future<void> saveFile(KdbxFile file, {FileSource toFileSource}) async {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
-    final bytes = _saveFileToBytes(file);
+    final bytes = await _saveFileToBytes(file);
     await fileSource.contentWrite(bytes);
     analytics.events.trackSave(type: fileSource.typeDebug, value: bytes.length);
   }
@@ -736,7 +736,7 @@ class KdbxBloc {
       KdbxOpenedFile oldFile,
       CloudStorageSelectorSaveResult createFileInfo,
       CloudStorageProvider cs) async {
-    final bytes = _saveFileToBytes(oldFile.kdbxFile);
+    final bytes = await _saveFileToBytes(oldFile.kdbxFile);
     final entity = await cs.createEntity(createFileInfo, bytes);
     return await _savedAs(oldFile, entity);
   }
