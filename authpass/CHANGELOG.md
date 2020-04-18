@@ -5,6 +5,8 @@
 * Update flutter dependency to 1.17 (beta).
 * Fixed potential crash on iOS file picker. 
   https://github.com/miguelpruivo/flutter_file_picker/issues/200
+* Decryption: Improved performance and fixed potential crash
+  for larger kdbx files.
 
 # 1.5.3
 
