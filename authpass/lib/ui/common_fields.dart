@@ -71,7 +71,7 @@ class CommonFields {
             icon: Icons.watch_later,
             protect: true,
             showByDefault: false,
-          )
+          ),
         ] {
     assert(fields.map((f) => f.key).toSet().length == fields.length);
   }
@@ -89,12 +89,25 @@ class CommonFields {
   /// otpauth://TYPE/LABEL?PARAMETERS
   CommonField get otpAuth => _fieldByKeyString('OTPAuth');
 
+  /// compatibility field to look OTP token for, used by TrayTOTP
+  /// Contains a base32 encoded secret, parameters are stored in
+  /// `TOTP Settings` [otpAuthCompat1Settings].
+  CommonField otpAuthCompat1 = _internalCommonField('TOTP Seed');
+  CommonField otpAuthCompat1Settings = _internalCommonField('TOTP Settings');
+
+  /// compatibility field to look OTP token for, used by e.g. KeeWeb
+  /// contains the same URL as we use (see [otpAuth])
+  CommonField otpAuthCompat2 = _internalCommonField('otp');
+
   final List<CommonField> fields;
 
   bool isCommon(
           KdbxKey
               key) => //fields.firstWhere((f) => f.key == key, orElse: () => null) != null;
       this[key] != null;
+
+  bool isTotp(KdbxKey key) =>
+      [otpAuth, otpAuthCompat1, otpAuthCompat2].map((e) => e.key).contains(key);
 
   CommonField operator [](KdbxKey key) =>
       fields.firstWhere((f) => f.key == key, orElse: () => null);
@@ -103,4 +116,7 @@ class CommonFields {
 
   CommonField _fieldByKey(KdbxKey key) =>
       fields.firstWhere((f) => f.key == key);
+
+  static CommonField _internalCommonField(String key) =>
+      CommonField(key: key, displayName: key);
 }

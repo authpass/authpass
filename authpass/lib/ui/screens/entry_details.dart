@@ -20,6 +20,7 @@ import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
@@ -360,7 +361,7 @@ class _EntryDetailsState extends State<EntryDetails>
               ..._fieldKeys
                   .map(
                     (f) => EntryField(
-                      fieldType: f.item3 == commonFields.otpAuth
+                      fieldType: commonFields.isTotp(f.item2)
                           ? FieldType.otp
                           : FieldType.string,
                       key: f.item1,
@@ -928,6 +929,8 @@ class _OtpEntryFieldState extends _EntryFieldState {
 
   String _currentOtp = '';
 
+  String _errorMessage;
+
   /// elapsed seconds since the last period change.
   int _elapsed = 0;
 
@@ -938,12 +941,68 @@ class _OtpEntryFieldState extends _EntryFieldState {
   String get _valueCurrent =>
       widget.entry.getString(widget.fieldKey)?.getText() ?? '';
 
-  void _updateOtp() {
-    final otpAuthUri = widget.entry.getString(widget.fieldKey)?.getText();
+  String _addBase32Padding(String base32data) {
+    if (base32data == null) {
+      return null;
+    }
+    final padding = (8 - (base32data.length % 8)) % 8;
+    if (padding == 0) {
+      return base32data;
+    }
+    return base32data + ('=' * padding);
+  }
+
+  OtpAuth _getOtpAuth() {
+    final value = widget.entry.getString(widget.fieldKey)?.getText();
+    if (value == null || value.isEmpty) {
+      return throw FormatException('OTP Field contains no data.', value);
+    }
+    if (value.startsWith('otpauth:')) {
+      // Or own format :-) (And also used by KeeWeb)
+      return OtpAuth.fromUri(Uri.parse(value));
+    }
+    if (value.contains('key\=')) {
+      _logger.finer('value contains "key=": $value');
+      // KeeOTP format:key={base32Key}&size=12&step=33&type=Totp&counter=3
+      final data = Uri.splitQueryString(value);
+      try {
+        return OtpAuth(
+          secret: base32.decode(_addBase32Padding(data['key'])),
+          period: data['step']?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
+          digits: data['size']?.toInt() ?? OtpAuth.DEFAULT_DIGITS,
+        );
+      } on FormatException catch (e, stackTrace) {
+        _logger.fine(
+            'Error parsing $data for ${widget.fieldKey}', e, stackTrace);
+        rethrow;
+      }
+    }
+    // assume base32 encoded secret, with more settings stored in a second field.
     try {
-      final otpAuth = OtpAuth.fromUri(Uri.parse(otpAuthUri));
+      final binarySecret = base32.decode(value);
+      final settings =
+          _commonFields.otpAuthCompat1Settings.stringValue(widget.entry) ?? '';
+      final settingsOptions = settings.split(';');
+      return OtpAuth(
+        secret: binarySecret,
+        period: settingsOptions.optGet(0)?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
+        digits: settingsOptions.optGet(1)?.toInt(),
+      );
+    } on FormatException catch (e, stackTrace) {
+      // ignore format exception from base32 decoding.
+      _logger.fine('Error decoding base32 secret', e, stackTrace);
+    } catch (e, stackTrace) {
+      _logger.fine('Error while parsing OTP format', e, stackTrace);
+      throw FormatException('Error parsing Tray OTP Format $e', value);
+    }
+    throw FormatException('Unknown format for OTP', value);
+  }
+
+  void _updateOtp() {
+    try {
+      final otpAuth = _getOtpAuth();
       final secretBase32 = base32.encode(otpAuth.secret);
-      _logger.fine('uri: $otpAuthUri secret: $secretBase32');
+      _logger.fine('uri: $otpAuth');
       final now = DateTime.now().millisecondsSinceEpoch;
       final totpCode = OTP.generateTOTPCodeString(
         secretBase32,
@@ -956,25 +1015,32 @@ class _OtpEntryFieldState extends _EntryFieldState {
         _elapsed = (now ~/ 1000) % otpAuth.period;
         _period = otpAuth.period;
         _currentOtp = totpCode;
+        _errorMessage = null;
       });
     } on FormatException catch (e, stackTrace) {
       _logger.severe('Error while decoding otpauth url.', e, stackTrace);
+      setState(() {
+        _currentOtp = '';
+        _errorMessage = 'Error generating token $e';
+      });
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    _updateOtp();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_timer == null) {
       _updateOtp();
-    });
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        _updateOtp();
+      });
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _timer.cancel();
+    _timer?.cancel();
     _timer = null;
   }
 
@@ -990,11 +1056,13 @@ class _OtpEntryFieldState extends _EntryFieldState {
   }
 
   @override
-  Widget _buildEntryFieldEditor() => OtpFieldEntryEditor(
-        period: _period,
-        elapsed: _elapsed,
-        otpCode: _currentOtp,
-      );
+  Widget _buildEntryFieldEditor() => _errorMessage != null
+      ? Text('$_errorMessage')
+      : OtpFieldEntryEditor(
+          period: _period,
+          elapsed: _elapsed,
+          otpCode: _currentOtp,
+        );
 
   @override
   Future<void> _handleMenuEntrySelected(EntryAction entryAction) async {
