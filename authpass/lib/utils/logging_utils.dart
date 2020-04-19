@@ -21,7 +21,7 @@ class LoggingUtils {
           AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
         await PathUtils.waitForRunAppFinished;
         final logsDir = await PathUtils().getLogDirectory();
-        final appLogFile = File(path.join(logsDir.path, 'app.log'));
+        final appLogFile = File(path.join(logsDir.path, 'app.log.txt'));
         await appLogFile.parent.create(recursive: true);
         _logger.fine('Logging into $appLogFile');
         return RotatingFileAppender(
