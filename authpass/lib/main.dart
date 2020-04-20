@@ -159,7 +159,25 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             child: child,
           );
         },
-        home: const SelectFileScreen(),
+        onGenerateInitialRoutes: (initialRoute) {
+          _logger.fine('initialRoute: $initialRoute');
+          if (initialRoute.startsWith('/openFile')) {
+            final uri = Uri.parse(initialRoute);
+            final file = uri.queryParameters['file'];
+            _logger.finer('uri: $uri /// file: $file');
+            return [
+//              MaterialPageRoute<void>(
+//                  builder: (context) => const SelectFileScreen()),
+              CredentialsScreen.route(
+                  FileSourceLocal(File(file), uuid: AppDataBloc.createUuid())),
+            ];
+          }
+          return [
+            MaterialPageRoute<void>(
+                builder: (context) => const SelectFileScreen())
+          ];
+        },
+//        home: const SelectFileScreen(),
       ),
     );
   }

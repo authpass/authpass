@@ -103,13 +103,13 @@ class Analytics {
 
       final labelParams = <String>[];
       for (final entry in params.entries) {
-        final custom = _gaPropertyMapping[entry.key];
+        final customKey = _gaPropertyMapping[entry.key];
         if (entry.key == 'value' && entry.value is int) {
           value = entry.value as int;
-        } else if (custom == null) {
+        } else if (customKey == null) {
           labelParams.add('${entry.key}=${entry.value}');
         } else {
-          eventParams[entry.key] = entry.value?.toString();
+          eventParams[customKey] = entry.value?.toString();
         }
       }
       labelParams.sort();

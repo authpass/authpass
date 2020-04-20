@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" android:requiredFeature="false"
         tools:ignore="UnusedAttribute" />
 
@@ -31,6 +32,23 @@
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/AuthPassAppTheme" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"  />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*"  />
+                <data android:mimeType="*/*" />
+                <!-- https://stackoverflow.com/a/52384331/109219 ?? -->
+                <data android:pathPattern=".*\\.kdbx" />
+                <data android:pathPattern=".*\\..*\\.kdbx" />
+                <data android:pathPattern=".*\\..*\\..*\\.kdbx" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.kdbx" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.kdbx" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.*\\..*\\.kdbx" />
+            </intent-filter>
         </activity>
 
         <service

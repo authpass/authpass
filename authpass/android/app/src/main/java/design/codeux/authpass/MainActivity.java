@@ -1,7 +1,14 @@
 package design.codeux.authpass;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.mr.flutter.plugin.filepicker.FilePickerDelegate;
+import com.mr.flutter.plugin.filepicker.FileUtils;
 
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.android.SplashScreen;
@@ -11,6 +18,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterFragmentActivity {
     private static final String CHANNEL = "app.authpass/misc";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +43,21 @@ public class MainActivity extends FlutterFragmentActivity {
             }
             result.notImplemented();
         });
+    }
+
+    @NonNull
+    @Override
+    protected String getInitialRoute() {
+        Uri data = getIntent().getData();
+        if (data != null) {
+            String filePath = FileUtils.getPath(data, this);
+            if (filePath == null) {
+                filePath = FileUtils.getUriFromRemote(this, data);
+            }
+            String initialRoute = "/openFile?file=" + Uri.encode(filePath);
+            Log.i(TAG, "Got intent data: " + data + ", initialRoute: " + initialRoute);
+            return initialRoute;
+        }
+        return super.getInitialRoute();
     }
 }
