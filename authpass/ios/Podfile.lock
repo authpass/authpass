@@ -98,7 +98,7 @@ SPEC CHECKSUMS:
   argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
-  biometric_storage: b142d2ee2048fb67c4f6054d0308363f3258a9c0
+  biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
   device_info: cbf09d2ec12aa7110e0b09fabe54b5bd6c8efe74
   file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
