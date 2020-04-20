@@ -1,7 +1,7 @@
 name: authpass
 description: Password Manager with support for kdbx 3.x and 4.x
 
-version: 1.5.5+129
+version: 1.5.6+130
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

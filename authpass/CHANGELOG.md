@@ -1,3 +1,7 @@
+# 1.5.6 (UNRELEASED)
+
+* Android: Add file handler to open  *.kdbx files.
+
 # 1.5.5
 
 * Allow changing of database name.
