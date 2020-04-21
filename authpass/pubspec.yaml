@@ -42,7 +42,7 @@ dependencies:
       url: https://github.com/hpoul/flutter_async_utils.git
       ref: b452a5be869fb4f824a20e930cc1756eea6ca90e
   flutter_svg: ^0.16.0
-  charcode: ^1.1.3
+  charcode: ^1.1.2 # For flutter 1.15.17 support, we have to keep 1.1.2 (fdroid)
   #usage: ^3.4.1
   usage:
     git:
