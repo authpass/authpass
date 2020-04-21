@@ -6,7 +6,7 @@ buildscript {
 
     dependencies {
         // https://github.com/flutter/flutter/pull/39126
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.3'
     }
 }
 
