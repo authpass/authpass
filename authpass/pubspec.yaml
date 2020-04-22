@@ -15,7 +15,7 @@ dependencies:
   argon2_ffi:
     git:
       url: https://github.com/authpass/argon2_ffi.git
-      ref: 97087b3c6dc2b3281849b6859565016426e848a9
+      ref: 59e37e756c05c77c8a448b5e926ed06182386195
   simple_form_field_validator:
     git:
       url: https://github.com/hpoul/flutter_utils.git

@@ -1,3 +1,8 @@
+if (System.getProperty("design.codeux.ndkVersion") == null) {
+//    println("Setting ndkVersion")
+    System.setProperty("design.codeux.ndkVersion", "21.0.6113669")
+}
+
 buildscript {
     repositories {
         google()
@@ -5,7 +10,6 @@ buildscript {
     }
 
     dependencies {
-        // https://github.com/flutter/flutter/pull/39126
         classpath 'com.android.tools.build:gradle:3.6.3'
     }
 }
