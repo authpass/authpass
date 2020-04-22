@@ -10,6 +10,7 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -18,6 +19,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 final _logger = Logger('manage_file');
@@ -134,7 +136,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                 trailing: PopupMenuButton<VoidCallback>(
                   onSelected: (action) => action(),
                   itemBuilder: (context) => [
-                    ...?(Platform.isIOS || Platform.isAndroid
+                    ...?(Platform.isAndroid
                         ? null
                         : [
                             PopupMenuItem(
@@ -212,9 +214,38 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     );
   }
 
-  void _saveAsLocalFile() {
-    if (Platform.isIOS || Platform.isAndroid) {
+  Future<void> _saveAsLocalFile() async {
+    if (Platform.isAndroid) {
       // not yet supported.
+      return;
+    }
+    if (Platform.isIOS) {
+      final tempDirBase = await getTemporaryDirectory();
+      final tempDir =
+          Directory(path.join(tempDirBase.path, AppDataBloc.createUuid()));
+      await tempDir.create(recursive: true);
+      final tempFile = File(path.join(tempDir.path,
+          '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx'));
+      await tempFile.writeAsString('<placeholder>');
+
+      final fileInfo =
+          await FilePickerWritable().openFilePickerForCreate(tempFile);
+      if (fileInfo == null) {
+        _logger.info('User cancelled file picker.');
+        return;
+      }
+      _logger.fine('Writing into ${fileInfo.uri} / ${fileInfo.file}');
+      final newFile = await _kdbxBloc.saveAs(
+          _file,
+          FileSourceLocal(
+            fileInfo.file,
+            databaseName: _file.fileSource.displayName,
+            uuid: AppDataBloc.createUuid(),
+            filePickerIdentifier: fileInfo.identifier,
+          ));
+      setState(() {
+        _file = newFile;
+      });
       return;
     }
     showSavePanel(

@@ -14,6 +14,7 @@ import 'package:authpass/main.dart';
 import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -120,6 +121,7 @@ class FileSourceLocal extends FileSource {
     String databaseName,
     @required String uuid,
     this.macOsSecureBookmark,
+    this.filePickerIdentifier,
   }) : super(databaseName: databaseName, uuid: uuid);
 
   final File file;
@@ -127,13 +129,24 @@ class FileSourceLocal extends FileSource {
   /// on macos a secure bookmark is required, if we are in a sandbox.
   final String macOsSecureBookmark;
 
+  /// stores the identifier as returned by [FilePickerWritable]
+  final String filePickerIdentifier;
+
   @override
   Future<FileContent> load() async {
     return await _accessFile((f) async => FileContent(await f.readAsBytes()));
   }
 
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
-    if (Platform.isMacOS && macOsSecureBookmark != null) {
+    if (Platform.isAndroid && filePickerIdentifier != null) {
+      final fileInfo = await FilePickerWritable()
+          .readFileWithIdentifier(filePickerIdentifier);
+      if (fileInfo.identifier != filePickerIdentifier) {
+        _logger.severe(
+            'Identifier changed. panic. $fileInfo vs $filePickerIdentifier');
+      }
+      return await cb(fileInfo.file);
+    } else if (Platform.isMacOS && macOsSecureBookmark != null) {
       final resolved =
           await SecureBookmarks().resolveBookmark(macOsSecureBookmark);
       _logger.finer('Reading from secure  bookmark. ($resolved)');
@@ -191,6 +204,7 @@ class FileSourceLocal extends FileSource {
         databaseName: databaseName,
         uuid: uuid,
         macOsSecureBookmark: macOsSecureBookmark,
+        filePickerIdentifier: filePickerIdentifier,
       );
 }
 

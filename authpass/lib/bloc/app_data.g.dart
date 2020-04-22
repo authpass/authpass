@@ -65,6 +65,12 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
         ..add(serializers.serialize(object.macOsSecureBookmark,
             specifiedType: const FullType(String)));
     }
+    if (object.filePickerIdentifier != null) {
+      result
+        ..add('filePickerIdentifier')
+        ..add(serializers.serialize(object.filePickerIdentifier,
+            specifiedType: const FullType(String)));
+    }
     if (object.colorCode != null) {
       result
         ..add('colorCode')
@@ -112,6 +118,10 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
           break;
         case 'macOsSecureBookmark':
           result.macOsSecureBookmark = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'filePickerIdentifier':
+          result.filePickerIdentifier = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'colorCode':
@@ -244,6 +254,8 @@ class _$OpenedFile extends OpenedFile {
   @override
   final String macOsSecureBookmark;
   @override
+  final String filePickerIdentifier;
+  @override
   final int colorCode;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder) updates]) =>
@@ -257,6 +269,7 @@ class _$OpenedFile extends OpenedFile {
       this.name,
       this.biometricStoreName,
       this.macOsSecureBookmark,
+      this.filePickerIdentifier,
       this.colorCode})
       : super._() {
     if (lastOpenedAt == null) {
@@ -290,6 +303,7 @@ class _$OpenedFile extends OpenedFile {
         name == other.name &&
         biometricStoreName == other.biometricStoreName &&
         macOsSecureBookmark == other.macOsSecureBookmark &&
+        filePickerIdentifier == other.filePickerIdentifier &&
         colorCode == other.colorCode;
   }
 
@@ -299,11 +313,13 @@ class _$OpenedFile extends OpenedFile {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
-                        sourcePath.hashCode),
-                    name.hashCode),
-                biometricStoreName.hashCode),
-            macOsSecureBookmark.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
+                            sourcePath.hashCode),
+                        name.hashCode),
+                    biometricStoreName.hashCode),
+                macOsSecureBookmark.hashCode),
+            filePickerIdentifier.hashCode),
         colorCode.hashCode));
   }
 
@@ -317,6 +333,7 @@ class _$OpenedFile extends OpenedFile {
           ..add('name', name)
           ..add('biometricStoreName', biometricStoreName)
           ..add('macOsSecureBookmark', macOsSecureBookmark)
+          ..add('filePickerIdentifier', filePickerIdentifier)
           ..add('colorCode', colorCode))
         .toString();
   }
@@ -357,6 +374,11 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   set macOsSecureBookmark(String macOsSecureBookmark) =>
       _$this._macOsSecureBookmark = macOsSecureBookmark;
 
+  String _filePickerIdentifier;
+  String get filePickerIdentifier => _$this._filePickerIdentifier;
+  set filePickerIdentifier(String filePickerIdentifier) =>
+      _$this._filePickerIdentifier = filePickerIdentifier;
+
   int _colorCode;
   int get colorCode => _$this._colorCode;
   set colorCode(int colorCode) => _$this._colorCode = colorCode;
@@ -372,6 +394,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
       _name = _$v.name;
       _biometricStoreName = _$v.biometricStoreName;
       _macOsSecureBookmark = _$v.macOsSecureBookmark;
+      _filePickerIdentifier = _$v.filePickerIdentifier;
       _colorCode = _$v.colorCode;
       _$v = null;
     }
@@ -402,6 +425,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
             name: name,
             biometricStoreName: biometricStoreName,
             macOsSecureBookmark: macOsSecureBookmark,
+            filePickerIdentifier: filePickerIdentifier,
             colorCode: colorCode);
     replace(_$result);
     return _$result;

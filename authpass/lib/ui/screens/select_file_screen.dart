@@ -16,6 +16,7 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -243,7 +244,20 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   icon: FontAwesomeIcons.hdd,
                   label: 'Open\nLocal File',
                   onPressed: () async {
-                    if (Platform.isIOS || Platform.isAndroid) {
+                    if (Platform.isIOS) {
+                      final fileInfo =
+                          await FilePickerWritable().openFilePicker();
+                      if (fileInfo != null) {
+                        await Navigator.of(context)
+                            .push(CredentialsScreen.route(
+                          FileSourceLocal(
+                            fileInfo.file,
+                            uuid: AppDataBloc.createUuid(),
+                            filePickerIdentifier: fileInfo.identifier,
+                          ),
+                        ));
+                      }
+                    } else if (Platform.isIOS || Platform.isAndroid) {
                       final path =
                           await FilePicker.getFilePath(type: FileType.any);
                       if (path != null) {
@@ -264,6 +278,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                             File(paths[0]),
                             uuid: AppDataBloc.createUuid(),
                             macOsSecureBookmark: macOsBookmark,
+                            filePickerIdentifier: null,
                           )));
                         }
                       });

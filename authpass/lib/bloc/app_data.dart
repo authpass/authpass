@@ -80,6 +80,10 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   @nullable
   String get macOsSecureBookmark;
 
+  /// stores the identifier as returned by [FilePickerWritable]
+  @nullable
+  String get filePickerIdentifier;
+
   @nullable
   int get colorCode;
 
@@ -99,6 +103,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               ..sourceType = OpenedFilesSourceType.Local
               ..sourcePath = fileSource.file.absolute.path
               ..macOsSecureBookmark = fileSource.macOsSecureBookmark
+              ..filePickerIdentifier = fileSource.filePickerIdentifier
               ..name = dbName;
           } else if (fileSource is FileSourceUrl) {
             b
@@ -129,6 +134,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         return FileSourceLocal(
           File(sourcePath),
           macOsSecureBookmark: macOsSecureBookmark,
+          filePickerIdentifier: filePickerIdentifier,
           uuid: uuid ?? AppDataBloc.createUuid(),
           databaseName: name,
         );
