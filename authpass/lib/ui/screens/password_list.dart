@@ -144,7 +144,7 @@ class PasswordListContent extends StatefulWidget {
       BuildContext context, KdbxEntry entry, EntrySelectionType type) {
     if (isAutofillSelector) {
       if (type == EntrySelectionType.activeOpen) {
-        final cf = Provider.of<CommonFields>(context);
+        final cf = Provider.of<CommonFields>(context, listen: false);
         final username = entry.getString(cf.userName.key)?.getText();
         final password = entry.getString(cf.password.key)?.getText();
         AutofillService().resultWithDataset(

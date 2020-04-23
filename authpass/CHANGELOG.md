@@ -3,6 +3,7 @@
 * Android: Add file handler to open  *.kdbx files.
 * Android/iOS: Improved opening of existing files through document picker APIs.
   * Previously changes were not correctly persisted back to the original location.
+* Android: Improved autofill username/password field detection.
 
 # 1.5.5
 
