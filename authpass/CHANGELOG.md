@@ -1,6 +1,8 @@
 # 1.5.6 (UNRELEASED)
 
 * Android: Add file handler to open  *.kdbx files.
+* Android/iOS: Improved opening of existing files through document picker APIs.
+  * Previously changes were not correctly persisted back to the original location.
 
 # 1.5.5
 

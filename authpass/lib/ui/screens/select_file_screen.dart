@@ -434,7 +434,7 @@ class OpenedFileTile extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     openedFile.displayName,
-                    style: TextStyle(color: AuthPassTheme.linkColor),
+                    style: const TextStyle(color: AuthPassTheme.linkColor),
                   ),
                   Text(
                     '${openedFile.displayPath}',

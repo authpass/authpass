@@ -24,6 +24,7 @@ import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('kdbx_bloc');
@@ -142,6 +143,7 @@ class FileSourceLocal extends FileSource {
         filePickerIdentifier != null) {
       final fileInfo = await FilePickerWritable()
           .readFileWithIdentifier(filePickerIdentifier);
+      _logger.finest('Got uri: ${fileInfo.uri}');
       if (fileInfo.identifier != filePickerIdentifier) {
         _logger.severe(
             'Identifier changed. panic. $fileInfo vs $filePickerIdentifier');
@@ -189,8 +191,30 @@ class FileSourceLocal extends FileSource {
   @override
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic> previousMetadata) async {
-    await _accessFile((f) => f.writeAsBytes(bytes));
+    if (filePickerIdentifier != null) {
+      final f = await createFileInNewTempDirectory(path.basename(displayPath));
+      await f.writeAsBytes(bytes, flush: true);
+      final fileInfo = await FilePickerWritable()
+          .writeFileWithIdentifier(filePickerIdentifier, f);
+      if (fileInfo.identifier != filePickerIdentifier) {
+        _logger.severe('Panic, fileIdentifier changed. must no happen.');
+      }
+    } else {
+      await _accessFile((f) => f.writeAsBytes(bytes));
+    }
     return null;
+  }
+
+  static Future<File> createFileInNewTempDirectory(String baseName) async {
+    final tempDirBase = await getTemporaryDirectory();
+    final tempDir =
+        Directory(path.join(tempDirBase.path, AppDataBloc.createUuid()));
+    await tempDir.create(recursive: true);
+    final tempFile = File(path.join(
+      tempDir.path,
+      baseName,
+    ));
+    return tempFile;
   }
 
   @override

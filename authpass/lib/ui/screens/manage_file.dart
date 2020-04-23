@@ -14,6 +14,8 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_async_utils/flutter_async_utils.dart'
+    hide FutureTaskStateMixin;
 import 'package:flutter_colorpicker/block_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
@@ -24,7 +26,7 @@ import 'package:provider/provider.dart';
 
 final _logger = Logger('manage_file');
 
-class ManageFileScreen extends StatelessWidget {
+class ManageFileScreen extends StatefulWidget {
   const ManageFileScreen({Key key, @required this.fileSource})
       : assert(fileSource != null),
         super(key: key);
@@ -39,23 +41,62 @@ class ManageFileScreen extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
+  _ManageFileScreenState createState() => _ManageFileScreenState();
+}
+
+class _ManageFileScreenState extends State<ManageFileScreen>
+    with StreamSubscriberMixin {
+  FileSource _currentFileSource;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_currentFileSource == null) {
+      _init();
+    }
+  }
+
+  void _init() {
     // when changing the database name, we have to refresh the file source.
     final kdbxBloc = Provider.of<KdbxBloc>(context);
-    final currentFileSource = kdbxBloc.fileForFileSource(fileSource).fileSource;
+    _currentFileSource = widget.fileSource;
+    handleSubscription(kdbxBloc.openedFilesChanged.listen((event) {
+      setState(() {
+        final newFile = kdbxBloc.fileForFileSource(widget.fileSource);
+        if (newFile != null) {
+          _currentFileSource = newFile.fileSource;
+        }
+      });
+    }));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(currentFileSource.displayName),
+        title: Text(_currentFileSource.displayName),
       ),
-      body: ManageFile(fileSource: fileSource),
+      body: ManageFile(
+        fileSource: _currentFileSource,
+        onFileSourceChanged: (fileSource) => setState(() {
+          _currentFileSource = fileSource;
+        }),
+      ),
     );
   }
 }
 
 class ManageFile extends StatefulWidget {
-  const ManageFile({Key key, this.fileSource}) : super(key: key);
+  const ManageFile({
+    Key key,
+    @required this.fileSource,
+    @required this.onFileSourceChanged,
+  })  : assert(fileSource != null),
+        assert(onFileSourceChanged != null),
+        super(key: key);
 
   final FileSource fileSource;
+  final void Function(FileSource newFileSource) onFileSourceChanged;
 
   @override
   _ManageFileState createState() => _ManageFileState();
@@ -212,12 +253,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 
   Future<void> _saveAsLocalFile() async {
     if (Platform.isIOS || Platform.isAndroid) {
-      final tempDirBase = await getTemporaryDirectory();
-      final tempDir =
-          Directory(path.join(tempDirBase.path, AppDataBloc.createUuid()));
-      await tempDir.create(recursive: true);
-      final tempFile = File(path.join(tempDir.path,
-          '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx'));
+      final tempFile = await FileSourceLocal.createFileInNewTempDirectory(
+          '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx');
       await tempFile.writeAsString('<placeholder>');
 
       final fileInfo =
@@ -235,14 +272,15 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
             uuid: AppDataBloc.createUuid(),
             filePickerIdentifier: fileInfo.identifier,
           ));
+      widget.onFileSourceChanged(newFile.fileSource);
       if (!mounted) {
         _logger
             .severe('$runtimeType We are no longer mounted afterwriting file.');
         return;
       }
-      setState(() {
-        _file = newFile;
-      });
+//      setState(() {
+//        _file = newFile;
+//      });
       return;
     }
     showSavePanel(
@@ -262,9 +300,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
               macOsSecureBookmark: macOsBookmark,
             ),
           );
-          setState(() {
-            _file = newFile;
-          });
+          widget.onFileSourceChanged(newFile.fileSource);
         }
       },
       suggestedFileName: path.basename(widget.fileSource.displayPath),
