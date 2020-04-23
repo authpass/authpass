@@ -136,20 +136,16 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                 trailing: PopupMenuButton<VoidCallback>(
                   onSelected: (action) => action(),
                   itemBuilder: (context) => [
-                    ...?(Platform.isAndroid
-                        ? null
-                        : [
-                            PopupMenuItem(
-                              child: const ListTile(
-                                leading: Icon(FontAwesomeIcons.hdd),
-                                title: Text('Save As...'),
-                                subtitle: Text('Local File'),
-                              ),
-                              value: () {
-                                _saveAsLocalFile();
-                              },
-                            )
-                          ]),
+                    PopupMenuItem(
+                      child: const ListTile(
+                        leading: Icon(FontAwesomeIcons.hdd),
+                        title: Text('Save As...'),
+                        subtitle: Text('Local File'),
+                      ),
+                      value: () {
+                        _saveAsLocalFile();
+                      },
+                    ),
                     ...cloudStorageBloc.availableCloudStorage.map(
                       (cs) => PopupMenuItem(
                         child: ListTile(
@@ -215,11 +211,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   }
 
   Future<void> _saveAsLocalFile() async {
-    if (Platform.isAndroid) {
-      // not yet supported.
-      return;
-    }
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isAndroid) {
       final tempDirBase = await getTemporaryDirectory();
       final tempDir =
           Directory(path.join(tempDirBase.path, AppDataBloc.createUuid()));

@@ -27,7 +27,7 @@ dependencies:
   file_picker_writable:
     git:
       url: https://github.com/hpoul/file_picker_writable.git
-      ref: cdc428a19c981d05cf99114fdeebdbfd13ebcdea
+      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
   json_annotation: ^3.0.1
   built_value: ^7.0.9
   simple_json_persistence: ^0.2.0

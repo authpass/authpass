@@ -244,7 +244,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   icon: FontAwesomeIcons.hdd,
                   label: 'Open\nLocal File',
                   onPressed: () async {
-                    if (Platform.isIOS) {
+                    if (Platform.isIOS || Platform.isAndroid) {
                       final fileInfo =
                           await FilePickerWritable().openFilePicker();
                       if (fileInfo != null) {

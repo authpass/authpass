@@ -79,7 +79,9 @@
 			<key>UTTypeDescription</key>
 			<string>KeePass password database</string>
 			<key>UTTypeIconFiles</key>
-			<array/>
+			<array>
+				<string>kdbx_doc_type</string>
+			</array>
 			<key>UTTypeIdentifier</key>
 			<string>design.codeux.authpass</string>
 			<key>UTTypeTagSpecification</key>

@@ -138,7 +138,8 @@ class FileSourceLocal extends FileSource {
   }
 
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
-    if (Platform.isAndroid && filePickerIdentifier != null) {
+    if ((Platform.isIOS || Platform.isAndroid) &&
+        filePickerIdentifier != null) {
       final fileInfo = await FilePickerWritable()
           .readFileWithIdentifier(filePickerIdentifier);
       if (fileInfo.identifier != filePickerIdentifier) {
