@@ -297,12 +297,10 @@ packages:
   file_picker_writable:
     dependency: "direct main"
     description:
-      path: "."
-      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
-      resolved-ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
-      url: "https://github.com/hpoul/file_picker_writable.git"
-    source: git
-    version: "1.0.0-rc.1"
+      name: file_picker_writable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-rc.2"
   fixnum:
     dependency: transitive
     description:
