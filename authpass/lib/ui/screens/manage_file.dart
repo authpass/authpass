@@ -243,6 +243,11 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
             uuid: AppDataBloc.createUuid(),
             filePickerIdentifier: fileInfo.identifier,
           ));
+      if (!mounted) {
+        _logger
+            .severe('$runtimeType We are no longer mounted afterwriting file.');
+        return;
+      }
       setState(() {
         _file = newFile;
       });
