@@ -24,7 +24,7 @@ dependencies:
   logging: '>=0.11.3+2 <1.0.0'
   logging_appenders: ^0.4.1
   file_picker: ^1.6.2
-  file_picker_writable: 1.0.0-rc.2
+  file_picker_writable: 1.0.0
 #  file_picker_writable:
 #    git:
 #      url: https://github.com/hpoul/file_picker_writable.git
