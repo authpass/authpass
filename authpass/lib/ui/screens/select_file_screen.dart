@@ -253,7 +253,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           FileSourceLocal(
                             fileInfo.file,
                             uuid: AppDataBloc.createUuid(),
-                            filePickerIdentifier: fileInfo.identifier,
+                            filePickerIdentifier: fileInfo.toJsonString(),
                           ),
                         ));
                       }

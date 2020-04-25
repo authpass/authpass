@@ -130,8 +130,36 @@ class FileSourceLocal extends FileSource {
   /// on macos a secure bookmark is required, if we are in a sandbox.
   final String macOsSecureBookmark;
 
-  /// stores the identifier as returned by [FilePickerWritable]
+  /// stores the complete json [FileInfo] from [FilePickerWritable]
+  /// for backward compatibility might also only contains [FileInfo.identifier]
   final String filePickerIdentifier;
+
+  FileInfo _filePickerInfo;
+
+  FileInfo get filePickerInfo {
+    if (_filePickerInfo != null) {
+      return _filePickerInfo;
+    }
+    if (filePickerIdentifier != null && filePickerIdentifier.startsWith('{')) {
+      return _filePickerInfo = FileInfo.fromJson(
+          json.decode(filePickerIdentifier) as Map<String, dynamic>);
+    }
+    return null;
+  }
+
+  @override
+  String get typeDebug => '$runtimeType:$typeDebugFilePicker';
+  String get typeDebugFilePicker {
+    final uri = filePickerInfo?.uri;
+    if (uri == null) {
+      return macOsSecureBookmark != null ? 'macos' : 'internal';
+    }
+    if (Platform.isIOS && uri.contains('CloudDocs')) {
+      return 'icloud';
+    }
+    final parsed = Uri.parse(uri);
+    return '${parsed.scheme}:${parsed.host}';
+  }
 
   @override
   Future<FileContent> load() async {
@@ -141,12 +169,13 @@ class FileSourceLocal extends FileSource {
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
     if ((Platform.isIOS || Platform.isAndroid) &&
         filePickerIdentifier != null) {
-      final fileInfo = await FilePickerWritable()
-          .readFileWithIdentifier(filePickerIdentifier);
+      final oldFileInfo = filePickerInfo;
+      final identifier = oldFileInfo?.identifier ?? filePickerIdentifier;
+      final fileInfo =
+          await FilePickerWritable().readFileWithIdentifier(identifier);
       _logger.finest('Got uri: ${fileInfo.uri}');
-      if (fileInfo.identifier != filePickerIdentifier) {
-        _logger.severe(
-            'Identifier changed. panic. $fileInfo vs $filePickerIdentifier');
+      if (fileInfo.identifier != identifier) {
+        _logger.severe('Identifier changed. panic. $fileInfo vs $identifier');
       }
       return await cb(fileInfo.file);
     } else if (Platform.isMacOS && macOsSecureBookmark != null) {
@@ -183,20 +212,22 @@ class FileSourceLocal extends FileSource {
   }
 
   @override
-  String get displayPath => file.absolute.path;
+  String get displayPath => filePickerInfo?.uri ?? file.absolute.path;
 
   @override
-  String get displayNameFromPath => path.basenameWithoutExtension(displayPath);
+  String get displayNameFromPath =>
+      filePickerInfo?.fileName ?? path.basenameWithoutExtension(displayPath);
 
   @override
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     if (filePickerIdentifier != null) {
+      final identifier = filePickerInfo?.identifier ?? filePickerIdentifier;
       final f = await createFileInNewTempDirectory(path.basename(displayPath));
       await f.writeAsBytes(bytes, flush: true);
-      final fileInfo = await FilePickerWritable()
-          .writeFileWithIdentifier(filePickerIdentifier, f);
-      if (fileInfo.identifier != filePickerIdentifier) {
+      final fileInfo =
+          await FilePickerWritable().writeFileWithIdentifier(identifier, f);
+      if (fileInfo.identifier != identifier) {
         _logger.severe('Panic, fileIdentifier changed. must no happen.');
       }
     } else {

@@ -21,7 +21,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 final _logger = Logger('manage_file');
@@ -270,7 +269,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
             fileInfo.file,
             databaseName: _file.fileSource.displayName,
             uuid: AppDataBloc.createUuid(),
-            filePickerIdentifier: fileInfo.identifier,
+            filePickerIdentifier: fileInfo.toJsonString(),
           ));
       widget.onFileSourceChanged(newFile.fileSource);
       if (!mounted) {
