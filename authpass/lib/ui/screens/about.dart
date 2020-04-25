@@ -77,19 +77,19 @@ class AuthPassAboutDialog extends StatelessWidget {
   static PopupMenuButton createAboutPopupAction(BuildContext context,
       {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
           builder}) {
+    final openedFiles = Provider.of<OpenedKdbxFiles>(context);
     return PopupMenuButton<VoidCallback>(
       onSelected: (val) => val(),
       itemBuilder: (context) => [
         ...?(builder == null ? null : builder(context)),
-        ...createDefaultPopupMenuItems(context),
+        ...createDefaultPopupMenuItems(context, openedFiles),
       ],
     );
   }
 
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
-      BuildContext context) {
-    final openedFiles =
-        Provider.of<OpenedKdbxFiles>(context, listen: false).values;
+      BuildContext context, OpenedKdbxFiles openedKdbxFiles) {
+    final openedFiles = openedKdbxFiles.values;
     return [
       PopupMenuItem(
         child: const ListTile(

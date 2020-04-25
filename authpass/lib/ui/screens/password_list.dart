@@ -351,7 +351,8 @@ class _PasswordListContentState extends State<PasswordListContent>
             item();
           },
           itemBuilder: (context) => [
-            ...AuthPassAboutDialog.createDefaultPopupMenuItems(context),
+            ...AuthPassAboutDialog.createDefaultPopupMenuItems(
+                context, kdbxBloc.openedFiles),
             PopupMenuItem(
               value: () {
                 Provider.of<KdbxBloc>(context, listen: false).closeAllFiles();
