@@ -63,10 +63,10 @@ dependencies:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info: ^0.4.2+1
+  device_info: ^0.4.2+2
   path_provider: ^1.6.0
   path_provider_macos: ^0.0.3
-  analytics_event: ^0.1.1
+  analytics_event: ^0.1.2
   autofill_service:
     path: ../deps/autofill_service
 

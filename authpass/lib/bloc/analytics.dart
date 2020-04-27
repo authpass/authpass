@@ -97,6 +97,7 @@ class Analytics {
       _logger.info('No analyics Id defined. Not tracking anyting.');
     }
 
+    _logger.finest('Registering analytics tracker.');
     events.registerTracker((event, params) {
       final eventParams = <String, String>{};
       int value;

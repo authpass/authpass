@@ -21,7 +21,7 @@ packages:
       name: analytics_event
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   analytics_event_gen:
     dependency: "direct dev"
     description:
@@ -256,7 +256,7 @@ packages:
       name: device_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2+1"
+    version: "0.4.2+2"
   dio:
     dependency: transitive
     description:
@@ -629,7 +629,7 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4"
+    version: "0.0.4+1"
   path_provider_platform_interface:
     dependency: transitive
     description:
