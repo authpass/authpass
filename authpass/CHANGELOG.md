@@ -1,9 +1,10 @@
-# 1.5.6 (UNRELEASED)
+# 1.5.6 - 2020-04-27
 
 * Android: Add file handler to open  *.kdbx files.
 * Android/iOS: Improved opening of existing files through document picker APIs.
   * Previously changes were not correctly persisted back to the original location.
 * Android: Improved autofill username/password field detection.
+* fixed appbar menu not refreshing correctly.
 
 # 1.5.5
 
