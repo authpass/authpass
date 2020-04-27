@@ -161,6 +161,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         },
         onGenerateInitialRoutes: (initialRoute) {
           _logger.fine('initialRoute: $initialRoute');
+          _deps.analytics.trackScreen(initialRoute);
           if (initialRoute.startsWith('/openFile')) {
             final uri = Uri.parse(initialRoute);
             final file = uri.queryParameters['file'];
@@ -204,6 +205,7 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPush(route, previousRoute);
+    _logger.finest('didPush');
     _sendScreenView(route);
   }
 
