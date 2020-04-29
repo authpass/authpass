@@ -1,3 +1,7 @@
+# 1.5.7 - unreleased
+
+* Add `Help` menu item to open https://authpass.app/docs/
+
 # 1.5.6 - 2020-04-27
 
 * Android: Add file handler to open  *.kdbx files.
