@@ -23,6 +23,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'value': value
       });
   @override
+  void trackActionPressed({String action}) =>
+      trackEvent('actionPressed', <String, dynamic>{'action': action});
+  @override
   void trackCreateFile() => trackEvent('createFile', <String, dynamic>{});
   @override
   void trackOpenFile({String type}) =>

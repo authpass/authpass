@@ -90,6 +90,7 @@ class AuthPassAboutDialog extends StatelessWidget {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
       BuildContext context, OpenedKdbxFiles openedKdbxFiles) {
     final openedFiles = openedKdbxFiles.values;
+    final analytics = Provider.of<Analytics>(context, listen: false);
     return [
       PopupMenuItem(
         child: const ListTile(
@@ -97,6 +98,7 @@ class AuthPassAboutDialog extends StatelessWidget {
           title: Text('Generate Password'),
         ),
         value: () {
+          analytics.events.trackActionPressed(action: 'generatePassword');
           Navigator.of(context).push(PasswordGeneratorScreen.route());
         },
       ),
@@ -106,6 +108,7 @@ class AuthPassAboutDialog extends StatelessWidget {
           title: Text('Preferences'),
         ),
         value: () {
+          analytics.events.trackActionPressed(action: 'preferences');
           Navigator.of(context).push(PreferencesScreen.route());
         },
       ),
@@ -127,6 +130,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                     ),
                   ),
                   value: () {
+                    analytics.events.trackActionPressed(action: 'manageFile');
                     Navigator.of(context, rootNavigator: true)
                         .push(ManageFileScreen.route(file.fileSource));
                   },
@@ -139,6 +143,7 @@ class AuthPassAboutDialog extends StatelessWidget {
           title: Text('Open another File'),
         ),
         value: () {
+          analytics.events.trackActionPressed(action: 'openFile');
           Navigator.of(context, rootNavigator: true)
               .push(SelectFileScreen.route());
         },
@@ -154,21 +159,36 @@ class AuthPassAboutDialog extends StatelessWidget {
                   subtitle: Text('Send logs by email/ask for help.'),
                 ),
                 value: () {
+                  analytics.events.trackActionPressed(action: 'emailSupport');
                   DialogUtils.sendLogs(context);
                 },
               )
             ],
+      PopupMenuItem(
+        child: const ListTile(
+          leading: Icon(Icons.help),
+          title: Text('Help'),
+          subtitle: Text('Show documentation.'),
+        ),
+        value: () async {
+          analytics.events.trackActionPressed(action: 'help');
+          await DialogUtils.openUrl('https://authpass.app/docs/?utm_source=app'
+              '&utm_medium=app_help&utm_campaign=app_help#documentation');
+        },
+      ),
       createAboutMenuItem(context)
     ];
   }
 
   static PopupMenuItem<VoidCallback> createAboutMenuItem(BuildContext context) {
+    final analytics = Provider.of<Analytics>(context, listen: false);
     return PopupMenuItem<VoidCallback>(
       child: const ListTile(
         leading: ImageIcon(AssetImage('assets/images/logo_icon.png')),
         title: Text('About'),
       ),
       value: () {
+        analytics.events.trackActionPressed(action: 'about');
         AuthPassAboutDialog.openDialog(context);
       },
     );

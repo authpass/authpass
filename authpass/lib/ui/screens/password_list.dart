@@ -355,6 +355,9 @@ class _PasswordListContentState extends State<PasswordListContent>
                 context, kdbxBloc.openedFiles),
             PopupMenuItem(
               value: () {
+                Provider.of<Analytics>(context, listen: false)
+                    .events
+                    .trackActionPressed(action: 'lockFiles');
                 Provider.of<KdbxBloc>(context, listen: false).closeAllFiles();
                 Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                   SelectFileScreen.route(skipQuickUnlock: true),

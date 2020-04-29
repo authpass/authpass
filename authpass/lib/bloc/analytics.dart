@@ -194,6 +194,8 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     @required int value,
   });
 
+  void trackActionPressed({@required String action});
+
   void trackCreateFile();
 
   void trackOpenFile({@required String type});

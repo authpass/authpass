@@ -44,9 +44,9 @@ Future<void> startApp(Env env) async {
     Analytics.trackError(errorDetails.summary.toString(), true);
   };
 
-  await runZoned<Future<void>>(() async {
+  await runZonedGuarded<Future<void>>(() async {
     runApp(AuthPassApp(env: env));
-  }, onError: (dynamic error, StackTrace stackTrace) {
+  }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
   }, zoneSpecification: ZoneSpecification(
