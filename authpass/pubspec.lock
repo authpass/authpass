@@ -47,8 +47,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "59e37e756c05c77c8a448b5e926ed06182386195"
-      resolved-ref: "59e37e756c05c77c8a448b5e926ed06182386195"
+      ref: e66dd4ef20be5597d805b2293835c91fa7b477e3
+      resolved-ref: e66dd4ef20be5597d805b2293835c91fa7b477e3
       url: "https://github.com/authpass/argon2_ffi.git"
     source: git
     version: "0.0.1"

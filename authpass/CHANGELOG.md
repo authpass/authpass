@@ -1,6 +1,7 @@
 # 1.5.7 - unreleased
 
 * Add `Help` menu item to open https://authpass.app/docs/
+* Fix potential bug in argon2 hashing.
 
 # 1.5.6 - 2020-04-27
 

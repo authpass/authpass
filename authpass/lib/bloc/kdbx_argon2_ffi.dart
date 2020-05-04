@@ -13,9 +13,9 @@ final _logger = Logger('kdbx_argon2_ffi');
 
 typedef Argon2HashNative = Pointer<Utf8> Function(
   Pointer<Uint8> key,
-  IntPtr keyLen,
+  Uint32 keyLen,
   Pointer<Uint8> salt,
-  Uint64 saltlen,
+  Uint32 saltlen,
   Uint32 m_cost, // memory cost
   Uint32 t_cost, // time cost (number iterations)
   Uint32 parallelism,
