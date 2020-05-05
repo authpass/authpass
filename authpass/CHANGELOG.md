@@ -1,5 +1,6 @@
 # 1.5.7 - unreleased
 
+* By default hide recycle bin/deleted items, allow changing of filter by group.
 * Add `Help` menu item to open https://authpass.app/docs/
 * Fix potential bug in argon2 hashing.
 
