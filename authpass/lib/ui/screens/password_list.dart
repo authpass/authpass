@@ -93,19 +93,9 @@ class PasswordList extends StatelessWidget {
     return StreamBuilder<bool>(
         stream: Rx.merge(streams).map((x) => true),
         builder: (context, snapshot) {
-          final watch = Stopwatch()..start();
-          final allEntries = kdbxBloc.openedFilesKdbx
-              .expand((f) => f.body.rootGroup.getAllEntries())
-              .map((e) => EntryViewModel(e, kdbxBloc))
-              .toList(growable: false);
-          allEntries.sort(
-              (a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
-          watch.stop();
-          _logger
-              .finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
           return PasswordListContent(
             kdbxBloc: kdbxBloc,
-            entries: allEntries,
+            openedKdbxFiles: kdbxBloc.openedFilesKdbx,
             selectedEntry: selectedEntry,
             onEntrySelected: onEntrySelected,
           );
@@ -125,7 +115,7 @@ class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
     Key key,
     @required this.kdbxBloc,
-    @required this.entries,
+    @required this.openedKdbxFiles,
     @required
         void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected,
     this.selectedEntry,
@@ -133,7 +123,7 @@ class PasswordListContent extends StatefulWidget {
         super(key: key);
 
   final KdbxBloc kdbxBloc;
-  final List<EntryViewModel> entries;
+  final List<KdbxFile> openedKdbxFiles;
   bool get isAutofillSelector =>
       WidgetsBinding.instance.window.defaultRouteName == '/autofill';
   final void Function(KdbxEntry entry, EntrySelectionType type)
@@ -197,6 +187,58 @@ class PasswordListFilterIsolateRunner {
   }
 }
 
+class GroupFilterEntry {
+  const GroupFilterEntry({this.group, this.isRecursive});
+
+  final KdbxGroup group;
+  final bool isRecursive;
+}
+
+class GroupFilter {
+  const GroupFilter({
+    this.groups = const [],
+    @required this.showRecycleBin,
+    @required this.showActive,
+    @required this.name,
+  })  : assert(showRecycleBin != null),
+        assert(showActive != null),
+        assert(name != null);
+
+  static const DEFAULT_GROUP_FILTER = GroupFilter(
+      showRecycleBin: false, showActive: true, name: 'Hide Deleted Entries');
+  static const RECYCLE_BIN = GroupFilter(
+      showRecycleBin: true, showActive: false, name: 'Deleted Entries');
+
+  final List<GroupFilterEntry> groups;
+
+  /// show items which are in the recycle bins.
+  final bool showRecycleBin;
+
+  /// show items which are not in recycle bins.
+  final bool showActive;
+
+  /// Name to display.
+  final String name;
+
+  Iterable<KdbxEntry> getEntries(List<KdbxFile> files) {
+    return files.expand((f) {
+      if (showRecycleBin && showActive) {
+        return f.body.rootGroup.getAllEntries();
+      } else {
+        final recycleBin = f.recycleBin;
+        if (showRecycleBin) {
+          return recycleBin.entries;
+        } else {
+          return f.body.rootGroup
+              .getAllGroups()
+              .where((g) => g != recycleBin)
+              .expand((e) => e.entries);
+        }
+      }
+    });
+  }
+}
+
 class _PasswordListContentState extends State<PasswordListContent>
     with StreamSubscriberMixin, WidgetsBindingObserver {
   List<EntryViewModel> _filteredEntries;
@@ -204,14 +246,17 @@ class _PasswordListContentState extends State<PasswordListContent>
   final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
   bool _speedDialOpen = false;
-  KdbxGroup _groupFilter;
+  final ValueNotifier<GroupFilter> _groupFilterNotifier =
+      ValueNotifier(GroupFilter.DEFAULT_GROUP_FILTER);
+  GroupFilter get _groupFilter => _groupFilterNotifier.value;
 
-  List<EntryViewModel> get _allEntries => _groupFilter == null
-      ? widget.entries
-      : _groupFilter
-          .getAllEntries()
-          .map((e) => EntryViewModel(e, widget.kdbxBloc))
-          .toList();
+//  List<EntryViewModel> get _allEntries => _groupFilter == null
+//      ? widget.entries
+//      : _groupFilter
+//          .getAllEntries()
+//          .map((e) => EntryViewModel(e, widget.kdbxBloc))
+//          .toList();
+  List<EntryViewModel> _allEntries;
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
@@ -223,6 +268,30 @@ class _PasswordListContentState extends State<PasswordListContent>
 //      _logger.finer('Initializd filter isolate $result');
 //    });
     WidgetsBinding.instance.addObserver(this);
+    _updateAllEntries();
+    _groupFilterNotifier.addListener(_updateAllEntries);
+  }
+
+  void _updateAllEntries() {
+    final watch = Stopwatch()..start();
+    final allEntries = _groupFilter
+        .getEntries(widget.openedKdbxFiles)
+        .map((e) => EntryViewModel(e, widget.kdbxBloc))
+        .toList(growable: false);
+    allEntries
+        .sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+    _allEntries = allEntries;
+    watch.stop();
+    _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
+    setState(() {});
+  }
+
+  @override
+  void didUpdateWidget(PasswordListContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.openedKdbxFiles != widget.openedKdbxFiles) {
+      _updateAllEntries();
+    }
   }
 
   void _selectAllFilter() =>
@@ -251,7 +320,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         setState(() {
           if (_filterQuery == null || _filteredEntries == null) {
             _filterQuery ??= '';
-            _filteredEntries = widget.entries;
+            _filteredEntries = _allEntries;
           }
           _selectAllFilter();
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -267,7 +336,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   void _selectNextEntry(int next) {
-    final entries = _filteredEntries ?? widget.entries;
+    final entries = _filteredEntries ?? _allEntries;
     if (entries.isEmpty) {
       return;
     }
@@ -291,6 +360,8 @@ class _PasswordListContentState extends State<PasswordListContent>
 //    _isolateRunner.then<void>((runner) => runner.close());
     _filterFocusNode.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    _groupFilterNotifier.removeListener(_updateAllEntries);
+    _groupFilterNotifier.dispose();
     super.dispose();
   }
 
@@ -327,16 +398,64 @@ class _PasswordListContentState extends State<PasswordListContent>
                   ),
                 ),
               ],
-        IconButton(
-          icon: Icon(FontAwesomeIcons.sitemap),
-          onPressed: () async {
-            final groupFilter =
-                await Navigator.of(context).push(GroupList.route(null));
-            setState(() {
-              _groupFilter = groupFilter;
-              _filteredEntries = null;
-              _filterTextEditingController.text = '';
-            });
+//        IconButton(
+//          icon: Icon(FontAwesomeIcons.sitemap),
+//          onPressed: () async {
+//            final groupFilter =
+//                await Navigator.of(context).push(GroupList.route(null));
+//            setState(() {
+//              _groupFilter = groupFilter;
+//              _filteredEntries = null;
+//              _filterTextEditingController.text = '';
+//            });
+//          },
+//        ),
+        PopupMenuButton<VoidCallback>(
+          icon: Icon(FontAwesomeIcons.filter),
+          onSelected: (value) async {
+            value();
+            _logger.fine('onchanged - $value');
+          },
+          itemBuilder: (context) {
+            final availableFilter = [
+              GroupFilter.DEFAULT_GROUP_FILTER,
+              GroupFilter.RECYCLE_BIN,
+            ];
+            if (!availableFilter.contains(_groupFilter)) {
+              availableFilter.add(_groupFilter);
+            }
+            return <PopupMenuEntry<VoidCallback>>[
+              ...availableFilter.map(
+                (e) => CheckedPopupMenuItem<VoidCallback>(
+                  value: () => _groupFilterNotifier.value = e,
+                  checked: e == _groupFilter,
+                  child: Text(e.name),
+                ),
+              ),
+//              const Divider(),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: Icon(Icons.folder),
+                  title: const Text('Customize …'),
+                ),
+                value: () async {
+                  final groupFilter =
+                      await Navigator.of(context).push(GroupList.route(null));
+                  setState(() {
+                    _groupFilterNotifier.value = GroupFilter(
+                      groups: [
+                        GroupFilterEntry(group: groupFilter, isRecursive: true),
+                      ],
+                      showRecycleBin: true,
+                      showActive: true,
+                      name: 'Group: ${groupFilter.name.get()} (recursive)',
+                    );
+                    _filteredEntries = null;
+                    _filterTextEditingController.text = '';
+                  });
+                },
+              ),
+            ];
           },
         ),
         IconButton(
@@ -451,20 +570,18 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   List<Widget> _buildGroupFilterPrefix() {
-    if (_groupFilter == null) {
+    if (_groupFilter == GroupFilter.DEFAULT_GROUP_FILTER) {
       return null;
     }
     return [
       MaterialBanner(
         backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
-        content: Text('Group: ${_groupFilter.name.get()}'),
+        content: Text('${_groupFilter.name}'),
         actions: <Widget>[
           FlatButton(
             child: const Text('Clear'),
             onPressed: () {
-              setState(() {
-                _groupFilter = null;
-              });
+              _groupFilterNotifier.value = GroupFilter.DEFAULT_GROUP_FILTER;
             },
           )
         ],
@@ -517,7 +634,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       appBar: _filteredEntries == null
           ? _buildDefaultAppBar(context)
           : _buildFilterAppBar(context),
-      body: widget.entries.isEmpty
+      body: _allEntries.isEmpty
           ? NoPasswordsEmptyView(
               onPrimaryButtonPressed: () {
                 final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
@@ -631,7 +748,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                 },
               ),
             ),
-      floatingActionButton: widget.entries.isEmpty || _filterQuery != null
+      floatingActionButton: _allEntries.isEmpty || _filterQuery != null
           ? null
           : kdbxBloc.openedFiles.length == 1
               ? FloatingActionButton(
