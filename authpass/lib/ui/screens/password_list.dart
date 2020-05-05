@@ -221,6 +221,24 @@ class GroupFilter {
   final String name;
 
   Iterable<KdbxEntry> getEntries(List<KdbxFile> files) {
+    if (groups.isNotEmpty) {
+      return groups.expand((g) {
+        final groups = g.isRecursive ? g.group.getAllGroups() : [g.group];
+        if (showRecycleBin && showActive) {
+          return groups.expand((g) => g.entries);
+        } else if (showActive) {
+          return groups
+              .where((g) => g.file.recycleBin != g)
+              .expand((g) => g.entries);
+        } else if (showRecycleBin) {
+          return groups
+              .where((g) => g.file.recycleBin == g)
+              .expand((g) => g.entries);
+        } else {
+          throw StateError('Impossible.');
+        }
+      });
+    }
     return files.expand((f) {
       if (showRecycleBin && showActive) {
         return f.body.rootGroup.getAllEntries();
@@ -446,9 +464,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                       groups: [
                         GroupFilterEntry(group: groupFilter, isRecursive: true),
                       ],
-                      showRecycleBin: true,
+                      showRecycleBin: false,
                       showActive: true,
-                      name: 'Group: ${groupFilter.name.get()} (recursive)',
+                      name: 'Group: ${groupFilter.name.get()} '
+                          '(recursive, without deleted)',
                     );
                     _filteredEntries = null;
                     _filterTextEditingController.text = '';
