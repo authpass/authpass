@@ -37,6 +37,16 @@ class EnvSecrets {
     @required this.dropboxKey,
     @required this.dropboxSecret,
   });
+
+  static const nullSecrets = EnvSecrets(
+    analyticsAmplitudeApiKey: null,
+    analyticsGoogleAnalyticsId: null,
+    googleClientId: null,
+    googleClientSecret: null,
+    dropboxKey: null,
+    dropboxSecret: null,
+  );
+
   final String analyticsAmplitudeApiKey;
   final String analyticsGoogleAnalyticsId;
   final String googleClientId;

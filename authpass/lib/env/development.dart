@@ -9,12 +9,5 @@ class Development extends Env {
   String get storageNamespace => 'development';
 
   @override
-  EnvSecrets get secrets => const EnvSecrets(
-        analyticsAmplitudeApiKey: null,
-        analyticsGoogleAnalyticsId: null,
-        googleClientId: null,
-        googleClientSecret: null,
-        dropboxKey: null,
-        dropboxSecret: null,
-      );
+  EnvSecrets get secrets => EnvSecrets.nullSecrets;
 }

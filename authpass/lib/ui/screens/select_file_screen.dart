@@ -314,6 +314,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: LinkButton(
+                        key: const Key('downloadFromUrl'),
                         onPressed: () async {
                           final source = await showDialog<FileSourceUrl>(
                               context: context,
