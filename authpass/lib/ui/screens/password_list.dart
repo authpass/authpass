@@ -235,7 +235,8 @@ class GroupFilter {
               .where((g) => g.file.recycleBin == g)
               .expand((g) => g.entries);
         } else {
-          throw StateError('Impossible.');
+          throw StateError('Impossible. (showRecycleBin: $showRecycleBin,'
+              'showActive: $showActive)');
         }
       });
     }

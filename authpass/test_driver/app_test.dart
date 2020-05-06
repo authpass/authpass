@@ -44,8 +44,6 @@ void main() {
 
     test('open kdbx 3 file', () async {
       await driver.tap(downloadButton);
-      final field =
-          await driver.getWidgetDiagnostics(find.byType('TextFormField'));
 
       await driver.enterText(
           'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx');
