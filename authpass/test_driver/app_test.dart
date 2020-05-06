@@ -45,6 +45,8 @@ void main() {
     test('open kdbx 3 file', () async {
       await driver.tap(downloadButton);
 
+      await driver.waitUntilNoTransientCallbacks();
+
       await driver.enterText(
           'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx');
       await takeScreenshot();
@@ -54,6 +56,9 @@ void main() {
 //      await driver.waitUntilNoTransientCallbacks(
 //          timeout: const Duration(seconds: 10));
       await takeScreenshot();
+
+      await driver.waitUntilNoTransientCallbacks();
+
       await driver.enterText('asdf');
       await driver.tap(find.byType('CheckboxListTile'));
       await driver.tap(find.text('Continue'));

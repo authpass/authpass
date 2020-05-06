@@ -1,4 +1,4 @@
-name: build android samsungapps
+name: build android
 
 on: [push]
 
@@ -41,13 +41,6 @@ jobs:
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
       run: "./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}"
     - uses: actions/upload-artifact@v1
-      if: matrix.flavor != 'huawei'
       with:
         name: app-${{ matrix.flavor }}-release-${{steps.buildapk.outputs.appbuildnumber}}.apk
         path: authpass/build/app/outputs/apk/${{ matrix.flavor }}/release/app-${{ matrix.flavor }}-release.apk
-    - uses: actions/upload-artifact@v1
-      if: matrix.flavor == 'huawei'
-      with:
-        name: app-${{ matrix.flavor }}-release-${{steps.buildapk.outputs.appbuildnumber}}.aab
-        path: authpass/build/app/outputs/bundle/${{ matrix.flavor }}Release/app-${{ matrix.flavor }}-release.aab
-
