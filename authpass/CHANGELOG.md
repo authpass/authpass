@@ -1,4 +1,8 @@
-# 1.5.7 - unreleased
+# 1.5.8 - 2020-04-06
+
+* Critical bugfix, Error opening files with missing Recycle Bin.
+ 
+# 1.5.7 - 2020-04-05
 
 * By default hide recycle bin/deleted items, allow changing of filter by group.
 * Add `Help` menu item to open https://authpass.app/docs/
