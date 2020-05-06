@@ -12,10 +12,10 @@ task:
   submodule_script:
     - git submodule update --init
   install_script:
-    - brew install gnupg
-    - git clone https://github.com/mipmip/blackbox && cd blackbox && make manual-install && cd ..
-    - gpg -v --import <(echo "$GPG_PRIVATE_KEY")
-    - ./authpass/_tools/ci-install-deps.sh ios
+    # - brew install gnupg
+    # - git clone https://github.com/mipmip/blackbox && cd blackbox && make manual-install && cd ..
+    # - gpg -v --import <(echo "$GPG_PRIVATE_KEY")
+    - BLACKBOX_SECRET="$GPG_PRIVATE_KEY" ./authpass/_tools/ci-install-deps.sh ios
   release_ios_script:
     - ./authpass/_tools/ci-release.sh ios
 #  release_macos_script:

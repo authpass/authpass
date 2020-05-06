@@ -11,7 +11,7 @@ echo "Installing blackbox into $DEPS"
 mkdir -p ${DEPS}
 pushd ${DEPS}
 
-if test "${1}" == "ios" ; then
+if test "${1:-}" == "ios" ; then
     curl -L -o blackbox.go.macos https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.macos
     chmod +x blackbox.go.macos
     popd
