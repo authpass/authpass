@@ -24,6 +24,7 @@ import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -404,6 +406,28 @@ class _EntryDetailsState extends State<EntryDetails>
                   setState(() {});
                 },
               ),
+              ...?widget.entry.binaryEntries.isEmpty
+                  ? []
+                  : widget.entry.binaryEntries.map((e) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.attach_file),
+                          Text(e.key.key),
+                          IconButton(
+                              icon: Icon(Icons.open_in_new),
+                              onPressed: () async {
+                                final f = await PathUtils().saveToTempDirectory(
+                                    e.value.value,
+                                    dirPrefix: 'openbinary',
+                                    fileName: e.key.key);
+                                _logger.fine('Opening ${f.path}');
+                                final result = await OpenFile.open(f.path);
+                                _logger.fine('finished opening $result');
+                              }),
+                        ],
+                      );
+                    }),
               const SizedBox(height: 16),
               PrimaryButton(
                 icon: Icon(Icons.save),

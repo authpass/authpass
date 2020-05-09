@@ -130,6 +130,7 @@ dependencies:
     git:
       url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git
       ref: 85cfc7efee91c3444d24435486cf292a32f04499
+  open_file: ^3.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
