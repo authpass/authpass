@@ -87,42 +87,45 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
       appBar: AppBar(
         title: Text(EntryFormatUtils.getLabel(widget.entry)),
         actions: <Widget>[
-          AuthPassAboutDialog.createAboutPopupAction(context,
-              builder: !env.isDebug
+          AuthPassAboutDialog.createAboutPopupAction(
+            context,
+            builder: (context) => [
+              PopupMenuItem(
+                child: const ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('Delete'),
+                ),
+                value: () {
+                  final oldGroup = widget.entry.parent;
+                  widget.entry.file.deleteEntry(widget.entry);
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: const Text('Deleted entry.'),
+                    action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () {
+                          widget.entry.file.move(widget.entry, oldGroup);
+                        }),
+                  ));
+                },
+              ),
+              ...?!env.isDebug
                   ? null
-                  : (context) => [
-                        PopupMenuItem(
-                          child: const ListTile(
-                            leading: Icon(Icons.delete),
-                            title: Text('Delete'),
-                          ),
-                          value: () {
-                            final oldGroup = widget.entry.parent;
-                            widget.entry.file.deleteEntry(widget.entry);
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: const Text('Deleted entry.'),
-                              action: SnackBarAction(
-                                  label: 'Undo',
-                                  onPressed: () {
-                                    widget.entry.file
-                                        .move(widget.entry, oldGroup);
-                                  }),
-                            ));
-                          },
+                  : [
+                      PopupMenuItem(
+                        child: const ListTile(
+                          leading: Icon(Icons.bug_report),
+                          title: Text('Debug: Copy XML'),
                         ),
-                        PopupMenuItem(
-                          child: const ListTile(
-                            leading: Icon(Icons.bug_report),
-                            title: Text('Debug: Copy XML'),
-                          ),
-                          value: () {
-                            Clipboard.setData(ClipboardData(
-                                text: widget.entry
-                                    .toXml()
-                                    .toXmlString(pretty: true)));
-                          },
-                        ),
-                      ]),
+                        value: () {
+                          Clipboard.setData(ClipboardData(
+                              text: widget.entry
+                                  .toXml()
+                                  .toXmlString(pretty: true)));
+                        },
+                      ),
+                    ]
+            ],
+          )
         ],
       ),
 //      floatingActionButton: FloatingActionButton(
