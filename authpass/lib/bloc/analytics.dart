@@ -106,6 +106,7 @@ class Analytics {
       final labelParams = <String>[];
       for (final entry in params.entries) {
         final customKey = _gaPropertyMapping[entry.key];
+        _logger.fine('entry.key: ${entry.key} = ${entry.value.runtimeType}');
         if (entry.key == 'value' && entry.value is int) {
           value = entry.value as int;
         } else if (entry.key == 'category' && entry.value is String) {

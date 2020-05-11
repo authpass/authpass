@@ -222,13 +222,13 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
   }
 
   String _screenNameFor(Route route) {
-    return route?.settings?.name;
+    return route?.settings?.name ?? '${route?.runtimeType}';
   }
 
   void _sendScreenView(Route route) {
     final screenName = _screenNameFor(route);
     if (screenName != null) {
-      analytics.trackScreen(route.settings.name);
+      analytics.trackScreen(screenName);
     }
   }
 }
