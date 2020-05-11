@@ -30,7 +30,7 @@ dependencies:
 #      url: https://github.com/hpoul/file_picker_writable.git
 #      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
   json_annotation: ^3.0.1
-  built_value: ^7.0.9
+  built_value: ^7.1.0
   simple_json_persistence: ^0.2.0
   provider: ^4.0.4
   http: ^0.12.0+4
@@ -131,6 +131,8 @@ dependencies:
       url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git
       ref: 85cfc7efee91c3444d24435486cf292a32f04499
   open_file: ^3.0.1
+  esys_flutter_share: ^1.0.2
+  mime: ^0.9.6+3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -145,11 +147,11 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   test: any
-  json_serializable: ^3.2.5
-  build_runner: ^1.7.3
+  json_serializable: ^3.3.0
+  build_runner: ^1.10.0
   builder_static_text: ^0.0.1+2
-  built_value_generator: ^7.0.8
-  analytics_event_gen: ^0.1.1+1
+  built_value_generator: ^7.1.0
+  analytics_event_gen: ^0.1.2
 
 dependency_overrides:
   pedantic: ^1.9.0

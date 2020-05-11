@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:authpass/bloc/analytics.dart';
@@ -27,6 +28,7 @@ import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:base32/base32.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +37,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +97,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
               ? null
               : [
                   IconButton(
-                    icon: Icon(Icons.save),
+                    icon: const Icon(Icons.save),
                     onPressed: _saveCallback,
                   ),
                 ],
@@ -447,23 +450,12 @@ class _EntryDetailsState extends State<EntryDetails>
                           ),
                         ),
                         onTap: () async {
-                          final f = await PathUtils().saveToTempDirectory(
-                              e.value.value,
-                              dirPrefix: 'openbinary',
-                              fileName: e.key.key);
-                          _logger.fine('Opening ${f.path}');
-                          final result = await OpenFile.open(f.path);
-                          _logger.fine('finished opening $result');
-                        },
-                        onLongPress: () async {
-                          final confirm = await DialogUtils.showConfirmDialog(
+                          await showModalBottomSheet<void>(
                               context: context,
-                              params: ConfirmDialogParams(
-                                  content:
-                                      'Do you really want to delete ${e.key.key}?'));
-                          if (confirm) {
-                            widget.entry.removeBinary(e.key);
-                          }
+                              builder: (context) => AttachmentBottomSheet(
+                                    entry: widget.entry,
+                                    attachment: e,
+                                  ));
                         },
                       );
                     }),
@@ -485,7 +477,7 @@ class _EntryDetailsState extends State<EntryDetails>
               ),
               const SizedBox(height: 16),
               PrimaryButton(
-                icon: Icon(Icons.save),
+                icon: const Icon(Icons.save),
                 child: const Text('Save'),
                 onPressed: widget.onSavedPressed,
               ),
@@ -535,6 +527,95 @@ class _EntryDetailsState extends State<EntryDetails>
       helperText: 'Please enter time based key.',
     ).show(context);
     return _cleanOtpCodeCode(totpCode);
+  }
+}
+
+class AttachmentBottomSheet extends StatelessWidget {
+  const AttachmentBottomSheet({
+    Key key,
+    @required this.entry,
+    @required this.attachment,
+  })  : assert(entry != null),
+        assert(attachment != null),
+        super(key: key);
+
+  final KdbxEntry entry;
+  final MapEntry<KdbxKey, KdbxBinary> attachment;
+
+  @override
+  Widget build(BuildContext context) {
+    final analytics = Provider.of<Analytics>(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.open_in_new),
+          title: const Text('Open'),
+          onTap: () async {
+            analytics.events.trackAttachmentAction('open');
+            Navigator.of(context).pop();
+            final f = await PathUtils().saveToTempDirectory(
+                attachment.value.value,
+                dirPrefix: 'openbinary',
+                fileName: attachment.key.key);
+            _logger.fine('Opening ${f.path}');
+            final result = await OpenFile.open(f.path);
+            _logger.fine('finished opening $result');
+          },
+        ),
+        if (Platform.isIOS || Platform.isAndroid)
+          ListTile(
+            leading: const Icon(Icons.share),
+            title: const Text('Share'),
+            onTap: () {
+              analytics.events.trackAttachmentAction('share');
+              final mimeType = lookupMimeType(
+                attachment.key.key,
+                headerBytes: attachment.value.value.length >
+                        defaultMagicNumbersMaxLength
+                    ? Uint8List.sublistView(
+                        attachment.value.value, 0, defaultMagicNumbersMaxLength)
+                    : null,
+              );
+              _logger.fine('Opening attachment with mimeType $mimeType');
+              Share.file('Attachment', attachment.key.key,
+                  attachment.value.value, mimeType);
+              Navigator.of(context).pop();
+            },
+          ),
+        if (Platform.isIOS || Platform.isAndroid)
+          ListTile(
+            leading: const Icon(Icons.save),
+            title: const Text('Save to device'),
+            onTap: () async {
+              analytics.events.trackAttachmentAction('saveToDevice');
+              Navigator.of(context).pop();
+              final f = await PathUtils().saveToTempDirectory(
+                  attachment.value.value,
+                  dirPrefix: 'openbinary',
+                  fileName: attachment.key.key);
+              _logger.fine('Opening ${f.path}');
+              await FilePickerWritable().openFilePickerForCreate(f);
+            },
+          ),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Remove'),
+          onTap: () async {
+            analytics.events.trackAttachmentAction('remove');
+            Navigator.of(context).pop();
+            final confirm = await DialogUtils.showConfirmDialog(
+                context: context,
+                params: ConfirmDialogParams(
+                    content: 'Do you really want to delete'
+                        ' ${attachment.key.key}?'));
+            if (confirm) {
+              entry.removeBinary(attachment.key);
+            }
+          },
+        ),
+      ],
+    );
   }
 }
 

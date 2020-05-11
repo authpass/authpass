@@ -63,6 +63,10 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackSaveCount({String generator, int value}) => trackEvent(
       'saveCount', <String, dynamic>{'generator': generator, 'value': value});
+  @override
+  void trackAttachmentAction(String action, {String category = 'attachment'}) =>
+      trackEvent('attachmentAction',
+          <String, dynamic>{'action': action, 'category': category});
 }
 
 // **************************************************************************

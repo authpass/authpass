@@ -101,12 +101,15 @@ class Analytics {
     events.registerTracker((event, params) {
       final eventParams = <String, String>{};
       int value;
+      var category = 'track';
 
       final labelParams = <String>[];
       for (final entry in params.entries) {
         final customKey = _gaPropertyMapping[entry.key];
         if (entry.key == 'value' && entry.value is int) {
           value = entry.value as int;
+        } else if (entry.key == 'category' && entry.value is String) {
+          category = entry.value as String;
         } else if (customKey == null) {
           labelParams.add('${entry.key}=${entry.value}');
         } else {
@@ -120,7 +123,7 @@ class Analytics {
           .finer('event($event, $eventParams, value=$value) - label: $label');
 //      _amplitude?.logEvent(name: event, properties: params);
       _sendEvent(
-        'track',
+        category,
         event,
         label: label,
         value: value,
@@ -221,4 +224,6 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackSave({@required String type, int value});
   void trackSaveCount({@required String generator, @required int value});
+
+  void trackAttachmentAction(String action, {String category = 'attachment'});
 }
