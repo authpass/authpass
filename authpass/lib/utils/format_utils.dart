@@ -8,11 +8,14 @@ final _logger = Logger('format_utils');
 class FormatUtils {
   FormatUtils({
     @required String locale,
-  }) : dateFormatFull = DateFormat.yMd(locale).add_Hms() {
+  }) : _dateFormatFull = DateFormat.yMd(locale).add_Hms() {
     _logger.finer('Initialized with locale $locale');
   }
 
-  final DateFormat dateFormatFull;
+  final DateFormat _dateFormatFull;
+
+  String formatDateFull(DateTime dateTime) =>
+      _dateFormatFull.format(dateTime.toLocal());
 
   /// To keep things secure, like URLs we just log the first few characters.
   static String maxLength(String string, int maxLength,

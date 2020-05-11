@@ -353,7 +353,7 @@ class _EntryDetailsState extends State<EntryDetails>
                         ),
                         EntryMetaInfo(
                           label: 'Last Modified:',
-                          value: formatUtils.dateFormatFull.format(
+                          value: formatUtils.formatDateFull(
                               vm.entry.times.lastModificationTime.get()),
                         ),
                         const SizedBox(height: 16),

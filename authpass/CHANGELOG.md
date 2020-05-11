@@ -1,3 +1,10 @@
+# 1.6.0
+
+* Added support for file attachments/binaries.
+* Fix reading/writing timestamps correctly.
+* Fix compatibility problems with kdbx 4 timestamps.
+* Correctly display modification timestamp in local time zone.
+
 # 1.5.8 - 2020-04-06
 
 * Critical bugfix, Error opening files with missing Recycle Bin.
