@@ -27,6 +27,7 @@ import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:base32/base32.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -295,6 +296,7 @@ class _EntryDetailsState extends State<EntryDetails>
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     final vm = EntryViewModel(widget.entry, kdbxBloc);
     final formatUtils = Provider.of<FormatUtils>(context);
+    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       child: Padding(
@@ -406,28 +408,65 @@ class _EntryDetailsState extends State<EntryDetails>
                   setState(() {});
                 },
               ),
+              const Divider(),
               ...?widget.entry.binaryEntries.isEmpty
                   ? []
                   : widget.entry.binaryEntries.map((e) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.attach_file),
-                          Text(e.key.key),
-                          IconButton(
-                              icon: Icon(Icons.open_in_new),
-                              onPressed: () async {
-                                final f = await PathUtils().saveToTempDirectory(
-                                    e.value.value,
-                                    dirPrefix: 'openbinary',
-                                    fileName: e.key.key);
-                                _logger.fine('Opening ${f.path}');
-                                final result = await OpenFile.open(f.path);
-                                _logger.fine('finished opening $result');
-                              }),
-                        ],
+                      return InkWell(
+                        child: Container(
+                          constraints: const BoxConstraints(minWidth: 500),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 8,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.attach_file),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(e.key.key,
+                                        style: theme.textTheme.subtitle1),
+                                    const SizedBox(height: 2),
+                                    Text('${e.value.value.length} bytes',
+                                        style: theme.textTheme.caption),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        onTap: () async {
+                          final f = await PathUtils().saveToTempDirectory(
+                              e.value.value,
+                              dirPrefix: 'openbinary',
+                              fileName: e.key.key);
+                          _logger.fine('Opening ${f.path}');
+                          final result = await OpenFile.open(f.path);
+                          _logger.fine('finished opening $result');
+                        },
+                        onLongPress: () async {},
                       );
                     }),
+              LinkButton(
+                icon: Icon(Icons.attach_file),
+                child: const Text('Add attachment'),
+                onPressed: () async {
+                  final fileInfo = await FilePickerWritable().openFilePicker();
+                  if (fileInfo != null) {
+                    final fileName = fileInfo.fileName ?? fileInfo.file.path;
+                    final bytes = await fileInfo.file.readAsBytes();
+                    widget.entry.createBinary(
+                      isProtected: false,
+                      name: fileName,
+                      bytes: bytes,
+                    );
+                  }
+                },
+              ),
               const SizedBox(height: 16),
               PrimaryButton(
                 icon: Icon(Icons.save),
