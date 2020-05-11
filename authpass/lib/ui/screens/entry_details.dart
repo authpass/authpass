@@ -90,6 +90,14 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
       appBar: AppBar(
         title: Text(EntryFormatUtils.getLabel(widget.entry)),
         actions: <Widget>[
+          ...?!_isDirty
+              ? null
+              : [
+                  IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: _saveCallback,
+                  ),
+                ],
           AuthPassAboutDialog.createAboutPopupAction(
             context,
             builder: (context) => [
@@ -140,37 +148,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
           key: _formKey,
           child: EntryDetails(
             entry: widget.entry,
-            onSavedPressed: !_isDirty && !widget.entry.isDirty
-                ? null
-                : asyncTaskCallback(() async {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      final kdbxBloc =
-                          Provider.of<KdbxBloc>(context, listen: false);
-                      if (kdbxBloc
-                          .fileForKdbxFile(widget.entry.file)
-                          .fileSource
-                          .supportsWrite) {
-                        try {
-                          await kdbxBloc.saveFile(widget.entry.file);
-                        } on StorageException catch (e, stackTrace) {
-                          _logger.warning(
-                              'Error while saving database.', e, stackTrace);
-                          await DialogUtils.showErrorDialog(context,
-                              'Error while saving', 'Unable to save file: $e');
-                          return;
-                        }
-                        setState(() => _isDirty = false);
-                      } else {
-                        await DialogUtils.showSimpleAlertDialog(
-                          context,
-                          null,
-                          'Sorry this database does not support saving. '
-                          'Please open a local database file.',
-                        );
-                      }
-                    }
-                  }),
+            onSavedPressed:
+                !_isDirty && !widget.entry.isDirty ? null : _saveCallback,
           ),
           onChanged: () {
             if (!_isDirty) {
@@ -194,6 +173,34 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
       ),
     );
   }
+
+  VoidCallback get _saveCallback => asyncTaskCallback(() async {
+        if (_formKey.currentState.validate()) {
+          _formKey.currentState.save();
+          final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+          if (kdbxBloc
+              .fileForKdbxFile(widget.entry.file)
+              .fileSource
+              .supportsWrite) {
+            try {
+              await kdbxBloc.saveFile(widget.entry.file);
+            } on StorageException catch (e, stackTrace) {
+              _logger.warning('Error while saving database.', e, stackTrace);
+              await DialogUtils.showErrorDialog(
+                  context, 'Error while saving', 'Unable to save file: $e');
+              return;
+            }
+            setState(() => _isDirty = false);
+          } else {
+            await DialogUtils.showSimpleAlertDialog(
+              context,
+              null,
+              'Sorry this database does not support saving. '
+              'Please open a local database file.',
+            );
+          }
+        }
+      });
 }
 
 enum FieldType {
