@@ -448,7 +448,16 @@ class _EntryDetailsState extends State<EntryDetails>
                           final result = await OpenFile.open(f.path);
                           _logger.fine('finished opening $result');
                         },
-                        onLongPress: () async {},
+                        onLongPress: () async {
+                          final confirm = await DialogUtils.showConfirmDialog(
+                              context: context,
+                              params: ConfirmDialogParams(
+                                  content:
+                                      'Do you really want to delete ${e.key.key}?'));
+                          if (confirm) {
+                            widget.entry.removeBinary(e.key);
+                          }
+                        },
                       );
                     }),
               LinkButton(
