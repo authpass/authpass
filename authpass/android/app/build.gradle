@@ -21,6 +21,17 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def secretProperties = new Properties()
+def secretPropertiesFile = rootProject.file('../_tools/secrets/gradle_home/gradle.properties')
+if (secretPropertiesFile.exists()) {
+    System.out.println("loading secrets from ${secretPropertiesFile.absolutePath}")
+    secretPropertiesFile.withReader('UTF-8') { reader ->
+        secretProperties.load(reader)
+    }
+} else {
+    System.err.println("secrets not found at ${secretPropertiesFile.absolutePath}")
+}
+
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -45,9 +56,9 @@ android {
     signingConfigs {
         release {
             keyAlias 'authpass'
-            keyPassword project.properties['design.codeux.authpass.storePassword']
-            storeFile file(project.properties['design.codeux.authpass.storeFile'] ?: "invalid")
-            storePassword project.properties['design.codeux.authpass.storePassword']
+            keyPassword secretProperties['design.codeux.authpass.storePassword']
+            storeFile file(secretProperties['design.codeux.authpass.storeFile'] ?: "invalid")
+            storePassword secretProperties['design.codeux.authpass.storePassword']
         }
     }
 
