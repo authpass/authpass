@@ -109,13 +109,14 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile(
-                    'proguard-android-optimize.txt'),
-                    // List additional ProGuard rules for the given build type here. By default,
-                    // Android Studio creates and includes an empty rules file for you (located
-                    // at the root directory of each module).
-                    'proguard-rules.pro'
+//            minification SHOULD work, but was a bit high risk for me for no gain.
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile(
+//                    'proguard-android-optimize.txt'),
+//                    // List additional ProGuard rules for the given build type here. By default,
+//                    // Android Studio creates and includes an empty rules file for you (located
+//                    // at the root directory of each module).
+//                    'proguard-rules.pro'
         }
         debug {
             project.flutter.target = 'lib/env/development.dart'
