@@ -5,6 +5,8 @@ set -xeu
 dir="${0%/*}"
 cd $dir/..
 
+flavor="$1"
+
 FLT=${FLT:-flutter}
 
 DEPS=${DEPS:-~/deps}
@@ -47,7 +49,7 @@ fi
 echo "::set-output name=appbuildnumber::$buildnumber"
 
 $FLT pub get
-case "$1" in
+case "${flavor}" in
     ios)
         mkdir -p ~/.fastlane/spaceship
         $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
@@ -73,15 +75,16 @@ case "$1" in
         echo
         open macos/Runner.xcworkspace
     ;;
-    samsungapps)
-        $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor samsungapps
-    ;;
-    huawei)
-        $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor huawei
-#        $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor huawei
-    ;;
-    sideload)
-        $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor sideload
+    samsungapps | huawei | sideload)
+        $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor ${flavor}
+        apkpath="build/app/outputs/apk/${flavor}/release"
+        apk="${apkpath}/app-${flavor}-release.apk"
+        outputfilename="authpass-${flavor}-${buildnumber}.apk"
+        outputpath="${apkpath}/${outputfilename}"
+        echo "Copying to output apk ${apk}"
+        cp ${apk} ${outputpath}
+        echo "::set-output name=outputfilename::${outputfilename}"
+        echo "::set-output name=outputpath::${outputpath}"
     ;;
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
@@ -94,10 +97,7 @@ case "$1" in
         fastlane beta
     ;;
     *)
-        echo "Unsupported command $1"
+        echo "Unsupported command ${flavor}"
     ;;
 esac
-
-
-
 

@@ -42,5 +42,5 @@ jobs:
       run: "./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}"
     - uses: actions/upload-artifact@v1
       with:
-        name: app-${{ matrix.flavor }}-release-${{steps.buildapk.outputs.appbuildnumber}}.apk
-        path: authpass/build/app/outputs/apk/${{ matrix.flavor }}/release/app-${{ matrix.flavor }}-release.apk
+        name: ${{ steps.buildapk.outputs.outputfilename }}
+        path: authpass/${{ steps.buildapk.outputs.outputpath }}
