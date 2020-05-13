@@ -12,6 +12,7 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
+import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -458,21 +459,17 @@ class _PasswordListContentState extends State<PasswordListContent>
                   title: const Text('Customize …'),
                 ),
                 value: () async {
-                  final groupFilter =
-                      await Navigator.of(context).push(GroupList.route(null));
-                  setState(() {
-                    _groupFilterNotifier.value = GroupFilter(
-                      groups: [
-                        GroupFilterEntry(group: groupFilter, isRecursive: true),
-                      ],
-                      showRecycleBin: false,
-                      showActive: true,
-                      name: 'Group: ${groupFilter.name.get()} '
-                          '(recursive, without deleted)',
-                    );
-                    _filteredEntries = null;
-                    _filterTextEditingController.text = '';
-                  });
+                  final groupFilter = await Navigator.of(context).push(
+                      GroupListFlat.route(
+                          _groupFilter.groups.map((e) => e.group).toSet()));
+                  if (groupFilter == null) {
+                    return;
+                  }
+                  if (groupFilter.isEmpty) {
+                    _groupFilterNotifier.value =
+                        GroupFilter.DEFAULT_GROUP_FILTER;
+                  }
+                  _createGroupFilter(groupFilter);
                 },
               ),
             ];
@@ -490,6 +487,19 @@ class _PasswordListContentState extends State<PasswordListContent>
             item();
           },
           itemBuilder: (context) => [
+            PopupMenuItem(
+              child: ListTile(
+                leading: Icon(Icons.category),
+                title: const Text('Manage Groups'),
+              ),
+              value: () async {
+                final group =
+                    await Navigator.of(context).push(GroupList.route(null));
+                if (group != null) {
+                  _createGroupFilter({group});
+                }
+              },
+            ),
             ...AuthPassAboutDialog.createDefaultPopupMenuItems(
                 context, kdbxBloc.openedFiles),
             PopupMenuItem(
@@ -656,6 +666,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           : _buildFilterAppBar(context),
       body: _allEntries.isEmpty
           ? NoPasswordsEmptyView(
+              listPrefix: listPrefix,
               onPrimaryButtonPressed: () {
                 final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
                 final entry = kdbxBloc.createEntry();
@@ -805,36 +816,66 @@ class _PasswordListContentState extends State<PasswordListContent>
                 ),
     );
   }
+
+  void _createGroupFilter(Set<KdbxGroup> groupFilter) {
+    final name = groupFilter.length == 1
+        ? 'Group: ${groupFilter.first.name.get()}'
+        : 'Custom Filter (${groupFilter.length} Groups)';
+    _groupFilterNotifier.value = GroupFilter(
+      groups: groupFilter
+          .map((g) => GroupFilterEntry(group: g, isRecursive: true))
+          .toList(),
+      showRecycleBin: true,
+      showActive: true,
+      name: name,
+    );
+    _filteredEntries = null;
+    _filterTextEditingController.text = '';
+  }
 }
 
 class NoPasswordsEmptyView extends StatelessWidget {
-  const NoPasswordsEmptyView({Key key, this.onPrimaryButtonPressed})
-      : super(key: key);
+  const NoPasswordsEmptyView({
+    Key key,
+    this.onPrimaryButtonPressed,
+    this.listPrefix,
+  }) : super(key: key);
 
+  final List<Widget> listPrefix;
   final VoidCallback onPrimaryButtonPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('🤗️', style: TextStyle(fontSize: 64)),
-            const SizedBox(height: 16),
-            const Text(
-              'You do not have any password in your database yet.',
-              textAlign: TextAlign.center,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        ...?listPrefix,
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Align(
+              alignment: const Alignment(0, -0.7),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text('🤗️', style: TextStyle(fontSize: 64)),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'You do not have any password in your database yet.',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  PrimaryButton(
+                    child: const Text('Add Password'),
+                    onPressed: onPrimaryButtonPressed,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            PrimaryButton(
-              child: const Text('Add Password'),
-              onPressed: onPrimaryButtonPressed,
-            ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -922,9 +963,7 @@ class PasswordEntryTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
             child: Icon(
               PredefinedIcons.iconFor(vm.entry.icon.get()),
-              color: fgColor ??
-                  vm.fileColor ??
-                  (isDarkTheme ? Colors.white54 : Colors.black45),
+              color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
             ),
           ),
           Expanded(

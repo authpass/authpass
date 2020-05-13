@@ -1,6 +1,8 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
+import 'package:authpass/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -78,18 +80,22 @@ class GroupList extends StatelessWidget {
                 return ListTile(
                   leading: Icon(group.icon),
                   title: Text(group.name),
-                  trailing: IconButton(
-                    icon: Icon(FontAwesomeIcons.solidArrowAltCircleRight),
-                    onPressed: () async {
-                      final result = await Navigator.of(context)
-                          .push(GroupList.route(group.group));
-                      if (result != null) {
-                        Navigator.pop(context, result);
-                      }
-                    },
-                  ),
-                  onTap: () {
-                    Navigator.pop(context, group.group);
+//                  trailing: IconButton(
+//                    icon: Icon(FontAwesomeIcons.solidArrowAltCircleRight),
+//                    onPressed: () async {
+//                      final result = await Navigator.of(context)
+//                          .push(GroupList.route(group.group));
+//                      if (result != null) {
+//                        Navigator.pop(context, result);
+//                      }
+//                    },
+//                  ),
+                  onTap: () async {
+                    final result = await Navigator.of(context)
+                        .push(GroupList.route(group.group));
+                    if (result != null) {
+                      Navigator.of(context).pop(result);
+                    }
                   },
                   onLongPress: () async {
 //                    showModalBottomSheet(context: null, builder: () => )
@@ -99,7 +105,16 @@ class GroupList extends StatelessWidget {
                         title: Text(group.name),
                         children: <Widget>[
                           SimpleDialogOption(
-                            onPressed: () => Navigator.pop(context, 'delete'),
+                            onPressed: () =>
+                                Navigator.of(context).pop('filter'),
+                            child: const ListTile(
+                              leading: Icon(FontAwesomeIcons.filter),
+                              title: Text('Show passwords'),
+                            ),
+                          ),
+                          SimpleDialogOption(
+                            onPressed: () =>
+                                Navigator.of(context).pop('delete'),
                             child: const ListTile(
                               leading: Icon(Icons.delete),
                               title: Text('Delete'),
@@ -123,6 +138,10 @@ class GroupList extends StatelessWidget {
                           ),
                         ),
                       );
+                    } else if (action == 'filter') {
+                      Navigator.of(context).pop(group.group);
+                    } else if (action != null) {
+                      throw StateError('Invalid action $action');
                     }
                   },
                 );
@@ -142,5 +161,243 @@ class GroupList extends StatelessWidget {
             .toList();
     ret.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     return ret;
+  }
+}
+
+class _GroupViewModel {
+  _GroupViewModel(this.kdbxBloc, this.file, this.group, this.level);
+
+  final KdbxBloc kdbxBloc;
+  final KdbxOpenedFile file;
+  final KdbxGroup group;
+  final int level;
+
+  bool get isRoot => group.parent == null;
+
+  IconData get icon => isRoot
+      ? file.fileSource.displayIcon
+      : PredefinedIcons.iconForGroup(group.icon.get());
+
+  String get name =>
+      (isRoot ? file.kdbxFile.body.meta.databaseName.get() : group.name.get())
+          ?.nullIfBlank() ??
+      '(Unnamed)';
+
+  Color get color => file.openedFile.color;
+}
+
+class GroupListFlat extends StatelessWidget {
+  const GroupListFlat({Key key, this.initialSelection}) : super(key: key);
+
+  static MaterialPageRoute<Set<KdbxGroup>> route(Set<KdbxGroup> selection) =>
+      MaterialPageRoute<Set<KdbxGroup>>(
+        settings: const RouteSettings(name: '/group_list_flat/'),
+        builder: (_) => GroupListFlat(initialSelection: selection),
+      );
+
+  final Set<KdbxGroup> initialSelection;
+
+  @override
+  Widget build(BuildContext context) {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final groups = _createViewModel(kdbxBloc, null, null, 0);
+
+    return GroupListFlatContent(
+      groups: groups,
+      initialSelection: initialSelection ?? {},
+    );
+  }
+
+  List<_GroupViewModel> _createViewModel(
+      KdbxBloc kdbxBloc, KdbxOpenedFile file, KdbxGroup group, int depth) {
+    if (file == null || group == null) {
+      return kdbxBloc.openedFiles.values
+          .expand((file) => _createViewModel(
+              kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
+          .toList();
+    } else {
+      return [
+        _GroupViewModel(kdbxBloc, file, group, depth),
+        ...group.groups
+            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
+      ];
+    }
+  }
+}
+
+class GroupListFlatContent extends StatefulWidget {
+  const GroupListFlatContent({
+    Key key,
+    this.groups,
+    @required this.initialSelection,
+  })  : assert(initialSelection != null),
+        super(key: key);
+
+  final Set<KdbxGroup> initialSelection;
+  final List<_GroupViewModel> groups;
+
+  @override
+  _GroupListFlatContentState createState() => _GroupListFlatContentState();
+}
+
+class _GroupListFlatContentState extends State<GroupListFlatContent> {
+  final Set<_GroupViewModel> _groupFilter = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _initSelection();
+  }
+
+  @override
+  void didUpdateWidget(GroupListFlatContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialSelection != widget.initialSelection) {
+      _initSelection();
+    }
+  }
+
+  void _initSelection() {
+    _groupFilter.clear();
+    _groupFilter.addAll(widget.groups
+        .where((element) => widget.initialSelection.contains(element.group)));
+  }
+
+  bool get _allSelected => _groupFilter.length == widget.groups.length;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: const Text('Filter Groups'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(_groupFilter.map((e) => e.group).toSet());
+              }),
+        ],
+      ),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _listHeader();
+          }
+          final group = widget.groups[index - 1];
+          return GroupListTile(
+            group: group,
+            isSelected: _groupFilter.contains(group),
+            onChanged: (value) {
+              setState(() {
+                if (value) {
+                  _groupFilter.add(group);
+                } else {
+                  _groupFilter.remove(group);
+                }
+              });
+            },
+          );
+//        return CheckboxListTile(
+//          value: _groupFilter.contains(group),
+//          controlAffinity: ListTileControlAffinity.leading,
+//          onChanged: (value) {},
+//        );
+        },
+        itemCount: widget.groups.length + 1,
+      ),
+    );
+  }
+
+  Widget _listHeader() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: const Text('Select which Groups to show (recursively)'),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: LinkButton(
+            child: _allSelected
+                ? const Text('Unselect all')
+                : const Text('Select All'),
+            onPressed: () {
+              setState(() {
+                if (_allSelected) {
+                  _groupFilter.clear();
+                } else {
+                  _groupFilter.addAll(widget.groups.map((e) => e));
+                }
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class GroupListTile extends StatelessWidget {
+  const GroupListTile({
+    Key key,
+    @required this.group,
+    @required this.isSelected,
+    @required this.onChanged,
+  })  : assert(group != null),
+        assert(onChanged != null),
+//        assert(isSelected != null),
+        super(key: key);
+
+  static const _levelIndent = 16.0;
+
+  final _GroupViewModel group;
+  final bool isSelected;
+  final void Function(bool selected) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: () {
+        onChanged(!isSelected);
+      },
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: group.level * _levelIndent,
+                  maxWidth: group.level * _levelIndent,
+                  minHeight: 4,
+                  maxHeight: double.infinity,
+                ),
+                child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: ThemeUtil.iconColor(theme, group.color)))),
+            Checkbox(value: isSelected, onChanged: onChanged),
+            Icon(
+              group.icon,
+              size: 24,
+              color: ThemeUtil.iconColor(theme, group.color),
+            ),
+            const SizedBox(width: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(group.name, style: theme.textTheme.subtitle1),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -10,6 +10,8 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
+  - esys_flutter_share (0.0.1):
+    - Flutter
   - file_chooser (0.0.1):
     - Flutter
   - file_picker (0.0.1):
@@ -45,6 +47,7 @@ DEPENDENCIES:
   - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
+  - esys_flutter_share (from `.symlinks/plugins/esys_flutter_share/ios`)
   - file_chooser (from `.symlinks/plugins/file_chooser/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
@@ -75,6 +78,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/biometric_storage/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
+  esys_flutter_share:
+    :path: ".symlinks/plugins/esys_flutter_share/ios"
   file_chooser:
     :path: ".symlinks/plugins/file_chooser/ios"
   file_picker:
@@ -110,6 +115,7 @@ SPEC CHECKSUMS:
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  esys_flutter_share: 403498dab005b36ce1f8d7aff377e81f0621b0b4
   file_chooser: 98943893422baaed80ca2415390aec58f01ea192
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
