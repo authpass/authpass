@@ -43,3 +43,11 @@ see also https://github.com/authpass/authpass/issues
 * [ ] kdbx 4 support (missing argon2) compatibility https://github.com/authpass/authpass/issues/4
 * [x] Android: Auto Fill https://github.com/authpass/authpass/issues/30
 * [ ] iOS: Auto Fill https://github.com/authpass/authpass/issues/31
+
+# Donations
+
+If you like AuthPass check out the [website for ways to support us](https://authpass.app/docs/support-authpass-get-involved/).
+
+* Bitcoin: 3NcBacCmJbYWpwxj6rWzpM7sx48etMrPtc
+* GitHub Sponsor: https://github.com/sponsors/hpoul (Or just hit the *Sponsor* button up top).
+
