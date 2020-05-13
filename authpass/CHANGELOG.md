@@ -1,6 +1,7 @@
 # 1.6.0
 
 * Added support for file attachments/binaries.
+* Filter by groups, show/hide deleted trash items, etc.
 * Fix reading/writing timestamps correctly.
 * Fix compatibility problems with kdbx 4 timestamps.
 * Correctly display modification timestamp in local time zone.
