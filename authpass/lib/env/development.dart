@@ -6,7 +6,7 @@ class Development extends Env {
   Development() : super(EnvType.development);
 
   @override
-  String get storageNamespace => 'development';
+  String get storageNamespace => '${super.storageNamespace ?? ''}development';
 
   @override
   EnvSecrets get secrets => EnvSecrets.nullSecrets;

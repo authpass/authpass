@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:authpass/main.dart';
 import 'package:built_value/built_value.dart';
 import 'package:flutter/services.dart';
@@ -60,6 +62,8 @@ abstract class Env {
     value = this;
   }
 
+  static const _ENV_STORAGE_NAMESPACE = 'AUTHPASS_STORAGE_NAMESPACE';
+
   static Env value;
 
   final EnvType type;
@@ -76,13 +80,16 @@ abstract class Env {
   /// Allows having a "namespace" for different environments.
   /// e.g. for mac os to have a different configuration for
   /// debug build vs. production/app store build.
-  String get storageNamespace => null;
+  String get storageNamespace => _storageNamespaceFromEnvironment;
 
   /// Support for dropbox, google drive.
   bool get featureCloudStorageProprietary => true;
 
   /// Support for WebDAV
   bool get featureCloudStorageWebDav => true;
+
+  String get _storageNamespaceFromEnvironment =>
+      Platform.environment[_ENV_STORAGE_NAMESPACE];
 
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();
