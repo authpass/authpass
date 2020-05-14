@@ -178,6 +178,18 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.theme,
             specifiedType: const FullType(AppDataTheme)));
     }
+    if (object.themeVisualDensity != null) {
+      result
+        ..add('themeVisualDensity')
+        ..add(serializers.serialize(object.themeVisualDensity,
+            specifiedType: const FullType(double)));
+    }
+    if (object.themeFontSizeFactor != null) {
+      result
+        ..add('themeFontSizeFactor')
+        ..add(serializers.serialize(object.themeFontSizeFactor,
+            specifiedType: const FullType(double)));
+    }
     if (object.lastBuildId != null) {
       result
         ..add('lastBuildId')
@@ -226,6 +238,14 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'theme':
           result.theme = serializers.deserialize(value,
               specifiedType: const FullType(AppDataTheme)) as AppDataTheme;
+          break;
+        case 'themeVisualDensity':
+          result.themeVisualDensity = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
+        case 'themeFontSizeFactor':
+          result.themeFontSizeFactor = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
           break;
         case 'lastBuildId':
           result.lastBuildId = serializers.deserialize(value,
@@ -446,6 +466,10 @@ class _$AppData extends AppData {
   @override
   final AppDataTheme theme;
   @override
+  final double themeVisualDensity;
+  @override
+  final double themeFontSizeFactor;
+  @override
   final int lastBuildId;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
@@ -458,6 +482,8 @@ class _$AppData extends AppData {
       this.manualUserType,
       this.firstLaunchedAt,
       this.theme,
+      this.themeVisualDensity,
+      this.themeFontSizeFactor,
       this.lastBuildId})
       : super._() {
     if (previousFiles == null) {
@@ -487,6 +513,8 @@ class _$AppData extends AppData {
         manualUserType == other.manualUserType &&
         firstLaunchedAt == other.firstLaunchedAt &&
         theme == other.theme &&
+        themeVisualDensity == other.themeVisualDensity &&
+        themeFontSizeFactor == other.themeFontSizeFactor &&
         lastBuildId == other.lastBuildId;
   }
 
@@ -497,12 +525,16 @@ class _$AppData extends AppData {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc(0, previousFiles.hashCode),
-                            passwordGeneratorLength.hashCode),
-                        passwordGeneratorCharacterSets.hashCode),
-                    manualUserType.hashCode),
-                firstLaunchedAt.hashCode),
-            theme.hashCode),
+                        $jc(
+                            $jc(
+                                $jc($jc(0, previousFiles.hashCode),
+                                    passwordGeneratorLength.hashCode),
+                                passwordGeneratorCharacterSets.hashCode),
+                            manualUserType.hashCode),
+                        firstLaunchedAt.hashCode),
+                    theme.hashCode),
+                themeVisualDensity.hashCode),
+            themeFontSizeFactor.hashCode),
         lastBuildId.hashCode));
   }
 
@@ -516,6 +548,8 @@ class _$AppData extends AppData {
           ..add('manualUserType', manualUserType)
           ..add('firstLaunchedAt', firstLaunchedAt)
           ..add('theme', theme)
+          ..add('themeVisualDensity', themeVisualDensity)
+          ..add('themeFontSizeFactor', themeFontSizeFactor)
           ..add('lastBuildId', lastBuildId))
         .toString();
   }
@@ -556,6 +590,16 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   AppDataTheme get theme => _$this._theme;
   set theme(AppDataTheme theme) => _$this._theme = theme;
 
+  double _themeVisualDensity;
+  double get themeVisualDensity => _$this._themeVisualDensity;
+  set themeVisualDensity(double themeVisualDensity) =>
+      _$this._themeVisualDensity = themeVisualDensity;
+
+  double _themeFontSizeFactor;
+  double get themeFontSizeFactor => _$this._themeFontSizeFactor;
+  set themeFontSizeFactor(double themeFontSizeFactor) =>
+      _$this._themeFontSizeFactor = themeFontSizeFactor;
+
   int _lastBuildId;
   int get lastBuildId => _$this._lastBuildId;
   set lastBuildId(int lastBuildId) => _$this._lastBuildId = lastBuildId;
@@ -571,6 +615,8 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _manualUserType = _$v.manualUserType;
       _firstLaunchedAt = _$v.firstLaunchedAt;
       _theme = _$v.theme;
+      _themeVisualDensity = _$v.themeVisualDensity;
+      _themeFontSizeFactor = _$v.themeFontSizeFactor;
       _lastBuildId = _$v.lastBuildId;
       _$v = null;
     }
@@ -603,6 +649,8 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               manualUserType: manualUserType,
               firstLaunchedAt: firstLaunchedAt,
               theme: theme,
+              themeVisualDensity: themeVisualDensity,
+              themeFontSizeFactor: themeFontSizeFactor,
               lastBuildId: lastBuildId);
     } catch (_) {
       String _$failedField;

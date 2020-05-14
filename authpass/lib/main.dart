@@ -142,8 +142,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
         debugShowCheckedModeBanner: false,
-        theme: authPassLightTheme,
-        darkTheme: authPassDarkTheme,
+        theme: _customizeTheme(authPassLightTheme, _appData),
+        darkTheme: _customizeTheme(authPassDarkTheme, _appData),
         themeMode: _toThemeMode(_appData?.theme),
 //        themeMode: ThemeMode.light,
         builder: (context, child) {
@@ -154,10 +154,24 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          return Provider.value(
+          final ret = Provider.value(
             value: FormatUtils(locale: locale.toString()),
             child: child,
           );
+          if (_appData?.themeFontSizeFactor != null) {
+            return TweenAnimationBuilder<double>(
+                tween: Tween<double>(
+                    begin: _appData.themeFontSizeFactor,
+                    end: _appData.themeFontSizeFactor),
+                duration: const Duration(milliseconds: 100),
+                builder: (context, value, child) {
+                  return MediaQuery(
+                    data: mq.copyWith(textScaleFactor: value),
+                    child: ret,
+                  );
+                });
+          }
+          return ret;
         },
         onGenerateInitialRoutes: (initialRoute) {
           _logger.fine('initialRoute: $initialRoute');
@@ -194,6 +208,26 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         return ThemeMode.dark;
     }
     throw StateError('Invalid theme $theme');
+  }
+
+  ThemeData _customizeTheme(ThemeData theme, AppData appData) {
+    if (appData == null) {
+      return theme;
+    }
+
+    final visualDensity = appData.themeVisualDensity != null
+        ? VisualDensity(
+            horizontal: appData.themeVisualDensity,
+            vertical: appData.themeVisualDensity)
+        : theme.visualDensity;
+    _logger.fine('appData.themeFontSizeFactor: ${appData.themeFontSizeFactor}');
+//    final textTheme = appData.themeFontSizeFactor != null
+//        ? theme.textTheme.apply(fontSizeFactor: appData.themeFontSizeFactor)
+//        : theme.textTheme;
+    return theme.copyWith(
+      visualDensity: visualDensity,
+//      textTheme: textTheme,
+    );
   }
 }
 

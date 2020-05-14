@@ -74,6 +74,9 @@ class _PreferencesBodyState extends State<PreferencesBody>
 
   @override
   Widget build(BuildContext context) {
+    if (_appData == null) {
+      return const Text('loading');
+    }
     return Column(
       children: <Widget>[
         ...?(_autofillStatus == AutofillServiceStatus.unsupported ||
@@ -145,7 +148,164 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 .update((builder, data) => builder.theme = nextTheme);
           },
         ),
+        ValueSelectorTile(
+          icon: const FaIcon(FontAwesomeIcons.arrowsAltH),
+          title: const Text('Visual Density'),
+          onChanged: (value) {
+            _appDataBloc
+                .update((builder, data) => builder.themeVisualDensity = value);
+          },
+          value: _appData.themeVisualDensity,
+          minValue: -4,
+          maxValue: 4,
+          steps: 16,
+        ),
+        ValueSelectorTile(
+          icon: const FaIcon(FontAwesomeIcons.textHeight),
+          title: const Text('Text Scale Factor'),
+          onChanged: (value) {
+            _appDataBloc
+                .update((builder, data) => builder.themeFontSizeFactor = value);
+          },
+          value: _appData.themeFontSizeFactor,
+          minValue: 0.5,
+          maxValue: 2,
+          valueForNull: 1,
+          steps: 15,
+        ),
       ],
+    );
+  }
+}
+
+class ValueSelectorTile extends StatelessWidget {
+  const ValueSelectorTile({
+    Key key,
+    @required this.value,
+    @required this.minValue,
+    @required this.maxValue,
+    @required this.steps,
+    @required this.onChanged,
+    this.icon,
+    this.title,
+    this.valueForNull = 0,
+  })  : assert(minValue != null),
+        assert(maxValue != null),
+        assert(steps != null),
+        assert(valueForNull != null),
+        super(key: key);
+
+  final Widget icon;
+  final Widget title;
+  final double value;
+  final double valueForNull;
+  final double minValue;
+  final double maxValue;
+  final int steps;
+  final void Function(double value) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final density = theme.visualDensity;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              icon,
+              SizedBox(width: 32 + density.horizontal * 2),
+              Expanded(
+                child: DefaultTextStyle(
+                  style: theme.textTheme.subtitle1,
+                  child: title,
+                ),
+              ),
+              Text(value == null ? 'Default' : value.toStringAsFixed(2)),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              IconButton(
+                icon: const FaIcon(FontAwesomeIcons.minusSquare),
+                onPressed: () => _updateValue(-1),
+              ),
+              IconButton(
+                icon: const FaIcon(FontAwesomeIcons.plusSquare),
+                onPressed: () => _updateValue(1),
+              ),
+              IconButton(
+                icon: const FaIcon(FontAwesomeIcons.times),
+                onPressed: () => onChanged(null),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void _updateValue(int stepDirection) {
+    assert(stepDirection != null);
+    final v = value ?? valueForNull;
+    final valueStep = (maxValue - minValue) / steps;
+    final newValue =
+        (v + valueStep * stepDirection).clamp(minValue, maxValue).toDouble();
+    if (value != newValue) {
+      onChanged(newValue);
+    }
+  }
+}
+
+class SliderSelector extends StatefulWidget {
+  const SliderSelector({
+    Key key,
+    @required this.initialValue,
+    @required this.minValue,
+    @required this.maxValue,
+    @required this.steps,
+    @required this.onChanged,
+  })  : assert(initialValue != null),
+        assert(minValue != null),
+        assert(maxValue != null),
+        assert(steps != null),
+        super(key: key);
+
+  final double initialValue;
+  final double minValue;
+  final double maxValue;
+  final int steps;
+  final void Function(double value) onChanged;
+
+  @override
+  _SliderSelectorState createState() => _SliderSelectorState();
+}
+
+class _SliderSelectorState extends State<SliderSelector> {
+  double _value;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.initialValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Slider(
+      value: _value,
+      min: widget.minValue,
+      max: widget.maxValue,
+      divisions: widget.steps,
+      onChanged: (value) {
+        setState(() {
+          _value = value;
+          widget.onChanged(value);
+        });
+      },
     );
   }
 }
