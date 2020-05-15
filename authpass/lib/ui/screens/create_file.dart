@@ -1,11 +1,11 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
-import 'package:authpass/utils/async_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:provider/provider.dart';
 
 class CreateFile extends StatefulWidget {

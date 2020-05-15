@@ -11,6 +11,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -42,6 +43,14 @@ Future<void> startApp(Env env) async {
         errorDetails.stack);
     _logger.fine(errorDetails.summary.toString());
     Analytics.trackError(errorDetails.summary.toString(), true);
+  };
+
+  FutureTaskStateMixin.defaultShowErrorDialog = (error) {
+    DialogUtils.showErrorDialog(
+      error.context,
+      error.title,
+      error.message,
+    );
   };
 
   await runZonedGuarded<Future<void>>(() async {

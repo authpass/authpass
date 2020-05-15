@@ -337,11 +337,9 @@ packages:
   flutter_async_utils:
     dependency: "direct main"
     description:
-      path: "."
-      ref: b452a5be869fb4f824a20e930cc1756eea6ca90e
-      resolved-ref: b452a5be869fb4f824a20e930cc1756eea6ca90e
-      url: "https://github.com/hpoul/flutter_async_utils.git"
-    source: git
+      name: flutter_async_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   flutter_colorpicker:
     dependency: "direct main"
