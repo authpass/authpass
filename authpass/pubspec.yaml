@@ -23,6 +23,8 @@ dependencies:
       ref: 4c65f09005a1086525ebe2ae004eccdc2dd56fe1
   logging: '>=0.11.3+2 <1.0.0'
   logging_appenders: ^0.4.1
+  diac_client:
+    path: ../deps/diac/diac_client
   file_picker: ^1.6.2
   file_picker_writable: 1.0.1
 #  file_picker_writable:
@@ -31,7 +33,7 @@ dependencies:
 #      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
   json_annotation: ^3.0.1
   built_value: ^7.1.0
-  simple_json_persistence: ^0.2.0
+  simple_json_persistence: ^1.0.0
   provider: ^4.0.4
   http: ^0.12.0+4
   meta: '>=1.0.0 <2.0.0'
@@ -42,7 +44,7 @@ dependencies:
 #  clipboard_manager: ^0.0.4
   quiver: ">=2.0.0 <3.0.0"
   tuple: ^1.0.3
-  flutter_async_utils: 0.0.1
+  flutter_async_utils: ^0.0.1
   flutter_svg: ^0.16.0
   charcode: ^1.1.2 # For flutter 1.15.17 support, we have to keep 1.1.2 (fdroid)
   #usage: ^3.4.1
@@ -50,11 +52,7 @@ dependencies:
     git:
       url: https://github.com/hpoul/usage.git
       ref: custom-user-agent
-  package_info:
-    git:
-      url: https://github.com/hpoul/plugins.git
-      ref: package_info_macos
-      path: packages/package_info
+  package_info: ^0.4.1
 #  package_info: ^0.4.0+13
 #  package_info_macos:
 #    git:
@@ -77,7 +75,7 @@ dependencies:
   uuid: ^2.0.4
   url_launcher: ^5.4.2
   font_awesome_flutter: ^8.8.1
-  rxdart: ^0.23.1
+  rxdart: ^0.24.1
   qr_flutter: ^3.2.0
   otp: ^2.2.0
 
@@ -158,6 +156,13 @@ dependency_overrides:
     git:
       url: https://github.com/authpass/pointycastle.git
       ref: 73dea5d9d441da30bd2c99adc16e5bf98d6c2a43
+  # remove this once package_info 0.4.1 is published.
+  package_info:
+    git:
+      url: https://github.com/hpoul/plugins.git
+      ref: package_info_macos
+      path: packages/package_info
+  rxdart: ^0.24.1
 
 #  url_launcher_fde:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/flutter_plugins/url_launcher_fde

@@ -264,6 +264,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.2+2"
+  diac_client:
+    dependency: "direct main"
+    description:
+      path: "../deps/diac/diac_client"
+      relative: true
+    source: path
+    version: "0.1.0"
   dio:
     dependency: transitive
     description:
@@ -278,6 +285,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  expressions:
+    dependency: transitive
+    description:
+      name: expressions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   ffi:
     dependency: "direct main"
     description:
@@ -398,6 +412,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.8.1"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.1"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -444,7 +465,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+4"
+    version: "0.12.1"
   http_auth:
     dependency: "direct main"
     description:
@@ -814,7 +835,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.23.1"
+    version: "0.24.1"
   shelf:
     dependency: transitive
     description:
@@ -858,7 +879,7 @@ packages:
       name: simple_json_persistence
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -982,7 +1003,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.2"
+    version: "5.4.7"
   url_launcher_macos:
     dependency: transitive
     description:

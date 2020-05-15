@@ -229,7 +229,8 @@ class AppDataBloc {
     (json) => serializers.deserializeWith(AppData.serializer, json),
     defaultCreator: () =>
         AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
-    baseDirectoryBuilder: () => PathUtils().getAppDataDirectory(),
+    storeBackend: createStoreBackend(
+        () async => (await PathUtils().getAppDataDirectory()).path),
   );
 
   static final _uuid = Uuid();

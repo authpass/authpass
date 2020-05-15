@@ -398,7 +398,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             : [
                 Builder(
                   builder: (context) => IconButton(
-                    icon: Icon(Icons.save),
+                    icon: const Icon(Icons.save),
                     onPressed: () async {
                       final scaffold = Scaffold.of(context);
                       final savedFiles = <String>[];
