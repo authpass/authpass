@@ -431,7 +431,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 //          },
 //        ),
         PopupMenuButton<VoidCallback>(
-          icon: Icon(FontAwesomeIcons.filter),
+          icon: const Icon(FontAwesomeIcons.filter),
           onSelected: (value) async {
             value();
             _logger.fine('onchanged - $value');

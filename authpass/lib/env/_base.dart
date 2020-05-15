@@ -38,6 +38,8 @@ class EnvSecrets {
     @required this.googleClientSecret,
     @required this.dropboxKey,
     @required this.dropboxSecret,
+    @required this.microsoftClientId,
+    @required this.microsoftClientSecret,
   });
 
   static const nullSecrets = EnvSecrets(
@@ -47,6 +49,8 @@ class EnvSecrets {
     googleClientSecret: null,
     dropboxKey: null,
     dropboxSecret: null,
+    microsoftClientId: null,
+    microsoftClientSecret: null,
   );
 
   final String analyticsAmplitudeApiKey;
@@ -55,6 +59,8 @@ class EnvSecrets {
   final String googleClientSecret;
   final String dropboxKey;
   final String dropboxSecret;
+  final String microsoftClientId;
+  final String microsoftClientSecret;
 }
 
 abstract class Env {

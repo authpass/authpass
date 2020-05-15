@@ -13,6 +13,8 @@ class FDroid extends Env {
         googleClientSecret: null,
         dropboxKey: null,
         dropboxSecret: null,
+        microsoftClientId: null,
+        microsoftClientSecret: null,
       );
 
   @override
