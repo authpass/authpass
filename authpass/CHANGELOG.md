@@ -1,3 +1,8 @@
+# 1.6.1
+
+* Allow customizing of visual density and font scale.
+* TOTP: Disable OTP secret padding
+
 # 1.6.0
 
 * Added support for file attachments/binaries.

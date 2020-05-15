@@ -1173,6 +1173,8 @@ class _OtpEntryFieldState extends _EntryFieldState {
         algorithm: otpAuth.algorithm,
         length: otpAuth.digits,
         interval: otpAuth.period,
+        // do not pad OTP secret if it is not of correct length.
+        isGoogle: true,
       );
       setState(() {
         _elapsed = (now ~/ 1000) % otpAuth.period;

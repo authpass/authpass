@@ -1,7 +1,7 @@
 name: authpass
 description: Password Manager with support for kdbx 3.x and 4.x
 
-version: 1.6.0+133
+version: 1.6.1+134
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -82,7 +82,7 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   rxdart: ^0.23.1
   qr_flutter: ^3.2.0
-  otp: ^2.1.0
+  otp: ^2.2.0
 
   # WebDAV
   http_auth: ^0.2.9
