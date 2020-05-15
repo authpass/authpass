@@ -15,6 +15,7 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:diac_client/diac_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -116,11 +117,25 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   @override
   Widget build(BuildContext context) {
     // TODO generate localizations.
-    _logger.fine(
-        'Building AuthPass App state. route: ${WidgetsBinding.instance.window.defaultRouteName}');
+    _logger.fine('Building AuthPass App state. route: '
+        '${WidgetsBinding.instance.window.defaultRouteName}');
     final authPassLocalizations = AuthPassLocalizations();
     return MultiProvider(
       providers: [
+        Provider<DiacBloc>(
+          create: (context) => DiacBloc(
+            opts: DiacOpts(
+              endpointUrl: _deps.env.diacEndpoint,
+              disableConfigFetch: _deps.env.diacDefaultDisableConfigFetch,
+              // always reload after a new start.
+              refetchIntervalCold: Duration.zero,
+            ),
+            contextBuilder: () async => {
+              'env': <String, Object>{'isDebug': _deps.env.isDebug},
+            },
+          ),
+          dispose: (context, diac) => diac.dispose(),
+        ),
         Provider<Env>.value(value: _deps.env),
         Provider<Deps>.value(value: _deps),
         Provider<Analytics>.value(value: _deps.analytics),

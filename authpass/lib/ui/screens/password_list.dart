@@ -14,6 +14,7 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
+import 'package:diac_client/diac_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -658,6 +659,11 @@ class _PasswordListContentState extends State<PasswordListContent>
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),
     ];
+    if (listPrefix.isEmpty) {
+      listPrefix.add(DiacMaterialBanner(
+        diac: Provider.of<DiacBloc>(context),
+      ));
+    }
     final theme = Theme.of(context);
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(
