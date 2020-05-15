@@ -15,4 +15,4 @@
 	url = ../package_info_macos
 [submodule "deps/diac"]
 	path = deps/diac
-	url = git@github.com:hpoul/diac.git
+	url = ../../hpoul/diac
