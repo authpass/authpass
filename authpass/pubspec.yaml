@@ -77,7 +77,11 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   rxdart: ^0.24.1
   qr_flutter: ^3.2.0
-  otp: ^2.2.0
+#  otp: ^2.2.0
+  otp:
+    git:
+      url: https://github.com/authpass/dart-otp.git
+      ref: 326819e6d3ee99fe70916d39eb6f677a117a1add
 
   # WebDAV
   http_auth: ^0.2.9
@@ -121,6 +125,7 @@ dependencies:
 
   # Plugins
   #flutter_barcode_scanner: ^0.1.7
+#  barcode_scan: ^3.0.1 <-- not working (protobuf damnit)
   barcode_scan:
     git:
       url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git

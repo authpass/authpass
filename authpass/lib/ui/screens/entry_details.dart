@@ -25,7 +25,7 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan/barcode_scan.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -513,10 +513,19 @@ class _EntryDetailsState extends State<EntryDetails>
         _logger.finer('Opening barcode scanner.');
 //        final barcode = await FlutterBarcodeScanner.scanBarcode(
 //            '#ff6666', 'Cancel', true, ScanMode.QR);
-        final barcode = await BarcodeScanner.scan();
-        if (barcode != null) {
-          return _cleanOtpCodeCode(barcode);
+
+        final barcodeResult = await barcode.BarcodeScanner.scan();
+        if (barcodeResult != null) {
+          return _cleanOtpCodeCode(barcodeResult);
         }
+
+//        final scanResult = await barcode.BarcodeScanner.scan();
+//        _logger.fine('Got scan result of type ${scanResult.type} -'
+//            ' ${scanResult.format} (${scanResult.formatNote})');
+//        if (scanResult != null &&
+//            scanResult.type == barcode.ResultType.Barcode) {
+//          return _cleanOtpCodeCode(scanResult.rawContent);
+//        }
       } catch (e, stackTrace) {
         _logger.warning('Error during barcode scanning.', e, stackTrace);
       }
@@ -690,7 +699,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
           ),
           Offset.zero & overlay.size,
         );
-        final commonFields = Provider.of<CommonFields>(context);
+        final commonFields = Provider.of<CommonFields>(context, listen: false);
         final custom = CommonField(
           displayName: 'Custom Field',
           key: '__custom',
@@ -999,7 +1008,8 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
       ];
 
   Future<void> _generatePassword() async {
-    final appData = await Provider.of<AppDataBloc>(context).store.load();
+    final appData =
+        await Provider.of<AppDataBloc>(context, listen: false).store.load();
     final characterSets = CharacterSet.characterSetFromIds(
         appData.passwordGeneratorCharacterSets);
     if (characterSets.isEmpty) {
@@ -1037,7 +1047,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
 
   Future<bool> copyValue() async {
     _highlightWidgetKey.currentState.triggerHighlight();
-    Provider.of<Analytics>(context)
+    Provider.of<Analytics>(context, listen: false)
         .events
         .trackCopyField(key: widget.fieldKey.key);
     await Clipboard.setData(ClipboardData(text: _valueCurrent ?? ''));
@@ -1212,7 +1222,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
   Future<bool> copyValue() async {
     _logger.finer('Copying OTP value.');
     _highlightWidgetKey.currentState.triggerHighlight();
-    Provider.of<Analytics>(context)
+    Provider.of<Analytics>(context, listen: false)
         .events
         .trackCopyField(key: widget.fieldKey.key);
     await Clipboard.setData(ClipboardData(text: _currentOtp ?? ''));

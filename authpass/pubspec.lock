@@ -646,10 +646,12 @@ packages:
   otp:
     dependency: "direct main"
     description:
-      name: otp
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.0"
+      path: "."
+      ref: "326819e6d3ee99fe70916d39eb6f677a117a1add"
+      resolved-ref: "326819e6d3ee99fe70916d39eb6f677a117a1add"
+      url: "https://github.com/authpass/dart-otp.git"
+    source: git
+    version: "2.2.0+1"
   package_config:
     dependency: transitive
     description:
