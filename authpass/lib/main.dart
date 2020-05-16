@@ -133,7 +133,15 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             contextBuilder: () async => {
               'env': <String, Object>{'isDebug': _deps.env.isDebug},
             },
-          ),
+          )..events.listen((event) {
+              _deps.analytics.trackGenericEvent(
+                'diac',
+                event is DiacEventDismissed
+                    ? 'dismissed:${event.action?.key}'
+                    : event.type.toStringBare(),
+                label: event.message.key,
+              );
+            }),
           dispose: (context, diac) => diac.dispose(),
         ),
         Provider<Env>.value(value: _deps.env),

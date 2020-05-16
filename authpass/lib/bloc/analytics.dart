@@ -140,6 +140,16 @@ class Analytics {
     });
   }
 
+  void trackGenericEvent(String category, String action,
+          {String label, int value, Map<String, String> parameters}) =>
+      _sendEvent(
+        category,
+        action,
+        label: label,
+        value: value,
+        parameters: parameters,
+      );
+
   void _sendEvent(String category, String action,
       {String label, int value, Map<String, String> parameters}) {
     _requireGa((ga) {
