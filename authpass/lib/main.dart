@@ -19,7 +19,9 @@ import 'package:diac_client/diac_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -131,12 +133,32 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               refetchIntervalCold: Duration.zero,
             ),
             contextBuilder: () async => {
-              'env': <String, Object>{'isDebug': _deps.env.isDebug},
+              'env': <String, Object>{
+                'isDebug': _deps.env.isDebug,
+                'isGoogleStore':
+                    (await PackageInfo.fromPlatform()).packageName ==
+                            'design.codeux.authpass' &&
+                        Platform.isAndroid,
+                'isIOS': Platform.isIOS,
+                'isAndroid': Platform.isAndroid,
+                'operatingSystem': Platform.operatingSystem,
+              },
+            },
+            customActions: {
+              'launchReview': (event) async {
+                _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
+                return await FlutterStoreListing().launchStoreListing();
+              },
+              'requestReview': (event) async {
+                _deps.analytics.trackGenericEvent('review', 'reviewRequest');
+                return await FlutterStoreListing()
+                    .launchRequestReview(onlyNative: true);
+              },
             },
           )..events.listen((event) {
               _deps.analytics.trackGenericEvent(
                 'diac',
-                event is DiacEventDismissed
+                event is DiacEventWithAction
                     ? 'dismissed:${event.action?.key}'
                     : event.type.toStringBare(),
                 label: event.message.key,

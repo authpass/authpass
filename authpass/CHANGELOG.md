@@ -1,7 +1,7 @@
 # 1.6.1
 
 * Allow customizing of visual density and font scale.
-* TOTP: Disable OTP secret padding
+* TOTP: Disable OTP secret padding (makes it more compatible with e.g. GitHub, Amazon, etc.)
 * TOTP: Fix barcode scanner (missing camera permissions)
 
 # 1.6.0

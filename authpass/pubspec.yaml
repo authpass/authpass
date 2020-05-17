@@ -68,6 +68,7 @@ dependencies:
   flutter_colorpicker: ^0.2.6
   flutter_speed_dial: ^1.2.5
   flutter_email_sender: ^3.0.1
+  flutter_store_listing: ^0.1.1+2
 
   biometric_storage: ^0.3.4+4
 #  biometric_storage:
