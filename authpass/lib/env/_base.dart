@@ -75,7 +75,7 @@ abstract class Env {
   final EnvType type;
   EnvSecrets get secrets;
 
-  String get diacEndpoint => 'https://cloud.authpass.app/diac/';
+  String get diacEndpoint => 'https://cloud.authpass.app/diac';
   bool get diacDefaultDisableConfigFetch => false;
 
   Future<void> start() async {

@@ -2,6 +2,7 @@
 
 * Allow customizing of visual density and font scale.
 * TOTP: Disable OTP secret padding
+* TOTP: Fix barcode scanner (missing camera permissions)
 
 # 1.6.0
 

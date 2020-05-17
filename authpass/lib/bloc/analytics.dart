@@ -120,8 +120,6 @@ class Analytics {
       labelParams.sort();
 
       final label = labelParams.join(',');
-      _logger
-          .finer('event($event, $eventParams, value=$value) - label: $label');
 //      _amplitude?.logEvent(name: event, properties: params);
       _sendEvent(
         category,
@@ -152,6 +150,8 @@ class Analytics {
 
   void _sendEvent(String category, String action,
       {String label, int value, Map<String, String> parameters}) {
+    _logger.finer(
+        'event($category, $action, $label, $value) - parameters: $parameters');
     _requireGa((ga) {
       ga.sendEvent(category, action,
           label: label, value: value, parameters: parameters);
