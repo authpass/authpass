@@ -190,6 +190,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.themeFontSizeFactor,
             specifiedType: const FullType(double)));
     }
+    if (object.diacOptIn != null) {
+      result
+        ..add('diacOptIn')
+        ..add(serializers.serialize(object.diacOptIn,
+            specifiedType: const FullType(bool)));
+    }
     if (object.lastBuildId != null) {
       result
         ..add('lastBuildId')
@@ -246,6 +252,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'themeFontSizeFactor':
           result.themeFontSizeFactor = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
+          break;
+        case 'diacOptIn':
+          result.diacOptIn = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'lastBuildId':
           result.lastBuildId = serializers.deserialize(value,
@@ -470,6 +480,8 @@ class _$AppData extends AppData {
   @override
   final double themeFontSizeFactor;
   @override
+  final bool diacOptIn;
+  @override
   final int lastBuildId;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
@@ -484,6 +496,7 @@ class _$AppData extends AppData {
       this.theme,
       this.themeVisualDensity,
       this.themeFontSizeFactor,
+      this.diacOptIn,
       this.lastBuildId})
       : super._() {
     if (previousFiles == null) {
@@ -515,6 +528,7 @@ class _$AppData extends AppData {
         theme == other.theme &&
         themeVisualDensity == other.themeVisualDensity &&
         themeFontSizeFactor == other.themeFontSizeFactor &&
+        diacOptIn == other.diacOptIn &&
         lastBuildId == other.lastBuildId;
   }
 
@@ -527,14 +541,16 @@ class _$AppData extends AppData {
                     $jc(
                         $jc(
                             $jc(
-                                $jc($jc(0, previousFiles.hashCode),
-                                    passwordGeneratorLength.hashCode),
-                                passwordGeneratorCharacterSets.hashCode),
-                            manualUserType.hashCode),
-                        firstLaunchedAt.hashCode),
-                    theme.hashCode),
-                themeVisualDensity.hashCode),
-            themeFontSizeFactor.hashCode),
+                                $jc(
+                                    $jc($jc(0, previousFiles.hashCode),
+                                        passwordGeneratorLength.hashCode),
+                                    passwordGeneratorCharacterSets.hashCode),
+                                manualUserType.hashCode),
+                            firstLaunchedAt.hashCode),
+                        theme.hashCode),
+                    themeVisualDensity.hashCode),
+                themeFontSizeFactor.hashCode),
+            diacOptIn.hashCode),
         lastBuildId.hashCode));
   }
 
@@ -550,6 +566,7 @@ class _$AppData extends AppData {
           ..add('theme', theme)
           ..add('themeVisualDensity', themeVisualDensity)
           ..add('themeFontSizeFactor', themeFontSizeFactor)
+          ..add('diacOptIn', diacOptIn)
           ..add('lastBuildId', lastBuildId))
         .toString();
   }
@@ -600,6 +617,10 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set themeFontSizeFactor(double themeFontSizeFactor) =>
       _$this._themeFontSizeFactor = themeFontSizeFactor;
 
+  bool _diacOptIn;
+  bool get diacOptIn => _$this._diacOptIn;
+  set diacOptIn(bool diacOptIn) => _$this._diacOptIn = diacOptIn;
+
   int _lastBuildId;
   int get lastBuildId => _$this._lastBuildId;
   set lastBuildId(int lastBuildId) => _$this._lastBuildId = lastBuildId;
@@ -617,6 +638,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _theme = _$v.theme;
       _themeVisualDensity = _$v.themeVisualDensity;
       _themeFontSizeFactor = _$v.themeFontSizeFactor;
+      _diacOptIn = _$v.diacOptIn;
       _lastBuildId = _$v.lastBuildId;
       _$v = null;
     }
@@ -651,6 +673,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               theme: theme,
               themeVisualDensity: themeVisualDensity,
               themeFontSizeFactor: themeFontSizeFactor,
+              diacOptIn: diacOptIn,
               lastBuildId: lastBuildId);
     } catch (_) {
       String _$failedField;

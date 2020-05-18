@@ -7,6 +7,7 @@ import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/env/fdroid.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
@@ -16,12 +17,16 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:diac_client/diac_client.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flushbar/flushbar_helper.dart';
+import 'package:flushbar/flushbar_route.dart' as flushbarRoute;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info/package_info.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -37,7 +42,7 @@ Future<void> startApp(Env env) async {
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(
-      'Initialized logger. (${Platform.operatingSystem}, ${Platform.operatingSystemVersion}');
+      'Initialized logger. (${Platform.operatingSystem}, ${Platform.operatingSystemVersion})');
 
   FlutterError.onError = (errorDetails) {
     _logger.shout(
@@ -99,6 +104,7 @@ class AuthPassApp extends StatefulWidget {
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Deps _deps;
   AppData _appData;
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -125,45 +131,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     return MultiProvider(
       providers: [
         Provider<DiacBloc>(
-          create: (context) => DiacBloc(
-            opts: DiacOpts(
-              endpointUrl: _deps.env.diacEndpoint,
-              disableConfigFetch: _deps.env.diacDefaultDisableConfigFetch,
-              // always reload after a new start.
-              refetchIntervalCold: Duration.zero,
-            ),
-            contextBuilder: () async => {
-              'env': <String, Object>{
-                'isDebug': _deps.env.isDebug,
-                'isGoogleStore':
-                    (await PackageInfo.fromPlatform()).packageName ==
-                            'design.codeux.authpass' &&
-                        Platform.isAndroid,
-                'isIOS': Platform.isIOS,
-                'isAndroid': Platform.isAndroid,
-                'operatingSystem': Platform.operatingSystem,
-              },
-            },
-            customActions: {
-              'launchReview': (event) async {
-                _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
-                return await FlutterStoreListing().launchStoreListing();
-              },
-              'requestReview': (event) async {
-                _deps.analytics.trackGenericEvent('review', 'reviewRequest');
-                return await FlutterStoreListing()
-                    .launchRequestReview(onlyNative: true);
-              },
-            },
-          )..events.listen((event) {
-              _deps.analytics.trackGenericEvent(
-                'diac',
-                event is DiacEventWithAction
-                    ? 'dismissed:${event.action?.key}'
-                    : event.type.toStringBare(),
-                label: event.message.key,
-              );
-            }),
+          create: (context) => _createDiacBloc(),
           dispose: (context, diac) => diac.dispose(),
         ),
         Provider<Env>.value(value: _deps.env),
@@ -195,6 +163,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       child: MaterialApp(
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
+        navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
@@ -208,10 +177,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          final ret = Provider.value(
+          final ret = AppWrapper(
+              child: Provider.value(
             value: FormatUtils(locale: locale.toString()),
             child: child,
-          );
+          ));
           if (_appData?.themeFontSizeFactor != null) {
             return TweenAnimationBuilder<double>(
                 tween: Tween<double>(
@@ -227,26 +197,26 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           }
           return ret;
         },
-        onGenerateInitialRoutes: (initialRoute) {
-          _logger.fine('initialRoute: $initialRoute');
-          _deps.analytics.trackScreen(initialRoute);
-          if (initialRoute.startsWith('/openFile')) {
-            final uri = Uri.parse(initialRoute);
-            final file = uri.queryParameters['file'];
-            _logger.finer('uri: $uri /// file: $file');
-            return [
-//              MaterialPageRoute<void>(
-//                  builder: (context) => const SelectFileScreen()),
-              CredentialsScreen.route(
-                  FileSourceLocal(File(file), uuid: AppDataBloc.createUuid())),
-            ];
-          }
-          return [
-            MaterialPageRoute<void>(
-                builder: (context) => const SelectFileScreen())
-          ];
-        },
-//        home: const SelectFileScreen(),
+//        onGenerateInitialRoutes: (initialRoute) {
+//          _logger.fine('initialRoute: $initialRoute');
+//          _deps.analytics.trackScreen(initialRoute);
+//          if (initialRoute.startsWith('/openFile')) {
+//            final uri = Uri.parse(initialRoute);
+//            final file = uri.queryParameters['file'];
+//            _logger.finer('uri: $uri /// file: $file');
+//            return [
+////              MaterialPageRoute<void>(
+////                  builder: (context) => const SelectFileScreen()),
+//              CredentialsScreen.route(
+//                  FileSourceLocal(File(file), uuid: AppDataBloc.createUuid())),
+//            ];
+//          }
+//          return [
+//            MaterialPageRoute<void>(
+//                builder: (context) => const SelectFileScreen())
+//          ];
+//        },
+        home: const SelectFileScreen(),
       ),
     );
   }
@@ -283,6 +253,93 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 //      textTheme: textTheme,
     );
   }
+
+  DiacBloc _createDiacBloc() {
+    final disableOnlineMessages =
+        _deps.env.diacDefaultDisabled && _appData.diacOptIn != true;
+    _logger.finest('_createDiacBloc: $disableOnlineMessages = '
+        '${_deps.env.diacDefaultDisabled} && ${_appData.diacOptIn}');
+    return DiacBloc(
+      opts: DiacOpts(
+          endpointUrl: _deps.env.diacEndpoint,
+          disableConfigFetch: disableOnlineMessages,
+          // always reload after a new start.
+          refetchIntervalCold: Duration.zero,
+          initialConfig: !disableOnlineMessages
+              ? null
+              : DiacConfig(updatedAt: DateTime(2020, 5, 18), messages: [
+                  DiacMessage(
+                    uuid: 'e7373fa7-a793-4ed5-a2d1-d0a037ad778a',
+                    body:
+                        'Hello ${widget.env is FDroid ? 'F-Droid user' : 'there'}, thanks for using AuthPass! '
+                        'I would love to occasionally display relevant news, surveys, etc (like this one ;), '
+                        'no ads, spam, etc). You can disable it anytime.',
+                    key: 'ask-opt-in',
+                    expression: 'user.days > 0',
+                    actions: const [
+                      DiacMessageAction(
+                        key: 'yes',
+                        label: '👍️ Yes, Opt In',
+                        url: 'diac:diacOptIn',
+                      ),
+                      DiacMessageAction(
+                        key: 'no',
+                        label: 'No, Sorry',
+                        url: 'diac:diacNoOptIn',
+                      ),
+                    ],
+                  ),
+                ])),
+      contextBuilder: () async => {
+        'env': <String, Object>{
+          'isDebug': _deps.env.isDebug,
+          'isGoogleStore': (await PackageInfo.fromPlatform()).packageName ==
+                  'design.codeux.authpass' &&
+              Platform.isAndroid,
+          'isIOS': Platform.isIOS,
+          'isAndroid': Platform.isAndroid,
+          'operatingSystem': Platform.operatingSystem,
+        },
+      },
+      customActions: {
+        'launchReview': (event) async {
+          _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
+          return await FlutterStoreListing().launchStoreListing();
+        },
+        'requestReview': (event) async {
+          _deps.analytics.trackGenericEvent('review', 'reviewRequest');
+          return await FlutterStoreListing()
+              .launchRequestReview(onlyNative: true);
+        },
+        'diacOptIn': (event) async {
+          final flushbar = FlushbarHelper.createSuccess(message: 'Thanks! 🎉️');
+          final route = flushbarRoute.showFlushbar<void>(
+              context: context, flushbar: flushbar);
+          unawaited(_navigatorKey.currentState?.push<void>(route));
+          await _deps.appDataBloc
+              .update((builder, data) => builder.diacOptIn = true);
+          return true;
+        },
+        'diacNoOptIn': (event) async {
+          final flushbar = FlushbarHelper.createInformation(
+              message: '😢️ Too bad, if you ever change your mind, '
+                  'check out the preferences 🙏️.');
+          final route = flushbarRoute.showFlushbar<void>(
+              context: context, flushbar: flushbar);
+          await _navigatorKey.currentState?.push<void>(route);
+          return true;
+        }
+      },
+    )..events.listen((event) {
+        _deps.analytics.trackGenericEvent(
+          'diac',
+          event is DiacEventWithAction
+              ? 'dismissed:${event.action?.key}'
+              : event.type.toStringBare(),
+          label: event.message.key,
+        );
+      });
+  }
 }
 
 class AnalyticsNavigatorObserver extends NavigatorObserver {
@@ -318,5 +375,34 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
     if (screenName != null) {
       analytics.trackScreen(screenName);
     }
+  }
+}
+
+class AppWrapper extends StatefulWidget {
+  const AppWrapper({Key key, this.child}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  _AppWrapperState createState() => _AppWrapperState();
+}
+
+class _AppWrapperState extends State<AppWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    FilePickerWritable().init(openFileHandler: (fileInfo) {
+      _logger.fine('got a new fileInfo: $fileInfo');
+      Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(
+        fileInfo.file,
+        uuid: AppDataBloc.createUuid(),
+        filePickerIdentifier: fileInfo.toJsonString(),
+      )));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

@@ -193,6 +193,9 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   @nullable
   double get themeFontSizeFactor;
 
+  @nullable
+  bool get diacOptIn;
+
   /// remember which build id was used, so we might be
   /// able to show a changelog in the future..
   @nullable

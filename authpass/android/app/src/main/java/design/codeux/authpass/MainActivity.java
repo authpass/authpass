@@ -7,9 +7,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.mr.flutter.plugin.filepicker.FilePickerDelegate;
-import com.mr.flutter.plugin.filepicker.FileUtils;
-
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.android.SplashScreen;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -45,19 +42,20 @@ public class MainActivity extends FlutterFragmentActivity {
         });
     }
 
-    @NonNull
-    @Override
-    protected String getInitialRoute() {
-        Uri data = getIntent().getData();
-        if (data != null) {
-            String filePath = FileUtils.getPath(data, this);
-            if (filePath == null) {
-                filePath = FileUtils.getUriFromRemote(this, data);
-            }
-            String initialRoute = "/openFile?file=" + Uri.encode(filePath);
-            Log.i(TAG, "Got intent data: " + data + ", initialRoute: " + initialRoute);
-            return initialRoute;
-        }
-        return super.getInitialRoute();
-    }
+//    no longer required, handled by FilePickerWritable plugin.
+//    @NonNull
+//    @Override
+//    protected String getInitialRoute() {
+//        Uri data = getIntent().getData();
+//        if (data != null) {
+//            String filePath = FileUtils.getPath(data, this);
+//            if (filePath == null) {
+//                filePath = FileUtils.getUriFromRemote(this, data);
+//            }
+//            String initialRoute = "/openFile?file=" + Uri.encode(filePath);
+//            Log.i(TAG, "Got intent data: " + data + ", initialRoute: " + initialRoute);
+//            return initialRoute;
+//        }
+//        return super.getInitialRoute();
+//    }
 }

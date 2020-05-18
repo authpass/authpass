@@ -76,7 +76,9 @@ abstract class Env {
   EnvSecrets get secrets;
 
   String get diacEndpoint => 'https://cloud.authpass.app/diac';
-  bool get diacDefaultDisableConfigFetch => false;
+
+  /// whether diac is disabled by default, and only enabled through opt-in.
+  bool get diacDefaultDisabled => false;
 
   Future<void> start() async {
     await startApp(this);

@@ -1,5 +1,6 @@
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
     if (_appData == null) {
       return const Text('loading');
     }
+    final env = Provider.of<Env>(context);
     return Column(
       children: <Widget>[
         ...?(_autofillStatus == AutofillServiceStatus.unsupported ||
@@ -173,6 +175,19 @@ class _PreferencesBodyState extends State<PreferencesBody>
           valueForNull: 1,
           steps: 15,
         ),
+        ...?!env.diacDefaultDisabled
+            ? null
+            : [
+                SwitchListTile(
+                    title: const Text('Opt in to in app news, surveys.'),
+                    subtitle: const Text(
+                        'Will occasionally send a network request to fetch news.'),
+                    value: _appData.diacOptIn == true,
+                    onChanged: (value) {
+                      _appDataBloc
+                          .update((builder, data) => builder.diacOptIn = value);
+                    }),
+              ],
       ],
     );
   }

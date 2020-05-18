@@ -19,4 +19,7 @@ class FDroid extends Env {
 
   @override
   bool get featureCloudStorageProprietary => false;
+
+  @override
+  bool get diacDefaultDisabled => true;
 }
