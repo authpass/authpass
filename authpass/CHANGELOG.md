@@ -3,6 +3,7 @@
 * Allow customizing of visual density and font scale.
 * TOTP: Disable OTP secret padding (makes it more compatible with e.g. GitHub, Amazon, etc.)
 * TOTP: Fix barcode scanner (missing camera permissions)
+* Android, iOS: Support for Microsoft OneDrive (#71)
 
 # 1.6.0
 
