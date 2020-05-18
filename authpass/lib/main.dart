@@ -197,26 +197,30 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           }
           return ret;
         },
-//        onGenerateInitialRoutes: (initialRoute) {
-//          _logger.fine('initialRoute: $initialRoute');
-//          _deps.analytics.trackScreen(initialRoute);
-//          if (initialRoute.startsWith('/openFile')) {
-//            final uri = Uri.parse(initialRoute);
-//            final file = uri.queryParameters['file'];
-//            _logger.finer('uri: $uri /// file: $file');
-//            return [
-////              MaterialPageRoute<void>(
-////                  builder: (context) => const SelectFileScreen()),
-//              CredentialsScreen.route(
-//                  FileSourceLocal(File(file), uuid: AppDataBloc.createUuid())),
-//            ];
-//          }
-//          return [
-//            MaterialPageRoute<void>(
-//                builder: (context) => const SelectFileScreen())
-//          ];
-//        },
-        home: const SelectFileScreen(),
+        onGenerateInitialRoutes: (initialRoute) {
+          _logger.fine('initialRoute: $initialRoute');
+          _deps.analytics.trackScreen(initialRoute);
+          if (initialRoute.startsWith('/openFile')) {
+            final uri = Uri.parse(initialRoute);
+            final file = uri.queryParameters['file'];
+            _logger.finer('uri: $uri /// file: $file');
+            return [
+//              MaterialPageRoute<void>(
+//                  builder: (context) => const SelectFileScreen()),
+              CredentialsScreen.route(
+                  FileSourceLocal(File(file), uuid: AppDataBloc.createUuid())),
+            ];
+          }
+          return [
+            MaterialPageRoute<void>(
+                builder: (context) => const SelectFileScreen())
+          ];
+        },
+        // this is actually never used. But i still have to define it,
+        // because of https://github.com/flutter/flutter/blob/f64f6e2b6bf5802f23d6a0e3896541b213be490a/packages/flutter/lib/src/widgets/app.dart#L226-L243
+        // (defining a navigatorKey requires defining a `routes`)
+        routes: {'/open': (context) => const SelectFileScreen()},
+//        home: const SelectFileScreen(),
       ),
     );
   }
