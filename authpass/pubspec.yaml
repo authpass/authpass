@@ -79,11 +79,7 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   rxdart: ^0.24.1
   qr_flutter: ^3.2.0
-#  otp: ^2.2.0
-  otp:
-    git:
-      url: https://github.com/authpass/dart-otp.git
-      ref: 326819e6d3ee99fe70916d39eb6f677a117a1add
+  otp: ^2.2.1
 
   # WebDAV
   http_auth: ^0.2.9
