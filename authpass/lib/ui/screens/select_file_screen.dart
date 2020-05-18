@@ -14,7 +14,6 @@ import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -257,14 +256,14 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           ),
                         ));
                       }
-                    } else if (Platform.isIOS || Platform.isAndroid) {
-                      final path =
-                          await FilePicker.getFilePath(type: FileType.any);
-                      if (path != null) {
-                        await Navigator.of(context).push(
-                            CredentialsScreen.route(FileSourceLocal(File(path),
-                                uuid: AppDataBloc.createUuid())));
-                      }
+//                    } else if (Platform.isIOS || Platform.isAndroid) {
+//                      final path =
+//                          await FilePicker.getFilePath(type: FileType.any);
+//                      if (path != null) {
+//                        await Navigator.of(context).push(
+//                            CredentialsScreen.route(FileSourceLocal(File(path),
+//                                uuid: AppDataBloc.createUuid())));
+//                      }
                     } else {
                       showOpenPanel((result, paths) async {
                         if (result == FileChooserResult.ok) {
@@ -689,10 +688,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   onPressed: () async {
                     _invalidPassword = null;
                     if (Platform.isIOS || Platform.isAndroid) {
-                      final path =
-                          await FilePicker.getFilePath(type: FileType.any);
+                      final path = await FilePickerWritable().openFilePicker();
                       setState(() {
-                        _keyFile = path == null ? null : File(path);
+                        _keyFile = path == null ? null : path.file;
                       });
                     } else {
                       showOpenPanel((result, paths) async {

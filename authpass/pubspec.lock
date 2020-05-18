@@ -322,13 +322,6 @@ packages:
       url: "https://github.com/hpoul/flutter-desktop-embedding.git"
     source: git
     version: "0.0.1"
-  file_picker:
-    dependency: "direct main"
-    description:
-      name: file_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.6.2"
   file_picker_writable:
     dependency: "direct main"
     description:
@@ -374,13 +367,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.6"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -570,7 +556,7 @@ packages:
       name: logging_appenders
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1"
+    version: "0.4.2+2"
   macos_secure_bookmarks:
     dependency: "direct main"
     description:

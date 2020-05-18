@@ -22,10 +22,10 @@ dependencies:
       path: packages/simple_form_field_validator
       ref: 4c65f09005a1086525ebe2ae004eccdc2dd56fe1
   logging: '>=0.11.3+2 <1.0.0'
-  logging_appenders: ^0.4.1
+  logging_appenders: ^0.4.2+2
   diac_client:
     path: ../deps/diac/diac_client
-  file_picker: ^1.6.2
+#  file_picker: ^1.6.2
   file_picker_writable: 1.0.1
 #  file_picker_writable:
 #    git:
