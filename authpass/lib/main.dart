@@ -120,6 +120,27 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         });
       }
     }));
+    FilePickerWritable().init(openFileHandler: (fileInfo) {
+      _logger.fine('got a new fileInfo: $fileInfo');
+      final openRoute = () async {
+        var i = 0;
+        while (_navigatorKey.currentState == null) {
+          _logger.finest('No navigator yet. waiting. $i');
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+          if (i++ > 100) {
+            _logger.warning('Giving up $fileInfo');
+            return;
+          }
+        }
+        await _navigatorKey.currentState
+            .push(CredentialsScreen.route(FileSourceLocal(
+          fileInfo.file,
+          uuid: AppDataBloc.createUuid(),
+          filePickerIdentifier: fileInfo.toJsonString(),
+        )));
+      };
+      openRoute();
+    });
   }
 
   @override
@@ -177,11 +198,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          final ret = AppWrapper(
-              child: Provider.value(
+          final ret = Provider.value(
             value: FormatUtils(locale: locale.toString()),
             child: child,
-          ));
+          );
           if (_appData?.themeFontSizeFactor != null) {
             return TweenAnimationBuilder<double>(
                 tween: Tween<double>(
@@ -379,34 +399,5 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
     if (screenName != null) {
       analytics.trackScreen(screenName);
     }
-  }
-}
-
-class AppWrapper extends StatefulWidget {
-  const AppWrapper({Key key, this.child}) : super(key: key);
-
-  final Widget child;
-
-  @override
-  _AppWrapperState createState() => _AppWrapperState();
-}
-
-class _AppWrapperState extends State<AppWrapper> {
-  @override
-  void initState() {
-    super.initState();
-    FilePickerWritable().init(openFileHandler: (fileInfo) {
-      _logger.fine('got a new fileInfo: $fileInfo');
-      Navigator.of(context).push(CredentialsScreen.route(FileSourceLocal(
-        fileInfo.file,
-        uuid: AppDataBloc.createUuid(),
-        filePickerIdentifier: fileInfo.toJsonString(),
-      )));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
   }
 }

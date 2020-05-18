@@ -1,11 +1,7 @@
 package design.codeux.authpass;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.android.SplashScreen;
