@@ -172,7 +172,8 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                     child: PrimaryButton(
                       child: Text(widget.doneButtonLabel ?? 'Done'),
                       onPressed: () {
-                        final appDataBloc = Provider.of<AppDataBloc>(context);
+                        final appDataBloc =
+                            Provider.of<AppDataBloc>(context, listen: false);
                         appDataBloc.update((b, appData) => b
                           ..passwordGeneratorLength = _passwordLength
                           ..passwordGeneratorCharacterSets.replace(

@@ -27,9 +27,8 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   DropboxProvider({@required this.env, @required CloudStorageHelper helper})
       : super(helper: helper);
 
-  static const String _oauthEndpoint =
-      'https://www.dropbox.com/oauth2/authorize';
-  static const String _oauthToken = 'https://api.dropboxapi.com/oauth2/token';
+  static const _oauthEndpoint = 'https://www.dropbox.com/oauth2/authorize';
+  static const _oauthToken = 'https://api.dropboxapi.com/oauth2/token';
 
   Env env;
 
@@ -154,8 +153,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         'path': parent?.id ?? '',
       }),
     );
-    _logger.fine(
-        'request: ${response.request} --- headers: ${response.request.headers}}');
+    _logger.fine('request: ${response.request}');
     if (response.statusCode >= 300 || response.statusCode < 200) {
       _logger.severe('Error during call to dropbox endpoint. '
           '${response.statusCode} ${response.reasonPhrase} ($response)');

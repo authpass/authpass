@@ -160,7 +160,7 @@ class CloudStorageAuthentication extends StatelessWidget {
               return;
             }
           }
-          final code = await SimplePromptDialog(
+          final code = await SimpleAuthCodePromptDialog(
             title: '${provider.displayName} Authentication',
             labelText: 'Authentication Code',
           ).show(context);
@@ -346,7 +346,9 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
     await asyncRunTask((progress) async {
       final response = await widget.provider.list(parent: _folder);
       setState(() {
-        _response = response.rebuild((b) => b.results.sort(_compare));
+        _response = response.rebuild((b) => b.results
+          ..where((c) => c.type != CloudStorageEntityType.unknown)
+          ..sort(_compare));
       });
     }, label: 'Loading');
   }

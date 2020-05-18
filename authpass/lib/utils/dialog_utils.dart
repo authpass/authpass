@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -145,7 +147,71 @@ class ConfirmDialog extends StatelessWidget {
   }
 }
 
-class SimplePromptDialog extends StatefulWidget {
+mixin DialogMixin<T> on Widget {
+  Future<T> show(BuildContext context) =>
+      showDialog<T>(context: context, builder: (context) => this);
+}
+
+class SimpleAuthCodePromptDialog extends StatefulWidget
+    with DialogMixin<String> {
+  const SimpleAuthCodePromptDialog({
+    Key key,
+    this.title,
+    this.labelText,
+    this.helperText,
+    this.initialValue = '',
+  }) : super(key: key);
+
+  final String title;
+  final String labelText;
+  final String helperText;
+  final String initialValue;
+
+  @override
+  _SimpleAuthCodePromptDialogState createState() =>
+      _SimpleAuthCodePromptDialogState();
+}
+
+class _SimpleAuthCodePromptDialogState
+    extends State<SimpleAuthCodePromptDialog> {
+  FilePickerState _fps;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_fps == null) {
+      _fps = Provider.of<FilePickerState>(context);
+      _fps.registerUriHandler(_handleUri);
+    }
+  }
+
+  bool _handleUri(Uri uri) {
+    _logger.fine('Handling uri: $uri');
+    final code = uri.queryParameters['code'];
+    if (code != null && code.isNotEmpty) {
+      Navigator.of(context).pop(code);
+    }
+    return true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _fps?.removeUriHandler(_handleUri);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SimplePromptDialog(
+      title: widget.title,
+      labelText: widget.labelText,
+      helperText: widget.helperText,
+      initialValue: widget.initialValue,
+    );
+  }
+}
+
+class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
   const SimplePromptDialog({
     Key key,
     this.title,
@@ -162,9 +228,6 @@ class SimplePromptDialog extends StatefulWidget {
   static Future<String> showPrompt(
           BuildContext context, SimplePromptDialog dialog) =>
       dialog.show(context);
-
-  Future<String> show(BuildContext context) =>
-      showDialog<String>(context: context, builder: (context) => this);
 
   @override
   _SimplePromptDialogState createState() => _SimplePromptDialogState();

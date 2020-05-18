@@ -30,6 +30,7 @@ class LoadFileException implements Exception {
 enum CloudStorageEntityType {
   directory,
   file,
+  unknown,
 }
 
 abstract class CloudStorageEntity
@@ -238,6 +239,8 @@ abstract class CloudStorageProvider {
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes);
 
   Future<void> logout();
+
+  bool isSupported() => true;
 }
 
 abstract class CloudStorageProviderClientBase<CLIENT>

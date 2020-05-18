@@ -1,0 +1,93 @@
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
+
+part 'onedrive_models.g.dart';
+
+@JsonSerializable(nullable: false)
+class ListChildrenResponse {
+  ListChildrenResponse({
+    @required this.value,
+  });
+  factory ListChildrenResponse.fromJson(Map<String, dynamic> json) =>
+      _$ListChildrenResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ListChildrenResponseToJson(this);
+
+  final List<OneDriveItem> value;
+}
+
+@JsonSerializable(nullable: false)
+class OneDriveItem {
+  OneDriveItem({
+    @required this.id,
+    @required this.cTag,
+    @required this.eTag,
+    @required this.name,
+    @required this.parentReference,
+    this.folder,
+    this.file,
+  });
+  factory OneDriveItem.fromJson(Map<String, dynamic> json) =>
+      _$OneDriveItemFromJson(json);
+  Map<String, dynamic> toJson() => _$OneDriveItemToJson(this);
+
+  final String id;
+  final String cTag;
+  final String eTag;
+  final String name;
+
+  final OneDriveItemParent parentReference;
+
+  @JsonKey(nullable: true)
+  final OneDriveFolder folder;
+  @JsonKey(nullable: true)
+  final OneDriveFile file;
+
+  CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
+        (b) => b
+          ..name = name
+          ..id = id
+          ..type = (folder != null
+              ? CloudStorageEntityType.directory
+              : file != null
+                  ? CloudStorageEntityType.file
+                  : CloudStorageEntityType.unknown)
+          ..path = '${parentReference.path}/$name',
+      );
+}
+
+@JsonSerializable(nullable: false)
+class OneDriveItemParent {
+  OneDriveItemParent({
+    this.path,
+  });
+  factory OneDriveItemParent.fromJson(Map<String, dynamic> json) =>
+      _$OneDriveItemParentFromJson(json);
+  Map<String, dynamic> toJson() => _$OneDriveItemParentToJson(this);
+
+  final String path;
+}
+
+@JsonSerializable(nullable: false)
+class OneDriveFolder {
+  OneDriveFolder({
+    this.childCount,
+  });
+  factory OneDriveFolder.fromJson(Map<String, dynamic> json) =>
+      _$OneDriveFolderFromJson(json);
+  Map<String, dynamic> toJson() => _$OneDriveFolderToJson(this);
+
+  final int childCount;
+}
+
+@JsonSerializable(nullable: false)
+class OneDriveFile {
+  OneDriveFile({
+    this.mimeType,
+  });
+  factory OneDriveFile.fromJson(Map<String, dynamic> json) =>
+      _$OneDriveFileFromJson(json);
+  Map<String, dynamic> toJson() => _$OneDriveFileToJson(this);
+
+  final String mimeType;
+}

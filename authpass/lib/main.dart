@@ -19,7 +19,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flushbar/flushbar_helper.dart';
-import 'package:flushbar/flushbar_route.dart' as flushbarRoute;
+import 'package:flushbar/flushbar_route.dart' as flushbar_route;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -105,6 +105,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Deps _deps;
   AppData _appData;
   final _navigatorKey = GlobalKey<NavigatorState>();
+  FilePickerState _filePickerState;
 
   @override
   void initState() {
@@ -120,27 +121,29 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         });
       }
     }));
-    FilePickerWritable().init(openFileHandler: (fileInfo) {
-      _logger.fine('got a new fileInfo: $fileInfo');
-      final openRoute = () async {
-        var i = 0;
-        while (_navigatorKey.currentState == null) {
-          _logger.finest('No navigator yet. waiting. $i');
-          await Future<void>.delayed(const Duration(milliseconds: 100));
-          if (i++ > 100) {
-            _logger.warning('Giving up $fileInfo');
-            return;
+    _filePickerState = FilePickerWritable().init()
+      ..registerFileInfoHandler((fileInfo) {
+        _logger.fine('got a new fileInfo: $fileInfo');
+        final openRoute = () async {
+          var i = 0;
+          while (_navigatorKey.currentState == null) {
+            _logger.finest('No navigator yet. waiting. $i');
+            await Future<void>.delayed(const Duration(milliseconds: 100));
+            if (i++ > 100) {
+              _logger.warning('Giving up $fileInfo');
+              return;
+            }
           }
-        }
-        await _navigatorKey.currentState
-            .push(CredentialsScreen.route(FileSourceLocal(
-          fileInfo.file,
-          uuid: AppDataBloc.createUuid(),
-          filePickerIdentifier: fileInfo.toJsonString(),
-        )));
-      };
-      openRoute();
-    });
+          await _navigatorKey.currentState
+              .push(CredentialsScreen.route(FileSourceLocal(
+            fileInfo.file,
+            uuid: AppDataBloc.createUuid(),
+            filePickerIdentifier: fileInfo.toJsonString(),
+          )));
+        };
+        openRoute();
+        return true;
+      });
   }
 
   @override
@@ -155,6 +158,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           create: (context) => _createDiacBloc(),
           dispose: (context, diac) => diac.dispose(),
         ),
+        Provider<FilePickerState>.value(value: _filePickerState),
         Provider<Env>.value(value: _deps.env),
         Provider<Deps>.value(value: _deps),
         Provider<Analytics>.value(value: _deps.analytics),
@@ -337,7 +341,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         },
         'diacOptIn': (event) async {
           final flushbar = FlushbarHelper.createSuccess(message: 'Thanks! 🎉️');
-          final route = flushbarRoute.showFlushbar<void>(
+          final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
           unawaited(_navigatorKey.currentState?.push<void>(route));
           await _deps.appDataBloc
@@ -348,7 +352,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           final flushbar = FlushbarHelper.createInformation(
               message: '😢️ Too bad, if you ever change your mind, '
                   'check out the preferences 🙏️.');
-          final route = flushbarRoute.showFlushbar<void>(
+          final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
           await _navigatorKey.currentState?.push<void>(route);
           return true;
