@@ -289,6 +289,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
           final outputFile = File(path);
           String macOsBookmark;
           if (Platform.isMacOS) {
+            // create a dummy file, so we can create a secure bookmark.
+            await outputFile.writeAsString('.');
             macOsBookmark = await SecureBookmarks().bookmark(outputFile);
           }
           final newFile = await _kdbxBloc.saveAs(
