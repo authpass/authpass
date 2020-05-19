@@ -335,7 +335,7 @@ packages:
       name: file_picker_writable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   fixnum:
     dependency: transitive
     description:
@@ -567,10 +567,10 @@ packages:
   macos_secure_bookmarks:
     dependency: "direct main"
     description:
-      path: "/Users/herbert/dev/macos_secure_bookmarks"
-      relative: false
-    source: path
-    version: "0.1.0+1"
+      name: macos_secure_bookmarks
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+2"
   matcher:
     dependency: transitive
     description:

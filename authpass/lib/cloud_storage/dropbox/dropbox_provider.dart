@@ -84,7 +84,9 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       secret: env.secrets.dropboxSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
-    final authUrl = grant.getAuthorizationUrl(null);
+//    final authUrl = grant.getAuthorizationUrl(null);
+    final authUrl = grant.getAuthorizationUrl(
+        env.oauthRedirectUri != null ? Uri.parse(env.oauthRedirectUri) : null);
     final params = Map<String, String>.from(
         authUrl.queryParameters); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);

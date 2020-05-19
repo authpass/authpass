@@ -45,4 +45,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     return applicationName!
   }
+
 }

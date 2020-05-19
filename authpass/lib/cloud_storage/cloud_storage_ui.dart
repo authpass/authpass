@@ -78,7 +78,7 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                     widget.provider.logout();
                     setState(() {});
                   },
-                  icon: Icon(FontAwesomeIcons.signOutAlt),
+                  icon: const Icon(FontAwesomeIcons.signOutAlt),
                 ),
               ],
       ),

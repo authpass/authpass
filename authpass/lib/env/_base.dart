@@ -80,8 +80,14 @@ abstract class Env {
   /// whether diac is disabled by default, and only enabled through opt-in.
   bool get diacDefaultDisabled => false;
 
-  String get oauthRedirectUri => 'authpass://oauth/code';
-  bool get oauthRedirectUriSupported => Platform.isIOS || Platform.isAndroid;
+//  String get oauthRedirectUri => 'authpass://oauth/code';
+  String get oauthRedirectUri => oauthRedirectUriSupported
+      // for clients not supporting https:// handling, it will redirect
+      // to authpass://
+      ? 'https://links.authpass.app/app/oauth/code'
+      : null;
+  bool get oauthRedirectUriSupported =>
+      Platform.isIOS || Platform.isAndroid || Platform.isMacOS;
 
   Future<void> start() async {
     await startApp(this);
