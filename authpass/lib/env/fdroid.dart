@@ -3,7 +3,7 @@ import 'package:authpass/env/_base.dart';
 Future<void> main() async => await FDroid().start();
 
 class FDroid extends Env {
-  FDroid() : super(EnvType.development);
+  FDroid() : super(EnvType.production);
 
   @override
   EnvSecrets get secrets => const EnvSecrets(
