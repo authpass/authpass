@@ -68,8 +68,8 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
                   filled: true,
                   suffix: InkWell(
                     child: _passwordObscured
-                        ? Icon(Icons.lock)
-                        : Icon(Icons.lock_open),
+                        ? const Icon(Icons.lock)
+                        : const Icon(Icons.lock_open),
                     onTap: () {
                       setState(() {
                         _passwordObscured = !_passwordObscured;

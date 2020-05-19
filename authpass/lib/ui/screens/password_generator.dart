@@ -182,7 +182,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                         widget.doneButtonOnPressed(_password);
                       },
                       icon: widget.doneButtonIcon ??
-                          Icon(Icons.check_circle_outline),
+                          const Icon(Icons.check_circle_outline),
                       large: false,
                     ),
                   )

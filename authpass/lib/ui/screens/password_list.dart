@@ -455,9 +455,9 @@ class _PasswordListContentState extends State<PasswordListContent>
               ),
 //              const Divider(),
               PopupMenuItem(
-                child: ListTile(
+                child: const ListTile(
                   leading: Icon(Icons.folder),
-                  title: const Text('Customize …'),
+                  title: Text('Customize …'),
                 ),
                 value: () async {
                   final groupFilter = await Navigator.of(context).push(
@@ -477,7 +477,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           },
         ),
         IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               setState(() {
                 _filteredEntries = _allEntries;
@@ -489,9 +489,9 @@ class _PasswordListContentState extends State<PasswordListContent>
           },
           itemBuilder: (context) => [
             PopupMenuItem(
-              child: ListTile(
+              child: const ListTile(
                 leading: Icon(Icons.category),
-                title: const Text('Manage Groups'),
+                title: Text('Manage Groups'),
               ),
               value: () async {
                 final group =
@@ -514,9 +514,9 @@ class _PasswordListContentState extends State<PasswordListContent>
                   (_) => false,
                 );
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: Icon(Icons.exit_to_app),
-                title: const Text('Lock Files'),
+                title: Text('Lock Files'),
               ),
             ),
           ],
@@ -553,7 +553,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       textTheme: theme.primaryTextTheme,
       brightness: theme.primaryColorBrightness,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         onPressed: () {
           setState(() {
             _filterQuery = null;
@@ -708,10 +708,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
+                        children: const <Widget>[
                           Icon(Icons.lock),
-                          const SizedBox(height: 4),
-                          const Text('Copy Password'),
+                          SizedBox(height: 4),
+                          Text('Copy Password'),
                         ],
                       ),
                     ),
@@ -721,10 +721,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
+                        children: const <Widget>[
                           Icon(Icons.account_circle),
-                          const SizedBox(height: 4),
-                          const Text('Copy User Name'),
+                          SizedBox(height: 4),
+                          Text('Copy User Name'),
                         ],
                       ),
                     ),
@@ -789,7 +789,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           ? null
           : kdbxBloc.openedFiles.length == 1
               ? FloatingActionButton(
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                   onPressed: () {
                     final entry = kdbxBloc.createEntry();
                     widget.onEntrySelected(
@@ -902,7 +902,7 @@ class UnsupportedWrite extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: <Widget>[
-              Icon(Icons.warning, color: const Color(0xffff0000)),
+              const Icon(Icons.warning, color: Color(0xffff0000)),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -1043,7 +1043,8 @@ class PasswordEntryTile extends StatelessWidget {
       spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
       spans.add(TextSpan(
           text: text.substring(match.start, match.end),
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)));
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.green)));
       previousMatchEnd = match.end;
     }
     if (previousMatchEnd < text.length) {

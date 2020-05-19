@@ -115,7 +115,7 @@ class CloudStorageAuthentication extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           PrimaryButton(
-            icon: Icon(FontAwesomeIcons.signInAlt),
+            icon: const Icon(FontAwesomeIcons.signInAlt),
             child: Text('Login to ${provider.displayName}'),
             onPressed: () async {
               await _startLoginFlow(context);
@@ -225,7 +225,8 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
                     ),
                   ),
                   IconButton(
-                      icon: Icon(Icons.search), onPressed: () => _search()),
+                      icon: const Icon(Icons.search),
+                      onPressed: () => _search()),
                 ],
               ),
             ),

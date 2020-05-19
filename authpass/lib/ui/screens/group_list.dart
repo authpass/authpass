@@ -270,7 +270,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -278,7 +278,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
         title: const Text('Filter Groups'),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.check),
+              icon: const Icon(Icons.check),
               onPressed: () {
                 Navigator.of(context)
                     .pop(_groupFilter.map((e) => e.group).toSet());
@@ -328,7 +328,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: LinkButton(
             child: _allSelected
-                ? const Text('Unselect all')
+                ? const Text('Deselect all')
                 : const Text('Select All'),
             onPressed: () {
               setState(() {

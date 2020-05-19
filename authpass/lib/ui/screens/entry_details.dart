@@ -430,7 +430,7 @@ class _EntryDetailsState extends State<EntryDetails>
                           ),
                           child: Row(
                             children: <Widget>[
-                              Icon(Icons.attach_file),
+                              const Icon(Icons.attach_file),
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Column(
@@ -459,7 +459,7 @@ class _EntryDetailsState extends State<EntryDetails>
                       );
                     }),
               LinkButton(
-                icon: Icon(Icons.attach_file),
+                icon: const Icon(Icons.attach_file),
                 child: const Text('Add attachment'),
                 onPressed: () async {
                   final fileInfo = await FilePickerWritable().openFilePicker();
@@ -685,7 +685,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
   @override
   Widget build(BuildContext context) {
     return LinkButton(
-      icon: Icon(Icons.add_circle_outline),
+      icon: const Icon(Icons.add_circle_outline),
       child: const Text('Add Field'),
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
@@ -851,10 +851,10 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: const <Widget>[
             Icon(Icons.lock),
-            const SizedBox(height: 4),
-            const Text('Copy Field'),
+            SizedBox(height: 4),
+            Text('Copy Field'),
           ],
         ),
       ),
@@ -889,7 +889,7 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
                 child: _buildEntryFieldEditor(),
               ),
               PopupMenuButton<EntryAction>(
-                icon: Icon(Icons.more_vert),
+                icon: const Icon(Icons.more_vert),
                 offset: const Offset(0, 32),
                 onSelected: _handleMenuEntrySelected,
                 itemBuilder: _buildMenuEntries,
@@ -1358,7 +1358,7 @@ class StringEntryFieldEditor extends StatelessWidget {
             ? IconButton(
 //                            padding: EdgeInsets.zero,
                 tooltip: 'Generate Password (cmd+g)',
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 onPressed: passwordGeneratorPressed,
               )
             : null,

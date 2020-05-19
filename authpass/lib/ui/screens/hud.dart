@@ -23,7 +23,7 @@ class FullScreenHud extends StatelessWidget {
             children: <Widget>[
               Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,

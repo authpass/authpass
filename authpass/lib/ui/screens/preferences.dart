@@ -119,7 +119,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 ),
               ]),
         ListTile(
-          leading: Icon(FontAwesomeIcons.signOutAlt),
+          leading: const Icon(FontAwesomeIcons.signOutAlt),
           title: const Text('Lock all open files'),
           onTap: () async {
             _kdbxBloc.closeAllFiles();
@@ -128,7 +128,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
           },
         ),
         ListTile(
-          leading: Icon(
+          leading: const Icon(
             FontAwesomeIcons.lightbulb,
           ),
           title: const Text('Theme'),
