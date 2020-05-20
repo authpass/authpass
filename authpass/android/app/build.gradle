@@ -60,6 +60,12 @@ android {
             storeFile file(secretProperties['design.codeux.authpass.storeFile'] ?: "invalid")
             storePassword secretProperties['design.codeux.authpass.storePassword']
         }
+        amazon {
+            keyAlias 'amazon-key'
+            keyPassword secretProperties['design.codeux.authpass.amazon.storePassword']
+            storeFile file(secretProperties['design.codeux.authpass.amazon.storeFile'] ?: "invalid")
+            storePassword secretProperties['design.codeux.authpass.amazon.storePassword']
+        }
     }
 
     flavorDimensions "hpdist"
@@ -80,6 +86,11 @@ android {
             dimension "hpdist"
             applicationIdSuffix ".huawei"
             signingConfig signingConfigs.release
+        }
+        amazon {
+            dimension "hpdist"
+            applicationIdSuffix ".amazon"
+            signingConfig signingConfigs.amazon
         }
         playstore {
             dimension "hpdist"

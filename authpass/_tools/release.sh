@@ -75,7 +75,7 @@ case "${flavor}" in
         echo
         open macos/Runner.xcworkspace
     ;;
-    samsungapps | huawei | sideload)
+    samsungapps | huawei | sideload | amazon)
         $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor ${flavor}
         apkpath="build/app/outputs/apk/${flavor}/release"
         apk="${apkpath}/app-${flavor}-release.apk"
