@@ -328,6 +328,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           'isAndroid': Platform.isAndroid,
           'operatingSystem': Platform.operatingSystem,
         },
+        'appData': {
+          'manualUserType': _appData?.manualUserType,
+        },
       },
       customActions: {
         'launchReview': (event) async {
@@ -362,7 +365,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         _deps.analytics.trackGenericEvent(
           'diac',
           event is DiacEventWithAction
-              ? 'dismissed:${event.action?.key}'
+              ? '${event.type.toStringBare()}:${event.action?.key}'
               : event.type.toStringBare(),
           label: event.message.key,
         );
