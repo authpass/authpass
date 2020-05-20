@@ -26,7 +26,7 @@ dependencies:
   diac_client:
     path: ../deps/diac/diac_client
 #  file_picker: ^1.6.2
-  file_picker_writable: 1.1.1
+  file_picker_writable: 1.1.1+1
 #  file_picker_writable:
 #    path: /Users/herbert/dev/file_picker_writable
 #  file_picker_writable:
