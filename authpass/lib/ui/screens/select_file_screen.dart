@@ -7,6 +7,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/main.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
@@ -55,6 +56,12 @@ class SelectFileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('AuthPass - Select KeePass File'),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.font_download),
+            onPressed: () {
+              Provider.of<FontFamilyExperiment>(context, listen: false).next();
+            },
+          ),
           AuthPassAboutDialog.createAboutPopupAction(context),
         ],
       ),

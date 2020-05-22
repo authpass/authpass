@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info/package_info.dart';
 import 'package:pedantic/pedantic.dart';
@@ -101,11 +102,33 @@ class AuthPassApp extends StatefulWidget {
   _AuthPassAppState createState() => _AuthPassAppState();
 }
 
+class FontFamilyExperiment with ChangeNotifier {
+  final List<String> fonts = [
+    '',
+    'Inter',
+    'Roboto',
+    'Source Code Pro',
+    'Dancing Script',
+  ];
+
+  int fontIndex = 0;
+  String get font => fonts[fontIndex];
+
+  void next() {
+    fontIndex++;
+    if (fontIndex >= fonts.length) {
+      fontIndex = 0;
+    }
+    notifyListeners();
+  }
+}
+
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Deps _deps;
   AppData _appData;
   final _navigatorKey = GlobalKey<NavigatorState>();
   FilePickerState _filePickerState;
+  final FontFamilyExperiment _fontFamilyExperiment = FontFamilyExperiment();
 
   @override
   void initState() {
@@ -121,6 +144,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         });
       }
     }));
+    _fontFamilyExperiment.addListener(() {
+      setState(() {});
+    });
+
     _filePickerState = FilePickerWritable().init()
       ..registerFileInfoHandler((fileInfo) {
         _logger.fine('got a new fileInfo: $fileInfo');
@@ -158,6 +185,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           create: (context) => _createDiacBloc(),
           dispose: (context, diac) => diac.dispose(),
         ),
+        ListenableProvider<FontFamilyExperiment>.value(value: _fontFamilyExperiment),
         Provider<FilePickerState>.value(value: _filePickerState),
         Provider<Env>.value(value: _deps.env),
         Provider<Deps>.value(value: _deps),
@@ -276,10 +304,21 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 //    final textTheme = appData.themeFontSizeFactor != null
 //        ? theme.textTheme.apply(fontSizeFactor: appData.themeFontSizeFactor)
 //        : theme.textTheme;
-    return theme.copyWith(
+    final ret = theme.copyWith(
       visualDensity: visualDensity,
 //      textTheme: textTheme,
     );
+    final fontFamily = _fontFamilyExperiment.font;
+    if (fontFamily != '') {
+      return ret.copyWith(
+        textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme),
+        primaryTextTheme:
+            GoogleFonts.getTextTheme(fontFamily, theme.primaryTextTheme),
+        accentTextTheme:
+            GoogleFonts.getTextTheme(fontFamily, theme.accentTextTheme),
+      );
+    }
+    return ret;
   }
 
   DiacBloc _createDiacBloc() {
@@ -370,6 +409,12 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           label: event.message.key,
         );
       });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _fontFamilyExperiment.dispose();
   }
 }
 

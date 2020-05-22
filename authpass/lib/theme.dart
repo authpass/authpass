@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthPassTheme {
 //  static const Color linkColor = Colors.blueAccent;
@@ -30,7 +32,7 @@ abstract class Breakpoints {
 final authPassLightTheme = createTheme();
 final authPassDarkTheme = createDarkTheme();
 
-ThemeData customize(ThemeData base) {
+ThemeData _customize(ThemeData base) {
   final pageTransitionBuilders = {...const PageTransitionsTheme().builders};
   pageTransitionBuilders[TargetPlatform.macOS] =
       const FadeUpwardsPageTransitionsBuilder();
@@ -41,9 +43,22 @@ ThemeData customize(ThemeData base) {
 }
 
 ThemeData createTheme() {
-  return customize(ThemeData(
+  return _customize(ThemeData(
     primarySwatch: AuthPassTheme.primarySwatch,
+    typography: _getTypography(),
   ));
+}
+
+Typography _getTypography() {
+  if (defaultTargetPlatform == TargetPlatform.macOS) {
+    return Typography.material2018(
+      platform: defaultTargetPlatform,
+      black: GoogleFonts.interTextTheme(Typography.blackCupertino),
+      white: GoogleFonts.interTextTheme(Typography.whiteCupertino),
+    );
+  } else {
+    return Typography.material2018(platform: defaultTargetPlatform);
+  }
 }
 
 ThemeData createDarkTheme() {
@@ -52,7 +67,7 @@ ThemeData createDarkTheme() {
     secondary: AuthPassTheme.primarySwatch[300],
     secondaryVariant: AuthPassTheme.primarySwatch[500],
   );
-  return customize(ThemeData(
+  return _customize(ThemeData(
     primaryColor: colorScheme.primary,
     textSelectionHandleColor: AuthPassTheme.primarySwatch[800],
 //    textSelectionColor: Colors.red,
@@ -63,5 +78,6 @@ ThemeData createDarkTheme() {
     primarySwatch: AuthPassTheme.primarySwatch,
     accentColor: AuthPassTheme.primaryColor,
     selectedRowColor: colorScheme.surface,
+    typography: _getTypography(),
   ));
 }
