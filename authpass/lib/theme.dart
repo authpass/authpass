@@ -1,4 +1,12 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:logging/logging.dart';
+
+final _logger = Logger('theme');
 
 class AuthPassTheme {
 //  static const Color linkColor = Colors.blueAccent;
@@ -30,7 +38,7 @@ abstract class Breakpoints {
 final authPassLightTheme = createTheme();
 final authPassDarkTheme = createDarkTheme();
 
-ThemeData customize(ThemeData base) {
+ThemeData _customize(ThemeData base) {
   final pageTransitionBuilders = {...const PageTransitionsTheme().builders};
   pageTransitionBuilders[TargetPlatform.macOS] =
       const FadeUpwardsPageTransitionsBuilder();
@@ -40,9 +48,58 @@ ThemeData customize(ThemeData base) {
   );
 }
 
+bool _addedInterLicense = false;
+
+Typography _getTypography() {
+  if (defaultTargetPlatform == TargetPlatform.macOS &&
+      // macos 10.15 -> darwin 19.0
+      // https://en.wikipedia.org/wiki/MacOS_Mojave#Release_history
+      // https://en.wikipedia.org/wiki/MacOS_Catalina#Release_history
+      !_isDarwinVersion(minimumMajor: 19, minimumMinor: 0)) {
+    if (!_addedInterLicense) {
+      LicenseRegistry.addLicense(() async* {
+        final license =
+            await rootBundle.loadString('assets/fonts/Inter-LICENSE.txt');
+        yield LicenseEntryWithLineBreaks(['fonts_inter'], license);
+      });
+      _addedInterLicense = true;
+    }
+    return Typography.material2018(
+      platform: defaultTargetPlatform,
+      black: Typography.blackCupertino.apply(fontFamily: 'Inter'),
+      white: Typography.whiteCupertino.apply(fontFamily: 'Inter'),
+    );
+  } else {
+    print(
+        'using default theme $defaultTargetPlatform -- ${Platform.operatingSystemVersion}');
+    return Typography.material2018(platform: defaultTargetPlatform);
+  }
+}
+
+final macOsVersionPattern = RegExp(r'Darwin (\d+)\.(\d+)');
+
+bool _isDarwinVersion(
+    {@required int minimumMajor, @required int minimumMinor}) {
+  assert(minimumMajor != null);
+  assert(minimumMinor != null);
+  final match = macOsVersionPattern.firstMatch(Platform.operatingSystemVersion);
+  if (match == null) {
+    _logger.severe(
+        'Unable to parse mac os version ${Platform.operatingSystemVersion}');
+    return false;
+  }
+  final major = int.parse(match.group(1));
+  final minor = int.parse(match.group(2));
+  print('Parsed ${Platform.operatingSystemVersion} as $major.$minor');
+  _logger.finest('Parsed ${Platform.operatingSystemVersion} as $major.$minor');
+  return major > minimumMajor ||
+      (major == minimumMajor && minor >= minimumMinor);
+}
+
 ThemeData createTheme() {
-  return customize(ThemeData(
+  return _customize(ThemeData(
     primarySwatch: AuthPassTheme.primarySwatch,
+    typography: _getTypography(),
   ));
 }
 
@@ -52,7 +109,8 @@ ThemeData createDarkTheme() {
     secondary: AuthPassTheme.primarySwatch[300],
     secondaryVariant: AuthPassTheme.primarySwatch[500],
   );
-  return customize(ThemeData(
+  return _customize(ThemeData(
+    typography: _getTypography(),
     primaryColor: colorScheme.primary,
     textSelectionHandleColor: AuthPassTheme.primarySwatch[800],
 //    textSelectionColor: Colors.red,
