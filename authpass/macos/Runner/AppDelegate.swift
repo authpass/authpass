@@ -29,6 +29,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       menuItem.title = menuItem.title.replacingOccurrences(of: "APP_NAME", with: appName)
     }
   }
+    
+    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+        print("TODO: We should open \(filename)")
+        return true
+    }
 
   func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
     return true

@@ -31,6 +31,7 @@
 		33D1A10522148B93006C7A3E /* FlutterMacOS.framework in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 33D1A10322148B71006C7A3E /* FlutterMacOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D73912F022F37F9E000D13A0 /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D73912EF22F37F9E000D13A0 /* App.framework */; };
 		D73912F222F3801D000D13A0 /* App.framework in Bundle Framework */ = {isa = PBXBuildFile; fileRef = D73912EF22F37F9E000D13A0 /* App.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E54B0D022479276600AC9461 /* kdbx_doc_type.png in Resources */ = {isa = PBXBuildFile; fileRef = E54B0D012479276600AC9461 /* kdbx_doc_type.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		CCA1E8B7F953FE976AFC92B2 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		CFC85C8DBBD2F982F81DB637 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D73912EF22F37F9E000D13A0 /* App.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = App.framework; path = Flutter/ephemeral/App.framework; sourceTree = SOURCE_ROOT; };
+		E54B0D012479276600AC9461 /* kdbx_doc_type.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kdbx_doc_type.png; path = ../ios/Runner/kdbx_doc_type.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				33CC10F22044A3C60003C045 /* Assets.xcassets */,
+				E54B0D012479276600AC9461 /* kdbx_doc_type.png */,
 				33CC10F42044A3C60003C045 /* MainMenu.xib */,
 				33CC10F72044A3C60003C045 /* Info.plist */,
 			);
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E54B0D022479276600AC9461 /* kdbx_doc_type.png in Resources */,
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
 			);
