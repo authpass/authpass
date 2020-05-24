@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
@@ -40,14 +38,8 @@ class EntryViewModel {
   final List<String> groupNames;
   final Color fileColor;
 
-  static List<String> _createGroupNames(KdbxGroup group) {
-    final queue = Queue<String>();
-    while (group != null) {
-      queue.addFirst(group.name.get());
-      group = group.parent;
-    }
-    return queue.toList();
-  }
+  static List<String> _createGroupNames(KdbxGroup group) =>
+      group.breadcrumbs.map((e) => e.name.get()).toList();
 }
 
 class PasswordList extends StatelessWidget {
@@ -494,11 +486,13 @@ class _PasswordListContentState extends State<PasswordListContent>
                 title: Text('Manage Groups'),
               ),
               value: () async {
-                final group =
-                    await Navigator.of(context).push(GroupList.route(null));
-                if (group != null) {
-                  _createGroupFilter({group});
-                }
+                await Navigator.of(context).push(GroupListFlat.route(
+                  {},
+                  groupListMode: GroupListMode.manage,
+                ));
+//                if (group != null) {
+//                  _createGroupFilter({group});
+//                }
               },
             ),
             ...AuthPassAboutDialog.createDefaultPopupMenuItems(

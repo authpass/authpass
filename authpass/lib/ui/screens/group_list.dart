@@ -1,6 +1,8 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/ui/screens/group_edit.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:authpass/utils/extension_methods.dart';
+import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('group_list');
 
@@ -184,28 +186,75 @@ class _GroupViewModel {
       '(Unnamed)';
 
   Color get color => file.openedFile.color;
+
+  @override
+  bool operator ==(dynamic other) {
+    return other is _GroupViewModel && other.group == group;
+  }
+
+  @override
+  int get hashCode => group.hashCode;
+}
+
+enum GroupListMode {
+  multiSelectForFilter,
+  singleSelect,
+  manage,
+}
+
+extension on GroupListMode {
+  bool get isSelection =>
+      this == GroupListMode.multiSelectForFilter ||
+      this == GroupListMode.singleSelect;
 }
 
 class GroupListFlat extends StatelessWidget {
-  const GroupListFlat({Key key, this.initialSelection}) : super(key: key);
+  const GroupListFlat({
+    Key key,
+    this.initialSelection,
+    this.groupListMode = GroupListMode.multiSelectForFilter,
+    this.rootGroup,
+  }) : super(key: key);
 
-  static MaterialPageRoute<Set<KdbxGroup>> route(Set<KdbxGroup> selection) =>
+  static MaterialPageRoute<Set<KdbxGroup>> route(
+    Set<KdbxGroup> selection, {
+    GroupListMode groupListMode = GroupListMode.multiSelectForFilter,
+    KdbxGroup rootGroup,
+  }) =>
       MaterialPageRoute<Set<KdbxGroup>>(
-        settings: const RouteSettings(name: '/group_list_flat/'),
-        builder: (_) => GroupListFlat(initialSelection: selection),
+        settings: const RouteSettings(name: '/group_list_flat/}'),
+        builder: (_) => GroupListFlat(
+          initialSelection: selection,
+          groupListMode: groupListMode,
+          rootGroup: rootGroup,
+        ),
       );
 
+  /// if defined only groups within this group will be shown,
+  /// otherwise all groups in all files are shown.
+  final KdbxGroup rootGroup;
   final Set<KdbxGroup> initialSelection;
+  final GroupListMode groupListMode;
 
   @override
   Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
-    final groups = _createViewModel(kdbxBloc, null, null, 0);
+    final file =
+        rootGroup == null ? null : kdbxBloc.fileForKdbxFile(rootGroup.file);
 
-    return GroupListFlatContent(
-      groups: groups,
-      initialSelection: initialSelection ?? {},
-    );
+    final streams =
+        kdbxBloc.openedFilesKdbx.map((file) => file.dirtyObjectsChanged);
+    return StreamBuilder<bool>(
+        stream: Rx.merge(streams).map((x) => true),
+        builder: (context, snapshot) {
+          _logger.info('Rebuilding flat group list.');
+          final groups = _createViewModel(kdbxBloc, file, rootGroup, 0);
+          return GroupListFlatContent(
+            groups: groups,
+            initialSelection: initialSelection ?? {},
+            groupListMode: groupListMode,
+          );
+        });
   }
 
   List<_GroupViewModel> _createViewModel(
@@ -219,6 +268,8 @@ class GroupListFlat extends StatelessWidget {
       return [
         _GroupViewModel(kdbxBloc, file, group, depth),
         ...group.groups
+            // for now simply hide all trash groups.
+            .where((element) => element.file.recycleBin != element)
             .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
       ];
     }
@@ -230,11 +281,14 @@ class GroupListFlatContent extends StatefulWidget {
     Key key,
     this.groups,
     @required this.initialSelection,
+    @required this.groupListMode,
   })  : assert(initialSelection != null),
+        assert(groupListMode != null),
         super(key: key);
 
   final Set<KdbxGroup> initialSelection;
   final List<_GroupViewModel> groups;
+  final GroupListMode groupListMode;
 
   @override
   _GroupListFlatContentState createState() => _GroupListFlatContentState();
@@ -267,6 +321,10 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
 
   @override
   Widget build(BuildContext context) {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
+        element.key.supportsWrite &&
+        element.value.kdbxFile.dirtyObjects.isNotEmpty);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -275,47 +333,152 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text('Filter Groups'),
+        title: Text(widget.groupListMode == GroupListMode.multiSelectForFilter
+            ? 'Filter Groups'
+            : 'Groups'),
         actions: <Widget>[
-          IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: () {
-                Navigator.of(context)
-                    .pop(_groupFilter.map((e) => e.group).toSet());
-              }),
+          ...?!isDirty
+              ? null
+              : [
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: const Icon(Icons.save),
+                      onPressed: () async {
+                        final scaffold = Scaffold.of(context);
+                        final savedFiles = <String>[];
+                        for (final entry in kdbxBloc.openedFiles.entries) {
+                          if (entry.key.supportsWrite &&
+                              entry.value.kdbxFile.dirtyObjects.isNotEmpty) {
+                            await kdbxBloc.saveFile(entry.value.kdbxFile);
+                            savedFiles.add(entry.key.displayName);
+                          }
+                        }
+                        scaffold.showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Saved files into: ${savedFiles.join(', ')}')),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+          ...?widget.groupListMode.isSelection
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.check),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(_groupFilter.map((e) => e.group).toSet());
+                    },
+                  ),
+                ]
+              : null,
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return _listHeader();
-          }
-          final group = widget.groups[index - 1];
-          return GroupListTile(
-            group: group,
-            isSelected: _groupFilter.contains(group),
-            onChanged: (value) {
-              setState(() {
-                if (value) {
-                  _groupFilter.add(group);
-                } else {
-                  _groupFilter.remove(group);
+      body: Scrollbar(
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return _listHeader();
+            }
+            final group = widget.groups[index - 1];
+            return GroupListTile(
+              group: group,
+              isSelected: _groupFilter.contains(group),
+              groupListMode: widget.groupListMode,
+              onChanged: (value) {
+                setState(() {
+                  if (value &&
+                      widget.groupListMode == GroupListMode.singleSelect) {
+                    _groupFilter.clear();
+                  }
+                  if (value) {
+                    _groupFilter.add(group);
+                  } else {
+                    _groupFilter.remove(group);
+                  }
+                });
+              },
+              onLongPress: () async {
+                final action = await showDialog<String>(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    title: Text(group.name),
+                    children: <Widget>[
+                      SimpleDialogOption(
+                        onPressed: () => Navigator.of(context).pop('create'),
+                        child: const ListTile(
+                          leading: Icon(Icons.create_new_folder),
+                          title: Text('Create Subgroup'),
+                        ),
+                      ),
+                      SimpleDialogOption(
+                        onPressed: () => Navigator.of(context).pop('edit'),
+                        child: const ListTile(
+                          leading: Icon(FontAwesomeIcons.edit),
+                          title: Text('Edit'),
+                        ),
+                      ),
+                      ...?group.isRoot
+                          ? null
+                          : [
+                              SimpleDialogOption(
+                                onPressed: () =>
+                                    Navigator.of(context).pop('delete'),
+                                child: const ListTile(
+                                  leading: Icon(Icons.delete),
+                                  title: Text('Delete'),
+                                ),
+                              ),
+                            ],
+                    ],
+                  ),
+                );
+                if (action == 'create') {
+                  _logger.fine('Creating folder.');
+                  final newGroup = group.file.kdbxFile
+                      .createGroup(parent: group.group, name: 'New Group');
+                  await Navigator.of(context)
+                      .push(GroupEditScreen.route(newGroup));
+                } else if (action == 'delete') {
+                  _logger.fine('We should delete ${group.name}');
+                  final oldParent = group.group.parent;
+                  group.file.kdbxFile.deleteGroup(group.group);
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Deleted group.'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () {
+                          oldParent.file.move(group.group, oldParent);
+                        },
+                      ),
+                    ),
+                  );
+                } else if (action == 'edit') {
+                  await Navigator.of(context)
+                      .push(GroupEditScreen.route(group.group));
+                } else if (action != null) {
+                  throw StateError('Invalid action $action');
                 }
-              });
-            },
-          );
+              },
+            );
 //        return CheckboxListTile(
 //          value: _groupFilter.contains(group),
 //          controlAffinity: ListTileControlAffinity.leading,
 //          onChanged: (value) {},
 //        );
-        },
-        itemCount: widget.groups.length + 1,
+          },
+          itemCount: widget.groups.length + 1,
+        ),
       ),
     );
   }
 
   Widget _listHeader() {
+    if (widget.groupListMode != GroupListMode.multiSelectForFilter) {
+      return const SizedBox();
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -351,7 +514,9 @@ class GroupListTile extends StatelessWidget {
     Key key,
     @required this.group,
     @required this.isSelected,
+    @required this.groupListMode,
     @required this.onChanged,
+    this.onLongPress,
   })  : assert(group != null),
         assert(onChanged != null),
 //        assert(isSelected != null),
@@ -362,14 +527,22 @@ class GroupListTile extends StatelessWidget {
   final _GroupViewModel group;
   final bool isSelected;
   final void Function(bool selected) onChanged;
+  final GroupListMode groupListMode;
+  final VoidCallback onLongPress;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return InkWell(
       onTap: () {
-        onChanged(!isSelected);
+        if (groupListMode == GroupListMode.multiSelectForFilter) {
+          onChanged(!isSelected);
+        } else {
+          onChanged(true);
+        }
       },
+      onLongPress: onLongPress,
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -384,20 +557,43 @@ class GroupListTile extends StatelessWidget {
                 child: DecoratedBox(
                     decoration: BoxDecoration(
                         color: ThemeUtil.iconColor(theme, group.color)))),
-            Checkbox(value: isSelected, onChanged: onChanged),
+            ...?_buildSelectWidget(),
             Icon(
               group.icon,
               size: 24,
               color: ThemeUtil.iconColor(theme, group.color),
             ),
             const SizedBox(width: 8),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(group.name, style: theme.textTheme.subtitle1),
-            )
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(group.name, style: theme.textTheme.subtitle1),
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: onLongPress),
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _buildSelectWidget() {
+    switch (groupListMode) {
+      case GroupListMode.multiSelectForFilter:
+        return [Checkbox(value: isSelected, onChanged: onChanged)];
+      case GroupListMode.singleSelect:
+        return [
+          Radio<_GroupViewModel>(
+              value: group,
+              groupValue: isSelected ? group : null,
+              onChanged: (val) {
+                onChanged(true);
+              })
+        ];
+      case GroupListMode.manage:
+        return [const SizedBox(width: 16)];
+    }
+    throw StateError('Invalid groupListMode $groupListMode');
   }
 }

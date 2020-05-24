@@ -60,30 +60,16 @@ class EntryDetailsScreen extends StatefulWidget {
 }
 
 class _EntryDetailsScreenState extends State<EntryDetailsScreen>
-    with TaskStateMixin, StreamSubscriberMixin {
-  final _formKey = GlobalKey<FormState>();
-  bool _isDirty = false;
-
+    with
+        TaskStateMixin<EntryDetailsScreen>,
+        StreamSubscriberMixin<EntryDetailsScreen>,
+        KdbxObjectSavableStateMixin<EntryDetailsScreen> {
   @override
-  void initState() {
-    super.initState();
-    _registerListener();
-  }
-
+  KdbxFile get file => widget.entry.file;
   @override
-  void didUpdateWidget(EntryDetailsScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _registerListener();
-  }
-
-  void _registerListener() {
-    subscriptions.cancelSubscriptions();
-    handleSubscription(widget.entry.changes.listen((change) {
-      setState(() {
-        _isDirty = change.isDirty || _isDirty;
-      });
-    }));
-  }
+  Changeable get kdbxObject => widget.entry;
+  @override
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +78,12 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
       appBar: AppBar(
         title: Text(EntryFormatUtils.getLabel(widget.entry)),
         actions: <Widget>[
-          ...?!_isDirty
+          ...?!isDirty
               ? null
               : [
                   IconButton(
                     icon: const Icon(Icons.save),
-                    onPressed: _saveCallback,
+                    onPressed: saveCallback,
                   ),
                 ],
           AuthPassAboutDialog.createAboutPopupAction(
@@ -147,20 +133,20 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 //      ),
       body: WillPopScope(
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: EntryDetails(
             entry: widget.entry,
             onSavedPressed:
-                !_isDirty && !widget.entry.isDirty ? null : _saveCallback,
+                !isDirty && !widget.entry.isDirty ? null : saveCallback,
           ),
           onChanged: () {
-            if (!_isDirty) {
-              setState(() => _isDirty = true);
+            if (!isDirty) {
+              setState(() => isDirty = true);
             }
           },
         ),
         onWillPop: () async {
-          if (!_isDirty && !widget.entry.isDirty) {
+          if (!isDirty && !widget.entry.isDirty) {
             return true;
           }
           return await DialogUtils.showConfirmDialog(
@@ -175,24 +161,51 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
       ),
     );
   }
+}
 
-  VoidCallback get _saveCallback => asyncTaskCallback(() async {
-        if (_formKey.currentState.validate()) {
-          _formKey.currentState.save();
+mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
+    on State<T>, TaskStateMixin<T>, StreamSubscriberMixin<T> {
+  GlobalKey<FormState> get formKey;
+  KdbxFile get file;
+  bool isDirty = false;
+  Changeable get kdbxObject;
+
+  @override
+  void initState() {
+    super.initState();
+    _registerListener();
+  }
+
+  @override
+  void didUpdateWidget(T oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _registerListener();
+  }
+
+  void _registerListener() {
+    subscriptions.cancelSubscriptions();
+    handleSubscription(kdbxObject.changes.listen((change) {
+      setState(() {
+        isDirty = change.isDirty || isDirty;
+      });
+    }));
+  }
+
+  @protected
+  VoidCallback get saveCallback => asyncTaskCallback(() async {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-          if (kdbxBloc
-              .fileForKdbxFile(widget.entry.file)
-              .fileSource
-              .supportsWrite) {
+          if (kdbxBloc.fileForKdbxFile(file).fileSource.supportsWrite) {
             try {
-              await kdbxBloc.saveFile(widget.entry.file);
+              await kdbxBloc.saveFile(file);
             } on StorageException catch (e, stackTrace) {
               _logger.warning('Error while saving database.', e, stackTrace);
               await DialogUtils.showErrorDialog(
                   context, 'Error while saving', 'Unable to save file: $e');
               return;
             }
-            setState(() => _isDirty = false);
+            setState(() => isDirty = false);
           } else {
             await DialogUtils.showSimpleAlertDialog(
               context,
@@ -343,8 +356,15 @@ class _EntryDetailsState extends State<EntryDetails>
                           onTap: () async {
                             // TODO
                             final file = vm.entry.file;
-                            final newGroup = await Navigator.of(context)
-                                .push(GroupList.route(file.body.rootGroup));
+                            final newGroupSelection =
+                                await Navigator.of(context)
+//                                .push(GroupListFlat.route(file.body.rootGroup));
+                                    .push(GroupListFlat.route(
+                              {vm.entry.parent},
+                              groupListMode: GroupListMode.singleSelect,
+                              rootGroup: vm.entry.file.body.rootGroup,
+                            ));
+                            final newGroup = newGroupSelection?.first;
                             if (newGroup != null) {
                               final oldGroup = vm.entry.parent;
                               file.move(vm.entry, newGroup);
@@ -648,6 +668,7 @@ class EntryMetaInfo extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: Row(
 //          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             ...?onTap == null
                 ? null
@@ -655,15 +676,20 @@ class EntryMetaInfo extends StatelessWidget {
                     const Icon(Icons.edit, size: 16, color: Colors.black45),
                     const SizedBox(width: 8),
                   ],
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(label, style: theme.textTheme.caption),
-                Text(value,
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(label, style: theme.textTheme.caption),
+                  Text(
+                    value,
                     style: theme.textTheme.bodyText1
-                        .copyWith(color: theme.textTheme.caption.color)),
-              ],
+                        .copyWith(color: theme.textTheme.caption.color),
+                    maxLines: 2,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
