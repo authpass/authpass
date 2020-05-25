@@ -1,3 +1,8 @@
+# 1.6.2
+
+* Revamped Group management, filtering and editing, support for changing icons, renaming, deleting.
+* MacOS: Fixed font for older MacOS Versions
+
 # 1.6.1
 
 * Support for Microsoft OneDrive (#71)

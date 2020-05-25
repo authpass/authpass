@@ -461,6 +461,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                   if (groupFilter.isEmpty) {
                     _groupFilterNotifier.value =
                         GroupFilter.DEFAULT_GROUP_FILTER;
+                    return;
                   }
                   _createGroupFilter(groupFilter);
                 },

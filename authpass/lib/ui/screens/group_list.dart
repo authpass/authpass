@@ -386,18 +386,25 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
               group: group,
               isSelected: _groupFilter.contains(group),
               groupListMode: widget.groupListMode,
-              onChanged: (value) {
-                setState(() {
-                  if (value &&
-                      widget.groupListMode == GroupListMode.singleSelect) {
+              onChanged: (value) async {
+                switch (widget.groupListMode) {
+                  case GroupListMode.multiSelectForFilter:
+                    if (value) {
+                      _groupFilter.add(group);
+                    } else {
+                      _groupFilter.remove(group);
+                    }
+                    break;
+                  case GroupListMode.singleSelect:
                     _groupFilter.clear();
-                  }
-                  if (value) {
                     _groupFilter.add(group);
-                  } else {
-                    _groupFilter.remove(group);
-                  }
-                });
+                    break;
+                  case GroupListMode.manage:
+                    await Navigator.of(context)
+                        .push(GroupEditScreen.route(group.group));
+                    break;
+                }
+                setState(() {});
               },
               onLongPress: () async {
                 final action = await showDialog<String>(
@@ -563,7 +570,7 @@ class GroupListTile extends StatelessWidget {
               size: 24,
               color: ThemeUtil.iconColor(theme, group.color),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 16),
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
