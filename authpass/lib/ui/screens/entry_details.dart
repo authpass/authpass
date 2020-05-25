@@ -140,8 +140,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 !isDirty && !widget.entry.isDirty ? null : saveCallback,
           ),
           onChanged: () {
-            if (!isDirty) {
-              setState(() => isDirty = true);
+            if (!isFormDirty) {
+              setState(() => isFormDirty = true);
             }
           },
         ),
@@ -167,7 +167,9 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
     on State<T>, TaskStateMixin<T>, StreamSubscriberMixin<T> {
   GlobalKey<FormState> get formKey;
   KdbxFile get file;
-  bool isDirty = false;
+  bool _isObjectDirty = false;
+  bool get isDirty => _isObjectDirty || isFormDirty;
+  bool isFormDirty = false;
   Changeable get kdbxObject;
 
   @override
@@ -185,8 +187,10 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
   void _registerListener() {
     subscriptions.cancelSubscriptions();
     handleSubscription(kdbxObject.changes.listen((change) {
+      _logger.finer(
+          '_isObjectDirty = ${change.isDirty} (before: $_isObjectDirty / formDirty: $isFormDirty');
       setState(() {
-        isDirty = change.isDirty || isDirty;
+        _isObjectDirty = change.isDirty;
       });
     }));
   }
@@ -205,7 +209,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
                   context, 'Error while saving', 'Unable to save file: $e');
               return;
             }
-            setState(() => isDirty = false);
+            setState(() => isFormDirty = false);
           } else {
             await DialogUtils.showSimpleAlertDialog(
               context,

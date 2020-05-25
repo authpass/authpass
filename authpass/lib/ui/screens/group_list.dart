@@ -571,7 +571,10 @@ class GroupListTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            IconButton(icon: Icon(Icons.more_vert), onPressed: onLongPress),
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: onLongPress,
+            ),
           ],
         ),
       ),

@@ -127,9 +127,11 @@ class IconSelectorFormField extends StatelessWidget {
     Key key,
     @required this.initialValue,
     @required this.onSaved,
+    this.onChanged,
   }) : super(key: key);
   final KdbxIcon initialValue;
   final void Function(KdbxIcon icon) onSaved;
+  final void Function(KdbxIcon icon) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +146,7 @@ class IconSelectorFormField extends StatelessWidget {
                   initialSelection: formFieldState.value);
               if (newIcon != null) {
                 formFieldState.didChange(newIcon);
+                onChanged?.call(newIcon);
               }
             },
             child: Padding(

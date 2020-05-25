@@ -95,6 +95,9 @@ class _GroupEditState extends State<GroupEdit> {
               onSaved: (value) {
                 widget.group.icon.set(value);
               },
+              onChanged: (value) {
+                widget.group.icon.set(value);
+              },
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
