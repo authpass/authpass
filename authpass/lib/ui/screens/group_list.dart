@@ -367,8 +367,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
                   IconButton(
                     icon: const Icon(Icons.check),
                     onPressed: () {
-                      Navigator.of(context)
-                          .pop(_groupFilter.map((e) => e.group).toSet());
+                      _popResult();
                     },
                   ),
                 ]
@@ -398,6 +397,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
                   case GroupListMode.singleSelect:
                     _groupFilter.clear();
                     _groupFilter.add(group);
+                    _popResult();
                     break;
                   case GroupListMode.manage:
                     await Navigator.of(context)
@@ -480,6 +480,10 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
         ),
       ),
     );
+  }
+
+  void _popResult() {
+    Navigator.of(context).pop(_groupFilter.map((e) => e.group).toSet());
   }
 
   Widget _listHeader() {

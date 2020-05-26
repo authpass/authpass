@@ -196,7 +196,8 @@ class GroupFilter {
     @required this.name,
   })  : assert(showRecycleBin != null),
         assert(showActive != null),
-        assert(name != null);
+        assert(name != null),
+        assert(groups != null);
 
   static const DEFAULT_GROUP_FILTER = GroupFilter(
       showRecycleBin: false, showActive: true, name: 'Hide Deleted Entries');
@@ -782,11 +783,17 @@ class _PasswordListContentState extends State<PasswordListContent>
             ),
       floatingActionButton: _allEntries.isEmpty || _filterQuery != null
           ? null
-          : kdbxBloc.openedFiles.length == 1
+          : kdbxBloc.openedFiles.length == 1 || _groupFilter.groups.length == 1
               ? FloatingActionButton(
                   child: const Icon(Icons.add),
                   onPressed: () {
-                    final entry = kdbxBloc.createEntry();
+                    final group = _groupFilter.groups.isEmpty
+                        ? null
+                        : _groupFilter.groups.first.group;
+                    final entry = kdbxBloc.createEntry(
+                      file: group?.file,
+                      group: group,
+                    );
                     widget.onEntrySelected(
                         context, entry, EntrySelectionType.activeOpen);
                   },
@@ -808,7 +815,8 @@ class _PasswordListContentState extends State<PasswordListContent>
                                 ? null
                                 : Color(file.openedFile.colorCode),
                             onTap: () {
-                              final entry = kdbxBloc.createEntry(file.kdbxFile);
+                              final entry =
+                                  kdbxBloc.createEntry(file: file.kdbxFile);
                               widget.onEntrySelected(context, entry,
                                   EntrySelectionType.activeOpen);
                             }),

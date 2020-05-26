@@ -728,15 +728,20 @@ class KdbxBloc {
     return localSource;
   }
 
-  /// Creates a new password entry in the primary kdbx file, in the main root group.
-  KdbxEntry createEntry([KdbxFile file]) {
+  /// Creates a new password entry in [file] (default: the primary kdbx file),
+  /// and adds it to [group] (default: main root group).
+  KdbxEntry createEntry({
+    KdbxFile file,
+    KdbxGroup group,
+  }) {
+    file ??= group?.file;
     if (file == null) {
       if (openedFilesKdbx.isEmpty) {
         return null;
       }
       file = openedFilesKdbx.first;
     }
-    final rootGroup = file.body.rootGroup;
+    final rootGroup = group ?? file.body.rootGroup;
     final entry = KdbxEntry.create(file, rootGroup);
     rootGroup.addEntry(entry);
     return entry;
