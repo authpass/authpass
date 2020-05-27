@@ -900,12 +900,12 @@ class UnsupportedWrite extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        color: const Color(0xffffe9e9),
+        color: theme.errorColor.withOpacity(0.2),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: <Widget>[
-              const Icon(Icons.warning, color: Color(0xffff0000)),
+              Icon(Icons.warning, color: theme.errorColor),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -924,7 +924,8 @@ class UnsupportedWrite extends StatelessWidget {
                         FlatButton(
                           child: const Text('Save locally'),
                           onPressed: () {
-                            final bloc = Provider.of<KdbxBloc>(context);
+                            final bloc =
+                                Provider.of<KdbxBloc>(context, listen: false);
                             bloc.saveLocally(source);
                           },
                         )
