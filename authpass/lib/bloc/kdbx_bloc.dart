@@ -25,6 +25,7 @@ import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('kdbx_bloc');
@@ -40,7 +41,7 @@ class FileContent {
   final Map<String, dynamic> metadata;
 }
 
-abstract class FileSource {
+abstract class FileSource with Diagnosticable {
   FileSource({
     @required this.databaseName,
     @required this.uuid,
@@ -93,8 +94,15 @@ abstract class FileSource {
   Future<Uint8List> content() async => (_cached ??= await load()).content;
 
   Future<void> contentWrite(Uint8List bytes) async {
-    final newMetadata = await write(bytes, _cached?.metadata);
-    _cached = FileContent(bytes, newMetadata);
+    _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
+    try {
+      final newMetadata = await write(bytes, _cached?.metadata);
+      _cached = FileContent(bytes, newMetadata);
+    } catch (e, stackTrace) {
+      _logger.severe('Error while writing into $typeDebug ($runtimeType) $this',
+          e, stackTrace);
+      rethrow;
+    }
   }
 
   @override
@@ -110,10 +118,25 @@ abstract class FileSource {
   int get hashCode => uuid.hashCode;
 
   @override
-  String toString() {
-    return 'FileSource{type: $runtimeType, uuid: $uuid, '
-        'databaseName: $databaseName, displayPath: $displayPath}';
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('type', runtimeType.toString()));
+    properties.add(StringProperty('uuid', uuid));
+    properties.add(StringProperty('databaseName', databaseName));
+    properties.add(StringProperty('displayPath', displayPath));
   }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return toDiagnosticsNode(style: DiagnosticsTreeStyle.singleLine)
+        .toString(minLevel: minLevel);
+  }
+
+//  @override
+//  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+//    return 'FileSource{type: $runtimeType, uuid: $uuid, '
+//        'databaseName: $databaseName, displayPath: $displayPath}';
+//  }
 }
 
 class FileSourceLocal extends FileSource {
@@ -222,21 +245,25 @@ class FileSourceLocal extends FileSource {
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     if (filePickerIdentifier != null) {
+      _logger.finer('Writing into file with file picker.');
       final identifier = filePickerInfo?.identifier ?? filePickerIdentifier;
-      final f = await createFileInNewTempDirectory(path.basename(displayPath));
-      await f.writeAsBytes(bytes, flush: true);
-      final fileInfo =
-          await FilePickerWritable().writeFileWithIdentifier(identifier, f);
-      if (fileInfo.identifier != identifier) {
-        _logger.severe('Panic, fileIdentifier changed. must no happen.');
-      }
+      await createFileInNewTempDirectory(path.basename(displayPath), (f) async {
+        await f.writeAsBytes(bytes, flush: true);
+        final fileInfo =
+            await FilePickerWritable().writeFileWithIdentifier(identifier, f);
+        if (fileInfo.identifier != identifier) {
+          _logger.severe('Panic, fileIdentifier changed. must no happen.');
+        }
+      });
     } else {
+      _logger.finer('Writing into file directly.');
       await _accessFile((f) => f.writeAsBytes(bytes));
     }
     return null;
   }
 
-  static Future<File> createFileInNewTempDirectory(String baseName) async {
+  static Future<T> createFileInNewTempDirectory<T>(
+      String baseName, Future<T> Function(File tempFile) callback) async {
     final tempDirBase = await getTemporaryDirectory();
     final tempDir =
         Directory(path.join(tempDirBase.path, AppDataBloc.createUuid()));
@@ -245,7 +272,15 @@ class FileSourceLocal extends FileSource {
       tempDir.path,
       baseName,
     ));
-    return tempFile;
+    try {
+      return await callback(tempFile);
+    } finally {
+      unawaited(tempDir
+          .delete(recursive: true)
+          .catchError((dynamic error, StackTrace stackTrace) {
+        _logger.warning('Error while deleting temp dir.', error, stackTrace);
+      }));
+    }
   }
 
   @override
@@ -262,6 +297,15 @@ class FileSourceLocal extends FileSource {
         macOsSecureBookmark: macOsSecureBookmark,
         filePickerIdentifier: filePickerIdentifier,
       );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(StringProperty('filePickerIdentifier', filePickerIdentifier))
+      ..add(FlagsSummary('local', {'macOsSecureBookmark': macOsSecureBookmark},
+          showName: false));
+  }
 }
 
 class FileSourceUrl extends FileSource {

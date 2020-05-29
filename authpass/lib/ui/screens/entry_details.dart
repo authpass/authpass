@@ -208,6 +208,13 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
               await DialogUtils.showErrorDialog(
                   context, 'Error while saving', 'Unable to save file: $e');
               return;
+            } catch (e, stackTrace) {
+              _logger.severe('Error while saving database.', e, stackTrace);
+              if (mounted) {
+                await DialogUtils.showErrorDialog(
+                    context, 'Error while saving', 'Unable to save file: $e');
+              }
+              rethrow;
             }
             setState(() => isFormDirty = false);
           } else {

@@ -252,12 +252,13 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 
   Future<void> _saveAsLocalFile() async {
     if (Platform.isIOS || Platform.isAndroid) {
-      final tempFile = await FileSourceLocal.createFileInNewTempDirectory(
-          '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx');
-      await tempFile.writeAsString('<placeholder>');
+      final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
+          '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx',
+          (tempFile) async {
+        await tempFile.writeAsString('<placeholder>');
+        return await FilePickerWritable().openFilePickerForCreate(tempFile);
+      });
 
-      final fileInfo =
-          await FilePickerWritable().openFilePickerForCreate(tempFile);
       if (fileInfo == null) {
         _logger.info('User cancelled file picker.');
         return;
@@ -273,8 +274,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
           ));
       widget.onFileSourceChanged(newFile.fileSource);
       if (!mounted) {
-        _logger
-            .severe('$runtimeType We are no longer mounted afterwriting file.');
+        _logger.severe(
+            '$runtimeType We are no longer mounted after writing file.');
         return;
       }
 //      setState(() {
