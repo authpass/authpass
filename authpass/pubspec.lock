@@ -47,8 +47,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: e66dd4ef20be5597d805b2293835c91fa7b477e3
-      resolved-ref: e66dd4ef20be5597d805b2293835c91fa7b477e3
+      ref: "30ef543e3c199528562c7a3e10f8cda618d7d9ba"
+      resolved-ref: "30ef543e3c199528562c7a3e10f8cda618d7d9ba"
       url: "https://github.com/authpass/argon2_ffi.git"
     source: git
     version: "0.0.1"
@@ -285,13 +285,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
-  fake_async:
-    dependency: transitive
-    description:
-      name: fake_async
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   ffi:
     dependency: "direct main"
     description:
@@ -487,6 +480,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
+  image:
+    dependency: transitive
+    description:
+      name: image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.12"
   intl:
     dependency: "direct main"
     description:
@@ -528,7 +528,7 @@ packages:
       name: json_rpc_2
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.0"
   json_serializable:
     dependency: "direct dev"
     description:
@@ -672,7 +672,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.6.4"
   path_drawing:
     dependency: transitive
     description:

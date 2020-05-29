@@ -1,7 +1,7 @@
 name: authpass
 description: Password Manager with support for kdbx 3.x and 4.x
 
-version: 1.6.2+135
+version: 1.6.3+136
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -15,7 +15,7 @@ dependencies:
   argon2_ffi:
     git:
       url: https://github.com/authpass/argon2_ffi.git
-      ref: e66dd4ef20be5597d805b2293835c91fa7b477e3
+      ref: 30ef543e3c199528562c7a3e10f8cda618d7d9ba
   simple_form_field_validator:
     git:
       url: https://github.com/hpoul/flutter_utils.git
