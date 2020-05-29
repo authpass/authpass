@@ -9,5 +9,14 @@ jobs:
         
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
-          command: ./gradlew build
+          command: BLACKBOX_SECRET=`echo $BLACKBOX_SECRET_BASE64 | base64 --decode` authpass/_tools/postdeploy.sh
+      - run: ./authpass/_tools/ci-install-deps.sh android
+      - run: 
+          environment:
+            GIT_AUTHOR_NAME: 'CircleCI'
+            GIT_AUTHOR_EMAIL: 'herbert.circleci@codeux.design'
+            GIT_COMMITTER_NAME: 'CircleCI'
+            GIT_COMMITTER_EMAIL: 'herbert.circleci@codeux.design'
+          command: ./authpass/_tools/ci-release.sh android sideload
