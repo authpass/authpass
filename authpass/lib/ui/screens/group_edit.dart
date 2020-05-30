@@ -133,7 +133,7 @@ class _GroupEditState extends State<GroupEdit> {
             const SizedBox(height: 8),
             TextFormField(
               maxLines: null,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
 //        fillColor: const Color(0xfff0f0f0),
                 filled: true,
                 prefixIcon: Icon(Icons.label),
