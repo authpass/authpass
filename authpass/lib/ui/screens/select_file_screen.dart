@@ -265,22 +265,21 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //                                uuid: AppDataBloc.createUuid())));
 //                      }
                     } else {
-                      showOpenPanel((result, paths) async {
-                        if (result == FileChooserResult.ok) {
-                          String macOsBookmark;
-                          if (Platform.isMacOS) {
-                            macOsBookmark = await SecureBookmarks()
-                                .bookmark(File(paths[0]));
-                          }
-                          await Navigator.of(context)
-                              .push(CredentialsScreen.route(FileSourceLocal(
-                            File(paths[0]),
-                            uuid: AppDataBloc.createUuid(),
-                            macOsSecureBookmark: macOsBookmark,
-                            filePickerIdentifier: null,
-                          )));
+                      final result = await showOpenPanel();
+                      if (!result.canceled) {
+                        String macOsBookmark;
+                        if (Platform.isMacOS) {
+                          macOsBookmark = await SecureBookmarks()
+                              .bookmark(File(result.paths[0]));
                         }
-                      });
+                        await Navigator.of(context)
+                            .push(CredentialsScreen.route(FileSourceLocal(
+                          File(result.paths[0]),
+                          uuid: AppDataBloc.createUuid(),
+                          macOsSecureBookmark: macOsBookmark,
+                          filePickerIdentifier: null,
+                        )));
+                      }
                     }
                   },
                 ),
@@ -693,17 +692,16 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                         _keyFile = path == null ? null : path.file;
                       });
                     } else {
-                      showOpenPanel((result, paths) async {
-                        if (result == FileChooserResult.ok) {
-                          setState(() {
-                            _keyFile = File(paths[0]);
-                          });
-                        } else if (result == FileChooserResult.cancel) {
-                          setState(() {
-                            _keyFile = null;
-                          });
-                        }
-                      });
+                      final result = await showOpenPanel();
+                      if (!result.canceled) {
+                        setState(() {
+                          _keyFile = File(result.paths[0]);
+                        });
+                      } else {
+                        setState(() {
+                          _keyFile = null;
+                        });
+                      }
                     }
                   },
                 ),

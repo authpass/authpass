@@ -317,11 +317,11 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/file_chooser"
-      ref: a73321baa3a0e7c16c66e9180211ae247e63f39c
-      resolved-ref: a73321baa3a0e7c16c66e9180211ae247e63f39c
-      url: "https://github.com/hpoul/flutter-desktop-embedding.git"
+      ref: "4f7ad4f5cb9d1df3c3933db47468748afdd6d9e0"
+      resolved-ref: "4f7ad4f5cb9d1df3c3933db47468748afdd6d9e0"
+      url: "https://github.com/google/flutter-desktop-embedding.git"
     source: git
-    version: "0.0.1"
+    version: "0.1.0"
   file_picker_writable:
     dependency: "direct main"
     description:
@@ -1011,6 +1011,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.4.7"
+  url_launcher_fde:
+    dependency: "direct main"
+    description:
+      path: "plugins/flutter_plugins/url_launcher_fde"
+      ref: "4f7ad4f5cb9d1df3c3933db47468748afdd6d9e0"
+      resolved-ref: "4f7ad4f5cb9d1df3c3933db47468748afdd6d9e0"
+      url: "https://github.com/google/flutter-desktop-embedding.git"
+    source: git
+    version: "0.0.1"
   url_launcher_macos:
     dependency: transitive
     description:

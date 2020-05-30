@@ -28,6 +28,11 @@ set(FLUTTER_MANAGED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/flutter")
 # Flutter library and tool build rules.
 add_subdirectory(${FLUTTER_MANAGED_DIR})
 
+# System-level dependencies.
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
+pkg_check_modules(X11 REQUIRED IMPORTED_TARGET x11)
+
 # Application build
 add_executable(${BINARY_NAME}
   "main.cc"
@@ -36,6 +41,8 @@ add_executable(${BINARY_NAME}
 )
 apply_standard_settings(${BINARY_NAME})
 target_link_libraries(${BINARY_NAME} PRIVATE flutter flutter_wrapper_app)
+target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK)
+target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::X11)
 add_dependencies(${BINARY_NAME} flutter_assemble)
 
 # Generated plugin build rules, which manage building the plugins and adding

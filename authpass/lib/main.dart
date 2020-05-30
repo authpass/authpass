@@ -29,6 +29,9 @@ import 'package:package_info/package_info.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+// TODO: Remove the following two lines once path provider endorses the linux plugin
+import 'package:path_provider_linux/path_provider_linux.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 final _logger = Logger('main');
 
@@ -39,6 +42,13 @@ void initIsolate({bool fromMain = false}) {
 void main() => throw Exception('Run some env/*.dart');
 
 Future<void> startApp(Env env) async {
+
+  // TODO: Remove the following four lines once path provider endorses the linux plugin
+  if (Platform.isLinux) {
+    WidgetsFlutterBinding.ensureInitialized();
+    PathProviderPlatform.instance = PathProviderLinux();
+  }
+  
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(

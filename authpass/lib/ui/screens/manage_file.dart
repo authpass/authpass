@@ -283,31 +283,31 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 //      });
       return;
     }
-    showSavePanel(
-      (result, paths) async {
-        if (result == FileChooserResult.ok) {
-          final path = paths.first;
-          final outputFile = File(path);
-          String macOsBookmark;
-          if (Platform.isMacOS) {
-            // create a dummy file, so we can create a secure bookmark.
-            await outputFile.writeAsString('.');
-            macOsBookmark = await SecureBookmarks().bookmark(outputFile);
-          }
-          final newFile = await _kdbxBloc.saveAs(
-            _file,
-            FileSourceLocal(
-              outputFile,
-              uuid: AppDataBloc.createUuid(),
-              macOsSecureBookmark: macOsBookmark,
-            ),
-          );
-          widget.onFileSourceChanged(newFile.fileSource);
-        }
-      },
+    final result = await showSavePanel(
       suggestedFileName: path.basename(widget.fileSource.displayPath),
       confirmButtonText: 'Save',
     );
+    if (result.canceled) {
+      return;
+    }
+
+    final pathFile = result.paths.first;
+    final outputFile = File(pathFile);
+    String macOsBookmark;
+    if (Platform.isMacOS) {
+      // create a dummy file, so we can create a secure bookmark.
+      await outputFile.writeAsString('.');
+      macOsBookmark = await SecureBookmarks().bookmark(outputFile);
+    }
+    final newFile = await _kdbxBloc.saveAs(
+      _file,
+      FileSourceLocal(
+        outputFile,
+        uuid: AppDataBloc.createUuid(),
+        macOsSecureBookmark: macOsBookmark,
+      ),
+    );
+    widget.onFileSourceChanged(newFile.fileSource);
   }
 
   Future<void> _saveAsCloudStorage(CloudStorageProvider cs) async {
