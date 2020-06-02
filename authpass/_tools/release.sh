@@ -99,8 +99,11 @@ case "${flavor}" in
     linux)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
         $FLT build -v linux -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.linux
-        cd android
-        fastlane beta
+
+        outputfilename="authpass-linux-${buildnumber}.tar.gz"
+        outputpath="build/linux/release/${outputfilename}"
+        tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/linux/release/bundle
+        echo "::set-output name=outputpath::${outputpath}"
     ;;
     *)
         echo "Unsupported command ${flavor}"

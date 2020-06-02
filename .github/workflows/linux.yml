@@ -1,0 +1,48 @@
+name: build linux
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        flavor: ['linux']
+
+      fail-fast: true
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+    - name: Postdeploy
+      env:
+        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+      run: authpass/_tools/postdeploy.sh
+    - run: |
+        apt-get install apt-get install -y \
+        clang \
+        cmake \
+        ninja-build \
+        file pkg-config git unzip \
+        libgtk-3-dev libx11-dev
+    - name: ci-install-deps
+      run: "./authpass/_tools/ci-install-deps.sh android"
+    - name: build ${{ matrix.flavor }} apk
+      id: buildapk
+      env:
+        GIT_AUTHOR_NAME: 'Github Action CI'
+        GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
+        GIT_COMMITTER_NAME: 'Github Action CI'
+        GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
+      run: "./authpass/_tools/ci-release.sh ${{ matrix.flavor }}"
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.buildapk.outputs.outputfilename }}
+        path: authpass/${{ steps.buildapk.outputs.outputpath }}
