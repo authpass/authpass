@@ -47,10 +47,17 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "30ef543e3c199528562c7a3e10f8cda618d7d9ba"
-      resolved-ref: "30ef543e3c199528562c7a3e10f8cda618d7d9ba"
+      ref: "190ea970e1f24bfd87901ebc1a233111679e83d4"
+      resolved-ref: "190ea970e1f24bfd87901ebc1a233111679e83d4"
       url: "https://github.com/authpass/argon2_ffi.git"
     source: git
+    version: "0.0.1"
+  argon2_ffi_base:
+    dependency: transitive
+    description:
+      name: argon2_ffi_base
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   args:
     dependency: transitive
