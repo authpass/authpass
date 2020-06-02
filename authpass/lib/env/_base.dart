@@ -14,9 +14,12 @@ final _logger = Logger('_base');
 enum EnvType { production, development }
 
 const _DEFAULT_APP_NAME = 'AuthPass';
-const _DEFAULT_VERSION = '1.0.0';
-const _DEFAULT_BUILD_NUMBER = 1;
-const _DEFAULT_PACKAGE_NAME = 'design.codeux.authpass';
+const _DEFAULT_VERSION =
+    String.fromEnvironment('AUTHPASS_VERSION', defaultValue: '1.0.0');
+const _DEFAULT_BUILD_NUMBER =
+    int.fromEnvironment('AUTHPASS_BUILD_NUMBER', defaultValue: 1);
+const _DEFAULT_PACKAGE_NAME = String.fromEnvironment('AUTHPASS_PACKAGE_NAME',
+    defaultValue: 'design.codeux.authpass.dev');
 
 abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   factory AppInfo([void Function(AppInfoBuilder b) updates]) = _$AppInfo;
@@ -124,6 +127,10 @@ abstract class Env {
 
   Future<PackageInfo> _getPackageInfo() async {
     try {
+      // linux and windows don't support this right now.
+      if (Platform.isLinux || Platform.isWindows) {
+        return null;
+      }
       return await PackageInfo.fromPlatform();
     } on PlatformException catch (e, stackTrace) {
       _logger.severe('Error getting package info', e, stackTrace);

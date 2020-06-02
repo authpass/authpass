@@ -42,13 +42,12 @@ void initIsolate({bool fromMain = false}) {
 void main() => throw Exception('Run some env/*.dart');
 
 Future<void> startApp(Env env) async {
-
   // TODO: Remove the following four lines once path provider endorses the linux plugin
   if (Platform.isLinux) {
     WidgetsFlutterBinding.ensureInitialized();
     PathProviderPlatform.instance = PathProviderLinux();
   }
-  
+
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(
@@ -131,29 +130,32 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         });
       }
     }));
-    _filePickerState = FilePickerWritable().init()
-      ..registerFileInfoHandler((fileInfo) {
-        _logger.fine('got a new fileInfo: $fileInfo');
-        final openRoute = () async {
-          var i = 0;
-          while (_navigatorKey.currentState == null) {
-            _logger.finest('No navigator yet. waiting. $i');
-            await Future<void>.delayed(const Duration(milliseconds: 100));
-            if (i++ > 100) {
-              _logger.warning('Giving up $fileInfo');
-              return;
+    // file picker writable currently has only ios, android, macos support.
+    if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
+      _filePickerState = FilePickerWritable().init()
+        ..registerFileInfoHandler((fileInfo) {
+          _logger.fine('got a new fileInfo: $fileInfo');
+          final openRoute = () async {
+            var i = 0;
+            while (_navigatorKey.currentState == null) {
+              _logger.finest('No navigator yet. waiting. $i');
+              await Future<void>.delayed(const Duration(milliseconds: 100));
+              if (i++ > 100) {
+                _logger.warning('Giving up $fileInfo');
+                return;
+              }
             }
-          }
-          await _navigatorKey.currentState
-              .push(CredentialsScreen.route(FileSourceLocal(
-            fileInfo.file,
-            uuid: AppDataBloc.createUuid(),
-            filePickerIdentifier: fileInfo.toJsonString(),
-          )));
-        };
-        openRoute();
-        return true;
-      });
+            await _navigatorKey.currentState
+                .push(CredentialsScreen.route(FileSourceLocal(
+              fileInfo.file,
+              uuid: AppDataBloc.createUuid(),
+              filePickerIdentifier: fileInfo.toJsonString(),
+            )));
+          };
+          openRoute();
+          return true;
+        });
+    }
   }
 
   @override
