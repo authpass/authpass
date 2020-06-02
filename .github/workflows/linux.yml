@@ -1,6 +1,9 @@
 name: build linux
 
-on: [push]
+on: 
+  push:
+    branches:
+      - 'linux**'
 
 jobs:
   build:
@@ -26,14 +29,15 @@ jobs:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
       run: authpass/_tools/postdeploy.sh
     - run: |
-        apt-get install apt-get install -y \
+        sudo apt-get install -y \
         clang \
         cmake \
         ninja-build \
         file pkg-config git unzip \
         libgtk-3-dev libx11-dev
     - name: ci-install-deps
-      run: "./authpass/_tools/ci-install-deps.sh android"
+      run: "./authpass/_tools/ci-install-deps.sh linux"
+    - run: ~/deps/flutter/bin/flutter channel master && ~/deps/flutter/bin/flutter upgrade && ~/deps/flutter/bin/flutter config --enable-linux-desktop
     - name: build ${{ matrix.flavor }} apk
       id: buildapk
       env:

@@ -103,6 +103,7 @@ case "${flavor}" in
         outputfilename="authpass-linux-${buildnumber}.tar.gz"
         outputpath="build/linux/release/${outputfilename}"
         tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/linux/release/bundle
+        echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
     ;;
     *)
