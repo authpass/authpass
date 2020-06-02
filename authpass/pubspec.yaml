@@ -15,7 +15,7 @@ dependencies:
   argon2_ffi:
     git:
       url: https://github.com/authpass/argon2_ffi.git
-      ref: 8c3cb65627ac6db6263aa6bd8b73c4813988e43b
+      ref: a2d87d3d41c8ebb8ffd8a0b805b4f64a7ba89e9f
   simple_form_field_validator:
     git:
       url: https://github.com/hpoul/flutter_utils.git
@@ -154,6 +154,8 @@ dependency_overrides:
   pedantic: ^1.9.0
   xml: '>=3.7.0 <4.0.0'
   petitparser: '>=3.0.0 <4.0.0'
+  kdbx:
+    path: ../deps/kdbx.dart
   pointycastle:
     git:
       url: https://github.com/authpass/pointycastle.git
