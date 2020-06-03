@@ -1,2 +1,8 @@
+[Desktop Entry]
+Name=AuthPass
+GenericName=Password Manager
+Type=Application
 Exec=authpass
+Terminal=false
 Icon=${SNAP}/meta/gui/authpass.png
+Categories=Utility;Security;
