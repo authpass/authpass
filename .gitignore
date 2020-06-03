@@ -35,4 +35,5 @@ _debug-full-r8-config.txt
 /parts
 /stage
 /prime
+/snap/.snapcraft
 

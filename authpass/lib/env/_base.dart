@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:authpass/main.dart';
 import 'package:built_value/built_value.dart';
+import 'package:diac_client/diac_client.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -31,6 +32,15 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   String get packageName;
 
   String get versionLabel => '$version+$buildNumber';
+}
+
+extension AppInfoDiac on AppInfo {
+  DiacPackageInfo toDiacPackageInfo() => DiacPackageInfo(
+        appName: appName,
+        packageName: packageName,
+        version: version,
+        buildNumber: '$buildNumber',
+      );
 }
 
 class EnvSecrets {

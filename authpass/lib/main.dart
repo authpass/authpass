@@ -307,29 +307,34 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           refetchIntervalCold: Duration.zero,
           initialConfig: !disableOnlineMessages
               ? null
-              : DiacConfig(updatedAt: DateTime(2020, 5, 18), messages: [
-                  DiacMessage(
-                    uuid: 'e7373fa7-a793-4ed5-a2d1-d0a037ad778a',
-                    body:
-                        'Hello ${widget.env is FDroid ? 'F-Droid user' : 'there'}, thanks for using AuthPass! '
-                        'I would love to occasionally display relevant news, surveys, etc (like this one ;), '
-                        'no ads, spam, etc). You can disable it anytime.',
-                    key: 'ask-opt-in',
-                    expression: 'user.days > 0',
-                    actions: const [
-                      DiacMessageAction(
-                        key: 'yes',
-                        label: '👍️ Yes, Opt In',
-                        url: 'diac:diacOptIn',
-                      ),
-                      DiacMessageAction(
-                        key: 'no',
-                        label: 'No, Sorry',
-                        url: 'diac:diacNoOptIn',
-                      ),
-                    ],
-                  ),
-                ])),
+              : DiacConfig(
+                  updatedAt: DateTime(2020, 5, 18),
+                  messages: [
+                    DiacMessage(
+                      uuid: 'e7373fa7-a793-4ed5-a2d1-d0a037ad778a',
+                      body:
+                          'Hello ${widget.env is FDroid ? 'F-Droid user' : 'there'}, thanks for using AuthPass! '
+                          'I would love to occasionally display relevant news, surveys, etc (like this one ;), '
+                          'no ads, spam, etc). You can disable it anytime.',
+                      key: 'ask-opt-in',
+                      expression: 'user.days > 0',
+                      actions: const [
+                        DiacMessageAction(
+                          key: 'yes',
+                          label: '👍️ Yes, Opt In',
+                          url: 'diac:diacOptIn',
+                        ),
+                        DiacMessageAction(
+                          key: 'no',
+                          label: 'No, Sorry',
+                          url: 'diac:diacNoOptIn',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+          packageInfo: () async =>
+              (await _deps.env.getAppInfo()).toDiacPackageInfo()),
       contextBuilder: () async => {
         'env': <String, Object>{
           'isDebug': _deps.env.isDebug,
