@@ -28,3 +28,11 @@ Flutter.podspec
 /authpass/_tools/secrets/gradle_home/amazon-key.jks
 settings_aar.gradle
 _debug-full-r8-config.txt
+
+
+# snapcraft files
+/*.snap
+/parts
+/stage
+/prime
+
