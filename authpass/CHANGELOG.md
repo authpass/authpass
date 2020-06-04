@@ -1,3 +1,8 @@
+# 1.6.3
+
+* Initial support for Linux
+* fix OTP codes with spaces in 'TOTP Seed' field #26
+
 # 1.6.2
 
 * Revamped Group management, filtering and editing, support for changing icons, renaming, deleting.

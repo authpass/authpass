@@ -24,7 +24,7 @@ DEPENDENCIES:
   - biometric_storage (from `Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos`)
   - file_chooser (from `Flutter/ephemeral/.symlinks/plugins/file_chooser/macos`)
   - file_picker_writable (from `Flutter/ephemeral/.symlinks/plugins/file_picker_writable/macos`)
-  - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64-release`)
+  - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
   - macos_secure_bookmarks (from `Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos`)
   - package_info (from `Flutter/ephemeral/.symlinks/plugins/package_info/macos`)
   - path_provider (from `Flutter/ephemeral/.symlinks/plugins/path_provider/macos`)
@@ -42,7 +42,7 @@ EXTERNAL SOURCES:
   file_picker_writable:
     :path: Flutter/ephemeral/.symlinks/plugins/file_picker_writable/macos
   FlutterMacOS:
-    :path: Flutter/ephemeral/.symlinks/flutter/darwin-x64-release
+    :path: Flutter/ephemeral/.symlinks/flutter/darwin-x64
   macos_secure_bookmarks:
     :path: Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos
   package_info:
@@ -67,7 +67,7 @@ SPEC CHECKSUMS:
   path_provider: e0848572d1d38b9a7dd099e79cf83f5b7e2cde9f
   path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b
   url_launcher: af78307ef9bafff91273b34f1c6c0c86a0004fd7
-  url_launcher_macos: 76867a28e24e0b6b98bfd65f157b64108e6d477a
+  url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
 
 PODFILE CHECKSUM: 3d7f23e3a499e4f844c299df7bc01f656165c909
 

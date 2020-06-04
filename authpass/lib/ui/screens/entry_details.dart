@@ -27,6 +27,7 @@ import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:barcode_scan/barcode_scan.dart' as barcode;
 import 'package:base32/base32.dart';
+import 'package:clock/clock.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -1167,7 +1168,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
       return throw FormatException('OTP Field contains no data.', value);
     }
     if (value.startsWith('otpauth:')) {
-      // Or own format :-) (And also used by KeeWeb)
+      // Our own format :-) (And also used by KeeWeb)
       return OtpAuth.fromUri(Uri.parse(value));
     }
     if (value.contains('key\=')) {
@@ -1188,14 +1189,16 @@ class _OtpEntryFieldState extends _EntryFieldState {
     }
     // assume base32 encoded secret, with more settings stored in a second field.
     try {
-      final binarySecret = base32.decode(value);
+      final binarySecret = base32.decode(value.replaceAll(' ', ''));
       final settings =
           _commonFields.otpAuthCompat1Settings.stringValue(widget.entry) ?? '';
-      final settingsOptions = settings.split(';');
+      final settingsOptions =
+          settings.isEmpty ? <String>[] : settings.split(';');
+      _logger.finest('settings: $settings');
       return OtpAuth(
         secret: binarySecret,
         period: settingsOptions.optGet(0)?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
-        digits: settingsOptions.optGet(1)?.toInt(),
+        digits: settingsOptions.optGet(1)?.toInt() ?? OtpAuth.DEFAULT_DIGITS,
       );
     } on FormatException catch (e, stackTrace) {
       // ignore format exception from base32 decoding.
@@ -1212,7 +1215,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
       final otpAuth = _getOtpAuth();
       final secretBase32 = base32.encode(otpAuth.secret);
       _logger.fine('uri: $otpAuth');
-      final now = DateTime.now().millisecondsSinceEpoch;
+      final now = clock.now().millisecondsSinceEpoch;
       final totpCode = OTP.generateTOTPCodeString(
         secretBase32,
         now,
