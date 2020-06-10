@@ -1,6 +1,4 @@
 name: authpass
-base: core
-# version: '0.1'
 icon: snap/gui/authpass.png
 summary: Open Source Password Manager with Keepass file support.
 description: |
@@ -11,22 +9,29 @@ description: |
   across all your devices and easily find them whenever you need to login.
 
 
-adopt-info: setversion
+base: core18
+adopt-info: authpass
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict
 
 parts:
-  setversion:
-    plugin: nil
+  authpass:
+    plugin: dump
+    source: authpass/build/linux/release/bundle
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version $(cat ${SNAPCRAFT_PROJECT_DIR}/authpass/build/linux/release/version.txt)
-  main:
-    # See 'snapcraft plugins'
-    plugin: dump
-    source: authpass/build/linux/release/bundle
+    stage-packages:
+      - libegl-mesa0
 
 apps:
   authpass:
     command: authpass
     plugs: [home, network, x11]
+    extensions: [gnome-3-28]
+    plugs:
+      - opengl
+      - home
+      - network
+    environment:
+      __EGL_VENDOR_LIBRARY_DIRS: $SNAP/usr/share/glvnd/egl_vendor.d/
