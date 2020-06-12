@@ -1,7 +1,8 @@
 # 1.6.3
 
 * Initial support for Linux
-* fix OTP codes with spaces in 'TOTP Seed' field #26
+* Fix OTP codes with spaces in 'TOTP Seed' field #26
+* Password List: Improved search by search for each word separately.
 * iOS: added icloud capability to fix local file crashes on ios <= 10
 
 # 1.6.2

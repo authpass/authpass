@@ -151,8 +151,9 @@ class PasswordListFilterIsolateRunner {
       List<EntryViewModel> _allEntries, String query,
       {int maxResults = 30}) {
     _logger.info('We have to filter for $query');
+    final terms = query.toLowerCase().split(' ');
     return _allEntries
-        .where((entry) => matches(entry, query))
+        .where((entry) => matches(entry, terms))
         // take no more than 30 for now.
         .take(maxResults)
         .toList(growable: false);
@@ -164,20 +165,24 @@ class PasswordListFilterIsolateRunner {
     KdbxKey('UserName')
   ];
 
-  static bool matches(EntryViewModel entry, String filterQuery) {
-    final query = filterQuery.toLowerCase();
-    return searchFields
-            .where((field) =>
-                entry.entry
-                    .getString(field)
-                    ?.getText()
-                    ?.toLowerCase()
-                    ?.contains(query) ==
-                true)
-            .isNotEmpty ||
-        entry.groupNames
-            .where((string) => string.toLowerCase().contains(query))
-            .isNotEmpty;
+  static bool matches(EntryViewModel entry, List<String> filterTerms) {
+    for (final term in filterTerms) {
+      if (searchFields
+              .where((field) =>
+                  entry.entry
+                      .getString(field)
+                      ?.getText()
+                      ?.toLowerCase()
+                      ?.contains(term) ==
+                  true)
+              .isEmpty &&
+          entry.groupNames
+              .where((string) => string.toLowerCase().contains(term))
+              .isEmpty) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 
@@ -1039,11 +1044,12 @@ class PasswordEntryTile extends StatelessWidget {
       return TextSpan(text: text);
     }
     final lcText = text.toLowerCase();
-    final lcFilterQuery = filterQuery.toLowerCase();
-    //RegExp.escape(text).allMatches(string)
+    final lcFilterTerms = filterQuery.toLowerCase().split(' ');
+    final filterRegexp =
+        RegExp(lcFilterTerms.map((e) => RegExp.escape(e)).join('|'));
     var previousMatchEnd = 0;
     final spans = <TextSpan>[];
-    for (final match in lcFilterQuery.allMatches(lcText)) {
+    for (final match in filterRegexp.allMatches(lcText)) {
       spans.add(TextSpan(text: text.substring(previousMatchEnd, match.start)));
       spans.add(TextSpan(
           text: text.substring(match.start, match.end),
