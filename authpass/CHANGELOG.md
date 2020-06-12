@@ -2,6 +2,7 @@
 
 * Initial support for Linux
 * fix OTP codes with spaces in 'TOTP Seed' field #26
+* iOS: added icloud capability to fix local file crashes on ios <= 10
 
 # 1.6.2
 

@@ -8,5 +8,7 @@
 	<array>
 		<string>applinks:links.authpass.app</string>
 	</array>
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array/>
 </dict>
 </plist>
