@@ -27,7 +27,6 @@ parts:
 apps:
   authpass:
     command: authpass
-    plugs: [home, network, x11]
     extensions: [gnome-3-28]
     plugs:
       - opengl
