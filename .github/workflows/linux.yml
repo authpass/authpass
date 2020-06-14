@@ -56,6 +56,7 @@ jobs:
       run: |
         curl --request POST \
           --url https://data.authpass.app/data/artifact.push \
+          --fail \
           --form token=$( cat authpass/_tools/secrets/artifact_token.txt ) \
           --form upload=@authpass/${{ steps.buildapk.outputs.outputpath }} \
-          --form filename=authpass/${{ steps.buildapk.outputs.outputpath }}
+          --form filename=$( basename ${{ steps.buildapk.outputs.outputpath }} )
