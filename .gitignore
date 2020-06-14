@@ -37,3 +37,4 @@ _debug-full-r8-config.txt
 /prime
 /snap/.snapcraft
 
+/authpass/_tools/secrets/artifact_token.txt
