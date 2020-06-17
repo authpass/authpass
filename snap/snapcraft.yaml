@@ -11,7 +11,8 @@ description: |
 
 base: core18
 adopt-info: authpass
-grade: devel # must be 'stable' to release into candidate/stable channels
+#grade: devel # must be 'stable' to release into candidate/stable channels
+grade: stable
 confinement: strict
 
 parts:
