@@ -111,6 +111,8 @@ class Analytics {
           value = entry.value as int;
         } else if (entry.key == 'category' && entry.value is String) {
           category = entry.value as String;
+        } else if (entry.key == 'action' && entry.value is String) {
+          event = entry.value as String;
         } else if (customKey == null) {
           labelParams.add('${entry.key}=${entry.value}');
         } else {
@@ -237,4 +239,15 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackSaveCount({@required String generator, @required int value});
 
   void trackAttachmentAction(String action, {String category = 'attachment'});
+  void trackAttachmentAdd(
+    AttachmentAddType action,
+    String ext,
+    int value, {
+    String category = 'attachmentAdd',
+  });
+}
+
+enum AttachmentAddType {
+  success,
+  canceled,
 }

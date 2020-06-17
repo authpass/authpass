@@ -67,6 +67,15 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackAttachmentAction(String action, {String category = 'attachment'}) =>
       trackEvent('attachmentAction',
           <String, dynamic>{'action': action, 'category': category});
+  @override
+  void trackAttachmentAdd(AttachmentAddType action, String ext, int value,
+          {String category = 'attachmentAdd'}) =>
+      trackEvent('attachmentAdd', <String, dynamic>{
+        'action': action?.toString()?.substring(18),
+        'ext': ext,
+        'value': value,
+        'category': category
+      });
 }
 
 // **************************************************************************

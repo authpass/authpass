@@ -75,11 +75,12 @@ class DialogUtils {
   static Future<bool> showConfirmDialog({
     @required BuildContext context,
     @required ConfirmDialogParams params,
-  }) {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(params: params),
-    );
+  }) async {
+    return (await showDialog<bool>(
+          context: context,
+          builder: (context) => ConfirmDialog(params: params),
+        )) ==
+        true;
   }
 
   static bool sendLogsSupported() => Platform.isIOS || Platform.isAndroid;

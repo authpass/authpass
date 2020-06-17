@@ -29,6 +29,7 @@ import 'package:barcode_scan/barcode_scan.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +41,7 @@ import 'package:logging/logging.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -493,18 +495,7 @@ class _EntryDetailsState extends State<EntryDetails>
               LinkButton(
                 icon: const Icon(Icons.attach_file),
                 child: const Text('Add attachment'),
-                onPressed: () async {
-                  final fileInfo = await FilePickerWritable().openFilePicker();
-                  if (fileInfo != null) {
-                    final fileName = fileInfo.fileName ?? fileInfo.file.path;
-                    final bytes = await fileInfo.file.readAsBytes();
-                    widget.entry.createBinary(
-                      isProtected: false,
-                      name: fileName,
-                      bytes: bytes,
-                    );
-                  }
-                },
+                onPressed: _attachFile,
               ),
               const SizedBox(height: 16),
               PrimaryButton(
@@ -516,6 +507,55 @@ class _EntryDetailsState extends State<EntryDetails>
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _attachFile() async {
+    if (Platform.isIOS || Platform.isAndroid) {
+      final fileInfo = await FilePickerWritable().openFilePicker();
+      if (fileInfo != null) {
+        final fileName = fileInfo.fileName ?? fileInfo.file.path;
+        final bytes = await fileInfo.file.readAsBytes();
+        await _attachFileContent(fileName, bytes);
+      }
+    } else {
+      final result = await showOpenPanel();
+      if (!result.canceled) {
+        final file = result.paths[0];
+        final fileName = path.basename(file);
+        final bytes = await File(file).readAsBytes();
+        await _attachFileContent(fileName, bytes);
+      }
+    }
+  }
+
+  Future<void> _attachFileContent(String fileName, Uint8List bytes) async {
+    final analytics = Provider.of<Analytics>(context, listen: false);
+    if (bytes.lengthInBytes > 10 * 1024) {
+      if (!await DialogUtils.showConfirmDialog(
+        context: context,
+        params: ConfirmDialogParams(
+          content: 'Attached files will be embedded in password file. '
+              'This can significantly increase time required to open/save passwords.',
+        ),
+      )) {
+        analytics.events.trackAttachmentAdd(
+          AttachmentAddType.canceled,
+          path.extension(fileName),
+          bytes.lengthInBytes,
+        );
+        return;
+      }
+    }
+    analytics.events.trackAttachmentAdd(
+      AttachmentAddType.success,
+      path.extension(fileName),
+      bytes.lengthInBytes,
+    );
+    widget.entry.createBinary(
+      isProtected: false,
+      name: fileName,
+      bytes: bytes,
     );
   }
 
