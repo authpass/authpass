@@ -1,3 +1,8 @@
+# 1.6.4
+
+* Fixed saving files in Dropbox root folder.
+* MacOS: Fixed adding file attachments.
+
 # 1.6.3
 
 * Initial support for Linux
