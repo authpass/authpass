@@ -444,7 +444,7 @@ packages:
       name: googleapis
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.54.0"
+    version: "0.55.0"
   googleapis_auth:
     dependency: "direct main"
     description:
@@ -563,7 +563,7 @@ packages:
       name: logging_appenders
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2+2"
+    version: "0.4.2+3"
   macos_secure_bookmarks:
     dependency: "direct main"
     description:
@@ -1017,7 +1017,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.10"
+    version: "5.4.11"
   url_launcher_fde:
     dependency: "direct main"
     description:
