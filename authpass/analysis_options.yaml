@@ -14,6 +14,8 @@ analyzer:
     missing_return: warning
     # allow having TODOs in the code
     todo: ignore
+  exclude:
+    - lib/**/*.g.dart
 
 linter:
   rules:
