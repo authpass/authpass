@@ -135,6 +135,101 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
   }
 }
 
+class _$FeatureFlags extends FeatureFlags {
+  @override
+  final bool authpassCloud;
+  @override
+  final String authpassCloudUri;
+
+  factory _$FeatureFlags([void Function(FeatureFlagsBuilder) updates]) =>
+      (new FeatureFlagsBuilder()..update(updates)).build();
+
+  _$FeatureFlags._({this.authpassCloud, this.authpassCloudUri}) : super._() {
+    if (authpassCloud == null) {
+      throw new BuiltValueNullFieldError('FeatureFlags', 'authpassCloud');
+    }
+    if (authpassCloudUri == null) {
+      throw new BuiltValueNullFieldError('FeatureFlags', 'authpassCloudUri');
+    }
+  }
+
+  @override
+  FeatureFlags rebuild(void Function(FeatureFlagsBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  FeatureFlagsBuilder toBuilder() => new FeatureFlagsBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is FeatureFlags &&
+        authpassCloud == other.authpassCloud &&
+        authpassCloudUri == other.authpassCloudUri;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, authpassCloud.hashCode), authpassCloudUri.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('FeatureFlags')
+          ..add('authpassCloud', authpassCloud)
+          ..add('authpassCloudUri', authpassCloudUri))
+        .toString();
+  }
+}
+
+class FeatureFlagsBuilder
+    implements Builder<FeatureFlags, FeatureFlagsBuilder> {
+  _$FeatureFlags _$v;
+
+  bool _authpassCloud;
+  bool get authpassCloud => _$this._authpassCloud;
+  set authpassCloud(bool authpassCloud) =>
+      _$this._authpassCloud = authpassCloud;
+
+  String _authpassCloudUri;
+  String get authpassCloudUri => _$this._authpassCloudUri;
+  set authpassCloudUri(String authpassCloudUri) =>
+      _$this._authpassCloudUri = authpassCloudUri;
+
+  FeatureFlagsBuilder();
+
+  FeatureFlagsBuilder get _$this {
+    if (_$v != null) {
+      _authpassCloud = _$v.authpassCloud;
+      _authpassCloudUri = _$v.authpassCloudUri;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(FeatureFlags other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$FeatureFlags;
+  }
+
+  @override
+  void update(void Function(FeatureFlagsBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$FeatureFlags build() {
+    final _$result = _$v ??
+        new _$FeatureFlags._(
+            authpassCloud: authpassCloud, authpassCloudUri: authpassCloudUri);
+    replace(_$result);
+    return _$result;
+  }
+}
+
 // ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
 
 // **************************************************************************

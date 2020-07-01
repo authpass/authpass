@@ -25,6 +25,11 @@ dependencies:
   logging_appenders: ^0.4.2+3
   diac_client:
     path: ../deps/diac/diac_client
+  openapi_base: ^0.1.1
+  authpass_cloud_shared:
+    path: ../deps/authpass-cloud/packages/authpass_cloud_shared
+
+  synchronized: ^2.2.0+1
 #  file_picker: ^1.6.2
   file_picker_writable: 1.1.1+1
 #  file_picker_writable:

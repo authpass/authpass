@@ -76,6 +76,16 @@ class EnvSecrets {
   final String microsoftClientSecret;
 }
 
+abstract class FeatureFlags
+    implements Built<FeatureFlags, FeatureFlagsBuilder> {
+  factory FeatureFlags([void Function(FeatureFlagsBuilder b) updates]) =
+      _$FeatureFlags;
+  FeatureFlags._();
+
+  bool get authpassCloud;
+  String get authpassCloudUri;
+}
+
 abstract class Env {
   Env(this.type) {
     value = this;
@@ -123,6 +133,12 @@ abstract class Env {
 
   String get _storageNamespaceFromEnvironment =>
       Platform.environment[_ENV_STORAGE_NAMESPACE];
+
+  final FeatureFlags featureFlags = FeatureFlags(
+    (b) => b
+      ..authpassCloud = false
+      ..authpassCloudUri = 'https://cloud.authpass.app/',
+  );
 
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();

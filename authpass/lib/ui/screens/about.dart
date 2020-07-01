@@ -26,7 +26,7 @@ class AuthPassAboutDialog extends StatelessWidget {
           return AboutDialog(
             applicationIcon: GestureDetector(
               onLongPress: () async {
-                final deps = Provider.of<Deps>(context);
+                final deps = context.read<Deps>();
                 final appData = await deps.appDataBloc.store.load();
                 final newData = await SimplePromptDialog(
                   labelText: 'debug usertype',

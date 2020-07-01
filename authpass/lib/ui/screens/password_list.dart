@@ -1,7 +1,9 @@
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
@@ -502,6 +504,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 //                }
               },
             ),
+            ...?_buildAuthPassCloudMenuItems(context),
             ...AuthPassAboutDialog.createDefaultPopupMenuItems(
                 context, kdbxBloc.openedFiles),
             PopupMenuItem(
@@ -845,6 +848,30 @@ class _PasswordListContentState extends State<PasswordListContent>
     );
     _filteredEntries = null;
     _filterTextEditingController.text = '';
+  }
+
+  List<PopupMenuItem<VoidCallback>> _buildAuthPassCloudMenuItems(
+      BuildContext context) {
+    final bloc = context.read<AuthPassCloudBloc>();
+    if (bloc?.featureFlags?.authpassCloud != true) {
+      return null;
+    }
+    if (bloc.tokenStatus == TokenStatus.confirmed) {
+      return null;
+    } else {
+      return [
+        PopupMenuItem(
+          child: const ListTile(
+            leading: Icon(Icons.cloud),
+            title: Text('Authenticate with AuthPass Cloud'),
+          ),
+          value: () {
+            Navigator.of(context, rootNavigator: true)
+                .push(AuthPassCloudAuthScreen.route());
+          },
+        )
+      ];
+    }
   }
 }
 

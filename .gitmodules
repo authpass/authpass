@@ -16,3 +16,6 @@
 [submodule "deps/diac"]
 	path = deps/diac
 	url = ../../hpoul/diac
+[submodule "deps/authpass-cloud"]
+	path = deps/authpass-cloud
+	url = ../authpass-cloud

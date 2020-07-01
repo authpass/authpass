@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
@@ -182,6 +183,28 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         StreamProvider<AppData>(
           create: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,
+        ),
+        ProxyProvider2<AppData, Env, FeatureFlags>(
+          update: (_, appData, env, __) {
+            if (appData?.manualUserType == 'admin') {
+              return (env.featureFlags.toBuilder()..authpassCloud = true)
+                  .build();
+            }
+            return env.featureFlags;
+          },
+        ),
+        ListenableProxyProvider<FeatureFlags, AuthPassCloudBloc>(
+          create: (_) => null,
+          update: (_, featureFlags, previous) {
+            if (featureFlags == null ||
+                previous?.featureFlags == featureFlags) {
+              return previous;
+            }
+            previous?.dispose();
+            return AuthPassCloudBloc(featureFlags: featureFlags);
+          },
+          dispose: (_, prev) => prev.dispose(),
+          lazy: true,
         ),
         StreamProvider<KdbxBloc>(
           create: (context) => _deps.kdbxBloc.openedFilesChanged
