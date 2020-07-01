@@ -90,7 +90,7 @@ case "${flavor}" in
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
         cd android
         bundle install
-        bundle exec fastlane beta
+        bundle exec fastlane dev
     ;;
     android)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore

@@ -102,7 +102,7 @@ packages:
       name: biometric_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4+5"
+    version: "0.3.4+6"
   boolean_selector:
     dependency: transitive
     description:

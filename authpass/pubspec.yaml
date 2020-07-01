@@ -74,7 +74,7 @@ dependencies:
   flutter_email_sender: ^3.0.1
   flutter_store_listing: ^0.1.1+2
 
-  biometric_storage: ^0.3.4+5
+  biometric_storage: ^0.3.4+6
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^2.1.0

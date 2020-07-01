@@ -121,7 +121,9 @@ android {
 
     buildTypes {
         release {
-//            minification SHOULD work, but was a bit high risk for me for no gain.
+//            minification is enabled by flutter build command, so nothing we need to do here.
+//            NOTE: only `flutter build apk/appbundle` will enable it,
+//            BUT NOT `flutter run --release`!!
 //            minifyEnabled true
 //            proguardFiles getDefaultProguardFile(
 //                    'proguard-android-optimize.txt'),
