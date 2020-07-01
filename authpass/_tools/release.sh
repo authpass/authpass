@@ -89,12 +89,14 @@ case "${flavor}" in
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
         cd android
-        fastlane dev
+        bundle install
+        bundle exec fastlane beta
     ;;
     android)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
         cd android
-        fastlane beta
+        bundle install
+        bundle exec fastlane beta
     ;;
     linux)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)

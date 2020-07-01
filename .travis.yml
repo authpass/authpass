@@ -15,7 +15,9 @@ jobs:
     name: 'Android Dev Build'
     os: linux
     language: android
-    if: branch = master
+    #if: branch = master
+    # disabled for now, build via github actions.
+    if: 1 != 1
     dist: trusty
     android:
       components:
