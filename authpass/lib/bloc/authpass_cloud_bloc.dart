@@ -11,6 +11,7 @@ import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:quiver/check.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:enough_mail/enough_mail.dart' as enough;
 
 part 'authpass_cloud_bloc.g.dart';
 
@@ -165,6 +166,16 @@ class AuthPassCloudBloc with ChangeNotifier {
     final client = await _getClient();
     final mailList = await client.mailboxListGet().requireSuccess();
     return mailList.data;
+  }
+
+  Future<enough.MimeMessage> loadMail(EmailMessage message) async {
+    final client = await _getClient();
+    final body =
+        await client.mailboxMessageGet(messageId: message.id).requireSuccess();
+    final mimeMessage = enough.MimeMessage();
+    mimeMessage.bodyRaw = body;
+    mimeMessage.parse();
+    return mimeMessage;
   }
 
   @override

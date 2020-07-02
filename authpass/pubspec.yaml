@@ -25,9 +25,6 @@ dependencies:
   logging_appenders: ^0.4.2+3
   diac_client:
     path: ../deps/diac/diac_client
-  openapi_base: ^0.1.2
-  authpass_cloud_shared:
-    path: ../deps/authpass-cloud/packages/authpass_cloud_shared
 
   synchronized: ^2.2.0+1
 #  file_picker: ^1.6.2
@@ -53,7 +50,7 @@ dependencies:
   quiver: ">=2.0.0 <3.0.0"
   tuple: ^1.0.3
   flutter_async_utils: ^0.0.1
-  flutter_svg: ^0.16.0
+  flutter_svg: ">=0.17.0 <1.0.0"
   charcode: ^1.1.2 # For flutter 1.15.17 support, we have to keep 1.1.2 (fdroid)
   #usage: ^3.4.1
   usage:
@@ -142,6 +139,13 @@ dependencies:
   pedantic: ^1.9.0
   ffi: ^0.1.3
   ffi_helper: ^1.4.0
+  # AuthPass Cloud email deps
+  enough_mail: ^0.0.28
+  flutter_html: ^1.0.0
+  flutter_linkify: ^3.1.3
+  openapi_base: ^0.1.2
+  authpass_cloud_shared:
+    path: ../deps/authpass-cloud/packages/authpass_cloud_shared
 
 dev_dependencies:
   flutter_test:
@@ -172,6 +176,8 @@ dependency_overrides:
       ref: package_info_macos
       path: packages/package_info
   rxdart: ^0.24.1
+#  openapi_base:
+#    path: /Users/herbert/dev/authpass-cloud/deps/openapi_dart/packages/openapi_base
 
 #  url_launcher_fde:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/flutter_plugins/url_launcher_fde
@@ -200,12 +206,17 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
   fonts:
-   - family: Inter
-     fonts:
-       - asset: assets/fonts/Inter-Regular.otf
-       - asset: assets/fonts/Inter-Light.otf
-         weight: 300
-       - asset: assets/fonts/Inter-Medium.otf
-         weight: 500
-       - asset: assets/fonts/Inter-Bold.otf
-         weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.otf
+        - asset: assets/fonts/Inter-Light.otf
+          weight: 300
+        - asset: assets/fonts/Inter-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Inter-Bold.otf
+          weight: 700
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/jetbrains/JetBrainsMono-Regular.ttf
+        - asset: assets/fonts/jetbrains/JetBrainsMono-Bold.ttf
+          weight: 700

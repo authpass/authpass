@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
+import 'package:authpass/ui/screens/cloud/cloud_mail_read.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
@@ -158,6 +159,10 @@ class CloudMailList extends StatelessWidget {
                 subtitle: Text('${message.sender}\n'
                     '${formatUtil.formatDateFull(message.createdAt)}'),
                 isThreeLine: true,
+                onTap: () async {
+                  await Navigator.of(context)
+                      .push(EmailReadScreen.route(bloc, message));
+                },
               );
             },
             itemCount: data.length,
