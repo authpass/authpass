@@ -94,7 +94,16 @@ class EmailRead extends StatelessWidget {
               ),
             ),
             htmlData != null
-                ? Html(data: htmlData)
+                ? Expanded(
+                    child: SingleChildScrollView(
+                      child: Html(
+                        data: htmlData,
+                        onLinkTap: (link) {
+                          DialogUtils.openUrl(link);
+                        },
+                      ),
+                    ),
+                  )
                 : Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
