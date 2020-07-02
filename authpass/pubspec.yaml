@@ -25,7 +25,7 @@ dependencies:
   logging_appenders: ^0.4.2+3
   diac_client:
     path: ../deps/diac/diac_client
-  openapi_base: ^0.1.1
+  openapi_base: ^0.1.2
   authpass_cloud_shared:
     path: ../deps/authpass-cloud/packages/authpass_cloud_shared
 

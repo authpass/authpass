@@ -670,7 +670,7 @@ packages:
       name: openapi_base
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   otp:
     dependency: "direct main"
     description:
