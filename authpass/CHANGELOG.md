@@ -2,6 +2,7 @@
 
 * Fixed saving files in Dropbox root folder.
 * MacOS: Fixed adding file attachments.
+* Android: Allow installation on sdcard.
 
 # 1.6.3
 
