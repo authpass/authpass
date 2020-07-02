@@ -4,6 +4,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
+import 'package:authpass/ui/screens/cloud/cloud_mailbox.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
@@ -857,7 +858,18 @@ class _PasswordListContentState extends State<PasswordListContent>
       return null;
     }
     if (bloc.tokenStatus == TokenStatus.confirmed) {
-      return null;
+      return [
+        PopupMenuItem(
+          child: const ListTile(
+            leading: Icon(Icons.cloud),
+            title: Text('AuthPass Mailboxes'),
+          ),
+          value: () {
+            Navigator.of(context, rootNavigator: true)
+                .push(CloudMailboxTabScreen.route());
+          },
+        )
+      ];
     } else {
       return [
         PopupMenuItem(

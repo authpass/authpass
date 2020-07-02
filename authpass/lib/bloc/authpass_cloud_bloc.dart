@@ -5,6 +5,7 @@ import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
@@ -12,6 +13,8 @@ import 'package:quiver/check.dart';
 import 'package:synchronized/synchronized.dart';
 
 part 'authpass_cloud_bloc.g.dart';
+
+final _logger = Logger('authpass_cloud_bloc');
 
 @JsonSerializable(nullable: false)
 class _StoredToken {
@@ -137,6 +140,31 @@ class AuthPassCloudBloc with ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  Future<List<Mailbox>> loadMailboxList() async {
+    final client = await _getClient();
+    final mailboxResponse = await client.mailboxGet().requireSuccess();
+    return mailboxResponse.data;
+  }
+
+  Future<String> createMailbox() async {
+    final client = await _getClient();
+    final ret = await client
+        .mailboxCreatePost(MailboxCreateSchema(
+          label: '',
+          entryUuid: '',
+        ))
+        .requireSuccess();
+    _logger.finer('Created mail box with ${ret.address}');
+    notifyListeners();
+    return ret.address;
+  }
+
+  Future<List<EmailMessage>> listMail() async {
+    final client = await _getClient();
+    final mailList = await client.mailboxListGet().requireSuccess();
+    return mailList.data;
   }
 
   @override
