@@ -172,6 +172,14 @@ class AuthPassCloudBloc with ChangeNotifier {
     final client = await _getClient();
     final body =
         await client.mailboxMessageGet(messageId: message.id).requireSuccess();
+    if (!message.isRead) {
+      unawaited((() async {
+        await client
+            .mailboxMessageMarkRead(messageId: message.id)
+            .requireSuccess();
+        _logger.finer('Marked mail as read.');
+      })());
+    }
     final mimeMessage = enough.MimeMessage();
     mimeMessage.bodyRaw = body;
     mimeMessage.parse();

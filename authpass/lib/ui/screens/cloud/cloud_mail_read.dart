@@ -71,7 +71,7 @@ class EmailRead extends StatelessWidget {
                   TextSpan(text: '${e.key}: '),
                   TextSpan(
                     text: e.value,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const TextSpan(text: '\n'),
                 ])

@@ -23,7 +23,7 @@ class CloudMailboxScreen extends StatelessWidget {
       ),
       body: CloudMailboxList(bloc: bloc),
       floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         label: const Text('Create'),
         onPressed: () async {
           await bloc.createMailbox();
@@ -95,7 +95,7 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
               onPressed: () async {
                 await bloc.createMailbox();
               },
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               label: const Text('Create'),
             )
           : null,
@@ -142,6 +142,7 @@ class CloudMailList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatUtil = context.watch<FormatUtils>();
+    final theme = Theme.of(context);
     return RetryFutureBuilder<List<EmailMessage>>(
         produceFuture: (context) => bloc.listMail(),
         builder: (context, data) {
@@ -154,7 +155,12 @@ class CloudMailList extends StatelessWidget {
             itemBuilder: (context, idx) {
               final message = data[idx];
               return ListTile(
-                leading: Icon(Icons.mail),
+                leading: message.isRead
+                    ? const Icon(FontAwesomeIcons.envelopeOpen)
+                    : Icon(
+                        FontAwesomeIcons.envelope,
+                        color: theme.primaryColor,
+                      ),
                 title: Text(message.subject),
                 subtitle: Text('${message.sender}\n'
                     '${formatUtil.formatDateFull(message.createdAt)}'),
