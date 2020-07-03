@@ -10,6 +10,7 @@ import 'package:meta/meta.dart';
 import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:quiver/check.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:enough_mail/enough_mail.dart' as enough;
 
@@ -49,6 +50,10 @@ class AuthPassCloudBloc with ChangeNotifier {
   AuthPassCloudClient _client;
   _StoredToken _storedToken;
   final _tokenLock = Lock();
+
+  final _messageList = BehaviorSubject.seeded(const EmailMessageList.empty());
+  ValueStream<EmailMessageList> get messageList => _messageList.stream;
+  final _messageListFetch = JoinRun<EmailMessageList>();
 
   Future<void> _init() async {
     if (!featureFlags.authpassCloud) {
@@ -162,10 +167,25 @@ class AuthPassCloudBloc with ChangeNotifier {
     return ret.address;
   }
 
-  Future<List<EmailMessage>> listMail() async {
-    final client = await _getClient();
-    final mailList = await client.mailboxListGet().requireSuccess();
-    return mailList.data;
+  Future<EmailMessageList> loadMessageListMore({bool reload = false}) async {
+    return _messageListFetch.joinRun(() async {
+      final client = await _getClient();
+      final lastMessages =
+          reload ? const EmailMessageList.empty() : _messageList.value;
+      if (!lastMessages.hasMore) {
+        return lastMessages;
+      }
+      final mailList = await client
+          .mailboxListGet(pageToken: lastMessages.nextPageToken)
+          .requireSuccess();
+      final list = EmailMessageList(
+        messages: [...lastMessages.messages, ...mailList.data],
+        hasMore: mailList.page.nextPageToken != null,
+        nextPageToken: mailList.page.nextPageToken,
+      );
+      _messageList.add(list);
+      return list;
+    });
   }
 
   Future<enough.MimeMessage> loadMail(EmailMessage message) async {
@@ -177,6 +197,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         await client
             .mailboxMessageMarkRead(messageId: message.id)
             .requireSuccess();
+        _messageList.add(const EmailMessageList.empty());
         _logger.finer('Marked mail as read.');
       })());
     }
@@ -194,5 +215,34 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   Future<void> clearToken() async {
     await _saveToken(null);
+  }
+}
+
+class EmailMessageList {
+  const EmailMessageList({
+    @required this.messages,
+    @required this.hasMore,
+    @required this.nextPageToken,
+  })  : assert(messages != null),
+        assert(hasMore != null);
+  const EmailMessageList.empty()
+      : this(messages: const [], hasMore: true, nextPageToken: null);
+  final List<EmailMessage> messages;
+  final bool hasMore;
+  final String nextPageToken;
+}
+
+class JoinRun<T> {
+  Future<T> _currentRun;
+  Future<T> joinRun(Future<T> Function() callback) async {
+    if (_currentRun != null) {
+      return _currentRun;
+    }
+    try {
+      _currentRun = callback();
+      return await _currentRun;
+    } finally {
+      _currentRun = null;
+    }
   }
 }

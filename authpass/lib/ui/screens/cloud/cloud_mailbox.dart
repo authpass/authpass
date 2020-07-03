@@ -143,36 +143,49 @@ class CloudMailList extends StatelessWidget {
   Widget build(BuildContext context) {
     final formatUtil = context.watch<FormatUtils>();
     final theme = Theme.of(context);
-    return RetryFutureBuilder<List<EmailMessage>>(
-        produceFuture: (context) => bloc.listMail(),
-        builder: (context, data) {
-          if (data.isEmpty) {
-            return const Center(
-              child: Text('You do not have any mailboxes yet.'),
-            );
-          }
-          return ListView.builder(
-            itemBuilder: (context, idx) {
-              final message = data[idx];
-              return ListTile(
-                leading: message.isRead
-                    ? const Icon(FontAwesomeIcons.envelopeOpen)
-                    : Icon(
-                        FontAwesomeIcons.envelope,
-                        color: theme.primaryColor,
-                      ),
-                title: Text(message.subject),
-                subtitle: Text('${message.sender}\n'
-                    '${formatUtil.formatDateFull(message.createdAt)}'),
-                isThreeLine: true,
-                onTap: () async {
-                  await Navigator.of(context)
-                      .push(EmailReadScreen.route(bloc, message));
-                },
+    return RefreshIndicator(
+      onRefresh: () async {
+        await bloc.loadMessageListMore(reload: true);
+      },
+      child: RetryStreamBuilder<EmailMessageList>(
+          stream: (context) => bloc.messageList,
+          retry: () => bloc.loadMessageListMore(),
+          builder: (context, data) {
+            if (data.messages.isEmpty) {
+              if (data.hasMore) {
+                bloc.loadMessageListMore();
+                return const Center(child: CircularProgressIndicator());
+              }
+              return const Center(
+                child: Text('You do not have any mails yet.'),
               );
-            },
-            itemCount: data.length,
-          );
-        });
+            }
+            return ListView.builder(
+              itemCount: data.messages.length,
+              itemBuilder: (context, idx) {
+                if (idx + 1 == data.messages.length) {
+                  bloc.loadMessageListMore();
+                }
+                final message = data.messages[idx];
+                return ListTile(
+                  leading: message.isRead
+                      ? const Icon(FontAwesomeIcons.envelopeOpen)
+                      : Icon(
+                          FontAwesomeIcons.envelope,
+                          color: theme.primaryColor,
+                        ),
+                  title: Text(message.subject),
+                  subtitle: Text('${message.sender}\n'
+                      '${formatUtil.formatDateFull(message.createdAt)}'),
+                  isThreeLine: true,
+                  onTap: () async {
+                    await Navigator.of(context)
+                        .push(EmailReadScreen.route(bloc, message));
+                  },
+                );
+              },
+            );
+          }),
+    );
   }
 }
