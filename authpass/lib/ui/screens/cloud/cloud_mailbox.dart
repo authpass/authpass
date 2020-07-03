@@ -4,6 +4,7 @@ import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -126,6 +127,17 @@ class CloudMailboxList extends StatelessWidget {
                 title: Text(mailbox.address),
                 subtitle: Text('Created at '
                     '${formatUtil.formatDateFull(mailbox.createdAt)}'),
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: mailbox.address));
+                  Scaffold.of(context)
+                    ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
+                    ..showSnackBar(
+                      SnackBar(
+                        content: Text('Copied mailbox address to clipboard: '
+                            '${mailbox.address}'),
+                      ),
+                    );
+                },
               );
             },
             itemCount: data.length,

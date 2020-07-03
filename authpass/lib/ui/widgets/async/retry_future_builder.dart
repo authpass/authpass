@@ -34,6 +34,14 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
   }
 
   @override
+  void didUpdateWidget(RetryFutureBuilder<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.produceFuture != widget.produceFuture) {
+      _future = widget.produceFuture(context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
       future: _future,

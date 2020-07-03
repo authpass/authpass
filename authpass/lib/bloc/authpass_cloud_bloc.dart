@@ -200,7 +200,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         await client
             .mailboxMessageMarkRead(messageId: message.id)
             .requireSuccess();
-        _messageList.add(const EmailMessageList.empty());
+        _messageListReload();
         _logger.finer('Marked mail as read.');
       })());
     }
@@ -208,6 +208,16 @@ class AuthPassCloudBloc with ChangeNotifier {
     mimeMessage.bodyRaw = body;
     mimeMessage.parse();
     return mimeMessage;
+  }
+
+  Future<void> deleteMail(EmailMessage message) async {
+    final client = await _getClient();
+    await client.mailboxMessageDelete(messageId: message.id);
+    _messageListReload();
+  }
+
+  void _messageListReload() {
+    _messageList.add(const EmailMessageList.empty());
   }
 
   @override

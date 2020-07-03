@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
+import 'package:flinq/flinq.dart';
 
 class EmailReadScreen extends StatelessWidget {
   const EmailReadScreen({
@@ -35,6 +36,17 @@ class EmailReadScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('${emailMessage.subject}'),
+        actions: <Widget>[
+          Builder(
+            builder: (context) => IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await bloc.deleteMail(emailMessage);
+//                  Scaffold.of(context).
+                }),
+          ),
+        ],
       ),
       body: EmailRead(bloc: bloc, emailMessage: emailMessage),
     );
@@ -60,7 +72,10 @@ class EmailRead extends StatelessWidget {
         final htmlData = message.decodeTextHtmlPart();
         final headers = {
           'Subject': message.decodeHeaderValue('subject'),
-          'From': message.decodeHeaderMailAddressValue('from').toString(),
+          'From': message
+              .decodeHeaderMailAddressValue('from')
+              .firstOrNull
+              ?.toString(),
           'Date':
               formatUtil.formatDateFull(message.decodeHeaderDateValue('date')),
 //          'To': message.decodeHeaderValue('to'),
