@@ -42,6 +42,7 @@ enum TokenStatus {
 class AuthPassCloudBloc with ChangeNotifier {
   AuthPassCloudBloc({@required this.featureFlags})
       : assert(featureFlags != null) {
+    _logger.fine('Creating AuthPassCloudBloc with $featureFlags');
     _init();
   }
 
@@ -97,6 +98,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       if (_storedToken != null) {
         return _storedToken;
       }
+      _logger.finest('Loading token.');
       final f = await _getStorageFile();
       final str = await f.read();
       if (str == null) {
@@ -104,6 +106,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       }
       _storedToken =
           _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
+      _logger.finest('loaded. $tokenStatus');
       unawaited(Future<void>.microtask(() => notifyListeners()));
       return _storedToken;
     });
@@ -210,7 +213,8 @@ class AuthPassCloudBloc with ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-    _requestSender.dispose();
+    _logger.fine('Disposing AuthPassCloudBloc');
+    _requestSender?.dispose();
   }
 
   Future<void> clearToken() async {

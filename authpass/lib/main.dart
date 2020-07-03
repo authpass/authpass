@@ -200,11 +200,15 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                 previous?.featureFlags == featureFlags) {
               return previous;
             }
-            previous?.dispose();
+//            previous?.dispose();
             return AuthPassCloudBloc(featureFlags: featureFlags);
           },
-          dispose: (_, prev) => prev.dispose(),
-          lazy: true,
+          dispose: (_, prev) {
+            prev.dispose();
+          },
+          // eagerly create bloc so everything is loaded once we
+          // get into the context menu
+          lazy: false,
         ),
         StreamProvider<KdbxBloc>(
           create: (context) => _deps.kdbxBloc.openedFilesChanged
