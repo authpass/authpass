@@ -157,12 +157,12 @@ class AuthPassCloudBloc with ChangeNotifier {
     return mailboxResponse.data;
   }
 
-  Future<String> createMailbox() async {
+  Future<String> createMailbox({String label, String entryUuid}) async {
     final client = await _getClient();
     final ret = await client
         .mailboxCreatePost(MailboxCreateSchema(
           label: '',
-          entryUuid: '',
+          entryUuid: entryUuid,
         ))
         .requireSuccess();
     _logger.finer('Created mail box with ${ret.address}');

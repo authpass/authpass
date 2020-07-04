@@ -86,7 +86,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
                     msg: 'Please enter a valid email address.') +
                 SValidator.email(msg: 'Please enter a valid email address.'),
           ),
-          FlatButton(
+          RaisedButton(
             onPressed: _submitCallback(),
             child: const Text('Confirm Address'),
           ),
@@ -115,6 +115,7 @@ class _ConfirmEmailAddress extends StatefulWidget {
 
 class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
   Timer _timer;
+  bool _showResendButton = false;
 
   @override
   void initState() {
@@ -123,9 +124,14 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
   }
 
   Future<void> _scheduleCheck() async {
-    _timer = Timer(const Duration(seconds: 5), () async {
+    _timer = Timer(const Duration(seconds: 3), () async {
       await widget.bloc.checkConfirmed();
       unawaited(_scheduleCheck());
+      if (!_showResendButton) {
+        setState(() {
+          _showResendButton = true;
+        });
+      }
     });
   }
 
@@ -134,12 +140,13 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
     return Column(
       children: <Widget>[
         const Text('Please check your emails to confirm your email address.'),
-        FlatButton(
-          onPressed: () {
-            widget.bloc.clearToken();
-          },
-          child: const Text('Send a new confirmation link'),
-        ),
+        if (_showResendButton)
+          RaisedButton(
+            onPressed: () {
+              widget.bloc.clearToken();
+            },
+            child: const Text('Send a new confirmation link'),
+          ),
       ],
     );
   }

@@ -5,11 +5,13 @@ import 'dart:ui' as ui;
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/entry_totp.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/hud.dart';
@@ -850,9 +852,11 @@ enum EntryAction {
   delete,
   show,
   passwordGenerator,
+  generateEmail,
 }
 
-class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
+class _EntryFieldState extends State<EntryField>
+    with StreamSubscriberMixin, TaskStateMixin {
   final GlobalKey _formFieldKey = GlobalKey();
   TextEditingController _controller;
   bool _isValueObscured = false;
@@ -966,11 +970,26 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
               Expanded(
                 child: _buildEntryFieldEditor(),
               ),
-              PopupMenuButton<EntryAction>(
-                icon: const Icon(Icons.more_vert),
-                offset: const Offset(0, 32),
-                onSelected: _handleMenuEntrySelected,
-                itemBuilder: _buildMenuEntries,
+              Container(
+                width: 48,
+                height: 48,
+                alignment: Alignment.center,
+                child: AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 300),
+                  firstChild: PopupMenuButton<EntryAction>(
+                    icon: const Icon(Icons.more_vert),
+                    offset: const Offset(0, 32),
+                    onSelected: _handleMenuEntrySelected,
+                    itemBuilder: _buildMenuEntries,
+                  ),
+                  secondChild: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                  crossFadeState: task == null
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                ),
               ),
 //            IconButton(
 //              icon: Icon(Icons.content_copy),
@@ -1033,6 +1052,23 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           );
         });
         break;
+      case EntryAction.generateEmail:
+        final bloc = context.read<AuthPassCloudBloc>();
+        if (bloc.tokenStatus != TokenStatus.confirmed) {
+          await Navigator.of(context).push(AuthPassCloudAuthScreen.route());
+        } else {
+          await asyncRunTask(() async {
+            final address =
+                await bloc.createMailbox(entryUuid: widget.entry.uuid.uuid);
+            setState(() {
+              _isValueObscured = false;
+              _controller.text = address;
+              _fieldValue = PlainValue(_controller.text);
+              copyValue();
+            });
+          });
+        }
+        break;
     }
   }
 
@@ -1058,8 +1094,10 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
           child: ListTile(
             leading: Icon(FontAwesomeIcons.random),
             title: Text('Password Generator …'),
+//            subtitle: null,
           ),
         ),
+        ...?_buildMenuEntriesAuthPassCloud(context),
         PopupMenuItem(
           value: EntryAction.protect,
           child: ListTile(
@@ -1171,6 +1209,26 @@ class _EntryFieldState extends State<EntryField> with StreamSubscriberMixin {
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  List<PopupMenuEntry<EntryAction>> _buildMenuEntriesAuthPassCloud(
+      BuildContext context) {
+    final authPassCloud = context.read<AuthPassCloudBloc>();
+    if (authPassCloud?.featureFlags?.authpassCloud != true) {
+      return null;
+    }
+    if (authPassCloud.tokenStatus != TokenStatus.confirmed) {
+      return null;
+    }
+    return [
+      const PopupMenuItem(
+          value: EntryAction.generateEmail,
+          child: ListTile(
+            leading: Icon(Icons.cloud),
+            title: Text('Generate Email'),
+            subtitle: Text('AuthPass Cloud'),
+          )),
+    ];
   }
 }
 

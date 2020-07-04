@@ -869,6 +869,19 @@ class KdbxBloc {
     final localSource = await _localFileSourceForDbName(databaseName);
     return (await saveAs(file, localSource)).fileSource;
   }
+
+  Map<String, KdbxEntry> _entryUuidLookup;
+
+  KdbxEntry findEntryByUuid(String uuid) {
+    _entryUuidLookup ??= Map.fromEntries(openedFilesKdbx.expand((file) => file
+        .body.rootGroup
+        .getAllEntries()
+        .map((e) => MapEntry(e.uuid.uuid, e))));
+
+    return _entryUuidLookup[uuid];
+  }
+
+  void clearEntryByUuidLookup() => _entryUuidLookup = null;
 }
 
 class KdbxReadArgs {
