@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:authpass/env/_base.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:enough_mail/enough_mail.dart' as enough;
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
@@ -12,7 +14,6 @@ import 'package:pedantic/pedantic.dart';
 import 'package:quiver/check.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:enough_mail/enough_mail.dart' as enough;
 
 part 'authpass_cloud_bloc.g.dart';
 
@@ -51,6 +52,16 @@ class AuthPassCloudBloc with ChangeNotifier {
   AuthPassCloudClient _client;
   _StoredToken _storedToken;
   final _tokenLock = Lock();
+
+  final _mailboxList = BehaviorSubject<MailboxList>();
+  ValueStream<MailboxList> get mailboxList {
+    if (_mailboxList.value == null) {
+      loadMailboxList();
+    }
+    return _mailboxList.stream;
+  }
+
+  final _mailboxListFetch = JoinRun<MailboxList>();
 
   final _messageList = BehaviorSubject.seeded(const EmailMessageList.empty());
   ValueStream<EmailMessageList> get messageList => _messageList.stream;
@@ -151,10 +162,20 @@ class AuthPassCloudBloc with ChangeNotifier {
     return false;
   }
 
-  Future<List<Mailbox>> loadMailboxList() async {
-    final client = await _getClient();
-    final mailboxResponse = await client.mailboxGet().requireSuccess();
-    return mailboxResponse.data;
+  Future<void> loadMailboxList() async {
+    await _loadMailboxListFromServer();
+  }
+
+  Future<MailboxList> _loadMailboxListFromServer() async {
+    return await _mailboxListFetch.joinRun(() async {
+      final future = (() async {
+        final client = await _getClient();
+        final mailboxResponse = await client.mailboxGet().requireSuccess();
+        return MailboxList(mailboxes: mailboxResponse.data);
+      })();
+      unawaited(_mailboxList.addStream(Stream.fromFuture(future)));
+      return future;
+    });
   }
 
   Future<String> createMailbox(
@@ -167,7 +188,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         ))
         .requireSuccess();
     _logger.finer('Created mail box with ${ret.address}');
-    notifyListeners();
+    unawaited(loadMailboxList());
     return ret.address;
   }
 
@@ -245,6 +266,12 @@ class EmailMessageList {
   final List<EmailMessage> messages;
   final bool hasMore;
   final String nextPageToken;
+}
+
+class MailboxList {
+  const MailboxList({@required this.mailboxes});
+  static const empty = MailboxList(mailboxes: null);
+  final List<Mailbox> mailboxes;
 }
 
 class JoinRun<T> {

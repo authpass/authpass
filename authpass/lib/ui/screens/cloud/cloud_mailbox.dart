@@ -144,42 +144,49 @@ class CloudMailboxList extends StatelessWidget {
     // TODO only clear on demand (ie. when something changes in the kdbx file).
     _logger.fine('clearing entry lookup.');
     kdbxBloc.clearEntryByUuidLookup();
-    return RetryFutureBuilder<List<Mailbox>>(
-        produceFuture: (context) => bloc.loadMailboxList(),
-        builder: (context, data) {
-          if (data.isEmpty) {
-            return const Center(
-              child: Text('You do not have any mailboxes yet.'),
-            );
-          }
-          return ListView.builder(
-            itemBuilder: (context, idx) {
-              final mailbox = data[idx];
-              final vm = _labelFor(kdbxBloc, commonFields, formatUtil, mailbox);
-              return ListTile(
-                leading: Icon(vm.icon),
-                title: Text(vm.label),
-                subtitle: Text(
-                  mailbox.address,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: mailbox.address));
-                  Scaffold.of(context)
-                    ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
-                    ..showSnackBar(
-                      SnackBar(
-                        content: Text('Copied mailbox address to clipboard: '
-                            '${mailbox.address}'),
-                      ),
-                    );
-                },
+    return RefreshIndicator(
+      onRefresh: () async => bloc.loadMailboxList(),
+      child: RetryStreamBuilder<MailboxList>(
+          stream: (context) => bloc.mailboxList,
+          retry: () async => await bloc.loadMailboxList(),
+          builder: (context, mailboxList) {
+            final data = mailboxList.mailboxes;
+            if (data.isEmpty) {
+              return const Center(
+                child: Text('You do not have any mailboxes yet.'),
               );
-            },
-            itemCount: data.length,
-          );
-        });
+            }
+            return ListView.builder(
+              itemBuilder: (context, idx) {
+                final mailbox = data[idx];
+                final vm =
+                    _labelFor(kdbxBloc, commonFields, formatUtil, mailbox);
+                return ListTile(
+                  leading: Icon(vm.icon),
+                  title: Text(vm.label),
+                  subtitle: Text(
+                    mailbox.address,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: () async {
+                    await Clipboard.setData(
+                        ClipboardData(text: mailbox.address));
+                    Scaffold.of(context)
+                      ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text('Copied mailbox address to clipboard: '
+                              '${mailbox.address}'),
+                        ),
+                      );
+                  },
+                );
+              },
+              itemCount: data.length,
+            );
+          }),
+    );
   }
 
   MailboxViewModel _labelFor(KdbxBloc kdbxBloc, CommonFields commonFields,
