@@ -74,7 +74,7 @@ Future<void> startApp(Env env) async {
   final navigatorKey = GlobalKey<NavigatorState>();
 
   await runZonedGuarded<Future<void>>(() async {
-    runApp(AuthPassApp(env: env));
+    runApp(AuthPassApp(env: env, navigatorKey: navigatorKey));
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
@@ -109,9 +109,11 @@ void _setTargetPlatformForDesktop() {
 }
 
 class AuthPassApp extends StatefulWidget {
-  const AuthPassApp({Key key, @required this.env}) : super(key: key);
+  const AuthPassApp({Key key, @required this.env, this.navigatorKey})
+      : super(key: key);
 
   final Env env;
+  final GlobalKey<NavigatorState> navigatorKey;
 
   @override
   _AuthPassAppState createState() => _AuthPassAppState();
@@ -120,12 +122,12 @@ class AuthPassApp extends StatefulWidget {
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Deps _deps;
   AppData _appData;
-  final _navigatorKey = GlobalKey<NavigatorState>();
   FilePickerState _filePickerState;
 
   @override
   void initState() {
     super.initState();
+    final _navigatorKey = widget.navigatorKey;
     _deps = Deps(env: widget.env);
     PathUtils.runAppFinished.complete(true);
     _appData = _deps.appDataBloc.store.cachedValue;
@@ -233,7 +235,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       child: MaterialApp(
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
-        navigatorKey: _navigatorKey,
+        navigatorKey: widget.navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
@@ -396,7 +398,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           final flushbar = FlushbarHelper.createSuccess(message: 'Thanks! 🎉️');
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
-          unawaited(_navigatorKey.currentState?.push<void>(route));
+          unawaited(widget.navigatorKey.currentState?.push<void>(route));
           await _deps.appDataBloc
               .update((builder, data) => builder.diacOptIn = true);
           return true;
@@ -407,7 +409,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                   'check out the preferences 🙏️.');
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
-          await _navigatorKey.currentState?.push<void>(route);
+          await widget.navigatorKey.currentState?.push<void>(route);
           return true;
         }
       },
