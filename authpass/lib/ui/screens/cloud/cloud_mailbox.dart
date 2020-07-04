@@ -192,8 +192,8 @@ class CloudMailboxList extends StatelessWidget {
                             leading: Icon(Icons.delete),
                             title: const Text('Delete'),
                             onTap: () async {
-                              await bloc.deleteMailbox(mailbox);
                               Navigator.of(context).pop();
+                              await bloc.deleteMailbox(mailbox);
                             },
                           ),
                           ListTile(
@@ -201,9 +201,9 @@ class CloudMailboxList extends StatelessWidget {
                             title: const Text('Disable'),
                             subtitle: const Text('Receive no more emails'),
                             onTap: () async {
+                              Navigator.of(context).pop();
                               await bloc.updateMailbox(mailbox,
                                   isDisabled: true);
-                              Navigator.of(context).pop();
                             },
                           ),
                         ],
