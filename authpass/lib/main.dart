@@ -71,11 +71,17 @@ Future<void> startApp(Env env) async {
     );
   };
 
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   await runZonedGuarded<Future<void>>(() async {
     runApp(AuthPassApp(env: env));
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
+    if (navigatorKey.currentState?.overlay?.context != null) {
+      DialogUtils.showErrorDialog(navigatorKey.currentState.overlay.context,
+          null, 'Unexpected error: $error');
+    }
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone,
         ZoneSpecification specification, Map zoneValues) {

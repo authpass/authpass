@@ -181,6 +181,27 @@ class CloudMailboxList extends StatelessWidget {
                         ),
                       );
                   },
+                  onLongPress: () async {
+                    final action = await showModalBottomSheet<VoidCallback>(
+                      context: context,
+                      builder: (context) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(Icons.delete),
+                            title: const Text('Delete'),
+                            onTap: () async {
+                              await bloc.deleteMailbox(mailbox);
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                    if (action != null) {
+                      action();
+                    }
+                  },
                 );
               },
               itemCount: data.length,

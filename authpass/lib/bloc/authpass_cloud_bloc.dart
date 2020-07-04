@@ -182,7 +182,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       {String label = '', String entryUuid = ''}) async {
     final client = await _getClient();
     final ret = await client
-        .mailboxCreatePost(MailboxCreateSchema(
+        .mailboxCreatePost(MailboxCreatePostSchema(
           label: label,
           entryUuid: entryUuid,
         ))
@@ -190,6 +190,14 @@ class AuthPassCloudBloc with ChangeNotifier {
     _logger.finer('Created mail box with ${ret.address}');
     unawaited(loadMailboxList());
     return ret.address;
+  }
+
+  Future<void> deleteMailbox(Mailbox mailbox) async {
+    final client = await _getClient();
+    await client
+        .mailboxUpdate(MailboxUpdateSchema(), mailboxAddress: mailbox.address)
+        .requireSuccess();
+    unawaited(loadMailboxList());
   }
 
   Future<EmailMessageList> loadMessageListMore({bool reload = false}) async {
@@ -274,7 +282,9 @@ class MailboxList {
   final List<Mailbox> mailboxes;
 }
 
-class JoinRun<T> {
+class JoinRun<T> with ChangeNotifier {
+  bool get isRunning => _currentRun != null;
+
   Future<T> _currentRun;
   Future<T> joinRun(Future<T> Function() callback) async {
     if (_currentRun != null) {
@@ -282,9 +292,11 @@ class JoinRun<T> {
     }
     try {
       _currentRun = callback();
+      notifyListeners();
       return await _currentRun;
     } finally {
       _currentRun = null;
+      notifyListeners();
     }
   }
 }

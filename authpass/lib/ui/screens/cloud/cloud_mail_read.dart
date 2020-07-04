@@ -39,7 +39,7 @@ class EmailReadScreen extends StatelessWidget {
         actions: <Widget>[
           Builder(
             builder: (context) => IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await bloc.deleteMail(emailMessage);

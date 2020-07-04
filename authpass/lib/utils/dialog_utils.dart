@@ -111,6 +111,22 @@ class DialogUtils {
   }
 }
 
+extension BuildContextError on BuildContext {
+  Future<T> handleErrors<T>(String message, Future<T> Function() cb) async {
+    try {
+      return await cb();
+    } catch (error, stackTrace) {
+      _logger.severe('Error during action', error, stackTrace);
+      await DialogUtils.showErrorDialog(
+        this,
+        'Error while handling action',
+        'Encountered an unexpected error. $error',
+      );
+      rethrow;
+    }
+  }
+}
+
 class ConfirmDialogParams {
   ConfirmDialogParams({
     this.title,
