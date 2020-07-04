@@ -3,6 +3,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/cloud/cloud_mail_read.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
@@ -13,6 +14,10 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:provider/provider.dart';
+
+import 'package:logging/logging.dart';
+
+final _logger = Logger('cloud_mailbox');
 
 class CloudMailboxScreen extends StatelessWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
@@ -28,12 +33,19 @@ class CloudMailboxScreen extends StatelessWidget {
         title: const Text('Mailboxes'),
       ),
       body: CloudMailboxList(bloc: bloc),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add),
-        label: const Text('Create'),
-        onPressed: () async {
-          await bloc.createMailbox();
-        },
+      floatingActionButton: Builder(
+        builder: (context) => FloatingActionButton.extended(
+          icon: const Icon(Icons.add),
+          label: const Text('Create'),
+          onPressed: () async {
+            final result = await (const SimplePromptDialog(
+              labelText: 'Optional (internal) label for new mailbox',
+            )).show(context);
+            if (result != null) {
+              await bloc.createMailbox(label: result);
+            }
+          },
+        ),
       ),
     );
   }
@@ -103,7 +115,13 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
       floatingActionButton: _tabController.index == 0
           ? FloatingActionButton.extended(
               onPressed: () async {
-                await bloc.createMailbox();
+                final result = await (const SimplePromptDialog(
+                  title: 'Optionally label for new mailbox',
+                  labelText: '(Internal) Label',
+                )).show(context);
+                if (result != null) {
+                  await bloc.createMailbox(label: result);
+                }
               },
               icon: const Icon(Icons.add),
               label: const Text('Create'),
@@ -124,6 +142,7 @@ class CloudMailboxList extends StatelessWidget {
     final kdbxBloc = context.watch<KdbxBloc>();
     final commonFields = context.watch<CommonFields>();
     // TODO only clear on demand (ie. when something changes in the kdbx file).
+    _logger.fine('clearing entry lookup.');
     kdbxBloc.clearEntryByUuidLookup();
     return RetryFutureBuilder<List<Mailbox>>(
         produceFuture: (context) => bloc.loadMailboxList(),
@@ -165,7 +184,7 @@ class CloudMailboxList extends StatelessWidget {
 
   MailboxViewModel _labelFor(KdbxBloc kdbxBloc, CommonFields commonFields,
       FormatUtils formatUtils, Mailbox mailbox) {
-    if (mailbox.entryUuid != null) {
+    if (mailbox.entryUuid?.isNotEmpty == true) {
       final entry = kdbxBloc.findEntryByUuid(mailbox.entryUuid);
 
       if (entry != null) {
@@ -181,7 +200,7 @@ class CloudMailboxList extends StatelessWidget {
           'Unknown Entry: ${mailbox.entryUuid}',
         );
       }
-    } else if (mailbox.label != null) {
+    } else if (mailbox.label?.isNotEmpty == true) {
       return MailboxViewModel(FontAwesomeIcons.boxOpen, mailbox.label);
     }
     return MailboxViewModel(
