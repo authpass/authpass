@@ -195,7 +195,17 @@ class AuthPassCloudBloc with ChangeNotifier {
   Future<void> deleteMailbox(Mailbox mailbox) async {
     final client = await _getClient();
     await client
-        .mailboxUpdate(MailboxUpdateSchema(), mailboxAddress: mailbox.address)
+        .mailboxUpdate(MailboxUpdateSchema(isDeleted: true),
+            mailboxAddress: mailbox.address)
+        .requireSuccess();
+    unawaited(loadMailboxList());
+  }
+
+  Future<void> updateMailbox(Mailbox mailbox, {bool isDisabled}) async {
+    final client = await _getClient();
+    await client
+        .mailboxUpdate(MailboxUpdateSchema(isDisabled: isDisabled),
+            mailboxAddress: mailbox.address)
         .requireSuccess();
     unawaited(loadMailboxList());
   }

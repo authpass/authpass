@@ -162,7 +162,8 @@ class CloudMailboxList extends StatelessWidget {
                 final vm =
                     _labelFor(kdbxBloc, commonFields, formatUtil, mailbox);
                 return ListTile(
-                  leading: Icon(vm.icon),
+                  leading: Icon(vm.icon,
+                      color: mailbox.isDisabled ? Colors.black12 : null),
                   title: Text(vm.label),
                   subtitle: Text(
                     mailbox.address,
@@ -194,7 +195,17 @@ class CloudMailboxList extends StatelessWidget {
                               await bloc.deleteMailbox(mailbox);
                               Navigator.of(context).pop();
                             },
-                          )
+                          ),
+                          ListTile(
+                            leading: Icon(FontAwesomeIcons.volumeMute),
+                            title: const Text('Disable'),
+                            subtitle: const Text('Receive no more emails'),
+                            onTap: () async {
+                              await bloc.updateMailbox(mailbox,
+                                  isDisabled: true);
+                              Navigator.of(context).pop();
+                            },
+                          ),
                         ],
                       ),
                     );
