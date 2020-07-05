@@ -145,10 +145,10 @@ class CloudMailboxList extends StatelessWidget {
     _logger.fine('clearing entry lookup.');
     kdbxBloc.clearEntryByUuidLookup();
     return RefreshIndicator(
-      onRefresh: () async => bloc.loadMailboxList(),
+      onRefresh: () async => await bloc.mailboxList.reload(),
       child: RetryStreamBuilder<MailboxList>(
           stream: (context) => bloc.mailboxList,
-          retry: () async => await bloc.loadMailboxList(),
+          retry: () async => await bloc.mailboxList.reload(),
           builder: (context, mailboxList) {
             final data = mailboxList.mailboxes;
             if (data.isEmpty) {
@@ -189,7 +189,7 @@ class CloudMailboxList extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           ListTile(
-                            leading: Icon(Icons.delete),
+                            leading: const Icon(Icons.delete),
                             title: const Text('Delete'),
                             onTap: () async {
                               Navigator.of(context).pop();

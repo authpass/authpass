@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:clock/clock.dart';
 import 'package:enough_mail/enough_mail.dart' as enough;
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -53,15 +54,23 @@ class AuthPassCloudBloc with ChangeNotifier {
   _StoredToken _storedToken;
   final _tokenLock = Lock();
 
-  final _mailboxList = BehaviorSubject<MailboxList>();
-  ValueStream<MailboxList> get mailboxList {
-    if (_mailboxList.value == null) {
-      loadMailboxList();
-    }
-    return _mailboxList.stream;
-  }
+  final _cloudStatus = LazyBehaviorSubject<CloudStatus>(null);
+  ValueStream<CloudStatus> get cloudStatus => _cloudStatus.stream(() async {
+        final c = await _getClient();
+        final s = await c.statusGet().requireSuccess();
+        return CloudStatus(
+          lastFetched: clock.now().toUtc(),
+          messagesUnread: s.mail.messagesUnread,
+        );
+      });
 
-  final _mailboxListFetch = JoinRun<MailboxList>();
+  final _mailboxList = LazyBehaviorSubject<MailboxList>(null);
+  ReloadableValueStream<MailboxList> get mailboxList =>
+      _mailboxList.stream(() async {
+        final client = await _getClient();
+        final mailboxResponse = await client.mailboxGet().requireSuccess();
+        return MailboxList(mailboxes: mailboxResponse.data);
+      });
 
   final _messageList = BehaviorSubject.seeded(const EmailMessageList.empty());
   ValueStream<EmailMessageList> get messageList => _messageList.stream;
@@ -162,22 +171,6 @@ class AuthPassCloudBloc with ChangeNotifier {
     return false;
   }
 
-  Future<void> loadMailboxList() async {
-    await _loadMailboxListFromServer();
-  }
-
-  Future<MailboxList> _loadMailboxListFromServer() async {
-    return await _mailboxListFetch.joinRun(() async {
-      final future = (() async {
-        final client = await _getClient();
-        final mailboxResponse = await client.mailboxGet().requireSuccess();
-        return MailboxList(mailboxes: mailboxResponse.data);
-      })();
-      unawaited(_mailboxList.addStream(Stream.fromFuture(future)));
-      return future;
-    });
-  }
-
   Future<String> createMailbox(
       {String label = '', String entryUuid = ''}) async {
     final client = await _getClient();
@@ -188,7 +181,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         ))
         .requireSuccess();
     _logger.finer('Created mail box with ${ret.address}');
-    unawaited(loadMailboxList());
+    unawaited(_dirtyAll());
     return ret.address;
   }
 
@@ -198,7 +191,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         .mailboxUpdate(MailboxUpdateSchema(isDeleted: true),
             mailboxAddress: mailbox.address)
         .requireSuccess();
-    unawaited(loadMailboxList());
+    unawaited(_dirtyAll());
   }
 
   Future<void> updateMailbox(Mailbox mailbox, {bool isDisabled}) async {
@@ -207,7 +200,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         .mailboxUpdate(MailboxUpdateSchema(isDisabled: isDisabled),
             mailboxAddress: mailbox.address)
         .requireSuccess();
-    unawaited(loadMailboxList());
+    unawaited(_dirtyAll());
   }
 
   Future<EmailMessageList> loadMessageListMore({bool reload = false}) async {
@@ -231,6 +224,26 @@ class AuthPassCloudBloc with ChangeNotifier {
     });
   }
 
+  Future<void> _dirtyAll({
+    bool mailboxList = true,
+    bool messageList = true,
+    bool status = true,
+  }) async {
+    if (mailboxList) {
+      await _mailboxList.reload();
+    }
+    if (messageList) {
+      _messageListReload();
+    }
+    if (status) {
+      _cloudStatus.dirty();
+    }
+  }
+
+  void _messageListReload() {
+    _messageList.add(const EmailMessageList.empty());
+  }
+
   Future<enough.MimeMessage> loadMail(EmailMessage message) async {
     final client = await _getClient();
     final body =
@@ -240,7 +253,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         await client
             .mailboxMessageMarkRead(messageId: message.id)
             .requireSuccess();
-        _messageListReload();
+        await _dirtyAll();
         _logger.finer('Marked mail as read.');
       })());
     }
@@ -253,11 +266,7 @@ class AuthPassCloudBloc with ChangeNotifier {
   Future<void> deleteMail(EmailMessage message) async {
     final client = await _getClient();
     await client.mailboxMessageDelete(messageId: message.id);
-    _messageListReload();
-  }
-
-  void _messageListReload() {
-    _messageList.add(const EmailMessageList.empty());
+    await _dirtyAll();
   }
 
   @override
@@ -308,5 +317,74 @@ class JoinRun<T> with ChangeNotifier {
       _currentRun = null;
       notifyListeners();
     }
+  }
+}
+
+class CloudStatus {
+  CloudStatus({@required this.lastFetched, @required this.messagesUnread})
+      : assert(lastFetched != null),
+        assert(messagesUnread != null);
+  final DateTime lastFetched;
+  final int messagesUnread;
+}
+
+class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
+  ReloadableValueStream(this._stream)
+      : _valueStream = _stream._subject.stream,
+        super(_stream._subject.stream);
+
+  final LazyBehaviorSubject<T> _stream;
+  final ValueStream<T> _valueStream;
+
+  @override
+  bool get hasValue => _valueStream.hasValue;
+
+  @override
+  T get value => _valueStream.value;
+
+  Future<void> reload() async {
+    await _stream.reload();
+  }
+}
+
+class LazyBehaviorSubject<T> {
+  LazyBehaviorSubject(this._loadData);
+
+  final _subject = BehaviorSubject<T>();
+  final _joinRun = JoinRun<void>();
+  Future<T> Function() _loadData;
+
+  bool _dirty = true;
+
+  ReloadableValueStream<T> stream(Future<T> Function() loadData) {
+    _loadData = loadData;
+    if (_dirty) {
+      load();
+    }
+    return ReloadableValueStream(this);
+  }
+
+  Future<void> reload() async {
+    dirty();
+    await load();
+  }
+
+  Future<void> load() async {
+    if (_loadData == null) {
+      _logger.warning(
+          'calling reload on $runtimeType before anyone getting a stream.');
+      return;
+    }
+    await _joinRun.joinRun(() async {
+      if (!_dirty) {
+        return;
+      }
+      await _subject.addStream(Stream.fromFuture(_loadData()));
+      _dirty = false;
+    });
+  }
+
+  void dirty() {
+    _dirty = true;
   }
 }
