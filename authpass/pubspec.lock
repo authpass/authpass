@@ -94,6 +94,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  badges:
+    dependency: "direct main"
+    description:
+      name: badges
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   barcode_scan:
     dependency: "direct main"
     description:

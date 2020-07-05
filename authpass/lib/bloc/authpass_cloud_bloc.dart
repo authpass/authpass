@@ -56,6 +56,9 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   final _cloudStatus = LazyBehaviorSubject<CloudStatus>(null);
   ValueStream<CloudStatus> get cloudStatus => _cloudStatus.stream(() async {
+        if (tokenStatus != TokenStatus.confirmed) {
+          return null;
+        }
         final c = await _getClient();
         final s = await c.statusGet().requireSuccess();
         return CloudStatus(
@@ -110,6 +113,9 @@ class AuthPassCloudBloc with ChangeNotifier {
             _client, SecuritySchemeHttpData(bearerToken: token.authToken));
       }
       notifyListeners();
+      if (token.isConfirmed) {
+        unawaited(_dirtyAll());
+      }
     });
   }
 
@@ -155,7 +161,6 @@ class AuthPassCloudBloc with ChangeNotifier {
       authToken: response.authToken,
       isConfirmed: false,
     ));
-    notifyListeners();
   }
 
   Future<bool> checkConfirmed() async {
@@ -236,7 +241,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       _messageListReload();
     }
     if (status) {
-      _cloudStatus.dirty();
+      await _cloudStatus.reload();
     }
   }
 

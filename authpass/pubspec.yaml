@@ -35,7 +35,6 @@ dependencies:
 #    git:
 #      url: https://github.com/hpoul/file_picker_writable.git
 #      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
-  flushbar: ^1.10.4
   json_annotation: ^3.0.1
   built_value: ^7.1.0
   simple_json_persistence: ^1.0.1
@@ -80,9 +79,13 @@ dependencies:
   uuid: ^2.1.0
   url_launcher: ^5.4.11
   font_awesome_flutter: ^8.8.1
-  qr_flutter: ^3.2.0
   otp: ^2.2.1
 
+
+  # UI Utilities and Widgets
+  badges: ^1.1.1
+  qr_flutter: ^3.2.0
+  flushbar: ^1.10.4
 
   # (Small) utility packages
   quiver: ">=2.0.0 <3.0.0"

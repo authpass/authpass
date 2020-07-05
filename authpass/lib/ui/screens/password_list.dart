@@ -15,6 +15,7 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
+import 'package:badges/badges.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -485,46 +486,62 @@ class _PasswordListContentState extends State<PasswordListContent>
                 _filteredEntries = _allEntries;
               });
             }),
-        PopupMenuButton<VoidCallback>(
-          onSelected: (item) {
-            item();
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              child: const ListTile(
-                leading: Icon(Icons.category),
-                title: Text('Manage Groups'),
-              ),
-              value: () async {
-                await Navigator.of(context).push(GroupListFlat.route(
-                  {},
-                  groupListMode: GroupListMode.manage,
-                ));
+        StreamBuilder<CloudStatus>(
+          stream: context.watch<AuthPassCloudBloc>().cloudStatus,
+          initialData: null,
+          builder: (context, cloudStatusSnapshot) => Badge(
+            badgeContent: cloudStatusSnapshot.hasData &&
+                    cloudStatusSnapshot.data.messagesUnread > 0
+                ? Text('${cloudStatusSnapshot.data.messagesUnread}',
+                    style: TextStyle(color: Colors.white))
+                : null,
+            badgeColor: Theme.of(context).primaryColorDark,
+            position: BadgePosition.topRight(top: 0, right: 3),
+            child: PopupMenuButton<VoidCallback>(
+              onSelected: (item) {
+                item();
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: const ListTile(
+                    leading: Icon(Icons.category),
+                    title: Text('Manage Groups'),
+                  ),
+                  value: () async {
+                    await Navigator.of(context).push(GroupListFlat.route(
+                      {},
+                      groupListMode: GroupListMode.manage,
+                    ));
 //                if (group != null) {
 //                  _createGroupFilter({group});
 //                }
-              },
+                  },
+                ),
+                ...?_buildAuthPassCloudMenuItems(
+                    context, cloudStatusSnapshot.data),
+                ...AuthPassAboutDialog.createDefaultPopupMenuItems(
+                    context, kdbxBloc.openedFiles),
+                PopupMenuItem(
+                  value: () {
+                    Provider.of<Analytics>(context, listen: false)
+                        .events
+                        .trackActionPressed(action: 'lockFiles');
+                    Provider.of<KdbxBloc>(context, listen: false)
+                        .closeAllFiles();
+                    Navigator.of(context, rootNavigator: true)
+                        .pushAndRemoveUntil(
+                      SelectFileScreen.route(skipQuickUnlock: true),
+                      (_) => false,
+                    );
+                  },
+                  child: const ListTile(
+                    leading: Icon(Icons.exit_to_app),
+                    title: Text('Lock Files'),
+                  ),
+                ),
+              ],
             ),
-            ...?_buildAuthPassCloudMenuItems(context),
-            ...AuthPassAboutDialog.createDefaultPopupMenuItems(
-                context, kdbxBloc.openedFiles),
-            PopupMenuItem(
-              value: () {
-                Provider.of<Analytics>(context, listen: false)
-                    .events
-                    .trackActionPressed(action: 'lockFiles');
-                Provider.of<KdbxBloc>(context, listen: false).closeAllFiles();
-                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                  SelectFileScreen.route(skipQuickUnlock: true),
-                  (_) => false,
-                );
-              },
-              child: const ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text('Lock Files'),
-              ),
-            ),
-          ],
+          ),
         )
       ],
     );
@@ -852,7 +869,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   List<PopupMenuItem<VoidCallback>> _buildAuthPassCloudMenuItems(
-      BuildContext context) {
+      BuildContext context, CloudStatus cloudStatus) {
     final bloc = context.read<AuthPassCloudBloc>();
     if (bloc?.featureFlags?.authpassCloud != true) {
       return null;
@@ -860,9 +877,23 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (bloc.tokenStatus == TokenStatus.confirmed) {
       return [
         PopupMenuItem(
-          child: const ListTile(
-            leading: Icon(Icons.cloud),
-            title: Text('AuthPass Mailboxes'),
+          child: ListTile(
+            leading: Badge(
+              badgeContent:
+                  cloudStatus != null && cloudStatus.messagesUnread > 0
+                      ? Text(
+                          cloudStatus.messagesUnread.toString(),
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .primaryTextTheme
+                                  .bodyText1
+                                  .color),
+                        )
+                      : null,
+              badgeColor: Theme.of(context).primaryColor,
+              child: const Icon(Icons.cloud),
+            ),
+            title: const Text('AuthPass Mailboxes'),
           ),
           value: () {
             Navigator.of(context, rootNavigator: true)
