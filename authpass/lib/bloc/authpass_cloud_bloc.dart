@@ -86,7 +86,7 @@ class AuthPassCloudBloc with ChangeNotifier {
     await _loadToken();
   }
 
-  TokenStatus get tokenStatus => _storedToken == null
+  TokenStatus get tokenStatus => _storedToken?.isConfirmed == null
       ? TokenStatus.none
       : _storedToken.isConfirmed ? TokenStatus.confirmed : TokenStatus.created;
 
@@ -130,9 +130,19 @@ class AuthPassCloudBloc with ChangeNotifier {
       if (str == null) {
         return null;
       }
-      _storedToken =
-          _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
-      _logger.finest('loaded. $tokenStatus');
+      try {
+        _storedToken =
+            _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
+        // TODO: The following should only matter for old stored tokens,
+        //       this can probably be removed in the next version.
+        checkNotNull(_storedToken.authToken);
+        checkNotNull(_storedToken.isConfirmed);
+      } catch (e, stackTrace) {
+        _storedToken = null;
+        _logger.warning(
+            'Error while loading token. Ignoring stored token.', e, stackTrace);
+      }
+      _logger.finest('loaded. $tokenStatus --- $_storedToken');
       unawaited(Future<void>.microtask(() => notifyListeners()));
       return _storedToken;
     });
