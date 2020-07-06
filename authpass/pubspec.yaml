@@ -47,8 +47,8 @@ dependencies:
   isolate: ^2.0.3
 #  clipboard_manager: ^0.0.4
 
-  flutter_async_utils: ^0.0.1
-  flutter_svg: ">=0.17.0 <1.0.0"
+  flutter_async_utils: ^0.1.0
+  flutter_svg: ">=0.18.0 <1.0.0"
   #usage: ^3.4.1
   usage:
     git:
@@ -171,7 +171,7 @@ dev_dependencies:
 
 dependency_overrides:
   pedantic: ^1.9.0
-  xml: '>=3.7.0 <4.0.0'
+#  xml: '>=3.7.0 <4.0.0'
   petitparser: '>=3.0.0 <4.0.0'
   kdbx:
     path: ../deps/kdbx.dart
@@ -179,6 +179,11 @@ dependency_overrides:
     git:
       url: https://github.com/authpass/pointycastle.git
       ref: 73dea5d9d441da30bd2c99adc16e5bf98d6c2a43
+  # requires xml 4.2
+  enough_mail:
+    git:
+      url: https://github.com/authpass/enough_mail.git
+      ref: 2cddc2e5cb24909607a1d54cfeafe2903d492b36
   # remove this once package_info 0.4.1 is published.
   package_info:
     git:
@@ -186,6 +191,9 @@ dependency_overrides:
       ref: package_info_macos
       path: packages/package_info
   rxdart: ^0.24.1
+  # flutter_html depends on 0.17
+  flutter_svg: ^0.18.0
+
 #  openapi_base:
 #    path: /Users/herbert/dev/authpass-cloud/deps/openapi_dart/packages/openapi_base
 

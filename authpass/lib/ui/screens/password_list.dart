@@ -7,6 +7,7 @@ import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/cloud/cloud_mailbox.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
+import 'package:authpass/ui/screens/password_list_drawer.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -492,9 +493,11 @@ class _PasswordListContentState extends State<PasswordListContent>
           builder: (context, cloudStatusSnapshot) => Badge(
             badgeContent: cloudStatusSnapshot.hasData &&
                     cloudStatusSnapshot.data.messagesUnread > 0
-                ? Text('${cloudStatusSnapshot.data.messagesUnread}',
-                    style: TextStyle(color: Colors.white))
+                ? Text('x${cloudStatusSnapshot.data.messagesUnread}',
+                    style: const TextStyle(color: Colors.white))
                 : null,
+            showBadge: cloudStatusSnapshot.hasData &&
+                cloudStatusSnapshot.data.messagesUnread > 0,
             badgeColor: Theme.of(context).primaryColorDark,
             position: BadgePosition.topRight(top: 0, right: 3),
             child: PopupMenuButton<VoidCallback>(
@@ -692,6 +695,14 @@ class _PasswordListContentState extends State<PasswordListContent>
       appBar: _filteredEntries == null
           ? _buildDefaultAppBar(context)
           : _buildFilterAppBar(context),
+      drawer: Drawer(
+        child: PasswordListDrawer(
+          initialSelection: _groupFilter.groups.map((e) => e.group).toSet(),
+          selectionChanged: (Set<KdbxGroup> selection) {
+            _createGroupFilter(selection);
+          },
+        ),
+      ),
       body: _allEntries.isEmpty
           ? NoPasswordsEmptyView(
               listPrefix: listPrefix,
@@ -853,6 +864,10 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   void _createGroupFilter(Set<KdbxGroup> groupFilter) {
+    if (groupFilter.isEmpty) {
+      _groupFilterNotifier.value = GroupFilter.DEFAULT_GROUP_FILTER;
+      return;
+    }
     final name = groupFilter.length == 1
         ? 'Group: ${groupFilter.first.name.get()}'
         : 'Custom Filter (${groupFilter.length} Groups)';
@@ -890,6 +905,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                                   .color),
                         )
                       : null,
+              showBadge: cloudStatus != null && cloudStatus.messagesUnread > 0,
               badgeColor: Theme.of(context).primaryColor,
               child: const Icon(Icons.cloud),
             ),

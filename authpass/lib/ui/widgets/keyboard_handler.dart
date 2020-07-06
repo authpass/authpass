@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:authpass/bloc/app_data.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -133,6 +135,11 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
               final shortcut = mapping[character];
               if (shortcut != null) {
                 _keyboardShortcutEvents._shortcutEvents.add(shortcut);
+              } else {
+                if (character == LogicalKeyboardKey.bracketRight) {
+                  final t = context.read<AppDataBloc>().updateNextTheme();
+                  _logger.fine('Switching theme to $t');
+                }
               }
             } else if (modifiers.isEmpty) {
               _logger.finer('modifiers is empty.. now check which key it is.');

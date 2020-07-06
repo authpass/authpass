@@ -208,7 +208,27 @@ extension on GroupListMode {
       this == GroupListMode.singleSelect;
 }
 
-class GroupListFlat extends StatelessWidget {
+mixin GroupListFlatMixin {
+  List<_GroupViewModel> _createViewModel(
+      KdbxBloc kdbxBloc, KdbxOpenedFile file, KdbxGroup group, int depth) {
+    if (file == null || group == null) {
+      return kdbxBloc.openedFiles.values
+          .expand((file) => _createViewModel(
+              kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
+          .toList();
+    } else {
+      return [
+        _GroupViewModel(kdbxBloc, file, group, depth),
+        ...group.groups
+            // for now simply hide all trash groups.
+            .where((element) => element.file.recycleBin != element)
+            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
+      ];
+    }
+  }
+}
+
+class GroupListFlat extends StatelessWidget with GroupListFlatMixin {
   const GroupListFlat({
     Key key,
     this.initialSelection,
@@ -256,24 +276,6 @@ class GroupListFlat extends StatelessWidget {
           );
         });
   }
-
-  List<_GroupViewModel> _createViewModel(
-      KdbxBloc kdbxBloc, KdbxOpenedFile file, KdbxGroup group, int depth) {
-    if (file == null || group == null) {
-      return kdbxBloc.openedFiles.values
-          .expand((file) => _createViewModel(
-              kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
-          .toList();
-    } else {
-      return [
-        _GroupViewModel(kdbxBloc, file, group, depth),
-        ...group.groups
-            // for now simply hide all trash groups.
-            .where((element) => element.file.recycleBin != element)
-            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
-      ];
-    }
-  }
 }
 
 class GroupListFlatContent extends StatefulWidget {
@@ -316,8 +318,6 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
     _groupFilter.addAll(widget.groups
         .where((element) => widget.initialSelection.contains(element.group)));
   }
-
-  bool get _allSelected => _groupFilter.length == widget.groups.length;
 
   @override
   Widget build(BuildContext context) {
@@ -374,110 +374,40 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
               : null,
         ],
       ),
-      body: Scrollbar(
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return _listHeader();
+      body: GroupListFlatList(
+        groupFilter: _groupFilter,
+        groups: widget.groups,
+        groupListMode: widget.groupListMode,
+        onChanged: (group, value) async {
+          switch (widget.groupListMode) {
+            case GroupListMode.multiSelectForFilter:
+              if (value) {
+                _groupFilter.add(group);
+              } else {
+                _groupFilter.remove(group);
+              }
+              break;
+            case GroupListMode.singleSelect:
+              _groupFilter.clear();
+              _groupFilter.add(group);
+              _popResult();
+              break;
+            case GroupListMode.manage:
+              await Navigator.of(context)
+                  .push(GroupEditScreen.route(group.group));
+              break;
+          }
+          setState(() {});
+        },
+        onChangedAll: (bool selected) {
+          setState(() {
+            if (selected) {
+              _groupFilter.clear();
+            } else {
+              _groupFilter.addAll(widget.groups.map((e) => e));
             }
-            final group = widget.groups[index - 1];
-            return GroupListTile(
-              group: group,
-              isSelected: _groupFilter.contains(group),
-              groupListMode: widget.groupListMode,
-              onChanged: (value) async {
-                switch (widget.groupListMode) {
-                  case GroupListMode.multiSelectForFilter:
-                    if (value) {
-                      _groupFilter.add(group);
-                    } else {
-                      _groupFilter.remove(group);
-                    }
-                    break;
-                  case GroupListMode.singleSelect:
-                    _groupFilter.clear();
-                    _groupFilter.add(group);
-                    _popResult();
-                    break;
-                  case GroupListMode.manage:
-                    await Navigator.of(context)
-                        .push(GroupEditScreen.route(group.group));
-                    break;
-                }
-                setState(() {});
-              },
-              onLongPress: () async {
-                final action = await showDialog<String>(
-                  context: context,
-                  builder: (context) => SimpleDialog(
-                    title: Text(group.name),
-                    children: <Widget>[
-                      SimpleDialogOption(
-                        onPressed: () => Navigator.of(context).pop('create'),
-                        child: const ListTile(
-                          leading: Icon(Icons.create_new_folder),
-                          title: Text('Create Subgroup'),
-                        ),
-                      ),
-                      SimpleDialogOption(
-                        onPressed: () => Navigator.of(context).pop('edit'),
-                        child: const ListTile(
-                          leading: Icon(FontAwesomeIcons.edit),
-                          title: Text('Edit'),
-                        ),
-                      ),
-                      ...?group.isRoot
-                          ? null
-                          : [
-                              SimpleDialogOption(
-                                onPressed: () =>
-                                    Navigator.of(context).pop('delete'),
-                                child: const ListTile(
-                                  leading: Icon(Icons.delete),
-                                  title: Text('Delete'),
-                                ),
-                              ),
-                            ],
-                    ],
-                  ),
-                );
-                if (action == 'create') {
-                  _logger.fine('Creating folder.');
-                  final newGroup = group.file.kdbxFile
-                      .createGroup(parent: group.group, name: 'New Group');
-                  await Navigator.of(context)
-                      .push(GroupEditScreen.route(newGroup));
-                } else if (action == 'delete') {
-                  _logger.fine('We should delete ${group.name}');
-                  final oldParent = group.group.parent;
-                  group.file.kdbxFile.deleteGroup(group.group);
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Deleted group.'),
-                      action: SnackBarAction(
-                        label: 'Undo',
-                        onPressed: () {
-                          oldParent.file.move(group.group, oldParent);
-                        },
-                      ),
-                    ),
-                  );
-                } else if (action == 'edit') {
-                  await Navigator.of(context)
-                      .push(GroupEditScreen.route(group.group));
-                } else if (action != null) {
-                  throw StateError('Invalid action $action');
-                }
-              },
-            );
-//        return CheckboxListTile(
-//          value: _groupFilter.contains(group),
-//          controlAffinity: ListTileControlAffinity.leading,
-//          onChanged: (value) {},
-//        );
-          },
-          itemCount: widget.groups.length + 1,
-        ),
+          });
+        },
       ),
     );
   }
@@ -485,9 +415,119 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   void _popResult() {
     Navigator.of(context).pop(_groupFilter.map((e) => e.group).toSet());
   }
+}
+
+class GroupListFlatList extends StatelessWidget {
+  const GroupListFlatList({
+    Key key,
+    @required this.groupFilter,
+    @required this.groups,
+    @required this.groupListMode,
+    @required this.onChanged,
+    @required this.onChangedAll,
+  }) : super(key: key);
+
+  final Set<_GroupViewModel> groupFilter;
+  final List<_GroupViewModel> groups;
+  final GroupListMode groupListMode;
+  final void Function(_GroupViewModel group, bool selected) onChanged;
+  final void Function(bool selected) onChangedAll;
+
+  bool get _allSelected => groupFilter.length == groups.length;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _listHeader();
+          }
+          final group = groups[index - 1];
+          return GroupListTile(
+            group: group,
+            isSelected: groupFilter.contains(group),
+            groupListMode: groupListMode,
+            onChanged: (value) async {
+              onChanged(group, value);
+            },
+            onLongPress: () async {
+              final action = await showDialog<String>(
+                context: context,
+                builder: (context) => SimpleDialog(
+                  title: Text(group.name),
+                  children: <Widget>[
+                    SimpleDialogOption(
+                      onPressed: () => Navigator.of(context).pop('create'),
+                      child: const ListTile(
+                        leading: Icon(Icons.create_new_folder),
+                        title: Text('Create Subgroup'),
+                      ),
+                    ),
+                    SimpleDialogOption(
+                      onPressed: () => Navigator.of(context).pop('edit'),
+                      child: const ListTile(
+                        leading: Icon(FontAwesomeIcons.edit),
+                        title: Text('Edit'),
+                      ),
+                    ),
+                    ...?group.isRoot
+                        ? null
+                        : [
+                            SimpleDialogOption(
+                              onPressed: () =>
+                                  Navigator.of(context).pop('delete'),
+                              child: const ListTile(
+                                leading: Icon(Icons.delete),
+                                title: Text('Delete'),
+                              ),
+                            ),
+                          ],
+                  ],
+                ),
+              );
+              if (action == 'create') {
+                _logger.fine('Creating folder.');
+                final newGroup = group.file.kdbxFile
+                    .createGroup(parent: group.group, name: 'New Group');
+                await Navigator.of(context)
+                    .push(GroupEditScreen.route(newGroup));
+              } else if (action == 'delete') {
+                _logger.fine('We should delete ${group.name}');
+                final oldParent = group.group.parent;
+                group.file.kdbxFile.deleteGroup(group.group);
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('Deleted group.'),
+                    action: SnackBarAction(
+                      label: 'Undo',
+                      onPressed: () {
+                        oldParent.file.move(group.group, oldParent);
+                      },
+                    ),
+                  ),
+                );
+              } else if (action == 'edit') {
+                await Navigator.of(context)
+                    .push(GroupEditScreen.route(group.group));
+              } else if (action != null) {
+                throw StateError('Invalid action $action');
+              }
+            },
+          );
+//        return CheckboxListTile(
+//          value: _groupFilter.contains(group),
+//          controlAffinity: ListTileControlAffinity.leading,
+//          onChanged: (value) {},
+//        );
+        },
+        itemCount: groups.length + 1,
+      ),
+    );
+  }
 
   Widget _listHeader() {
-    if (widget.groupListMode != GroupListMode.multiSelectForFilter) {
+    if (groupListMode != GroupListMode.multiSelectForFilter) {
       return const SizedBox();
     }
     return Column(
@@ -505,18 +545,69 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
                 ? const Text('Deselect all')
                 : const Text('Select All'),
             onPressed: () {
-              setState(() {
-                if (_allSelected) {
-                  _groupFilter.clear();
-                } else {
-                  _groupFilter.addAll(widget.groups.map((e) => e));
-                }
-              });
+              onChangedAll(!_allSelected);
             },
           ),
         ),
       ],
     );
+  }
+}
+
+class GroupFilterFlatList extends StatefulWidget {
+  const GroupFilterFlatList({
+    Key key,
+    @required this.initialSelection,
+    @required this.selectionChanged,
+  }) : super(key: key);
+
+  final Set<KdbxGroup> initialSelection;
+  final void Function(Set<KdbxGroup> selection) selectionChanged;
+
+  @override
+  _GroupFilterFlatListState createState() => _GroupFilterFlatListState();
+}
+
+class _GroupFilterFlatListState extends State<GroupFilterFlatList>
+    with GroupListFlatMixin {
+  List<_GroupViewModel> _groups;
+  final Set<_GroupViewModel> _groupFilter = {};
+
+  void _initViewModels() {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    _groups = _createViewModel(kdbxBloc, null, null, 0);
+    _groupFilter.addAll(_groups
+        .where((element) => widget.initialSelection.contains(element.group)));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _initViewModels();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GroupListFlatList(
+        groupFilter: _groupFilter,
+        groups: _groups,
+        groupListMode: GroupListMode.multiSelectForFilter,
+        onChanged: (group, value) {
+          if (value) {
+            _groupFilter.add(group);
+          } else {
+            _groupFilter.remove(group);
+          }
+          widget.selectionChanged(_groupFilter.map((e) => e.group).toSet());
+        },
+        onChangedAll: (value) {
+          if (value) {
+            _groupFilter.clear();
+          } else {
+            _groupFilter.addAll(_groups);
+          }
+          widget.selectionChanged(_groupFilter.map((e) => e.group).toSet());
+        });
   }
 }
 

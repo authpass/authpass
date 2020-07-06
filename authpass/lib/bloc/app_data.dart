@@ -276,4 +276,14 @@ class AppDataBloc {
     await store.save(newAppData);
     return ret;
   }
+
+  Future<AppDataTheme> updateNextTheme() async {
+    final updated = await update((builder, data) {
+      final nextTheme = data.theme == null
+          ? AppDataTheme.light
+          : data.theme == AppDataTheme.light ? AppDataTheme.dark : null;
+      return builder.theme = nextTheme;
+    });
+    return updated;
+  }
 }

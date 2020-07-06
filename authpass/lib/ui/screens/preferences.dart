@@ -141,13 +141,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             if (_appData == null) {
               return;
             }
-            final nextTheme = _appData.theme == null
-                ? AppDataTheme.light
-                : _appData.theme == AppDataTheme.light
-                    ? AppDataTheme.dark
-                    : null;
-            await _appDataBloc
-                .update((builder, data) => builder.theme = nextTheme);
+            await _appDataBloc.updateNextTheme();
           },
         ),
         ValueSelectorTile(
