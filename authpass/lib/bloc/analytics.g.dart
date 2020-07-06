@@ -64,6 +64,8 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackSaveCount({String generator, int value}) => trackEvent(
       'saveCount', <String, dynamic>{'generator': generator, 'value': value});
   @override
+  void trackDrawerOpen() => trackEvent('drawerOpen', <String, dynamic>{});
+  @override
   void trackAttachmentAction(String action, {String category = 'attachment'}) =>
       trackEvent('attachmentAction',
           <String, dynamic>{'action': action, 'category': category});

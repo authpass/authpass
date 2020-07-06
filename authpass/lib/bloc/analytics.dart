@@ -238,6 +238,8 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackSave({@required String type, int value});
   void trackSaveCount({@required String generator, @required int value});
 
+  void trackDrawerOpen();
+
   void trackAttachmentAction(String action, {String category = 'attachment'});
   void trackAttachmentAdd(
     AttachmentAddType action,

@@ -1,11 +1,12 @@
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/ui/screens/group_list.dart';
-import 'package:authpass/ui/screens/password_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
+import 'package:provider/provider.dart';
 
-class PasswordListDrawer extends StatelessWidget {
+class PasswordListDrawer extends StatefulWidget {
   const PasswordListDrawer({
     Key key,
     @required this.initialSelection,
@@ -14,6 +15,27 @@ class PasswordListDrawer extends StatelessWidget {
 
   final Set<KdbxGroup> initialSelection;
   final void Function(Set<KdbxGroup> selection) selectionChanged;
+
+  @override
+  _PasswordListDrawerState createState() => _PasswordListDrawerState();
+}
+
+class _PasswordListDrawerState extends State<PasswordListDrawer> {
+  bool initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!initialized) {
+      context.read<Analytics>().events.trackDrawerOpen();
+      initialized = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +59,8 @@ class PasswordListDrawer extends StatelessWidget {
         ),
         Expanded(
           child: GroupFilterFlatList(
-            initialSelection: initialSelection,
-            selectionChanged: selectionChanged,
+            initialSelection: widget.initialSelection,
+            selectionChanged: widget.selectionChanged,
           ),
         ),
       ],
