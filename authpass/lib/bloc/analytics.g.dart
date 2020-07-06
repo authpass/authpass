@@ -78,6 +78,12 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'value': value,
         'category': category
       });
+  @override
+  void trackCloudAuth(CloudAuthAction action, {String category = 'cloud'}) =>
+      trackEvent('cloudAuth', <String, dynamic>{
+        'action': action?.toString()?.substring(16),
+        'category': category
+      });
 }
 
 // **************************************************************************

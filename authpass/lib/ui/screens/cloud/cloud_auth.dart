@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -109,6 +110,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
 
   VoidCallback _submitCallback() => asyncTaskCallback((progress) async {
         if (_form.currentState.validate()) {
+          context.read<Analytics>().events.trackCloudAuth(CloudAuthAction.send);
           await widget.bloc.authenticate(_email.text);
         }
       });
@@ -128,16 +130,22 @@ class _ConfirmEmailAddress extends StatefulWidget {
 class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
   Timer _timer;
   bool _showResendButton = false;
+  Analytics _analytics;
 
   @override
-  void initState() {
-    super.initState();
-    _scheduleCheck();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_timer == null || !_timer.isActive) {
+      _scheduleCheck();
+    }
+    _analytics = context.read<Analytics>();
   }
 
   Future<void> _scheduleCheck() async {
     _timer = Timer(const Duration(seconds: 3), () async {
-      await widget.bloc.checkConfirmed();
+      if (await widget.bloc.checkConfirmed()) {
+        _analytics.events.trackCloudAuth(CloudAuthAction.success);
+      }
       unawaited(_scheduleCheck());
       if (!_showResendButton) {
         setState(() {
@@ -152,13 +160,23 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
     return Column(
       children: <Widget>[
         const Text('Please check your emails to confirm your email address.'),
-        if (_showResendButton)
-          RaisedButton(
-            onPressed: () {
-              widget.bloc.clearToken();
-            },
-            child: const Text('Send a new confirmation link'),
-          ),
+        ...?_showResendButton
+            ? [
+                const Text('If you have not received an email, '
+                    'please check your spam folder. Otherwise you can try '
+                    'to request a new confirmation link.'),
+                RaisedButton(
+                  onPressed: () {
+                    context
+                        .read<Analytics>()
+                        .events
+                        .trackCloudAuth(CloudAuthAction.resend);
+                    widget.bloc.clearToken();
+                  },
+                  child: const Text('Request a new confirmation link'),
+                ),
+              ]
+            : null,
       ],
     );
   }
@@ -167,5 +185,6 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
   void dispose() {
     super.dispose();
     _timer.cancel();
+    _timer = null;
   }
 }

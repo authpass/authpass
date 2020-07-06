@@ -247,6 +247,17 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     int value, {
     String category = 'attachmentAdd',
   });
+
+  void trackCloudAuth(
+    CloudAuthAction action, {
+    String category = 'cloud',
+  });
+}
+
+enum CloudAuthAction {
+  send,
+  resend,
+  success,
 }
 
 enum AttachmentAddType {
