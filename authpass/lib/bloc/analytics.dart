@@ -250,14 +250,16 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackCloudAuth(
     CloudAuthAction action, {
+    String label = 'auth',
     String category = 'cloud',
   });
 }
 
 enum CloudAuthAction {
-  send,
-  resend,
-  success,
+  authSend,
+  authResend,
+  authSuccess,
+  authCanceled,
 }
 
 enum AttachmentAddType {
