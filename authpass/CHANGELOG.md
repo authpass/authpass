@@ -1,5 +1,6 @@
 # 1.6.4
 
+* Group Management/Filter: Add Drawer for easy filtering by Groups.
 * Fixed saving files in Dropbox root folder.
 * MacOS: Fixed adding file attachments.
 * Android: Allow installation on sdcard.
@@ -9,7 +10,7 @@
 * Initial support for Linux
 * Fix OTP codes with spaces in 'TOTP Seed' field #26
 * Password List: Improved search by search for each word separately.
-* iOS: added icloud capability to fix local file crashes on ios <= 10
+* iOS: added iCloud capability to fix local file crashes on ios <= 10
 
 # 1.6.2
 

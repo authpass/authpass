@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
+import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -74,6 +76,16 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
+          LinkButton(
+            child: const Text(
+              'AuthPass Cloud\n'
+              'For details visit https://authpass.app/docs/authpass-cloud/',
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              DialogUtils.openUrl('https://authpass.app/docs/authpass-cloud/');
+            },
+          ),
           TextFormField(
             controller: _email,
             decoration: const InputDecoration(

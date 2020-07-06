@@ -136,7 +136,7 @@ abstract class Env {
 
   final FeatureFlags featureFlags = FeatureFlags(
     (b) => b
-      ..authpassCloud = false
+      ..authpassCloud = true
       ..authpassCloudUri = 'https://cloud.authpass.app/',
   );
 
