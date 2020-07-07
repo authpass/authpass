@@ -2,6 +2,7 @@
 
 * Group Management/Filter: Add Drawer for easy filtering by Groups.
 * Fixed saving files in Dropbox root folder.
+* Use default colors when opening files (do not use gray).
 * MacOS: Fixed adding file attachments.
 * Android: Allow installation on sdcard.
 

@@ -26,6 +26,36 @@ class AuthPassTheme {
     800: Color(0xFF464eb1),
     900: Color(0xFF343ca4),
   });
+
+  static const defaultFileColors = [
+    Colors.red,
+    Colors.pink,
+    Colors.purple,
+    Colors.deepPurple,
+    Colors.indigo,
+    Colors.blue,
+    Colors.lightBlue,
+    Colors.cyan,
+    primaryColor,
+    Colors.teal,
+    Colors.green,
+    Colors.lightGreen,
+    Colors.lime,
+    Colors.yellow,
+    Colors.amber,
+    Colors.orange,
+    Colors.deepOrange,
+    Colors.brown,
+    Colors.grey,
+    Colors.blueGrey,
+    Colors.black,
+  ];
+  static const defaultColorOrder = [
+    Colors.teal,
+    Colors.orange,
+    Colors.blueGrey,
+    Colors.deepPurple,
+  ];
 }
 
 abstract class Breakpoints {

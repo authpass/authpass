@@ -11,6 +11,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
+import 'package:authpass/theme.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -610,8 +611,11 @@ class KdbxBloc {
       throw kdbxReadFile.exception;
     }
     final kdbxFile = kdbxReadFile.file;
-    final openedFile = await appDataBloc.openedFile(file,
-        name: kdbxFile.body.meta.databaseName.get());
+    final openedFile = await appDataBloc.openedFile(
+      file,
+      name: kdbxFile.body.meta.databaseName.get(),
+      defaultColor: _defaultNextColor(),
+    );
     _openedFiles.value = OpenedKdbxFiles({
       ..._openedFiles.value._files,
       file: KdbxOpenedFile(
@@ -632,6 +636,16 @@ class KdbxBloc {
       _logger.fine('adding file to quick unlock.');
       await _updateQuickUnlockStore();
     }
+  }
+
+  Color _defaultNextColor() {
+    for (final color in AuthPassTheme.defaultColorOrder) {
+      if (!openedFiles.values
+          .any((file) => file.openedFile.colorCode == color.value)) {
+        return color;
+      }
+    }
+    return null;
   }
 
   /// writes all opened files into secure storage.

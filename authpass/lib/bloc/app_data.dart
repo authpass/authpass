@@ -255,10 +255,13 @@ class AppDataBloc {
   ///
   /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.
   Future<OpenedFile> openedFile(FileSource file,
-          {@required String name, OpenedFile oldFile}) async =>
+          {@required String name,
+          OpenedFile oldFile,
+          Color defaultColor}) async =>
       await update((b, data) {
         final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
-        final colorCode = recentFile?.colorCode;
+        final colorCode =
+            recentFile?.colorCode ?? oldFile?.colorCode ?? defaultColor?.value;
         final openedFile = OpenedFile.fromFileSource(
             file, name, (b) => b..colorCode = colorCode);
         _logger.finest('openedFile: $openedFile');

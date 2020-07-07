@@ -13,6 +13,7 @@ import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/theme_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
@@ -371,6 +372,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                   (f) => OpenedFileTile(
                                     openedFile:
                                         f.toFileSource(cloudStorageBloc),
+                                    color: f.color,
                                     onPressed: () {
                                       final source =
                                           f.toFileSource(cloudStorageBloc);
@@ -405,17 +407,23 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 }
 
 class OpenedFileTile extends StatelessWidget {
-  const OpenedFileTile({Key key, @required this.openedFile, this.onPressed})
-      : super(key: key);
+  const OpenedFileTile({
+    Key key,
+    @required this.openedFile,
+    this.onPressed,
+    @required this.color,
+  }) : super(key: key);
 
   final FileSource openedFile;
   final VoidCallback onPressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final subtitleStyle = TextStyle(
         color: ListTileTheme.of(context).textColor ??
-            Theme.of(context).textTheme.caption.color);
+            theme.textTheme.caption.color);
     return InkWell(
       onTap: onPressed,
       child: Padding(
@@ -424,7 +432,10 @@ class OpenedFileTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
 //        crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Icon(openedFile.displayIcon),
+            Icon(
+              openedFile.displayIcon,
+              color: ThemeUtil.iconColor(theme, color),
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Column(

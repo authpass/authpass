@@ -6,6 +6,7 @@ import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:file_chooser/file_chooser.dart';
@@ -388,7 +389,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   }
 
   void _init() {
-    _selectedColor = _defaultColors.firstWhere(
+    _selectedColor = AuthPassTheme.defaultFileColors.firstWhere(
         (color) => color.value == widget.initialColor?.value,
         orElse: () => widget.initialColor);
   }
@@ -404,7 +405,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             BlockPicker(
-              availableColors: _defaultColors,
+              availableColors: AuthPassTheme.defaultFileColors,
               pickerColor: _selectedColor ?? Colors.white,
               onColorChanged: (color) {
                 setState(() {
@@ -435,26 +436,3 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
     );
   }
 }
-
-const _defaultColors = [
-  Colors.red,
-  Colors.pink,
-  Colors.purple,
-  Colors.deepPurple,
-  Colors.indigo,
-  Colors.blue,
-  Colors.lightBlue,
-  Colors.cyan,
-  Colors.teal,
-  Colors.green,
-  Colors.lightGreen,
-  Colors.lime,
-  Colors.yellow,
-  Colors.amber,
-  Colors.orange,
-  Colors.deepOrange,
-  Colors.brown,
-  Colors.grey,
-  Colors.blueGrey,
-  Colors.black,
-];
