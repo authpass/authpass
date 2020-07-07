@@ -93,7 +93,7 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
         title: const Text('AuthPass Mail'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(
               text: 'Mailbox',
               icon: Icon(FontAwesomeIcons.boxOpen),
@@ -197,7 +197,7 @@ class CloudMailboxList extends StatelessWidget {
                             },
                           ),
                           ListTile(
-                            leading: Icon(FontAwesomeIcons.volumeMute),
+                            leading: const Icon(FontAwesomeIcons.volumeMute),
                             title: const Text('Disable'),
                             subtitle: const Text('Receive no more emails'),
                             onTap: () async {

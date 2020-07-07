@@ -1,5 +1,6 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/ui/screens/group_list.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -49,7 +50,8 @@ class _PasswordListDrawerState extends State<PasswordListDrawer> {
 //          decoration: BoxDecoration(color: theme.primaryColor),
 //          padding: const EdgeInsets.all(16),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16) +
+                MediaQuery.of(context).padding.onlyTop,
             alignment: Alignment.bottomLeft,
             child: Text(
               'AuthPass',
@@ -58,9 +60,13 @@ class _PasswordListDrawerState extends State<PasswordListDrawer> {
           ),
         ),
         Expanded(
-          child: GroupFilterFlatList(
-            initialSelection: widget.initialSelection,
-            selectionChanged: widget.selectionChanged,
+          child: GroupListBuilder(
+            rootGroup: null,
+            builder: (context, groups) => GroupFilterFlatList(
+              groups: groups,
+              initialSelection: widget.initialSelection,
+              selectionChanged: widget.selectionChanged,
+            ),
           ),
         ),
       ],

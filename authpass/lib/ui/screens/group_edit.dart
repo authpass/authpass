@@ -53,7 +53,12 @@ class _GroupEditScreenState extends State<GroupEditScreen>
           AuthPassAboutDialog.createAboutPopupAction(context),
         ],
       ),
-      body: GroupEdit(group: widget.group, formKey: formKey),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          top: false,
+          child: GroupEdit(group: widget.group, formKey: formKey),
+        ),
+      ),
     );
   }
 }
@@ -78,6 +83,8 @@ class _GroupEditState extends State<GroupEdit> {
   void initState() {
     super.initState();
     _nameController.text = widget.group.name.get();
+    _nameController.selection =
+        TextSelection(baseOffset: 0, extentOffset: _nameController.text.length);
   }
 
   @override
@@ -133,6 +140,7 @@ class _GroupEditState extends State<GroupEdit> {
             const SizedBox(height: 8),
             TextFormField(
               maxLines: null,
+              controller: _nameController,
               decoration: const InputDecoration(
 //        fillColor: const Color(0xfff0f0f0),
                 filled: true,
@@ -142,7 +150,7 @@ class _GroupEditState extends State<GroupEdit> {
               keyboardType: TextInputType.text,
 //    controller: controller,
 //    onSaved: onSaved,
-              initialValue: widget.group.name.get(),
+              autofocus: true,
               onSaved: (value) {
                 widget.group.name.set(value);
               },

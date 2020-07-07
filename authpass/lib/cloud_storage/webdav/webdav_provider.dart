@@ -142,7 +142,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     await _expectSuccessResponse(response);
 
     final bytes = await response.stream.toBytes();
-    final doc = xml.parse(utf8.decode(bytes));
+    final doc = xml.XmlDocument.parse(utf8.decode(bytes));
 //    _logger.finer('Got propfind result: ${doc.toXmlString(pretty: true)}');
     final entities = doc.findAllElements('response', namespace: 'DAV:');
     _logger.finer('entities: ${entities.length}');

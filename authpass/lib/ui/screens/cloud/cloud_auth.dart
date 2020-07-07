@@ -91,8 +91,10 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             controller: _email,
             decoration: const InputDecoration(
               labelText: 'Enter email address to register or sign in.',
+              hintMaxLines: 2,
             ),
             keyboardType: TextInputType.emailAddress,
+            textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.send,
             onEditingComplete: () {},
             validator: SValidator.notEmpty(

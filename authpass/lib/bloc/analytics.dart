@@ -253,6 +253,16 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     String label = 'auth',
     String category = 'cloud',
   });
+
+  void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
+  void trackGroupCreate({String category = 'group'});
+}
+
+enum GroupDeleteResult {
+  hasSubgroups,
+  hasEntries,
+  deleted,
+  undo,
 }
 
 enum CloudAuthAction {

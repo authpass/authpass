@@ -1,3 +1,4 @@
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/group_edit.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -208,27 +209,7 @@ extension on GroupListMode {
       this == GroupListMode.singleSelect;
 }
 
-mixin GroupListFlatMixin {
-  List<_GroupViewModel> _createViewModel(
-      KdbxBloc kdbxBloc, KdbxOpenedFile file, KdbxGroup group, int depth) {
-    if (file == null || group == null) {
-      return kdbxBloc.openedFiles.values
-          .expand((file) => _createViewModel(
-              kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
-          .toList();
-    } else {
-      return [
-        _GroupViewModel(kdbxBloc, file, group, depth),
-        ...group.groups
-            // for now simply hide all trash groups.
-            .where((element) => element.file.recycleBin != element)
-            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
-      ];
-    }
-  }
-}
-
-class GroupListFlat extends StatelessWidget with GroupListFlatMixin {
+class GroupListFlat extends StatelessWidget {
   const GroupListFlat({
     Key key,
     this.initialSelection,
@@ -258,6 +239,32 @@ class GroupListFlat extends StatelessWidget with GroupListFlatMixin {
 
   @override
   Widget build(BuildContext context) {
+    return GroupListBuilder(
+        rootGroup: rootGroup,
+        builder: (context, groups) {
+          _logger.info('Rebuilding flat group list.');
+          return GroupListFlatContent(
+            groups: groups,
+            initialSelection: initialSelection ?? {},
+            groupListMode: groupListMode,
+          );
+        });
+  }
+}
+
+class GroupListBuilder extends StatelessWidget {
+  const GroupListBuilder({Key key, this.rootGroup, @required this.builder})
+      : assert(builder != null),
+        super(key: key);
+
+  /// if defined only groups within this group will be shown,
+  /// otherwise all groups in all files are shown.
+  final KdbxGroup rootGroup;
+  final Widget Function(BuildContext context, List<_GroupViewModel> groups)
+      builder;
+
+  @override
+  Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     final file =
         rootGroup == null ? null : kdbxBloc.fileForKdbxFile(rootGroup.file);
@@ -269,12 +276,26 @@ class GroupListFlat extends StatelessWidget with GroupListFlatMixin {
         builder: (context, snapshot) {
           _logger.info('Rebuilding flat group list.');
           final groups = _createViewModel(kdbxBloc, file, rootGroup, 0);
-          return GroupListFlatContent(
-            groups: groups,
-            initialSelection: initialSelection ?? {},
-            groupListMode: groupListMode,
-          );
+          return builder(context, groups);
         });
+  }
+
+  List<_GroupViewModel> _createViewModel(
+      KdbxBloc kdbxBloc, KdbxOpenedFile file, KdbxGroup group, int depth) {
+    if (file == null || group == null) {
+      return kdbxBloc.openedFiles.values
+          .expand((file) => _createViewModel(
+              kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
+          .toList();
+    } else {
+      return [
+        _GroupViewModel(kdbxBloc, file, group, depth),
+        ...group.groups
+            // for now simply hide all trash groups.
+            .where((element) => element.file.recycleBin != element)
+            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
+      ];
+    }
   }
 }
 
@@ -402,9 +423,9 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
         onChangedAll: (bool selected) {
           setState(() {
             if (selected) {
-              _groupFilter.clear();
-            } else {
               _groupFilter.addAll(widget.groups.map((e) => e));
+            } else {
+              _groupFilter.clear();
             }
           });
         },
@@ -452,6 +473,7 @@ class GroupListFlatList extends StatelessWidget {
               onChanged(group, value);
             },
             onLongPress: () async {
+              final analytics = context.read<Analytics>();
               final action = await showDialog<String>(
                 context: context,
                 builder: (context) => SimpleDialog(
@@ -492,10 +514,30 @@ class GroupListFlatList extends StatelessWidget {
                     .createGroup(parent: group.group, name: 'New Group');
                 await Navigator.of(context)
                     .push(GroupEditScreen.route(newGroup));
+                analytics.events.trackGroupCreate();
               } else if (action == 'delete') {
                 _logger.fine('We should delete ${group.name}');
+                // for now only allow deleting of empty groups.
+                if (group.group.groups.isNotEmpty) {
+                  analytics.events
+                      .trackGroupDelete(GroupDeleteResult.hasSubgroups);
+                  await DialogUtils.showSimpleAlertDialog(
+                      context,
+                      'Unable to delete group',
+                      'This group still contains other groups. You can currently only delete empty groups.');
+                  return;
+                } else if (group.group.entries.isNotEmpty) {
+                  analytics.events
+                      .trackGroupDelete(GroupDeleteResult.hasEntries);
+                  await DialogUtils.showSimpleAlertDialog(
+                      context,
+                      'Unable to delete group',
+                      'This group still contains other groups. You can currently only delete empty groups.');
+                  return;
+                }
                 final oldParent = group.group.parent;
                 group.file.kdbxFile.deleteGroup(group.group);
+                analytics.events.trackGroupDelete(GroupDeleteResult.deleted);
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: const Text('Deleted group.'),
@@ -503,6 +545,8 @@ class GroupListFlatList extends StatelessWidget {
                       label: 'Undo',
                       onPressed: () {
                         oldParent.file.move(group.group, oldParent);
+                        analytics.events
+                            .trackGroupDelete(GroupDeleteResult.undo);
                       },
                     ),
                   ),
@@ -559,8 +603,10 @@ class GroupFilterFlatList extends StatefulWidget {
     Key key,
     @required this.initialSelection,
     @required this.selectionChanged,
+    @required this.groups,
   }) : super(key: key);
 
+  final List<_GroupViewModel> groups;
   final Set<KdbxGroup> initialSelection;
   final void Function(Set<KdbxGroup> selection) selectionChanged;
 
@@ -568,16 +614,19 @@ class GroupFilterFlatList extends StatefulWidget {
   _GroupFilterFlatListState createState() => _GroupFilterFlatListState();
 }
 
-class _GroupFilterFlatListState extends State<GroupFilterFlatList>
-    with GroupListFlatMixin {
-  List<_GroupViewModel> _groups;
-  final Set<_GroupViewModel> _groupFilter = {};
+class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
+//  List<_GroupViewModel> _groups;
+  Set<_GroupViewModel> _groupFilter;
 
   void _initViewModels() {
-    final kdbxBloc = Provider.of<KdbxBloc>(context);
-    _groups = _createViewModel(kdbxBloc, null, null, 0);
-    _groupFilter.addAll(_groups
-        .where((element) => widget.initialSelection.contains(element.group)));
+    if (_groupFilter == null) {
+      _groupFilter = Set.of(widget.groups
+          .where((element) => widget.initialSelection.contains(element.group)));
+    } else {
+      final oldGroupFilter = _groupFilter.map((e) => e.group).toSet();
+      _groupFilter = Set.of(widget.groups
+          .where((element) => oldGroupFilter.contains(element.group)));
+    }
   }
 
   @override
@@ -587,10 +636,16 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList>
   }
 
   @override
+  void didUpdateWidget(GroupFilterFlatList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _initViewModels();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GroupListFlatList(
         groupFilter: _groupFilter,
-        groups: _groups,
+        groups: widget.groups,
         groupListMode: GroupListMode.multiSelectForFilter,
         onChanged: (group, value) {
           if (value) {
@@ -601,12 +656,14 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList>
           widget.selectionChanged(_groupFilter.map((e) => e.group).toSet());
         },
         onChangedAll: (value) {
+          _logger.fine('changedAll: $value');
           if (value) {
-            _groupFilter.clear();
+            _groupFilter.addAll(widget.groups);
           } else {
-            _groupFilter.addAll(_groups);
+            _groupFilter.clear();
           }
           widget.selectionChanged(_groupFilter.map((e) => e.group).toSet());
+          setState(() {});
         });
   }
 }

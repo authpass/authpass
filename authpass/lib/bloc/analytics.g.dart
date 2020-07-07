@@ -86,6 +86,16 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'label': label,
         'category': category
       });
+  @override
+  void trackGroupDelete(GroupDeleteResult result,
+          {String category = 'group'}) =>
+      trackEvent('groupDelete', <String, dynamic>{
+        'result': result?.toString()?.substring(18),
+        'category': category
+      });
+  @override
+  void trackGroupCreate({String category = 'group'}) =>
+      trackEvent('groupCreate', <String, dynamic>{'category': category});
 }
 
 // **************************************************************************
