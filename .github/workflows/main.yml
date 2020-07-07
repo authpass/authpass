@@ -26,7 +26,7 @@ jobs:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
       run: authpass/_tools/postdeploy.sh
     - name: debug android directory
-      run: echo "${ANDROID_SDK_ROOT} , ${ANDROID_HOME}"
+      run: echo "${ANDROID_SDK_ROOT} , ${ANDROID_HOME}" , Running in ${{ github.ref }}
     - uses: actions/setup-ruby@v1
       if: ${{ startsWith(matrix.flavor, 'playstoredev') }}
       with:
@@ -45,6 +45,7 @@ jobs:
         GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
+        AUTHPASS_SKIP_FASTLANE: ${{ github.ref != 'refs/heads/master' }}
       run: "./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}"
     - uses: actions/upload-artifact@v1
       if: ${{ steps.buildapk.outputs.outputfilename != null }}

@@ -8,6 +8,7 @@ cd $dir/..
 flavor="$1"
 
 FLT=${FLT:-flutter}
+AUTHPASS_SKIP_FASTLANE=${AUTHPASS_SKIP_FASTLANE:-}
 
 DEPS=${DEPS:-~/deps}
 if test -d ${DEPS}/flutter/bin ; then
@@ -89,8 +90,12 @@ case "${flavor}" in
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
         cd android
-        bundle install
-        bundle exec fastlane dev
+        if test "${AUTHPASS_SKIP_FASTLANE}" != "true" ; then
+            bundle install
+            bundle exec fastlane dev
+        else
+            echo "Skipping fastlane."
+        fi
     ;;
     android)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
