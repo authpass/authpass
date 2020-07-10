@@ -198,7 +198,10 @@ class _SimpleAuthCodePromptDialogState
     super.didChangeDependencies();
     if (_fps == null) {
       _fps = Provider.of<FilePickerState>(context);
-      _fps.registerUriHandler(_handleUri);
+      _fps?.registerUriHandler(_handleUri);
+      if (_fps == null) {
+        _logger.warning('No url handler declared. User will have to manually enter code.');
+      }
     }
   }
 
