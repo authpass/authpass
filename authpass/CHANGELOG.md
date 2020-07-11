@@ -1,3 +1,8 @@
+# 1.6.5
+
+* WebDav Connect UI: Make dialog scrollable. #103
+* Linux: support for keyring storage (for Dropbox, Google Drive, WebDav, One Drive)
+
 # 1.6.4
 
 * Group Management/Filter: Add Drawer for easy filtering by Groups.

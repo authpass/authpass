@@ -488,6 +488,7 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('WebDAV Settings'),
+      scrollable: true,
       content: Form(
         key: _formKey,
         child: Column(
