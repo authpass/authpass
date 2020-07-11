@@ -179,9 +179,14 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
       ..hasMore = false);
   }
 
+  static final _removeTrailingSlash = RegExp(r'/+$');
+
   CloudStorageEntity _toCloudStorageEntity(
       WebDavClient client, String href, CloudStorageEntityType type) {
+    href = href.replaceFirst(_removeTrailingSlash, '');
     final hrefUri = Uri.parse(href);
+    _logger.fine(
+        'Cloud entity to href: $href (pathSegments: ${hrefUri.pathSegments})');
     final basePath =
         path.joinAll(Uri.parse(client.credentials.baseUrl).pathSegments);
     final pathSegments = hrefUri.pathSegments.where((val) => val != '');
@@ -257,6 +262,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 //      }
       _logger.severe('Error during call to webdav endpoint. '
           '${response.statusCode} ${response.reasonPhrase} (${response.headers})');
+      _logger.severe('webdav request to: ${response.request.url}');
       throw StorageException(
         StorageExceptionType.unknown,
         'Error during request. (${response.statusCode} ${response.reasonPhrase})',

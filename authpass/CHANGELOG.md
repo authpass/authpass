@@ -1,6 +1,7 @@
 # 1.6.5
 
-* WebDav Connect UI: Make dialog scrollable. #103
+* WebDav: Connect UI: Make dialog scrollable. #103
+* WebDav: Fixed Compatibility with servers returning trailing slashes for directories.
 * Linux: support for keyring storage (for Dropbox, Google Drive, WebDav, One Drive)
 
 # 1.6.4
