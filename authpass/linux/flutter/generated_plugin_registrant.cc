@@ -8,6 +8,7 @@
 #include <file_chooser/file_chooser_plugin.h>
 #include <url_launcher_fde/url_launcher_plugin.h>
 #include <biometric_storage/biometric_storage_plugin.h>
+#include <clipboard_plugintest/clipboard_plugintest_plugin.h>
 
 void fl_register_plugins(FlPluginRegistry* registry) {
   g_autoptr(FlPluginRegistrar) argon2_ffi_registrar =
@@ -22,4 +23,7 @@ void fl_register_plugins(FlPluginRegistry* registry) {
   g_autoptr(FlPluginRegistrar) biometric_storage_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "BiometricStoragePlugin");
   biometric_storage_plugin_register_with_registrar(biometric_storage_registrar);
+  g_autoptr(FlPluginRegistrar) clipboard_plugintest_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "ClipboardPlugintestPlugin");
+  clipboard_plugintest_plugin_register_with_registrar(clipboard_plugintest_registrar);
 }

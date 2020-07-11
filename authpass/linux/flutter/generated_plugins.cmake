@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_chooser
   url_launcher_fde
   biometric_storage
+  clipboard_plugintest
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

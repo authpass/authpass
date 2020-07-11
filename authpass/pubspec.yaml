@@ -156,6 +156,10 @@ dependencies:
   openapi_base: ^0.1.2
   authpass_cloud_shared:
     path: ../deps/authpass-cloud/packages/authpass_cloud_shared
+  
+  # WORKAROUND: Clipboard for linux did not work..
+  clipboard_plugintest:
+    path: ../deps/clipboard_plugintest
 
 dev_dependencies:
   flutter_test:

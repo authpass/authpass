@@ -19,3 +19,6 @@
 [submodule "deps/authpass-cloud"]
 	path = deps/authpass-cloud
 	url = ../authpass-cloud
+[submodule "deps/clipboard_plugintest"]
+	path = deps/clipboard_plugintest
+	url = ../clipboard_plugintest

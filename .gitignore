@@ -38,3 +38,6 @@ _debug-full-r8-config.txt
 /snap/.snapcraft
 
 /authpass/_tools/secrets/artifact_token.txt
+
+.vscode
+

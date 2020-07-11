@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:clipboard_plugintest/clipboard_plugintest.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -200,7 +201,8 @@ class _SimpleAuthCodePromptDialogState
       _fps = Provider.of<FilePickerState>(context);
       _fps?.registerUriHandler(_handleUri);
       if (_fps == null) {
-        _logger.warning('No url handler declared. User will have to manually enter code.');
+        _logger.warning(
+            'No url handler declared. User will have to manually enter code.');
       }
     }
   }
@@ -274,7 +276,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
   }
 
   Future<void> _readClipboard({bool setIfChanged = false}) async {
-    final text = (await Clipboard.getData('text/plain'))?.text;
+    final text = await _getClipboardText();
     if (setIfChanged && text != _previousClipboard && text != null) {
       _controller.text = text;
       _controller.selection =
@@ -304,7 +306,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
               tooltip: 'Paste from clipboard',
               icon: const Icon(FontAwesomeIcons.paste),
               onPressed: () async {
-                _controller.text = (await Clipboard.getData('text/plain')).text;
+                _controller.text = await _getClipboardText() ?? '';
               },
             ),
             Expanded(
@@ -340,4 +342,11 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
       ],
     );
   }
+}
+
+Future<String> _getClipboardText() async {
+  if (Platform.isLinux) {
+    return await ClipboardPlugintest.getData();
+  }
+  return (await Clipboard.getData('text/plain'))?.text;
 }
