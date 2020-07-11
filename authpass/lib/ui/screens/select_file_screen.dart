@@ -168,16 +168,23 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         _checkQuickUnlock();
       });
     }
-    if (Platform.isLinux) {
-      BiometricStorage().linuxCheckAppArmorError().then((value) {
-        setState(() {
-          _showLinuxAppArmorMessage = true;
-        });
-      });
-    }
+    _linuxAppArmorCheck();
 //      Future<int>.delayed(const Duration(seconds: 5))
 //        .then((value) => _checkQuickUnlock());
 //    _checkQuickUnlock();
+  }
+
+  Future<bool> _linuxAppArmorCheck() async {
+    if (!Platform.isLinux) {
+      return true;
+    }
+    final isError = await BiometricStorage().linuxCheckAppArmorError();
+    if (isError != _showLinuxAppArmorMessage) {
+      setState(() {
+        _showLinuxAppArmorMessage = isError;
+      });
+    }
+    return !isError;
   }
 
   @override
@@ -275,6 +282,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                 content: Text('Copied to clipboard.'),
                               ),
                             );
+                          await _linuxAppArmorCheck();
                         }),
                   ]
                 : null),
