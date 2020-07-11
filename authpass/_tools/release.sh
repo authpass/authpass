@@ -112,6 +112,7 @@ case "${flavor}" in
         echo "${version}+${buildnumber}" > build/linux/release/version.txt
         echo "${version}+${buildnumber}" > build/linux/release/bundle/version.txt
         tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/linux/release/bundle
+        echo "::set-output name=appversion::${version}"
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
     ;;

@@ -65,5 +65,5 @@ jobs:
       id: snapcraft
     - uses: actions/upload-artifact@v2
       with:
-        name: snap
+        name: authpass-${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}-snap
         path: ${{ steps.snapcraft.outputs.snap }}

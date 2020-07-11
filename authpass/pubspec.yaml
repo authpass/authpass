@@ -195,7 +195,7 @@ dependency_overrides:
       ref: package_info_macos
       path: packages/package_info
   rxdart: ^0.24.1
-  # flutter_html depends on 0.17
+  # flutter_html depends on 0.17bio
   flutter_svg: ^0.18.0
 
 #  openapi_base:
@@ -205,8 +205,8 @@ dependency_overrides:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/flutter_plugins/url_launcher_fde
 #  file_chooser:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/file_chooser
-#  biometric_storage
-#    path: ../deps/biometric_storage
+  biometric_storage:
+    path: ../deps/biometric_storage
 #  macos_secure_bookmarks:
 #    path: /Users/herbert/dev/macos_secure_bookmarks
 
