@@ -14,11 +14,13 @@ import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/theme_utils.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
@@ -152,6 +154,9 @@ class SelectFileWidget extends StatefulWidget {
 class _SelectFileWidgetState extends State<SelectFileWidget>
     with FutureTaskStateMixin {
   bool _quickUnlockAttempted = false;
+  bool _showLinuxAppArmorMessage = false;
+  static const _linuxAppArmorCommand =
+      'snap connect authpass:password-manager-service';
   int counter = 0;
 
   @override
@@ -161,6 +166,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     if (!widget.skipQuickUnlock) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _checkQuickUnlock();
+      });
+    }
+    if (Platform.isLinux) {
+      BiometricStorage().linuxCheckAppArmorError().then((value) {
+        setState(() {
+          _showLinuxAppArmorMessage = true;
+        });
       });
     }
 //      Future<int>.delayed(const Duration(seconds: 5))
@@ -232,6 +244,40 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            ...?(_showLinuxAppArmorMessage
+                ? [
+                    const SizedBox(height: 16),
+                    Text(
+                      'AuthPass requires permission to communicate with '
+                      'Secret Service to store credentials for cloud storage.\n'
+                      'Please run the following command:',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.caption.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).errorColor,
+                          ),
+                    ),
+                    LinkButton(
+                        icon: const Icon(Icons.content_copy),
+                        child: const Text(
+                          _linuxAppArmorCommand,
+                          style: TextStyle(
+                              fontFamily: AuthPassTheme.monoFontFamily),
+                          maxLines: null,
+                        ),
+                        onPressed: () async {
+                          await Clipboard.setData(
+                              const ClipboardData(text: _linuxAppArmorCommand));
+                          Scaffold.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                content: Text('Copied to clipboard.'),
+                              ),
+                            );
+                        }),
+                  ]
+                : null),
             const SizedBox(height: 16),
             const Text('Please select a KeePass (.kdbx) file.'),
             const SizedBox(height: 16),

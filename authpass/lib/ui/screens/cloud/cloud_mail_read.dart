@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
+import 'package:authpass/theme.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -62,7 +63,7 @@ class EmailRead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.bodyText1.copyWith(
-          fontFamily: 'JetBrainsMono',
+          fontFamily: AuthPassTheme.monoFontFamily,
           height: 1.4,
         );
     final formatUtil = context.watch<FormatUtils>();

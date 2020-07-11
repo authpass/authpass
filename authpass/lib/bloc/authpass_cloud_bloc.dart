@@ -7,6 +7,7 @@ import 'package:biometric_storage/biometric_storage.dart';
 import 'package:clock/clock.dart';
 import 'package:enough_mail/enough_mail.dart' as enough;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -125,18 +126,27 @@ class AuthPassCloudBloc with ChangeNotifier {
         return _storedToken;
       }
       _logger.finest('Loading token.');
-      final f = await _getStorageFile();
-      final str = await f.read();
-      if (str == null) {
-        return null;
-      }
       try {
+        final f = await _getStorageFile();
+        final str = await f.read();
+        if (str == null) {
+          return null;
+        }
         _storedToken =
             _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
         // TODO: The following should only matter for old stored tokens,
         //       this can probably be removed in the next version.
         checkNotNull(_storedToken.authToken);
         checkNotNull(_storedToken.isConfirmed);
+      } on AuthException catch (e, stackTrace) {
+        _storedToken = null;
+        _logger.warning(
+            'Unable to load token, due to (known) error'
+            ' from secure storage. ignoring.',
+            e,
+            stackTrace);
+      } on PlatformException catch (e) {
+        rethrow;
       } catch (e, stackTrace) {
         _storedToken = null;
         _logger.warning(

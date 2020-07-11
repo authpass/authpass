@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 final _logger = Logger('theme');
 
 class AuthPassTheme {
+  static const monoFontFamily = 'JetBrainsMono';
 //  static const Color linkColor = Colors.blueAccent;
   static const int _primaryColorValue = 0xFF626bc6;
   static const Color primaryColor = Color(_primaryColorValue);
