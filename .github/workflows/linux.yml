@@ -61,3 +61,9 @@ jobs:
           --form token=$( cat authpass/_tools/secrets/artifact_token.txt ) \
           --form upload=@authpass/${{ steps.buildapk.outputs.outputpath }} \
           --form filename=$( basename ${{ steps.buildapk.outputs.outputpath }} )
+    - uses: snapcore/action-build@v1
+      id: snapcraft
+    - uses: actions/upload-artifact@v2
+      with:
+        name: snap
+        path: ${{ steps.snapcraft.outputs.snap }}
