@@ -373,7 +373,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       contextBuilder: () async => {
         'env': <String, Object>{
           'isDebug': _deps.env.isDebug,
-          'isGoogleStore': (await PackageInfo.fromPlatform()).packageName ==
+          'isGoogleStore': (await _deps.env.getAppInfo()).packageName ==
                   'design.codeux.authpass' &&
               Platform.isAndroid,
           'isIOS': Platform.isIOS,

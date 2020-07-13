@@ -37,7 +37,7 @@ dependencies:
 #      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
   json_annotation: ^3.0.1
   built_value: ^7.1.0
-  simple_json_persistence: ^1.0.1
+  simple_json_persistence: ^1.0.2
   provider: ^4.1.3
   http: ^0.12.1
   meta: '>=1.0.0 <2.0.0'
