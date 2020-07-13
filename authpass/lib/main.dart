@@ -33,6 +33,7 @@ import 'package:rxdart/rxdart.dart';
 // TODO: Remove the following two lines once path provider endorses the linux plugin
 import 'package:path_provider_linux/path_provider_linux.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:simple_json_persistence/simple_json_persistence.dart';
 
 final _logger = Logger('main');
 
@@ -48,6 +49,8 @@ Future<void> startApp(Env env) async {
     WidgetsFlutterBinding.ensureInitialized();
     PathProviderPlatform.instance = PathProviderLinux();
   }
+  StoreBackend.defaultBaseDirectoryBuilder =
+      () async => (await PathUtils().getAppDataDirectory()).path;
 
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
