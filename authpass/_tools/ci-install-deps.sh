@@ -19,7 +19,7 @@ if test "${1:-}" == "ios" ; then
     echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.macos cipostdeploy
 elif test "${1:-}" == "windows" ; then
     curl -L -o blackbox.go.windows.amd64.exe https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.windows.amd64.exe
-    //chmod +x blackbox.go.macos
+    #chmod +x blackbox.go.macos
     popd
     pushd "${root}"
     echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.windows.amd64.exe cipostdeploy
