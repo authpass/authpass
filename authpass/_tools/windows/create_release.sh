@@ -12,7 +12,7 @@ VS_REDIST_FILES=(
 	vcruntime140_1.dll
 )
 
-TARGET=release
+TARGET=release/authpass
 SOURCE=build/windows/runner/Release
 
 dir="${0%/*}"
