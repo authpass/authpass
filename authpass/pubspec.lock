@@ -788,11 +788,9 @@ packages:
   package_info:
     dependency: "direct main"
     description:
-      path: "packages/package_info"
-      ref: package_info_macos
-      resolved-ref: ae5d992233580a9b187507892af5d9a6612750c2
-      url: "https://github.com/hpoul/plugins.git"
-    source: git
+      name: package_info
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.4.1"
   path:
     dependency: transitive
@@ -821,7 +819,16 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.10"
+    version: "1.6.11"
+  path_provider_fde:
+    dependency: "direct main"
+    description:
+      path: "plugins/flutter_plugins/path_provider_fde"
+      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      resolved-ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      url: "https://github.com/google/flutter-desktop-embedding.git"
+    source: git
+    version: "0.0.1"
   path_provider_linux:
     dependency: "direct main"
     description:
@@ -1028,7 +1035,7 @@ packages:
       name: simple_json_persistence
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   sky_engine:
     dependency: transitive
     description: flutter

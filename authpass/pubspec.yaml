@@ -190,12 +190,6 @@ dependency_overrides:
     git:
       url: https://github.com/authpass/enough_mail.git
       ref: 2cddc2e5cb24909607a1d54cfeafe2903d492b36
-  # remove this once package_info 0.4.1 is published.
-  package_info:
-    git:
-      url: https://github.com/hpoul/plugins.git
-      ref: package_info_macos
-      path: packages/package_info
   rxdart: ^0.24.1
   # flutter_html depends on 0.17bio
   flutter_svg: ^0.18.0
