@@ -29,6 +29,7 @@ elif test "${1:-}" == "windows" ; then
     git clone https://github.com/flutter/flutter.git
     cd flutter/bin
     ./flutter upgrade
+    ./flutter config --enable-windows-desktop
 
     exit 0
 else

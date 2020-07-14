@@ -68,9 +68,9 @@ jobs:
     - name: upload artifact
       shell: cmd
       run: C:\tools\cygwin\bin\bash.exe -c "./authpass/_tools/upload-artifact.sh ${{ steps.buildapk.outputs.outputpath }}"
-    - uses: snapcore/action-build@v1
-      id: snapcraft
-    - uses: actions/upload-artifact@v2
-      with:
-        name: authpass-${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}-snap
-        path: ${{ steps.snapcraft.outputs.snap }}
+    # - uses: snapcore/action-build@v1
+    #   id: snapcraft
+    # - uses: actions/upload-artifact@v2
+    #   with:
+    #     name: authpass-${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}-snap
+    #     path: ${{ steps.snapcraft.outputs.snap }}
