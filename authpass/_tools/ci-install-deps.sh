@@ -23,6 +23,13 @@ elif test "${1:-}" == "windows" ; then
     popd
     pushd "${root}"
     echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.windows.amd64.exe cipostdeploy
+    popd
+
+    pushd ${DEPS}
+    git clone https://github.com/flutter/flutter.git
+    cd flutter/bin
+    ./flutter upgrade
+
     exit 0
 else
 #git clone https://github.com/mipmip/blackbox

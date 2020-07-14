@@ -28,14 +28,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-chocolatey-${{ matrix.os }}-
           ${{ runner.os }}-chocolatey-
-    - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '1.12.x' # you can use 1.12
-        channel: 'dev' # optional, default to: 'stable'
-    - run: |
-        flutter channel master
-        flutter upgrade
-        flutter config --enable-windows-desktop
+    # - uses: subosito/flutter-action@v1
+    #   with:
+    #     flutter-version: '1.12.x' # you can use 1.12
+    #     channel: 'dev' # optional, default to: 'stable'
+    # - run: |
+    #     flutter channel master
+    #     flutter upgrade
+    #     flutter config --enable-windows-desktop
     - name: Install cygwin base packages with chocolatey
       run: |
         choco config get cacheLocation
