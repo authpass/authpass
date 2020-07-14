@@ -105,13 +105,30 @@ case "${flavor}" in
     ;;
     linux)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
-        $FLT build -v linux -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.linux
+        $FLT build -v ${flavor} -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor}
 
-        outputfilename="authpass-linux-${version}_${buildnumber}.tar.gz"
-        outputpath="build/linux/release/${outputfilename}"
-        echo "${version}+${buildnumber}" > build/linux/release/version.txt
-        echo "${version}+${buildnumber}" > build/linux/release/bundle/version.txt
-        tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/linux/release/bundle
+        outputfilename="authpass-${flavor}-${version}_${buildnumber}.tar.gz"
+        outputpath="build/${flavor}/release/${outputfilename}"
+        echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
+        echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
+        tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/release/bundle
+        echo "::set-output name=appversion::${version}"
+        echo "::set-output name=outputfilename::${outputfilename}"
+        echo "::set-output name=outputpath::${outputpath}"
+    ;;
+    windows)
+        version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
+        $FLT build -v ${flavor} -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor}
+
+        _tools/windows/create_release.sh
+
+        "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" -DMyAppVersion=${version}_${buildnumber} _tools/windows/AuthPassSetup.iss
+
+        outputfilename="AuthPassSetup-${version}_${buildnumber}.exe"
+        outputpath="build/_authpass/windows/seutp/${outputfilename}"
+        #echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
+        #echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
+        #tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/release/bundle
         echo "::set-output name=appversion::${version}"
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"

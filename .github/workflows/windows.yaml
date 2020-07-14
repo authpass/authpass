@@ -1,0 +1,71 @@
+name: build windows
+
+on: 
+  push:
+    branches:
+      - 'windows**'
+      - 'stable'
+      - 'beta'
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        flavor: ['windows']
+        os: [windows-2019]
+        vs: [2019]
+
+      fail-fast: true
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/cache@v1
+      with:
+        path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
+        key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-chocolatey-${{ matrix.os }}-
+          ${{ runner.os }}-chocolatey-
+    - name: Install cygwin base packages with chocolatey
+      run: |
+        choco config get cacheLocation
+        choco install --no-progress cygwin
+    - name: Install cygwin additional packages
+      run: |
+        C:\tools\cygwin\cygwinsetup.exe -qgnNdO -R C:/tools/cygwin -s http://mirrors.kernel.org/sourceware/cygwin/ -P git,zip,curl
+      shell: cmd
+
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: ci-install-deps
+      shell: cmd
+      env:
+        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+      run: C:\tools\cygwin\usr\bin\bash.exe -c "./authpass/_tools/ci-install-deps.sh windows"
+    - shell: cmd
+      run: C:\tools\cygwin\usr\bin\bash.exe -c "~/deps/flutter/bin/flutter channel master && ~/deps/flutter/bin/flutter upgrade && ~/deps/flutter/bin/flutter config --enable-linux-desktop"
+    - name: build ${{ matrix.flavor }} apk
+      id: buildapk
+      shell: cmd
+      env:
+        GIT_AUTHOR_NAME: 'Github Action CI'
+        GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
+        GIT_COMMITTER_NAME: 'Github Action CI'
+        GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
+      run: C:\tools\cygwin\usr\bin\bash.exe -c "./authpass/_tools/ci-release.sh ${{ matrix.flavor }}"
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.buildapk.outputs.outputfilename }}
+        path: authpass/${{ steps.buildapk.outputs.outputpath }}
+    - name: upload artifact
+      shell: cmd
+      run: C:\tools\cygwin\usr\bin\bash.exe -c "./authpass/_tools/upload-artifact.sh ${{ steps.buildapk.outputs.outputpath }}"
+    - uses: snapcore/action-build@v1
+      id: snapcraft
+    - uses: actions/upload-artifact@v2
+      with:
+        name: authpass-${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}-snap
+        path: ${{ steps.snapcraft.outputs.snap }}
