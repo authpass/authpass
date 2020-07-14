@@ -124,7 +124,7 @@ case "${flavor}" in
 
         "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" -DMyAppVersion=${version}_${buildnumber} _tools/windows/AuthPassSetup.iss
 
-        outputfilename="AuthPassSetup-${version}_${buildnumber}.exe"
+        outputfilename="AuthPass-setup-${version}_${buildnumber}.exe"
         outputpath="build/_authpass/windows/setup/${outputfilename}"
         #echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
         #echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
