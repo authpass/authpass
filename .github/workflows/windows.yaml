@@ -28,6 +28,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-chocolatey-${{ matrix.os }}-
           ${{ runner.os }}-chocolatey-
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '1.12.x' # you can use 1.12
+        channel: 'dev' # optional, default to: 'stable'
+    - run: |
+        flutter channel master
+        flutter upgrade
+        flutter config --enable-windows-desktop
     - name: Install cygwin base packages with chocolatey
       run: |
         choco config get cacheLocation
@@ -36,7 +44,6 @@ jobs:
       run: |
         C:\tools\cygwin\cygwinsetup.exe -qgnNdO -R C:/tools/cygwin -s http://mirrors.kernel.org/sourceware/cygwin/ -P git,zip,curl
       shell: cmd
-
     - uses: actions/checkout@v2
       with:
         submodules: true
@@ -45,8 +52,6 @@ jobs:
       env:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
       run: C:\tools\cygwin\bin\bash.exe -c "./authpass/_tools/ci-install-deps.sh windows"
-    - shell: cmd
-      run: C:\tools\cygwin\bin\bash.exe -c "~/deps/flutter/bin/flutter channel master && ~/deps/flutter/bin/flutter upgrade && ~/deps/flutter/bin/flutter config --enable-linux-desktop"
     - name: build ${{ matrix.flavor }} apk
       id: buildapk
       shell: cmd
