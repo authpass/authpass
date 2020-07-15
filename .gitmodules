@@ -1,24 +1,24 @@
 [submodule "deps/kdbx.dart"]
 	path = deps/kdbx.dart
-	url = ../kdbx.dart
+	url = ../../authpass/kdbx.dart
 [submodule "deps/analytics_events"]
 	path = deps/analytics_events
 	url = ../../hpoul/analytics_events
 [submodule "deps/biometric_storage"]
 	path = deps/biometric_storage
-	url = ../biometric_storage.git
+	url = ../../authpass/biometric_storage.git
 [submodule "deps/autofill_service"]
 	path = deps/autofill_service
-	url = ../autofill_service.git
+	url = ../../authpass/autofill_service.git
 [submodule "deps/package_info_macos"]
 	path = deps/package_info_macos
-	url = ../package_info_macos
+	url = ../../authpass/package_info_macos
 [submodule "deps/diac"]
 	path = deps/diac
 	url = ../../hpoul/diac
 [submodule "deps/authpass-cloud"]
 	path = deps/authpass-cloud
-	url = ../authpass-cloud
+	url = ../../authpass/authpass-cloud
 [submodule "deps/clipboard_plugintest"]
 	path = deps/clipboard_plugintest
-	url = ../clipboard_plugintest
+	url = ../../authpass/clipboard_plugintest
