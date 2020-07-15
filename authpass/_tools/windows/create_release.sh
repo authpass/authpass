@@ -4,7 +4,7 @@ set -xeu
 
 VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2019"
 VS_REDIST_BASE=$(cygpath "$VS_REDIST_BASE_WIN")
-find "${VS_REDIST_BASE}"
+# find "${VS_REDIST_BASE}"
 
 
 VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC"
@@ -25,10 +25,10 @@ VS_REDIST_FILES=(
 	vcruntime140_1.dll
 )
 
-echo "REDIST"
-find "${VS_REDIST_BASE}"
+# echo "REDIST"
+# find "${VS_REDIST_BASE}"
 
-echo
+# echo
 echo
 
 VS_REDIST=`find "${VS_REDIST_BASE}" -path '**0/x64/M**' -iname "${VS_REDIST_FILES[0]}" | grep -v onecore | head -n 1`
