@@ -3,6 +3,7 @@
 * Windows: Initial Windows Support 🎉️
 * Improved group filter by showing recursive filter and trash.
 * Password Entry: Only show "generate password" button if value is blank. #108
+* Entry: Fix: Adding a custom field discards previous changes. #106
 * WebDav: Connect UI: Make dialog scrollable. #103
 * WebDav: Fixed Compatibility with servers returning trailing slashes for directories.
 * Linux: support for keyring storage (for Dropbox, Google Drive, WebDav, One Drive)

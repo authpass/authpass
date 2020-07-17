@@ -294,8 +294,7 @@ class _EntryDetailsState extends State<EntryDetails>
         .where((str) => !commonFields.isCommon(str.key));
     _fieldKeys = commonFields.fields
         .where((f) => f.showByDefault || widget.entry.getString(f.key) != null)
-        .map((f) => Tuple3(
-            GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'), f.key, f))
+        .map((f) => Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, f))
         .followedBy(nonCommonKeys.map((f) =>
             Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
         .toList();
