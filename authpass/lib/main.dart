@@ -17,6 +17,7 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:authpass/utils/winsparkle_init.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -26,13 +27,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info/package_info.dart';
-import 'package:pedantic/pedantic.dart';
-import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 // TODO: Remove the following two lines once path provider endorses the linux plugin
 import 'package:path_provider_linux/path_provider_linux.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:pedantic/pedantic.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 
 final _logger = Logger('main');
@@ -142,6 +142,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         });
       }
     }));
+    if (Platform.isWindows) {
+      initWinSparkle(widget.env);
+    }
+
     // file picker writable currently has only ios, android, macos support.
     if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
       _filePickerState = FilePickerWritable().init()

@@ -9,10 +9,13 @@
     <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/biometric_storage" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/package_info_macos" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/linux/flutter/ephemeral/.plugin_symlinks/argon2_ffi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/linux/flutter/ephemeral/.plugin_symlinks/biometric_storage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/linux/flutter/ephemeral/.plugin_symlinks/clipboard_plugintest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/argon2_ffi" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/autofill_service" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/barcode_scan" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/biometric_storage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/clipboard_plugintest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/package_info_macos" vcs="Git" />
   </component>

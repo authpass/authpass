@@ -157,6 +157,11 @@ dependencies:
   openapi_base: ^0.1.2
   authpass_cloud_shared:
     path: ../deps/authpass-cloud/packages/authpass_cloud_shared
+  # windows updater
+  winsparkle_flutter:
+    git:
+      url: https://github.com/authpass/winsparkle_flutter.git
+      ref: 9aaf368131e4ea6107f645c26602220e821d2980
   
   # WORKAROUND: Clipboard for linux did not work..
   clipboard_plugintest:
