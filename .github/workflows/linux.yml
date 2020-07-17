@@ -31,6 +31,7 @@ jobs:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
       run: authpass/_tools/postdeploy.sh
     - run: |
+        sudo apt-get update
         sudo apt-get install -y \
         clang \
         cmake \
