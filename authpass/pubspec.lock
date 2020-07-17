@@ -1315,8 +1315,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "9aaf368131e4ea6107f645c26602220e821d2980"
-      resolved-ref: "9aaf368131e4ea6107f645c26602220e821d2980"
+      ref: "7e53c4d9ce46ab8166908572795a75cf8b26c38f"
+      resolved-ref: "7e53c4d9ce46ab8166908572795a75cf8b26c38f"
       url: "https://github.com/authpass/winsparkle_flutter.git"
     source: git
     version: "0.0.1"
