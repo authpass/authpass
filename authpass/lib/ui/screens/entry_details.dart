@@ -1492,14 +1492,18 @@ class StringEntryFieldEditor extends StatelessWidget {
 //        fillColor: const Color(0xfff0f0f0),
         filled: true,
         prefixIcon: commonField?.icon == null ? null : Icon(commonField.icon),
-        suffixIcon: fieldKey == commonFields.password.key
-            ? IconButton(
+        suffixIcon: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: controller,
+          builder: (context, value, child) =>
+              fieldKey == commonFields.password.key && controller.text.isEmpty
+                  ? IconButton(
 //                            padding: EdgeInsets.zero,
-                tooltip: 'Generate Password (cmd+g)',
-                icon: const Icon(Icons.refresh),
-                onPressed: passwordGeneratorPressed,
-              )
-            : null,
+                      tooltip: 'Generate Password (cmd+g)',
+                      icon: const Icon(Icons.refresh),
+                      onPressed: passwordGeneratorPressed,
+                    )
+                  : const SizedBox(),
+        ),
 //                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
         labelText: commonField?.displayName ?? fieldKey.key,
       ),
