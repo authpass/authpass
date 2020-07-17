@@ -9,6 +9,7 @@ import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/winsparkle_init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +23,8 @@ class AuthPassAboutDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loggingUtil = LoggingUtils();
+    final logFiles = loggingUtil.rotatingFileLoggerFiles;
     return FutureBuilder<AppInfo>(
         future: env.getAppInfo(),
         builder: (context, snapshot) {
@@ -49,19 +52,24 @@ class AuthPassAboutDialog extends StatelessWidget {
             applicationName: 'AuthPass',
             applicationVersion: appInfo?.versionLabel,
             applicationLegalese: '© by Herbert Poul, 2019-2020',
-            children: const <Widget>[
-              SizedBox(height: 32),
-              UrlLink(
+            children: <Widget>[
+              const SizedBox(height: 32),
+              const UrlLink(
                 caption: 'We welcome any kind of feedback!',
                 url: 'mailto:hello@authpass.app',
               ),
-              UrlLink(
+              const UrlLink(
                 caption: 'Also make sure to visit our website',
                 url: 'https://authpass.app/',
               ),
-              UrlLink(
+              const UrlLink(
                 caption: 'And Open Source Project',
                 url: 'https://github.com/authpass/authpass/',
+              ),
+              const SizedBox(height: 32),
+              Text(
+                'Log File: ${logFiles.first.absolute.path}',
+                style: Theme.of(context).textTheme.caption,
               ),
             ],
           );
