@@ -147,6 +147,8 @@ dependencies:
       ref: 85cfc7efee91c3444d24435486cf292a32f04499
   open_file: ^3.0.1
   esys_flutter_share: ^1.0.2
+  flutter_windowmanager: ^0.0.2
+
   mime: ^0.9.6+3
   pedantic: ^1.9.0
   ffi: ^0.1.3

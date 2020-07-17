@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
@@ -118,6 +120,19 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   },
                 ),
               ]),
+        ...?!Platform.isAndroid
+            ? null
+            : [
+                SwitchListTile(
+                  secondary: const Icon(Icons.camera_alt),
+                  title: const Text('Allow Screenshots of the App'),
+                  value: !_appData.secureWindowOrDefault,
+                  onChanged: (value) {
+                    _appDataBloc.update(
+                        (builder, data) => builder.secureWindow = !value);
+                  },
+                ),
+              ],
         ListTile(
           leading: const Icon(FontAwesomeIcons.signOutAlt),
           title: const Text('Lock all open files'),

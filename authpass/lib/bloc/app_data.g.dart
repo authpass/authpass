@@ -202,6 +202,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.lastBuildId,
             specifiedType: const FullType(int)));
     }
+    if (object.secureWindow != null) {
+      result
+        ..add('secureWindow')
+        ..add(serializers.serialize(object.secureWindow,
+            specifiedType: const FullType(bool)));
+    }
     return result;
   }
 
@@ -260,6 +266,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'lastBuildId':
           result.lastBuildId = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'secureWindow':
+          result.secureWindow = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
       }
     }
@@ -483,6 +493,8 @@ class _$AppData extends AppData {
   final bool diacOptIn;
   @override
   final int lastBuildId;
+  @override
+  final bool secureWindow;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
       (new AppDataBuilder()..update(updates)).build();
@@ -497,7 +509,8 @@ class _$AppData extends AppData {
       this.themeVisualDensity,
       this.themeFontSizeFactor,
       this.diacOptIn,
-      this.lastBuildId})
+      this.lastBuildId,
+      this.secureWindow})
       : super._() {
     if (previousFiles == null) {
       throw new BuiltValueNullFieldError('AppData', 'previousFiles');
@@ -529,7 +542,8 @@ class _$AppData extends AppData {
         themeVisualDensity == other.themeVisualDensity &&
         themeFontSizeFactor == other.themeFontSizeFactor &&
         diacOptIn == other.diacOptIn &&
-        lastBuildId == other.lastBuildId;
+        lastBuildId == other.lastBuildId &&
+        secureWindow == other.secureWindow;
   }
 
   @override
@@ -542,16 +556,19 @@ class _$AppData extends AppData {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc($jc(0, previousFiles.hashCode),
-                                        passwordGeneratorLength.hashCode),
-                                    passwordGeneratorCharacterSets.hashCode),
-                                manualUserType.hashCode),
-                            firstLaunchedAt.hashCode),
-                        theme.hashCode),
-                    themeVisualDensity.hashCode),
-                themeFontSizeFactor.hashCode),
-            diacOptIn.hashCode),
-        lastBuildId.hashCode));
+                                    $jc(
+                                        $jc($jc(0, previousFiles.hashCode),
+                                            passwordGeneratorLength.hashCode),
+                                        passwordGeneratorCharacterSets
+                                            .hashCode),
+                                    manualUserType.hashCode),
+                                firstLaunchedAt.hashCode),
+                            theme.hashCode),
+                        themeVisualDensity.hashCode),
+                    themeFontSizeFactor.hashCode),
+                diacOptIn.hashCode),
+            lastBuildId.hashCode),
+        secureWindow.hashCode));
   }
 
   @override
@@ -567,7 +584,8 @@ class _$AppData extends AppData {
           ..add('themeVisualDensity', themeVisualDensity)
           ..add('themeFontSizeFactor', themeFontSizeFactor)
           ..add('diacOptIn', diacOptIn)
-          ..add('lastBuildId', lastBuildId))
+          ..add('lastBuildId', lastBuildId)
+          ..add('secureWindow', secureWindow))
         .toString();
   }
 }
@@ -625,6 +643,10 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   int get lastBuildId => _$this._lastBuildId;
   set lastBuildId(int lastBuildId) => _$this._lastBuildId = lastBuildId;
 
+  bool _secureWindow;
+  bool get secureWindow => _$this._secureWindow;
+  set secureWindow(bool secureWindow) => _$this._secureWindow = secureWindow;
+
   AppDataBuilder();
 
   AppDataBuilder get _$this {
@@ -640,6 +662,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _themeFontSizeFactor = _$v.themeFontSizeFactor;
       _diacOptIn = _$v.diacOptIn;
       _lastBuildId = _$v.lastBuildId;
+      _secureWindow = _$v.secureWindow;
       _$v = null;
     }
     return this;
@@ -674,7 +697,8 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               themeVisualDensity: themeVisualDensity,
               themeFontSizeFactor: themeFontSizeFactor,
               diacOptIn: diacOptIn,
-              lastBuildId: lastBuildId);
+              lastBuildId: lastBuildId,
+              secureWindow: secureWindow);
     } catch (_) {
       String _$failedField;
       try {

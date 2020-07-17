@@ -6,6 +6,7 @@
 * Entry: Fix: Adding a custom field discards previous changes. #106
 * WebDav: Connect UI: Make dialog scrollable. #103
 * WebDav: Fixed Compatibility with servers returning trailing slashes for directories.
+* Android: allow disabling of screenshots #100
 * Linux: support for keyring storage (for Dropbox, Google Drive, WebDav, One Drive)
 
 # 1.6.4

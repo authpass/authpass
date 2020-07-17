@@ -26,6 +26,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 // TODO: Remove the following two lines once path provider endorses the linux plugin
 import 'package:path_provider_linux/path_provider_linux.dart';
@@ -140,6 +141,13 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         setState(() {
           _appData = appData;
         });
+        if (Platform.isAndroid) {
+          if (appData.secureWindowOrDefault) {
+            FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+          } else {
+            FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+          }
+        }
       }
     }));
     if (Platform.isWindows) {
@@ -256,7 +264,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          final ret = Provider.value(
+          final Widget ret = Provider.value(
             value: FormatUtils(locale: locale.toString()),
             child: child,
           );

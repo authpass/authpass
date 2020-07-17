@@ -201,6 +201,11 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   @nullable
   int get lastBuildId;
 
+  /// Android only: disable screenshots, etc. (FLAG_SECURE)
+  @nullable
+  bool get secureWindow;
+  bool get secureWindowOrDefault => secureWindow ?? false;
+
   @override
   Map<String, dynamic> toJson() =>
       serializers.serialize(this) as Map<String, dynamic>;
