@@ -3,8 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  argon2_ffi
   file_chooser
+  path_provider_fde
   url_launcher_fde
+  winsparkle_flutter
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

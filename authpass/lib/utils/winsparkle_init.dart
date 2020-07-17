@@ -12,7 +12,7 @@ final _logger = Logger('winsparkle_init');
 Future<void> initWinSparkle(Env env) async {
   assert(Platform.isWindows);
   _logger.fine('Initializing winsparkle.');
-  List<Pointer<NativeType>> freePointers;
+  final freePointers = <Pointer<NativeType>>[];
   try {
     final url =
         Utf8.toUtf8('https://data.authpass.app/data/artifacts/appcast.xml');
@@ -47,4 +47,8 @@ void cleanupWinSparkle() {
     _logger.warning(
         'Error while calling cleanup for WinSparkle', e, stackTrace);
   }
+}
+
+void winSparkleCheckUpdate() {
+  win_sparkle_check_update_with_ui();
 }

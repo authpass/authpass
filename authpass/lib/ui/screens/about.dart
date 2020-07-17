@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
@@ -7,6 +9,7 @@ import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/winsparkle_init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -149,6 +152,18 @@ class AuthPassAboutDialog extends StatelessWidget {
         },
       ),
       const PopupMenuDivider(),
+      ...?!Platform.isWindows
+          ? null
+          : [
+              PopupMenuItem(
+                  child: const ListTile(
+                    leading: Icon(Icons.update),
+                    title: Text('Check for updates'),
+                  ),
+                  value: () {
+                    winSparkleCheckUpdate();
+                  }),
+            ],
       ...?!DialogUtils.sendLogsSupported()
           ? null
           : [

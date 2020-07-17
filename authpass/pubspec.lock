@@ -130,7 +130,7 @@ packages:
       path: "../deps/biometric_storage"
       relative: true
     source: path
-    version: "0.4.1"
+    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -214,7 +214,7 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0-nullsafety"
   charcode:
     dependency: "direct main"
     description:
@@ -277,7 +277,7 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.14.13"
+    version: "1.15.0-nullsafety"
   convert:
     dependency: transitive
     description:
@@ -684,14 +684,14 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.8"
+    version: "0.12.9"
   meta:
     dependency: "direct main"
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.8"
+    version: "1.3.0-nullsafety"
   mime:
     dependency: "direct main"
     description:
@@ -1117,21 +1117,21 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.15.2"
+    version: "1.15.3"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.17"
+    version: "0.2.18"
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.10"
+    version: "0.3.11"
   timing:
     dependency: transitive
     description:
@@ -1152,7 +1152,7 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.0-nullsafety"
   uri:
     dependency: transitive
     description:
@@ -1233,7 +1233,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.1.0-nullsafety"
   video_player:
     dependency: transitive
     description:
@@ -1311,12 +1311,19 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.22+1"
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.9"
   winsparkle_flutter:
     dependency: "direct main"
     description:
       path: "."
-      ref: "7e53c4d9ce46ab8166908572795a75cf8b26c38f"
-      resolved-ref: "7e53c4d9ce46ab8166908572795a75cf8b26c38f"
+      ref: "404298fb0129c5281a58a833d3a7fa4d95789fac"
+      resolved-ref: "404298fb0129c5281a58a833d3a7fa4d95789fac"
       url: "https://github.com/authpass/winsparkle_flutter.git"
     source: git
     version: "0.0.1"
@@ -1342,5 +1349,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.9.0-14.0.dev <3.0.0"
+  dart: ">=2.9.0-18.0 <2.9.0"
   flutter: ">=1.17.0 <2.0.0"
