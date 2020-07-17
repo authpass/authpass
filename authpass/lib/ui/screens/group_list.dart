@@ -168,12 +168,19 @@ class GroupList extends StatelessWidget {
 }
 
 class _GroupViewModel {
-  _GroupViewModel(this.kdbxBloc, this.file, this.group, this.level);
+  _GroupViewModel(
+    this.kdbxBloc,
+    this.file,
+    this.group,
+    this.level, {
+    @required this.inRecycleBin,
+  });
 
   final KdbxBloc kdbxBloc;
   final KdbxOpenedFile file;
   final KdbxGroup group;
   final int level;
+  final bool inRecycleBin;
 
   bool get isRoot => group.parent == null;
 
@@ -281,21 +288,70 @@ class GroupListBuilder extends StatelessWidget {
   }
 
   List<_GroupViewModel> _createViewModel(
-      KdbxBloc kdbxBloc, KdbxOpenedFile file, KdbxGroup group, int depth) {
+    KdbxBloc kdbxBloc,
+    KdbxOpenedFile file,
+    KdbxGroup group,
+    int depth, {
+    bool inRecycleBin = false,
+  }) {
     if (file == null || group == null) {
       return kdbxBloc.openedFiles.values
           .expand((file) => _createViewModel(
               kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
           .toList();
     } else {
+      inRecycleBin |= group.file.recycleBin == group;
       return [
-        _GroupViewModel(kdbxBloc, file, group, depth),
+        _GroupViewModel(kdbxBloc, file, group, depth,
+            inRecycleBin: inRecycleBin),
         ...group.groups
-            // for now simply hide all trash groups.
-            .where((element) => element.file.recycleBin != element)
-            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1)),
+//            // for now simply hide all trash groups.
+//            .where((element) => element.file.recycleBin != element)
+            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1,
+                inRecycleBin: inRecycleBin)),
       ];
     }
+  }
+}
+
+class GroupFilter {
+  GroupFilter({
+    @required this.groups,
+    Set<_GroupViewModel> groupFilter,
+    Set<_GroupViewModel> groupFilterRecursive,
+  })  : vmByGroup = Map.fromEntries(groups.map((e) => MapEntry(e.group, e))),
+        groupFilter = groupFilter ?? {},
+        groupFilterRecursive = groupFilterRecursive ?? {};
+  final List<_GroupViewModel> groups;
+  final Map<KdbxGroup, _GroupViewModel> vmByGroup;
+  final Set<_GroupViewModel> groupFilter;
+  final Set<_GroupViewModel> groupFilterRecursive;
+
+  void add(_GroupViewModel group) {
+    groupFilter.add(group);
+    groupFilterRecursive.addAll(group.group
+        .getAllGroups()
+        .map((e) => vmByGroup[e])
+        .where((group) => !group.inRecycleBin));
+  }
+
+  void addAll(Iterable<_GroupViewModel> groups) {
+    groupFilter.addAll(groups);
+    groupFilterRecursive.addAll(groups
+        .expand((element) => element.group.getAllGroups())
+        .map((e) => vmByGroup[e])
+        .where((group) => !group.inRecycleBin));
+  }
+
+  void remove(_GroupViewModel group) {
+    groupFilter.remove(group);
+    groupFilterRecursive
+        .remove(group.group.getAllGroups().map((e) => vmByGroup[e]));
+  }
+
+  void clear() {
+    groupFilter.clear();
+    groupFilterRecursive.clear();
   }
 }
 
@@ -318,7 +374,7 @@ class GroupListFlatContent extends StatefulWidget {
 }
 
 class _GroupListFlatContentState extends State<GroupListFlatContent> {
-  final Set<_GroupViewModel> _groupFilter = {};
+  GroupFilter _groupFilter;
 
   @override
   void initState() {
@@ -335,6 +391,8 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   }
 
   void _initSelection() {
+    _groupFilter = GroupFilter(
+        groups: widget.groups, groupFilter: {}, groupFilterRecursive: {});
     _groupFilter.clear();
     _groupFilter.addAll(widget.groups
         .where((element) => widget.initialSelection.contains(element.group)));
@@ -434,7 +492,8 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   }
 
   void _popResult() {
-    Navigator.of(context).pop(_groupFilter.map((e) => e.group).toSet());
+    Navigator.of(context)
+        .pop(_groupFilter.groupFilter.map((e) => e.group).toSet());
   }
 }
 
@@ -448,13 +507,13 @@ class GroupListFlatList extends StatelessWidget {
     @required this.onChangedAll,
   }) : super(key: key);
 
-  final Set<_GroupViewModel> groupFilter;
+  final GroupFilter groupFilter;
   final List<_GroupViewModel> groups;
   final GroupListMode groupListMode;
   final void Function(_GroupViewModel group, bool selected) onChanged;
   final void Function(bool selected) onChangedAll;
 
-  bool get _allSelected => groupFilter.length == groups.length;
+  bool get _allSelected => groupFilter.groupFilter.length == groups.length;
 
   @override
   Widget build(BuildContext context) {
@@ -467,7 +526,9 @@ class GroupListFlatList extends StatelessWidget {
           final group = groups[index - 1];
           return GroupListTile(
             group: group,
-            isSelected: groupFilter.contains(group),
+            isSelected: groupFilter.groupFilter.contains(group),
+            isSelectedInherited:
+                groupFilter.groupFilterRecursive.contains(group),
             groupListMode: groupListMode,
             onChanged: (value) async {
               onChanged(group, value);
@@ -616,15 +677,18 @@ class GroupFilterFlatList extends StatefulWidget {
 
 class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
 //  List<_GroupViewModel> _groups;
-  Set<_GroupViewModel> _groupFilter;
+  GroupFilter _groupFilter;
 
   void _initViewModels() {
     if (_groupFilter == null) {
-      _groupFilter = Set.of(widget.groups
+      _groupFilter = GroupFilter(groups: widget.groups);
+      _groupFilter.addAll(widget.groups
           .where((element) => widget.initialSelection.contains(element.group)));
     } else {
-      final oldGroupFilter = _groupFilter.map((e) => e.group).toSet();
-      _groupFilter = Set.of(widget.groups
+      final oldGroupFilter =
+          _groupFilter.groupFilter.map((e) => e.group).toSet();
+      _groupFilter.clear();
+      _groupFilter.addAll(widget.groups
           .where((element) => oldGroupFilter.contains(element.group)));
     }
   }
@@ -653,7 +717,8 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
           } else {
             _groupFilter.remove(group);
           }
-          widget.selectionChanged(_groupFilter.map((e) => e.group).toSet());
+          widget.selectionChanged(
+              _groupFilter.groupFilter.map((e) => e.group).toSet());
         },
         onChangedAll: (value) {
           _logger.fine('changedAll: $value');
@@ -662,7 +727,8 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
           } else {
             _groupFilter.clear();
           }
-          widget.selectionChanged(_groupFilter.map((e) => e.group).toSet());
+          widget.selectionChanged(
+              _groupFilter.groupFilter.map((e) => e.group).toSet());
           setState(() {});
         });
   }
@@ -673,6 +739,7 @@ class GroupListTile extends StatelessWidget {
     Key key,
     @required this.group,
     @required this.isSelected,
+    @required this.isSelectedInherited,
     @required this.groupListMode,
     @required this.onChanged,
     this.onLongPress,
@@ -685,6 +752,7 @@ class GroupListTile extends StatelessWidget {
 
   final _GroupViewModel group;
   final bool isSelected;
+  final bool isSelectedInherited;
   final void Function(bool selected) onChanged;
   final GroupListMode groupListMode;
   final VoidCallback onLongPress;
@@ -694,13 +762,15 @@ class GroupListTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {
-        if (groupListMode == GroupListMode.multiSelectForFilter) {
-          onChanged(!isSelected);
-        } else {
-          onChanged(true);
-        }
-      },
+      onTap: isSelected || !isSelectedInherited
+          ? () {
+              if (groupListMode == GroupListMode.multiSelectForFilter) {
+                onChanged(!isSelected);
+              } else {
+                onChanged(true);
+              }
+            }
+          : null,
       onLongPress: onLongPress,
       child: IntrinsicHeight(
         child: Row(
@@ -743,7 +813,12 @@ class GroupListTile extends StatelessWidget {
   List<Widget> _buildSelectWidget() {
     switch (groupListMode) {
       case GroupListMode.multiSelectForFilter:
-        return [Checkbox(value: isSelected, onChanged: onChanged)];
+        return [
+          Checkbox(
+            value: isSelected || isSelectedInherited,
+            onChanged: isSelected || !isSelectedInherited ? onChanged : null,
+          )
+        ];
       case GroupListMode.singleSelect:
         return [
           Radio<_GroupViewModel>(

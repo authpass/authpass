@@ -145,7 +145,8 @@ class AuthPassCloudBloc with ChangeNotifier {
             ' from secure storage. ignoring.',
             e,
             stackTrace);
-      } on PlatformException catch (e) {
+      } on PlatformException catch (e, stackTrace) {
+        _logger.severe('Unable to load cloud storage token', e, stackTrace);
         rethrow;
       } catch (e, stackTrace) {
         _storedToken = null;

@@ -7,7 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   clipboard_plugintest
   argon2_ffi
   file_chooser
-  url_launcher_fde
+  url_launcher_linux
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
@@ -227,13 +229,15 @@ class GroupFilter {
 
   Iterable<KdbxEntry> getEntries(List<KdbxFile> files) {
     if (groups.isNotEmpty) {
-      return groups.expand((g) {
-        final groups = g.isRecursive ? g.group.getAllGroups() : [g.group];
+      return groups.expand((groupSelected) {
+        final groups = groupSelected.isRecursive
+            ? groupSelected.group.getAllGroups()
+            : [groupSelected.group];
         if (showRecycleBin && showActive) {
           return groups.expand((g) => g.entries);
         } else if (showActive) {
           return groups
-              .where((g) => g.file.recycleBin != g)
+              .where((g) => g == groupSelected.group || g.file.recycleBin != g)
               .expand((g) => g.entries);
         } else if (showRecycleBin) {
           return groups
@@ -251,7 +255,7 @@ class GroupFilter {
       } else {
         final recycleBin = f.recycleBin;
         if (showRecycleBin) {
-          return recycleBin.entries;
+          return recycleBin?.entries ?? [];
         } else {
           return f.body.rootGroup
               .getAllGroups()
@@ -298,13 +302,20 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   void _updateAllEntries() {
     final watch = Stopwatch()..start();
-    final allEntries = _groupFilter
-        .getEntries(widget.openedKdbxFiles)
-        .map((e) => EntryViewModel(e, widget.kdbxBloc))
-        .toList(growable: false);
-    allEntries
-        .sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
-    _allEntries = allEntries;
+    final allEntries = SplayTreeSet<EntryViewModel>.from(
+        _groupFilter
+            .getEntries(widget.openedKdbxFiles)
+            .map<EntryViewModel>((e) => EntryViewModel(e, widget.kdbxBloc)),
+        (EntryViewModel a, EntryViewModel b) =>
+            a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+//    final allEntries = _groupFilter
+//        .getEntries(widget.openedKdbxFiles)
+//        .map((e) => EntryViewModel(e, widget.kdbxBloc))
+//        .toSet()
+//        .toList(growable: false);
+//    allEntries
+//        .sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+    _allEntries = allEntries.toList(growable: false);
     watch.stop();
     _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
     setState(() {});
@@ -875,7 +886,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       groups: groupFilter
           .map((g) => GroupFilterEntry(group: g, isRecursive: true))
           .toList(),
-      showRecycleBin: true,
+      showRecycleBin: false,
       showActive: true,
       name: name,
     );
