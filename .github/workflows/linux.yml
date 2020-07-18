@@ -64,6 +64,14 @@ jobs:
           --form filename=$( basename ${{ steps.buildapk.outputs.outputpath }} )
     - uses: snapcore/action-build@v1
       id: snapcraft
+    - name: upload snap artifact
+      run: |
+        curl --request POST \
+          --url https://data.authpass.app/data/artifact.push \
+          --fail \
+          --form token=$( cat authpass/_tools/secrets/artifact_token.txt ) \
+          --form upload=@${{ steps.snapcraft.outputs.snap }} \
+          --form filename=authpass_${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}_amd64.snap
     - uses: actions/upload-artifact@v2
       with:
         name: authpass-${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}-snap
