@@ -1180,9 +1180,9 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/flutter_plugins/url_launcher_fde"
-      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
-      resolved-ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
-      url: "https://github.com/google/flutter-desktop-embedding.git"
+      ref: "1cf9411f8107386a5b4b3b27c700e8f623bde875"
+      resolved-ref: "1cf9411f8107386a5b4b3b27c700e8f623bde875"
+      url: "https://github.com/hpoul/flutter-desktop-embedding.git"
     source: git
     version: "0.1.0"
   url_launcher_linux:

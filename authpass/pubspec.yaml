@@ -127,9 +127,9 @@ dependencies:
 #      path: plugins/file_chooser
   url_launcher_fde:
     git:
-      url: https://github.com/google/flutter-desktop-embedding.git
+      url: https://github.com/hpoul/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
-      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      ref: 1cf9411f8107386a5b4b3b27c700e8f623bde875
   # Used for windows, for now:
   path_provider_fde:
     git:
