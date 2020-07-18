@@ -98,7 +98,11 @@ dependencies:
 
 
   # WebDAV
-  http_auth: ^0.2.9
+#  http_auth: ^0.2.9
+  http_auth:
+    git:
+      url: https://github.com/authpass/http_auth.git
+      ref: 37b04ada13436195abaa12433ceb18535a4d4d45
 
   # google drive
   googleapis: ^0.55.0

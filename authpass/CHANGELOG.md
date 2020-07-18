@@ -4,8 +4,9 @@
 * Improved group filter by showing recursive filter and trash.
 * Password Entry: Only show "generate password" button if value is blank. #108
 * Entry: Fix: Adding a custom field discards previous changes. #106
-* WebDav: Connect UI: Make dialog scrollable. #103
-* WebDav: Fixed Compatibility with servers returning trailing slashes for directories.
+* WebDAV: Connect UI: Make dialog scrollable. #103
+* WebDAV: Fixed Compatibility with servers returning trailing slashes for directories.
+* WebDAV: Support for digest authentication (next to basic auth). #112
 * Android: allow disabling of screenshots #100
 * Linux: support for keyring storage (for Dropbox, Google Drive, WebDav, One Drive)
 

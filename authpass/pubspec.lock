@@ -583,9 +583,11 @@ packages:
   http_auth:
     dependency: "direct main"
     description:
-      name: http_auth
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "37b04ada13436195abaa12433ceb18535a4d4d45"
+      resolved-ref: "37b04ada13436195abaa12433ceb18535a4d4d45"
+      url: "https://github.com/authpass/http_auth.git"
+    source: git
     version: "0.2.9"
   http_multi_server:
     dependency: transitive

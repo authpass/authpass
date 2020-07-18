@@ -24,7 +24,7 @@ class AuthenticationException extends StorageException {
       : super(StorageExceptionType.authentication, details);
 }
 
-class WebDavClient extends BasicAuthClient {
+class WebDavClient extends NegotiateAuthClient {
   WebDavClient(this.credentials)
       : super(credentials.username, credentials.password);
 
