@@ -19,7 +19,7 @@ Future<void> initWinSparkle(Env env) async {
     win_sparkle_set_appcast_url(url);
 
     final appInfo = await env.getAppInfo();
-    final companyName = Utf8.toUtf8('CodeUX.design');
+    final companyName = Utf16.toUtf16('CodeUX.design');
     final name = Utf16.toUtf16(appInfo.appName);
     final appVersion = Utf16.toUtf16(appInfo.versionLabel);
     freePointers.addAll([companyName, name, appVersion]);
