@@ -292,11 +292,21 @@ class _EntryDetailsState extends State<EntryDetails>
   void _initFields(CommonFields commonFields) {
     final nonCommonKeys = widget.entry.stringEntries
         .where((str) => !commonFields.isCommon(str.key));
+    final oldKeys = _fieldKeys == null
+        ? <KdbxKey, GlobalKey<_EntryFieldState>>{}
+        : Map.fromEntries(_fieldKeys.map((e) => MapEntry(e.item2, e.item1)));
     _fieldKeys = commonFields.fields
         .where((f) => f.showByDefault || widget.entry.getString(f.key) != null)
-        .map((f) => Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, f))
-        .followedBy(nonCommonKeys.map((f) =>
-            Tuple3(GlobalObjectKey<_EntryFieldState>(f.key), f.key, null)))
+        .map((f) => Tuple3(
+            oldKeys[f.key] ??
+                GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'),
+            f.key,
+            f))
+        .followedBy(nonCommonKeys.map((f) => Tuple3(
+            oldKeys[f.key] ??
+                GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'),
+            f.key,
+            null)))
         .toList();
     _logger.fine('Listing on changes for ${widget.entry.label}');
     handleSubscription(widget.entry.changes.listen((event) {
