@@ -1,3 +1,7 @@
+# 1.7.1
+
+* Bug fix for Entry display
+
 # 1.7.0
 
 * Windows: Initial Windows Support 🎉️
