@@ -78,7 +78,7 @@ dependencies:
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^2.1.0
-  url_launcher: ^5.4.11
+  url_launcher: ^5.5.0
   font_awesome_flutter: ^8.8.1
   otp: ^2.2.1
 
@@ -127,9 +127,9 @@ dependencies:
 #      path: plugins/file_chooser
   url_launcher_fde:
     git:
-      url: https://github.com/hpoul/flutter-desktop-embedding.git
+      url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
-      ref: 1cf9411f8107386a5b4b3b27c700e8f623bde875
+      ref: 9e9b68b67c2a2c0b82eed2224f709aff2ccbab7c
   # Used for windows, for now:
   path_provider_fde:
     git:
