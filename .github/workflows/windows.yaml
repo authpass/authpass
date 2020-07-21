@@ -24,6 +24,21 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: true
+    - shell: bash
+      run: git status
+    - shell: bash
+      run: git diff
+    - shell: bash
+      run: |
+        set -xeu
+        git config core.autocrlf
+        git config --global core.autocrlf true
+        git submodule update
+        git checkout -- .
+        git submodule foreach git checkout -- .
+        git status
+        git diff-index HEAD
+        for f in `git ls-files -s | awk '/120000/{print $4}'`; do git update-index --assume-unchanged $f; done
     - name: ci-install-deps
       shell: bash
       env:

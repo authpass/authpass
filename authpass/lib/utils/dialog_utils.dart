@@ -65,7 +65,8 @@ class DialogUtils {
   }
 
   static Future<bool> openUrl(String url) async {
-    if (await canLaunch(url)) {
+    // for some reason windows plugin does not support canLaunch.
+    if (Platform.isWindows || await canLaunch(url)) {
       return await launch(url, forceSafariVC: false, forceWebView: false);
     } else {
       _logger.severe('Unable to launch url $url');
