@@ -29,7 +29,7 @@ jobs:
       matrix:
         device:
 #          - "iPhone 8 (13.1)"
-          - "iPhone 11 Pro Max (13.5)"
+          - "iPhone .* Pro Max "
 
       fail-fast: true
 
@@ -59,8 +59,9 @@ jobs:
           awk \
             -F ' *[][]' \
             -v 'device=${{ matrix.device }}' \
-            '$1 == device { print $2 }'
+            '$1 ~ device { print $2 }' | head -n 1
         )
+        echo starting ${UDID}
         xcrun simctl boot "${UDID:?No Simulator with this name found}"
     - name: run test ${{ matrix.flavor }}
       run: "cd authpass && ~/deps/flutter/bin/flutter drive --target=test_driver/app.dart"
