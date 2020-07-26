@@ -700,6 +700,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         diac: Provider.of<DiacBloc>(context),
       ));
     }
+
     final theme = Theme.of(context);
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     return Scaffold(

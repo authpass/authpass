@@ -8,6 +8,7 @@ AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdb
 * Android: [Google Play Store](https://play.google.com/store/apps/details?id=design.codeux.authpass) or [F-Droid](https://f-droid.org/packages/design.codeux.authpass.fdroid/)
 * iOS: [App Store](https://apps.apple.com/app/authpass-password-manager/id1479297675?ls=1&at=11l8ru)
 * Linux Desktop: [Check out our blog post for installation instructions](https://authpass.app/articles/linux-desktop-release-authpass-1.6.3/)
+* Windows Desktop: [Check out our annoucement post](https://authpass.app/articles/authpass-released-for-windows-desktop-authpass-1.7.0/)
 
 ![Mac OS, iOS and Android Screenshot](_docs/authpass-platform-composition.png)
 
@@ -21,12 +22,12 @@ see also https://github.com/authpass/authpass/issues
 * [x] Download of kdbx files through url
 * [x] Parse decrypted XML/handle protected values
 * [x] Flutter scaffold for mobile (ios/android)
-* [ ] Platforms
-  * [x] iOS
-  * [x] Android
-  * [x] Mac OS
-  * [ ] Windows https://github.com/authpass/authpass/issues/27
-  * [x] Linux https://github.com/authpass/authpass/issues/26
+* [X] Platforms 🎉️👍️✅️
+  * [x] iOS: [App Store](https://apps.apple.com/app/authpass-password-manager/id1479297675?ls=1&at=11l8ru)
+  * [x] Android: [Google Play Store](https://play.google.com/store/apps/details?id=design.codeux.authpass)
+  * [x] Mac OS [Mac App Store](https://apps.apple.com/app/authpass-password-manager/id1478552452?ls=1&mt=12)
+  * [x] [Windows](https://authpass.app/articles/authpass-released-for-windows-desktop-authpass-1.7.0/) https://github.com/authpass/authpass/issues/27
+  * [x] [Linux](https://authpass.app/articles/linux-desktop-release-authpass-1.6.3/) https://github.com/authpass/authpass/issues/26
 * [x] Decrypt with keyfile https://github.com/authpass/authpass/issues/3
 * [x] List of password entries
 * [x] 👆️ Search through entries
