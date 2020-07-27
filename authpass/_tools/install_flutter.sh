@@ -1,46 +1,59 @@
 #!/usr/bin/env bash
 
-set -e
+# Download the required flutter version and extracts it into $DEPS
+
 # debug log
 set -xeu
 
+path="${0%/*}"
+
 DEPS=${DEPS} # must be defined by environment.
 
-FLUTTER_CHANNEL='stable'
-#FLUTTER_VERSION=v1.2.1-stable
-#FLUTTER_VERSION='v1.7.8+hotfix.4-stable'
-FLUTTER_CHANNEL='stable'
-#FLUTTER_VERSION='v1.9.5-dev'
-#FLUTTER_VERSION='v1.9.7-dev'
-#FLUTTER_VERSION='v1.10.0-dev'
-FLUTTER_VERSION='v1.12.13+hotfix.5-stable'
-
-FLUTTER_CHANNEL='stable'
-#FLUTTER_VERSION='v1.15.17-beta'
-#FLUTTER_VERSION='1.17.0-dev.3.1-beta'
-#FLUTTER_VERSION='1.17.0-3.2.pre-beta'
-#FLUTTER_VERSION='1.17.4-stable'
-FLUTTER_CHANNEL='beta'
-FLUTTER_VERSION='1.19.0-4.3.pre-beta'
+source "${path}/_flutter_version.sh"
 
 #FLUTTER_MAC_CHANNEL='dev'
 #FLUTTER_MAC_VERSION='v1.13.6-dev'
-FLUTTER_MAC_CHANNEL="${FLUTTER_CHANNEL}"
-FLUTTER_MAC_VERSION="${FLUTTER_VERSION}"
+#FLUTTER_MAC_CHANNEL="${FLUTTER_CHANNEL}"
+#FLUTTER_MAC_VERSION="${FLUTTER_VERSION}"
 
 FLUTTER_PLATFORM=macos
 FLUTTER_EXT=zip
 
 platform="$(uname -s)"
 case "${platform}" in
-    Linux*)     FLUTTER_PLATFORM=linux ; FLUTTER_EXT=tar.xz ;;
-    Darwin*)    FLUTTER_PLATFORM=macos ; FLUTTER_VERSION=${FLUTTER_MAC_VERSION} ; FLUTTER_CHANNEL=${FLUTTER_MAC_CHANNEL} ;;
+    Linux*)     FLUTTER_PLATFORM=linux
+                FLUTTER_EXT=tar.xz
+                FLUTTER_VERSION=${FLUTTER_LINUX_VERSION}
+                FLUTTER_SHA256=${FLUTTER_LINUX_SHA256}
+                FLUTTER_ARCHIVE=${FLUTTER_LINUX_ARCHIVE}
+    ;;
+    Darwin*)    FLUTTER_PLATFORM=macos
+                FLUTTER_VERSION=${FLUTTER_MACOS_VERSION}
+                FLUTTER_SHA256=${FLUTTER_MACOS_SHA256}
+                FLUTTER_ARCHIVE=${FLUTTER_MACOS_ARCHIVE}
+    ;;
     *)          echo "Unknown platform ${platform}" ; exit 1 ;;
 esac
 
 pushd ${DEPS}
-echo "Downloading ${FLUTTER_PLATFORM}/flutter_${FLUTTER_PLATFORM}_${FLUTTER_VERSION}.${FLUTTER_EXT}"
-curl -o flutter.${FLUTTER_EXT} https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/${FLUTTER_PLATFORM}/flutter_${FLUTTER_PLATFORM}_${FLUTTER_VERSION}.${FLUTTER_EXT}
+echo "Downloading ${FLUTTER_URL}${FLUTTER_ARCHIVE}"
+
+f="flutter.${FLUTTER_EXT}"
+curl -o ${f} ${FLUTTER_URL}${FLUTTER_ARCHIVE}
+
+if command -v shasum ; then
+    checksum=$(shasum -a 256 ${f} | cut -f1 -d' ')
+elif command -v sha256sum ; then
+    checksum=$(sha256sum ${f} | cut -f1 -d' ')
+else
+    echo "Can't find command for sha256"
+    exit 1
+fi
+
+if test "${checksum}" != "${FLUTTER_SHA256}" ; then
+    echo "Invalid checksum. ${checksum} vs ${FLUTTER_SHA256}"
+    exit 1
+fi
 
 if test "${FLUTTER_EXT}" = "zip" ; then
     unzip flutter.zip | tail
