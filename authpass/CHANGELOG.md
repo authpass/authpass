@@ -1,3 +1,9 @@
+# 1.7.2
+
+* Android: Remove erroneously requested READ_PHONE_STATE permission.
+  (A flutter plugin had a dummy android plugin without a targetSdkVersion defined, which defaults
+  to requesting READ_PHONE_STATE)
+
 # 1.7.1
 
 * Bug fix for Entry display

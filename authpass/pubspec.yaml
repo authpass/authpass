@@ -137,7 +137,7 @@ dependencies:
       path: plugins/flutter_plugins/path_provider_fde
       ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
 
-  macos_secure_bookmarks: ^0.1.0+2
+  macos_secure_bookmarks: ^0.1.2
 
   # UI Utils
   percent_indicator: ^2.1.5
