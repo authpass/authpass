@@ -1,0 +1,34 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+
+      - name: Install
+        run: |
+          flutter config --enable-web
+          cd authpass && flutter pub get
+      - name: Build
+        run: cd authpass && flutter build web -t lib/env/development.dart
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./authpass/build/web
+          allow_empty_commit: true
+

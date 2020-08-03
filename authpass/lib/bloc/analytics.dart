@@ -1,16 +1,17 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:analytics_event/analytics_event.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:usage/usage_io.dart' as usage;
+import 'package:usage/usage_html.dart' as usage;
 
 part 'analytics.g.dart';
 part 'analytics_ua.dart';
@@ -42,7 +43,7 @@ class Analytics {
 
   Future<void> _init() async {
     if (env.secrets.analyticsGoogleAnalyticsId != null) {
-      if (Platform.isAndroid) {
+      if (AuthPassPlatform.isAndroid) {
         const miscChannel = MethodChannel('app.authpass/misc');
         final isFirebaseTestLab =
             await miscChannel.invokeMethod<bool>('isFirebaseTestLab');
@@ -57,11 +58,11 @@ class Analytics {
 
       String platformVersion;
       String deviceInfo;
-      if (Platform.isAndroid) {
+      if (AuthPassPlatform.isAndroid) {
         final androidInfo = await DeviceInfoPlugin().androidInfo;
         platformVersion = androidInfo.version.release;
         deviceInfo = androidInfo.model;
-      } else if (Platform.isIOS) {
+      } else if (AuthPassPlatform.isIOS) {
         final iosInfo = await DeviceInfoPlugin().iosInfo;
         platformVersion = iosInfo.systemVersion;
       }
@@ -71,21 +72,29 @@ class Analytics {
           'Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
           'UserAgent: $userAgent');
 
-      final docsDir = await PathUtils().getAppDataDirectory();
-      _ga = usage.AnalyticsIO(
-        env.secrets.analyticsGoogleAnalyticsId,
-        info.appName,
-        '${info.version}+${info.buildNumber}',
-        documentDirectory: docsDir,
-        userAgent: userAgent,
-      );
+      if (AuthPassPlatform.isWeb) {
+        _ga = usage.AnalyticsHtml(
+          env.secrets.analyticsGoogleAnalyticsId,
+          info.appName,
+          '${info.version}+${info.buildNumber}',
+        );
+      } else {
+        final docsDir = await PathUtils().getAppDataDirectory();
+        _ga = usage.AnalyticsIO(
+          env.secrets.analyticsGoogleAnalyticsId,
+          info.appName,
+          '${info.version}+${info.buildNumber}',
+          documentDirectory: docsDir,
+          userAgent: userAgent,
+        );
+      }
 //      _ga.onSend.listen((event) {
 //        _logger.finer('analytics send: $event');
 //      });
       _ga.setSessionValue('ua', userAgent);
       _errorGa = _ga;
       _ga.setSessionValue(
-          _gaPropertyMapping['platform'], Platform.operatingSystem);
+          _gaPropertyMapping['platform'], AuthPassPlatform.operatingSystem);
       // set application id to package name.
       _ga.setSessionValue('aid', info.packageName);
 
@@ -186,15 +195,15 @@ class Analytics {
 
 Future<String> deviceInfo() async {
   // get information about the current device.
-  if (Platform.isAndroid) {
+  if (AuthPassPlatform.isAndroid) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
     return androidInfo.model;
   }
-  if (Platform.isIOS) {
+  if (AuthPassPlatform.isIOS) {
     final iosInfo = await DeviceInfoPlugin().iosInfo;
     return iosInfo.utsname.machine;
   }
-  return 'unknown (${Platform.operatingSystem})';
+  return 'unknown (${AuthPassPlatform.operatingSystem})';
 }
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {

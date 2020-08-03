@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -120,7 +119,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   },
                 ),
               ]),
-        ...?!Platform.isAndroid
+        ...?!AuthPassPlatform.isAndroid
             ? null
             : [
                 SwitchListTile(

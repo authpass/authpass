@@ -13,6 +13,7 @@ import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:file_chooser/file_chooser.dart';
@@ -175,7 +176,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   Future<bool> _linuxAppArmorCheck() async {
-    if (!Platform.isLinux) {
+    if (!AuthPassPlatform.isLinux) {
       return true;
     }
     final isError = await BiometricStorage().linuxCheckAppArmorError();
@@ -215,7 +216,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         _logger.info(
             'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
         if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
-//          if (Platform.isMacOS) {
+//          if (AuthPassPlatform.isMacOS) {
 //            _logger.fine('Lets chill for a second.');
 //            await Future<int>.delayed(const Duration(seconds: 3));
 //            _logger.fine('calling setState');
@@ -298,7 +299,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   icon: FontAwesomeIcons.hdd,
                   label: 'Open\nLocal File',
                   onPressed: () async {
-                    if (Platform.isIOS || Platform.isAndroid) {
+                    if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
                       final fileInfo =
                           await FilePickerWritable().openFilePicker();
                       if (fileInfo != null) {
@@ -311,7 +312,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           ),
                         ));
                       }
-//                    } else if (Platform.isIOS || Platform.isAndroid) {
+//                    } else if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
 //                      final path =
 //                          await FilePicker.getFilePath(type: FileType.any);
 //                      if (path != null) {
@@ -323,7 +324,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       final result = await showOpenPanel();
                       if (!result.canceled) {
                         String macOsBookmark;
-                        if (Platform.isMacOS) {
+                        if (AuthPassPlatform.isMacOS) {
                           macOsBookmark = await SecureBookmarks()
                               .bookmark(File(result.paths[0]));
                         }
@@ -751,7 +752,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       : path.basename(_keyFile.path)),
                   onPressed: () async {
                     _invalidPassword = null;
-                    if (Platform.isIOS || Platform.isAndroid) {
+                    if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
                       final path = await FilePickerWritable().openFilePicker();
                       setState(() {
                         _keyFile = path == null ? null : path.file;

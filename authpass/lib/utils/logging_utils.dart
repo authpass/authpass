@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:authpass/utils/path_utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'package:path/path.dart' as path;
@@ -36,6 +37,9 @@ class LoggingUtils {
   void setupLogging({bool fromMainIsolate = false}) {
     Logger.root.level = Level.ALL;
     PrintAppender().attachToLogger(Logger.root);
+    if (kIsWeb) {
+      return;
+    }
     if (fromMainIsolate) {
       _rotatingFileLogger.attachToLogger(Logger.root);
     }

@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:authpass/main.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:built_value/built_value.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:flutter/services.dart';
@@ -110,7 +109,9 @@ abstract class Env {
       ? 'https://links.authpass.app/app/oauth/code'
       : null;
   bool get oauthRedirectUriSupported =>
-      Platform.isIOS || Platform.isAndroid || Platform.isMacOS;
+      AuthPassPlatform.isIOS ||
+      AuthPassPlatform.isAndroid ||
+      AuthPassPlatform.isMacOS;
 
   Future<void> start() async {
     await startApp(this);
@@ -132,7 +133,7 @@ abstract class Env {
   bool get featureCloudStorageWebDav => true;
 
   String get _storageNamespaceFromEnvironment =>
-      Platform.environment[_ENV_STORAGE_NAMESPACE];
+      AuthPassPlatform.environment[_ENV_STORAGE_NAMESPACE];
 
   final FeatureFlags featureFlags = FeatureFlags(
     (b) => b
@@ -154,7 +155,9 @@ abstract class Env {
   Future<PackageInfo> _getPackageInfo() async {
     try {
       // linux and windows don't support this right now.
-      if (Platform.isLinux || Platform.isWindows) {
+      if (AuthPassPlatform.isWeb ||
+          AuthPassPlatform.isLinux ||
+          AuthPassPlatform.isWindows) {
         return null;
       }
       return await PackageInfo.fromPlatform();

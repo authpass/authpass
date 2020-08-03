@@ -27,6 +27,7 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:barcode_scan/barcode_scan.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
@@ -522,7 +523,7 @@ class _EntryDetailsState extends State<EntryDetails>
   }
 
   Future<void> _attachFile() async {
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       final fileInfo = await FilePickerWritable().openFilePicker();
       if (fileInfo != null) {
         final fileName = fileInfo.fileName ?? fileInfo.file.path;
@@ -591,7 +592,7 @@ class _EntryDetailsState extends State<EntryDetails>
       }
     };
 
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       try {
         _logger.finer('Opening barcode scanner.');
 //        final barcode = await FlutterBarcodeScanner.scanBarcode(
@@ -654,7 +655,7 @@ class AttachmentBottomSheet extends StatelessWidget {
             _logger.fine('finished opening $result');
           },
         ),
-        if (Platform.isIOS || Platform.isAndroid)
+        if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid)
           ListTile(
             leading: const Icon(Icons.share),
             title: const Text('Share'),
@@ -674,7 +675,7 @@ class AttachmentBottomSheet extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-        if (Platform.isIOS || Platform.isAndroid)
+        if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid)
           ListTile(
             leading: const Icon(Icons.save),
             title: const Text('Save to device'),

@@ -17,7 +17,9 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
-import 'package:authpass/utils/winsparkle_init.dart';
+import 'package:authpass/utils/platform.dart';
+import 'package:authpass/utils/winsparkle_init_noop.dart'
+    if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -28,6 +30,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
+
 // TODO: Remove the following two lines once path provider endorses the linux plugin
 import 'package:path_provider_linux/path_provider_linux.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -46,7 +49,7 @@ void main() => throw Exception('Run some env/*.dart');
 
 Future<void> startApp(Env env) async {
   // TODO: Remove the following four lines once path provider endorses the linux plugin
-  if (Platform.isLinux) {
+  if (AuthPassPlatform.isLinux) {
     WidgetsFlutterBinding.ensureInitialized();
     PathProviderPlatform.instance = PathProviderLinux();
   }
@@ -56,7 +59,7 @@ Future<void> startApp(Env env) async {
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(
-      'Initialized logger. (${Platform.operatingSystem}, ${Platform.operatingSystemVersion})');
+      'Initialized logger. (${AuthPassPlatform.operatingSystem}, ${AuthPassPlatform.operatingSystemVersion})');
 
   FlutterError.onError = (errorDetails) {
     _logger.shout(
@@ -100,10 +103,10 @@ Future<void> startApp(Env env) async {
 /// Otherwise, do nothing.
 void _setTargetPlatformForDesktop() {
   TargetPlatform targetPlatform;
-  /*if (Platform.isMacOS) {
+  /*if (AuthPassPlatform.isMacOS) {
     targetPlatform = TargetPlatform.iOS;
   } else */
-  if (Platform.isLinux || Platform.isWindows) {
+  if (AuthPassPlatform.isLinux || AuthPassPlatform.isWindows) {
     targetPlatform = TargetPlatform.android;
   }
   _logger.info('targetPlatform: $targetPlatform');
@@ -141,7 +144,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         setState(() {
           _appData = appData;
         });
-        if (Platform.isAndroid) {
+        if (AuthPassPlatform.isAndroid) {
           if (appData.secureWindowOrDefault) {
             FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
           } else {
@@ -150,12 +153,14 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         }
       }
     }));
-    if (Platform.isWindows) {
+    if (AuthPassPlatform.isWindows) {
       initWinSparkle(widget.env);
     }
 
     // file picker writable currently has only ios, android, macos support.
-    if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
+    if (AuthPassPlatform.isIOS ||
+        AuthPassPlatform.isAndroid ||
+        AuthPassPlatform.isMacOS) {
       _filePickerState = FilePickerWritable().init()
         ..registerFileInfoHandler((fileInfo) {
           _logger.fine('got a new fileInfo: $fileInfo');
@@ -390,10 +395,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           'isDebug': _deps.env.isDebug,
           'isGoogleStore': (await _deps.env.getAppInfo()).packageName ==
                   'design.codeux.authpass' &&
-              Platform.isAndroid,
-          'isIOS': Platform.isIOS,
-          'isAndroid': Platform.isAndroid,
-          'operatingSystem': Platform.operatingSystem,
+              AuthPassPlatform.isAndroid,
+          'isIOS': AuthPassPlatform.isIOS,
+          'isAndroid': AuthPassPlatform.isAndroid,
+          'operatingSystem': AuthPassPlatform.operatingSystem,
         },
         'appData': {
           'manualUserType': _appData?.manualUserType,

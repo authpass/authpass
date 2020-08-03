@@ -1,9 +1,7 @@
-import 'dart:io';
-
+import 'package:authpass/utils/platform.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:logging/logging.dart';
 
 final _logger = Logger('theme');
@@ -102,7 +100,7 @@ Typography _getTypography() {
     );
   } else {
     print(
-        'using default theme $defaultTargetPlatform -- ${Platform.operatingSystemVersion}');
+        'using default theme $defaultTargetPlatform -- ${AuthPassPlatform.operatingSystemVersion}');
     return Typography.material2018(platform: defaultTargetPlatform);
   }
 }
@@ -113,16 +111,18 @@ bool _isDarwinVersion(
     {@required int minimumMajor, @required int minimumMinor}) {
   assert(minimumMajor != null);
   assert(minimumMinor != null);
-  final match = macOsVersionPattern.firstMatch(Platform.operatingSystemVersion);
+  final match =
+      macOsVersionPattern.firstMatch(AuthPassPlatform.operatingSystemVersion);
   if (match == null) {
     _logger.severe(
-        'Unable to parse mac os version ${Platform.operatingSystemVersion}');
+        'Unable to parse mac os version ${AuthPassPlatform.operatingSystemVersion}');
     return false;
   }
   final major = int.parse(match.group(1));
   final minor = int.parse(match.group(2));
-  print('Parsed ${Platform.operatingSystemVersion} as $major.$minor');
-  _logger.finest('Parsed ${Platform.operatingSystemVersion} as $major.$minor');
+  print('Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
+  _logger.finest(
+      'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
   return major > minimumMajor ||
       (major == minimumMajor && minor >= minimumMinor);
 }

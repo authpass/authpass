@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:clipboard_plugintest/clipboard_plugintest.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class DialogUtils {
 
   static Future<bool> openUrl(String url) async {
     // for some reason windows plugin does not support canLaunch.
-    if (Platform.isWindows || await canLaunch(url)) {
+    if (AuthPassPlatform.isWindows || await canLaunch(url)) {
       return await launch(url, forceSafariVC: false, forceWebView: false);
     } else {
       _logger.severe('Unable to launch url $url');
@@ -85,7 +85,8 @@ class DialogUtils {
         true;
   }
 
-  static bool sendLogsSupported() => Platform.isIOS || Platform.isAndroid;
+  static bool sendLogsSupported() =>
+      AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid;
 
   static Future<void> sendLogs(
     BuildContext context, {
@@ -102,7 +103,7 @@ class DialogUtils {
         : '===================\n$errorDescription';
     final email = Email(
       subject: 'Log file for '
-          '${await env.getAppInfo()} (${Platform.operatingSystem})',
+          '${await env.getAppInfo()} (${AuthPassPlatform.operatingSystem})',
       body: '\n\n\n\n$details\n'
           '====================Available Log Files:\n$logFileDebug',
       recipients: ['support@authpass.app'],
@@ -346,7 +347,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
 }
 
 Future<String> _getClipboardText() async {
-  if (Platform.isLinux) {
+  if (AuthPassPlatform.isLinux) {
     return await ClipboardPlugintest.getData();
   }
   return (await Clipboard.getData('text/plain'))?.text;

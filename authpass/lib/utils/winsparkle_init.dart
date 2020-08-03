@@ -1,16 +1,15 @@
 import 'dart:ffi';
-import 'dart:io';
 
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:ffi/ffi.dart';
-
 import 'package:logging/logging.dart';
 import 'package:winsparkle_flutter/winsparkle_flutter.dart';
 
 final _logger = Logger('winsparkle_init');
 
 Future<void> initWinSparkle(Env env) async {
-  assert(Platform.isWindows);
+  assert(AuthPassPlatform.isWindows);
   _logger.fine('Initializing winsparkle.');
   final freePointers = <Pointer<NativeType>>[];
   try {

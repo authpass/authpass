@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
@@ -10,7 +8,9 @@ import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
-import 'package:authpass/utils/winsparkle_init.dart';
+import 'package:authpass/utils/platform.dart';
+import 'package:authpass/utils/winsparkle_init_noop.dart'
+    if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -160,7 +160,7 @@ class AuthPassAboutDialog extends StatelessWidget {
         },
       ),
       const PopupMenuDivider(),
-      ...?!Platform.isWindows
+      ...?!AuthPassPlatform.isWindows
           ? null
           : [
               PopupMenuItem(

@@ -9,6 +9,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -252,7 +253,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   }
 
   Future<void> _saveAsLocalFile() async {
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
           '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx',
           (tempFile) async {
@@ -295,7 +296,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     final pathFile = result.paths.first;
     final outputFile = File(pathFile);
     String macOsBookmark;
-    if (Platform.isMacOS) {
+    if (AuthPassPlatform.isMacOS) {
       // create a dummy file, so we can create a secure bookmark.
       await outputFile.writeAsString('.');
       macOsBookmark = await SecureBookmarks().bookmark(outputFile);

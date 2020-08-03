@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -17,10 +18,13 @@ class PathUtils {
   static Future<bool> get waitForRunAppFinished => runAppFinished.future;
 
   Future<Directory> getAppDataDirectory() async {
-    if (Platform.isIOS || Platform.isMacOS) {
+    if (AuthPassPlatform.isWeb) {
+      throw UnsupportedError('Not supported on web.');
+    }
+    if (AuthPassPlatform.isIOS || AuthPassPlatform.isMacOS) {
       return _namespaced(await getApplicationSupportDirectory());
     }
-    if (Platform.isAndroid) {
+    if (AuthPassPlatform.isAndroid) {
       return _namespaced(await getApplicationDocumentsDirectory());
     }
     return _namespaced(await _getDesktopDirectory());
@@ -41,8 +45,8 @@ class PathUtils {
 
   Future<Directory> _getDesktopDirectory() async {
     // https://stackoverflow.com/a/32937974/109219
-    final userHome =
-        Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
+    final userHome = AuthPassPlatform.environment['HOME'] ??
+        Platform.environment['USERPROFILE'];
     final dataDir = Directory(path.join(userHome, '.authpass', 'data'));
     await dataDir.create(recursive: true);
     return dataDir;

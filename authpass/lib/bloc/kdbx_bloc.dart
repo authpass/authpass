@@ -13,6 +13,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
@@ -178,7 +179,7 @@ class FileSourceLocal extends FileSource {
     if (uri == null) {
       return macOsSecureBookmark != null ? 'macos' : 'internal';
     }
-    if (Platform.isIOS && uri.contains('CloudDocs')) {
+    if (AuthPassPlatform.isIOS && uri.contains('CloudDocs')) {
       return 'icloud';
     }
     final parsed = Uri.parse(uri);
@@ -191,7 +192,7 @@ class FileSourceLocal extends FileSource {
   }
 
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
-    if ((Platform.isIOS || Platform.isAndroid) &&
+    if ((AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) &&
         filePickerIdentifier != null) {
       final oldFileInfo = filePickerInfo;
       final identifier = oldFileInfo?.identifier ?? filePickerIdentifier;
@@ -202,7 +203,7 @@ class FileSourceLocal extends FileSource {
         _logger.severe('Identifier changed. panic. $fileInfo vs $identifier');
       }
       return await cb(fileInfo.file);
-    } else if (Platform.isMacOS && macOsSecureBookmark != null) {
+    } else if (AuthPassPlatform.isMacOS && macOsSecureBookmark != null) {
       final resolved =
           await SecureBookmarks().resolveBookmark(macOsSecureBookmark);
       _logger.finer('Reading from secure  bookmark. ($resolved)');
@@ -219,7 +220,7 @@ class FileSourceLocal extends FileSource {
       } finally {
         await SecureBookmarks().stopAccessingSecurityScopedResource(resolved);
       }
-    } else if (Platform.isIOS && !file.existsSync()) {
+    } else if (AuthPassPlatform.isIOS && !file.existsSync()) {
       // On iOS we must not store the absolute path, but since we do, try to
       // load it relative from application support.
       final newFile = File(path.join(
@@ -531,6 +532,9 @@ class KdbxBloc {
             cloudStorageBloc: cloudStorageBloc,
             env: env,
             analytics: analytics) {
+    if (AuthPassPlatform.isWeb) {
+      KdbxFormat.dartWebWorkaround = true;
+    }
     _openedFiles
         .map((value) => Map.fromEntries(value.entries
             .map((entry) => MapEntry(entry.value.kdbxFile, entry.value))))
