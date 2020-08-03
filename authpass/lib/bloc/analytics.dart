@@ -1,17 +1,17 @@
 import 'dart:ui';
 
 import 'package:analytics_event/analytics_event.dart';
+import 'package:authpass/bloc/analytics_io.dart'
+    if (dart.library.html) 'package:authpass/bloc/analytics_html.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
-import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:usage/usage_io.dart' as usage;
-import 'package:usage/usage_html.dart' as usage;
+import 'package:usage/usage.dart' as usage;
 
 part 'analytics.g.dart';
 part 'analytics_ua.dart';
@@ -72,22 +72,12 @@ class Analytics {
           'Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
           'UserAgent: $userAgent');
 
-      if (AuthPassPlatform.isWeb) {
-        _ga = usage.AnalyticsHtml(
-          env.secrets.analyticsGoogleAnalyticsId,
-          info.appName,
-          '${info.version}+${info.buildNumber}',
-        );
-      } else {
-        final docsDir = await PathUtils().getAppDataDirectory();
-        _ga = usage.AnalyticsIO(
-          env.secrets.analyticsGoogleAnalyticsId,
-          info.appName,
-          '${info.version}+${info.buildNumber}',
-          documentDirectory: docsDir,
-          userAgent: userAgent,
-        );
-      }
+      _ga = await analyticsCreate(
+        env.secrets.analyticsGoogleAnalyticsId,
+        info.appName,
+        '${info.version}+${info.buildNumber}',
+        userAgent: userAgent,
+      );
 //      _ga.onSend.listen((event) {
 //        _logger.finer('analytics send: $event');
 //      });
