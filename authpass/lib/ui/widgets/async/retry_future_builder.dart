@@ -8,6 +8,8 @@ final _logger = Logger('retry_future_builder');
 
 typedef FutureProducer<T> = Future<T> Function(BuildContext context);
 typedef StreamProducer<T> = Stream<T> Function(BuildContext context);
+typedef ScaffoldBuilder<T> = Widget Function(
+    BuildContext context, Widget body, AsyncSnapshot<T> snapshot);
 typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
 class RetryFutureBuilder<T> extends StatefulWidget {
@@ -15,10 +17,16 @@ class RetryFutureBuilder<T> extends StatefulWidget {
     Key key,
     @required this.produceFuture,
     @required this.builder,
+    this.scaffoldBuilder = defaultScaffoldBuilder,
   }) : super(key: key);
 
   final FutureProducer<T> produceFuture;
   final DataWidgetBuilder<T> builder;
+  final ScaffoldBuilder<T> scaffoldBuilder;
+
+  static Widget defaultScaffoldBuilder(
+          BuildContext context, Widget body, dynamic _) =>
+      body;
 
   @override
   _RetryFutureBuilderState createState() => _RetryFutureBuilderState<T>();
@@ -47,26 +55,35 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
       future: _future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return widget.builder(context, snapshot.data);
+          final child = widget.builder(context, snapshot.data);
+          return widget.scaffoldBuilder(context, child, snapshot);
         }
         if (snapshot.hasError) {
           _logger.warning('Error while creating future.', snapshot.error);
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text('Error during api call. ${snapshot.error}'),
-              RaisedButton(
-                child: const Text('Retry'),
-                onPressed: () {
-                  setState(() {
-                    _future = widget.produceFuture(context);
-                  });
-                },
-              ),
-            ],
+          return widget.scaffoldBuilder(
+            context,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text('Error during api call. ${snapshot.error}'),
+                RaisedButton(
+                  child: const Text('Retry'),
+                  onPressed: () {
+                    setState(() {
+                      _future = widget.produceFuture(context);
+                    });
+                  },
+                ),
+              ],
+            ),
+            snapshot,
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return widget.scaffoldBuilder(
+            context,
+            const Center(child: CircularProgressIndicator()),
+            snapshot,
+          );
         }
       },
     );
