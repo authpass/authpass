@@ -1,21 +1,21 @@
 {
-    "name": "authpass",
-    "short_name": "authpass",
+    "name": "AuthPass",
+    "short_name": "AuthPass",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#626BC6",
+    "theme_color": "#626BC6",
+    "description": "AuthPass - Cross Platform Password Manager.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
-            "src": "icons/Icon-192.png",
+            "src": "icons/authpass-launcher-192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "icons/Icon-512.png",
+            "src": "icons/authpass-launcher-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
