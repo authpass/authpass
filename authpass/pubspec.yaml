@@ -74,7 +74,7 @@ dependencies:
   flutter_email_sender: ^3.0.1
   flutter_store_listing: ^0.1.1+2
 
-  biometric_storage: ^0.4.0
+  biometric_storage: ^1.0.1
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^2.1.0
@@ -211,8 +211,8 @@ dependency_overrides:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/flutter_plugins/url_launcher_fde
 #  file_chooser:
 #    path: /Users/herbert/dev/flutter/flutter-desktop-embedding/plugins/file_chooser
-  biometric_storage:
-    path: ../deps/biometric_storage
+#  biometric_storage:
+#    path: ../deps/biometric_storage
 #  macos_secure_bookmarks:
 #    path: /Users/herbert/dev/macos_secure_bookmarks
 

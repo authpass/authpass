@@ -127,10 +127,10 @@ packages:
   biometric_storage:
     dependency: "direct main"
     description:
-      path: "../deps/biometric_storage"
-      relative: true
-    source: path
-    version: "1.0.0"
+      name: biometric_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   boolean_selector:
     dependency: transitive
     description:
