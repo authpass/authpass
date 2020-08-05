@@ -1,3 +1,7 @@
+# Unreleased
+
+* Fixed possible error dialogs #124 ("The method 'markNeedsBuild' was called on null")
+
 # 1.7.2
 
 * Android: Remove erroneously requested READ_PHONE_STATE permission.

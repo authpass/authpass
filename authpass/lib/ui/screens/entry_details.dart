@@ -222,7 +222,10 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
               }
               rethrow;
             }
-            setState(() => isFormDirty = false);
+            // if user navigated away from this entry, just ignore this.
+            if (mounted) {
+              setState(() => isFormDirty = false);
+            }
           } else {
             await DialogUtils.showSimpleAlertDialog(
               context,

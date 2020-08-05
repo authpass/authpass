@@ -839,9 +839,14 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           'Unknown error while trying to open file. $e',
         );
       } finally {
-        setState(() {
-          _loadingFile = null;
-        });
+        if (mounted) {
+          setState(() {
+            _loadingFile = null;
+          });
+        } else {
+          _logger.warning('User navigated away from $runtimeType, '
+              'not updating UI.');
+        }
       }
     }
   }
