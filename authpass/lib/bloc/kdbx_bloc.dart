@@ -314,11 +314,18 @@ class FileSourceUrl extends FileSource {
   FileSourceUrl(this.url, {String databaseName, @required String uuid})
       : super(databaseName: databaseName, uuid: uuid);
 
+  static const _webCorsProxy = 'https://cors-anywhere.herokuapp.com/';
+
   final Uri url;
+
+  Uri get _url =>
+      AuthPassPlatform.isWeb && !url.toString().contains(_webCorsProxy)
+          ? Uri.parse('$_webCorsProxy$url')
+          : url;
 
   @override
   Future<FileContent> load() async {
-    final response = await http.readBytes(url);
+    final response = await http.readBytes(_url);
     return FileContent(response);
   }
 

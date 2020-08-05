@@ -45,8 +45,8 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
     return RetryFutureBuilder<enough.MimeMessage>(
       produceFuture: (context) => widget.bloc.loadMail(widget.emailMessage),
       scaffoldBuilder: (context, child, snapshot) {
-        bool hasHtml = false;
-        bool hasText = false;
+        var hasHtml = false;
+        var hasText = false;
         if (snapshot.hasData) {
           hasHtml = snapshot.data.decodeTextHtmlPart() != null;
           hasText = snapshot.data.decodeTextPlainPart() != null;
