@@ -836,6 +836,8 @@ class KdbxBloc {
     final bytes = await _saveFileToBytes(file);
     await fileSource.contentWrite(bytes);
     analytics.events.trackSave(type: fileSource.typeDebug, value: bytes.length);
+    analytics.trackTiming('saveFileSize', bytes.length,
+        category: 'fileSize', label: 'save');
   }
 
   KdbxOpenedFile fileForKdbxFile(KdbxFile file) =>
