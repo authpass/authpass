@@ -61,6 +61,10 @@ else
     tar xf flutter.${FLUTTER_EXT}
 fi
 
+# for some weird reason gen_l10n.dart fails if not manually running pub get in that directory.
+pushd flutter/dev/tools
+"${DEPS}/flutter/bin/flutter" pub get
+
 popd
 
 export PATH=${DEPS}/flutter/bin:$PATH
