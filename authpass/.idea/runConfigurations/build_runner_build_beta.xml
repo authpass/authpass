@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build_runner build beta" type="ShConfigurationType">
+    <option name="SCRIPT_PATH" value="." />
+    <option name="SCRIPT_OPTIONS" value="" />
+    <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="INTERPRETER_PATH" value="/bin/zsh" />
+    <option name="INTERPRETER_OPTIONS" value="-c &quot;_tools/flutter_run.sh pub run build_runner build --delete-conflicting-outputs &quot;" />
+    <method v="2" />
+  </configuration>
+</component>

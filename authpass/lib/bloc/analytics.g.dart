@@ -96,6 +96,18 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackGroupCreate({String category = 'group'}) =>
       trackEvent('groupCreate', <String, dynamic>{'category': category});
+  @override
+  void trackTryUnlock(
+          {TryUnlockResult action,
+          String ext,
+          String source,
+          String category = 'tryUnlock'}) =>
+      trackEvent('tryUnlock', <String, dynamic>{
+        'action': action?.toString()?.substring(16),
+        'ext': ext,
+        'source': source,
+        'category': category
+      });
 }
 
 // **************************************************************************

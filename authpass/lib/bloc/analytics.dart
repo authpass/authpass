@@ -105,7 +105,7 @@ class Analytics {
       final labelParams = <String>[];
       for (final entry in params.entries) {
         final customKey = _gaPropertyMapping[entry.key];
-        _logger.fine('entry.key: ${entry.key} = ${entry.value.runtimeType}');
+//        _logger.fine('entry.key: ${entry.key} = ${entry.value.runtimeType}');
         if (entry.key == 'value' && entry.value is int) {
           value = entry.value as int;
         } else if (entry.key == 'category' && entry.value is String) {
@@ -148,6 +148,15 @@ class Analytics {
         value: value,
         parameters: parameters,
       );
+
+  void trackTiming(String variableName, int timeMs,
+      {String category, String label}) {
+    _requireGa((ga) {
+      ga.sendTiming(variableName, timeMs, category: category, label: label);
+      _logger.finest('timing($variableName, $timeMs, '
+          'category: $category, label: $label)');
+    });
+  }
 
   void _sendEvent(String category, String action,
       {String label, int value, Map<String, String> parameters}) {
@@ -255,6 +264,19 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
   void trackGroupCreate({String category = 'group'});
+
+  void trackTryUnlock({
+    @required TryUnlockResult action,
+    @required String ext,
+    @required String source,
+    String category = 'tryUnlock',
+  });
+}
+
+enum TryUnlockResult {
+  success,
+  invalidCredential,
+  failure,
 }
 
 enum GroupDeleteResult {

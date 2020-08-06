@@ -814,12 +814,26 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     );
   }
 
+  String _fileExtension() {
+    final filePath = widget.kdbxFilePath.displayPath;
+    if (filePath == null) {
+      return '';
+    }
+    return path.extension(filePath);
+  }
+
   Future<void> _tryUnlock() async {
     if (_formKey.currentState.validate()) {
-      final kdbxBloc = Provider.of<Deps>(context, listen: false).kdbxBloc;
+      final deps = Provider.of<Deps>(context, listen: false);
+      final analytics = deps.analytics;
+      final kdbxBloc = deps.kdbxBloc;
       final pw = _controller.text;
       final keyFileContents = await _keyFile?.readAsBytes();
+      final stopWatch = Stopwatch();
       try {
+        _logger.finest('Precaching...');
+        await widget.kdbxFilePath.contentPreCache();
+        stopWatch.start();
         _loadingFile = kdbxBloc.openFile(
           widget.kdbxFilePath,
           Credentials.composite(
@@ -828,16 +842,43 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         );
         setState(() {});
         await _loadingFile;
+        analytics.trackTiming(
+          'tryUnlockFile',
+          stopWatch.elapsedMilliseconds,
+          category: 'unlock',
+          label: 'successfully unlocked',
+        );
+        analytics.events.trackTryUnlock(
+          action: TryUnlockResult.success,
+          ext: _fileExtension(),
+          source: widget.kdbxFilePath.typeDebug,
+        );
         await Navigator.of(context)
             .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
         _logger.fine('Invalid credentials.', e, stackTrace);
+        analytics.trackTiming(
+          'tryUnlockFile',
+          stopWatch.elapsedMilliseconds,
+          category: 'unlock',
+          label: 'invalid credentials',
+        );
+        analytics.events.trackTryUnlock(
+          action: TryUnlockResult.invalidCredential,
+          ext: _fileExtension(),
+          source: widget.kdbxFilePath.typeDebug,
+        );
         setState(() {
           _invalidPassword = pw;
           _formKey.currentState.validate();
         });
       } catch (e, stackTrace) {
         _logger.fine('Unable to open kdbx file. ', e, stackTrace);
+        analytics.events.trackTryUnlock(
+          action: TryUnlockResult.failure,
+          ext: _fileExtension(),
+          source: widget.kdbxFilePath.typeDebug,
+        );
         await DialogUtils.showSimpleAlertDialog(
           context,
           'Unable to open File',
