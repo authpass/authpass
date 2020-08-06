@@ -393,7 +393,6 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   void _initSelection() {
     _groupFilter = GroupFilter(
         groups: widget.groups, groupFilter: {}, groupFilterRecursive: {});
-    _groupFilter.clear();
     _groupFilter.addAll(widget.groups
         .where((element) => widget.initialSelection.contains(element.group)));
   }
@@ -540,13 +539,15 @@ class GroupListFlatList extends StatelessWidget {
                 builder: (context) => SimpleDialog(
                   title: Text(group.name),
                   children: <Widget>[
-                    SimpleDialogOption(
-                      onPressed: () => Navigator.of(context).pop('create'),
-                      child: const ListTile(
-                        leading: Icon(Icons.create_new_folder),
-                        title: Text('Create Subgroup'),
+                    if (!group.inRecycleBin) ...[
+                      SimpleDialogOption(
+                        onPressed: () => Navigator.of(context).pop('create'),
+                        child: const ListTile(
+                          leading: Icon(Icons.create_new_folder),
+                          title: Text('Create Subgroup'),
+                        ),
                       ),
-                    ),
+                    ],
                     SimpleDialogOption(
                       onPressed: () => Navigator.of(context).pop('edit'),
                       child: const ListTile(
@@ -554,18 +555,15 @@ class GroupListFlatList extends StatelessWidget {
                         title: Text('Edit'),
                       ),
                     ),
-                    ...?group.isRoot
-                        ? null
-                        : [
-                            SimpleDialogOption(
-                              onPressed: () =>
-                                  Navigator.of(context).pop('delete'),
-                              child: const ListTile(
-                                leading: Icon(Icons.delete),
-                                title: Text('Delete'),
-                              ),
-                            ),
-                          ],
+                    if (!group.isRoot && !group.inRecycleBin) ...[
+                      SimpleDialogOption(
+                        onPressed: () => Navigator.of(context).pop('delete'),
+                        child: const ListTile(
+                          leading: Icon(Icons.delete),
+                          title: Text('Delete'),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               );
@@ -687,7 +685,7 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
     } else {
       final oldGroupFilter =
           _groupFilter.groupFilter.map((e) => e.group).toSet();
-      _groupFilter.clear();
+      _groupFilter = GroupFilter(groups: widget.groups);
       _groupFilter.addAll(widget.groups
           .where((element) => oldGroupFilter.contains(element.group)));
     }
