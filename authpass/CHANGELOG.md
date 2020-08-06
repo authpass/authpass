@@ -2,6 +2,7 @@
 
 * Fixed possible error dialogs #124 ("The method 'markNeedsBuild' was called on null")
 * Fixed error in group list when adding new subgroups while a filter is active.
+* UI: Progress overlay on initial page now matches screen height.
 
 # 1.7.2
 
