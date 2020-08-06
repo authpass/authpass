@@ -9,9 +9,9 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/env/fdroid.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
-import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -192,7 +192,6 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     // TODO generate localizations.
     _logger.fine('Building AuthPass App state. route: '
         '${WidgetsBinding.instance.window.defaultRouteName}');
-    final authPassLocalizations = AuthPassLocalizations();
     return MultiProvider(
       providers: [
         Provider<DiacBloc>(
@@ -203,9 +202,6 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         Provider<Env>.value(value: _deps.env),
         Provider<Deps>.value(value: _deps),
         Provider<Analytics>.value(value: _deps.analytics),
-        Provider<AuthPassLocalizations>.value(value: authPassLocalizations),
-        Provider<CommonFields>.value(
-            value: CommonFields(authPassLocalizations)),
         Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
         Provider<AppDataBloc>.value(value: _deps.appDataBloc),
         StreamProvider<AppData>(
@@ -256,6 +252,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
         navigatorKey: widget.navigatorKey,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
@@ -269,8 +267,12 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          final Widget ret = Provider.value(
-            value: FormatUtils(locale: locale.toString()),
+          final localizations = AppLocalizations.of(context);
+          final Widget ret = MultiProvider(
+            providers: [
+              Provider.value(value: FormatUtils(locale: locale.toString())),
+              Provider<CommonFields>.value(value: CommonFields(localizations)),
+            ],
             child: child,
           );
           if (_appData?.themeFontSizeFactor != null) {

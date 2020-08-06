@@ -9,7 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-#  kdbx: ^0.2.0
+  flutter_localizations:
+    sdk: flutter
+  #  kdbx: ^0.2.0
   kdbx:
     path: ../deps/kdbx.dart
   argon2_ffi:
@@ -43,7 +45,7 @@ dependencies:
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.0.1
   intl: ^0.16.1
-#  path: ^1.6.4
+  path: ^1.7.0
   isolate: ^2.0.3
 #  clipboard_manager: ^0.0.4
 

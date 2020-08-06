@@ -1,0 +1,50 @@
+{
+  "@@locale": "en",
+  "fieldUserName": "User",
+  "@fieldUserName": {},
+  "fieldPassword": "Password",
+  "@fieldPassword": {},
+  "fieldWebsite": "Website",
+  "@fieldWebsite": {},
+  "fieldTitle": "Title",
+  "@fieldTitle": {},
+
+  "selectKeepassFile": "AuthPass - Select KeePass File",
+  "@selectKeepassFile": {
+    "context": "appbar title - select file screen"
+  },
+  "quickUnlockingFiles": "Quick unlocking files",
+  "@quickUnlockingFiles": {
+    "context": "select file screen"
+  },
+
+  "selectKeepassFileLabel": "Please select a KeePass (.kdbx) file.",
+  "@selectKeepassFileLabel": {
+    "context": "select file screen, used as label."
+  },
+
+  "openLocalFile": "Open\nLocal File",
+  "@openLocalFile": {
+    "context": "select file screen, big button open local file."
+  },
+
+  "loadFrom": "Load from {cloudStorageName}",
+  "@loadFrom": {
+    "placeholders": {
+      "cloudStorageName": {
+        "type": "String",
+        "example": "Dropbox"
+      }
+    }
+  },
+  "loadFromUrl": "Download from URL",
+  "@loadFromUrl": {},
+  "createNewKeepass": "New to KeePass?\nCreate New Password Database",
+  "@createNewKeepass": {},
+
+  "labelLastOpenFiles": "Last opened files:",
+  "@labelLastOpenFiles": {},
+
+  "noFilesHaveBeenOpenYet": "No files have been opened yet.",
+  "@noFilesHaveBeenOpenYet": {}
+}

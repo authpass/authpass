@@ -1,4 +1,4 @@
-import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
@@ -37,7 +37,7 @@ class CommonField {
 }
 
 class CommonFields {
-  CommonFields(AuthPassLocalizations loc)
+  CommonFields(AppLocalizations loc)
       : fields = [
           CommonField(
             key: 'Title',

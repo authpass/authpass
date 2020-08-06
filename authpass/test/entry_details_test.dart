@@ -1,5 +1,5 @@
+import 'package:authpass/l10n/app_localizations_en.dart';
 import 'package:authpass/ui/common_fields.dart';
-import 'package:authpass/ui/l10n/AuthPassLocalizations.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,7 +40,7 @@ void _testTotp(
         home: Scaffold(
           body: MultiProvider(
             providers: [
-              Provider.value(value: CommonFields(AuthPassLocalizations()))
+              Provider.value(value: CommonFields(AppLocalizationsEn()))
             ],
             child: EntryField(
                 fieldType: FieldType.otp,

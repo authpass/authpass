@@ -14,7 +14,7 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   analytics_event:
     dependency: "direct main"
     description:
@@ -35,7 +35,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.39.13"
+    version: "0.39.14"
   archive:
     dependency: transitive
     description:
@@ -123,14 +123,14 @@ packages:
       name: basic_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.5"
+    version: "2.6.1"
   biometric_storage:
     dependency: "direct main"
     description:
       name: biometric_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.1+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -172,14 +172,14 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.0"
+    version: "1.10.1"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "6.0.1"
   builder_static_text:
     dependency: "direct dev"
     description:
@@ -214,7 +214,7 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety"
+    version: "1.0.0"
   charcode:
     dependency: "direct main"
     description:
@@ -243,6 +243,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+1"
+  cli_util:
+    dependency: transitive
+    description:
+      name: cli_util
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   clipboard_plugintest:
     dependency: "direct main"
     description:
@@ -277,7 +284,7 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.15.0-nullsafety"
+    version: "1.14.13"
   convert:
     dependency: transitive
     description:
@@ -319,7 +326,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.1"
+    version: "0.16.2"
   dart_style:
     dependency: transitive
     description:
@@ -481,6 +488,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -532,7 +544,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.0"
+    version: "0.11.0+1"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -579,7 +591,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   http_auth:
     dependency: "direct main"
     description:
@@ -700,7 +712,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0-nullsafety"
+    version: "1.1.8"
   mime:
     dependency: "direct main"
     description:
@@ -745,13 +757,13 @@ packages:
       url: "https://github.com/authpass/oauth2.git"
     source: git
     version: "1.3.0"
-  open_api:
+  open_api_forked:
     dependency: transitive
     description:
-      name: open_api
+      name: open_api_forked
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.1+1"
   open_file:
     dependency: "direct main"
     description:
@@ -772,7 +784,7 @@ packages:
       name: openapi_base
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2"
+    version: "0.1.4"
   otp:
     dependency: "direct main"
     description:
@@ -795,7 +807,7 @@ packages:
     source: hosted
     version: "0.4.1"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       url: "https://pub.dartlang.org"
@@ -1112,7 +1124,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0+1"
+    version: "2.2.0+2"
   term_glyph:
     dependency: transitive
     description:
@@ -1161,7 +1173,7 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0-nullsafety"
+    version: "1.2.0"
   uri:
     dependency: transitive
     description:
@@ -1242,7 +1254,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0-nullsafety"
+    version: "2.0.8"
   video_player:
     dependency: transitive
     description:
@@ -1270,7 +1282,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.2.0"
   vm_service_client:
     dependency: transitive
     description:
@@ -1358,5 +1370,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.9.0-18.0 <2.9.0"
+  dart: ">=2.9.0-14.0.dev <3.0.0"
   flutter: ">=1.17.0 <2.0.0"

@@ -7,6 +7,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
@@ -55,9 +56,10 @@ class SelectFileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<Analytics>(context).events.trackLaunch();
     final cloudBloc = CloudStorageBloc(Provider.of<Env>(context));
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AuthPass - Select KeePass File'),
+        title: Text(loc.selectKeepassFile),
         actions: <Widget>[
           AuthPassAboutDialog.createAboutPopupAction(context),
         ],
@@ -110,8 +112,8 @@ class ProgressOverlay extends StatelessWidget {
                         child: ValueListenableBuilder<FutureTask>(
                           valueListenable: task,
                           builder: (context, value, child) {
-                            _logger.info(
-                                'Generating progress dialog with label ${value?.progressLabel}');
+                            _logger.info('Generating progress dialog'
+                                ' with label ${value?.progressLabel}');
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -240,12 +242,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //            });
 //          });
         }
-      }, label: 'Quick unlocking files');
+      }, label: AppLocalizations.of(context).quickUnlockingFiles);
 
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
+    final loc = AppLocalizations.of(context);
     return ProgressOverlay(
       task: task,
       child: Container(
@@ -291,7 +294,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     ]
                   : null),
               const SizedBox(height: 16),
-              const Text('Please select a KeePass (.kdbx) file.'),
+              Text(loc.selectKeepassFileLabel),
               const SizedBox(height: 16),
               Wrap(
                 alignment: WrapAlignment.center,
@@ -300,7 +303,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                 children: <Widget>[
                   SelectFileAction(
                     icon: FontAwesomeIcons.hdd,
-                    label: 'Open\nLocal File',
+                    label: loc.openLocalFile,
                     onPressed: () async {
                       if (AuthPassPlatform.isIOS ||
                           AuthPassPlatform.isAndroid) {
@@ -346,7 +349,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   ...cloudStorageBloc.availableCloudStorage.map(
                     (cs) => SelectFileAction(
                       icon: cs.displayIcon,
-                      label: 'Load from ${cs.displayName}',
+                      label: loc.loadFrom(cs.displayName),
                       onPressed: () async {
                         final source = await Navigator.of(context).push(
                             CloudStorageSelector.route(
@@ -381,8 +384,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                               _loadAndGoToCredentials(source);
                             }
                           },
-                          child: const Text(
-                            'Download from URL',
+                          child: Text(
+                            loc.loadFromUrl,
                             textAlign: TextAlign.right,
                           ),
                         ),
@@ -399,10 +402,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           Navigator.of(context).push(CreateFile.route());
                         },
                         icon: const Icon(Icons.create_new_folder),
-                        child: const Expanded(
-                            child: Text(
-                                'New to KeePass?\nCreate New Password Database',
-                                softWrap: true)),
+                        child: Expanded(
+                            child: Text(loc.createNewKeepass, softWrap: true)),
                       ),
                     )
                   ],
@@ -418,7 +419,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Text(
-                        'Last opened files:',
+                        loc.labelLastOpenFiles,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2
@@ -439,7 +440,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                       },
                                     ),
                                   ) ??
-                              [const Text('No files have been opened yet.')]),
+                              [Text(loc.noFilesHaveBeenOpenYet)]),
                     ],
                   ),
                 ),
