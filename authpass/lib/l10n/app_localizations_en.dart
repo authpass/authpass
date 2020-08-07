@@ -49,4 +49,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noFilesHaveBeenOpenYet => 'No files have been opened yet.';
+
+  @override
+  String get preferenceSelectLanguage => 'Select Language';
+
+  @override
+  String get preferenceLanguage => 'Language';
+
+  @override
+  String get preferenceTextScaleFactor => 'Text Scale Factor';
+
+  @override
+  String get preferenceVisualDensity => 'Visual Density';
+
+  @override
+  String get preferenceTheme => 'Theme';
+
+  @override
+  String get preferenceThemeLight => 'Light';
+
+  @override
+  String get preferenceThemeDark => 'Dark';
+
+  @override
+  String get preferenceSystemDefault => 'System Default';
+
+  @override
+  String get preferenceDefault => 'Default';
+
+  @override
+  String get lockAllFiles => 'Lock all open files';
+
+  @override
+  String get preferenceAllowScreenshots => 'Allow Screenshots of the App';
+
+  @override
+  String get preferenceEnableAutoFill => 'Enable autofill';
+
+  @override
+  String get preferenceAutoFillDescription => 'Only supported on Android Oreo (8.0) or later.';
+
+  @override
+  String get preferenceTitle => 'Preferences';
 }

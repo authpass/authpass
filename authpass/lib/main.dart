@@ -258,6 +258,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
         themeMode: _toThemeMode(_appData?.theme),
+        locale: _parseLocale(_appData?.localeOverride),
 //        themeMode: ThemeMode.light,
         builder: (context, child) {
           final mq = MediaQuery.of(context);
@@ -317,6 +318,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       ),
     );
   }
+
+  // TODO maybe support more than language code?
+  Locale _parseLocale(String localeString) =>
+      localeString == null ? null : Locale(localeString);
 
   ThemeMode _toThemeMode(AppDataTheme theme) {
     if (theme == null) {

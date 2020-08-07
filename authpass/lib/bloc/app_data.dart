@@ -206,6 +206,10 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   bool get secureWindow;
   bool get secureWindowOrDefault => secureWindow ?? false;
 
+  /// allows overriding system locale to a specific language.
+  @nullable
+  String get localeOverride;
+
   @override
   Map<String, dynamic> toJson() =>
       serializers.serialize(this) as Map<String, dynamic>;

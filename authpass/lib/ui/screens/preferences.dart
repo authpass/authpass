@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -22,7 +23,7 @@ class PreferencesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preferences'),
+        title: Text(AppLocalizations.of(context).preferenceTitle),
       ),
       body: PreferencesBody(),
     );
@@ -79,7 +80,13 @@ class _PreferencesBodyState extends State<PreferencesBody>
     if (_appData == null) {
       return const Text('loading');
     }
+    final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
+    final locales = {
+      null: loc.preferenceSystemDefault,
+      'de': 'Deutsch',
+      'en': 'English',
+    };
     return Column(
       children: <Widget>[
         ...?(_autofillStatus == AutofillServiceStatus.unsupported ||
@@ -88,10 +95,9 @@ class _PreferencesBodyState extends State<PreferencesBody>
             : [
                 SwitchListTile(
                   secondary: const Icon(FontAwesomeIcons.iCursor),
-                  title: const Text('Enable autofill'),
+                  title: Text(loc.preferenceEnableAutoFill),
                   subtitle: _autofillStatus == AutofillServiceStatus.unsupported
-                      ? const Text(
-                          'Only supported on Android Oreo (8.0) or later.')
+                      ? Text(loc.preferenceAutoFillDescription)
                       : null,
                   value: _autofillStatus == AutofillServiceStatus.enabled,
                   onChanged: _autofillStatus ==
@@ -124,7 +130,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             : [
                 SwitchListTile(
                   secondary: const Icon(Icons.camera_alt),
-                  title: const Text('Allow Screenshots of the App'),
+                  title: Text(loc.preferenceAllowScreenshots),
                   value: !_appData.secureWindowOrDefault,
                   onChanged: (value) {
                     _appDataBloc.update(
@@ -134,7 +140,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
               ],
         ListTile(
           leading: const Icon(FontAwesomeIcons.signOutAlt),
-          title: const Text('Lock all open files'),
+          title: Text(loc.lockAllFiles),
           onTap: () async {
             _kdbxBloc.closeAllFiles();
             await Navigator.of(context)
@@ -145,12 +151,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
           leading: const Icon(
             FontAwesomeIcons.lightbulb,
           ),
-          title: const Text('Theme'),
+          title: Text(loc.preferenceTheme),
           trailing: _appData?.theme == null
-              ? const Text('System Default')
+              ? Text(loc.preferenceSystemDefault)
               : _appData?.theme == AppDataTheme.light
-                  ? const Text('Light')
-                  : const Text('Dark'),
+                  ? Text(loc.preferenceThemeLight)
+                  : Text(loc.preferenceThemeDark),
           onTap: () async {
             if (_appData == null) {
               return;
@@ -160,7 +166,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         ValueSelectorTile(
           icon: const FaIcon(FontAwesomeIcons.arrowsAltH),
-          title: const Text('Visual Density'),
+          title: Text(loc.preferenceVisualDensity),
           onChanged: (value) {
             _appDataBloc
                 .update((builder, data) => builder.themeVisualDensity = value);
@@ -172,7 +178,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         ValueSelectorTile(
           icon: const FaIcon(FontAwesomeIcons.textHeight),
-          title: const Text('Text Scale Factor'),
+          title: Text(loc.preferenceTextScaleFactor),
           onChanged: (value) {
             _appDataBloc
                 .update((builder, data) => builder.themeFontSizeFactor = value);
@@ -196,7 +202,48 @@ class _PreferencesBodyState extends State<PreferencesBody>
                           .update((builder, data) => builder.diacOptIn = value);
                     }),
               ],
+        ListTile(
+          leading: const FaIcon(FontAwesomeIcons.language),
+          title: Text(loc.preferenceLanguage),
+          trailing: Text(locales[_appData.localeOverride]),
+          onTap: () async {
+            final result = await showDialog<String>(
+                context: context,
+                builder: (_) => SelectLanguageDialog(
+                      locales: locales,
+                      localeOverride: _appData.localeOverride,
+                    ));
+            await _appDataBloc
+                .update((builder, data) => builder.localeOverride = result);
+          },
+        ),
       ],
+    );
+  }
+}
+
+class SelectLanguageDialog extends StatelessWidget {
+  const SelectLanguageDialog({Key key, this.locales, this.localeOverride})
+      : super(key: key);
+
+  final Map<String, String> locales;
+  final String localeOverride;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    return SimpleDialog(
+      title: Text(loc.preferenceSelectLanguage),
+      children: locales.entries
+          .map((e) => RadioListTile<String>(
+                title: Text(e.value),
+                value: e.key,
+                groupValue: localeOverride,
+                onChanged: (value) {
+                  Navigator.of(context).pop(e.key);
+                },
+              ))
+          .toList(),
     );
   }
 }
@@ -231,6 +278,7 @@ class ValueSelectorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final density = theme.visualDensity;
+    final loc = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -246,7 +294,9 @@ class ValueSelectorTile extends StatelessWidget {
                   child: title,
                 ),
               ),
-              Text(value == null ? 'Default' : value.toStringAsFixed(2)),
+              Text(value == null
+                  ? loc.preferenceDefault
+                  : value.toStringAsFixed(2)),
             ],
           ),
           Row(

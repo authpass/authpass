@@ -46,5 +46,36 @@
   "@labelLastOpenFiles": {},
 
   "noFilesHaveBeenOpenYet": "No files have been opened yet.",
-  "@noFilesHaveBeenOpenYet": {}
+  "@noFilesHaveBeenOpenYet": {},
+
+  "preferenceSelectLanguage": "Select Language",
+  "@preferenceSelectLanguage": {},
+
+  "preferenceLanguage": "Language",
+  "@preferenceLanguage": {},
+
+  "preferenceTextScaleFactor": "Text Scale Factor",
+  "@preferenceTextScaleFactor": {},
+  "preferenceVisualDensity": "Visual Density",
+  "@preferenceVisualDensity": {},
+  "preferenceTheme": "Theme",
+  "@preferenceTheme": {},
+  "preferenceThemeLight": "Light",
+  "@preferenceThemeLight": {},
+  "preferenceThemeDark": "Dark",
+  "@preferenceThemeDark": {},
+  "preferenceSystemDefault": "System Default",
+  "@preferenceSystemDefault": {},
+  "preferenceDefault": "Default",
+  "@preferenceDefault": {},
+  "lockAllFiles": "Lock all open files",
+  "@lockAllFiles": {},
+  "preferenceAllowScreenshots": "Allow Screenshots of the App",
+  "@preferenceAllowScreenshots": {},
+  "preferenceEnableAutoFill": "Enable autofill",
+  "@preferenceEnableAutoFill": {},
+  "preferenceAutoFillDescription": "Only supported on Android Oreo (8.0) or later.",
+  "@preferenceAutoFillDescription": {},
+  "preferenceTitle": "Preferences",
+  "@preferenceTitle": {}
 }

@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 
 /// Callers can lookup localized strings with an instance of AppLocalizations returned
@@ -91,6 +92,7 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en')
   ];
 
@@ -132,6 +134,48 @@ abstract class AppLocalizations {
 
   // No description provided in @noFilesHaveBeenOpenYet
   String get noFilesHaveBeenOpenYet;
+
+  // No description provided in @preferenceSelectLanguage
+  String get preferenceSelectLanguage;
+
+  // No description provided in @preferenceLanguage
+  String get preferenceLanguage;
+
+  // No description provided in @preferenceTextScaleFactor
+  String get preferenceTextScaleFactor;
+
+  // No description provided in @preferenceVisualDensity
+  String get preferenceVisualDensity;
+
+  // No description provided in @preferenceTheme
+  String get preferenceTheme;
+
+  // No description provided in @preferenceThemeLight
+  String get preferenceThemeLight;
+
+  // No description provided in @preferenceThemeDark
+  String get preferenceThemeDark;
+
+  // No description provided in @preferenceSystemDefault
+  String get preferenceSystemDefault;
+
+  // No description provided in @preferenceDefault
+  String get preferenceDefault;
+
+  // No description provided in @lockAllFiles
+  String get lockAllFiles;
+
+  // No description provided in @preferenceAllowScreenshots
+  String get preferenceAllowScreenshots;
+
+  // No description provided in @preferenceEnableAutoFill
+  String get preferenceEnableAutoFill;
+
+  // No description provided in @preferenceAutoFillDescription
+  String get preferenceAutoFillDescription;
+
+  // No description provided in @preferenceTitle
+  String get preferenceTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -143,7 +187,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -155,6 +199,7 @@ AppLocalizations _lookupAppLocalizations(Locale locale) {
   
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'de': return AppLocalizationsDe();
     case 'en': return AppLocalizationsEn();
   }
 

@@ -208,6 +208,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.secureWindow,
             specifiedType: const FullType(bool)));
     }
+    if (object.localeOverride != null) {
+      result
+        ..add('localeOverride')
+        ..add(serializers.serialize(object.localeOverride,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -270,6 +276,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'secureWindow':
           result.secureWindow = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'localeOverride':
+          result.localeOverride = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -495,6 +505,8 @@ class _$AppData extends AppData {
   final int lastBuildId;
   @override
   final bool secureWindow;
+  @override
+  final String localeOverride;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
       (new AppDataBuilder()..update(updates)).build();
@@ -510,7 +522,8 @@ class _$AppData extends AppData {
       this.themeFontSizeFactor,
       this.diacOptIn,
       this.lastBuildId,
-      this.secureWindow})
+      this.secureWindow,
+      this.localeOverride})
       : super._() {
     if (previousFiles == null) {
       throw new BuiltValueNullFieldError('AppData', 'previousFiles');
@@ -543,7 +556,8 @@ class _$AppData extends AppData {
         themeFontSizeFactor == other.themeFontSizeFactor &&
         diacOptIn == other.diacOptIn &&
         lastBuildId == other.lastBuildId &&
-        secureWindow == other.secureWindow;
+        secureWindow == other.secureWindow &&
+        localeOverride == other.localeOverride;
   }
 
   @override
@@ -557,18 +571,22 @@ class _$AppData extends AppData {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc($jc(0, previousFiles.hashCode),
-                                            passwordGeneratorLength.hashCode),
-                                        passwordGeneratorCharacterSets
-                                            .hashCode),
-                                    manualUserType.hashCode),
-                                firstLaunchedAt.hashCode),
-                            theme.hashCode),
-                        themeVisualDensity.hashCode),
-                    themeFontSizeFactor.hashCode),
-                diacOptIn.hashCode),
-            lastBuildId.hashCode),
-        secureWindow.hashCode));
+                                        $jc(
+                                            $jc(
+                                                $jc(0, previousFiles.hashCode),
+                                                passwordGeneratorLength
+                                                    .hashCode),
+                                            passwordGeneratorCharacterSets
+                                                .hashCode),
+                                        manualUserType.hashCode),
+                                    firstLaunchedAt.hashCode),
+                                theme.hashCode),
+                            themeVisualDensity.hashCode),
+                        themeFontSizeFactor.hashCode),
+                    diacOptIn.hashCode),
+                lastBuildId.hashCode),
+            secureWindow.hashCode),
+        localeOverride.hashCode));
   }
 
   @override
@@ -585,7 +603,8 @@ class _$AppData extends AppData {
           ..add('themeFontSizeFactor', themeFontSizeFactor)
           ..add('diacOptIn', diacOptIn)
           ..add('lastBuildId', lastBuildId)
-          ..add('secureWindow', secureWindow))
+          ..add('secureWindow', secureWindow)
+          ..add('localeOverride', localeOverride))
         .toString();
   }
 }
@@ -647,6 +666,11 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   bool get secureWindow => _$this._secureWindow;
   set secureWindow(bool secureWindow) => _$this._secureWindow = secureWindow;
 
+  String _localeOverride;
+  String get localeOverride => _$this._localeOverride;
+  set localeOverride(String localeOverride) =>
+      _$this._localeOverride = localeOverride;
+
   AppDataBuilder();
 
   AppDataBuilder get _$this {
@@ -663,6 +687,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _diacOptIn = _$v.diacOptIn;
       _lastBuildId = _$v.lastBuildId;
       _secureWindow = _$v.secureWindow;
+      _localeOverride = _$v.localeOverride;
       _$v = null;
     }
     return this;
@@ -698,7 +723,8 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               themeFontSizeFactor: themeFontSizeFactor,
               diacOptIn: diacOptIn,
               lastBuildId: lastBuildId,
-              secureWindow: secureWindow);
+              secureWindow: secureWindow,
+              localeOverride: localeOverride);
     } catch (_) {
       String _$failedField;
       try {

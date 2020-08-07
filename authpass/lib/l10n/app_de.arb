@@ -1,0 +1,61 @@
+{
+    "@@locale": "de",
+    "fieldUserName": "Benutzer",
+    "@fieldUserName": {},
+    "fieldPassword": "Passwort",
+    "@fieldPassword": {},
+    "fieldWebsite": "Webseite",
+    "@fieldWebsite": {},
+    "fieldTitle": "Titel",
+    "@fieldTitle": {},
+    "selectKeepassFile": "AuthPass - Wähle eine Keepass Datei",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Quick-Unlock Dateien",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
+    },
+    "selectKeepassFileLabel": "Bitte wähle eine Keepass (.kdbx) Datei.",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "openLocalFile": "Öffne\nLokale Datei",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "loadFrom": "Lade von {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Lade von URL",
+    "@loadFromUrl": {},
+    "createNewKeepass": "KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen",
+    "@createNewKeepass": {},
+    "labelLastOpenFiles": "Zuletzt geöffnete Dateien:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Keine Dateien bisher geöffnet.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Sprache wählen",
+    "@preferenceSelectLanguage": {},
+
+    "preferenceLanguage": "Sprache",
+
+    "preferenceTextScaleFactor": "Text Skallierung",
+    "preferenceVisualDensity": "Visuelle Dichte",
+    "preferenceTheme": "Theme",
+    "preferenceThemeLight": "Hell",
+    "preferenceThemeDark": "Dunkel",
+    "preferenceSystemDefault": "Geräte Standardeinstellung",
+    "preferenceDefault": "Standard",
+    "lockAllFiles": "Alle offenen Dateien schließen",
+    "preferenceAllowScreenshots": "Screenshots der App zulassen",
+    "preferenceEnableAutoFill": "Autofill aktivieren",
+    "preferenceAutoFillDescription": "Wird nur auf ab Android Oreo (8.0) unterstützt.",
+    "preferenceTitle": "Einstellungen"
+}
