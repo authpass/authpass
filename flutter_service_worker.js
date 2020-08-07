@@ -6,18 +6,18 @@ const RESOURCES = {
   "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"main.dart.js": "ae8ff2e0ec596b85ac39e2cb8478d78c",
+"main.dart.js": "421aaf037c2eff17bb28cc3388931b68",
 "index.html": "5e77dbe07c6e53b56d12472982ef2f81",
 "/": "5e77dbe07c6e53b56d12472982ef2f81",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"assets/FontManifest.json": "da58a159986f9d76c1cb941cb263464e",
-"assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
+"assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
+"assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "2bca5ec802e40d3f4b60343e346cedde",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "5a37ae808cf9f652198acde612b5328d",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "2aa350bd2aeab88b601a593f793734c0",
 "assets/packages/open_iconic_flutter/assets/open-iconic.woff": "3cf97837524dd7445e9d1462e3c4afe2",
 "assets/AssetManifest.json": "67d13d800eff9b8e6f6cce1d5d18f303",
-"assets/NOTICES": "b649bd7c92b9cd354f19da0e7eb28647",
+"assets/NOTICES": "7c5e1d0cb50a2f440ed730f0517cbb84",
 "assets/assets/fonts/Inter-Bold.otf": "753bd86618b0faefb54da21403a261bb",
 "assets/assets/fonts/Inter-Light.otf": "a3a9cc1541c9da02424062b5855a60ec",
 "assets/assets/fonts/jetbrains/JetBrainsMono-Regular.ttf": "e1caef645de334fee2f25834b0d03c28",
@@ -43,8 +43,8 @@ const CORE = [
 self.addEventListener("install", (event) => {
   return event.waitUntil(
     caches.open(TEMP).then((cache) => {
-      // Provide a no-cache param to ensure the latest version is downloaded.
-      return cache.addAll(CORE.map((value) => new Request(value, {'cache': 'no-cache'})));
+      // Provide a 'reload' param to ensure the latest version is downloaded.
+      return cache.addAll(CORE.map((value) => new Request(value, {'cache': 'reload'})));
     })
   );
 });
@@ -127,7 +127,7 @@ self.addEventListener("fetch", (event) => {
         // Either respond with the cached resource, or perform a fetch and
         // lazily populate the cache. Ensure the resources are not cached
         // by the browser for longer than the service worker expects.
-        var modifiedRequest = new Request(event.request, {'cache': 'no-cache'});
+        var modifiedRequest = new Request(event.request, {'cache': 'reload'});
         return response || fetch(modifiedRequest).then((response) => {
           cache.put(event.request, response.clone());
           return response;
