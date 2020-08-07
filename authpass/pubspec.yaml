@@ -123,7 +123,7 @@ dependencies:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/file_chooser
-      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      ref: 1feed8db2e5222af4e5d8495ac45135a2701c755
 #      ref: android-dummy-plugin
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
@@ -131,13 +131,13 @@ dependencies:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
-      ref: 9e9b68b67c2a2c0b82eed2224f709aff2ccbab7c
+      ref: 1feed8db2e5222af4e5d8495ac45135a2701c755
   # Used for windows, for now:
   path_provider_fde:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/path_provider_fde
-      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      ref: 1feed8db2e5222af4e5d8495ac45135a2701c755
 
   macos_secure_bookmarks: ^0.1.2
 
