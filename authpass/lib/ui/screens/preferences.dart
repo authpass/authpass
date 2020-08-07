@@ -52,6 +52,9 @@ class _PreferencesBodyState extends State<PreferencesBody>
   }
 
   Future<void> _doInit() async {
+    if (AuthPassPlatform.isWeb) {
+      return;
+    }
     final autofill = AutofillService();
     _autofillStatus = await autofill.status();
     if (_autofillStatus != AutofillServiceStatus.unsupported) {

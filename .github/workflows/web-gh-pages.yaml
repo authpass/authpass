@@ -22,7 +22,8 @@ jobs:
       - name: Install
         run: |
           flutter config --enable-web
-          cd authpass && flutter pub get
+          pushd $FLUTTER_HOME/dev/tools && flutter pub get && popd
+          pushd authpass && flutter pub get
       - name: Build
         run: cd authpass && flutter build web -t lib/env/development.dart
 

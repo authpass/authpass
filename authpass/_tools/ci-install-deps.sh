@@ -30,6 +30,8 @@ elif test "${1:-}" == "windows" ; then
     cd flutter/bin
     ./flutter upgrade
     ./flutter config --enable-windows-desktop
+    cd "${DEPS}/flutter/dev/tools"
+    "${DEPS}/flutter/bin/flutter" pub get
 
     exit 0
 else
