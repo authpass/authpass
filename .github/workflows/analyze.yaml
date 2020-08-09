@@ -1,0 +1,29 @@
+name: analyze
+
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Postdeploy
+        env:
+          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+        run: authpass/_tools/postdeploy.sh
+      - name: ci-install-deps
+        run: "./authpass/_tools/ci-install-deps.sh android"
+      - run: |
+          cd authpass
+          ~/deps/flutter/bin/flutter pub get
+          ~/deps/flutter/bin/flutter analyze
+          _tools/run_analyse.sh

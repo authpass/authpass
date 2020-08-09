@@ -87,8 +87,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
     final env = Provider.of<Env>(context);
     final locales = {
       null: loc.preferenceSystemDefault,
-      'de': 'Deutsch',
-      'en': 'English',
+      'de': 'Deutsch', // NON-NLS
+      'en': 'English', // NON-NLS
     };
     return Column(
       children: <Widget>[

@@ -44,7 +44,7 @@ class LoggingUtils {
       _rotatingFileLogger.attachToLogger(Logger.root);
     }
     final isolateDebug =
-        '${Isolate.current.debugName} (${Isolate.current.hashCode})';
+        '${Isolate.current.debugName} (${Isolate.current.hashCode})'; // NON-NLS
     _logger.info(
         'Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
 
