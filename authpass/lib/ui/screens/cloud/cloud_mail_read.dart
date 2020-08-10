@@ -145,32 +145,36 @@ class EmailRead extends StatelessWidget {
         ),
         htmlData != null && !forcePlainText
             ? Expanded(
-                child: SingleChildScrollView(
-                  child: Html(
-                    data: htmlData,
-                    onLinkTap: (link) {
-                      DialogUtils.openUrl(link);
-                    },
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Html(
+                      data: htmlData,
+                      onLinkTap: (link) {
+                        DialogUtils.openUrl(link);
+                      },
+                    ),
                   ),
                 ),
               )
             : Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SelectableLinkify(
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SelectableLinkify(
 //                    child: Linkify(
-                      text: (message.decodeTextPlainPart() ??
-                              message.decodeContentText())
-                          .replaceAll('\r', ''),
-                      maxLines: null,
-                      options: LinkifyOptions(
-                        humanize: false,
+                        text: (message.decodeTextPlainPart() ??
+                                message.decodeContentText())
+                            .replaceAll('\r', ''),
+                        maxLines: null,
+                        options: LinkifyOptions(
+                          humanize: false,
+                        ),
+                        onOpen: (link) async {
+                          await DialogUtils.openUrl(link.url);
+                        },
+                        style: textStyle,
                       ),
-                      onOpen: (link) async {
-                        await DialogUtils.openUrl(link.url);
-                      },
-                      style: textStyle,
                     ),
                   ),
                 ),

@@ -113,5 +113,10 @@
   "menuItemHelpSubtitle": "Show documentation",
   "@menuItemHelpSubtitle": {},
   "menuItemAbout": "About",
-  "@menuItemAbout": {}
+  "@menuItemAbout": {},
+
+  "passwordPlainText": "Reveal password",
+  "@passwordPlainText": {
+    "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+  }
 }

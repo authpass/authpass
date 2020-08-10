@@ -12,6 +12,7 @@ import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/platform.dart';
@@ -724,13 +725,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 32, right: 32, left: 32),
 //              constraints: BoxConstraints.expand(),
-                child: TextFormField(
+                child: PasswordInputField(
                   controller: _controller,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  autocorrect: false,
-                  autofocus: true,
+                  labelText: 'Password',
                   autovalidate: _invalidPassword != null,
-                  obscureText: true,
                   validator: (_keyFile == null || _invalidPassword != null
                           ? SValidator.notEmpty(
                               msg: 'Please enter your password.')

@@ -135,4 +135,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get menuItemAbout => 'About';
+
+  @override
+  String get passwordPlainText => 'Reveal password';
 }

@@ -218,6 +218,9 @@ abstract class AppLocalizations {
 
   // No description provided in @menuItemAbout
   String get menuItemAbout;
+
+  // Master password input: show password as plain text during input. (shown as tooltip)
+  String get passwordPlainText;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
