@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:usage/usage.dart' as usage;
 
 part 'analytics.g.dart';
@@ -132,7 +133,7 @@ class Analytics {
     });
   }
 
-  void trackScreen(String screenName) {
+  void trackScreen(@NonNls String screenName) {
     _requireGa((ga) {
       _logger.finer('trackScreen($screenName)');
       ga.sendScreenView(screenName);
@@ -218,23 +219,24 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     @required int value,
   });
 
-  void trackActionPressed({@required String action});
+  void trackActionPressed({@required @NonNls String action});
 
   void trackCreateFile();
 
-  void trackOpenFile({@required String type});
+  void trackOpenFile({@required @NonNls String type});
 
-  void trackOpenFile2({@required String generator, @required String version});
+  void trackOpenFile2(
+      {@required @NonNls String generator, @required @NonNls String version});
 
   void trackSelectEntry({EntrySelectionType type});
 
-  void trackCopyField({@required String key});
+  void trackCopyField({@required @NonNls String key});
 
-  void trackAddField({@required String key});
+  void trackAddField({@required @NonNls String key});
 
   void trackCloseAllFiles({int count});
 
-  void trackUserType({String userType});
+  void trackUserType({@NonNls String userType});
 
   void trackCloseFile();
 

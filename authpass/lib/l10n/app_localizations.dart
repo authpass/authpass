@@ -176,6 +176,48 @@ abstract class AppLocalizations {
 
   // No description provided in @preferenceTitle
   String get preferenceTitle;
+
+  // No description provided in @aboutAppName
+  String get aboutAppName;
+
+  // No description provided in @aboutLinkFeedback
+  String get aboutLinkFeedback;
+
+  // No description provided in @aboutLinkVisitWebsite
+  String get aboutLinkVisitWebsite;
+
+  // No description provided in @aboutLinkGitHub
+  String get aboutLinkGitHub;
+
+  // No description provided in @aboutLogFile
+  String aboutLogFile(String logFilePath);
+
+  // No description provided in @menuItemGeneratePassword
+  String get menuItemGeneratePassword;
+
+  // No description provided in @menuItemPreferences
+  String get menuItemPreferences;
+
+  // No description provided in @menuItemOpenAnotherFile
+  String get menuItemOpenAnotherFile;
+
+  // No description provided in @menuItemCheckForUpdates
+  String get menuItemCheckForUpdates;
+
+  // No description provided in @menuItemSupport
+  String get menuItemSupport;
+
+  // No description provided in @menuItemSupportSubtitle
+  String get menuItemSupportSubtitle;
+
+  // No description provided in @menuItemHelp
+  String get menuItemHelp;
+
+  // No description provided in @menuItemHelpSubtitle
+  String get menuItemHelpSubtitle;
+
+  // No description provided in @menuItemAbout
+  String get menuItemAbout;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

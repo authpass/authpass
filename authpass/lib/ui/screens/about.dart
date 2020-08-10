@@ -2,6 +2,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/manage_file.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/preferences.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class AuthPassAboutDialog extends StatelessWidget {
   const AuthPassAboutDialog({Key key, this.env}) : super(key: key);
@@ -25,6 +27,7 @@ class AuthPassAboutDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final loggingUtil = LoggingUtils();
     final logFiles = loggingUtil.rotatingFileLoggerFiles;
+    final loc = AppLocalizations.of(context);
     return FutureBuilder<AppInfo>(
         future: env.getAppInfo(),
         builder: (context, snapshot) {
@@ -35,8 +38,8 @@ class AuthPassAboutDialog extends StatelessWidget {
                 final deps = context.read<Deps>();
                 final appData = await deps.appDataBloc.store.load();
                 final newData = await SimplePromptDialog(
-                  labelText: 'debug usertype',
-                  initialValue: appData?.manualUserType ?? '',
+                  labelText: 'debug usertype', // NON-NLS
+                  initialValue: appData?.manualUserType ?? '', // NON-NLS
                 ).show(context);
                 if (newData != null) {
                   await deps.appDataBloc
@@ -49,26 +52,26 @@ class AuthPassAboutDialog extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            applicationName: 'AuthPass',
+            applicationName: loc.aboutAppName,
             applicationVersion: appInfo?.versionLabel,
-            applicationLegalese: '© by Herbert Poul, 2019-2020',
+            applicationLegalese: '© by Herbert Poul, 2019-2020', // NON-NLS
             children: <Widget>[
               const SizedBox(height: 32),
-              const UrlLink(
-                caption: 'We welcome any kind of feedback!',
+              UrlLink(
+                caption: loc.aboutLinkFeedback,
                 url: 'mailto:hello@authpass.app',
               ),
-              const UrlLink(
-                caption: 'Also make sure to visit our website',
+              UrlLink(
+                caption: loc.aboutLinkVisitWebsite,
                 url: 'https://authpass.app/',
               ),
-              const UrlLink(
-                caption: 'And Open Source Project',
+              UrlLink(
+                caption: loc.aboutLinkGitHub,
                 url: 'https://github.com/authpass/authpass/',
               ),
               const SizedBox(height: 32),
               Text(
-                'Log File: ${logFiles.first.absolute.path}',
+                loc.aboutLogFile(logFiles.first.absolute.path),
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
@@ -102,11 +105,12 @@ class AuthPassAboutDialog extends StatelessWidget {
       BuildContext context, OpenedKdbxFiles openedKdbxFiles) {
     final openedFiles = openedKdbxFiles.values;
     final analytics = Provider.of<Analytics>(context, listen: false);
+    final loc = AppLocalizations.of(context);
     return [
       PopupMenuItem(
-        child: const ListTile(
-          leading: Icon(FontAwesomeIcons.random),
-          title: Text('Generate Password'),
+        child: ListTile(
+          leading: const Icon(FontAwesomeIcons.random),
+          title: Text(loc.menuItemGeneratePassword),
         ),
         value: () {
           analytics.events.trackActionPressed(action: 'generatePassword');
@@ -114,9 +118,9 @@ class AuthPassAboutDialog extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: const ListTile(
-          leading: Icon(FontAwesomeIcons.cogs),
-          title: Text('Preferences'),
+        child: ListTile(
+          leading: const Icon(FontAwesomeIcons.cogs),
+          title: Text(loc.menuItemPreferences),
         ),
         value: () {
           analytics.events.trackActionPressed(action: 'preferences');
@@ -149,9 +153,9 @@ class AuthPassAboutDialog extends StatelessWidget {
               ),
             )),
       PopupMenuItem(
-        child: const ListTile(
-          leading: Icon(FontAwesomeIcons.folderPlus),
-          title: Text('Open another File'),
+        child: ListTile(
+          leading: const Icon(FontAwesomeIcons.folderPlus),
+          title: Text(loc.menuItemOpenAnotherFile),
         ),
         value: () {
           analytics.events.trackActionPressed(action: 'openFile');
@@ -164,9 +168,9 @@ class AuthPassAboutDialog extends StatelessWidget {
           ? null
           : [
               PopupMenuItem(
-                  child: const ListTile(
-                    leading: Icon(Icons.update),
-                    title: Text('Check for updates'),
+                  child: ListTile(
+                    leading: const Icon(Icons.update),
+                    title: Text(loc.menuItemCheckForUpdates),
                   ),
                   value: () {
                     winSparkleCheckUpdate();
@@ -176,10 +180,10 @@ class AuthPassAboutDialog extends StatelessWidget {
           ? null
           : [
               PopupMenuItem(
-                child: const ListTile(
-                  leading: Icon(Icons.email),
-                  title: Text('Email Support'),
-                  subtitle: Text('Send logs by email/ask for help.'),
+                child: ListTile(
+                  leading: const Icon(Icons.email),
+                  title: Text(loc.menuItemSupport),
+                  subtitle: Text(loc.menuItemSupportSubtitle),
                 ),
                 value: () {
                   analytics.events.trackActionPressed(action: 'emailSupport');
@@ -188,10 +192,10 @@ class AuthPassAboutDialog extends StatelessWidget {
               )
             ],
       PopupMenuItem(
-        child: const ListTile(
-          leading: Icon(Icons.help),
-          title: Text('Help'),
-          subtitle: Text('Show documentation.'),
+        child: ListTile(
+          leading: const Icon(Icons.help),
+          title: Text(loc.menuItemHelp),
+          subtitle: Text(loc.menuItemHelpSubtitle),
         ),
         value: () async {
           analytics.events.trackActionPressed(action: 'help');
@@ -205,10 +209,11 @@ class AuthPassAboutDialog extends StatelessWidget {
 
   static PopupMenuItem<VoidCallback> createAboutMenuItem(BuildContext context) {
     final analytics = Provider.of<Analytics>(context, listen: false);
+    final loc = AppLocalizations.of(context);
     return PopupMenuItem<VoidCallback>(
-      child: const ListTile(
-        leading: ImageIcon(AssetImage('assets/images/logo_icon.png')),
-        title: Text('About'),
+      child: ListTile(
+        leading: const ImageIcon(AssetImage('assets/images/logo_icon.png')),
+        title: Text(loc.menuItemAbout),
       ),
       value: () {
         analytics.events.trackActionPressed(action: 'about');
@@ -219,7 +224,7 @@ class AuthPassAboutDialog extends StatelessWidget {
 }
 
 class UrlLink extends StatelessWidget {
-  const UrlLink({Key key, this.caption, this.url}) : super(key: key);
+  const UrlLink({Key key, this.caption, @NonNls this.url}) : super(key: key);
 
   final String caption;
   final String url;

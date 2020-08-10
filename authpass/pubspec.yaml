@@ -97,7 +97,7 @@ dependencies:
   charcode: ^1.1.2 # For flutter 1.15.17 support, we have to keep 1.1.2 (fdroid)
   # collection utilities:
   flinq: ^1.1.1
-
+  string_literal_finder_annotations: ^0.1.0
 
   # WebDAV
 #  http_auth: ^0.2.9

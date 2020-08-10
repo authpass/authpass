@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:meta/meta.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class CommonField {
   CommonField({
@@ -112,7 +113,8 @@ class CommonFields {
   CommonField operator [](KdbxKey key) =>
       fields.firstWhere((f) => f.key == key, orElse: () => null);
 
-  CommonField _fieldByKeyString(String key) => _fieldByKey(KdbxKey(key));
+  CommonField _fieldByKeyString(@NonNls String key) =>
+      _fieldByKey(KdbxKey(key));
 
   CommonField _fieldByKey(KdbxKey key) =>
       fields.firstWhere((f) => f.key == key);

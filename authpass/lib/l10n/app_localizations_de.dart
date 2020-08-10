@@ -91,4 +91,48 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preferenceTitle => 'Einstellungen';
+
+  @override
+  String get aboutAppName => 'AuthPass';
+
+  @override
+  String get aboutLinkFeedback => 'We welcome any kind of feedback!';
+
+  @override
+  String get aboutLinkVisitWebsite => 'Also make sure to visit our website';
+
+  @override
+  String get aboutLinkGitHub => 'And Open Source Project';
+
+  @override
+  String aboutLogFile(String logFilePath) {
+    return 'Log File: ${logFilePath}';
+  }
+
+  @override
+  String get menuItemGeneratePassword => 'Generate Password';
+
+  @override
+  String get menuItemPreferences => 'Preferences';
+
+  @override
+  String get menuItemOpenAnotherFile => 'Open another File';
+
+  @override
+  String get menuItemCheckForUpdates => 'Check for updates';
+
+  @override
+  String get menuItemSupport => 'Email Support';
+
+  @override
+  String get menuItemSupportSubtitle => 'Send logs by email/ask for help.';
+
+  @override
+  String get menuItemHelp => 'Help';
+
+  @override
+  String get menuItemHelpSubtitle => 'Show documentation';
+
+  @override
+  String get menuItemAbout => 'About';
 }

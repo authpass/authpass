@@ -77,5 +77,41 @@
   "preferenceAutoFillDescription": "Only supported on Android Oreo (8.0) or later.",
   "@preferenceAutoFillDescription": {},
   "preferenceTitle": "Preferences",
-  "@preferenceTitle": {}
+  "@preferenceTitle": {},
+  "aboutAppName": "AuthPass",
+  "@aboutAppName": {},
+  "aboutLinkFeedback": "We welcome any kind of feedback!",
+  "@aboutLinkFeedback": {},
+  "aboutLinkVisitWebsite": "Also make sure to visit our website",
+  "@aboutLinkVisitWebsite": {},
+  "aboutLinkGitHub": "And Open Source Project",
+  "@aboutLinkGitHub": {},
+  "aboutLogFile": "Log File: {logFilePath}",
+  "@aboutLogFile": {
+    "placeholders": {
+      "logFilePath": {
+        "type": "String",
+        "example": "/Users/mustermann/log.txt"
+      }
+    }
+  },
+
+  "menuItemGeneratePassword": "Generate Password",
+  "@menuItemGeneratePassword": {},
+  "menuItemPreferences": "Preferences",
+  "@menuItemPreferences": {},
+  "menuItemOpenAnotherFile": "Open another File",
+  "@menuItemOpenAnotherFile": {},
+  "menuItemCheckForUpdates": "Check for updates",
+  "@menuItemCheckForUpdates": {},
+  "menuItemSupport": "Email Support",
+  "@menuItemSupport": {},
+  "menuItemSupportSubtitle": "Send logs by email/ask for help.",
+  "@menuItemSupportSubtitle": {},
+  "menuItemHelp": "Help",
+  "@menuItemHelp": {},
+  "menuItemHelpSubtitle": "Show documentation",
+  "@menuItemHelpSubtitle": {},
+  "menuItemAbout": "About",
+  "@menuItemAbout": {}
 }
