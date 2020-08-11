@@ -358,12 +358,10 @@ packages:
   enough_mail:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "2cddc2e5cb24909607a1d54cfeafe2903d492b36"
-      resolved-ref: "2cddc2e5cb24909607a1d54cfeafe2903d492b36"
-      url: "https://github.com/authpass/enough_mail.git"
-    source: git
-    version: "0.0.29"
+      name: enough_mail
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.32"
   esys_flutter_share:
     dependency: "direct main"
     description:
@@ -410,8 +408,8 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/file_chooser"
-      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
-      resolved-ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      ref: "1feed8db2e5222af4e5d8495ac45135a2701c755"
+      resolved-ref: "1feed8db2e5222af4e5d8495ac45135a2701c755"
       url: "https://github.com/google/flutter-desktop-embedding.git"
     source: git
     version: "0.2.0"
@@ -480,7 +478,7 @@ packages:
       name: flutter_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.2"
   flutter_linkify:
     dependency: "direct main"
     description:
@@ -838,8 +836,8 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/flutter_plugins/path_provider_fde"
-      ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
-      resolved-ref: bd722fbdb6d491d4b7781c240543ed3b3b181063
+      ref: "1feed8db2e5222af4e5d8495ac45135a2701c755"
+      resolved-ref: "1feed8db2e5222af4e5d8495ac45135a2701c755"
       url: "https://github.com/google/flutter-desktop-embedding.git"
     source: git
     version: "0.0.1"
@@ -942,7 +940,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.1"
+    version: "4.3.2"
   pub_semver:
     dependency: transitive
     description:
@@ -1104,6 +1102,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  string_literal_finder_annotations:
+    dependency: "direct main"
+    description:
+      name: string_literal_finder_annotations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1+1"
   string_scanner:
     dependency: transitive
     description:
@@ -1192,8 +1197,8 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/flutter_plugins/url_launcher_fde"
-      ref: "9e9b68b67c2a2c0b82eed2224f709aff2ccbab7c"
-      resolved-ref: "9e9b68b67c2a2c0b82eed2224f709aff2ccbab7c"
+      ref: "1feed8db2e5222af4e5d8495ac45135a2701c755"
+      resolved-ref: "1feed8db2e5222af4e5d8495ac45135a2701c755"
       url: "https://github.com/google/flutter-desktop-embedding.git"
     source: git
     version: "0.1.0"

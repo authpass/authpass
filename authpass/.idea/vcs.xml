@@ -19,5 +19,7 @@
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/package_info_macos" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/macos/Flutter/ephemeral/.symlinks/plugins/winsparkle_flutter" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/flutter/ephemeral/.plugin_symlinks/argon2_ffi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/flutter/ephemeral/.plugin_symlinks/winsparkle_flutter" vcs="Git" />
   </component>
 </project>

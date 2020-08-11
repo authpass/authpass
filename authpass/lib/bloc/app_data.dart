@@ -15,6 +15,7 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 part 'app_data.g.dart';
 
@@ -245,7 +246,8 @@ class AppDataBloc {
         () async => (await PathUtils().getAppDataDirectory()).path),
   );
 
-  static final _uuid = Uuid();
+  static final _uuid =
+      Uuid(options: <String, dynamic>{'grng': UuidUtil.cryptoRNG});
 
   static String createUuid() => _uuid.v4();
 
