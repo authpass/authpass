@@ -4,6 +4,7 @@
 * Fixed error in group list when adding new subgroups while a filter is active.
 * UI: Progress overlay on initial page now matches screen height.
 * UI: allow displaying of plain text master password during unlocking. #86
+* KDBX: fixed bug saving files with history entries which contain attachments.
 
 # 1.7.2
 
