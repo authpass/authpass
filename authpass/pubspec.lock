@@ -668,7 +668,7 @@ packages:
       path: "../deps/kdbx.dart"
       relative: true
     source: path
-    version: "0.4.0+1"
+    version: "0.4.1"
   linkify:
     dependency: transitive
     description:
