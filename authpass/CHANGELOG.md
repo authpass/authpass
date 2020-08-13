@@ -1,3 +1,7 @@
+# Unreleased
+
+* Show custom icons for passwords and groups #68
+
 # 1.7.3
 
 * Fixed possible error dialogs #124 ("The method 'markNeedsBuild' was called on null")
