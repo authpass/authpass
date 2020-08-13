@@ -363,9 +363,15 @@ class _EntryDetailsState extends State<EntryDetails>
                 children: <Widget>[
                   const SizedBox(width: 16),
                   IconSelectorFormField(
-                    initialValue: widget.entry.icon.get(),
+                    initialValue: SelectedIcon.fromObject(widget.entry),
                     onSaved: (icon) {
-                      widget.entry.icon.set(icon);
+                      icon.when(predefined: (predefined) {
+                        widget.entry.customIcon = null;
+                        widget.entry.icon.set(predefined);
+                      }, custom: (custom) {
+                        // TODO support changing to a custom icon.
+                        throw StateError('not yet supported.');
+                      });
                     },
                   ),
                   const SizedBox(width: 16),

@@ -1067,6 +1067,18 @@ class PasswordEntryTile extends StatelessWidget {
     final fgColor = isSelected
         ? isDarkTheme ? theme.primaryColorLight : theme.primaryColorDark
         : null;
+    final iconTheme = IconTheme.of(context);
+    final icon = vm.entry.customIcon?.let((customIcon) => Image.memory(
+              customIcon.data,
+              width: iconTheme.size,
+              height: iconTheme.size,
+              fit: BoxFit.contain,
+            )) ??
+        Icon(
+          PredefinedIcons.iconFor(vm.entry.icon.get()),
+          color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
+        );
+
     return InkWell(
       onTap: onTap,
       child: Row(
@@ -1074,10 +1086,7 @@ class PasswordEntryTile extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-            child: Icon(
-              PredefinedIcons.iconFor(vm.entry.icon.get()),
-              color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
-            ),
+            child: icon,
           ),
           Expanded(
             child: Padding(

@@ -20,3 +20,7 @@ extension ListOptGet<T> on List<T> {
 extension EdgeInsetsExt on EdgeInsets {
   EdgeInsets get onlyTop => EdgeInsets.only(top: top);
 }
+
+extension ObjectExt<T> on T {
+  R let<R>(R Function(T that) op) => op(this);
+}

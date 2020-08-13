@@ -1,9 +1,14 @@
 import 'package:authpass/ui/widgets/centered_icon.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/predefined_icons.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+
+part 'icon_selector.freezed.dart';
 
 final _logger = Logger('authpass.icon_selector');
 
@@ -122,6 +127,17 @@ class IconSelectorIcon extends StatelessWidget {
   }
 }
 
+@freezed
+abstract class SelectedIcon with _$SelectedIcon {
+  const factory SelectedIcon.predefined(KdbxIcon icon) =
+      _SelectedIconPredefined;
+  const factory SelectedIcon.custom(KdbxCustomIcon custom) =
+      _SelectedIconCustom;
+  factory SelectedIcon.fromObject(KdbxObject object) =>
+      object.customIcon?.let((custom) => SelectedIcon.custom(custom)) ??
+      object.icon.get()?.let((icon) => SelectedIcon.predefined(icon));
+}
+
 class IconSelectorFormField extends StatelessWidget {
   const IconSelectorFormField({
     Key key,
@@ -129,24 +145,32 @@ class IconSelectorFormField extends StatelessWidget {
     @required this.onSaved,
     this.onChanged,
   }) : super(key: key);
-  final KdbxIcon initialValue;
-  final void Function(KdbxIcon icon) onSaved;
-  final void Function(KdbxIcon icon) onChanged;
+  final SelectedIcon initialValue;
+  final void Function(SelectedIcon icon) onSaved;
+  final void Function(SelectedIcon icon) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return FormField<KdbxIcon>(
+    return FormField<SelectedIcon>(
       builder: (formFieldState) {
         final theme = Theme.of(context);
+        final value = formFieldState.value;
+        final initialPredefined = value.map(
+          predefined: (value) => value.icon,
+          custom: (value) => null,
+        );
+        const iconSize = 48.0;
         return Card(
           elevation: 8,
           child: InkWell(
             onTap: () async {
+              // TODO add support for selecting custom icon.
               final newIcon = await IconSelectorDialog.show(context,
-                  initialSelection: formFieldState.value);
+                  initialSelection: initialPredefined);
               if (newIcon != null) {
-                formFieldState.didChange(newIcon);
-                onChanged?.call(newIcon);
+                final change = SelectedIcon.predefined(newIcon);
+                formFieldState.didChange(change);
+                onChanged?.call(change);
               }
             },
             child: Padding(
@@ -156,10 +180,18 @@ class IconSelectorFormField extends StatelessWidget {
                 width: 64,
                 child: Align(
                   alignment: Alignment.center,
-                  child: CenteredIcon(
-                    icon: PredefinedIcons.iconFor(formFieldState.value),
-                    size: 48,
-                    color: theme.primaryColor,
+                  child: value.map(
+                    predefined: (predefined) => CenteredIcon(
+                      icon: PredefinedIcons.iconFor(predefined.icon),
+                      size: iconSize,
+                      color: theme.primaryColor,
+                    ),
+                    custom: (custom) => Image.memory(
+                      custom.custom.data,
+                      width: iconSize,
+                      height: iconSize,
+                      fit: BoxFit.contain,
+                    ),
                   ),
 //                        child: Icon(
 //                          PredefinedIcons.iconFor(widget.entry.icon.get()),

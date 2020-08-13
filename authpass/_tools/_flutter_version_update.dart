@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 
 import 'package:http/http.dart';
 
-const FLUTTER_VERSION = '1.20.0-7.4.pre';
+const FLUTTER_VERSION = '1.21.0-7.0.pre';
 const FLUTTER_URL = 'https://storage.googleapis.com/flutter_infra/releases/';
 const OUTPUT_FILE = '_flutter_version.sh';
 

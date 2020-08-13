@@ -87,6 +87,16 @@ class _GroupEditState extends State<GroupEdit> {
         TextSelection(baseOffset: 0, extentOffset: _nameController.text.length);
   }
 
+  void _saveIcon(SelectedIcon icon) {
+    icon.when(predefined: (predefined) {
+      widget.group.customIcon = null;
+      widget.group.icon.set(predefined);
+    }, custom: (custom) {
+      // TODO support changing to a custom icon.
+      throw StateError('not yet supported.');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -98,13 +108,9 @@ class _GroupEditState extends State<GroupEdit> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconSelectorFormField(
-              initialValue: widget.group.icon.get(),
-              onSaved: (value) {
-                widget.group.icon.set(value);
-              },
-              onChanged: (value) {
-                widget.group.icon.set(value);
-              },
+              initialValue: SelectedIcon.fromObject(widget.group),
+              onSaved: _saveIcon,
+              onChanged: _saveIcon,
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
