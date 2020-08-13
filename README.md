@@ -1,4 +1,6 @@
-![AuthPass.app](_docs/logo-header.png)
+[<img align="right" src="https://img.shields.io/badge/join%20us%20on%20our%20chat-discord-green">](https://authpass.app/go/discord)
+
+[![AuthPass.app](_docs/logo-header.png)](https://authpass.app)
 
 # AuthPass.app - Open Source Password Manager for mobile and desktop
 
