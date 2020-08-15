@@ -253,7 +253,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         title: 'AuthPass',
         navigatorKey: widget.navigatorKey,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
