@@ -134,8 +134,7 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
                                   .instance.focusManager.primaryFocus,
                               settings: const RouteSettings(name: '/entry'),
                               builder: (context) => EntryDetailsScreen(
-                                    entry: EntryViewModel(
-                                        entry, context.read<KdbxBloc>()),
+                                    entry: entry,
                                   )),
                           (route) => route.isFirst,
                         );

@@ -56,10 +56,10 @@ class EntryDetailsScreen extends StatefulWidget {
   static Route<void> route({@required KdbxEntry entry}) => MaterialPageRoute(
       settings: const RouteSettings(name: '/entry'),
       builder: (context) => EntryDetailsScreen(
-            entry: EntryViewModel(entry, context.watch<KdbxBloc>()),
+            entry: entry,
           ));
 
-  final EntryViewModel entry;
+  final KdbxEntry entry;
 
   @override
   _EntryDetailsScreenState createState() => _EntryDetailsScreenState();
@@ -71,19 +71,20 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
         StreamSubscriberMixin<EntryDetailsScreen>,
         KdbxObjectSavableStateMixin<EntryDetailsScreen> {
   @override
-  KdbxFile get file => widget.entry.entry.file;
+  KdbxFile get file => widget.entry.file;
   @override
-  Changeable get kdbxObject => widget.entry.entry;
+  Changeable get kdbxObject => widget.entry;
   @override
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final env = Provider.of<Env>(context);
-    final entry = widget.entry.entry;
+    final vm = EntryViewModel(widget.entry, context.watch<KdbxBloc>());
+    final entry = widget.entry;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.entry.label),
+        title: Text(vm.label),
         actions: <Widget>[
           ...?!isDirty
               ? null
@@ -140,7 +141,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
         child: Form(
           key: formKey,
           child: EntryDetails(
-            entry: widget.entry,
+            entry: vm,
             onSavedPressed: !isDirty && !entry.isDirty ? null : saveCallback,
           ),
           onChanged: () {
@@ -343,7 +344,6 @@ class _EntryDetailsState extends State<EntryDetails>
 
   @override
   Widget build(BuildContext context) {
-    final appData = Provider.of<AppData>(context);
     final commonFields = Provider.of<CommonFields>(context);
     final vm = widget.entry;
     final entry = widget.entry.entry;

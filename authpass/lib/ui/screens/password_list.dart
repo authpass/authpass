@@ -35,9 +35,10 @@ import 'package:rxdart/rxdart.dart';
 
 final _logger = Logger('password_list');
 
-class EntryViewModel {
+class EntryViewModel implements Comparable<EntryViewModel> {
   EntryViewModel(this.entry, this.kdbxBloc)
       : label = EntryFormatUtils.getLabel(entry),
+        _labelComparable = EntryFormatUtils.getLabel(entry).toLowerCase(),
         groupNames = _createGroupNames(entry.parent),
         fileColor = kdbxBloc.fileForKdbxFile(entry.file).openedFile.color;
 
@@ -48,6 +49,7 @@ class EntryViewModel {
   String _website;
   String get website => _website ??= _normalizeUrl();
   final String label;
+  final String _labelComparable;
   final List<String> groupNames;
   final Color fileColor;
 
@@ -77,6 +79,20 @@ class EntryViewModel {
       return null;
     }
   }
+
+  @override
+  int compareTo(EntryViewModel other) {
+    if (entry == other.entry) {
+      return 0;
+    }
+    return _labelComparable
+        .compareTo(other._labelComparable)
+        .unlessZero(() => entry.uuid.uuid.compareTo(other.entry.uuid.uuid));
+  }
+}
+
+extension on int {
+  int unlessZero(int Function() cb) => this == 0 ? cb() : this;
 }
 
 class PasswordList extends StatelessWidget {
@@ -336,8 +352,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         _groupFilter
             .getEntries(widget.openedKdbxFiles)
             .map<EntryViewModel>((e) => EntryViewModel(e, widget.kdbxBloc)),
-        (EntryViewModel a, EntryViewModel b) =>
-            a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+        (EntryViewModel a, EntryViewModel b) => a.compareTo(b));
 //    final allEntries = _groupFilter
 //        .getEntries(widget.openedKdbxFiles)
 //        .map((e) => EntryViewModel(e, widget.kdbxBloc))
@@ -347,7 +362,8 @@ class _PasswordListContentState extends State<PasswordListContent>
 //        .sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
     _allEntries = allEntries.toList(growable: false);
     watch.stop();
-    _logger.finer('Rebuilding PasswordList. ${watch.elapsedMilliseconds}ms');
+    _logger.finer('Rebuilding PasswordList. (${_allEntries.length} entries)'
+        ' ${watch.elapsedMilliseconds}ms');
     setState(() {});
   }
 
@@ -1105,7 +1121,6 @@ class PasswordEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appData = Provider.of<AppData>(context);
     final commonFields = Provider.of<CommonFields>(context);
     final theme = Theme.of(context);
     final isDarkTheme = theme.brightness == Brightness.dark;
@@ -1116,7 +1131,7 @@ class PasswordEntryTile extends StatelessWidget {
     final size = iconTheme.size * 1.5;
     _logger
         .info('devicePixelRatio: ${MediaQuery.of(context).devicePixelRatio}');
-    ;
+
     final icon = EntryIcon(
       vm: vm,
       size: size,
