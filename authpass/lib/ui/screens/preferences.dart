@@ -2,6 +2,7 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
+import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -85,6 +86,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
     }
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
+    final commonFields = context.watch<CommonFields>();
     final locales = {
       null: loc.preferenceSystemDefault,
       'de': 'Deutsch', // NON-NLS
@@ -219,6 +221,20 @@ class _PreferencesBodyState extends State<PreferencesBody>
             await _appDataBloc
                 .update((builder, data) => builder.localeOverride = result);
           },
+        ),
+        CheckboxListTile(
+          value: _appData.fetchWebsiteIcons,
+          title: const Text('Dynamically load Icons'),
+          subtitle: Text(
+              'Will make http requests with the value in "${commonFields.url.displayName}" '
+              'field to load website icons.'),
+          isThreeLine: true,
+          onChanged: (value) {
+            _logger.fine('Changed to $value');
+            _appDataBloc
+                .update((builder, data) => builder.fetchWebsiteIcons = value);
+          },
+          tristate: true,
         ),
       ],
     );

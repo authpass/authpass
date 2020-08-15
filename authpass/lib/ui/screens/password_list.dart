@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
@@ -19,6 +20,7 @@ import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,14 +41,42 @@ class EntryViewModel {
         groupNames = _createGroupNames(entry.parent),
         fileColor = kdbxBloc.fileForKdbxFile(entry.file).openedFile.color;
 
+  static final websiteKey = KdbxKey(CommonFields.urlFieldName);
+
   final KdbxBloc kdbxBloc;
   final KdbxEntry entry;
+  String _website;
+  String get website => _website ??= _normalizeUrl();
   final String label;
   final List<String> groupNames;
   final Color fileColor;
 
   static List<String> _createGroupNames(KdbxGroup group) =>
       group.breadcrumbs.map((e) => e.name.get()).toList();
+
+  String _normalizeUrl() {
+    final url = entry.getString(websiteKey)?.getText()?.trim();
+    if (url == null || url.isEmpty) {
+      return null;
+    }
+    try {
+      var urlToParse = url;
+      if (!url.contains('//')) {
+        urlToParse = 'http://$url';
+      }
+      final parsed = Uri.parse(urlToParse);
+      var ret = parsed;
+      if (!parsed.hasScheme) {
+        ret = parsed.replace(scheme: 'https');
+      }
+      final resolved = ret.resolve('/');
+      _logger
+          .finer('url $url ($parsed) with scheme $ret resolved to $resolved');
+      return resolved.toString();
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class PasswordList extends StatelessWidget {
@@ -1059,8 +1089,23 @@ class PasswordEntryTile extends StatelessWidget {
   final String filterQuery;
   final VoidCallback onTap;
 
+  Widget _defaultIcon(Color fgColor, ThemeData theme, double size) {
+    return vm.entry.customIcon?.let((customIcon) => Image.memory(
+              customIcon.data,
+              width: size,
+              height: size,
+              fit: BoxFit.contain,
+            )) ??
+        Icon(
+          PredefinedIcons.iconFor(vm.entry.icon.get()),
+          color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
+          size: size,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final commonFields = Provider.of<CommonFields>(context);
     final theme = Theme.of(context);
     final isDarkTheme = theme.brightness == Brightness.dark;
@@ -1068,16 +1113,15 @@ class PasswordEntryTile extends StatelessWidget {
         ? isDarkTheme ? theme.primaryColorLight : theme.primaryColorDark
         : null;
     final iconTheme = IconTheme.of(context);
-    final icon = vm.entry.customIcon?.let((customIcon) => Image.memory(
-              customIcon.data,
-              width: iconTheme.size,
-              height: iconTheme.size,
-              fit: BoxFit.contain,
-            )) ??
-        Icon(
-          PredefinedIcons.iconFor(vm.entry.icon.get()),
-          color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
-        );
+    final size = iconTheme.size * 1.5;
+    _logger
+        .info('devicePixelRatio: ${MediaQuery.of(context).devicePixelRatio}');
+    ;
+    final icon = EntryIcon(
+      vm: vm,
+      size: size,
+      fallback: (context) => _defaultIcon(fgColor, theme, size),
+    );
 
     return InkWell(
       onTap: onTap,
@@ -1168,5 +1212,45 @@ class PasswordEntryTile extends StatelessWidget {
       spans.add(TextSpan(text: text.substring(previousMatchEnd)));
     }
     return TextSpan(children: spans);
+  }
+}
+
+class EntryIcon extends StatelessWidget {
+  const EntryIcon({
+    Key key,
+    @required this.vm,
+    @required this.fallback,
+    @required this.size,
+  })  : assert(vm != null),
+        assert(fallback != null),
+        assert(size != null),
+        super(key: key);
+
+  final EntryViewModel vm;
+  final double size;
+  final Widget Function(BuildContext context) fallback;
+
+  @override
+  Widget build(BuildContext context) {
+    final appData = context.watch<AppData>();
+    if (!appData.fetchWebsiteIconsOrDefault) {
+      return fallback(context);
+    }
+
+    final url = vm.website;
+
+    if (url == null) {
+      return fallback(context);
+    }
+
+    return CachedNetworkImage(
+      width: size,
+      height: size,
+      imageUrl: Uri.parse('https://cloud.authpass.app/website/image')
+          .replace(queryParameters: <String, String>{'url': url}).toString(),
+      errorWidget: (context, _, dynamic __) {
+        return fallback(context);
+      },
+    );
   }
 }

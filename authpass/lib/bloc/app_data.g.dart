@@ -214,6 +214,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.localeOverride,
             specifiedType: const FullType(String)));
     }
+    if (object.fetchWebsiteIcons != null) {
+      result
+        ..add('fetchWebsiteIcons')
+        ..add(serializers.serialize(object.fetchWebsiteIcons,
+            specifiedType: const FullType(bool)));
+    }
     return result;
   }
 
@@ -280,6 +286,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'localeOverride':
           result.localeOverride = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'fetchWebsiteIcons':
+          result.fetchWebsiteIcons = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
       }
     }
@@ -507,6 +517,8 @@ class _$AppData extends AppData {
   final bool secureWindow;
   @override
   final String localeOverride;
+  @override
+  final bool fetchWebsiteIcons;
 
   factory _$AppData([void Function(AppDataBuilder) updates]) =>
       (new AppDataBuilder()..update(updates)).build();
@@ -523,7 +535,8 @@ class _$AppData extends AppData {
       this.diacOptIn,
       this.lastBuildId,
       this.secureWindow,
-      this.localeOverride})
+      this.localeOverride,
+      this.fetchWebsiteIcons})
       : super._() {
     if (previousFiles == null) {
       throw new BuiltValueNullFieldError('AppData', 'previousFiles');
@@ -557,7 +570,8 @@ class _$AppData extends AppData {
         diacOptIn == other.diacOptIn &&
         lastBuildId == other.lastBuildId &&
         secureWindow == other.secureWindow &&
-        localeOverride == other.localeOverride;
+        localeOverride == other.localeOverride &&
+        fetchWebsiteIcons == other.fetchWebsiteIcons;
   }
 
   @override
@@ -573,20 +587,23 @@ class _$AppData extends AppData {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc(0, previousFiles.hashCode),
-                                                passwordGeneratorLength
+                                                $jc(
+                                                    $jc(0,
+                                                        previousFiles.hashCode),
+                                                    passwordGeneratorLength
+                                                        .hashCode),
+                                                passwordGeneratorCharacterSets
                                                     .hashCode),
-                                            passwordGeneratorCharacterSets
-                                                .hashCode),
-                                        manualUserType.hashCode),
-                                    firstLaunchedAt.hashCode),
-                                theme.hashCode),
-                            themeVisualDensity.hashCode),
-                        themeFontSizeFactor.hashCode),
-                    diacOptIn.hashCode),
-                lastBuildId.hashCode),
-            secureWindow.hashCode),
-        localeOverride.hashCode));
+                                            manualUserType.hashCode),
+                                        firstLaunchedAt.hashCode),
+                                    theme.hashCode),
+                                themeVisualDensity.hashCode),
+                            themeFontSizeFactor.hashCode),
+                        diacOptIn.hashCode),
+                    lastBuildId.hashCode),
+                secureWindow.hashCode),
+            localeOverride.hashCode),
+        fetchWebsiteIcons.hashCode));
   }
 
   @override
@@ -604,7 +621,8 @@ class _$AppData extends AppData {
           ..add('diacOptIn', diacOptIn)
           ..add('lastBuildId', lastBuildId)
           ..add('secureWindow', secureWindow)
-          ..add('localeOverride', localeOverride))
+          ..add('localeOverride', localeOverride)
+          ..add('fetchWebsiteIcons', fetchWebsiteIcons))
         .toString();
   }
 }
@@ -671,6 +689,11 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set localeOverride(String localeOverride) =>
       _$this._localeOverride = localeOverride;
 
+  bool _fetchWebsiteIcons;
+  bool get fetchWebsiteIcons => _$this._fetchWebsiteIcons;
+  set fetchWebsiteIcons(bool fetchWebsiteIcons) =>
+      _$this._fetchWebsiteIcons = fetchWebsiteIcons;
+
   AppDataBuilder();
 
   AppDataBuilder get _$this {
@@ -688,6 +711,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _lastBuildId = _$v.lastBuildId;
       _secureWindow = _$v.secureWindow;
       _localeOverride = _$v.localeOverride;
+      _fetchWebsiteIcons = _$v.fetchWebsiteIcons;
       _$v = null;
     }
     return this;
@@ -724,7 +748,8 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               diacOptIn: diacOptIn,
               lastBuildId: lastBuildId,
               secureWindow: secureWindow,
-              localeOverride: localeOverride);
+              localeOverride: localeOverride,
+              fetchWebsiteIcons: fetchWebsiteIcons);
     } catch (_) {
       String _$failedField;
       try {

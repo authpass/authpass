@@ -211,6 +211,13 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   @nullable
   String get localeOverride;
 
+  /// whether to fetch icons for password entries with websites from
+  /// the internet, instead of showing kdbx icons.
+  /// (right now: off by default).
+  @nullable
+  bool get fetchWebsiteIcons;
+  bool get fetchWebsiteIconsOrDefault => fetchWebsiteIcons ?? false;
+
   @override
   Map<String, dynamic> toJson() =>
       serializers.serialize(this) as Map<String, dynamic>;

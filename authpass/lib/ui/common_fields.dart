@@ -79,7 +79,8 @@ class CommonFields {
 
   CommonField get title => _fieldByKeyString('Title');
 
-  CommonField get url => _fieldByKeyString('URL');
+  static const urlFieldName = 'URL';
+  CommonField get url => _fieldByKeyString(urlFieldName);
 
   CommonField get userName => _fieldByKeyString('UserName');
 
