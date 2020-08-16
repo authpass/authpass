@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:clock/clock.dart';
@@ -16,6 +17,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:quiver/check.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:http/http.dart' as http;
 
 part 'authpass_cloud_bloc.g.dart';
 
@@ -43,12 +45,14 @@ enum TokenStatus {
 }
 
 class AuthPassCloudBloc with ChangeNotifier {
-  AuthPassCloudBloc({@required this.featureFlags})
-      : assert(featureFlags != null) {
+  AuthPassCloudBloc({@required this.env, @required this.featureFlags})
+      : assert(env != null),
+        assert(featureFlags != null) {
     _logger.fine('Creating AuthPassCloudBloc with $featureFlags');
     _init();
   }
 
+  final Env env;
   final FeatureFlags featureFlags;
   HttpRequestSender _requestSender;
   AuthPassCloudClient _client;
@@ -161,7 +165,12 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   Future<AuthPassCloudClient> _getClient() async {
     return _client ??= await (() async {
-      _requestSender = HttpRequestSender();
+      final ai = await env.getAppInfo();
+      _requestSender = HttpRequestSender(
+          clientCreator: () => UserAgentClient(
+              '${ai.shortString} / ${AuthPassPlatform.operatingSystem} '
+              '(${AuthPassPlatform.operatingSystem})',
+              http.Client()));
       final baseUri = Uri.parse(featureFlags.authpassCloudUri);
       final client = AuthPassCloudClient(baseUri, _requestSender);
       final token = await _loadToken();

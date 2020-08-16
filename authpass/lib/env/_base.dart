@@ -31,6 +31,8 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   String get packageName;
 
   String get versionLabel => '$version+$buildNumber';
+
+  String get shortString => '$appName ($versionLabel)';
 }
 
 extension AppInfoDiac on AppInfo {

@@ -225,7 +225,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               return previous;
             }
 //            previous?.dispose();
-            return AuthPassCloudBloc(featureFlags: featureFlags);
+            return AuthPassCloudBloc(
+              env: _deps.env,
+              featureFlags: featureFlags,
+            );
           },
           dispose: (_, prev) {
             prev.dispose();
