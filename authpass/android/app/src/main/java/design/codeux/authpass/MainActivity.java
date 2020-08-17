@@ -1,7 +1,11 @@
 package design.codeux.authpass;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.android.SplashScreen;
@@ -13,10 +17,16 @@ public class MainActivity extends FlutterFragmentActivity {
     private static final String CHANNEL = "app.authpass/misc";
     private static final String TAG = "MainActivity";
 
+    private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Intent intent = getIntent();
+        logger.debug("onCreate " + intent);
+        if (getIntent() != null) {
+            logger.debug("onCreate Intent extras: " + getIntent().getExtras());
+        }
     }
 
     @Override

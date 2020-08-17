@@ -94,7 +94,7 @@ class Analytics {
       }
       _gaQ.clear();
     } else {
-      _logger.info('No analyics Id defined. Not tracking anyting.');
+      _logger.info('No analytics Id defined. Not tracking anything.');
     }
 
     _logger.finest('Registering analytics tracker.');
@@ -266,6 +266,17 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
   void trackGroupCreate({String category = 'group'});
+
+  void trackAutofillFilter({
+    @required String filter,
+    String category = 'autofill',
+    String action = 'filter',
+    @required int value,
+  });
+  void trackAutofillSelect({
+    String category = 'autofill',
+    String action = 'select',
+  });
 
   void trackTryUnlock({
     @required TryUnlockResult action,

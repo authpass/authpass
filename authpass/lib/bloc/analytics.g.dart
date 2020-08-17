@@ -97,6 +97,23 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackGroupCreate({String category = 'group'}) =>
       trackEvent('groupCreate', <String, dynamic>{'category': category});
   @override
+  void trackAutofillFilter(
+          {String filter,
+          String category = 'autofill',
+          String action = 'filter',
+          int value}) =>
+      trackEvent('autofillFilter', <String, dynamic>{
+        'filter': filter,
+        'category': category,
+        'action': action,
+        'value': value
+      });
+  @override
+  void trackAutofillSelect(
+          {String category = 'autofill', String action = 'select'}) =>
+      trackEvent('autofillSelect',
+          <String, dynamic>{'category': category, 'action': action});
+  @override
   void trackTryUnlock(
           {TryUnlockResult action,
           String ext,

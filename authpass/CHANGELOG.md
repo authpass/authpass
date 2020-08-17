@@ -1,7 +1,8 @@
 # Unreleased
 
 * Show custom icons for passwords and groups #68
-* Android: Fix autofill error unsupported errors on devices prior to Android Oreo (8.0)
+* Android: Improved autofill (automatically filter by app or web domain).
+* Android: Fix autofill error unsupported errors on devices prior to Android Oreo (8.0).
 
 # 1.7.3
 

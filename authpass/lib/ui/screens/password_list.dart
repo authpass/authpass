@@ -22,6 +22,7 @@ import 'package:autofill_service/autofill_service.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diac_client/diac_client.dart';
+import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -186,6 +187,8 @@ class PasswordListContent extends StatefulWidget {
         final password = entry.getString(cf.password.key)?.getText();
         AutofillService().resultWithDataset(
             label: entry.label, username: username, password: password);
+        // not sure if this actually works.
+        context?.read<Analytics>()?.events?.trackAutofillSelect();
         return;
       }
     }
@@ -332,6 +335,9 @@ class _PasswordListContentState extends State<PasswordListContent>
 //          .toList();
   List<EntryViewModel> _allEntries;
 
+  /// on android while requesting autofill.
+  AutofillMetadata _autofillMetadata;
+
 //  final _isolateRunner = IsolateRunner.spawn();
 
   @override
@@ -344,6 +350,31 @@ class _PasswordListContentState extends State<PasswordListContent>
     WidgetsBinding.instance.addObserver(this);
     _updateAllEntries();
     _groupFilterNotifier.addListener(_updateAllEntries);
+    _updateAutofillMetadata();
+  }
+
+  void _updateAutofillMetadata() {
+    if (widget.isAutofillSelector) {
+      AutofillService().getAutofillMetadata().then((value) {
+        if (_autofillMetadata == value || !mounted) {
+          return;
+        }
+        setState(() {
+          _autofillMetadata = value;
+        });
+        final val = value?.searchTerm?.let((term) {
+              _filterTextEditingController.text = term;
+              _filterTextEditingController.selection =
+                  TextSelection(baseOffset: 0, extentOffset: term.length);
+              return _updateFilterQuery(term);
+            }) ??
+            0;
+        context?.read<Analytics>()?.events?.trackAutofillFilter(
+              filter: '${value?.searchTerm?.isNotEmpty}',
+              value: val,
+            );
+      });
+    }
   }
 
   void _updateAllEntries() {
@@ -653,23 +684,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           controller: _filterTextEditingController,
           onChanged: (newQuery) async {
             _logger.info('query changed to $newQuery');
-            final entries = PasswordListFilterIsolateRunner.filterEntries(
-                _allEntries, newQuery);
-            setState(() {
-              _filterQuery = newQuery;
-              _filteredEntries = entries;
-              if (_filteredEntries.isNotEmpty &&
-                  (widget.selectedEntry == null ||
-                      !_filteredEntries.contains(widget.selectedEntry))) {
-                widget.onEntrySelected(context, _filteredEntries.first.entry,
-                    EntrySelectionType.passiveHighlight);
-//                  // TODO this looks a bit like a workaround. But on MacOS we lose focus when
-//                  //      we show another password entry.
-//                  WidgetsBinding.instance.addPostFrameCallback((_) {
-//                    _filterFocusNode.requestFocus();
-//                  });
-              }
-            });
+            _updateFilterQuery(newQuery);
           },
           autofocus: true,
           decoration: InputDecoration(
@@ -680,6 +695,32 @@ class _PasswordListContentState extends State<PasswordListContent>
         ),
       ),
     );
+  }
+
+  int _updateFilterQuery(String newQuery) {
+    final entries =
+        PasswordListFilterIsolateRunner.filterEntries(_allEntries, newQuery);
+    if (!mounted) {
+      _logger.severe('No longer mounted after updating filter query.', null,
+          StackTrace.current);
+      return 0;
+    }
+    setState(() {
+      _filterQuery = newQuery;
+      _filteredEntries = entries;
+      if (_filteredEntries.isNotEmpty &&
+          (widget.selectedEntry == null ||
+              !_filteredEntries.contains(widget.selectedEntry))) {
+        widget.onEntrySelected(context, _filteredEntries.first.entry,
+            EntrySelectionType.passiveHighlight);
+//                  // TODO this looks a bit like a workaround. But on MacOS we lose focus when
+//                  //      we show another password entry.
+//                  WidgetsBinding.instance.addPostFrameCallback((_) {
+//                    _filterFocusNode.requestFocus();
+//                  });
+      }
+    });
+    return entries.length;
   }
 
   List<Widget> _buildGroupFilterPrefix() {
@@ -704,16 +745,36 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   List<Widget> _buildAutofillListPrefix() {
     if (!widget.isAutofillSelector) {
+      _logger.info(
+          'not autofill: ${WidgetsBinding.instance.window.defaultRouteName}');
       return null;
     }
-    return const [
+
+    final info = _autofillMetadata?.let((metadata) {
+      final searchTerm = metadata.searchTerm;
+      if (searchTerm != null && searchTerm == _filterQuery) {
+        return [
+          const TextSpan(text: '\nFilter: '),
+          TextSpan(
+              text: searchTerm,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+        ];
+      }
+    });
+    return [
       Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Card(
           color: Colors.lightGreen,
           child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Select password entry for autofill.'),
+            padding: const EdgeInsets.all(8.0),
+            child: Text.rich(
+              TextSpan(
+                text: 'Select password entry for autofill.',
+                children: info,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ),
@@ -876,7 +937,9 @@ class _PasswordListContentState extends State<PasswordListContent>
                 },
               ),
             ),
-      floatingActionButton: _allEntries.isEmpty || _filterQuery != null
+      floatingActionButton: _allEntries.isEmpty ||
+              _filterQuery != null ||
+              _autofillMetadata != null
           ? null
           : kdbxBloc.openedFiles.length == 1 || _groupFilter.groups.length == 1
               ? FloatingActionButton(
@@ -1268,4 +1331,10 @@ class EntryIcon extends StatelessWidget {
       },
     );
   }
+}
+
+extension on AutofillMetadata {
+  String get searchTerm =>
+      webDomains?.firstOrNull?.domain ??
+      packageNames.where((element) => element != 'android').firstOrNull;
 }

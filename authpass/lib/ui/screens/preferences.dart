@@ -26,7 +26,9 @@ class PreferencesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).preferenceTitle),
       ),
-      body: PreferencesBody(),
+      body: Scrollbar(
+        child: SingleChildScrollView(child: PreferencesBody()),
+      ),
     );
   }
 }
