@@ -14,6 +14,7 @@ import 'package:authpass/ui/screens/password_list_drawer.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
@@ -73,8 +74,8 @@ class EntryViewModel implements Comparable<EntryViewModel> {
         ret = parsed.replace(scheme: 'https');
       }
       final resolved = ret.resolve('/');
-      _logger
-          .finer('url $url ($parsed) with scheme $ret resolved to $resolved');
+//      _logger
+//          .finer('url $url ($parsed) with scheme $ret resolved to $resolved');
       return resolved.toString();
     } catch (e) {
       return null;
@@ -1322,6 +1323,7 @@ class EntryIcon extends StatelessWidget {
     }
 
     return CachedNetworkImage(
+      cacheManager: context.watch<AuthPassCacheManager>(),
       width: size,
       height: size,
       imageUrl: Uri.parse('https://cloud.authpass.app/website/image')

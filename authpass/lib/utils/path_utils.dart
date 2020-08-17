@@ -17,6 +17,10 @@ class PathUtils {
   static final Completer<bool> runAppFinished = Completer<bool>();
   static Future<bool> get waitForRunAppFinished => runAppFinished.future;
 
+  Future<Directory> getTemporaryDirectory() async {
+    return _namespaced(await getTemporaryDirectory());
+  }
+
   Future<Directory> getAppDataDirectory() async {
     if (AuthPassPlatform.isWeb) {
       throw UnsupportedError('Not supported on web.');
@@ -37,6 +41,8 @@ class PathUtils {
     }
     return Directory(path.join(base.path, namespace));
   }
+
+  String get namespace => Env.value?.storageNamespace;
 
   Future<Directory> getLogDirectory() async {
     return Directory(

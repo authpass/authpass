@@ -13,6 +13,7 @@ import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
@@ -204,6 +205,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         Provider<Analytics>.value(value: _deps.analytics),
         Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
         Provider<AppDataBloc>.value(value: _deps.appDataBloc),
+        Provider<AuthPassCacheManager>(
+          create: (context) => AuthPassCacheManager(pathUtils: PathUtils()),
+          dispose: (context, obj) => obj.store.dispose(),
+        ),
         StreamProvider<AppData>(
           create: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps.appDataBloc.store.cachedValue,
