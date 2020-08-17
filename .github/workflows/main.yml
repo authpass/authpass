@@ -9,7 +9,19 @@ jobs:
 
     strategy:
       matrix:
-        flavor: ['playstoredev', 'samsungapps', 'sideload', 'huawei']
+        flavor: ['playstoredev', 'samsungapps', 'sideload', 'huawei', 'amazon']
+        shouldRelease:
+          - ${{ contains(github.ref, 'stable') || startsWith(github.ref, 'refs/heads/v') }}
+        isMaster:
+          - ${{ contains(github.ref, 'master') }}
+        exclude:
+          - shouldRelease: false
+            flavor: amazon
+          - shouldRelease: false
+            flavor: huawei
+          - shouldRelease: false
+            flavor: samsungapps
+
 
       fail-fast: true
 
@@ -18,6 +30,7 @@ jobs:
     - name: Checkout submodules
       shell: bash
       run: |
+        echo "shouldRelease: ${{matrix.shouldRelease}} - isMaster: ${{matrix.isMaster}} - ref: ${{github.ref}}"
         auth_header="$(git config --local --get http.https://github.com/.extraheader)"
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
