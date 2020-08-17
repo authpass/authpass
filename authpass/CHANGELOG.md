@@ -1,6 +1,7 @@
-# Unreleased
+# 1.7.4
 
 * Show custom icons for passwords and groups #68
+* Desktop: Fixed wrong locale.
 * Android: Improved autofill (automatically filter by app or web domain).
 * Android: Fix autofill error unsupported errors on devices prior to Android Oreo (8.0).
 
