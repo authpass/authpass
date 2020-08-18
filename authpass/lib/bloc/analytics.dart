@@ -267,6 +267,17 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
   void trackGroupCreate({String category = 'group'});
 
+  void trackPreferences({
+    @required String setting,
+    @required String to,
+  }) =>
+      _trackPreferences(action: setting, to: to);
+  void _trackPreferences({
+    @required String action,
+    @required String to,
+    String category = 'preferences',
+  });
+
   void trackAutofillFilter({
     @required String filter,
     String category = 'autofill',
