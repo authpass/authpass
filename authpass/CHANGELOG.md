@@ -1,6 +1,8 @@
 # 1.7.4
 
 * Show custom icons for passwords and groups #68
+* Show encryption options in file options, allow upgrading to kdbx 4.
+* By default create kdbx v4 files (instead of kdbx 3.1)
 * Desktop: Fixed wrong locale.
 * Android: Improved autofill (automatically filter by app or web domain).
 * Android: Fix autofill error unsupported errors on devices prior to Android Oreo (8.0).

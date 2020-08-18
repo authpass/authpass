@@ -20,6 +20,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart'
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_colorpicker/block_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
@@ -144,116 +145,160 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     return ProgressOverlay(
       task: task,
       child: Center(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          constraints: const BoxConstraints(maxWidth: 320),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                title: Text(databaseName),
-                trailing: const Icon(Icons.edit),
-                onTap: () async {
-                  final newName = await SimplePromptDialog(
-                    title: 'Enter database name',
-                    initialValue: databaseName,
-                  ).show(context);
-                  if (newName == null) {
-                    _logger.fine('changing database name was canceled.');
-                    return;
-                  }
-                  setState(() {
-                    _file.kdbxFile.body.meta.databaseName.set(newName);
-                  });
-                  await asyncRunTask((progress) async {
-                    await Future<int>.delayed(
-                        const Duration(milliseconds: 100));
-                    await _kdbxBloc.saveAs(
-                      _file,
-                      _file.fileSource.copyWithDatabaseName(newName),
-                    );
-                  }, label: 'Saving');
-                },
-              ),
-              ListTile(
-                title: const Text('Path'),
-                subtitle: Text(_file.fileSource.displayPath),
-                trailing: PopupMenuButton<VoidCallback>(
-                  onSelected: (action) => action(),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: const ListTile(
-                        leading: Icon(FontAwesomeIcons.hdd),
-                        title: Text('Save As...'),
-                        subtitle: Text('Local File'),
-                      ),
-                      value: () {
-                        _saveAsLocalFile();
-                      },
-                    ),
-                    ...cloudStorageBloc.availableCloudStorage.map(
-                      (cs) => PopupMenuItem(
-                        child: ListTile(
-                          leading: Icon(cs.displayIcon),
-                          title: const Text('Save As...'),
-                          subtitle: Text('${cs.displayName}'),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            constraints: const BoxConstraints(maxWidth: 320),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text(databaseName),
+                  trailing: const Icon(Icons.edit),
+                  onTap: () async {
+                    final newName = await SimplePromptDialog(
+                      title: 'Enter database name',
+                      initialValue: databaseName,
+                    ).show(context);
+                    if (newName == null) {
+                      _logger.fine('changing database name was canceled.');
+                      return;
+                    }
+                    setState(() {
+                      _file.kdbxFile.body.meta.databaseName.set(newName);
+                    });
+                    await asyncRunTask((progress) async {
+                      await Future<int>.delayed(
+                          const Duration(milliseconds: 100));
+                      await _kdbxBloc.saveAs(
+                        _file,
+                        _file.fileSource.copyWithDatabaseName(newName),
+                      );
+                    }, label: 'Saving');
+                  },
+                ),
+                ListTile(
+                  title: const Text('Path'),
+                  subtitle: Text(_file.fileSource.displayPath),
+                  trailing: PopupMenuButton<VoidCallback>(
+                    onSelected: (action) => action(),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: const ListTile(
+                          leading: Icon(FontAwesomeIcons.hdd),
+                          title: Text('Save As...'),
+                          subtitle: Text('Local File'),
                         ),
                         value: () {
-                          _saveAsCloudStorage(cs);
+                          _saveAsLocalFile();
                         },
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                title: const Text('Color'),
-                subtitle:
-                    const Text('Select a color to distinguish beween files.'),
-                trailing:
-                    CircleColor(color: _file.openedFile.color, circleSize: 24),
-                onTap: () async {
-                  final newColor = await ColorPickerDialog(
-                    initialColor: _file.openedFile.color,
-                  ).show(context);
-                  _logger.fine('Selected color $newColor');
-                  _file = await _kdbxBloc.updateOpenedFile(
-                      _file, (b) => b.colorCode = newColor?.value);
-                  setState(() {});
-                },
-              ),
-              ButtonBar(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('Close/Lock'),
-                    onPressed: () async {
-                      await _kdbxBloc.close(_file.kdbxFile);
-                      Navigator.of(context).pop();
-                    },
+                      ...cloudStorageBloc.availableCloudStorage.map(
+                        (cs) => PopupMenuItem(
+                          child: ListTile(
+                            leading: Icon(cs.displayIcon),
+                            title: const Text('Save As...'),
+                            subtitle: Text('${cs.displayName}'),
+                          ),
+                          value: () {
+                            _saveAsCloudStorage(cs);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  ...?!env.isDebug
-                      ? null
-                      : [
-                          FlatButton(
-                            child: Text(
-                                'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
-                            onPressed: () async {
-                              await Clipboard.setData(ClipboardData(
-                                  text: _file.kdbxFile.body
-                                      .toXml()
-                                      .toXmlString(pretty: true)));
-                            },
-                          )
-                        ],
-                ],
-              )
-            ],
+                ),
+                ListTile(
+                  title: const Text('Color'),
+                  subtitle:
+                      const Text('Select a color to distinguish beween files.'),
+                  trailing: CircleColor(
+                      color: _file.openedFile.color, circleSize: 24),
+                  onTap: () async {
+                    final newColor = await ColorPickerDialog(
+                      initialColor: _file.openedFile.color,
+                    ).show(context);
+                    _logger.fine('Selected color $newColor');
+                    _file = await _kdbxBloc.updateOpenedFile(
+                        _file, (b) => b.colorCode = newColor?.value);
+                    setState(() {});
+                  },
+                ),
+                ListTile(
+                  title: const Text('Kdbx File Version'),
+                  subtitle: Text('${_file.kdbxFile.header.version} '
+                      '(${_debugKdfType(_file.kdbxFile)})'),
+                  trailing: _file.kdbxFile.header.version < KdbxVersion.V4
+                      ? IconButton(
+                          icon: const Icon(Icons.upgrade),
+                          tooltip: 'Upgrade to ${KdbxVersion.V4}',
+                          onPressed: asyncTaskCallback((progress) async {
+                            _file.kdbxFile.upgrade(KdbxVersion.V4.major);
+                            await _file.kdbxFile.save();
+                          }),
+                        )
+                      : null,
+                ),
+                ButtonBar(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    FlatButton(
+                      child: const Text('Close/Lock'),
+                      onPressed: () async {
+                        await _kdbxBloc.close(_file.kdbxFile);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ...?!env.isDebug
+                        ? null
+                        : [
+                            FlatButton(
+                              child: Text(
+                                  'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
+                              onPressed: () async {
+                                await Clipboard.setData(ClipboardData(
+                                    text: _file.kdbxFile.body
+                                        .toXml()
+                                        .toXmlString(pretty: true)));
+                              },
+                            )
+                          ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  String _debugKdfType(KdbxFile file) {
+    final cipher = file.header.cipher;
+    final cipherName = cipher.toString().split('.').last;
+    final innerEncryption =
+        file.header.innerRandomStreamEncryption.toString().split('.').last;
+    var ret = 'Cipher: $cipherName, Inner: $innerEncryption';
+    if (file.header.version < KdbxVersion.V4) {
+      return '$ret, Kdf: AES, rounds: ${file.header.v3KdfTransformRounds}';
+    } else {
+      // kdbx 4
+      final kdf = file.header.readKdfParameters;
+      final kdfType = KeyEncrypterKdf.kdfTypeFor(kdf);
+      switch (kdfType) {
+        case KdfType.Aes:
+          ret += ', Kdf: AES, rounds: ${KdfField.rounds.read(kdf)}';
+          break;
+        case KdfType.Argon2:
+          final p = KdfField.parallelism.read(kdf);
+          final m = KdfField.memory.read(kdf);
+          final i = KdfField.iterations.read(kdf);
+          ret += ', Kdf: Argon2, parallelism: $p, memory: $m, iterations: $i';
+          break;
+      }
+    }
+    return ret;
   }
 
   Future<void> _saveAsLocalFile() async {

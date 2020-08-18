@@ -733,9 +733,11 @@ class KdbxBloc {
     _logger.finer('Closing all files, clearing quick unlock.');
     analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
     _openedFiles.value = OpenedKdbxFiles({});
-    // clear all quick unlock data.
-    _openedFilesQuickUnlock.clear();
-    quickUnlockStorage.updateQuickUnlockFile({});
+    if (_openedFilesQuickUnlock.isNotEmpty) {
+      // clear all quick unlock data.
+      _openedFilesQuickUnlock.clear();
+      quickUnlockStorage.updateQuickUnlockFile({});
+    }
   }
 
   static Future<ReadFileResponse> staticReadKdbxFile(
@@ -873,7 +875,21 @@ class KdbxBloc {
           .where((entry) => entry.key != oldSource)),
       newFile.fileSource: newFile,
     });
-    await _updateQuickUnlockStore();
+    // TODO also do not update quick unlock if this file is not in quick unlock.
+    if (_openedFilesQuickUnlock.isNotEmpty) {
+      try {
+        await _updateQuickUnlockStore();
+      } on AuthException catch (e, stackTrace) {
+        if (e.code == AuthExceptionCode.userCanceled) {
+          _logger.warning(
+              'User cancelled saving quick unlock. ignoring for now.',
+              e,
+              stackTrace);
+        } else {
+          rethrow;
+        }
+      }
+    }
     return newFile;
   }
 
