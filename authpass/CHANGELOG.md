@@ -6,6 +6,7 @@
 * Desktop: Fixed wrong locale.
 * Android: Improved autofill (automatically filter by app or web domain).
 * Android: Fix autofill error unsupported errors on devices prior to Android Oreo (8.0).
+* Android/iOS: Use new FilePickerWritable API to correctly clean up temporary files.
 
 # 1.7.3
 

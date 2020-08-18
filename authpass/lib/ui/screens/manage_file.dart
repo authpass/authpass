@@ -306,19 +306,25 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
       final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
           '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx',
           (tempFile) async {
-        await tempFile.writeAsString('<placeholder>');
-        return await FilePickerWritable().openFilePickerForCreate(tempFile);
+        return await FilePickerWritable().openFileForCreate(
+          fileName:
+              '${path.basenameWithoutExtension(_file.fileSource.displayPath)}.kdbx',
+          writer: (file) async {
+            _logger.fine('Writing placeholder into $file');
+            await file.writeAsString('<placeholder>');
+          },
+        );
       });
 
       if (fileInfo == null) {
         _logger.info('User cancelled file picker.');
         return;
       }
-      _logger.fine('Writing into ${fileInfo.uri} / ${fileInfo.file}');
+      _logger.fine('writing to ${fileInfo.uri} / ${fileInfo.fileName}');
       final newFile = await _kdbxBloc.saveAs(
           _file,
           FileSourceLocal(
-            fileInfo.file,
+            File(fileInfo.fileName),
             databaseName: _file.fileSource.displayName,
             uuid: AppDataBloc.createUuid(),
             filePickerIdentifier: fileInfo.toJsonString(),

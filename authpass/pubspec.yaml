@@ -30,8 +30,8 @@ dependencies:
 
   synchronized: ^2.2.0+1
 #  file_picker: ^1.6.2
-  file_picker_writable: 1.1.1+1
-#  file_picker_writable:
+  file_picker_writable: ^1.2.0-dev.1
+  #  file_picker_writable:
 #    path: /Users/herbert/dev/file_picker_writable
 #  file_picker_writable:
 #    git:

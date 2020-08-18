@@ -538,12 +538,12 @@ class _EntryDetailsState extends State<EntryDetails>
 
   Future<void> _attachFile() async {
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
-      final fileInfo = await FilePickerWritable().openFilePicker();
-      if (fileInfo != null) {
-        final fileName = fileInfo.fileName ?? fileInfo.file.path;
-        final bytes = await fileInfo.file.readAsBytes();
+      await FilePickerWritable().openFile((fileInfo, file) async {
+        final fileName = fileInfo.fileName ?? file.path;
+        final bytes = await file.readAsBytes();
         await _attachFileContent(fileName, bytes);
-      }
+        return fileInfo;
+      });
     } else {
       final result = await showOpenPanel();
       if (!result.canceled) {
@@ -696,12 +696,12 @@ class AttachmentBottomSheet extends StatelessWidget {
             onTap: () async {
               analytics.events.trackAttachmentAction('saveToDevice');
               Navigator.of(context).pop();
-              final f = await PathUtils().saveToTempDirectory(
-                  attachment.value.value,
-                  dirPrefix: 'openbinary',
-                  fileName: attachment.key.key);
-              _logger.fine('Opening ${f.path}');
-              await FilePickerWritable().openFilePickerForCreate(f);
+              await FilePickerWritable().openFileForCreate(
+                  fileName: attachment.key.key,
+                  writer: (file) async {
+                    _logger.fine('Opening ${file.path}');
+                    await file.writeAsBytes(attachment.value.value);
+                  });
             },
           ),
         ListTile(

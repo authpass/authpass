@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
@@ -308,18 +309,19 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     onPressed: () async {
                       if (AuthPassPlatform.isIOS ||
                           AuthPassPlatform.isAndroid) {
-                        final fileInfo =
-                            await FilePickerWritable().openFilePicker();
-                        if (fileInfo != null) {
+                        await FilePickerWritable()
+                            .openFile((fileInfo, file) async {
                           await Navigator.of(context)
                               .push(CredentialsScreen.route(
                             FileSourceLocal(
-                              fileInfo.file,
+                              file,
                               uuid: AppDataBloc.createUuid(),
                               filePickerIdentifier: fileInfo.toJsonString(),
+                              initialCachedContent:
+                                  FileContent(await file.readAsBytes()),
                             ),
                           ));
-                        }
+                        });
 //                    } else if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
 //                      final path =
 //                          await FilePicker.getFilePath(type: FileType.any);
@@ -662,6 +664,39 @@ class CredentialsScreen extends StatefulWidget {
   _CredentialsScreenState createState() => _CredentialsScreenState();
 }
 
+abstract class KeyFile {
+  Future<Uint8List> readAsBytes();
+
+  String get displayName;
+}
+
+class KeyFileFile implements KeyFile {
+  KeyFileFile(this.file);
+
+  final File file;
+
+  @override
+  Future<Uint8List> readAsBytes() async {
+    return await file.readAsBytes();
+  }
+
+  @override
+  String get displayName => file.path;
+}
+
+class KeyFileInfo implements KeyFile {
+  KeyFileInfo({@required this.fileInfo, @required this.bytes});
+
+  final FileInfo fileInfo;
+  final Uint8List bytes;
+
+  @override
+  Future<Uint8List> readAsBytes() async => bytes;
+
+  @override
+  String get displayName => fileInfo.fileName;
+}
+
 class _CredentialsScreenState extends State<CredentialsScreen> {
   final _formKey = GlobalKey<FormState>();
   String _invalidPassword;
@@ -673,7 +708,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   bool _biometricQuickUnlockSupported = false;
   bool _biometricQuickUnlockActivated;
 
-  File _keyFile;
+  KeyFile _keyFile;
 
   @override
   void initState() {
@@ -753,19 +788,29 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       : FontAwesomeIcons.edit),
                   label: Text(_keyFile == null
                       ? 'Use Key File'
-                      : path.basename(_keyFile.path)),
+                      : path.basename(_keyFile.displayName)),
                   onPressed: () async {
                     _invalidPassword = null;
                     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
-                      final path = await FilePickerWritable().openFilePicker();
-                      setState(() {
-                        _keyFile = path == null ? null : path.file;
+                      final fileInfo = await FilePickerWritable()
+                          .openFile((fileInfo, file) async {
+                        final keyFile = KeyFileInfo(
+                            fileInfo: fileInfo,
+                            bytes: await file.readAsBytes());
+                        setState(() {
+//                          writeTe
+                          _keyFile = keyFile;
+                        });
+                        return fileInfo;
                       });
+                      if (fileInfo == null) {
+                        setState(() => _keyFile = null);
+                      }
                     } else {
                       final result = await showOpenPanel();
                       if (!result.canceled) {
                         setState(() {
-                          _keyFile = File(result.paths[0]);
+                          _keyFile = KeyFileFile(File(result.paths[0]));
                         });
                       } else {
                         setState(() {

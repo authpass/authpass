@@ -163,7 +163,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         AuthPassPlatform.isAndroid ||
         AuthPassPlatform.isMacOS) {
       _filePickerState = FilePickerWritable().init()
-        ..registerFileInfoHandler((fileInfo) {
+        ..registerFileOpenHandler((fileInfo, file) async {
           _logger.fine('got a new fileInfo: $fileInfo');
           final openRoute = () async {
             var i = 0;
@@ -177,12 +177,13 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             }
             await _navigatorKey.currentState
                 .push(CredentialsScreen.route(FileSourceLocal(
-              fileInfo.file,
+              file,
               uuid: AppDataBloc.createUuid(),
               filePickerIdentifier: fileInfo.toJsonString(),
+              initialCachedContent: FileContent(await file.readAsBytes()),
             )));
           };
-          openRoute();
+          await openRoute();
           return true;
         });
     }

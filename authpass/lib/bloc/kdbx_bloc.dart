@@ -148,7 +148,12 @@ class FileSourceLocal extends FileSource {
     @required String uuid,
     this.macOsSecureBookmark,
     this.filePickerIdentifier,
-  }) : super(databaseName: databaseName, uuid: uuid);
+    FileContent initialCachedContent,
+  }) : super(
+          databaseName: databaseName,
+          uuid: uuid,
+          initialCachedContent: initialCachedContent,
+        );
 
   final File file;
 
@@ -196,13 +201,16 @@ class FileSourceLocal extends FileSource {
         filePickerIdentifier != null) {
       final oldFileInfo = filePickerInfo;
       final identifier = oldFileInfo?.identifier ?? filePickerIdentifier;
-      final fileInfo =
-          await FilePickerWritable().readFileWithIdentifier(identifier);
-      _logger.finest('Got uri: ${fileInfo.uri}');
-      if (fileInfo.identifier != identifier) {
-        _logger.severe('Identifier changed. panic. $fileInfo vs $identifier');
-      }
-      return await cb(fileInfo.file);
+      return await FilePickerWritable().readFile(
+          identifier: identifier,
+          reader: (fileInfo, file) async {
+            _logger.finest('Got uri: ${fileInfo.uri}');
+            if (fileInfo.identifier != identifier) {
+              _logger.severe(
+                  'Identifier changed. panic. $fileInfo vs $identifier');
+            }
+            return await cb(file);
+          });
     } else if (AuthPassPlatform.isMacOS && macOsSecureBookmark != null) {
       final resolved =
           await SecureBookmarks().resolveBookmark(macOsSecureBookmark);
@@ -249,7 +257,8 @@ class FileSourceLocal extends FileSource {
     if (filePickerIdentifier != null) {
       _logger.finer('Writing into file with file picker.');
       final identifier = filePickerInfo?.identifier ?? filePickerIdentifier;
-      await createFileInNewTempDirectory(path.basename(displayPath), (f) async {
+      await createFileInNewTempDirectory('$displayNameFromPath.kdbx',
+          (f) async {
         await f.writeAsBytes(bytes, flush: true);
         final fileInfo =
             await FilePickerWritable().writeFileWithIdentifier(identifier, f);
@@ -266,6 +275,9 @@ class FileSourceLocal extends FileSource {
 
   static Future<T> createFileInNewTempDirectory<T>(
       String baseName, Future<T> Function(File tempFile) callback) async {
+    if (baseName.length > 30) {
+      baseName = baseName.substring(0, 30);
+    }
     final tempDirBase = await getTemporaryDirectory();
     final tempDir =
         Directory(path.join(tempDirBase.path, AppDataBloc.createUuid()));
@@ -822,7 +834,7 @@ class KdbxBloc {
   Future<Uint8List> _saveFileToBytes(KdbxFile file) async {
     final generator = file.body.meta.generator.get();
     if (generator == null || generator.isEmpty) {
-      file.body.meta.generator.set('AuthPass');
+      file.body.meta.generator.set('AuthPass (save)');
     }
     final saveCounter =
         file.body.meta.customData['codeux.design.authpass.save'] ?? '0';
