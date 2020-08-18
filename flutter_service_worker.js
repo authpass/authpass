@@ -6,7 +6,7 @@ const RESOURCES = {
   "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"main.dart.js": "92e879cf0c34d2ae7cd1b68652d5d043",
+"main.dart.js": "416893dabea903c42b5decdd21ec1001",
 "index.html": "5e77dbe07c6e53b56d12472982ef2f81",
 "/": "5e77dbe07c6e53b56d12472982ef2f81",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
