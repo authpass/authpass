@@ -235,7 +235,10 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           tooltip: 'Upgrade to ${KdbxVersion.V4}',
                           onPressed: asyncTaskCallback((progress) async {
                             _file.kdbxFile.upgrade(KdbxVersion.V4.major);
-                            await _file.kdbxFile.save();
+                            await _kdbxBloc.saveFile(_file.kdbxFile);
+                            Scaffold.of(context).showSnackBar(const SnackBar(
+                                content: Text(
+                                    'Successfully upgraded file and saved.')));
                           }),
                         )
                       : null,
