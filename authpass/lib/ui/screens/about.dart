@@ -71,7 +71,9 @@ class AuthPassAboutDialog extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Text(
-                loc.aboutLogFile(logFiles.first.absolute.path),
+                loc.aboutLogFile(logFiles.isEmpty
+                    ? 'No Log File?!'
+                    : logFiles.first.absolute.path),
                 style: Theme.of(context).textTheme.caption,
               ),
             ],

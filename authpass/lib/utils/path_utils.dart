@@ -6,7 +6,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 class PathUtils {
   factory PathUtils() => _instance;
@@ -18,7 +18,7 @@ class PathUtils {
   static Future<bool> get waitForRunAppFinished => runAppFinished.future;
 
   Future<Directory> getTemporaryDirectory() async {
-    return _namespaced(await getTemporaryDirectory());
+    return _namespaced(await path_provider.getTemporaryDirectory());
   }
 
   Future<Directory> getAppDataDirectory() async {
@@ -26,10 +26,11 @@ class PathUtils {
       throw UnsupportedError('Not supported on web.');
     }
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isMacOS) {
-      return _namespaced(await getApplicationSupportDirectory());
+      return _namespaced(await path_provider.getApplicationSupportDirectory());
     }
     if (AuthPassPlatform.isAndroid) {
-      return _namespaced(await getApplicationDocumentsDirectory());
+      return _namespaced(
+          await path_provider.getApplicationDocumentsDirectory());
     }
     return _namespaced(await _getDesktopDirectory());
   }
