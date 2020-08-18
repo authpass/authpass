@@ -97,8 +97,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackGroupCreate({String category = 'group'}) =>
       trackEvent('groupCreate', <String, dynamic>{'category': category});
   @override
-  void _trackPreferences(
-          {String action, String to, String category = 'preferences'}) =>
+  void _trackPreferences({String action, String to, String category}) =>
       trackEvent('preferences',
           <String, dynamic>{'action': action, 'to': to, 'category': category});
   @override

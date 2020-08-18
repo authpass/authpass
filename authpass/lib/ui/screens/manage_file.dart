@@ -159,6 +159,10 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     title: 'Enter database name',
                     initialValue: databaseName,
                   ).show(context);
+                  if (newName == null) {
+                    _logger.fine('changing database name was canceled.');
+                    return;
+                  }
                   setState(() {
                     _file.kdbxFile.body.meta.databaseName.set(newName);
                   });

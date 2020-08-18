@@ -638,8 +638,7 @@ class KdbxBloc {
     analytics.events.trackOpenFile(type: file.typeDebug);
     analytics.events.trackOpenFile2(
       generator: kdbxFile.body.meta.generator.get() ?? 'NULL',
-      version:
-          '${kdbxFile.header.versionMajor}.${kdbxFile.header.versionMinor}',
+      version: '${kdbxFile.header.version}',
     );
 
     if (addToQuickUnlock) {

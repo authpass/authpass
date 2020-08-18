@@ -271,11 +271,11 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     @required String setting,
     @required String to,
   }) =>
-      _trackPreferences(action: setting, to: to);
+      _trackPreferences(action: setting, to: to, category: 'preferences');
   void _trackPreferences({
     @required String action,
     @required String to,
-    String category = 'preferences',
+    String category,
   });
 
   void trackAutofillFilter({
