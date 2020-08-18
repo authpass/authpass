@@ -45,7 +45,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
         builder.element('d:resourcetype');
       });
     });
-    return builder.build();
+    return builder.buildDocument();
   }
 
   @override
