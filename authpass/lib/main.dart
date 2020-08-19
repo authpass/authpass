@@ -185,6 +185,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           };
           await openRoute();
           return true;
+        })
+        ..registerErrorEventHandler((errorEvent) async {
+          _logger.severe('Error received from file picker. $errorEvent');
+          Analytics.trackError('FilePickerWritable: $errorEvent', false);
+          return true;
         });
     }
   }
