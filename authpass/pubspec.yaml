@@ -175,10 +175,6 @@ dependencies:
       url: https://github.com/authpass/winsparkle_flutter.git
       ref: 2c56009666a2a8b6802a87a87e5135ed724edfc2
   
-  # WORKAROUND: Clipboard for linux did not work..
-  clipboard_plugintest:
-    path: ../deps/clipboard_plugintest
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

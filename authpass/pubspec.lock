@@ -257,13 +257,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.4"
-  clipboard_plugintest:
-    dependency: "direct main"
-    description:
-      path: "../deps/clipboard_plugintest"
-      relative: true
-    source: path
-    version: "0.0.1"
   clock:
     dependency: "direct main"
     description:
@@ -882,7 +875,7 @@ packages:
       name: path_provider_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   pedantic:
     dependency: "direct main"
     description:

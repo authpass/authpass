@@ -441,11 +441,34 @@ class _PasswordListContentState extends State<PasswordListContent>
           });
         });
       } else if (event.type == KeyboardShortcutType.moveUp) {
-        _selectNextEntry(-1);
+        if (!_isFocusInForeignTextField()) {
+          _selectNextEntry(-1);
+        }
       } else if (event.type == KeyboardShortcutType.moveDown) {
-        _selectNextEntry(1);
+        if (!_isFocusInForeignTextField()) {
+          _selectNextEntry(1);
+        }
+      } else if (event.type == KeyboardShortcutType.escape) {
+        if (!_isFocusInForeignTextField()) {
+          _cancelFilter();
+        }
       }
     }));
+  }
+
+  bool _isFocusInForeignTextField() {
+    final widget =
+        WidgetsBinding.instance.focusManager.primaryFocus?.context?.widget;
+    if (widget == null) {
+      return false;
+    }
+    if (widget is EditableText) {
+      if (widget.controller == _filterTextEditingController) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   void _selectNextEntry(int next) {
@@ -659,6 +682,13 @@ class _PasswordListContentState extends State<PasswordListContent>
     }
   }
 
+  void _cancelFilter() {
+    setState(() {
+      _filterQuery = null;
+      _filteredEntries = null;
+    });
+  }
+
   AppBar _buildFilterAppBar(BuildContext context) {
     final theme = filterAppBarTheme(context);
     return AppBar(
@@ -669,10 +699,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          setState(() {
-            _filterQuery = null;
-            _filteredEntries = null;
-          });
+          _cancelFilter();
         },
       ),
       title: Theme(

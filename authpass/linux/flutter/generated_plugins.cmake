@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  clipboard_plugintest
   argon2_ffi
   file_chooser
   biometric_storage

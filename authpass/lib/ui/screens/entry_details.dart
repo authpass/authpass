@@ -261,10 +261,25 @@ class _EntryDetailsState extends State<EntryDetails>
   void _initShortcutListener(
       KeyboardShortcutEvents events, CommonFields commonFields) {
     handleSubscription(events.shortcutEvents.listen((event) {
+      _logger.fine('shortcut event: $event //// ${event.type}');
       if (event.type == KeyboardShortcutType.copyPassword) {
+        final context = FocusManager.instance.primaryFocus?.context;
+        if (context != null) {
+          final entryFieldState =
+              context.findAncestorStateOfType<_EntryFieldState>();
+          if (entryFieldState != null) {
+            entryFieldState.copyValue();
+            return;
+          }
+          if (widget is EditableText) {
+            return;
+          }
+        }
         _copyField(commonFields.password);
       } else if (event.type == KeyboardShortcutType.copyUsername) {
         _copyField(commonFields.userName);
+      } else if (event.type == KeyboardShortcutType.escape) {
+        FocusManager.instance.primaryFocus?.unfocus();
       }
     }));
   }

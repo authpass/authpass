@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/platform.dart';
-import 'package:clipboard_plugintest/clipboard_plugintest.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -303,6 +302,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
     return AlertDialog(
       title: widget.title == null ? null : Text(widget.title),
       content: Container(
+        constraints: const BoxConstraints(minWidth: 400.0),
         child: Row(
           children: <Widget>[
             IconButton(
@@ -317,8 +317,10 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
                 controller: _controller,
                 decoration: InputDecoration(
                   labelText: widget.labelText,
-                  helperText: widget.helperText,
-                  helperMaxLines: 1,
+                  helperText: widget.helperText ??
+                      'Hint: If you need to paste, '
+                          'try the button to the left ;-)',
+                  helperMaxLines: 2,
                 ),
                 autofocus: true,
                 onEditingComplete: () {
@@ -348,8 +350,5 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
 }
 
 Future<String> _getClipboardText() async {
-  if (AuthPassPlatform.isLinux) {
-    return await ClipboardPlugintest.getData();
-  }
   return (await Clipboard.getData('text/plain'))?.text;
 }

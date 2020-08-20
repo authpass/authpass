@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -139,6 +140,24 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                 if (character == LogicalKeyboardKey.bracketRight) {
                   final t = context.read<AppDataBloc>().updateNextTheme();
                   _logger.fine('Switching theme to $t');
+                } else if (character == LogicalKeyboardKey.keyV) {
+                  if (AuthPassPlatform.isLinux) {
+                    final w = WidgetsBinding
+                        .instance.focusManager.primaryFocus.context.widget;
+                    Clipboard.getData('text/plain').then((value) async {
+//                    await Future<void>.delayed(const Duration(seconds: 2));
+                      final newContent = value.text;
+                      if (w is EditableText) {
+                        final s = w.controller.selection;
+                        final oldContent = w.controller.text;
+                        final before = s.textBefore(oldContent);
+                        final after = s.textAfter(oldContent);
+                        w.controller.text = '$before$newContent$after';
+                        w.controller.selection = TextSelection.collapsed(
+                            offset: s.start + newContent.length);
+                      }
+                    });
+                  }
                 }
               }
             } else if (modifiers.isEmpty) {
@@ -156,6 +175,9 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                 _keyboardShortcutEvents._shortcutEvents.add(
                     const KeyboardShortcut(
                         type: KeyboardShortcutType.moveDown));
+              } else if (character == LogicalKeyboardKey.escape) {
+                _keyboardShortcutEvents._shortcutEvents.add(
+                    const KeyboardShortcut(type: KeyboardShortcutType.escape));
               }
             }
           }
@@ -179,6 +201,7 @@ enum KeyboardShortcutType {
   moveUp,
   moveDown,
   generatePassword,
+  escape,
 }
 
 class KeyboardShortcut {
