@@ -204,6 +204,9 @@ dependency_overrides:
   rxdart: ^0.24.1
   # flutter_html depends on 0.17bio
   flutter_svg: ^0.18.0
+  file: ^6.0.0-nullsafety.1
+  process: ^4.0.0-nullsafety.1
+
 
 #  openapi_base:
 #    path: /Users/herbert/dev/authpass-cloud/deps/openapi_dart/packages/openapi_base
