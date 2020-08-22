@@ -94,100 +94,101 @@ class _GeneratePasswordState extends State<GeneratePassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            child: InputDecorator(
-              decoration: InputDecoration(
-                labelText: 'Password',
-                suffix: IconButton(
-                  icon: const Icon(Icons.content_copy),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: _password));
-                    Scaffold.of(context)
-                      ..hideCurrentSnackBar(reason: SnackBarClosedReason.remove)
-                      ..showSnackBar(const SnackBar(content: Text('Copied.')));
-                  },
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  suffix: IconButton(
+                    icon: const Icon(Icons.content_copy),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: _password));
+                      Scaffold.of(context)
+                        ..hideCurrentSnackBar(
+                            reason: SnackBarClosedReason.remove)
+                        ..showSnackBar(
+                            const SnackBar(content: Text('Copied.')));
+                    },
+                  ),
                 ),
+                child: Text(_password),
               ),
-              child: Text(_password),
             ),
-          ),
-          SimpleGridWidget(
-            children: _characterSets.entries
-                .map<Widget>(
-              (entry) => SwitchListTile(
-                title: Text(entry.key),
-                value: _selectedCharacterSet.contains(entry.value),
-                onChanged: (val) {
-                  setState(() {
-                    if (val) {
-                      _selectedCharacterSet.add(entry.value);
-                    } else {
-                      _selectedCharacterSet.remove(entry.value);
-                    }
-                    _generatePassword();
-                  });
-                },
-              ),
-            )
-                .followedBy(
-              [
-                Row(
-                  children: <Widget>[
-                    const SizedBox(width: 16),
-                    const Text('Length'),
-                    Expanded(
-                      child: Slider(
-                        value: _passwordLength.toDouble(),
-                        min: passwordLengthMin.toDouble(),
-                        max: passwordLengthMax.toDouble(),
-                        divisions: (passwordLengthMax - passwordLengthMin),
-                        label: _passwordLength.toString(),
-                        onChanged: (val) {
-                          setState(() {
-                            _generatePassword();
-                            _passwordLength = val.round();
-                          });
-                        },
-                      ),
-                    ),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(minWidth: 32),
-                      child: Text(_passwordLength.toString()),
-                    ),
-                    const SizedBox(width: 16),
-                  ],
-                ),
-              ],
-            ).toList(),
-          ),
-          ...?(widget.doneButtonOnPressed == null
-              ? null
-              : [
-                  Center(
-                    child: PrimaryButton(
-                      child: Text(widget.doneButtonLabel ?? 'Done'),
-                      onPressed: () {
-                        final appDataBloc =
-                            Provider.of<AppDataBloc>(context, listen: false);
-                        appDataBloc.update((b, appData) => b
-                          ..passwordGeneratorLength = _passwordLength
-                          ..passwordGeneratorCharacterSets.replace(
-                              _selectedCharacterSet.map<String>((set) =>
-                                  CharacterSet.characterSetIdFor(set))));
-                        widget.doneButtonOnPressed(_password);
+            SimpleGridWidget(
+              children: _characterSets.entries
+                  .map<Widget>(
+                    (entry) => SwitchListTile(
+                      title: Text(entry.key),
+                      value: _selectedCharacterSet.contains(entry.value),
+                      onChanged: (val) {
+                        setState(() {
+                          if (val) {
+                            _selectedCharacterSet.add(entry.value);
+                          } else {
+                            _selectedCharacterSet.remove(entry.value);
+                          }
+                          _generatePassword();
+                        });
                       },
-                      icon: widget.doneButtonIcon ??
-                          const Icon(Icons.check_circle_outline),
-                      large: false,
                     ),
                   )
-                ]),
-        ],
+                  .toList(),
+            ),
+            Row(
+              children: <Widget>[
+                const SizedBox(width: 16),
+                const Text('Length'),
+                Expanded(
+                  child: Slider(
+                    value: _passwordLength.toDouble(),
+                    min: passwordLengthMin.toDouble(),
+                    max: passwordLengthMax.toDouble(),
+                    divisions: (passwordLengthMax - passwordLengthMin),
+                    label: _passwordLength.toString(),
+                    onChanged: (val) {
+                      setState(() {
+                        _generatePassword();
+                        _passwordLength = val.round();
+                      });
+                    },
+                  ),
+                ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 32),
+                  child: Text(_passwordLength.toString()),
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
+            ...?(widget.doneButtonOnPressed == null
+                ? null
+                : [
+                    Center(
+                      child: PrimaryButton(
+                        child: Text(widget.doneButtonLabel ?? 'Done'),
+                        onPressed: () {
+                          final appDataBloc =
+                              Provider.of<AppDataBloc>(context, listen: false);
+                          appDataBloc.update((b, appData) => b
+                            ..passwordGeneratorLength = _passwordLength
+                            ..passwordGeneratorCharacterSets.replace(
+                                _selectedCharacterSet.map<String>((set) =>
+                                    CharacterSet.characterSetIdFor(set))));
+                          widget.doneButtonOnPressed(_password);
+                        },
+                        icon: widget.doneButtonIcon ??
+                            const Icon(Icons.check_circle_outline),
+                        large: false,
+                      ),
+                    )
+                  ]),
+          ],
+        ),
       ),
     );
   }

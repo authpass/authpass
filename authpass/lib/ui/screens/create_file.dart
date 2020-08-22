@@ -126,7 +126,6 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
               'Error while trying to create database. '
                   'File already exists. Please choose another name. ${e.path}',
             );
-            rethrow;
           }
         }
       });

@@ -1198,6 +1198,7 @@ class _EntryFieldState extends State<EntryField>
           TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       _focusNode.requestFocus();
     });
+    copyValue();
   }
 
   Future<bool> copyValue() async {
@@ -1209,37 +1210,45 @@ class _EntryFieldState extends State<EntryField>
     return true;
   }
 
-  Widget _buildEntryFieldEditor() => _isValueObscured
-      ? ObscuredEntryFieldEditor(
-          onPressed: () {
-            setState(() {
-              _controller.text = _valueCurrent ?? '';
-              _controller.selection = TextSelection(
-                  baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
-              _isValueObscured = false;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _focusNode.requestFocus();
-                _logger.finer('requesting focus.');
-              });
-            });
-          },
-          fieldKey: widget.fieldKey,
-          commonField: widget.commonField,
-        )
-      : StringEntryFieldEditor(
-          onSaved: (value) {
-            final newValue = _isProtected
-                ? ProtectedValue.fromString(value)
-                : PlainValue(value);
-            _fieldValue = newValue;
-          },
-          fieldKey: widget.fieldKey,
-          commonField: widget.commonField,
-          controller: _controller,
-          formFieldKey: _formFieldKey,
-          focusNode: _focusNode,
-          passwordGeneratorPressed: _generatePassword,
-        );
+  Widget _buildEntryFieldEditor() =>
+      _isValueObscured && _valueCurrent?.isEmpty == false
+          ? _buildObscuredEntryFieldEditor()
+          : _buildStringEntryFieldEditor();
+
+  Widget _buildObscuredEntryFieldEditor() {
+    return ObscuredEntryFieldEditor(
+      onPressed: () {
+        setState(() {
+          _controller.text = _valueCurrent ?? '';
+          _controller.selection = TextSelection(
+              baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+          _isValueObscured = false;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _focusNode.requestFocus();
+            _logger.finer('requesting focus.');
+          });
+        });
+      },
+      fieldKey: widget.fieldKey,
+      commonField: widget.commonField,
+    );
+  }
+
+  Widget _buildStringEntryFieldEditor() {
+    return StringEntryFieldEditor(
+      onSaved: (value) {
+        final newValue =
+            _isProtected ? ProtectedValue.fromString(value) : PlainValue(value);
+        _fieldValue = newValue;
+      },
+      fieldKey: widget.fieldKey,
+      commonField: widget.commonField,
+      controller: _controller,
+      formFieldKey: _formFieldKey,
+      focusNode: _focusNode,
+      passwordGeneratorPressed: _generatePassword,
+    );
+  }
 
   @override
   void dispose() {
