@@ -422,7 +422,18 @@ class FileSourceCloudStorage extends FileSource {
       );
 }
 
-class FileExistsException extends KdbxException {}
+class FileExistsException extends KdbxException {
+  FileExistsException({
+    @required this.path,
+  }) : assert(path != null);
+
+  final String path;
+
+  @override
+  String toString() {
+    return 'FileExistsException{path: $path}';
+  }
+}
 
 class QuickUnlockStorage {
   QuickUnlockStorage({
@@ -805,7 +816,7 @@ class KdbxBloc {
     final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
         databaseName: databaseName, uuid: AppDataBloc.createUuid());
     if (localSource.file.existsSync()) {
-      throw FileExistsException();
+      throw FileExistsException(path: localSource.file.path);
     }
     return localSource;
   }

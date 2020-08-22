@@ -8,6 +8,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:provider/provider.dart';
 
+import 'package:logging/logging.dart';
+
+final _logger = Logger('create_file');
+
 class CreateFile extends StatefulWidget {
   static PageRoute<void> route() => MaterialPageRoute(
         settings: const RouteSettings(name: '/createFile'),
@@ -114,12 +118,13 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
             assert(created != null);
             await Navigator.of(context)
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
-          } on FileExistsException catch (_) {
+          } on FileExistsException catch (e, stackTrace) {
+            _logger.warning('Showing file exists error dialog.', e, stackTrace);
             await DialogUtils.showSimpleAlertDialog(
               context,
               'File Exists',
               'Error while trying to create database. '
-                  'File already exists. Please choose another name',
+                  'File already exists. Please choose another name. ${e.path}',
             );
             rethrow;
           }
