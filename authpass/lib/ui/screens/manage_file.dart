@@ -18,7 +18,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart'
     hide FutureTaskStateMixin;
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:flutter_colorpicker/block_picker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
