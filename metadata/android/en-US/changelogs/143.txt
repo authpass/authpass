@@ -1,0 +1,19 @@
+# 1.7.4
+
+* Show custom icons for passwords and groups #68
+* Show encryption options in file options, allow upgrading to kdbx 4.
+* By default create kdbx v4 files (instead of kdbx 3.1)
+* Desktop: Fixed wrong locale.
+* Android: Improved autofill (automatically filter by app or web domain).
+* Android: Fix autofill error unsupported errors on devices prior to Android Oreo (8.0).
+* Android/iOS: Use new FilePickerWritable API to correctly clean up temporary files.
+
+# 1.7.3
+
+* Fixed possible error dialogs #124 ("The method 'markNeedsBuild' was called on null")
+* Fixed error in group list when adding new subgroups while a filter is active.
+* UI: Progress overlay on initial page now matches screen height.
+* UI: allow displaying of plain text master password during unlocking. #86
+* KDBX: fix bug saving files with history entries which contain attachments.
+* KDBX: fix saving of history entries.
+
