@@ -90,6 +90,7 @@ dependencies:
   badges: ^1.1.1
   qr_flutter: ^3.2.0
   flushbar: ^1.10.4
+  filesystem_picker: ^1.0.2
 
   # (Small) utility packages
   quiver: ">=2.0.0 <3.0.0"

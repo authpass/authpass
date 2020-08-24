@@ -231,14 +231,25 @@ class FileSourceLocal extends FileSource {
     } else if (AuthPassPlatform.isIOS && !file.existsSync()) {
       // On iOS we must not store the absolute path, but since we do, try to
       // load it relative from application support.
+      _logger
+          .fine('iOS file ${file.path} no longer exists, checking new paths');
+      final docDir = File(path.join(
+          (await PathUtils().getAppDocDirectory(ensureCreated: true)).path,
+          path.basename(file.path)));
+      if (docDir.existsSync()) {
+        _logger.fine('${file.path} exists.');
+        return cb(docDir);
+      }
+
       final newFile = File(path.join(
           (await PathUtils().getAppDataDirectory()).path,
           path.basename(file.path)));
       _logger.fine(
           'iOS file ${file.path} no longer exists, checking ${newFile.path}');
       if (newFile.existsSync()) {
-        _logger.fine('... exists.');
-        return cb(newFile);
+        _logger.fine('... exists, moving to ${docDir.path}');
+        final renamed = newFile.renameSync(docDir.path);
+        return cb(renamed);
       }
     }
     return cb(file);
@@ -811,8 +822,7 @@ class KdbxBloc {
 
   Future<FileSourceLocal> _localFileSourceForDbName(String databaseName) async {
     final fileName = '$databaseName.kdbx';
-    final appDir = await PathUtils().getAppDataDirectory();
-    await appDir.create(recursive: true);
+    final appDir = await PathUtils().getAppDocDirectory(ensureCreated: true);
     final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
         databaseName: databaseName, uuid: AppDataBloc.createUuid());
     if (localSource.file.existsSync()) {

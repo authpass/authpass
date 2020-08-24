@@ -21,6 +21,19 @@ class PathUtils {
     return _namespaced(await path_provider.getTemporaryDirectory());
   }
 
+  /// Document directory for "internal" kdbx files which should be accessible
+  /// by the user. - this directory is NOT namespaced during development.
+  Future<Directory> getAppDocDirectory({@required bool ensureCreated}) async {
+    assert(ensureCreated != null);
+    final dir = await path_provider.getApplicationDocumentsDirectory();
+    if (ensureCreated) {
+      return await dir.create(recursive: true);
+    }
+    return dir;
+  }
+
+  /// Data directory meant for files which are NOT accessible by the user.
+  /// (ie. json files, logs, etc).
   Future<Directory> getAppDataDirectory() async {
     if (AuthPassPlatform.isWeb) {
       throw UnsupportedError('Not supported on web.');
