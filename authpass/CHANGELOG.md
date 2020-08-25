@@ -1,4 +1,4 @@
-# (unreleased) 1.7.5
+# 1.7.5
 
 * Password fields: Do not obscure if they are empty.
 * Fix length selector in password generator.
