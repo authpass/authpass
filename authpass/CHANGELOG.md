@@ -7,6 +7,7 @@
   * ESC: Will blur the current text field. If inside the search bar, will cancel the search.
   * Linux: Workaround for pasting into text fields.
 * iOS: Allow copying of kdbx files from/to application docs dir with iTunes/Finder. #110
+* Linux: Fix argon2 lib loading for kdbx 4. #131
 
 # 1.7.4
 
