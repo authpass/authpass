@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:argon2_ffi_base/argon2_ffi_base.dart';
+import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
@@ -21,13 +22,14 @@ class FlutterArgon2 extends Argon2 {
     final started = Stopwatch()..start();
     try {
       _logger.finest('Starting argon2');
-      return await compute(FlutterArgon2.runArgon2, args);
+      return await compute(FlutterArgon2._runArgon2, args);
     } finally {
       _logger.fine('Finished argon2 in ${started.elapsedMilliseconds}ms');
     }
   }
 
-  static Uint8List runArgon2(Argon2Arguments args) {
+  static Uint8List _runArgon2(Argon2Arguments args) {
+    LoggingUtils().setupLogging(fromMainIsolate: false);
     return singleton.argon2(args);
   }
 }
