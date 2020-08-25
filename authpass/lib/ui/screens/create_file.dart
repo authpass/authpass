@@ -22,7 +22,7 @@ class CreateFile extends StatefulWidget {
   _CreateFileState createState() => _CreateFileState();
 }
 
-class _CreateFileState extends State<CreateFile> with TaskStateMixin {
+class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _databaseName =
       TextEditingController(text: 'PersonalPasswords');
@@ -106,7 +106,7 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
     );
   }
 
-  VoidCallback _submitCallback() => asyncTaskCallback(() async {
+  VoidCallback _submitCallback() => asyncTaskCallback((progress) async {
         if (_formKey.currentState.validate()) {
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
           try {
@@ -126,6 +126,9 @@ class _CreateFileState extends State<CreateFile> with TaskStateMixin {
               'Error while trying to create database. '
                   'File already exists. Please choose another name. ${e.path}',
             );
+          } catch (e, stackTrace) {
+            _logger.severe('Error while creating file.', e, stackTrace);
+            rethrow;
           }
         }
       });
