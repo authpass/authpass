@@ -97,7 +97,7 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   Future<BiometricStorageFile> _getStorageFile() async {
     return await BiometricStorage().getStorage(
-      'AuthPassCloud',
+      '${env.storageNamespace ?? ''}AuthPassCloud',
       options: StorageFileInitOptions(authenticationRequired: false),
     );
   }
