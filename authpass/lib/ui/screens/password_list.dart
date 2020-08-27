@@ -1196,19 +1196,8 @@ class PasswordEntryTile extends StatelessWidget {
   final String filterQuery;
   final VoidCallback onTap;
 
-  Widget _defaultIcon(Color fgColor, ThemeData theme, double size) {
-    return vm.entry.customIcon?.let((customIcon) => Image.memory(
-              customIcon.data,
-              width: size,
-              height: size,
-              fit: BoxFit.contain,
-            )) ??
-        Icon(
-          PredefinedIcons.iconFor(vm.entry.icon.get()),
-          color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
-          size: size,
-        );
-  }
+  Widget _defaultIcon(Color fgColor, ThemeData theme, double size) =>
+      EntryIcon.defaultIcon(vm, fgColor, theme, size);
 
   @override
   Widget build(BuildContext context) {
@@ -1359,6 +1348,25 @@ class EntryIcon extends StatelessWidget {
         return fallback(context);
       },
     );
+  }
+
+  static Widget defaultIcon(
+    EntryViewModel vm,
+    Color fgColor,
+    ThemeData theme,
+    double size,
+  ) {
+    return vm.entry.customIcon?.let((customIcon) => Image.memory(
+              customIcon.data,
+              width: size,
+              height: size,
+              fit: BoxFit.contain,
+            )) ??
+        Icon(
+          PredefinedIcons.iconFor(vm.entry.icon.get()),
+          color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
+          size: size,
+        );
   }
 }
 

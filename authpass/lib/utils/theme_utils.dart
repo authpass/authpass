@@ -8,6 +8,7 @@ class ThemeUtil {
   }
 }
 
-extension on ThemeData {
+extension ThemeDataExt on ThemeData {
   bool get isDarkTheme => brightness == Brightness.dark;
+  Color iconColor(Color fileColor) => ThemeUtil.iconColor(this, fileColor);
 }

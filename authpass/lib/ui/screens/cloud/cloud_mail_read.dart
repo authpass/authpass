@@ -1,17 +1,25 @@
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/theme.dart';
+import 'package:authpass/ui/screens/cloud/cloud_viewmodel.dart';
+import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/theme_utils.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
-import 'package:enough_mail/enough_mail.dart' as enough;
+import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flinq/flinq.dart';
+
+import 'package:logging/logging.dart';
+
+final _logger = Logger('cloud_mail_read');
 
 class EmailReadScreen extends StatefulWidget {
   const EmailReadScreen({
@@ -42,14 +50,32 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RetryFutureBuilder<enough.MimeMessage>(
-      produceFuture: (context) => widget.bloc.loadMail(widget.emailMessage),
+    final vm = EmailViewModel(emailMessage: widget.emailMessage);
+    final kdbxBloc = context.watch<KdbxBloc>();
+    return RetryStreamBuilder<EmailViewModel>(
+      stream: (context) => (() async* {
+        final emailMessage = widget.emailMessage;
+        final mailbox =
+            await widget.bloc.findMailboxByUuid(emailMessage.mailboxEntryUuid);
+        if (mailbox == null) {
+          _logger.warning('Unable to find mailbox for '
+              'uuid ${emailMessage.mailboxEntryUuid}');
+        }
+        final entry =
+            mailbox?.entryUuid?.let((uuid) => kdbxBloc.findEntryByUuid(uuid));
+        final vm2 = vm.copyWith(mailbox: mailbox, kdbxEntry: entry);
+        yield vm2;
+        yield vm2.copyWith(
+          mimeMessage: await widget.bloc.loadMail(emailMessage),
+        );
+      })(),
+      initialValue: vm,
       scaffoldBuilder: (context, child, snapshot) {
         var hasHtml = false;
         var hasText = false;
         if (snapshot.hasData) {
-          hasHtml = snapshot.data.decodeTextHtmlPart() != null;
-          hasText = snapshot.data.decodeTextPlainPart() != null;
+          hasHtml = snapshot.data.mimeMessage?.decodeTextHtmlPart() != null;
+          hasText = snapshot.data.mimeMessage?.decodeTextPlainPart() != null;
         }
         return Scaffold(
           appBar: AppBar(
@@ -82,7 +108,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
       },
       builder: (context, message) => EmailRead(
         bloc: widget.bloc,
-        message: message,
+        vm: message,
         forcePlainText: _forcePlainText,
       ),
     );
@@ -90,14 +116,16 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
 }
 
 class EmailRead extends StatelessWidget {
-  const EmailRead(
-      {Key key,
-      @required this.bloc,
-      @required this.message,
-      this.forcePlainText})
-      : super(key: key);
+  const EmailRead({
+    Key key,
+    @required this.bloc,
+    @required this.vm,
+    this.forcePlainText,
+  })  : assert(bloc != null),
+        assert(vm != null),
+        super(key: key);
   final AuthPassCloudBloc bloc;
-  final enough.MimeMessage message;
+  final EmailViewModel vm;
   final bool forcePlainText;
 
   @override
@@ -107,12 +135,19 @@ class EmailRead extends StatelessWidget {
           height: 1.4,
         );
     final formatUtil = context.watch<FormatUtils>();
-    final htmlData = message.decodeTextHtmlPart();
+    final htmlData = vm.mimeMessage?.decodeTextHtmlPart();
     final headers = {
-      'Subject': message.decodeHeaderValue('subject'),
-      'From':
-          message.decodeHeaderMailAddressValue('from').firstOrNull?.toString(),
-      'Date': formatUtil.formatDateFull(message.decodeHeaderDateValue('date')),
+      'Subject': vm.mimeMessage?.decodeHeaderValue('subject') ??
+          vm.emailMessage.subject,
+      'From': vm.mimeMessage
+              ?.decodeHeaderMailAddressValue('from')
+              ?.firstOrNull
+              ?.toString() ??
+          vm.emailMessage.sender,
+      'Date': formatUtil.formatDateFull(
+          vm.mimeMessage?.decodeHeaderDateValue('date') ??
+              vm.emailMessage.createdAt),
+      'Mailbox': vm.kdbxEntry?.label ?? vm.mailbox?.label?.takeUnlessBlank(),
 //          'To': message.decodeHeaderValue('to'),
     };
     final textSpans = headers.entries
@@ -127,58 +162,78 @@ class EmailRead extends StatelessWidget {
             ])
         .toList()
           ..removeLast();
+    final entryVm = vm.kdbxEntry
+        ?.let((entry) => EntryViewModel(entry, context.watch<KdbxBloc>()));
+    const iconSize = 56.0;
+    final theme = Theme.of(context);
+    final fallbackIcon = (BuildContext context) => Icon(
+          Icons.email,
+          color: theme.iconColor(null),
+          size: iconSize,
+        );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Material(
           elevation: 1,
-          color: Theme.of(context).cardColor,
+          color: theme.cardColor,
           child: Container(
             padding: const EdgeInsets.all(16),
-            child: RichText(
-              text: TextSpan(children: textSpans, style: textStyle),
+            child: Row(
+              children: [
+                entryVm == null
+                    ? fallbackIcon(context)
+                    : EntryIcon(
+                        vm: entryVm,
+                        fallback: (context) => EntryIcon.defaultIcon(
+                            entryVm, null, theme, iconSize),
+                        size: iconSize,
+                      ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(children: textSpans, style: textStyle),
 //                'Subject: ${message.decodeHeaderValue('subject')}\n'
 //                'Date: ${formatUtil.formatDateFull(message.decodeHeaderDateValue('date'))}',
-              maxLines: null,
+                    maxLines: null,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-        htmlData != null && !forcePlainText
-            ? Expanded(
-                child: Scrollbar(
+        Expanded(
+          child: vm.mimeMessage == null
+              ? const Center(child: CircularProgressIndicator())
+              : Scrollbar(
                   child: SingleChildScrollView(
-                    child: Html(
-                      data: htmlData,
-                      onLinkTap: (link) {
-                        DialogUtils.openUrl(link);
-                      },
-                    ),
-                  ),
-                ),
-              )
-            : Expanded(
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SelectableLinkify(
+                    child: htmlData != null && !forcePlainText
+                        ? Html(
+                            data: htmlData,
+                            onLinkTap: (link) {
+                              DialogUtils.openUrl(link);
+                            },
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SelectableLinkify(
 //                    child: Linkify(
-                        text: (message.decodeTextPlainPart() ??
-                                message.decodeContentText())
-                            .replaceAll('\r', ''),
-                        maxLines: null,
-                        options: LinkifyOptions(
-                          humanize: false,
-                        ),
-                        onOpen: (link) async {
-                          await DialogUtils.openUrl(link.url);
-                        },
-                        style: textStyle,
-                      ),
-                    ),
+                              text: (vm.mimeMessage?.decodeTextPlainPart() ??
+                                      vm.mimeMessage?.decodeContentText())
+                                  .replaceAll('\r', ''),
+                              maxLines: null,
+                              options: LinkifyOptions(
+                                humanize: false,
+                              ),
+                              onOpen: (link) async {
+                                await DialogUtils.openUrl(link.url);
+                              },
+                              style: textStyle,
+                            ),
+                          ),
                   ),
                 ),
-              ),
+        ),
       ],
     );
   }

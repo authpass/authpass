@@ -314,6 +314,12 @@ class AuthPassCloudBloc with ChangeNotifier {
   Future<void> clearToken() async {
     await _saveToken(null);
   }
+
+  Future<Mailbox> findMailboxByUuid(ApiUuid uuid) async {
+    final list = await mailboxList.load();
+    return list.mailboxes
+        .firstWhere((element) => uuid == element.id, orElse: () => null);
+  }
 }
 
 class EmailMessageList {
@@ -377,16 +383,16 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   @override
   T get value => _valueStream.value;
 
-  Future<void> reload() async {
-    await _stream.reload();
-  }
+  Future<T> load() async => _stream.load();
+
+  Future<T> reload() async => await _stream.reload();
 }
 
 class LazyBehaviorSubject<T> {
   LazyBehaviorSubject(this._loadData);
 
   final _subject = BehaviorSubject<T>();
-  final _joinRun = JoinRun<void>();
+  final _joinRun = JoinRun<T>();
   Future<T> Function() _loadData;
 
   bool _dirty = true;
@@ -399,23 +405,31 @@ class LazyBehaviorSubject<T> {
     return ReloadableValueStream(this);
   }
 
-  Future<void> reload() async {
+  Future<T> reload() async {
     dirty();
-    await load();
+    return await load();
   }
 
-  Future<void> load() async {
+  Future<T> load() async {
     if (_loadData == null) {
       _logger.warning(
           'calling reload on $runtimeType before anyone getting a stream.');
-      return;
+      return null;
     }
-    await _joinRun.joinRun(() async {
+    return await _joinRun.joinRun(() async {
       if (!_dirty) {
-        return;
+        return _subject.value;
       }
-      await _subject.addStream(Stream.fromFuture(_loadData()));
-      _dirty = false;
+      try {
+        final data = await _loadData();
+        _subject.add(data);
+        return data;
+      } catch (error, stackTrace) {
+        _subject.addError(error, stackTrace);
+        rethrow;
+      } finally {
+        _dirty = false;
+      }
     });
   }
 
