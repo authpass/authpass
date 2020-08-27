@@ -22,9 +22,12 @@ class DialogUtils {
     String title,
     String content, {
     List<Widget> moreActions,
+    String routeName = '/dialog/alert/',
+    @NonNls @required String routeAppend,
   }) {
     return showDialog<dynamic>(
         context: context,
+        routeSettings: RouteSettings(name: routeName + routeAppend),
         builder: (context) {
           return AlertDialog(
             title: title == null ? null : Text(title),
@@ -48,6 +51,7 @@ class DialogUtils {
       context,
       title,
       content,
+      routeAppend: 'error',
       moreActions: !sendLogsSupported()
           ? null
           : [
@@ -80,6 +84,7 @@ class DialogUtils {
   }) async {
     return (await showDialog<bool>(
           context: context,
+          routeSettings: const RouteSettings(name: '/dialog/confirm'),
           builder: (context) => ConfirmDialog(params: params),
         )) ==
         true;
@@ -168,8 +173,13 @@ class ConfirmDialog extends StatelessWidget {
 }
 
 mixin DialogMixin<T> on Widget {
-  Future<T> show(BuildContext context) =>
-      showDialog<T>(context: context, builder: (context) => this);
+  String get name;
+
+  Future<T> show(BuildContext context) => showDialog<T>(
+        context: context,
+        routeSettings: RouteSettings(name: name),
+        builder: (context) => this,
+      );
 }
 
 class SimpleAuthCodePromptDialog extends StatefulWidget
@@ -190,6 +200,9 @@ class SimpleAuthCodePromptDialog extends StatefulWidget
   @override
   _SimpleAuthCodePromptDialogState createState() =>
       _SimpleAuthCodePromptDialogState();
+
+  @override
+  String get name => '/dialog/authCode';
 }
 
 class _SimpleAuthCodePromptDialogState
@@ -255,6 +268,9 @@ class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
 
   @override
   _SimplePromptDialogState createState() => _SimplePromptDialogState();
+
+  @override
+  String get name => '/dialog/prompt/simple';
 }
 
 class _SimplePromptDialogState extends State<SimplePromptDialog>

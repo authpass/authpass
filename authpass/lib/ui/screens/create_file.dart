@@ -125,6 +125,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
               'File Exists',
               'Error while trying to create database. '
                   'File already exists. Please choose another name. ${e.path}',
+              routeAppend: 'createFileExists',
             );
           } catch (e, stackTrace) {
             _logger.severe('Error while creating file.', e, stackTrace);

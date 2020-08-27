@@ -17,8 +17,10 @@ import 'package:provider/provider.dart';
 final _logger = Logger('main_app_scaffold');
 
 class MainAppScaffold extends StatelessWidget {
-  static MaterialPageRoute<void> route() =>
-      MaterialPageRoute(builder: (context) => MainAppScaffold());
+  static MaterialPageRoute<void> route() => MaterialPageRoute(
+        settings: const RouteSettings(name: '/main'),
+        builder: (context) => MainAppScaffold(),
+      );
 
   @override
   Widget build(BuildContext context) {

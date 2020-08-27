@@ -231,6 +231,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
               null,
               'Sorry this database does not support saving. '
               'Please open a local database file.',
+              routeAppend: 'databaseNoSupportSaving',
             );
           }
         }
@@ -615,8 +616,12 @@ class _EntryDetailsState extends State<EntryDetails>
         return OtpAuth(secret: value);
       } catch (e, stackTrace) {
         _logger.warning('Invalid base32 code?', e, stackTrace);
-        await DialogUtils.showSimpleAlertDialog(context, 'Invalid key',
-            'Given input is not a valid base32 TOTP code. Please verify your input.');
+        await DialogUtils.showSimpleAlertDialog(
+          context,
+          'Invalid key',
+          'Given input is not a valid base32 TOTP code. Please verify your input.',
+          routeAppend: 'totpInvalidKey',
+        );
         return await _askForTotpSecret(context);
       }
     };

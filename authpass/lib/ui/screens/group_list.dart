@@ -581,17 +581,21 @@ class GroupListFlatList extends StatelessWidget {
                   analytics.events
                       .trackGroupDelete(GroupDeleteResult.hasSubgroups);
                   await DialogUtils.showSimpleAlertDialog(
-                      context,
-                      'Unable to delete group',
-                      'This group still contains other groups. You can currently only delete empty groups.');
+                    context,
+                    'Unable to delete group',
+                    'This group still contains other groups. You can currently only delete empty groups.',
+                    routeAppend: 'deleteGroupError',
+                  );
                   return;
                 } else if (group.group.entries.isNotEmpty) {
                   analytics.events
                       .trackGroupDelete(GroupDeleteResult.hasEntries);
                   await DialogUtils.showSimpleAlertDialog(
-                      context,
-                      'Unable to delete group',
-                      'This group still contains other groups. You can currently only delete empty groups.');
+                    context,
+                    'Unable to delete group',
+                    'This group still contains other groups. You can currently only delete empty groups.',
+                    routeAppend: 'deleteGroupError',
+                  );
                   return;
                 }
                 final oldParent = group.group.parent;

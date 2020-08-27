@@ -155,7 +155,11 @@ class CloudStorageAuthentication extends StatelessWidget {
           if (!forceNoOpenUrl) {
             if (!await DialogUtils.openUrl(uri)) {
               await DialogUtils.showSimpleAlertDialog(
-                  context, null, 'Unable to launch url. Please visit $uri');
+                context,
+                null,
+                'Unable to launch url. Please visit $uri',
+                routeAppend: 'cloudStorageAuthError',
+              );
               prompt.result(null);
               return;
             }

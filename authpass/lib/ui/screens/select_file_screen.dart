@@ -1008,6 +1008,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           context,
           'Unable to open File',
           'Unknown error while trying to open file. $e',
+          routeAppend: 'errorOpenFile',
         );
       } finally {
         if (mounted) {

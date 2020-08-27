@@ -321,8 +321,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             ];
           }
           return [
-            MaterialPageRoute<void>(
-                builder: (context) => const SelectFileScreen())
+            SelectFileScreen.route(),
           ];
         },
         // this is actually never used. But i still have to define it,
@@ -492,7 +491,15 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
   }
 
   String _screenNameFor(Route route) {
-    return route?.settings?.name ?? '${route?.runtimeType}';
+    final name = route?.settings?.name;
+    if (name != null) {
+      return name;
+    }
+    assert((() {
+      _logger.severe('Route does not have a named RouteSettings! $route', null,
+          StackTrace.current);
+    })());
+    return '${route?.runtimeType}';
   }
 
   void _sendScreenView(Route route) {
