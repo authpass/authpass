@@ -47,6 +47,7 @@ class EmailReadScreen extends StatefulWidget {
 
 class _EmailReadScreenState extends State<EmailReadScreen> {
   bool _forcePlainText = false;
+  bool _forwarded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +92,17 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                         _forcePlainText = !_forcePlainText;
                       });
                     }),
+              ],
+              if (!_forwarded) ...[
+                IconButton(
+                  icon: const Icon(Icons.forward),
+                  onPressed: () async {
+                    await widget.bloc.forwardMail(widget.emailMessage);
+                    setState(() {
+                      _forwarded = true;
+                    });
+                  },
+                ),
               ],
               Builder(
                 builder: (context) => IconButton(

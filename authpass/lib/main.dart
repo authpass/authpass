@@ -496,8 +496,12 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
       return name;
     }
     assert((() {
+      if (route is PopupRoute) {
+        return true;
+      }
       _logger.severe('Route does not have a named RouteSettings! $route', null,
           StackTrace.current);
+      return true;
     })());
     return '${route?.runtimeType}';
   }

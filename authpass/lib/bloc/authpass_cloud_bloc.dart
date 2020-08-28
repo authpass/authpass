@@ -298,6 +298,12 @@ class AuthPassCloudBloc with ChangeNotifier {
     return mimeMessage;
   }
 
+  Future<void> forwardMail(EmailMessage message) async {
+    final client = await _getClient();
+    await client.mailboxMessageForward(MailboxMessageForwardSchema(),
+        messageId: message.id);
+  }
+
   Future<void> deleteMail(EmailMessage message) async {
     final client = await _getClient();
     await client.mailboxMessageDelete(messageId: message.id);
