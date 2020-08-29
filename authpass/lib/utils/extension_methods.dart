@@ -18,6 +18,10 @@ extension ListOptGet<T> on List<T> {
   T optGet(int index) => length > index ? this[index] : null;
 }
 
+extension IterableNotNull<T> on Iterable<T> {
+  Iterable<T> whereNotNull() => where((element) => element != null);
+}
+
 extension EdgeInsetsExt on EdgeInsets {
   EdgeInsets get onlyTop => EdgeInsets.only(top: top);
 }

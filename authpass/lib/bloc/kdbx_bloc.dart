@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
@@ -15,6 +16,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:clock/clock.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -33,14 +35,26 @@ import 'package:rxdart/rxdart.dart';
 final _logger = Logger('kdbx_bloc');
 
 /// Wrapper around loaded file contents. This basically attaches
-/// metadata to the retrieved byte content, e.g. for conflict detection
+/// `metadata` to the retrieved byte content, e.g. for conflict detection
 /// by having the revision loaded from e.g. dropbox we can assure there
 /// are no conflicts on writing.
+///
+/// `metadata` must only be primitives and json serializable.
 class FileContent {
-  FileContent(this.content, [this.metadata = const <String, dynamic>{}]);
+  FileContent(
+    this.content, [
+    this.metadata = const <String, dynamic>{},
+    this.source = FileContentSource.origin,
+  ]);
 
   final Uint8List content;
   final Map<String, dynamic> metadata;
+  final FileContentSource source;
+}
+
+enum FileContentSource {
+  origin,
+  cache,
 }
 
 abstract class FileSource with Diagnosticable {
@@ -82,7 +96,7 @@ abstract class FileSource with Diagnosticable {
   FileSource copyWithDatabaseName(String databaseName);
 
   @protected
-  Future<FileContent> load();
+  Stream<FileContent> load();
 
   /// Should write the given contents to the file. when there was a previous
   /// call to [load] which returned [FileContent.metadata], this will be passe
@@ -91,9 +105,18 @@ abstract class FileSource with Diagnosticable {
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic> previousMetadata);
 
-  Future<void> contentPreCache() async => await content();
+  Future<void> contentPreCache() async => await content().last;
 
-  Future<Uint8List> content() async => (_cached ??= await load()).content;
+  Stream<FileContent> content() async* {
+    if (_cached != null) {
+      //  memory cache is perfectly fine.
+      yield _cached;
+    }
+    await for (final content in load()) {
+      yield content;
+      _cached = content;
+    }
+  }
 
   Future<void> contentWrite(Uint8List bytes) async {
     _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
@@ -192,8 +215,8 @@ class FileSourceLocal extends FileSource {
   }
 
   @override
-  Future<FileContent> load() async {
-    return await _accessFile((f) async => FileContent(await f.readAsBytes()));
+  Stream<FileContent> load() async* {
+    yield await _accessFile((f) async => FileContent(await f.readAsBytes()));
   }
 
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
@@ -347,9 +370,9 @@ class FileSourceUrl extends FileSource {
           : url;
 
   @override
-  Future<FileContent> load() async {
+  Stream<FileContent> load() async* {
     final response = await http.readBytes(_url);
-    return FileContent(response);
+    yield FileContent(response);
   }
 
   @override
@@ -382,6 +405,36 @@ class FileSourceUrl extends FileSource {
       );
 }
 
+class FileContentCached {
+  FileContentCached({
+    @required this.metadata,
+    @required this.cacheDate,
+    @required this.cacheSize,
+  }) : assert(cacheDate.isUtc);
+  factory FileContentCached.fromJson(Map<String, Object> json) =>
+      FileContentCached(
+        metadata: json['metadata'] as Map<String, Object>,
+        cacheDate: DateTime.fromMillisecondsSinceEpoch(
+          json['cacheDate'] as int,
+          isUtc: true,
+        ),
+        cacheSize: json['cacheSize'] as int,
+      );
+
+  final Map<String, dynamic> metadata;
+  final DateTime cacheDate;
+  final int cacheSize;
+
+  Map<String, Object> toJson() => {
+        'metadata': metadata,
+        'cacheDate': cacheDate.millisecond,
+        'cacheSize': cacheSize,
+      };
+
+  @override
+  String toString() => toJson().toString();
+}
+
 class FileSourceCloudStorage extends FileSource {
   FileSourceCloudStorage({
     @required this.provider,
@@ -393,6 +446,11 @@ class FileSourceCloudStorage extends FileSource {
             databaseName: databaseName,
             uuid: uuid,
             initialCachedContent: initialCachedContent);
+
+  static Directory _cacheDir;
+
+  static Future<Directory> _getCacheDir() =>
+      PathUtils().getTemporaryDirectory(subNamespace: 'cloud_storage_cache');
 
   final CloudStorageProvider provider;
 
@@ -407,8 +465,59 @@ class FileSourceCloudStorage extends FileSource {
   @override
   String get displayPath => provider.displayPath(fileInfo);
 
+  File _cacheMetadataFile(String cacheDirPath) =>
+      File(path.join(cacheDirPath, '$uuid.kdbx.json'));
+  File _cacheKdbxFile(String cacheDirPath) =>
+      File(path.join(cacheDirPath, '$uuid.kdbx'));
+
   @override
-  Future<FileContent> load() => provider.loadFile(fileInfo);
+  Stream<FileContent> load() async* {
+    // first try to load from cache.
+    _cacheDir ??= await _getCacheDir();
+    final metadataFile = _cacheMetadataFile(_cacheDir.path);
+    final kdbxFile = _cacheKdbxFile(_cacheDir.path);
+    try {
+      if (metadataFile.existsSync()) {
+        final cacheInfo = FileContentCached.fromJson(json
+            .decode(await metadataFile.readAsString()) as Map<String, Object>);
+        final content = await kdbxFile.readAsBytes();
+        if (content.length != cacheInfo.cacheSize) {
+          throw StateError('Cached size does not match size in '
+              'cache file. ${content.length} vs $cacheInfo');
+        }
+        yield FileContent(content, cacheInfo.metadata, FileContentSource.cache);
+      }
+    } catch (e, stackTrace) {
+      _logger.severe('Error while loading cached kdbx file', e, stackTrace);
+    }
+
+    // after cache got loaded, download new version.
+    _logger.finer('loading ${toString()}');
+    final freshContent = await provider.loadFile(fileInfo);
+    yield freshContent;
+    unawaited(_writeCache(freshContent));
+  }
+
+  Future<void> _writeCache(FileContent freshContent) async {
+    assert(freshContent.source == FileContentSource.origin);
+    try {
+      _cacheDir ??= await _getCacheDir();
+      final metadataFile = _cacheMetadataFile(_cacheDir.path);
+      final kdbxFile = _cacheKdbxFile(_cacheDir.path);
+      final cacheInfo = FileContentCached(
+        metadata: freshContent.metadata,
+        cacheDate: clock.now().toUtc(),
+        cacheSize: freshContent.content.length,
+      );
+      _logger.finer('Writing cache ${metadataFile.path}');
+      await metadataFile.writeAsString(json.encode(cacheInfo.toJson()),
+          flush: true);
+      await kdbxFile.writeAsBytes(freshContent.content);
+      _logger.finer('Done: Written cache ${metadataFile.path}');
+    } catch (e, stackTrace) {
+      _logger.severe('Error while writing cache for $uuid', e, stackTrace);
+    }
+  }
 
   @override
   bool get supportsWrite => true;
@@ -416,7 +525,9 @@ class FileSourceCloudStorage extends FileSource {
   @override
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic> previousMetadata) async {
-    return provider.saveFile(fileInfo, bytes, previousMetadata);
+    final metadata = await provider.saveFile(fileInfo, bytes, previousMetadata);
+    await _writeCache(FileContent(bytes, metadata));
+    return metadata;
   }
 
   @override
@@ -563,6 +674,20 @@ class OpenedKdbxFiles {
 //      _files.map(f);
 }
 
+/// Result information for [KdbxBloc.openFile] method calls.
+class OpenFileResult {
+  OpenFileResult({
+    this.kdbxOpenedFile,
+    this.fileContent,
+    this.unlockStopwatch,
+    this.loadStopwatch,
+  });
+  final KdbxOpenedFile kdbxOpenedFile;
+  final FileContent fileContent;
+  final Stopwatch unlockStopwatch;
+  final Stopwatch loadStopwatch;
+}
+
 class KdbxBloc {
   KdbxBloc({
     @required this.env,
@@ -636,10 +761,47 @@ class KdbxBloc {
     return newFile;
   }
 
-  Future<void> openFile(FileSource file, Credentials credentials,
-      {bool addToQuickUnlock = false}) async {
-    final fileContent = await file.content();
-    final readArgs = KdbxReadArgs(fileContent, credentials);
+  Stream<OpenFileResult> openFile(FileSource file, Credentials credentials,
+      {bool addToQuickUnlock = false}) async* {
+    Uint8List previous;
+    KdbxOpenedFile openedFile;
+    await for (final fileContent in file.content()) {
+      _logger.finer('$file got from ${fileContent.source}');
+      final loadStopwatch = Stopwatch()..start();
+      if (previous != null) {
+        if (ByteUtils.eq(previous, fileContent.content)) {
+          _logger.finer('$file: No changes detected. Nothing to do.');
+          continue;
+        } else {
+          if (openedFile.kdbxFile.isDirty) {
+            // ooooopsie.
+            throw StateError('File was changed locally while '
+                'loading new file from remote storage.');
+          }
+        }
+      }
+      previous = fileContent.content;
+      loadStopwatch.stop();
+      final unlockStopwatch = Stopwatch()..start();
+      openedFile = await _openFileContent(
+          file, credentials, fileContent, addToQuickUnlock);
+      addToQuickUnlock = false;
+      yield OpenFileResult(
+        kdbxOpenedFile: openedFile,
+        fileContent: fileContent,
+        unlockStopwatch: unlockStopwatch..stop(),
+        loadStopwatch: loadStopwatch,
+      );
+    }
+    _logger.finer('$file: Done.');
+  }
+
+  Future<KdbxOpenedFile> _openFileContent(
+      FileSource file,
+      Credentials credentials,
+      FileContent fileContent,
+      bool addToQuickUnlock) async {
+    final readArgs = KdbxReadArgs(fileContent.content, credentials);
 //    final kdbxReadFile = await compute(
 //        staticReadKdbxFile, readArgs,
 //        debugLabel: 'readKdbxFile');
@@ -661,13 +823,14 @@ class KdbxBloc {
       name: kdbxFile.body.meta.databaseName.get(),
       defaultColor: _defaultNextColor(),
     );
+    final kdbxOpenedFile = KdbxOpenedFile(
+      fileSource: file,
+      openedFile: openedFile,
+      kdbxFile: kdbxFile,
+    );
     _openedFiles.value = OpenedKdbxFiles({
       ..._openedFiles.value._files,
-      file: KdbxOpenedFile(
-        fileSource: file,
-        openedFile: openedFile,
-        kdbxFile: kdbxFile,
-      )
+      file: kdbxOpenedFile,
     });
     analytics.events.trackOpenFile(type: file.typeDebug);
     analytics.events.trackOpenFile2(
@@ -680,6 +843,7 @@ class KdbxBloc {
       _logger.fine('adding file to quick unlock.');
       await _updateQuickUnlockStore();
     }
+    return kdbxOpenedFile;
   }
 
   Color _defaultNextColor() {
@@ -709,6 +873,23 @@ class KdbxBloc {
 
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
 
+  Future<void> continueLoadInBackground(
+    StreamIterator<OpenFileResult> openIt, {
+    @required String debugName,
+  }) async {
+    try {
+      while (await openIt.moveNext()) {
+        final r = openIt.current;
+        _logger.fine('load:$debugName new data from ${r.fileContent.source}');
+      }
+    } catch (e, stackTrace) {
+      _logger.severe('load:$debugName error while loading subsequent data.', e,
+          stackTrace);
+      rethrow;
+    }
+    _logger.fine('load:$debugName finished.');
+  }
+
   Future<int> reopenQuickUnlock([TaskProgress progress]) =>
       _quickUnlockCheckRunning ??= (() async {
         try {
@@ -721,11 +902,14 @@ class KdbxBloc {
             try {
               final fileLabel =
                   '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})';
-              progress.progressLabel = 'Loading $fileLabel';
-              await file.key.contentPreCache();
+//              progress.progressLabel = 'Loading $fileLabel';
+//              await file.key.contentPreCache();
               progress.progressLabel = 'Opening $fileLabel';
-              await openFile(file.key, file.value);
+              final open = StreamIterator(openFile(file.key, file.value));
+              await open.moveNext();
               filesOpened++;
+              unawaited(
+                  continueLoadInBackground(open, debugName: '$fileLabel'));
             } catch (e, stackTrace) {
               _logger.severe(
                   'Panic, error while trying to open file from '
@@ -815,7 +999,7 @@ class KdbxBloc {
     await localSource.file
         .writeAsBytes(await _saveFileToBytes(kdbxFile), flush: true);
     if (openAfterCreate) {
-      await openFile(localSource, credentials);
+      await openFile(localSource, credentials).last;
     }
     return localSource;
   }

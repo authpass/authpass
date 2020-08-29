@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
@@ -17,8 +18,17 @@ class PathUtils {
   static final Completer<bool> runAppFinished = Completer<bool>();
   static Future<bool> get waitForRunAppFinished => runAppFinished.future;
 
-  Future<Directory> getTemporaryDirectory() async {
-    return _namespaced(await path_provider.getTemporaryDirectory());
+  final Map<String, Directory> directoryCache = {};
+
+  static String _cacheKey(String type, String subNamespace) {
+    return '$type$subNamespace';
+  }
+
+  Future<Directory> getTemporaryDirectory({String subNamespace}) async {
+    return directoryCache[_cacheKey('temp', subNamespace)] ??= _namespaced(
+      await path_provider.getTemporaryDirectory(),
+      subNamespace: subNamespace,
+    );
   }
 
   /// Document directory for "internal" kdbx files which should be accessible
@@ -48,12 +58,14 @@ class PathUtils {
     return _namespaced(await _getDesktopDirectory());
   }
 
-  Directory _namespaced(Directory base) {
+  Directory _namespaced(Directory base, {String subNamespace}) {
     final namespace = Env.value?.storageNamespace;
-    if (namespace == null) {
+    if (namespace == null && subNamespace == null) {
       return base;
     }
-    return Directory(path.join(base.path, namespace));
+    return Directory(
+        path.joinAll([base.path, namespace, subNamespace].whereNotNull()))
+      ..create(recursive: true);
   }
 
   String get namespace => Env.value?.storageNamespace;

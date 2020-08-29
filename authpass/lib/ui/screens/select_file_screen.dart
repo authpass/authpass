@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -484,7 +485,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 
   void _loadAndGoToCredentials(FileSource source) {
     asyncRunTask((progress) {
-      return source.content().then((value) {
+      return source.content().last.then((value) {
         return Navigator.of(context).push(CredentialsScreen.route(source));
       }).catchError((dynamic error, StackTrace stackTrace) {
         _logger.fine('Error while trying to load file source $source');
@@ -794,6 +795,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   @override
   void initState() {
     super.initState();
+    unawaited((() async {
+      _logger.finest('Precaching...');
+      await widget.kdbxFilePath.contentPreCache();
+    })());
   }
 
   @override
@@ -956,28 +961,32 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       final keyFileContents = await _keyFile?.readAsBytes();
       final stopWatch = Stopwatch();
       try {
-        _logger.finest('Precaching...');
-        await widget.kdbxFilePath.contentPreCache();
         stopWatch.start();
-        _loadingFile = kdbxBloc.openFile(
+        final openFileStream = kdbxBloc.openFile(
           widget.kdbxFilePath,
           Credentials.composite(
               pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
         );
+        // TODO handle subsequent errors.
+        final openIt = StreamIterator(openFileStream);
+        _loadingFile = openIt.moveNext();
         setState(() {});
         await _loadingFile;
+        final fileResult = openIt.current;
         analytics.trackTiming(
           'tryUnlockFile',
-          stopWatch.elapsedMilliseconds,
+          fileResult.unlockStopwatch.elapsedMilliseconds,
           category: 'unlock',
-          label: 'successfully unlocked',
+          label: 'successfully unlocked (${fileResult.fileContent.source})',
         );
         analytics.events.trackTryUnlock(
           action: TryUnlockResult.success,
           ext: _fileExtension(),
           source: widget.kdbxFilePath.typeDebug,
         );
+        unawaited(kdbxBloc.continueLoadInBackground(openIt,
+            debugName: '${fileResult.kdbxOpenedFile.fileSource.displayName}'));
         await Navigator.of(context)
             .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
