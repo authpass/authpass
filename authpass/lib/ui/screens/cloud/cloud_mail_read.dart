@@ -7,14 +7,17 @@ import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
+import 'package:enough_mail/enough_mail.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 
 import 'package:logging/logging.dart';
@@ -78,6 +81,10 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
           hasHtml = snapshot.data.mimeMessage?.decodeTextHtmlPart() != null;
           hasText = snapshot.data.mimeMessage?.decodeTextPlainPart() != null;
         }
+        final attachments = snapshot.data?.mimeMessage
+                ?.findContentInfo(disposition: ContentDisposition.attachment) ??
+            [];
+
         return Scaffold(
           appBar: AppBar(
             title: Text('${widget.emailMessage.subject}'),
@@ -92,6 +99,33 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                         _forcePlainText = !_forcePlainText;
                       });
                     }),
+              ],
+              if (attachments.isNotEmpty) ...[
+                PopupMenuButton<VoidCallback>(
+                  icon: const Icon(Icons.attach_file),
+                  itemBuilder: (context) => attachments
+                      .map(
+                        (a) => PopupMenuItem(
+                          value: () async {
+                            final part =
+                                snapshot.data.mimeMessage.getPart(a.fetchId);
+                            final f = await PathUtils().saveToTempDirectory(
+                                part.decodeContentBinary(),
+                                dirPrefix: 'openbinary',
+                                fileName: a.fileName);
+                            _logger.fine('Opening ${f.path}');
+                            final result = await OpenFile.open(f.path);
+                            _logger.fine('finished opening $result');
+                          },
+                          child: ListTile(
+                            leading: Icon(_iconFor(a)),
+                            title: Text(a.fileName),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onSelected: (item) => item(),
+                )
               ],
               if (!_forwarded) ...[
                 IconButton(
@@ -124,6 +158,13 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
         forcePlainText: _forcePlainText,
       ),
     );
+  }
+
+  IconData _iconFor(ContentInfo a) {
+    if (a.contentType.mediaType.sub == MediaSubtype.applicationPdf) {
+      return FontAwesomeIcons.filePdf;
+    }
+    return FontAwesomeIcons.paperclip;
   }
 }
 
