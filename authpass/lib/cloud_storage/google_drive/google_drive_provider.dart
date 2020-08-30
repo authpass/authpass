@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
-import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:googleapis/drive/v3.dart';
@@ -18,7 +17,8 @@ final _logger = Logger('authpass.google_drive_bloc');
 
 class GoogleDriveProvider
     extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
-  GoogleDriveProvider({@required this.env, @required CloudStorageHelper helper})
+  GoogleDriveProvider(
+      {@required this.env, @required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   final Env env;

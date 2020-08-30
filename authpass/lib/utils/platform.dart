@@ -1,6 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'platform_noop.dart' if (dart.platform.html) 'platform_web.dart';
+
+/// we do this ourselves so we do not have to depend on flutter for this file.
+const bool kIsWeb = authPassIsWeb;
 
 class AuthPassPlatform {
   static final Map<String, String> environment =

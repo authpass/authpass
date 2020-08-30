@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
-import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/onedrive/onedrive_models.dart';
 import 'package:authpass/env/_base.dart';
@@ -17,7 +16,8 @@ import 'package:oauth2/oauth2.dart' as oauth2;
 final _logger = Logger('onedrive_provider');
 
 class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
-  OneDriveProvider({@required this.env, @required CloudStorageHelper helper})
+  OneDriveProvider(
+      {@required this.env, @required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   final Env env;
@@ -161,11 +161,14 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         ? _uri(['items', locationId, 'createUploadSession'])
         : _uri(['items', '$locationId:', '$fileName:', 'createUploadSession']);
     final client = await requireAuthenticatedClient();
+    if (eTag != null) {
+      _logger.finer('Setting if-match to: $eTag');
+    }
     final createResponse = await client.post(
       uri,
       headers: {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-        ...?eTag == null ? null : {'if-match': ''},
+        ...?eTag == null ? null : {'if-match': eTag},
       },
       body: json.encode({
         'item': fileName == null
@@ -178,7 +181,17 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
               },
       }),
     );
-    _assertSuccessResponse(createResponse);
+
+    try {
+      _assertSuccessResponse(createResponse);
+    } catch (e) {
+      if (createResponse.statusCode == 412) {
+        throw StorageException(StorageExceptionType.conflict,
+            'Conflict while uploading to One Drive.',
+            errorBody: createResponse.body);
+      }
+      rethrow;
+    }
     final createJson = json.decode(createResponse.body) as Map<String, dynamic>;
     final uploadUrl = createJson['uploadUrl'] as String;
     final uploadResponse = await client.put(uploadUrl, body: bytes);
@@ -186,7 +199,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     _logger.fine('uploadResponse: ${uploadResponse.statusCode}');
     final driveItem = OneDriveItem.fromJson(
         json.decode(uploadResponse.body) as Map<String, dynamic>);
-    _logger.fine('upload: $driveItem');
+    _logger.finer('upload: ${driveItem.toJson()}');
     return driveItem;
   }
 

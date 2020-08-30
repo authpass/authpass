@@ -4,13 +4,13 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
-import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
 
 part 'cloud_storage_provider.g.dart';
 
@@ -30,6 +30,17 @@ enum CloudStorageEntityType {
   directory,
   file,
   unknown,
+}
+
+/// thrown when during writing to a file source a conflict is detected.
+class FileSourceConflictException implements Exception {
+  FileSourceConflictException(this.message);
+  final String message;
+
+  @override
+  String toString() {
+    return 'FileSourceConflictException{message: $message}';
+  }
 }
 
 abstract class CloudStorageEntity
@@ -132,7 +143,7 @@ abstract class CloudStorageProvider {
   CloudStorageProvider({@required this.helper});
 
   @protected
-  final CloudStorageHelper helper;
+  final CloudStorageHelperBase helper;
   PathUtil get pathUtil => helper.pathUtil;
 
   /// whether we are initialized, authenticated and ready for requests.
@@ -204,9 +215,16 @@ abstract class CloudStorageProvider {
   bool isSupported() => true;
 }
 
+abstract class CloudStorageHelperBase {
+  PathUtil get pathUtil;
+  Future<String> loadCredentials(String cloudStorageId);
+
+  Future<void> saveCredentials(String cloudStorageId, String data);
+}
+
 abstract class CloudStorageProviderClientBase<CLIENT>
     extends CloudStorageProvider {
-  CloudStorageProviderClientBase({@required CloudStorageHelper helper})
+  CloudStorageProviderClientBase({@required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   CLIENT _client;
@@ -216,6 +234,10 @@ abstract class CloudStorageProviderClientBase<CLIENT>
 
   @override
   Future<void> logout() async {
+    final c = _client;
+    if (c is http.Client) {
+      c.close();
+    }
     _client = null;
   }
 

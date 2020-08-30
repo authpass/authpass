@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
-import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_models.dart';
 import 'package:authpass/env/_base.dart';
@@ -23,7 +22,7 @@ const _METADATA_KEY_DROPBOX_DATA = 'dropbox.file_metadata';
 const _HEADER_DOWNLOAD_METADATA = 'Dropbox-API-Result';
 
 class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
-  DropboxProvider({@required this.env, @required CloudStorageHelper helper})
+  DropboxProvider({@required this.env, @required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   static const _oauthEndpoint = 'https://www.dropbox.com/oauth2/authorize';

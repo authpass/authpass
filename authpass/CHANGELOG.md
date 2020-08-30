@@ -1,3 +1,8 @@
+# (Unreleased) 1.7.6
+
+* One Drive: Add conflict detection.
+* Kdbx: Improved compatibility with other Keepass apps.
+
 # 1.7.5
 
 * Password fields: Do not obscure if they are empty.
