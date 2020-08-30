@@ -7,3 +7,4 @@ authpass/_tools/secrets/gradle_home/amazon-key.jks
 authpass/_tools/secrets/gradle_home/gradle.properties
 authpass/_tools/secrets/gradle_home/upload-key.jks
 authpass/lib/env/secrets.dart
+authpass/test/_testSecrets.json
