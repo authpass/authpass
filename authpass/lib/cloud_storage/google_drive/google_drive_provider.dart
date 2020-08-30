@@ -3,12 +3,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
-import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/bloc/kdbx/file_content.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
-import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
-import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
@@ -136,7 +135,7 @@ class GoogleDriveProvider
   String get displayName => 'Google Drive';
 
   @override
-  IconData get displayIcon => FontAwesomeIcons.googleDrive;
+  CloudStorageIcon get displayIcon => CloudStorageIcon.googleDrive;
 
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {

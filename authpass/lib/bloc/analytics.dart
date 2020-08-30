@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:analytics_event/analytics_event.dart';
 import 'package:authpass/bloc/analytics_io.dart'
     if (dart.library.html) 'package:authpass/bloc/analytics_html.dart';
@@ -170,14 +168,16 @@ class Analytics {
   }
 
   void updateSizes({
-    Size viewportSize,
-    Size displaySize,
+    double viewportSizeWidth,
+    double viewportSizeHeight,
+    double displaySizeWidth,
+    double displaySizeHeight,
     double devicePixelRatio,
   }) {
     _requireGa((ga) {
       ga.setSessionValue(
-          'vp', '${viewportSize.width.round()}x${viewportSize.height.round()}');
-      final sr = [displaySize.width, displaySize.height]
+          'vp', '${viewportSizeWidth.round()}x${viewportSizeHeight.round()}');
+      final sr = [displaySizeWidth, displaySizeHeight]
           .map((e) => (e / devicePixelRatio).round())
           .join('x');
       ga.setSessionValue('sr', sr);

@@ -1,5 +1,5 @@
 import 'package:authpass/bloc/app_data.dart';
-import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -13,19 +13,6 @@ import 'package:logging/logging.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
 final _logger = Logger('authpass.google_drive_ui');
-
-abstract class CloudStorageSelectorResult {}
-
-class CloudStorageSelectorSaveResult implements CloudStorageSelectorResult {
-  CloudStorageSelectorSaveResult(this.parent, this.fileName);
-  final CloudStorageEntity parent;
-  final String fileName;
-}
-
-class CloudStorageSelectorLoadResult implements CloudStorageSelectorResult {
-  CloudStorageSelectorLoadResult(this.fileSource);
-  final FileSource fileSource;
-}
 
 class CloudStorageSelector extends StatefulWidget {
   const CloudStorageSelector({Key key, this.provider, this.browserConfig})

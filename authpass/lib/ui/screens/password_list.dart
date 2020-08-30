@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
@@ -995,7 +997,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                       .map(
                         (file) => SpeedDialChild(
                             label: file.fileSource.displayName,
-                            child: Icon(file.fileSource.displayIcon),
+                            child: Icon(file.fileSource.displayIcon.iconData),
                             labelBackgroundColor: Theme.of(context).cardColor,
                             backgroundColor: file.openedFile.colorCode == null
                                 ? null

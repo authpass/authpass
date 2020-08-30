@@ -3,6 +3,7 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/path_utils.dart';
 import 'package:meta/meta.dart';
 
 /// Global resources available throughout the app (using [Provider])
@@ -10,7 +11,7 @@ class Deps {
   factory Deps({@required Env env}) {
     final appDataBloc = AppDataBloc(env);
     final analytics = Analytics(env: env);
-    final cloudStorageBloc = CloudStorageBloc(env);
+    final cloudStorageBloc = CloudStorageBloc(env, PathUtils());
     return Deps._(
       env: env,
       appDataBloc: appDataBloc,

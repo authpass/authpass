@@ -1,5 +1,6 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
@@ -136,7 +137,7 @@ class AuthPassAboutDialog extends StatelessWidget {
               openedFiles.map(
                 (file) => PopupMenuItem(
                   child: ListTile(
-                    leading: Icon(file.fileSource.displayIcon,
+                    leading: Icon(file.fileSource.displayIcon.iconData,
                         color: file.openedFile.color),
                     title: Text(file.fileSource.displayName),
                     subtitle: Text(

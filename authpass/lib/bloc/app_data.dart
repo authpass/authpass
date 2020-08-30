@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
+import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_utils.dart';
+import 'package:authpass/utils/uuid_util.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
@@ -14,8 +17,6 @@ import 'package:flutter/material.dart' show Color;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
-import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
 
 part 'app_data.g.dart';
 
@@ -154,7 +155,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         }
         return provider.toFileSource(
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map).cast<String, String>(),
-          uuid: uuid ?? AppDataBloc.createUuid(),
+          uuid: uuid ?? UuidUtil.createUuid(),
           databaseName: name,
         );
     }
@@ -253,10 +254,7 @@ class AppDataBloc {
         () async => (await PathUtils().getAppDataDirectory()).path),
   );
 
-  static final _uuid =
-      Uuid(options: <String, dynamic>{'grng': UuidUtil.cryptoRNG});
-
-  static String createUuid() => _uuid.v4();
+  static String createUuid() => UuidUtil.createUuid();
 
   Future<void> _init() async {
     await Future<dynamic>.delayed(const Duration(seconds: 10));

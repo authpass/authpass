@@ -5,6 +5,9 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/bloc/kdbx/file_content.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
@@ -14,6 +17,7 @@ import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -60,7 +64,7 @@ class SelectFileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<Analytics>(context).events.trackLaunch();
-    final cloudBloc = CloudStorageBloc(Provider.of<Env>(context));
+    final cloudBloc = CloudStorageBloc(Provider.of<Env>(context), PathUtils());
     final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -334,7 +338,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   ),
                   ...cloudStorageBloc.availableCloudStorage.map(
                     (cs) => SelectFileAction(
-                      icon: cs.displayIcon,
+                      icon: cs.displayIcon.iconData,
                       label: loc.loadFrom(cs.displayName),
                       onPressed: () async {
                         final source = await Navigator.of(context).push(
@@ -579,7 +583,7 @@ class OpenedFileTile extends StatelessWidget {
 //        crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Icon(
-              openedFile.displayIcon,
+              openedFile.displayIcon.iconData,
               color: ThemeUtil.iconColor(theme, color),
             ),
             const SizedBox(width: 8),

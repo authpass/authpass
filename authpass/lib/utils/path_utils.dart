@@ -4,12 +4,13 @@ import 'dart:typed_data';
 
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/extension_methods.dart';
+import 'package:authpass/utils/path_util.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-class PathUtils {
+class PathUtils implements PathUtil {
   factory PathUtils() => _instance;
 
   PathUtils._();
@@ -24,6 +25,7 @@ class PathUtils {
     return '$type$subNamespace';
   }
 
+  @override
   Future<Directory> getTemporaryDirectory({String subNamespace}) async {
     return directoryCache[_cacheKey('temp', subNamespace)] ??= _namespaced(
       await path_provider.getTemporaryDirectory(),

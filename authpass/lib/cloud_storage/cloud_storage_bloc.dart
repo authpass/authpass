@@ -1,15 +1,17 @@
+import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
 import 'package:authpass/cloud_storage/onedrive/onedrive_provider.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_provider.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/path_util.dart';
 
 /// manages available cloud storages.
 /// BloC is definitely the wrong name here...
 class CloudStorageBloc {
-  CloudStorageBloc(this.env)
-      : _helper = CloudStorageHelper(env),
+  CloudStorageBloc(this.env, PathUtil pathUtil)
+      : _helper = CloudStorageHelper(env, pathUtil),
         availableCloudStorage = {} {
     if (env.featureCloudStorageProprietary) {
       availableCloudStorage.addAll({

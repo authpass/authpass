@@ -3,19 +3,19 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
-import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/bloc/kdbx/file_content.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
-import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:xml/xml.dart' as xml;
 import 'package:path/path.dart' as path;
+import 'package:xml/xml.dart' as xml;
 
 final _logger = Logger('authpass.webdav_provider');
 
@@ -113,7 +113,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   @override
-  IconData get displayIcon => FontAwesomeIcons.cloudUploadAlt;
+  CloudStorageIcon get displayIcon => CloudStorageIcon.webDav;
 
   @override
   String get displayName => 'WebDAV';
