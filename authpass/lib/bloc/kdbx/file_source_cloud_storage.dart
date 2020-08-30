@@ -139,7 +139,7 @@ class FileSourceCloudStorage extends FileSource {
   }
 
   @override
-  CloudStorageIcon get displayIcon => provider.displayIcon;
+  FileSourceIcon get displayIcon => provider.displayIcon;
 
   @override
   FileSource copyWithDatabaseName(String databaseName) =>

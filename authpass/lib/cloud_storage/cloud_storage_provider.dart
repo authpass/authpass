@@ -140,7 +140,7 @@ abstract class CloudStorageProvider {
 
   String get id => runtimeType.toString();
   String get displayName;
-  CloudStorageIcon get displayIcon;
+  FileSourceIcon get displayIcon;
   bool get supportSearch => false;
   Future<bool> loadSavedAuth();
   Future<bool> startAuth<RESULT extends UserAuthenticationPromptResult,

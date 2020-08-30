@@ -9,7 +9,7 @@ import 'package:path/path.dart' as path;
 
 final _logger = Logger('file_source');
 
-enum CloudStorageIcon {
+enum FileSourceIcon {
   hdd,
   externalLink,
   dropbox,
@@ -38,7 +38,7 @@ abstract class FileSource {
   /// Returns the database name, or if it is not know the bare file name.
   String get displayName => databaseName ?? displayNameFromPath;
 
-  CloudStorageIcon get displayIcon;
+  FileSourceIcon get displayIcon;
 
   /// The database name to display if [databaseName] is unknown.
   @protected
@@ -164,7 +164,7 @@ class FileSourceUrl extends FileSource {
   bool get supportsWrite => false;
 
   @override
-  CloudStorageIcon get displayIcon => CloudStorageIcon.externalLink;
+  FileSourceIcon get displayIcon => FileSourceIcon.externalLink;
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => FileSourceUrl(

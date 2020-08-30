@@ -113,7 +113,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   @override
-  CloudStorageIcon get displayIcon => CloudStorageIcon.webDav;
+  FileSourceIcon get displayIcon => FileSourceIcon.webDav;
 
   @override
   String get displayName => 'WebDAV';

@@ -135,7 +135,7 @@ class GoogleDriveProvider
   String get displayName => 'Google Drive';
 
   @override
-  CloudStorageIcon get displayIcon => CloudStorageIcon.googleDrive;
+  FileSourceIcon get displayIcon => FileSourceIcon.googleDrive;
 
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {

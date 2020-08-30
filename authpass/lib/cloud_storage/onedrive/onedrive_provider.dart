@@ -79,7 +79,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   }
 
   @override
-  CloudStorageIcon get displayIcon => CloudStorageIcon.oneDrive;
+  FileSourceIcon get displayIcon => FileSourceIcon.oneDrive;
 
   @override
   String get displayName => 'One Drive';

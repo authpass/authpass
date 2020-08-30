@@ -180,7 +180,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   String get displayName => 'Dropbox';
 
   @override
-  CloudStorageIcon get displayIcon => CloudStorageIcon.dropbox;
+  FileSourceIcon get displayIcon => FileSourceIcon.dropbox;
 
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {

@@ -188,7 +188,7 @@ class FileSourceLocal extends FileSource {
   bool get supportsWrite => true;
 
   @override
-  CloudStorageIcon get displayIcon => CloudStorageIcon.hdd;
+  FileSourceIcon get displayIcon => FileSourceIcon.hdd;
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => FileSourceLocal(

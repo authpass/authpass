@@ -2,20 +2,20 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-extension CloudStorageIconUi on CloudStorageIcon {
+extension FileSourceIconUi on FileSourceIcon {
   IconData get iconData {
     switch (this) {
-      case CloudStorageIcon.dropbox:
+      case FileSourceIcon.dropbox:
         return FontAwesomeIcons.dropbox;
-      case CloudStorageIcon.googleDrive:
+      case FileSourceIcon.googleDrive:
         return FontAwesomeIcons.googleDrive;
-      case CloudStorageIcon.webDav:
+      case FileSourceIcon.webDav:
         return FontAwesomeIcons.cloudUploadAlt;
-      case CloudStorageIcon.oneDrive:
+      case FileSourceIcon.oneDrive:
         return FontAwesomeIcons.microsoft;
-      case CloudStorageIcon.hdd:
+      case FileSourceIcon.hdd:
         return FontAwesomeIcons.hdd;
-      case CloudStorageIcon.externalLink:
+      case FileSourceIcon.externalLink:
         return FontAwesomeIcons.externalLinkAlt;
     }
     throw StateError('Invalid icon: $this');
