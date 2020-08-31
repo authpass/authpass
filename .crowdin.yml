@@ -1,0 +1,3 @@
+files:
+  - source: /metadata/android/en-US/**
+    translation: /metadata/android/%locale%
