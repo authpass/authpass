@@ -1,0 +1,20 @@
+<p>Sichere und einfache Verwahrung all Deiner Passwörter! Finde schnell all Deine Zugriffsdaten und erstelle neue Passwörter.</p>
+
+<p>AuthPass ist ein lokaler Passwort Manager der das populäre (und bewährte) Format von Keepass (kdbx) unterstützt/verwendet.
+Dies erlaubt das Weiterverwenden von bestehenden Passwort Datenbanken aus anderen kommpatiblen Apps sowie bietet die 
+Sicherheit eines erprobten, sicheren Formats.</p>
+
+<p>Mithilfe von AuthPass kannst Du auf all Deinen Geräten mit der selben App all deine Benutzerkonten und Passwörter verwalten,
+neue Passwörter (und Email Adressen) generieren und über Cloud storage (z.b. WebDav) synchronisieren.</p>
+
+<ul>
+<li>All deine Benutzerkonten und Passwörter an einer Stelle.</li>
+<li>Auto-Fill ab Android 9 und mit Browser support ab Android 10.</li>
+<li>Generiere sichere, Zufallspasswörter für all deine Konten.</li>
+<li>Quick Unlock von Passwortdatenbanken gesichert mit Biometric Lock (Fingerabdruck oder Face Unlock).</li>
+<li>Verfügbar auf all deinen Geräten: Für MacOS, iOS, iPadOS, Android, Linux and Windows.</li>
+<li>Open Source und verfügbar unter https://github.com/authpass/authpass/ - Mehr informationen unter https://authpass.app/</li>
+<li>Contributions welcome ;-) (Für Entwickler, Übersetzer, Dokumentation, Grafiker, etc. immer gerne gesehen ;-) )</li>
+</ul>
+
+<p>Besuche unseren Discord channel! https://authpass.app/go/discord Bei Problemen, Fragen oder Feature requests.</p>
