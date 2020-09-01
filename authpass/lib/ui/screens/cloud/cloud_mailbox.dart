@@ -196,16 +196,33 @@ class CloudMailboxList extends StatelessWidget {
                               await bloc.deleteMailbox(mailbox);
                             },
                           ),
-                          ListTile(
-                            leading: const Icon(FontAwesomeIcons.volumeMute),
-                            title: const Text('Disable'),
-                            subtitle: const Text('Receive no more emails'),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              await bloc.updateMailbox(mailbox,
-                                  isDisabled: true);
-                            },
-                          ),
+                          mailbox.isDisabled
+                              ? ListTile(
+                                  leading:
+                                      const Icon(FontAwesomeIcons.volumeUp),
+                                  title: const Text('(re)enable'),
+                                  subtitle:
+                                      const Text('Continue receiving emails'),
+                                  onTap: () async {
+                                    Navigator.of(context).pop();
+                                    await bloc.updateMailbox(
+                                      mailbox,
+                                      isDisabled: false,
+                                    );
+                                  },
+                                )
+                              : ListTile(
+                                  leading:
+                                      const Icon(FontAwesomeIcons.volumeMute),
+                                  title: const Text('Disable'),
+                                  subtitle:
+                                      const Text('Receive no more emails'),
+                                  onTap: () async {
+                                    Navigator.of(context).pop();
+                                    await bloc.updateMailbox(mailbox,
+                                        isDisabled: true);
+                                  },
+                                ),
                         ],
                       ),
                     );
