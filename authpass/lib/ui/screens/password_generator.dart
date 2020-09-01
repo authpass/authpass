@@ -199,7 +199,8 @@ class _GeneratePasswordState extends State<GeneratePassword>
                         _generatePassword();
                         if (_passwordLength == passwordLengthMax &&
                             _passwordLengthCustom.text.isEmpty) {
-                          _passwordLengthCustom.text = '$passwordLengthMax';
+                          _passwordLengthCustom.text =
+                              passwordLengthMax.toString();
                         }
                       });
                     },
