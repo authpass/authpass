@@ -221,6 +221,9 @@ abstract class AppLocalizations {
 
   // Master password input: show password as plain text during input. (shown as tooltip)
   String get passwordPlainText;
+
+  // No description provided in @unexpectedError
+  String unexpectedError(String error);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

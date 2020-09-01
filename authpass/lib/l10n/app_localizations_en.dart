@@ -138,4 +138,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordPlainText => 'Reveal password';
+
+  @override
+  String unexpectedError(String error) {
+    return 'Unexpected Error: ${error}';
+  }
 }

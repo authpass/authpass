@@ -44,7 +44,7 @@ class GeneratePassword extends StatefulWidget {
 
 class _GeneratePasswordState extends State<GeneratePassword> {
   static const _characterSets = <String, CharacterSet>{
-    'Lowerase (a-z)': CharacterSet.alphabetAsciiLowerCase,
+    'Lowercase (a-z)': CharacterSet.alphabetAsciiLowerCase,
     'Uppercase (A-Z)': CharacterSet.alphabetAsciiUpperCase,
     'Numeric (0-9)': CharacterSet.numeric,
     'Umlauts (ä)': CharacterSet.alphabetUmlauts,
@@ -96,11 +96,12 @@ class _GeneratePasswordState extends State<GeneratePassword> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
+              padding: const EdgeInsets.all(16),
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -122,8 +123,8 @@ class _GeneratePasswordState extends State<GeneratePassword> {
             SimpleGridWidget(
               children: _characterSets.entries
                   .map<Widget>(
-                    (entry) => SwitchListTile(
-                      title: Text(entry.key),
+                    (entry) => OptionToggleTile(
+                      label: entry.key.replaceFirst(' (', '\n('),
                       value: _selectedCharacterSet.contains(entry.value),
                       onChanged: (val) {
                         setState(() {
@@ -221,5 +222,43 @@ class SimpleGridWidget extends StatelessWidget {
                       partition.map((child) => Expanded(child: child)).toList(),
                 ))
             .toList());
+  }
+}
+
+class OptionToggleTile extends StatelessWidget {
+  const OptionToggleTile({
+    Key key,
+    @required this.label,
+    @required this.value,
+    @required this.onChanged,
+  })  : assert(label != null),
+        assert(value != null),
+        assert(onChanged != null),
+        super(key: key);
+
+  final String label;
+  final bool value;
+  final void Function(bool value) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Checkbox(value: value, onChanged: onChanged),
+            Expanded(
+              child: Text(label, style: Theme.of(context).textTheme.subtitle1),
+            ),
+            // Switch(value: value, onChanged: onChanged),
+          ],
+        ),
+      ),
+      onTap: () {
+        onChanged(!value);
+      },
+    );
   }
 }

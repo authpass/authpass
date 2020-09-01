@@ -118,5 +118,14 @@
   "passwordPlainText": "Reveal password",
   "@passwordPlainText": {
     "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+  },
+
+  "unexpectedError": "Unexpected Error: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }

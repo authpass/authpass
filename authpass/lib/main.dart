@@ -18,6 +18,7 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/diac_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -88,14 +89,19 @@ Future<void> startApp(Env env) async {
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
-    if (navigatorKey.currentState?.overlay?.context != null) {
-      DialogUtils.showErrorDialog(navigatorKey.currentState.overlay.context,
-          null, 'Unexpected error: $error');
-    }
+    navigatorKey.currentState?.overlay?.context?.let((context) {
+      var message = 'Unexpected error: $error'; // NON-NLS
+      try {
+        message = AppLocalizations.of(context)?.unexpectedError('$error');
+      } catch (e, stackTrace) {
+        _logger.fine('Error while localizing error message', e, stackTrace);
+      }
+      DialogUtils.showErrorDialog(context, null, message);
+    });
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone,
         ZoneSpecification specification, Map zoneValues) {
-      print('Forking zone.');
+      print('Forking zone.'); // NON-NLS
       return parent.fork(zone, specification, zoneValues);
     },
   ));
