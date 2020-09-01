@@ -152,6 +152,35 @@ class AppLocalizationsDe extends AppLocalizations {
   String get useAsDefault => 'Use as Default';
 
   @override
+  String get characterSetLowerCase => 'Lowercase (a-z)';
+
+  @override
+  String get characterSetUpperCase => 'Uppercase (A-Z)';
+
+  @override
+  String get characterSetNumeric => 'Numeric (0-9)';
+
+  @override
+  String get characterSetUmlauts => 'Umlauts (ä)';
+
+  @override
+  String get characterSetSpecial => 'Special (@%+)';
+
+  @override
+  String get length => 'Length';
+
+  @override
+  String get customLength => 'Custom Length';
+
+  @override
+  String customLengthHelperText(Object customMinLength) {
+    return 'Only used for length > ${customMinLength}';
+  }
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard.';
+
+  @override
   String unexpectedError(String error) {
     return 'Unexpected Error: ${error}';
   }

@@ -234,6 +234,33 @@ abstract class AppLocalizations {
   // Button Label for Password generator settings: use as defaults
   String get useAsDefault;
 
+  // No description provided in @characterSetLowerCase
+  String get characterSetLowerCase;
+
+  // No description provided in @characterSetUpperCase
+  String get characterSetUpperCase;
+
+  // No description provided in @characterSetNumeric
+  String get characterSetNumeric;
+
+  // No description provided in @characterSetUmlauts
+  String get characterSetUmlauts;
+
+  // No description provided in @characterSetSpecial
+  String get characterSetSpecial;
+
+  // Length of password
+  String get length;
+
+  // Label for custom length field
+  String get customLength;
+
+  // Help text for custom length field
+  String customLengthHelperText(Object customMinLength);
+
+  // Snackbar text when copying text to clipboard.
+  String get copiedToClipboard;
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

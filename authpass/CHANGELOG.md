@@ -2,6 +2,7 @@
 
 * One Drive: Add conflict detection.
 * Kdbx: Improved compatibility with other Keepass apps.
+* Password generator: Allow generted passwords of custom length >40 characters.
 
 # 1.7.5
 

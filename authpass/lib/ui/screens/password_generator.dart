@@ -68,13 +68,15 @@ class GeneratePassword extends StatefulWidget {
 
 class _GeneratePasswordState extends State<GeneratePassword>
     with SingleTickerProviderStateMixin {
-  static const _characterSets = <String, CharacterSet>{
-    'Lowercase (a-z)': CharacterSet.alphabetAsciiLowerCase,
-    'Uppercase (A-Z)': CharacterSet.alphabetAsciiUpperCase,
-    'Numeric (0-9)': CharacterSet.numeric,
-    'Umlauts (ä)': CharacterSet.alphabetUmlauts,
-    'Special (@%+)': CharacterSet.specialCharacters,
-  };
+  static Map<String, CharacterSet> characterSets(AppLocalizations loc) => {
+        loc.characterSetLowerCase: CharacterSet.alphabetAsciiLowerCase,
+        loc.characterSetUpperCase: CharacterSet.alphabetAsciiUpperCase,
+        loc.characterSetNumeric: CharacterSet.numeric,
+        loc.characterSetUmlauts: CharacterSet.alphabetUmlauts,
+        loc.characterSetSpecial: CharacterSet.specialCharacters,
+      };
+
+  Map<String, CharacterSet> _characterSets;
 
   static const _defaultCharacterSets = {
     CharacterSet.alphabetAsciiLowerCase,
@@ -110,6 +112,7 @@ class _GeneratePasswordState extends State<GeneratePassword>
         ..addAll(CharacterSet.characterSetFromIds(
             appData.passwordGeneratorCharacterSets));
     }
+    _characterSets = characterSets(AppLocalizations.of(context));
     _generatePassword();
   }
 
@@ -137,7 +140,8 @@ class _GeneratePasswordState extends State<GeneratePassword>
                   Clipboard.setData(ClipboardData(text: _password));
                   Scaffold.of(context)
                     ..hideCurrentSnackBar(reason: SnackBarClosedReason.remove)
-                    ..showSnackBar(const SnackBar(content: Text('Copied.')));
+                    ..showSnackBar(
+                        SnackBar(content: Text(loc.copiedToClipboard)));
                 },
                 child: InputDecorator(
                   decoration: InputDecoration(
@@ -161,7 +165,7 @@ class _GeneratePasswordState extends State<GeneratePassword>
               children: _characterSets.entries
                   .map<Widget>(
                     (entry) => OptionToggleTile(
-                      label: entry.key.replaceFirst(' (', '\n('),
+                      label: entry.key.replaceFirst(' (', '\n('), // NON-NLS
                       value: _selectedCharacterSet.contains(entry.value),
                       onChanged: (val) {
                         setState(() {
@@ -180,7 +184,7 @@ class _GeneratePasswordState extends State<GeneratePassword>
             Row(
               children: <Widget>[
                 const SizedBox(width: 16),
-                const Text('Length'),
+                Text(loc.length),
                 Expanded(
                   child: Slider(
                     value: min(_passwordLength.toDouble(),
@@ -216,11 +220,11 @@ class _GeneratePasswordState extends State<GeneratePassword>
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 200),
                   child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
                       isDense: true,
-                      labelText: 'Custom Length',
-                      helperText: 'Only used for length > $passwordLengthMax',
+                      labelText: loc.customLength,
+                      helperText: loc.customLengthHelperText(passwordLengthMax),
                     ),
                     controller: _passwordLengthCustom,
                     keyboardType: const TextInputType.numberWithOptions(),
