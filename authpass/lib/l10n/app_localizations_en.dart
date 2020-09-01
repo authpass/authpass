@@ -140,6 +140,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordPlainText => 'Reveal password';
 
   @override
+  String get generatorPassword => 'Password';
+
+  @override
+  String get generatePassword => 'Generate Password';
+
+  @override
+  String get doneButtonLabel => 'Done';
+
+  @override
+  String get useAsDefault => 'Use as Default';
+
+  @override
   String unexpectedError(String error) {
     return 'Unexpected Error: ${error}';
   }

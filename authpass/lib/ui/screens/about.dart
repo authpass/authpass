@@ -117,7 +117,8 @@ class AuthPassAboutDialog extends StatelessWidget {
         ),
         value: () {
           analytics.events.trackActionPressed(action: 'generatePassword');
-          Navigator.of(context).push(PasswordGeneratorScreen.route());
+          Navigator.of(context).push(PasswordGeneratorScreen.route(
+              finishButton: FinishButtonStyle.save));
         },
       ),
       PopupMenuItem(

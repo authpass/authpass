@@ -120,6 +120,24 @@
     "description": "Master password input: show password as plain text during input. (shown as tooltip)"
   },
 
+  "generatorPassword": "Password",
+  "@generatorPassword": {
+    "description": "Label for generated password"
+  },
+  "generatePassword": "Generate Password",
+  "@generatePassword": {
+    "description": "screen title for password generator"
+  },
+  "doneButtonLabel": "Done",
+  "@doneButtonLabel": {
+    "description": "generic button label for 'Done' action."
+  },
+  "useAsDefault": "Use as Default",
+  "@useAsDefault": {
+    "description": "Button Label for Password generator settings: use as defaults",
+    "context": "Password generator"
+  },
+
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {

@@ -222,6 +222,18 @@ abstract class AppLocalizations {
   // Master password input: show password as plain text during input. (shown as tooltip)
   String get passwordPlainText;
 
+  // Label for generated password
+  String get generatorPassword;
+
+  // screen title for password generator
+  String get generatePassword;
+
+  // generic button label for 'Done' action.
+  String get doneButtonLabel;
+
+  // Button Label for Password generator settings: use as defaults
+  String get useAsDefault;
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

@@ -1185,8 +1185,8 @@ class _EntryFieldState extends State<EntryField>
   }
 
   Future<void> _launchPasswordGenerator() async {
-    final password =
-        await Navigator.of(context).push(PasswordGeneratorScreen.route());
+    final password = await Navigator.of(context).push(
+        PasswordGeneratorScreen.route(finishButton: FinishButtonStyle.done));
     if (password != null) {
       setState(() {
         _generatedPassword(password);
