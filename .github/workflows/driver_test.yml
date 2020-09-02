@@ -3,22 +3,23 @@ name: Unit and Driver Tests
 on: [push]
 
 jobs:
-  flutter_test:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-      - name: ci-install-deps
-        env:
-          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
-        run: "./authpass/_tools/ci-install-deps.sh ios"
-      - name: run test
-        run: "cd authpass && ~/deps/flutter/bin/flutter test"
+#  test is now run in `unit_test.yaml`
+#  flutter_test:
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Checkout submodules
+#        shell: bash
+#        run: |
+#          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+#          git submodule sync --recursive
+#          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+#      - name: ci-install-deps
+#        env:
+#          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+#        run: "./authpass/_tools/ci-install-deps.sh ios"
+#      - name: run test
+#        run: "cd authpass && ~/deps/flutter/bin/flutter test"
 
 
   drive_ios:
