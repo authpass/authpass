@@ -262,6 +262,9 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                             lastStatus = status;
                             progress.progressLabel = 'Status: $status';
                           }
+                        } catch (e, stackTrace) {
+                          lastStatus = ReloadStatus.error;
+                          _logger.severe('Error during merge.', e, stackTrace);
                         } finally {
                           // make sure logs are processed
                           await Future<void>.delayed(
