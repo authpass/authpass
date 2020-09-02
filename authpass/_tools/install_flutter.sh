@@ -9,6 +9,7 @@ path="${0%/*}"
 
 DEPS=${DEPS} # must be defined by environment.
 
+# shellcheck source=./_flutter_version.sh
 source "${path}/_flutter_version.sh"
 
 #FLUTTER_MAC_CHANNEL='dev'
@@ -35,11 +36,12 @@ case "${platform}" in
     *)          echo "Unknown platform ${platform}" ; exit 1 ;;
 esac
 
-pushd ${DEPS}
+pushd "${DEPS}"
+echo "Using flutter for ${FLUTTER_PLATFORM}: ${FLUTTER_VERSION}."
 echo "Downloading ${FLUTTER_URL}${FLUTTER_ARCHIVE}"
 
 f="flutter.${FLUTTER_EXT}"
-curl -o ${f} ${FLUTTER_URL}${FLUTTER_ARCHIVE}
+curl -o ${f} "${FLUTTER_URL}${FLUTTER_ARCHIVE}"
 
 if command -v shasum ; then
     checksum=$(shasum -a 256 ${f} | cut -f1 -d' ')
@@ -65,7 +67,14 @@ fi
 pushd flutter/dev/tools
 "../../../flutter/bin/flutter" pub get
 
-popd
+popd # flutter/dev/tools
+
+popd # $DEPS
+
+pushd "$path"/..
+
+# install dependencies, subsequent commands can simply use _tools/flutter_run.sh
+"${DEPS}/flutter/bin/flutter" pub get
 
 export PATH=${DEPS}/flutter/bin:$PATH
 

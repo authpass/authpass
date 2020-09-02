@@ -111,4 +111,5 @@ flutter_export_environment.sh
 report.xml
 
 test/_cloudStorageHelper.json
+/coverage
 
