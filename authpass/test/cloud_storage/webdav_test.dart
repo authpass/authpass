@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_provider.dart';
@@ -25,10 +23,12 @@ void main() {
   final webDavUsername = Platform.environment['WEBDAV_USERNAME'] ?? 'authpass';
   final webDavPassword = Platform.environment['WEBDAV_PASSWORD'] ?? 'authpa55';
 
+  _logger.fine('Starting webdav test for URL: $webDavUrl');
+
   group('simple webdav test', () {
     WebDavProvider provider;
     setUp(() async {
-      final env = await TestUtil.createEnv();
+      // final env = await TestUtil.createEnv();
       provider = WebDavProvider(helper: CloudStorageHelperMock());
       // authenticate
       final result = await provider.startAuth((prompt) async {
