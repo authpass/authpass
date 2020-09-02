@@ -11,7 +11,9 @@ final _logger = Logger('test_util');
 
 class TestUtil {
   static Future<Env> createEnv() async {
-    final secretJson = await File('test/_testSecrets.json').readAsString();
+    final secretsFile = File('test/_testSecrets.json');
+    final secretJson =
+        secretsFile.existsSync() ? await secretsFile.readAsString() : '{}';
 
     return TestEnv(EnvSecretsFake.fromJson(
         json.decode(secretJson) as Map<String, Object>));
