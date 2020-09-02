@@ -1,3 +1,4 @@
+[![Crowdin](https://badges.crowdin.net/e/df2e0329a54542fef35ab5412a893d23/localized.svg)](https://authpass.crowdin.com/authpass)
 [<img align="right" src="https://img.shields.io/badge/join%20us%20on%20our%20chat-discord-green">](https://authpass.app/go/discord)
 
 [![AuthPass.app](_docs/logo-header.png)](https://authpass.app)
@@ -10,9 +11,23 @@ AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdb
 * Android: [Google Play Store](https://play.google.com/store/apps/details?id=design.codeux.authpass) or [F-Droid](https://f-droid.org/packages/design.codeux.authpass.fdroid/)
 * iOS: [App Store](https://apps.apple.com/app/authpass-password-manager/id1479297675?ls=1&at=11l8ru)
 * Linux Desktop: [Check out our blog post for installation instructions](https://authpass.app/articles/linux-desktop-release-authpass-1.6.3/)
-* Windows Desktop: [Check out our annoucement post](https://authpass.app/articles/authpass-released-for-windows-desktop-authpass-1.7.0/)
+* Windows Desktop: [Windows Install Guide](https://authpass.app/docs/install/windows-installation/) - [![AuthPass-setup-stable.exe](https://data.authpass.app/data/artifact.download/AuthPass-setup-stable.exe/shield)](https://data.authpass.app/data/artifact.download/AuthPass-setup-stable.exe)
 
 ![Mac OS, iOS and Android Screenshot](_docs/authpass-platform-composition.png)
+
+## Contribute to AuthPass
+
+See also https://authpass.app/docs/support-authpass-get-involved/
+
+If you like AuthPass, and want to contribute. First, spread the word ;-) Writing reviews, vote or
+share AuthPass on twitter, reddit, etc.
+
+* Help us translate AuthPass (work in progress): [![Crowdin](https://badges.crowdin.net/e/df2e0329a54542fef35ab5412a893d23/localized.svg)](https://authpass.crowdin.com/authpass)
+  * [Contact us for new languages](https://authpass.app/docs/contact/)
+* Interested in writing documentation? Let us new in our [discord channel](https://authpass.app/go/discord)
+* Want to code? See [CONTRIBUTING.md](https://github.com/authpass/authpass/blob/master/CONTRIBUTING.md).
+  * If you need some slight introduction to the code, ask in the [discord channel](https://authpass.app/go/discord).
+* Good at design? Or marketing? Just get in contact ;-)
 
 ## Roadmap/TODOs
 
