@@ -31,7 +31,7 @@ VS_REDIST_FILES=(
 # echo
 echo
 
-VS_REDIST=`find "${VS_REDIST_BASE}" -path '**0/x64/M**' -iname "${VS_REDIST_FILES[0]}" | grep -v onecore | head -n 1`
+VS_REDIST=`find "${VS_REDIST_BASE}" -path '**[0-9]/x64/M**' -iname "${VS_REDIST_FILES[0]}" | grep -v onecore | head -n 1`
 
 if test -z "${VS_REDIST}" ; then
   echo "UNABLE TO FIND VS REDIST (${VS_REDIST_FILES[0]})"
