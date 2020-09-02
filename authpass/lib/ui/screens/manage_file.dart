@@ -12,6 +12,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -247,8 +248,33 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       : null,
                 ),
                 ButtonBar(
-                  mainAxisSize: MainAxisSize.min,
+                  // mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    FlatButton.icon(
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Reload'),
+                      onPressed: asyncTaskCallback((progress) async {
+                        final appender = MemoryAppender()
+                          ..attachToLogger(Logger.root);
+                        var lastStatus = ReloadStatus.error;
+                        try {
+                          await for (final status in _kdbxBloc.reload(_file)) {
+                            lastStatus = status;
+                            progress.progressLabel = 'Status: $status';
+                          }
+                        } finally {
+                          // make sure logs are processed
+                          await Future<void>.delayed(
+                              const Duration(milliseconds: 100));
+                          // final log = appender.log.toString();
+                          await appender.dispose();
+                          await LogViewerDialog(
+                            title: 'Finished Merge $lastStatus',
+                            log: appender.log,
+                          ).open(context);
+                        }
+                      }),
+                    ),
                     FlatButton(
                       child: const Text('Close/Lock'),
                       onPressed: () async {
@@ -256,22 +282,25 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         Navigator.of(context).pop();
                       },
                     ),
-                    ...?!env.isDebug
-                        ? null
-                        : [
-                            FlatButton(
-                              child: Text(
-                                  'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
-                              onPressed: () async {
-                                await Clipboard.setData(ClipboardData(
-                                    text: _file.kdbxFile.body
-                                        .toXml()
-                                        .toXmlString(pretty: true)));
-                              },
-                            )
-                          ],
                   ],
-                )
+                ),
+                if (env.isDebug) ...[
+                  ButtonBar(
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FlatButton(
+                        child: Text(
+                            'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
+                        onPressed: () async {
+                          await Clipboard.setData(ClipboardData(
+                              text: _file.kdbxFile.body
+                                  .toXml()
+                                  .toXmlString(pretty: true)));
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),

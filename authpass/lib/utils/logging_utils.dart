@@ -62,3 +62,30 @@ class LoggingUtils {
     Isolate.current.addOnExitListener(exitPort.sendPort, response: 'exit');
   }
 }
+
+class StringBufferWrapper with ChangeNotifier {
+  final StringBuffer _buffer = StringBuffer();
+
+  void writeln(String line) {
+    _buffer.writeln(line);
+    notifyListeners();
+  }
+
+  @override
+  String toString() => _buffer.toString();
+}
+
+class MemoryAppender extends BaseLogAppender {
+  MemoryAppender({this.minLevel = Level.ALL})
+      : super(const DefaultLogRecordFormatter());
+
+  final Level minLevel;
+  final StringBufferWrapper log = StringBufferWrapper();
+
+  @override
+  void handle(LogRecord record) {
+    if (record.level.value >= minLevel.value) {
+      log.writeln(formatter.format(record));
+    }
+  }
+}

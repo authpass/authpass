@@ -26,9 +26,13 @@ abstract class FileSource {
   }) : _cached = initialCachedContent;
 
   FileContent _cached;
+
   @protected
   @visibleForTesting
   FileContent get cached => _cached;
+
+  /// the last read or written content.
+  FileContent get lastContent => cached;
 
   final String uuid;
 
@@ -83,11 +87,12 @@ abstract class FileSource {
     }
   }
 
-  Future<void> contentWrite(Uint8List bytes) async {
+  Future<FileContent> contentWrite(Uint8List bytes) async {
     _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
     try {
       final newMetadata = await write(bytes, _cached?.metadata);
-      _cached = FileContent(bytes, newMetadata, FileContentSource.memoryCache);
+      return _cached =
+          FileContent(bytes, newMetadata, FileContentSource.memoryCache);
     } catch (e, stackTrace) {
       _logger.severe('Error while writing into $typeDebug ($runtimeType) $this',
           e, stackTrace);

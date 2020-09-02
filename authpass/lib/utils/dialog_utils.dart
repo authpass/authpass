@@ -119,6 +119,48 @@ class DialogUtils {
   }
 }
 
+class LogViewerDialog extends StatelessWidget {
+  const LogViewerDialog({Key key, this.title, this.log}) : super(key: key);
+
+  final String title;
+  final StringBufferWrapper log;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: title == null ? null : Text(title),
+      insetPadding: const EdgeInsets.all(4),
+      contentPadding: const EdgeInsets.all(4),
+      content: Scrollbar(
+        child: SingleChildScrollView(
+          child: AnimatedBuilder(
+              animation: log,
+              builder: (context, snapshot) {
+                return Text(
+                  log.toString(),
+                  textScaleFactor: 0.5,
+                );
+              }),
+        ),
+      ),
+      actions: <Widget>[
+        // ...?moreActions,
+        FlatButton(
+          child: const Text('Ok'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+
+  Future<void> open(BuildContext context) => showDialog<void>(
+      context: context,
+      builder: (context) => this,
+      routeSettings: const RouteSettings(name: '/dialog/log'));
+}
+
 extension BuildContextError on BuildContext {
   Future<T> handleErrors<T>(String message, Future<T> Function() cb) async {
     try {
