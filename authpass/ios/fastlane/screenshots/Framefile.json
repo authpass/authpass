@@ -1,0 +1,57 @@
+{
+  "device_frame_version": "latest",
+  "default": {
+    "background": "./background.jpg",
+    "padding": 50,
+    "stack_title": true,
+    "keyword": {
+      "color_xx": "#8A93EE",
+      "color": "#626BC6",
+      "font_size": 128,
+      "fonts": [
+        {
+          "font": "./font/rubik-bold.ttf",
+          "supported": [
+            "de-DE",
+            "en-US",
+            "es-ES",
+            "fr-FR",
+            "it-IT",
+            "nl-NL",
+            "sv-SE",
+            "pt-BR"
+          ]
+        }
+      ]
+    },
+    "title": {
+      "color": "#666666",
+      "font_size": 64,
+      "fonts": [
+        {
+          "font": "./font/rubik-regular.ttf",
+          "supported": [
+            "de-DE",
+            "en-US",
+            "es-ES",
+            "fr-FR",
+            "it-IT",
+            "nl-NL",
+            "sv-SE",
+            "pt-BR"
+          ]
+        }
+      ]
+    }
+  },
+  "data": [
+    {
+      "filter": "launchscreen"
+    },
+    {
+      "filter": "openedfile",
+      "title": {
+      }
+    }
+  ]
+}

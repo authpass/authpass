@@ -191,6 +191,7 @@ dev_dependencies:
   built_value_generator: ^7.1.0
   analytics_event_gen: ^0.1.2
   freezed: ^0.11.5
+  screenshots: ^2.1.1
 
 dependency_overrides:
 #  pedantic: ^1.9.2
@@ -205,9 +206,10 @@ dependency_overrides:
       ref: 73dea5d9d441da30bd2c99adc16e5bf98d6c2a43
   # The following two are required since flutter 1.21
   # but blocked by e.g flutter_cache_manager
-  file: ^6.0.0-nullsafety.1
-  process: ^4.0.0-nullsafety.1
-
+#  file: ^6.0.0-nullsafety.1
+  file: ^5.2.1
+  process: ^3.0.13
+  platform: ^2.2.1
 
 #  openapi_base:
 #    path: /Users/herbert/dev/authpass-cloud/deps/openapi_dart/packages/openapi_base
