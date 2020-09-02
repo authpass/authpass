@@ -62,7 +62,7 @@ jobs:
         path: authpass/${{ steps.buildapk.outputs.outputpath }}
     - name: upload artifact
       shell: bash
-      run: ./authpass/_tools/upload-artifact.sh ${{ steps.buildapk.outputs.outputpath }}
+      run: ./authpass/_tools/upload-artifact.sh authpass/${{ steps.buildapk.outputs.outputpath }}
     # - uses: snapcore/action-build@v1
     #   id: snapcraft
     # - uses: actions/upload-artifact@v2
