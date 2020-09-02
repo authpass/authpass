@@ -21,4 +21,5 @@ class FileContent {
 enum FileContentSource {
   origin,
   cache,
+  memoryCache,
 }

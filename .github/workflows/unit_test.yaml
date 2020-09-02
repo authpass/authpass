@@ -3,8 +3,21 @@ name: unit test with coverage
 on: [push]
 
 jobs:
-  build:
+  unit_test:
     runs-on: ubuntu-latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      webdav:
+        # Docker Hub image
+        image: bytemark/webdav
+        ports:
+          - "10280:80"
+        env:
+          AUTH_TYPE: Digest
+          USERNAME: authpass
+          PASSWORD: authpa55
 
     steps:
       - uses: actions/checkout@v2

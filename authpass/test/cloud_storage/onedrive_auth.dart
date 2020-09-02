@@ -4,7 +4,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/onedrive/onedrive_provider.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-import 'util/test_util.dart';
+import '../util/test_util.dart';
 
 // small utility for `onedrive_test.dart`.
 

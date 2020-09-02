@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/onedrive/onedrive_models.dart';
 import 'package:authpass/env/_base.dart';
@@ -140,7 +141,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     final driveItem = await _upload(
       locationId: file.id,
-      eTag: previousMetadata[_METADATA_ETAG] as String,
+      cTag: previousMetadata[_METADATA_CTAG] as String,
       bytes: bytes,
     );
     return <String, dynamic>{
@@ -152,7 +153,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   Future<OneDriveItem> _upload({
     @required String locationId,
     String fileName,
-    String eTag,
+    String cTag,
     @required Uint8List bytes,
   }) async {
     assert(locationId != null);
@@ -161,14 +162,14 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         ? _uri(['items', locationId, 'createUploadSession'])
         : _uri(['items', '$locationId:', '$fileName:', 'createUploadSession']);
     final client = await requireAuthenticatedClient();
-    if (eTag != null) {
-      _logger.finer('Setting if-match to: $eTag');
+    if (cTag != null) {
+      _logger.finer('Setting if-match to: $cTag');
     }
     final createResponse = await client.post(
       uri,
       headers: {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-        ...?eTag == null ? null : {'if-match': eTag},
+        ...?cTag == null ? null : {'if-match': cTag},
       },
       body: json.encode({
         'item': fileName == null
@@ -186,7 +187,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       _assertSuccessResponse(createResponse);
     } catch (e) {
       if (createResponse.statusCode == 412) {
-        throw StorageException(StorageExceptionType.conflict,
+        throw StorageException.conflict(
             'Conflict while uploading to One Drive.',
             errorBody: createResponse.body);
       }

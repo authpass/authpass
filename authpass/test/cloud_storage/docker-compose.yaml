@@ -1,0 +1,30 @@
+# docker compose file during local development.
+# in github actions we use a service container.
+version: '3'
+services:
+  webdav:
+    image: bytemark/webdav
+    ports:
+      - "10280:80"
+    environment:
+      AUTH_TYPE: Digest
+      USERNAME: authpass
+      PASSWORD: authpa55
+  webdav2:
+    image: ugeek/webdav:amd64
+    ports:
+      - "10282:80"
+    environment:
+      USERNAME: authpass
+      PASSWORD: authpa55
+  webdav3:
+    image: binfalse/webdav
+    ports:
+      - "10283:80"
+    volumes:
+      - ./docker.default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker.htpasswd:/dav/.htpassword:ro
+      - ./docker.share:/dav/share
+    environment:
+      USERNAME: authpass
+      PASSWORD: authpa55

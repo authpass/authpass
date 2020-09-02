@@ -19,28 +19,37 @@ class TestUtil {
 }
 
 class CloudStorageHelperMock implements CloudStorageHelperBase {
-  CloudStorageHelperMock();
+  CloudStorageHelperMock() {}
 //  @override
 //  final Env env;
 
-  final Map<String, String> _storage = {};
-
   File get _file => File('test/_cloudStorageHelper.json');
+  Map<String, String> __storage;
+  Future<Map<String, String>> _storage() async =>
+      __storage ??= await (() async {
+        final _storage = <String, String>{};
+        if (_file.existsSync()) {
+          _logger.fine('Loading from $_file');
+          _storage.addAll((json.decode(await _file.readAsString()) as Map)
+              .cast<String, String>());
+        } else {
+          _logger
+              .severe('Unable to find cloud storage file at ${_file.absolute}');
+        }
+        return _storage;
+      })();
 
   @override
   Future<String> loadCredentials(String cloudStorageId) async {
-    if (_file.existsSync()) {
-      _storage.addAll((json.decode(await _file.readAsString()) as Map)
-          .cast<String, String>());
-    }
-    return _storage[cloudStorageId];
+    return (await _storage())[cloudStorageId];
   }
 
   @override
   Future<void> saveCredentials(String cloudStorageId, String data) async {
     _logger.info('Saving for $cloudStorageId: $data');
-    _storage[cloudStorageId] = data;
-    await _file.writeAsString(json.encode(_storage));
+    final storage = await _storage();
+    storage[cloudStorageId] = data;
+    await _file.writeAsString(json.encode(storage));
   }
 
   @override

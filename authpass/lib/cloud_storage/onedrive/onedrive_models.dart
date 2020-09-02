@@ -32,7 +32,11 @@ class OneDriveItem {
   Map<String, dynamic> toJson() => _$OneDriveItemToJson(this);
 
   final String id;
+
+  /// the "content" tag, only changes with content
   final String cTag;
+
+  /// etag changes with metadata+content.
   final String eTag;
   final String name;
 

@@ -16,6 +16,7 @@
       <w>snackbar</w>
       <w>sqflite</w>
       <w>totp</w>
+      <w>webdav</w>
     </words>
   </dictionary>
 </component>

@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_models.dart';
 import 'package:authpass/env/_base.dart';
@@ -267,12 +268,11 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         final dynamic error = info['error'];
         if (error is Map<String, dynamic>) {
           if (error['conflict'] != null) {
-            throw StorageException(StorageExceptionType.conflict,
-                info['error_summary'].toString());
+            throw StorageException.conflict(info['error_summary'].toString());
           }
         }
       }
-      throw StorageException(StorageExceptionType.unknown,
+      throw StorageException.unknown(
           info['error_summary'].toString() ?? info.toString());
     }
     final metadataJson = json.decode(response.body) as Map<String, dynamic>;
