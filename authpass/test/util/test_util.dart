@@ -6,12 +6,26 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
+import 'package:path/path.dart' as path;
 
 final _logger = Logger('test_util');
 
 class TestUtil {
+  static Directory basePath() {
+    final dir = Directory.current;
+    if (dir.path.endsWith('test')) {
+      return dir.parent;
+    }
+    return dir;
+  }
+
+  static File filePath(String relativePath) {
+    return File(path.join(basePath().path, relativePath));
+  }
+
   static Future<Env> createEnv() async {
-    final secretsFile = File('test/_testSecrets.json');
+    final secretsFile = filePath('test/_testSecrets.json');
+    _logger.fine('Using ${secretsFile.absolute}');
     final secretJson =
         secretsFile.existsSync() ? await secretsFile.readAsString() : '{}';
 
@@ -21,11 +35,11 @@ class TestUtil {
 }
 
 class CloudStorageHelperMock implements CloudStorageHelperBase {
-  CloudStorageHelperMock() {}
+  CloudStorageHelperMock();
 //  @override
 //  final Env env;
 
-  File get _file => File('test/_cloudStorageHelper.json');
+  File get _file => TestUtil.filePath('test/_cloudStorageHelper.json');
   Map<String, String> __storage;
   Future<Map<String, String>> _storage() async =>
       __storage ??= await (() async {
