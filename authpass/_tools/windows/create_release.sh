@@ -20,9 +20,9 @@ fi
 #VS_REDIST=$(cygpath "$VS_REDIST_WIN")
 
 VS_REDIST_FILES=(
+	vcruntime140_1.dll
 	msvcp140.dll
 	vcruntime140.dll
-	vcruntime140_1.dll
 )
 
 # echo "REDIST"
