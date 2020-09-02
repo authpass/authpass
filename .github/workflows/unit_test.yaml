@@ -32,7 +32,8 @@ jobs:
       - run: authpass/_tools/test-coverage.sh
       - name: Coveralls
         uses: coverallsapp/github-action@master
+        env:
+          COVERALLS_FLAG_NAME: Unit
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: authpass/coverage/lcov.info
-          flag-name: Unit
