@@ -27,6 +27,7 @@ abstract class FileSource {
 
   FileContent _cached;
   @protected
+  @visibleForTesting
   FileContent get cached => _cached;
 
   final String uuid;
@@ -77,7 +78,8 @@ abstract class FileSource {
     }
     await for (final content in load()) {
       yield content;
-      _cached = content;
+      _cached = FileContent(
+          content.content, content.metadata, FileContentSource.memoryCache);
     }
   }
 
@@ -85,7 +87,7 @@ abstract class FileSource {
     _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
     try {
       final newMetadata = await write(bytes, _cached?.metadata);
-      _cached = FileContent(bytes, newMetadata);
+      _cached = FileContent(bytes, newMetadata, FileContentSource.memoryCache);
     } catch (e, stackTrace) {
       _logger.severe('Error while writing into $typeDebug ($runtimeType) $this',
           e, stackTrace);

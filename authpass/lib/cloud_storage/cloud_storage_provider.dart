@@ -7,10 +7,11 @@ import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:http/http.dart' as http;
 
 part 'cloud_storage_provider.g.dart';
 
@@ -272,7 +273,7 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   Future<CLIENT> requireAuthenticatedClient() async {
     return _client ??= await _loadStoredCredentials().then((client) async {
       if (client == null) {
-        throw LoadFileException('Unable to load dropbox credentials.');
+        throw LoadFileException('Unable to load cloud storage credentials.');
       }
       return client;
     });
@@ -307,25 +308,6 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   Future<bool> loadSavedAuth() async {
     _client = await _loadStoredCredentials();
     return isAuthenticated;
-  }
-}
-
-enum StorageExceptionType {
-  conflict,
-  unknown,
-  authentication,
-}
-
-class StorageException implements Exception {
-  StorageException(this.type, this.details, {this.errorBody});
-
-  final StorageExceptionType type;
-  final String details;
-  final String errorBody;
-
-  @override
-  String toString() {
-    return 'StorageException{type: $type, details: $details, errorBody: $errorBody}';
   }
 }
 
