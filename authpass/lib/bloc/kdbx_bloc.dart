@@ -659,7 +659,12 @@ class KdbxBloc {
       final readArgs =
           KdbxReadArgs(reloadedContent.content, file.kdbxFile.credentials);
       final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
+
+      _logger.info('\n\n\n===========\n\n\n');
+      _logger.info('starting merge.');
       file.kdbxFile.merge(kdbxReadFile.file);
+
+      _logger.info('\n\nDONE MERGE\n\n\n\n');
 
       yield ReloadStatus.merged;
     } finally {
