@@ -131,6 +131,7 @@ class KdbxOpenedFile {
     @required this.fileSource,
     @required this.openedFile,
     @required this.kdbxFile,
+    @required this.kdbxFileContent,
   })  : assert(fileSource != null),
         assert(openedFile != null),
         assert(kdbxFile != null);
@@ -138,6 +139,9 @@ class KdbxOpenedFile {
   final FileSource fileSource;
   final OpenedFile openedFile;
   final KdbxFile kdbxFile;
+
+  /// the file content which was used to originally read the [kdbxFile]
+  final FileContent kdbxFileContent;
 }
 
 class OpenedKdbxFiles {
@@ -238,6 +242,7 @@ class KdbxBloc {
       fileSource: file.fileSource,
       openedFile: updatedFile,
       kdbxFile: file.kdbxFile,
+      kdbxFileContent: file.kdbxFileContent,
     );
     _openedFiles.value = OpenedKdbxFiles({
       ..._openedFiles.value._files,
@@ -313,6 +318,7 @@ class KdbxBloc {
       fileSource: file,
       openedFile: openedFile,
       kdbxFile: kdbxFile,
+      kdbxFileContent: fileContent,
     );
     _openedFiles.value = OpenedKdbxFiles({
       ..._openedFiles.value._files,
@@ -535,13 +541,14 @@ class KdbxBloc {
     return await file.save();
   }
 
-  Future<void> saveFile(KdbxFile file, {FileSource toFileSource}) async {
+  Future<FileContent> saveFile(KdbxFile file, {FileSource toFileSource}) async {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
     final bytes = await _saveFileToBytes(file);
-    await fileSource.contentWrite(bytes);
+    final ret = await fileSource.contentWrite(bytes);
     analytics.events.trackSave(type: fileSource.typeDebug, value: bytes.length);
     analytics.trackTiming('saveFileSize', bytes.length,
         category: 'fileSize', label: 'save');
+    return ret;
   }
 
   KdbxOpenedFile fileForKdbxFile(KdbxFile file) =>
@@ -555,12 +562,12 @@ class KdbxBloc {
 
   Future<KdbxOpenedFile> saveAs(
       KdbxOpenedFile oldFile, FileSource output) async {
-    await saveFile(oldFile.kdbxFile, toFileSource: output);
-    return await _savedAs(oldFile, output);
+    final content = await saveFile(oldFile.kdbxFile, toFileSource: output);
+    return await _savedAs(oldFile, output, content);
   }
 
-  Future<KdbxOpenedFile> _savedAs(
-      KdbxOpenedFile oldFile, FileSource output) async {
+  Future<KdbxOpenedFile> _savedAs(KdbxOpenedFile oldFile, FileSource output,
+      FileContent fileContent) async {
     final oldSource = oldFile.fileSource;
     final databaseName = oldFile.kdbxFile.body.meta.databaseName.get();
     final newOpenedFile = await appDataBloc.openedFile(
@@ -572,6 +579,7 @@ class KdbxBloc {
       fileSource: output,
       openedFile: newOpenedFile,
       kdbxFile: oldFile.kdbxFile,
+      kdbxFileContent: fileContent,
     );
     _openedFiles.value = OpenedKdbxFiles({
       ...Map.fromEntries(_openedFiles.value._files.entries
@@ -602,7 +610,9 @@ class KdbxBloc {
       CloudStorageProvider cs) async {
     final bytes = await _saveFileToBytes(oldFile.kdbxFile);
     final entity = await cs.createEntity(createFileInfo, bytes);
-    return await _savedAs(oldFile, entity);
+    final lastContent = entity.lastContent;
+    assert(bytes == lastContent.content);
+    return await _savedAs(oldFile, entity, lastContent);
   }
 
   Future<FileSource> saveLocally(FileSource source) async {
@@ -627,6 +637,45 @@ class KdbxBloc {
   }
 
   void clearEntryByUuidLookup() => _entryUuidLookup = null;
+
+  Stream<ReloadStatus> reload(KdbxOpenedFile file) async* {
+    Uint8List bytes;
+    final dirtyObjects = file.kdbxFile.dirtyObjects;
+    try {
+      if (file.kdbxFile.isDirty) {
+        //throw StateError('File must not be dirty for now.');
+        bytes = await file.kdbxFile.save();
+      }
+      yield ReloadStatus.downloading;
+      final reloadedContent = await file.fileSource.content().last;
+      assert(reloadedContent.source == FileContentSource.origin);
+      if (ByteUtils.eq(reloadedContent.content, file.kdbxFileContent.content)) {
+        yield ReloadStatus.didNotChange;
+        return;
+      }
+
+      // try loading the new file.
+      yield ReloadStatus.decrypting;
+      final readArgs =
+          KdbxReadArgs(reloadedContent.content, file.kdbxFile.credentials);
+      final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
+      file.kdbxFile.merge(kdbxReadFile.file);
+
+      yield ReloadStatus.merged;
+    } finally {
+      if (bytes != null && !file.kdbxFile.isDirty) {
+        dirtyObjects.forEach(file.kdbxFile.dirtyObject);
+      }
+    }
+  }
+}
+
+enum ReloadStatus {
+  error,
+  downloading,
+  decrypting,
+  didNotChange,
+  merged,
 }
 
 class KdbxReadArgs {

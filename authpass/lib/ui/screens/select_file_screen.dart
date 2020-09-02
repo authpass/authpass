@@ -121,7 +121,7 @@ class ProgressOverlay extends StatelessWidget {
                         child: ValueListenableBuilder<FutureTask>(
                           valueListenable: task,
                           builder: (context, value, child) {
-                            _logger.info('Generating progress dialog'
+                            _logger.fine('Generating progress dialog'
                                 ' with label ${value?.progressLabel}');
                             return Column(
                               mainAxisSize: MainAxisSize.min,
