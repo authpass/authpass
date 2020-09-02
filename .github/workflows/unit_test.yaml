@@ -30,4 +30,9 @@ jobs:
           BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
         run: authpass/_tools/postdeploy.sh
       - run: authpass/_tools/test-coverage.sh
-
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: authpass/coverage/lcov.info
+          flag-name: Unit
