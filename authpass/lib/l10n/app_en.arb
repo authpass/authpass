@@ -8,6 +8,10 @@
   "@fieldWebsite": {},
   "fieldTitle": "Title",
   "@fieldTitle": {},
+  "fieldTotp": "One Time Password (Time Based)",
+  "@fieldTotp": {
+    "description": "Label for fields of TOTP (Time based one time passwords)"
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {

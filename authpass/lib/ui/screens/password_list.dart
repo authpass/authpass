@@ -46,7 +46,7 @@ class EntryViewModel implements Comparable<EntryViewModel> {
         groupNames = _createGroupNames(entry.parent),
         fileColor = kdbxBloc.fileForKdbxFile(entry.file).openedFile.color;
 
-  static final websiteKey = KdbxKey(CommonFields.urlFieldName);
+  static const websiteKey = KdbxKeyCommon.URL;
 
   final KdbxBloc kdbxBloc;
   final KdbxEntry entry;

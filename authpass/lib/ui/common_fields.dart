@@ -7,14 +7,14 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 
 class CommonField {
   CommonField({
-    @required String key,
+    @required this.key,
     @required this.displayName,
     this.includeInSearch = false,
     this.protect = false,
     this.keyboardType,
     this.icon = Icons.label_outline,
     this.showByDefault = true,
-  }) : key = KdbxKey(key);
+  });
 
   final KdbxKey key;
   final String displayName;
@@ -41,34 +41,34 @@ class CommonFields {
   CommonFields(AppLocalizations loc)
       : fields = [
           CommonField(
-            key: 'Title',
+            key: KdbxKeyCommon.TITLE,
             displayName: loc.fieldTitle,
             includeInSearch: true,
             icon: Icons.label,
           ),
           CommonField(
-            key: 'UserName',
+            key: KdbxKeyCommon.USER_NAME,
             displayName: loc.fieldUserName,
             includeInSearch: true,
             keyboardType: TextInputType.emailAddress,
             icon: Icons.account_circle,
           ),
           CommonField(
-            key: 'Password',
+            key: KdbxKeyCommon.PASSWORD,
             displayName: loc.fieldPassword,
             protect: true,
             icon: Icons.lock,
           ),
           CommonField(
-            key: 'URL',
+            key: KdbxKeyCommon.URL,
             displayName: loc.fieldWebsite,
             includeInSearch: true,
             keyboardType: TextInputType.url,
             icon: Icons.link,
           ),
           CommonField(
-            key: 'OTPAuth',
-            displayName: 'One Time Password (Time Based)',
+            key: KdbxKeyCommon.OTP,
+            displayName: loc.fieldTotp,
             icon: Icons.watch_later,
             protect: true,
             showByDefault: false,
@@ -77,14 +77,13 @@ class CommonFields {
     assert(fields.map((f) => f.key).toSet().length == fields.length);
   }
 
-  CommonField get title => _fieldByKeyString('Title');
+  CommonField get title => _fieldByKey(KdbxKeyCommon.TITLE);
 
-  static const urlFieldName = 'URL';
-  CommonField get url => _fieldByKeyString(urlFieldName);
+  CommonField get url => _fieldByKey(KdbxKeyCommon.URL);
 
-  CommonField get userName => _fieldByKeyString('UserName');
+  CommonField get userName => _fieldByKey(KdbxKeyCommon.USER_NAME);
 
-  CommonField get password => _fieldByKeyString('Password');
+  CommonField get password => _fieldByKey(KdbxKeyCommon.PASSWORD);
 
   /// Secret for TOTP -- content is modeled after
   /// https://github.com/google/google-authenticator/blob/master/mobile/ios/README
@@ -120,6 +119,6 @@ class CommonFields {
   CommonField _fieldByKey(KdbxKey key) =>
       fields.firstWhere((f) => f.key == key);
 
-  static CommonField _internalCommonField(String key) =>
-      CommonField(key: key, displayName: key);
+  static CommonField _internalCommonField(@NonNls String key) =>
+      CommonField(key: KdbxKey(key), displayName: key);
 }

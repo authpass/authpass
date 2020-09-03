@@ -22,6 +22,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fieldTitle => 'Title';
 
   @override
+  String get fieldTotp => 'One Time Password (Time Based)';
+
+  @override
   String get selectKeepassFile => 'AuthPass - Select KeePass File';
 
   @override

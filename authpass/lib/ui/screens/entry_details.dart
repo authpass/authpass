@@ -826,7 +826,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
         final commonFields = Provider.of<CommonFields>(context, listen: false);
         final custom = CommonField(
           displayName: 'Custom Field',
-          key: '__custom',
+          key: KdbxKey('__custom'),
         );
         final fields = commonFields.fields.followedBy([custom]).map(
           (f) => PopupMenuItem(

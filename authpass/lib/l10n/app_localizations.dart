@@ -108,6 +108,9 @@ abstract class AppLocalizations {
   // No description provided in @fieldTitle
   String get fieldTitle;
 
+  // Label for fields of TOTP (Time based one time passwords)
+  String get fieldTotp;
+
   // No description provided in @selectKeepassFile
   String get selectKeepassFile;
 
