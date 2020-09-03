@@ -64,6 +64,7 @@ else
 fi
 
 # for some weird reason gen_l10n.dart fails if not manually running pub get in that directory.
+# https://github.com/flutter/flutter/issues/65023
 pushd flutter/dev/tools
 "../../../flutter/bin/flutter" pub get
 

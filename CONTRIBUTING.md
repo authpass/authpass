@@ -31,6 +31,9 @@ permission denied errors when you clone using ssh. To work around those you migh
 1. [Download Flutter](https://flutter.dev/docs/get-started/install) and make sure `flutter doctor` shows no errors.
    * Latest Flutter stable or beta channel should typically work, check out
      [authpass/_tools/install_flutter.sh](authpass/_tools/install_flutter.sh) for what's being used in the CI.
+   * ⚠️ **NOTE**: Right now one extra step is required after installing flutter: in the flutter directory change to `flutter/dev/tools` and run: `flutter pub get`. See the (flutter issue #65023)[https://github.com/flutter/flutter/issues/65023] for details.
+     otherwise you will stumble on errors like:
+     ```flutter/dev/tools/localization/bin/gen_l10n.dart:7:8: Error: Error when reading '/flutter/.pub-cache/hosted/pub.dartlang.org/args-1.6.0/lib/args.dart': The system cannot find the path specified.```
 2. Clone the repository `git clone https://github.com/authpass/authpass.git` (or better yet, create your own fork to make later creating Pull Requests easier).
 3. Initialize submodules `git submodule update --init`
 4. Change to the `authpass/` subdirectory:
