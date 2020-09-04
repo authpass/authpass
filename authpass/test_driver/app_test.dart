@@ -60,7 +60,7 @@ void main() {
       await driver.waitUntilNoTransientCallbacks();
 
       await driver.enterText('asdf');
-      await driver.tap(find.byType('CheckboxListTile'));
+      // await driver.tap(find.byType('CheckboxListTile'));
       await driver.tap(find.text('Continue'));
       final newEntryTitle = await driver.getWidgetDiagnostics(find.descendant(
           of: find.byType('PasswordListContent'),
