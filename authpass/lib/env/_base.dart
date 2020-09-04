@@ -92,6 +92,10 @@ abstract class Env {
   /// Support for dropbox, google drive.
   bool get featureCloudStorageProprietary => true;
 
+  /// Automatically fetch website icons.
+  /// Right now this is only enabled during screenshots.
+  bool get featureFetchWebsiteIconEnabledByDefault => false;
+
   /// Support for WebDAV
   bool get featureCloudStorageWebDav => true;
 

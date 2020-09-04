@@ -112,6 +112,7 @@ class AuthPassAboutDialog extends StatelessWidget {
     return [
       PopupMenuItem(
         child: ListTile(
+          key: const ValueKey('openPasswordGenerator'),
           leading: const Icon(FontAwesomeIcons.random),
           title: Text(loc.menuItemGeneratePassword),
         ),
@@ -158,6 +159,7 @@ class AuthPassAboutDialog extends StatelessWidget {
             )),
       PopupMenuItem(
         child: ListTile(
+          key: const ValueKey('openAnotherFile'),
           leading: const Icon(FontAwesomeIcons.folderPlus),
           title: Text(loc.menuItemOpenAnotherFile),
         ),

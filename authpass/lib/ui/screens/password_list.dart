@@ -6,6 +6,7 @@ import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
@@ -51,6 +52,7 @@ class EntryViewModel implements Comparable<EntryViewModel> {
   final KdbxBloc kdbxBloc;
   final KdbxEntry entry;
   String _website;
+
   String get website => _website ??= _normalizeUrl();
   final String label;
   final String _labelComparable;
@@ -175,6 +177,7 @@ class PasswordListContent extends StatefulWidget {
 
   final KdbxBloc kdbxBloc;
   final List<KdbxFile> openedKdbxFiles;
+
   bool get isAutofillSelector =>
       WidgetsBinding.instance.window.defaultRouteName == '/autofill';
   final void Function(KdbxEntry entry, EntrySelectionType type)
@@ -328,6 +331,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   bool _speedDialOpen = false;
   final ValueNotifier<GroupFilter> _groupFilterNotifier =
       ValueNotifier(GroupFilter.DEFAULT_GROUP_FILTER);
+
   GroupFilter get _groupFilter => _groupFilterNotifier.value;
 
 //  List<EntryViewModel> get _allEntries => _groupFilter == null
@@ -615,6 +619,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             badgeColor: Theme.of(context).primaryColorDark,
             position: BadgePosition.topRight(top: 0, right: 3),
             child: PopupMenuButton<VoidCallback>(
+              key: const ValueKey('appBarOverflowMenu'),
               onSelected: (item) {
                 item();
               },
@@ -1329,8 +1334,10 @@ class EntryIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final env = context.watch<Env>();
     final appData = context.watch<AppData>();
-    if (!appData.fetchWebsiteIconsOrDefault) {
+    if (!env.featureFetchWebsiteIconEnabledByDefault &&
+        !appData.fetchWebsiteIconsOrDefault) {
       return fallback(context);
     }
 

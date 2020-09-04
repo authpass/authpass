@@ -8,4 +8,7 @@ class TestDriverEnv extends EnvAppBase {
 
   @override
   EnvSecrets get secrets => EnvSecrets.nullSecrets;
+
+  @override
+  bool get featureFetchWebsiteIconEnabledByDefault => true;
 }

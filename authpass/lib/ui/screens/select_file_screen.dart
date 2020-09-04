@@ -935,6 +935,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                         padding: EdgeInsets.all(32),
                         child: CircularProgressIndicator())
                     : LinkButton(
+                        key: const ValueKey('continue'),
                         child: const Text('Continue'),
                         onPressed: () async {
                           await _tryUnlock();

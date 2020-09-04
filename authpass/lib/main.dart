@@ -130,9 +130,14 @@ class AuthPassApp extends StatefulWidget {
 
   final Env env;
   final GlobalKey<NavigatorState> navigatorKey;
+  @visibleForTesting
+  static GlobalKey<NavigatorState> currentNavigatorKey;
 
   @override
-  _AuthPassAppState createState() => _AuthPassAppState();
+  _AuthPassAppState createState() {
+    currentNavigatorKey = navigatorKey;
+    return _AuthPassAppState();
+  }
 }
 
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
