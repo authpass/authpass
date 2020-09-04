@@ -191,6 +191,7 @@ dev_dependencies:
   built_value_generator: ^7.1.0
   analytics_event_gen: ^0.1.2
   freezed: ^0.11.5
+  plugin_platform_interface: ^1.0.2
 
 dependency_overrides:
 #  pedantic: ^1.9.2

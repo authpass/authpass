@@ -1,3 +1,5 @@
+@Timeout(Duration(minutes: 10))
+
 // example run command:
 // flutter_dev drive -d iPhone --target=test_driver/app.dart --driver=test_driver/screenshot_test.dart
 
@@ -83,7 +85,7 @@ void main() {
       await driver.waitUntilNoTransientCallbacks();
       await screenshot(driver, config, 'drawer2');
     });
-  });
+  }, timeout: const Timeout.factor(4));
 }
 
 Future<void> _downloadFileAndOpen(FlutterDriver driver, String url) async {
@@ -94,6 +96,6 @@ Future<void> _downloadFileAndOpen(FlutterDriver driver, String url) async {
   await driver.tap(find.text('Ok'));
   await driver.waitUntilNoTransientCallbacks();
   await driver.enterText('asdf');
-  await driver.tap(find.byType('CheckboxListTile'));
+  // await driver.tap(find.byType('CheckboxListTile'));
   await driver.tap(find.byValueKey('continue'));
 }

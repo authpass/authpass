@@ -24,4 +24,6 @@
 /node_modules
 
 
-/fastlane/metadata
+/fastlane/metadata/**/*.png
+/vendor
+

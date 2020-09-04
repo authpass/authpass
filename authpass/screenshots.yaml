@@ -1,5 +1,10 @@
 # run with PATH=/Users/herbert/dev/flutter/flutter__dev/bin:$PATH flutter_dev pub global run screenshots:main
 
+# iOS: create an 'iPhone Xs Max' emulator
+# Android:
+#   'samsung-galaxy-s10-plus': with screen resolution 1440x3088
+#       -- and enabe gesture navigation.
+
 # A list of screen capture tests
 tests:
   # Note: flutter driver expects a pair of files eg, main1.dart and main1_test.dart
@@ -15,10 +20,11 @@ locales:
 
 # A map of devices to emulate
 devices:
-  ios:
-    iPhone Xs Max:
-#  android:
+#  ios:
+#    iPhone Xs Max:
+  android:
 #    Nexus 6P:
+    samsung-galaxy-s10-plus:
 
 # Frame screenshots
 frame: false
