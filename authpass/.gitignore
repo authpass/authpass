@@ -112,4 +112,5 @@ report.xml
 
 test/_cloudStorageHelper.json
 /coverage
+/test/cloud_storage/docker.share/
 
