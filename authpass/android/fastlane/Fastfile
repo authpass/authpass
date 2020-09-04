@@ -20,25 +20,32 @@ platform :android do
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
+    debug
+
     #upload_to_play_store(aab: '../build/app/outputs/bundle/release/app.aab', track: 'internal')
     #upload_to_play_store(aab: '../build/app/outputs/bundle/release/app-release.aab', track: 'internal')
+
     upload_to_play_store(
         aab: '../build/app/outputs/bundle/playstoreRelease/app-playstore-release.aab',
         track: 'internal',
         metadata_path: 'ignoreme',
         skip_upload_changelogs: true,
         skip_upload_images: true,
+        skip_upload_screenshots: true,
         skip_upload_metadata: true
     )
   end
 
   lane :dev do
+    debug
+
     upload_to_play_store(
       aab: '../build/app/outputs/bundle/playstoredevRelease/app-playstoredev-release.aab',
       track: 'internal',
       package_name: 'design.codeux.authpass.dev',
       skip_upload_changelogs: true,
       skip_upload_images: true,
+      skip_upload_screenshots: true,
       skip_upload_metadata:  true
     )
   end
