@@ -1,7 +1,7 @@
 {
   "device_frame_version": "latest",
   "default": {
-    "background": "./background.jpg",
+    "background": "../background.jpg",
     "padding": "3%x4%",
     "interline_spacing": "24",
     "stack_title": true,
@@ -14,7 +14,7 @@
       "font_weight": 900,
       "fonts": [
         {
-          "font": "./font/rubik-black.ttf",
+          "font": "../font/rubik-black.ttf",
           "supported": [
             "de-DE",
             "en-US",
@@ -34,7 +34,7 @@
       "font_weight": "400",
       "fonts": [
         {
-          "font": "./font/rubik-regular.ttf",
+          "font": "../font/rubik-regular.ttf",
           "supported": [
             "de-DE",
             "en-US",
