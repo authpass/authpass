@@ -1,4 +1,4 @@
-commit_message: '[crowdin] Update translations ({languageName})'
+commit_message: '[crowdin] Update translations (%language%)'
 append_commit_message: false
 files:
   - source: /metadata/android/en-US/*.txt
