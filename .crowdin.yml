@@ -1,5 +1,5 @@
 files:
-  - source: /metadata/android/en-US/**/*.txt
+  - source: /metadata/android/en-US/*.txt
     translation: /metadata/android/%locale%/%original_file_name%
   - source: /metadata/android/en-US/**/*.png
     translation: /metadata/android/%locale%/%original_file_name%
