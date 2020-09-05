@@ -1,0 +1,14 @@
+<p>Lengvai ir saugiai valdykite savo slaptažodžius!</p>
+
+<p>„AuthPass“ yra atskira slaptažodžių tvarkyklė su palaikymu populiariam ir patikrintam „KeePass“ (kdbx) formatui. 
+Laikykite savo slaptažodžius, bendrinkite juos visuose savo įrenginiuose ir lengvai raskite juos kada norite prisijungti.</p>
+
+<ul>
+<li>Visi jūsų slaptažodžiai vienoje vietoje.<li>
+<li>Generuokite saugius atsitiktinius slaptažodžius kiekvienai skirtingai savo paskyrai.</li>
+<li>Greitai atrakinkite su biometriniu užraktu (Tik „Android“ šiuo metu) </li>
+<li>Valdykite visas paskyras internete.</li>
+<li>Programėlė galima „Mac“, „iOS“, „Android“, „Linux“ ir „Windows“ sistemose.</li>
+<li>Atviras kodas https://github.com/authpass/authpass/</li>
+<li>Indėlis vertinamas ir skatinamas ;-) (Nuolat ieškome programuotojų, vertėjų, dokumentacijos rašytojų, UI dizainerių ir t.t. :) ), tik prisijunkite prie mūsų „Discord“ serverio.</li>
+</ul>

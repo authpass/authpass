@@ -1,0 +1,180 @@
+{
+    "@@locale": "en",
+    "fieldUserName": "Пользователь",
+    "@fieldUserName": {},
+    "fieldPassword": "Пароль",
+    "@fieldPassword": {},
+    "fieldWebsite": "Сайт",
+    "@fieldWebsite": {},
+    "fieldTitle": "Название",
+    "@fieldTitle": {},
+    "selectKeepassFile": "AuthPass - выберите KeePass файл",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Быстрая разблокировка файлов",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
+    },
+    "selectKeepassFileLabel": "Выберите файл KeePass (.kdbx).",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "openLocalFile": "Открыть\nлокальный файл",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "loadFrom": "Загрузить из {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Загрузить из URL",
+    "@loadFromUrl": {},
+    "createNewKeepass": "Впервые в KeePass?\nСоздать новую базу данных паролей",
+    "@createNewKeepass": {},
+    "labelLastOpenFiles": "Последние открытые файлы:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Файлы ещё не были открыты.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Выберите язык",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Язык",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Коэффициент размера текста",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Плотность",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Тема",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Светлая",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Тёмная",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Системные настройки",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "По умолчанию",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Заблокировать все открытые файлы",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Разрешить делать скриншоты приложения",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Включить автозаполнение",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "Поддерживается с Android Oreo (8.0) или более поздней версии.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Настройки",
+    "@preferenceTitle": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Мы рады любым отзывам!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Не забудьте посетить наш сайт",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "И исходный код проекта",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "Файл журнала: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "menuItemGeneratePassword": "Сгенерировать пароль",
+    "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Настройки",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Открыть другой файл",
+    "@menuItemOpenAnotherFile": {},
+    "menuItemCheckForUpdates": "Проверить обновления",
+    "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Поддержка по Email",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Отправлять журналы по электронной почте/запрос о помощи.",
+    "@menuItemSupportSubtitle": {},
+    "menuItemHelp": "Помощь",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Показать документацию",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "О программе",
+    "@menuItemAbout": {},
+    "passwordPlainText": "Показать пароль",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Пароль",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Сгенерировать пароль",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Готово",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "По умолчанию",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Строчные буквы (а-я)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Прописные буквы (А-Я)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Числа (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Умляуты (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Специальные (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Длина",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Своя длина",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Только для длины > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "copiedToClipboard": "Скопировано в буфер обмена.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "unexpectedError": "Неожиданная ошибка: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    }
+}

@@ -1,0 +1,180 @@
+{
+    "@@locale": "en",
+    "fieldUserName": "Naudotojas",
+    "@fieldUserName": {},
+    "fieldPassword": "Slaptažodis",
+    "@fieldPassword": {},
+    "fieldWebsite": "Svetainė",
+    "@fieldWebsite": {},
+    "fieldTitle": "Pavadinimas",
+    "@fieldTitle": {},
+    "selectKeepassFile": "„AuthPass“ - Pasirinkti „KeePass“ failą",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Greitas failų atrakinimas",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
+    },
+    "selectKeepassFileLabel": "Prašome pasirinkti „KeePass“ (.kdbx) failą.",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "openLocalFile": "Atidaryti\nVietinis failas",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "loadFrom": "Iškelti iš {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Atsisiųsti iš URL",
+    "@loadFromUrl": {},
+    "createNewKeepass": "Esate naujas „KeePass“ programoje?\nSukurti naują slaptažodžių duomenų bazę",
+    "@createNewKeepass": {},
+    "labelLastOpenFiles": "Paskiausiai atidaryti failai:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Jokie failai dar nebuvo atidaryti.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Pasirinkti kalbą",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Kalba",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Teksto dydžio faktorius",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Vizualinis tankis",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Išvaizda",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Šviesi",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Tamsi",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Sistemos numatytoji",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Numatytasis",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Užrakinti visus atidarytus failus",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Leisti šios programėlės ekrano atvaizdus",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Įgalinti automatinį užpildymą",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "Palaikoma tik „Android Oreo“ (8.0) sistemoje ar naujesnėje.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Nustatymai",
+    "@preferenceTitle": {},
+    "aboutAppName": "„AuthPass“",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Mes laukiame bet kokių atsiliepimų!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Taip pat nepamirškite apsilankyti mūsų svetainėje",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "Taip pat atvirojo kodo projekto",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "Log failas: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "menuItemGeneratePassword": "Generuoti slaptažodį",
+    "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Nustatymai",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Atidaryti kitą failą",
+    "@menuItemOpenAnotherFile": {},
+    "menuItemCheckForUpdates": "Tikrinti, ar nėra atnaujinimų",
+    "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Pagalba el. paštu",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Siųsti log failus/klausti pagalbos.",
+    "@menuItemSupportSubtitle": {},
+    "menuItemHelp": "Pagalba",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Rodyti dokumentaciją",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "Apie",
+    "@menuItemAbout": {},
+    "passwordPlainText": "Rodyti slaptažodį",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Slaptažodis",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Generuoti slaptažodį",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Gerai",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "Naudoti kaip numatytajį",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Mažųjų raidžių (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Didžiosios raidės (A-Z)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Numeriai (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Umliautai (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Specialieji (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Ilgis",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Pritaikytas pagal save ilgis",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Naudojamas tik ilgiui > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "copiedToClipboard": "Nukopijuota į iškarpinę.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "unexpectedError": "Nenumatyta klaida: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    }
+}
