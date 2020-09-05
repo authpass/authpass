@@ -9,3 +9,5 @@ files:
     translation: /authpass/android/fastlane/metadata/android/%locale%/%original_file_name%
   - source: /authpass/ios/fastlane/screenshots/en-US/*.strings
     translation: /authpass/ios/fastlane/screenshots/%locale%/%original_file_name%
+  - source: /metadata/misc/en-US/*.csv
+    translation: /metadata/misc/%locale%/%original_file_name%
