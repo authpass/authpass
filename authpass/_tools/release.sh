@@ -7,8 +7,14 @@ cd $dir/..
 
 flavor="$1"
 
-FLT=${FLT:-flutter}
+FLT=${FLT:-}
 AUTHPASS_SKIP_FASTLANE=${AUTHPASS_SKIP_FASTLANE:-}
+
+if test -z "$FLT" && test -f .packages ; then
+    FLT=_tools/flutter_run.sh
+else
+    FLT=flutter
+fi
 
 DEPS=${DEPS:-~/deps}
 if test -d ${DEPS}/flutter/bin ; then
