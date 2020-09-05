@@ -95,6 +95,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
       null: loc.preferenceSystemDefault,
       'de': 'Deutsch', // NON-NLS
       'en': 'English', // NON-NLS
+      'lt': 'lietuviškai', // NON-NLS
+      'ru': 'русский', // NON-NLS
     };
     return Column(
       children: <Widget>[

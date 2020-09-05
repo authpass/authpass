@@ -5,95 +5,95 @@ import 'app_localizations.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-/// The translations for German (`de`).
-class AppLocalizationsDe extends AppLocalizations {
-  AppLocalizationsDe([String locale = 'de']) : super(locale);
+/// The translations for French (`fr`).
+class AppLocalizationsFr extends AppLocalizations {
+  AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get fieldUserName => 'Benutzer';
+  String get fieldUserName => 'User';
 
   @override
-  String get fieldPassword => 'Passwort';
+  String get fieldPassword => 'Password';
 
   @override
-  String get fieldWebsite => 'Webseite';
+  String get fieldWebsite => 'Website';
 
   @override
-  String get fieldTitle => 'Titel';
+  String get fieldTitle => 'Title';
 
   @override
   String get fieldTotp => 'One Time Password (Time Based)';
 
   @override
-  String get selectKeepassFile => 'AuthPass - Wähle eine KeePass Datei';
+  String get selectKeepassFile => 'AuthPass - Select KeePass File';
 
   @override
-  String get quickUnlockingFiles => 'Quick-Unlock Dateien';
+  String get quickUnlockingFiles => 'Quick unlocking files';
 
   @override
-  String get selectKeepassFileLabel => 'Bitte wähle eine KeePass (.kdbx) Datei.';
+  String get selectKeepassFileLabel => 'Please select a KeePass (.kdbx) file.';
 
   @override
-  String get openLocalFile => 'Öffne\nLokale Datei';
+  String get openLocalFile => 'Open\nLocal File';
 
   @override
   String loadFrom(String cloudStorageName) {
-    return 'Lade von ${cloudStorageName}';
+    return 'Load from ${cloudStorageName}';
   }
 
   @override
-  String get loadFromUrl => 'Lade von URL';
+  String get loadFromUrl => 'Download from URL';
 
   @override
-  String get createNewKeepass => 'KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen';
+  String get createNewKeepass => 'New to KeePass?\nCreate New Password Database';
 
   @override
-  String get labelLastOpenFiles => 'Zuletzt geöffnete Dateien:';
+  String get labelLastOpenFiles => 'Last opened files:';
 
   @override
-  String get noFilesHaveBeenOpenYet => 'Keine Dateien bisher geöffnet.';
+  String get noFilesHaveBeenOpenYet => 'No files have been opened yet.';
 
   @override
-  String get preferenceSelectLanguage => 'Sprache wählen';
+  String get preferenceSelectLanguage => 'Select Language';
 
   @override
-  String get preferenceLanguage => 'Sprache';
+  String get preferenceLanguage => 'Language';
 
   @override
-  String get preferenceTextScaleFactor => 'Text Skallierung';
+  String get preferenceTextScaleFactor => 'Text Scale Factor';
 
   @override
-  String get preferenceVisualDensity => 'Visuelle Dichte';
+  String get preferenceVisualDensity => 'Visual Density';
 
   @override
   String get preferenceTheme => 'Theme';
 
   @override
-  String get preferenceThemeLight => 'Hell';
+  String get preferenceThemeLight => 'Light';
 
   @override
-  String get preferenceThemeDark => 'Dunkel';
+  String get preferenceThemeDark => 'Dark';
 
   @override
-  String get preferenceSystemDefault => 'Geräte Standardeinstellung';
+  String get preferenceSystemDefault => 'System Default';
 
   @override
-  String get preferenceDefault => 'Standard';
+  String get preferenceDefault => 'Default';
 
   @override
-  String get lockAllFiles => 'Alle offenen Dateien schließen';
+  String get lockAllFiles => 'Lock all open files';
 
   @override
-  String get preferenceAllowScreenshots => 'Screenshots der App zulassen';
+  String get preferenceAllowScreenshots => 'Allow Screenshots of the App';
 
   @override
-  String get preferenceEnableAutoFill => 'Autofill aktivieren';
+  String get preferenceEnableAutoFill => 'Enable autofill';
 
   @override
-  String get preferenceAutoFillDescription => 'Wird nur auf ab Android Oreo (8.0) unterstützt.';
+  String get preferenceAutoFillDescription => 'Only supported on Android Oreo (8.0) or later.';
 
   @override
-  String get preferenceTitle => 'Einstellungen';
+  String get preferenceTitle => 'Preferences';
 
   @override
   String get aboutAppName => 'AuthPass';
