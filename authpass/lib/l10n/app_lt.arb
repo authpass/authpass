@@ -1,5 +1,5 @@
 {
-    "@@locale": "lt",
+    "@@locale": "en",
     "fieldUserName": "Naudotojas",
     "@fieldUserName": {},
     "fieldPassword": "Slaptažodis",
@@ -8,6 +8,10 @@
     "@fieldWebsite": {},
     "fieldTitle": "Pavadinimas",
     "@fieldTitle": {},
+    "fieldTotp": "Vieno karto slaptažodis (atsižvelgiant į laiką)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
     "selectKeepassFile": "„AuthPass“ - Pasirinkti „KeePass“ failą",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -168,6 +172,11 @@
     "copiedToClipboard": "Nukopijuota į iškarpinę.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
+    },
+    "masterPasswordInputLabel": "Slaptažodis",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
     },
     "unexpectedError": "Nenumatyta klaida: {error}",
     "@unexpectedError": {

@@ -1,5 +1,5 @@
 {
-    "@@locale": "ru",
+    "@@locale": "en",
     "fieldUserName": "Пользователь",
     "@fieldUserName": {},
     "fieldPassword": "Пароль",
@@ -168,6 +168,11 @@
     "copiedToClipboard": "Скопировано в буфер обмена.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
+    },
+    "masterPasswordInputLabel": "Пароль",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
     },
     "unexpectedError": "Неожиданная ошибка: {error}",
     "@unexpectedError": {

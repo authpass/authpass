@@ -1,5 +1,5 @@
 {
-    "@@locale": "de",
+    "@@locale": "en",
     "fieldUserName": "Benutzer",
     "@fieldUserName": {},
     "fieldPassword": "Passwort",
@@ -8,6 +8,10 @@
     "@fieldWebsite": {},
     "fieldTitle": "Titel",
     "@fieldTitle": {},
+    "fieldTotp": "Einmalpasswort (Zeitbasiert)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
     "selectKeepassFile": "AuthPass - Wähle eine KeePass Datei",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -23,6 +27,10 @@
     "openLocalFile": "Öffne\nLokale Datei",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
+    },
+    "openFile": "Datei öffnen",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
     },
     "loadFrom": "Lade von {cloudStorageName}",
     "@loadFrom": {
@@ -45,10 +53,12 @@
     "@preferenceSelectLanguage": {},
     "preferenceLanguage": "Sprache",
     "@preferenceLanguage": {},
-    "preferenceTextScaleFactor": "Text Skallierung",
+    "preferenceTextScaleFactor": "Text Skalierung",
     "@preferenceTextScaleFactor": {},
     "preferenceVisualDensity": "Visuelle Dichte",
     "@preferenceVisualDensity": {},
+    "preferenceTheme": "Theme",
+    "@preferenceTheme": {},
     "preferenceThemeLight": "Hell",
     "@preferenceThemeLight": {},
     "preferenceThemeDark": "Dunkel",
@@ -66,5 +76,328 @@
     "preferenceAutoFillDescription": "Wird nur auf ab Android Oreo (8.0) unterstützt.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Einstellungen",
-    "@preferenceTitle": {}
+    "@preferenceTitle": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Wir freuen uns über jede Art von Feedback!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Besuchen Sie auch unsere Website",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "Und Open Source Projekt",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "Log-Datei: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "menuItemGeneratePassword": "Passwort generieren",
+    "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Einstellungen",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Weitere Datei öffnen",
+    "@menuItemOpenAnotherFile": {},
+    "menuItemCheckForUpdates": "Nach Updates suchen",
+    "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "E-Mail Support",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Log-Datei per E-Mail versenden / Support kontaktieren.",
+    "@menuItemSupportSubtitle": {},
+    "menuItemHelp": "Hilfe",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Dokumentation anzeigen",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "Über AuthPass",
+    "@menuItemAbout": {},
+    "passwordPlainText": "Passwort anzeigen",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Passwort",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Passwort generieren",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Fertig",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "Als Standard speichern",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Kleinbuchstaben (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Großbuchstaben (A-Z)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Ziffern (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Umlaute (äöü)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Sonderzeichen (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Länge",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Andere Länge",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Nur für > {customMinLength} verwendet",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles,plural, one {Eine Datei gespeichert: {files}}, other {{numFiles} Dateien gespeichert: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "Gruppen verwalten",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Dateien sperren/schließen",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Suchen",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "clear": "Löschen",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Filter:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Wähle einen Passwort-Eintrag für Autofill.",
+    "@autofillPrompt": {
+        "description": ""
+    },
+    "copiedToClipboard": "In die Zwischenablage kopiert.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(kein Titel)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(kein Benutzername)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Anpassen …",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Passwort kopieren",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Benutzername kopieren",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedPassword": "Passwort in die Zwischenablage kopiert.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Benutzername in die Zwischenablage kopiert.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "emptyPasswordVaultPlaceholder": "Du hast noch kein Passwort in deiner Datenbank.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Erstelle dein erstes Passwort",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loadingFile": "Datei wird geladen …",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "Interne Dateien",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Datenbank zuvor mit AuthPass erstellt",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "File Picker",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Datei vom lokalen Gerät öffnen.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Entschlüsselung",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Passwort eingeben für:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Passwort",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Bitte gib dein Passwort ein.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Ungültiges Passwort",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Schlüsseldatei verwenden",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Passwort sicher speichern (mit biometrischen Schutz)?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "errorUnlockFileTitle": "Datei kann nicht geöffnet werden",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Unbekannter Fehler beim Öffnen der Datei. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Weiter",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Fehlerbericht senden/Hilfe",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterDescription": "Wähle Gruppen die (rekursiv) angezeigt werden sollen",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Alles auswählen",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Auswahl aufheben",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Untergruppe erstellen",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Bearbeiten",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Löschen",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Gruppe gelöscht.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Rückgängig",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "initialNewGroupName": "Neue Gruppe",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Gruppe kann nicht gelöscht werden",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Diese Gruppe enthält noch andere Gruppen. Sie können derzeit nur leere Gruppen löschen.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Diese Gruppe enthält noch Passwort-Einträge. Sie können derzeit nur leere Gruppen löschen.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Gruppen",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Nach Gruppen filtern",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "unexpectedError": "Unerwarteter Fehler: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    }
 }

@@ -1,1 +1,1 @@
-AuthPass - Keepas kompatibler Passwort Manager
+AuthPass - KeePass kompatibler Passwort Manager
