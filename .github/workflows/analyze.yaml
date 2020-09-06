@@ -27,3 +27,21 @@ jobs:
           ~/deps/flutter/bin/flutter pub get
           ~/deps/flutter/bin/flutter analyze
           _tools/run_analyse.sh
+        id: analyse
+#      - uses: LouisBrunner/checks-action@v0.1.0
+#        if: always()
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          name: Test XYZ
+#          conclusion: ${{ job }}
+#          output:
+#            summary: ${{ steps.test.outputs.summary }}
+#            text_description: ${{ steps.test.outputs.description }}
+      - name: Annotate
+        uses: Attest/annotations-action@master
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: './annotations_first_50.json'
+          input: './annotations_first_50.json'
+          title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
