@@ -628,9 +628,14 @@ class SelectFileAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SizedBox(
-      width: 120,
-      height: 96,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minWidth: 120,
+        maxWidth: 120,
+        minHeight: 96,
+      ),
+      // width: 120,
+      // height: 96,
       child: Material(
 //      shape: Border.all(),
         borderRadius: const BorderRadius.all(Radius.circular(8)),

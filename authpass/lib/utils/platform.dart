@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'platform_noop.dart' if (dart.platform.html) 'platform_web.dart';
+import 'platform_noop.dart' if (dart.library.html) 'platform_web.dart';
 
 /// we do this ourselves so we do not have to depend on flutter for this file.
 const bool kIsWeb = authPassIsWeb;
