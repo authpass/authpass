@@ -268,7 +268,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get credentialLabel => 'Enter the password for:';
 
   @override
-  String get masterPasswordInputLabel => 'Password';
+  String get masterPasswordInputLabel => 'Пароль';
 
   @override
   String get masterPasswordEmptyValidator => 'Please enter your password.';

@@ -22,7 +22,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get fieldTitle => 'Pavadinimas';
 
   @override
-  String get fieldTotp => 'One Time Password (Time Based)';
+  String get fieldTotp => 'Vieno karto slaptažodis (atsižvelgiant į laiką)';
 
   @override
   String get selectKeepassFile => '„AuthPass“ - Pasirinkti „KeePass“ failą';
@@ -268,7 +268,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get credentialLabel => 'Enter the password for:';
 
   @override
-  String get masterPasswordInputLabel => 'Password';
+  String get masterPasswordInputLabel => 'Slaptažodis';
 
   @override
   String get masterPasswordEmptyValidator => 'Please enter your password.';
