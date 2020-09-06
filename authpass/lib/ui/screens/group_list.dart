@@ -1,10 +1,12 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/group_edit.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
+import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
@@ -404,6 +406,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
     final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
         element.key.supportsWrite &&
         element.value.kdbxFile.dirtyObjects.isNotEmpty);
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -413,8 +416,8 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
           },
         ),
         title: Text(widget.groupListMode == GroupListMode.multiSelectForFilter
-            ? 'Filter Groups'
-            : 'Groups'),
+            ? loc.groupListFilterAppbarTitle
+            : loc.groupListAppBarTitle),
         actions: <Widget>[
           ...?!isDirty
               ? null
@@ -434,8 +437,9 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
                         }
                         scaffold.showSnackBar(
                           SnackBar(
-                              content: Text(
-                                  'Saved files into: ${savedFiles.join(', ')}')),
+                            content: Text(loc.savedFiles(savedFiles.length,
+                                savedFiles.join(Nls.COMMA_SPACE))),
+                          ),
                         );
                       },
                     ),
@@ -517,11 +521,12 @@ class GroupListFlatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scrollbar(
       child: ListView.builder(
         itemBuilder: (context, index) {
           if (index == 0) {
-            return _listHeader();
+            return _listHeader(loc);
           }
           final group = groups[index - 1];
           return GroupListTile(
@@ -543,25 +548,25 @@ class GroupListFlatList extends StatelessWidget {
                     if (!group.inRecycleBin) ...[
                       SimpleDialogOption(
                         onPressed: () => Navigator.of(context).pop('create'),
-                        child: const ListTile(
-                          leading: Icon(Icons.create_new_folder),
-                          title: Text('Create Subgroup'),
+                        child: ListTile(
+                          leading: const Icon(Icons.create_new_folder),
+                          title: Text(loc.createSubgroup),
                         ),
                       ),
                     ],
                     SimpleDialogOption(
                       onPressed: () => Navigator.of(context).pop('edit'),
-                      child: const ListTile(
-                        leading: Icon(FontAwesomeIcons.edit),
-                        title: Text('Edit'),
+                      child: ListTile(
+                        leading: const Icon(FontAwesomeIcons.edit),
+                        title: Text(loc.editAction),
                       ),
                     ),
                     if (!group.isRoot && !group.inRecycleBin) ...[
                       SimpleDialogOption(
                         onPressed: () => Navigator.of(context).pop('delete'),
-                        child: const ListTile(
-                          leading: Icon(Icons.delete),
-                          title: Text('Delete'),
+                        child: ListTile(
+                          leading: const Icon(Icons.delete),
+                          title: Text(loc.deleteAction),
                         ),
                       ),
                     ],
@@ -570,8 +575,8 @@ class GroupListFlatList extends StatelessWidget {
               );
               if (action == 'create') {
                 _logger.fine('Creating folder.');
-                final newGroup = group.file.kdbxFile
-                    .createGroup(parent: group.group, name: 'New Group');
+                final newGroup = group.file.kdbxFile.createGroup(
+                    parent: group.group, name: loc.initialNewGroupName);
                 await Navigator.of(context)
                     .push(GroupEditScreen.route(newGroup));
                 analytics.events.trackGroupCreate();
@@ -583,8 +588,8 @@ class GroupListFlatList extends StatelessWidget {
                       .trackGroupDelete(GroupDeleteResult.hasSubgroups);
                   await DialogUtils.showSimpleAlertDialog(
                     context,
-                    'Unable to delete group',
-                    'This group still contains other groups. You can currently only delete empty groups.',
+                    loc.deleteGroupErrorTitle,
+                    loc.deleteGroupErrorBodyContainsGroup,
                     routeAppend: 'deleteGroupError',
                   );
                   return;
@@ -593,8 +598,8 @@ class GroupListFlatList extends StatelessWidget {
                       .trackGroupDelete(GroupDeleteResult.hasEntries);
                   await DialogUtils.showSimpleAlertDialog(
                     context,
-                    'Unable to delete group',
-                    'This group still contains other groups. You can currently only delete empty groups.',
+                    loc.deleteGroupErrorTitle,
+                    loc.deleteGroupErrorBodyContainsEntries,
                     routeAppend: 'deleteGroupError',
                   );
                   return;
@@ -604,9 +609,9 @@ class GroupListFlatList extends StatelessWidget {
                 analytics.events.trackGroupDelete(GroupDeleteResult.deleted);
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text('Deleted group.'),
+                    content: Text(loc.successfullyDeletedGroup),
                     action: SnackBarAction(
-                      label: 'Undo',
+                      label: loc.undoButtonLabel,
                       onPressed: () {
                         oldParent.file.move(group.group, oldParent);
                         analytics.events
@@ -634,7 +639,7 @@ class GroupListFlatList extends StatelessWidget {
     );
   }
 
-  Widget _listHeader() {
+  Widget _listHeader(AppLocalizations loc) {
     if (groupListMode != GroupListMode.multiSelectForFilter) {
       return const SizedBox();
     }
@@ -644,14 +649,14 @@ class GroupListFlatList extends StatelessWidget {
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: const Text('Select which Groups to show (recursively)'),
+          child: Text(loc.groupFilterDescription),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: LinkButton(
             child: _allSelected
-                ? const Text('Deselect all')
-                : const Text('Select All'),
+                ? Text(loc.groupFilterDeselectAll)
+                : Text(loc.groupFilterSelectAll),
             onPressed: () {
               onChangedAll(!_allSelected);
             },

@@ -8,6 +8,8 @@ extension StringExt on String {
     }
     return this;
   }
+
+  String prepend(String prefix) => '$prefix$this';
 }
 
 extension StringToInt on String {

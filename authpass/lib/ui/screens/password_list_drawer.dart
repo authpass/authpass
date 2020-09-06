@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/foundation.dart';
@@ -54,7 +55,7 @@ class _PasswordListDrawerState extends State<PasswordListDrawer> {
                 MediaQuery.of(context).padding.onlyTop,
             alignment: Alignment.bottomLeft,
             child: Text(
-              'AuthPass',
+              Env.AuthPass,
               style: theme.primaryTextTheme.headline3,
             ),
           ),

@@ -536,8 +536,8 @@ class _PasswordListContentState extends State<PasswordListContent>
                       }
                       scaffold.showSnackBar(
                         SnackBar(
-                          content: Text(loc.savedFiles(
-                              savedFiles.length, savedFiles.join(', '))),
+                          content: Text(loc.savedFiles(savedFiles.length,
+                              savedFiles.join(Nls.COMMA_SPACE))),
                         ),
                       );
                     },
@@ -796,8 +796,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       final searchTerm = metadata.searchTerm;
       if (searchTerm != null && searchTerm == _filterQuery) {
         return [
-          TextSpan(
-              text: FormatUtils.NL + loc.autofillFilterPrefix + FormatUtils.SP),
+          TextSpan(text: Nls.NL + loc.autofillFilterPrefix + Nls.SP),
           TextSpan(
               text: searchTerm,
               style: const TextStyle(fontWeight: FontWeight.bold)),

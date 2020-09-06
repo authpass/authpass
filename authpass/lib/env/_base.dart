@@ -67,6 +67,9 @@ abstract class Env {
     value = this;
   }
 
+  /// app name ;) basically it's just here so I don't have to translate it.
+  static const AuthPass = 'AuthPass'; // NON-NLS
+
   static Env value;
 
   final EnvType type;

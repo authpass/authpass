@@ -294,8 +294,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                             Scaffold.of(context)
                               ..hideCurrentSnackBar()
                               ..showSnackBar(
-                                const SnackBar(
-                                  content: Text('Copied to clipboard.'),
+                                SnackBar(
+                                  content: Text(loc.copiedToClipboard),
                                 ),
                               );
                             await _linuxAppArmorCheck();
@@ -461,6 +461,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     if (kdbxFiles) {
       await showModalBottomSheet<void>(
         context: context,
+        routeSettings: const RouteSettings(name: '/openfileLocal/chooser'),
         builder: (context) => OpenFileBottomSheet(
           openFilePickerWritable: openFilePickerWritable,
         ),
@@ -481,6 +482,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       }
       _logger.finest('contains: ${dir.path}');
       if (f.path.endsWith('kdbx')) {
+        // NON-NLS
         return true;
       }
     }
@@ -488,6 +490,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   void _loadAndGoToCredentials(FileSource source) {
+    final loc = AppLocalizations.of(context);
     asyncRunTask((progress) {
       return source.content().last.then((value) {
         return Navigator.of(context).push(CredentialsScreen.route(source));
@@ -497,7 +500,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
             'Unable to open $source.\n$error');
         return Future<dynamic>.error(error, stackTrace);
       });
-    }, label: 'Loading file ...');
+    }, label: loc.loadingFile);
     setState(() {});
   }
 }
@@ -512,6 +515,7 @@ class OpenFileBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.only(
         top: 16,
@@ -522,8 +526,8 @@ class OpenFileBottomSheet extends StatelessWidget {
         children: [
           ListTile(
             leading: const ImageIcon(AssetImage('assets/images/logo_icon.png')),
-            title: const Text('Internal file'),
-            subtitle: const Text('Database previously created with AuthPass'),
+            title: Text(loc.internalFile),
+            subtitle: Text(loc.internalFileSubtitle),
             onTap: () async {
               final filePath = await FilesystemPicker.open(
                 context: context,
@@ -544,8 +548,8 @@ class OpenFileBottomSheet extends StatelessWidget {
           ),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.hdd),
-            title: const Text('File Picker'),
-            subtitle: const Text('Open file from the device.'),
+            title: Text(loc.filePicker),
+            subtitle: Text(loc.filePickerSubtitle),
             onTap: () async {
               await openFilePickerWritable();
             },
@@ -820,9 +824,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AuthPass - Credentials'),
+        title: Text(loc.credentialsAppBarTitle),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -835,7 +840,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Enter the password for:'),
+                    Text(loc.credentialLabel),
                     Text(widget.kdbxFilePath.displayName,
                         style: theme.textTheme.headline4),
                     Text(
@@ -852,15 +857,15 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
 //              constraints: BoxConstraints.expand(),
                 child: PasswordInputField(
                   controller: _controller,
-                  labelText: 'Password',
+                  labelText: loc.masterPasswordInputLabel,
                   autovalidate: _invalidPassword != null,
                   validator: (_keyFile == null || _invalidPassword != null
                           ? SValidator.notEmpty(
-                              msg: 'Please enter your password.')
+                              msg: loc.masterPasswordEmptyValidator)
                           : SValidator<String>([])) +
                       SValidator.invalidValue(
                           invalidValue: _invalidPassword,
-                          message: 'Invalid password'),
+                          message: loc.masterPasswordIncorrectValidator),
                   onEditingComplete: () {
                     FocusScope.of(context).unfocus();
 
@@ -877,7 +882,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       ? FontAwesomeIcons.folderOpen
                       : FontAwesomeIcons.edit),
                   label: Text(_keyFile == null
-                      ? 'Use Key File'
+                      ? loc.useKeyFile
                       : path.basename(_keyFile.displayName)),
                   onPressed: () async {
                     _invalidPassword = null;
@@ -917,8 +922,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                         child: CheckboxListTile(
                           value: _biometricQuickUnlockActivated,
                           dense: true,
-                          title: const Text(
-                            'Save Password with biometric key store?',
+                          title: Text(
+                            loc.saveMasterPasswordBiometric,
                             textAlign: TextAlign.right,
                           ),
                           onChanged: (value) => setState(() {
@@ -936,7 +941,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                         child: CircularProgressIndicator())
                     : LinkButton(
                         key: const ValueKey('continue'),
-                        child: const Text('Continue'),
+                        child: Text(loc.dialogContinue),
                         onPressed: () async {
                           await _tryUnlock();
                         },
@@ -960,6 +965,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   Future<void> _tryUnlock() async {
     if (_formKey.currentState.validate()) {
       final deps = Provider.of<Deps>(context, listen: false);
+      final loc = AppLocalizations.of(context);
       final analytics = deps.analytics;
       final kdbxBloc = deps.kdbxBloc;
       final pw = _controller.text;
@@ -1020,8 +1026,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         );
         await DialogUtils.showSimpleAlertDialog(
           context,
-          'Unable to open File',
-          'Unknown error while trying to open file. $e',
+          loc.errorUnlockFileTitle,
+          loc.errorUnlockFileBody(e),
           routeAppend: 'errorOpenFile',
         );
       } finally {

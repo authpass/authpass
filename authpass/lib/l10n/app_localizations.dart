@@ -323,6 +323,96 @@ abstract class AppLocalizations {
   // Button shown under placeholder text when password database is empty
   String get emptyPasswordVaultButtonLabel;
 
+  // credential screen while unlocking file.
+  String get loadingFile;
+
+  // Choose a file previously created in AuthPass app sandbox
+  String get internalFile;
+
+  // Choose a file previously created in AuthPass app sandbox
+  String get internalFileSubtitle;
+
+  // Choose a file with the system's file picker. (ios/android)
+  String get filePicker;
+
+  // Choose a file with the system's file picker. (ios/android)
+  String get filePickerSubtitle;
+
+  // Credential screen to enter master password when opening kdbx file.
+  String get credentialsAppBarTitle;
+
+  // Label for the file/database being opened
+  String get credentialLabel;
+
+  // 
+  String get masterPasswordInputLabel;
+
+  // 
+  String get masterPasswordEmptyValidator;
+
+  // 
+  String get masterPasswordIncorrectValidator;
+
+  // label for a key file in combination with mater password
+  String get useKeyFile;
+
+  // Label for the checkbox to save master password for quick unlock.
+  String get saveMasterPasswordBiometric;
+
+  // generic error when opening a file (dialog title)
+  String get errorUnlockFileTitle;
+
+  // generic error when opening a file (description)
+  String errorUnlockFileBody(Object error);
+
+  // Dialog action to continue to next step (e.g. credential screen when finished with master password)
+  String get dialogContinue;
+
+  // action button in error dialogs to send email to support with log file.
+  String get dialogSendErrorReport;
+
+  // Description shown in the group list for filtering (e.g. app drawer)
+  String get groupFilterDescription;
+
+  // No description provided in @groupFilterSelectAll
+  String get groupFilterSelectAll;
+
+  // No description provided in @groupFilterDeselectAll
+  String get groupFilterDeselectAll;
+
+  // menu action: create nested group inside another group
+  String get createSubgroup;
+
+  // menu action: edit item (e.g. delete a group)
+  String get editAction;
+
+  // menu action: delete item (e.g. delete a group)
+  String get deleteAction;
+
+  // snackbar after deleting a group.
+  String get successfullyDeletedGroup;
+
+  // undo action label (e.g. in a snackbar after deleting a group, or some other action)
+  String get undoButtonLabel;
+
+  // initial name of groups when user creates a new one.
+  String get initialNewGroupName;
+
+  // Title of error dialog when group could not be deleted.
+  String get deleteGroupErrorTitle;
+
+  // Body of error dialog when a group can't be deleted because it is not empty.
+  String get deleteGroupErrorBodyContainsGroup;
+
+  // Body of error dialog when a group can't be deleted because it is not empty.
+  String get deleteGroupErrorBodyContainsEntries;
+
+  // title in the app bar for the groups list
+  String get groupListAppBarTitle;
+
+  // title in the app bar for group lists when displayed for filtering password list
+  String get groupListFilterAppbarTitle;
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

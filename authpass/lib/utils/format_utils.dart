@@ -11,9 +11,6 @@ class FormatUtils {
     _logger.finer('Initialized with locale $locale');
   }
 
-  static const String NL = '\n'; // NLN-NLS
-  static const String SP = ' '; // NON-NLS
-
   final DateFormat _dateFormatFull;
 
   String formatDateFull(DateTime dateTime) =>
@@ -30,4 +27,14 @@ class FormatUtils {
 
   static String anonymizeUrl(String potentialUrl) =>
       maxLength(potentialUrl, 15);
+}
+
+/// Couple of constants which should not be translated, but I'm too
+/// lazy to write NON-NLS on every usage.
+/// (yes, that name should probably something be like `NonNlsConstants`
+/// but I'm lazy).
+class Nls {
+  static const String NL = '\n'; // NON-NLS
+  static const String SP = ' '; // NON-NLS
+  static const String COMMA_SPACE = ', '; // NON-NLS
 }

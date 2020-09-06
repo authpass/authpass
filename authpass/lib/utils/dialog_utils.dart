@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n/app_localizations.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -25,6 +27,7 @@ class DialogUtils {
     String routeName = '/dialog/alert/',
     @NonNls @required String routeAppend,
   }) {
+    final materialLoc = MaterialLocalizations.of(context);
     return showDialog<dynamic>(
         context: context,
         routeSettings: RouteSettings(name: routeName + routeAppend),
@@ -35,7 +38,7 @@ class DialogUtils {
             actions: <Widget>[
               ...?moreActions,
               FlatButton(
-                child: const Text('Ok'),
+                child: Text(materialLoc.okButtonLabel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -46,17 +49,22 @@ class DialogUtils {
   }
 
   static Future<dynamic> showErrorDialog(
-      BuildContext context, String title, String content) {
+    BuildContext context,
+    String title,
+    String content, {
+    @NonNls String routeAppend,
+  }) {
+    final loc = AppLocalizations.of(context);
     return showSimpleAlertDialog(
       context,
       title,
       content,
-      routeAppend: 'error',
+      routeAppend: 'error${routeAppend?.prepend('/') ?? ''}',
       moreActions: !sendLogsSupported()
           ? null
           : [
               FlatButton(
-                child: const Text('Send Error Report/Help'),
+                child: Text(loc.dialogSendErrorReport),
                 onPressed: () {
                   sendLogs(
                     context,

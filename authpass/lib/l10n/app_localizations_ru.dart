@@ -247,6 +247,98 @@ class AppLocalizationsRu extends AppLocalizations {
   String get emptyPasswordVaultButtonLabel => 'Create your first Password';
 
   @override
+  String get loadingFile => 'Loading file …';
+
+  @override
+  String get internalFile => 'Internal file';
+
+  @override
+  String get internalFileSubtitle => 'Database previously created with AuthPass';
+
+  @override
+  String get filePicker => 'File Picker';
+
+  @override
+  String get filePickerSubtitle => 'Open file from the device.';
+
+  @override
+  String get credentialsAppBarTitle => 'Credentials';
+
+  @override
+  String get credentialLabel => 'Enter the password for:';
+
+  @override
+  String get masterPasswordInputLabel => 'Password';
+
+  @override
+  String get masterPasswordEmptyValidator => 'Please enter your password.';
+
+  @override
+  String get masterPasswordIncorrectValidator => 'Invalid password';
+
+  @override
+  String get useKeyFile => 'Use Key File';
+
+  @override
+  String get saveMasterPasswordBiometric => 'Save Password with biometric key store?';
+
+  @override
+  String get errorUnlockFileTitle => 'Unable to open File';
+
+  @override
+  String errorUnlockFileBody(Object error) {
+    return 'Unknown error while trying to open file. ${error}';
+  }
+
+  @override
+  String get dialogContinue => 'Continue';
+
+  @override
+  String get dialogSendErrorReport => 'Send Error Report/Help';
+
+  @override
+  String get groupFilterDescription => 'Select which Groups to show (recursively)';
+
+  @override
+  String get groupFilterSelectAll => 'Select all';
+
+  @override
+  String get groupFilterDeselectAll => 'Deselect all';
+
+  @override
+  String get createSubgroup => 'Create Subgroup';
+
+  @override
+  String get editAction => 'Edit';
+
+  @override
+  String get deleteAction => 'Delete';
+
+  @override
+  String get successfullyDeletedGroup => 'Deleted group.';
+
+  @override
+  String get undoButtonLabel => 'Undo';
+
+  @override
+  String get initialNewGroupName => 'New Group';
+
+  @override
+  String get deleteGroupErrorTitle => 'Unable to delete group';
+
+  @override
+  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
+
+  @override
+  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
+
+  @override
+  String get groupListAppBarTitle => 'Groups';
+
+  @override
+  String get groupListFilterAppbarTitle => 'Filter by groups';
+
+  @override
   String unexpectedError(String error) {
     return 'Неожиданная ошибка: ${error}';
   }
