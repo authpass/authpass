@@ -1,4 +1,4 @@
-// Generated file, do not modify.
+// ignore_for_file: omit_local_variable_types,unused_local_variable
 import 'dart:async';
 
 // ignore: unused_import
@@ -130,6 +130,9 @@ abstract class AppLocalizations {
 
   // No description provided in @openLocalFile
   String get openLocalFile;
+
+  // Displayed as placeholder in password list when no file is open.
+  String get openFile;
 
   // No description provided in @loadFrom
   String loadFrom(String cloudStorageName);
@@ -269,8 +272,56 @@ abstract class AppLocalizations {
   // Help text for custom length field
   String customLengthHelperText(Object customMinLength);
 
+  // Message displayed when files were saved. (One or more).
+  String savedFiles(int numFiles, Object files);
+
+  // 
+  String get manageGroups;
+
+  // Close all files and return to start screen.
+  String get lockFiles;
+
+  // Placeholder in the password list search box
+  String get searchHint;
+
+  // Remove existing group filter from password list
+  String get clear;
+
+  // Label displayed for android auto fill
+  String get autofillFilterPrefix;
+
+  // 
+  String get autofillPrompt;
+
   // Snackbar text when copying text to clipboard.
   String get copiedToClipboard;
+
+  // Text to display in place of a title, when password entry has no name assigned.
+  String get noTitle;
+
+  // Text to display in place of a user name in the password list if none is defined.
+  String get noUsername;
+
+  // Customize filter in password list
+  String get filterCustomize;
+
+  // swipe action in password list to copy password
+  String get swipeCopyPassword;
+
+  // swipe action in password list to copy username
+  String get swipeCopyUsername;
+
+  // snackbar confirmation that password was copied.
+  String get doneCopiedPassword;
+
+  // snackbar confirmation that username was copied.
+  String get doneCopiedUsername;
+
+  // Placeholder text shown when a user opens an empty password file.
+  String get emptyPasswordVaultPlaceholder;
+
+  // Button shown under placeholder text when password database is empty
+  String get emptyPasswordVaultButtonLabel;
 
   // No description provided in @unexpectedError
   String unexpectedError(String error);

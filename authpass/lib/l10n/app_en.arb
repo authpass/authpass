@@ -32,6 +32,11 @@
     "context": "select file screen, big button open local file."
   },
 
+  "openFile": "Open File",
+  "@openFile": {
+    "description": "Displayed as placeholder in password list when no file is open."
+  },
+
   "loadFrom": "Load from {cloudStorageName}",
   "@loadFrom": {
     "placeholders": {
@@ -182,10 +187,86 @@
       }
     }
   },
+  "savedFiles": "{numFiles,plural, one {One file saved: {files}}, other {{numFiles} files saved: {files}}}",
+  "@savedFiles": {
+    "description": "Message displayed when files were saved. (One or more).",
+    "context": "Password list",
+    "placeholders": {
+      "numFiles": {
+        "description": "Number of files that have been saved (at least 1)",
+        "type": "int",
+        "format": "compactLong"
+      },
+      "files": {
+        "description": "Comma separated list of vault names."
+      }
+    }
+  },
+  "manageGroups": "Manage Groups",
+  "@manageGroups": {
+    "description": ""
+  },
+  "lockFiles": "Lock Files",
+  "@lockFiles": {
+    "description": "Close all files and return to start screen."
+  },
+  "searchHint": "Search",
+  "@searchHint": {
+    "description": "Placeholder in the password list search box"
+  },
+  "clear": "Clear",
+  "@clear": {
+    "description": "Remove existing group filter from password list"
+  },
+  "autofillFilterPrefix": "Filter:",
+  "@autofillFilterPrefix": {
+    "description": "Label displayed for android auto fill"
+  },
+  "autofillPrompt": "Select password entry for autofill.",
+  "@autofillPrompt": {
+    "description": ""
+  },
   "copiedToClipboard": "Copied to clipboard.",
   "@copiedToClipboard": {
     "description": "Snackbar text when copying text to clipboard."
   },
+  "noTitle": "(no title)",
+  "@noTitle": {
+    "description": "Text to display in place of a title, when password entry has no name assigned."
+  },
+  "noUsername": "(no username)",
+  "@noUsername": {
+    "description": "Text to display in place of a user name in the password list if none is defined."
+  },
+  "filterCustomize": "Customize …",
+  "@filterCustomize": {
+    "description": "Customize filter in password list"
+  },
+  "swipeCopyPassword": "Copy Password",
+  "@swipeCopyPassword": {
+    "description": "swipe action in password list to copy password"
+  },
+  "swipeCopyUsername": "Copy Username",
+  "@swipeCopyUsername": {
+    "description": "swipe action in password list to copy username"
+  },
+  "doneCopiedPassword": "Copied password to clipboard.",
+  "@doneCopiedPassword": {
+    "description": "snackbar confirmation that password was copied."
+  },
+  "doneCopiedUsername": "Copied username to clipboard.",
+  "@doneCopiedUsername": {
+    "description": "snackbar confirmation that username was copied."
+  },
+  "emptyPasswordVaultPlaceholder": "You do not have any password in your database yet.",
+  "@emptyPasswordVaultPlaceholder": {
+    "description": "Placeholder text shown when a user opens an empty password file."
+  },
+  "emptyPasswordVaultButtonLabel": "Create your first Password",
+  "@emptyPasswordVaultButtonLabel": {
+    "description": "Button shown under placeholder text when password database is empty"
+  },
+
 
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {

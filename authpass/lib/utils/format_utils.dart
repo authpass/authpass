@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
@@ -11,6 +10,9 @@ class FormatUtils {
   }) : _dateFormatFull = DateFormat.yMd(locale).add_Hms() {
     _logger.finer('Initialized with locale $locale');
   }
+
+  static const String NL = '\n'; // NLN-NLS
+  static const String SP = ' '; // NON-NLS
 
   final DateFormat _dateFormatFull;
 
@@ -28,14 +30,4 @@ class FormatUtils {
 
   static String anonymizeUrl(String potentialUrl) =>
       maxLength(potentialUrl, 15);
-}
-
-class EntryFormatUtils {
-  static String getLabel(KdbxEntry entry) {
-    final label = entry.label;
-    if (label == null || label.isEmpty) {
-      return '(No title)';
-    }
-    return label;
-  }
 }

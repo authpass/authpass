@@ -1,4 +1,4 @@
-// Generated file, do not modify.
+// ignore_for_file: omit_local_variable_types,unused_local_variable
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
@@ -35,6 +35,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get openLocalFile => 'Открыть\nлокальный файл';
+
+  @override
+  String get openFile => 'Open File';
 
   @override
   String loadFrom(String cloudStorageName) {
@@ -181,7 +184,67 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String savedFiles(int numFiles, Object files) {
+    final intl.NumberFormat numFilesNumberFormat = intl.NumberFormat.compactLong(
+      locale: localeName,
+      
+    );
+    final String numFilesString = numFilesNumberFormat.format(numFiles);
+
+    return intl.Intl.pluralLogic(
+      numFiles,
+      locale: localeName,
+      other: '${numFiles} files saved: ${files}',
+    );
+  }
+
+  @override
+  String get manageGroups => 'Manage Groups';
+
+  @override
+  String get lockFiles => 'Lock Files';
+
+  @override
+  String get searchHint => 'Search';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get autofillFilterPrefix => 'Filter:';
+
+  @override
+  String get autofillPrompt => 'Select password entry for autofill.';
+
+  @override
   String get copiedToClipboard => 'Скопировано в буфер обмена.';
+
+  @override
+  String get noTitle => '(no title)';
+
+  @override
+  String get noUsername => '(no username)';
+
+  @override
+  String get filterCustomize => 'Customize …';
+
+  @override
+  String get swipeCopyPassword => 'Copy Password';
+
+  @override
+  String get swipeCopyUsername => 'Copy Username';
+
+  @override
+  String get doneCopiedPassword => 'Copied password to clipboard.';
+
+  @override
+  String get doneCopiedUsername => 'Copied username to clipboard.';
+
+  @override
+  String get emptyPasswordVaultPlaceholder => 'You do not have any password in your database yet.';
+
+  @override
+  String get emptyPasswordVaultButtonLabel => 'Create your first Password';
 
   @override
   String unexpectedError(String error) {
