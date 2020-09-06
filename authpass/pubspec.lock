@@ -130,7 +130,7 @@ packages:
       name: biometric_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1+4"
+    version: "1.0.1+5"
   boolean_selector:
     dependency: transitive
     description:
