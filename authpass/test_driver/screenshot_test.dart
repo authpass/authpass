@@ -72,11 +72,22 @@ void main() {
           firstMatchOnly: true));
 
       // switch to dark theme
-
       while (!(await driver.requestData('nextTheme')).contains('dark')) {}
       await driver.waitUntilNoTransientCallbacks();
       await screenshot(driver, config, 'theme1');
 
+      // dark screenshot of overflow menu
+      await driver.tap(find.byValueKey('appBarOverflowMenu'));
+      await screenshot(driver, config, 'appbar_menu');
+      await driver.tap(find.byValueKey('openPasswordGenerator'));
+
+      // back to password list
+      await driver.tap(find.descendant(
+          of: find.byType('AppBar'),
+          matching: find.byType('IconButton'),
+          firstMatchOnly: true));
+
+      // open drawer
       await driver.tap(find.descendant(
           of: find.byType('AppBar'),
           matching: find.byType('IconButton'),
@@ -85,7 +96,7 @@ void main() {
       await driver.waitUntilNoTransientCallbacks();
       await screenshot(driver, config, 'drawer2');
     });
-  }, timeout: const Timeout.factor(4));
+  }, timeout: const Timeout.factor(8));
 }
 
 Future<void> _downloadFileAndOpen(FlutterDriver driver, String url) async {

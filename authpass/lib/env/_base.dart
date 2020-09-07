@@ -77,6 +77,8 @@ abstract class Env {
 
   String get diacEndpoint => 'https://cloud.authpass.app/diac';
 
+  bool get diacHidden => false;
+
   /// whether diac is disabled by default, and only enabled through opt-in.
   bool get diacDefaultDisabled => false;
 

@@ -7,6 +7,11 @@ class TestDriverEnv extends EnvAppBase {
   TestDriverEnv() : super(EnvType.production);
 
   @override
+  bool get diacHidden => true;
+  @override
+  bool get diacDefaultDisabled => true;
+
+  @override
   EnvSecrets get secrets => EnvSecrets.nullSecrets;
 
   @override

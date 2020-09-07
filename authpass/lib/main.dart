@@ -397,7 +397,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           disableConfigFetch: disableOnlineMessages,
           // always reload after a new start.
           refetchIntervalCold: Duration.zero,
-          initialConfig: !disableOnlineMessages
+          initialConfig: !disableOnlineMessages || _deps.env.diacHidden
               ? null
               : DiacConfig(
                   updatedAt: DateTime(2020, 5, 18),
