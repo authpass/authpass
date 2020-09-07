@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 extension StringExt on String {
   String takeUnlessBlank() => nullIfBlank();
   String nullIfBlank() {
-    if (isEmpty) {
+    if (this == null || isEmpty) {
       return null;
     }
     return this;

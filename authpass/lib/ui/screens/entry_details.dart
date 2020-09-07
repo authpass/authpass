@@ -9,6 +9,7 @@ import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
@@ -82,9 +83,10 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     final env = Provider.of<Env>(context);
     final vm = EntryViewModel(widget.entry, context.watch<KdbxBloc>());
     final entry = widget.entry;
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(vm.label),
+        title: Text(vm.label?.takeUnlessBlank() ?? loc.noTitle),
         actions: <Widget>[
           ...?!isDirty
               ? null
