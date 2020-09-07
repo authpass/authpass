@@ -1,4 +1,8 @@
-# run with PATH=/Users/herbert/dev/flutter/flutter__dev/bin:$PATH flutter_dev pub global run screenshots:main
+# run with:
+#
+# > PATH=/Users/herbert/dev/flutter/flutter__dev/bin:$PATH flutter_dev pub global run screenshots:main
+# or for android:
+# > PATH=/Users/herbert/dev/flutter/flutter__dev/bin:$PATH flutter_dev pub global run screenshots:main -f playstoredev
 
 # iOS: create an 'iPhone Xs Max' emulator
 # Android:
@@ -17,14 +21,16 @@ staging: /var/tmp/screenshots
 locales:
   - en-US
   - de-DE
+  - lt-LT
+  - ru-RU
 
 # A map of devices to emulate
 devices:
-#  ios:
-#    iPhone Xs Max:
-  android:
+  ios:
+    iPhone Xs Max:
+#  android:
 #    Nexus 6P:
-    samsung-galaxy-s10-plus:
+#    samsung-galaxy-s10-plus:
 
 # Frame screenshots
 frame: false
