@@ -43,3 +43,7 @@ _debug-full-r8-config.txt
 
 metrics.json
 /authpass/test/_testSecrets.json
+
+/authpass/ios/fastlane/screenshots/**/*.png
+/authpass/ios/fastlane/framed
+/authpass/android/fastlane/metadata/framed
