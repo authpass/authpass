@@ -4,6 +4,7 @@
 * Kdbx: Improved compatibility with other KeePass apps.
 * OneDrive: Add conflict detection.
 * WebDAV: Improved conflict detection on some webdav servers.
+* Android: Improve Autofill Field detection.
 
 # 1.7.5
 

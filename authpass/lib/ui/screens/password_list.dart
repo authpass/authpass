@@ -1393,7 +1393,10 @@ class EntryIcon extends StatelessWidget {
 
 extension on AutofillMetadata {
   String get searchTerm =>
-      webDomains?.firstOrNull?.domain ??
+      webDomains
+          ?.where((element) => element.domain.isNotEmpty)
+          ?.firstOrNull
+          ?.domain ??
       packageNames
           .where((element) => element != 'android' // NON-NLS
               )
