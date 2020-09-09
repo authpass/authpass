@@ -1,4 +1,4 @@
-# (Unreleased) 1.7.6
+# 1.7.6
 
 * Password generator: Allow generated passwords of custom length >40 characters.
 * Kdbx: Improved compatibility with other KeePass apps.

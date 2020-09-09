@@ -1,0 +1,8 @@
+rewrite:
+  - pattern: 'samsung-galaxy-s10-plus'
+    replace: 'samsung-galaxy-s10-plus-samsungapps'
+    action: duplicate
+images:
+  samsung-galaxy-s10-plus-samsungapps:
+    cropHeight: 2600
+    device: 'samsung-galaxy-s10-plus'
