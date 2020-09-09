@@ -1,6 +1,71 @@
-"playstore_full_description","","Google Play Store description","4000",""
+"playstore_full_description","Einfache und <b>sichere</b> Verwaltung all Deiner Passwörter und Konten!
+
+AuthPass ist ein nativer Passwort Manager der das populäre und auf Sicherheit erprobte Format von <strong>KeePass</strong> verwendet. Dies stellt sicher, dass all Deine Passwörter verschlüsselt und sicher gespeichert sind. Außerdem erlaubt es all deine Passwörter zwischen <b>all deinen Geräten</b> zu synchronisieren und deine Zugangsdaten zu finden, wo auch immer du sie brauchst.
+
+🗄 All deine Passwörter an einem Ort, einfaches suchen und finden.
+🧬 Generiere sichere Zufallspasswörter für jeden einzelnen deiner Benutzeraccounts, für alle Services.
+🔐 ""Quick Unlock"" (Speicherung des Master Passworts) im sicheren Gerätespeicher mit Biometrischer Verschlüsselung (Fingerabdruck oder Gesichtserkennung, je nach Gerät).
+🔍 Behalte den Überblick über all deine Benutzerkonten und Zugangsdaten.
+🖥 App ist verfügbar auf Mac, iPhone, iPad, Android Smartphones & Tablets, Linux und Windows.
+📂 Öffne mehrere unterschiedliche Passwort Dateien/Datenbanken. (z.B.: Eine für berufliche und eine für private Passwörter. Oder teile eine Datenbank mit Kollegen oder Freunden).
+🤓 Open Source Projekt unter https://github.com/authpass/authpass/
+✍ Autofill für alle deine Passwörter (Android 9+, Support in Browser erst ab Android 10+)
+🔦 Dark Theme 😎️
+
+
+<strong>=== Du hast volle Kontrolle ===</strong>
+AuthPass speichert all deine Passwörter im KeePass format, in einer Datei wo auch immer du diese ablegen möchtest. Entweder lokal am Gerät, oder auf Cloud Storage Diensten wie Dropbox, Google Drive, One Drive oder eigenen WebDav server:
+
+✅️ Jeder lokale Content Provider von Android.
+✅️ Native Google Drive Integration
+✅️ Native Dropbox Integration
+✅️ Native WebDAV support zum speichern in deiner eigenen NextCloud or OwnCloud (oder ähnlichem)
+✅️ Native Microsoft OneDrive Integration
+
+<b>=== FULL FEATURED, KEINE WERBUNG, KEINE ABOS ===</b>
+Als ein Open Source Projekt gibt es keine künstlichen Funktionsbeschränkungen, keine Werbung und keine Notwendigkeit für Zahlungen oder Abos.
+
+<strong>Mitwirken am Open Source Projekt gewünscht</strong> 😅️ (Wir suchen immer nach Entwicklern, Übersetzern, Dokumentations-Autoren, Grafiker, etc. :) ), komm einfach in unseren <a href=""https://authpass.app/go/discord"">discord channel</a>.
+
+<b>=== AKTIV WEITER ENTWICKELT 🛠️ ===</b>
+Dieses Open Source Projekt wird ständig weiter entwickelt und es gibt regelmäßig updates und neue features. Wir bauen auf dein Feedback! Per E-Mail oder in unserem <a href=""https://github.com/authpass/authpass/issues/"">issue tracker</a> at https://github.com/authpass/authpass/issues/
+
+Werde Teil der Community und besuche unseren <a href=""https://authpass.app/go/discord"">discord channel</a> at https://authpass.app/go/discord
+","Google Play Store description","4000",""
 "playstore_title","AuthPass - KeePass kompatibler Passwort Manager","Google Play Title","50",""
 "playstore_short_description","Sichere Aufbewahrung aller Passwörter und Benutzerkonten über alle Geräten.","Short description in play store.","80",""
 "apple-appstore-title","AuthPass - Passwort Manager","apple-appstore-title","30",""
 "apple-appstore-subtitle","Sicher, Effizient, Privat.","apple-appstore-subtitle","30",""
-"apple-appstore-description","","apple-appstore-description","4000",""
+"apple-appstore-description","Einfache und sichere Verwaltung all Deiner Passwörter und Konten!
+
+AuthPass ist ein nativer Passwort Manager der das populäre und auf Sicherheit erprobte Format von KeePass verwendet. Dies stellt sicher, dass all Deine Passwörter verschlüsselt und sicher gespeichert sind. Außerdem erlaubt es all deine Passwörter zwischen all deinen Geräten zu synchronisieren und deine Zugangsdaten zu finden, wo auch immer du sie brauchst.
+
+• All deine Passwörter an einem Ort, einfaches suchen und finden.
+• Generiere sichere Zufallspasswörter für jeden einzelnen deiner Benutzeraccounts, für alle Services.
+• ""Quick Unlock"" (Speicherung des Master Passworts) im sicheren Gerätespeicher mit Biometrischer Verschlüsselung (Fingerabdruck oder Gesichtserkennung, je nach Gerät).
+• Behalte den Überblick über all deine Benutzerkonten und Zugangsdaten.
+• App ist verfügbar auf allen Platformen, unter anderem auf Mac, iPhone, iPad.
+• Öffne mehrere unterschiedliche Passwort Dateien/Datenbanken. (z.B.: Eine für berufliche und eine für private Passwörter. Oder teile eine Datenbank mit Kollegen oder Freunden).
+• Open Source Projekt unter https://github.com/authpass/authpass/
+• Dark Theme ;-)
+
+
+=== Du hast volle Kontrolle ===
+AuthPass speichert all deine Passwörter im KeePass format, in einer Datei wo auch immer du diese ablegen möchtest. Entweder lokal am Gerät, oder auf Cloud Storage Diensten wie Dropbox, Google Drive, One Drive oder eigenen WebDav server:
+
+• Jeder lokale Content Provider von Android.
+• Native Google Drive Integration
+• Native Dropbox Integration
+• Native WebDAV support zum speichern in deiner eigenen NextCloud or OwnCloud (oder ähnlichem)
+• Native Microsoft OneDrive Integration
+
+=== FULL FEATURED, KEINE WERBUNG, KEINE ABOS ===
+Als ein Open Source Projekt gibt es keine künstlichen Funktionsbeschränkungen, keine Werbung und keine Notwendigkeit für Zahlungen oder Abos.
+
+Mitwirken am Open Source Projekt gewünscht ;`) (Wir suchen immer nach Entwicklern, Übersetzern, Dokumentations-Autoren, Grafiker, etc. ;) ), komm einfach in unseren discord channel: https://authpass.app/go/discord
+
+=== AKTIV WEITER ENTWICKELT ===
+Dieses Open Source Projekt wird ständig weiter entwickelt und es gibt regelmäßig updates und neue features. Wir bauen auf dein Feedback! Per E-Mail oder in unserem issue tracker unter https://github.com/authpass/authpass/issues/
+
+Werde Teil der Community und besuche unseren discord channel unter https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""

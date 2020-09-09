@@ -1,6 +1,67 @@
-"playstore_full_description","","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
-"playstore_short_description","","Short description in play store.","80",""
-"apple-appstore-title","","apple-appstore-title","30",""
-"apple-appstore-subtitle","","apple-appstore-subtitle","30",""
-"apple-appstore-description","","apple-appstore-description","4000",""
+"playstore_full_description","Lengvai ir saugiai tvarkykite visus savo slaptažodžius!
+
+„AuthPass“ yra atskira slaptažodžių tvarkyklė su palaikymu populiariesiems ir patikrintiems <strong>„KeePass“</strong> (kdbx 3.x or kdbx 4.x 🎉️) formatams. Laikykite savo slaptažodžius, <strong>bendrinkite visuose savo įrenginiuose</strong> ir lengvai raskite juos kada norite prisijungti.
+
+🗄 Visi slaptažodžiai vienoje vietoje.
+🧬 Generuokite saugius atsitiktinius slaptažodžius kiekvienai skirtingai savo paskyrai.
+🔐 Greitai atrakinkite su biometriniu užraktu.
+🔍 Valdykite visas paskyras internete.
+🖥 Programėlė galima „Mac“, „iOS“, „Android“, „Linux“ ir „Windows“ sistemose.
+📂 Atidarykite kelis slaptažodžių failus vienu metu (pvz. vienas darbui, kitas asmeniniams tikslams - taip pat galite dalintis failais su bendradarbiais)
+🤓 Atviras kodas yra https://github.com/authpass/authpass/
+✍ Automatiškai užpildykite savo slaptažodžiais („Android“ 9+, palaikymas naršyklėje tik nuo „Android“ 10+)
+🔦 Tamsi išvaizda 😎️
+
+<strong>===PO JŪSŲ KONTROLE === </strong>
+„AuthPass“ laiko visus slaptažodžius „KeePass“ formate, tiksliai kur jūs norite. Programėlė nesiunčia jūsų slaptažodžių į mūsų serverius. Bet „AuthPass“ palaiko saugojimą:
+
+✅️ Į bet kokį vietinio turinio teikėją „Android“ sistemoje
+✅️ „Google Drive“ integracija vietoje
+✅️ „Dropbox“ integracija vietoje
+✅️ „WebDAV“ integracija vietoje su galimybe laikyti savo „NextCloud“ ar „OwnCloud“ (ar panašiai)
+✅️ „Microsoft OneDrive“ integracija vietoje
+
+<b>=== PILNAI FUNKCIONALI, NĖRA REKLAMŲ, NĖRA NARYSČIŲ ===</b>
+Kaip atviro kodo projekte, čia nėra dirbtinių galimybių apribojimų, nėra reklamų ir nėra būtinumo kažką pirkti.
+
+<strong>Indėlis vertinamas ir skatinamas</strong> 😅️ (Nuolat ieškome programuotojų, vertėjų, dokumentacijos rašytojų, UI dizainerių ir t.t. :) ), tik prisijunkite prie mūsų <a href=""https://authpass.app/go/discord""> „Discord“ serverio</a>, taip pat esančio https://authpass.app/go/discord
+
+<b>=== VYKSTA AKTYVUS KŪRIMAS 🛠️ ===</b>
+Šis atviro kodo projektas, dar aktyviai kuriamas ir pridedamos naujos galimybės. Mes džiaugtumėmės gavę jūsų atsiliepimus el. paštu ar <a href=""https://github.com/authpass/authpass/issues/"">„GitHub“ problemų stebėjime</a> https://github.com/authpass/authpass/issues/
+
+Taip pat prisijunkite prie mūsų <a href=""https://authpass.app/go/discord"">„Discord“ serverio</a> https://authpass.app/go/discord
+","Google Play Store description","4000",""
+"playstore_title","„AuthPass“ - Su „KeePass“ suderinama slapt. tvark.","Google Play Title","50",""
+"playstore_short_description","Laikykite savo slaptažodžius saugiai visose platformose ir įrenginiuose.","Short description in play store.","80",""
+"apple-appstore-title","„AuthPass“ - slapt. tvarkyklė","apple-appstore-title","30",""
+"apple-appstore-subtitle","Vienas slapt. visuose įreng.","apple-appstore-subtitle","30",""
+"apple-appstore-description","Lengvai ir saugiai tvarkykite visus savo slaptažodžius!
+
+„AuthPass“ yra atskira slaptažodžių tvarkyklė su palaikymu populiariesiems ir patikrintiems „KeePass“ (kdbx 3.x or kdbx 4.x) formatams. Laikykite savo slaptažodžius, bendrinkite visuose savo įrenginiuose ir lengvai raskite juos kada norite prisijungti.
+
+• Visi slaptažodžiai vienoje vietoje.
+• Generuokite saugius atsitiktinius slaptažodžius kiekvienai skirtingai savo paskyrai.
+• Greitai atrakinkite su biometriniu užraktu.
+• Valdykite visas paskyras internete.
+• Programėlė galima visose platformose, taip pat „Mac“, „iPhone“ ir „iPad“.
+• Atidarykite kelis slaptažodžių failus vienu metu (pvz. vienas darbui, kitas asmeniniams tikslams - taip pat galite dalintis failais su bendradarbiais)
+• Atviras kodas yra https://github.com/authpass/authpass/
+• Tamsi išvaizda ;-)
+
+===PO JŪSŲ KONTROLE ===
+„AuthPass“ laiko visus slaptažodžius „KeePass“ formate, tiksliai kur jūs norite. Programėlė nesiunčia jūsų slaptažodžių į mūsų serverius. Bet „AuthPass“ palaiko saugojimą:
+
+Į bet kokį vietinio turinio teikėją, kaip „iCloud“.
+„Google Drive“ integracija vietoje
+„Dropbox“ integracija vietoje
+ „WebDAV“ integracija vietoje su galimybe laikyti savo „NextCloud“ ar „OwnCloud“ (ar panašiai)
+„Microsoft OneDrive“ integracija vietoje
+
+=== PILNAI FUNKCIONALI, NĖRA REKLAMŲ, NĖRA NARYSČIŲ ===
+Kaip atviro kodo projekte, čia nėra dirbtinių galimybių apribojimų, nėra reklamų ir nėra būtinumo kažką pirkti.
+
+VYKSTA AKTYVUS KŪRIMAS
+Šis atviro kodo projektas, dar aktyviai kuriamas ir pridedamos naujos galimybės. Mes džiaugtumėmės gavę jūsų atsiliepimus el. paštu ar „GitHub“ problemų stebėjime https://github.com/authpass/authpass/issues/
+
+Taip pat prisijunkite prie mūsų „Discord“ serverio https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""

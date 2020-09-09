@@ -38,31 +38,41 @@ Also join the community on our <a href=""https://authpass.app/go/discord"">disco
 "apple-appstore-subtitle","One Password, on all Devices.","","30",""
 "apple-appstore-description","Easily and securely keep track of all your Passwords!
 
-AuthPass is a stand alone password manager with support for the popular Keepass (kdbx 3.x AND kdbx 4.x) format. Store your passwords, share across all your devices and easily find them whenever you need to login.
+AuthPass is a stand alone password manager with support for the popular and security-proven KeePass format. Store your passwords, share across all your devices and easily find them whenever you need to login.
 
-* All your passwords in one place.
-* Generate secure random passwords for each of your accounts.
-* Quick Unlock secured with biometric lock (Touch ID or Face ID).
-* Keep track of your accounts across the web.
-* Open multiple password files at the same time (e.g. one for work, one for personal - or even share your password files with coworkers)
-* Directly open your password databases from Google Drive, Dropbox, WebDAV, OneDrive or iCloud.
-* Save Time-based One Time Passwords for 2fa (Two Factor Authentication).
-* Attach binary files to your password entries. (Like offline TANs, etc)
+• All your passwords in one place.
+• Generate secure random passwords for each of your accounts.
+• Quick Unlock secured with biometric lock.
+• Keep track of your accounts across the web.
+• App available all platform. Among them for Mac, iPhone and iPad.
+• Open multiple password files at the same time (e.g. one for work, one for personal - or even share your password files with coworkers)
+• Save Time-based One Time Passwords for 2fa (Two Factor Authentication).
+• Attach binary files to your password entries. (Like offline TANs, etc)
+• Open Source available on https://github.com/authpass/authpass/
+• Dark Theme ;-)
+
 
 === UNDER YOUR CONTRL ===
 
 AuthPass stores all your passwords in the open Keepass format, exactly where you want it. It does not send your passwords to our servers. But AuthPass supports saving to:
 
-* Any local document provider, like iCloud.
-* Native Google Drive Integration.
-* Native Dropbox Integration.
-* Native WebDAV support to store in your own NextCloud or OwnCloud (or similar).
+• Any local document provider, like iCloud.
+• Native Google Drive Integration
+• Native Dropbox Integration
+• Native WebDAV support to store in your own NextCloud or OwnCloud (or similar)
+• Native Microsoft OneDrive integration
+
 
 === FULL FEATURED, NO ADS, NO SUBSCRIPTION ===
 
 As an open source project there are no artificial feature restrictions, no ads and no requirement for payments.
 
+Contributions welcome and encouraged :-) (Always looking for developers, translators, documentation writers, UI designer, etc. :) ), just join our discord channel: https://authpass.app/go/discord.
+
+
 === UNDER ACTIVE DEVELOPMENT ===
 
-This is an open source project which is still under heavy development, adding features. We would love your feedback via email or on the issue tracker at https://github.com/authpass/authpass/issues/
-","","4000",""
+This is an open source project which is still under heavy development, adding features. We would love your feedback via email or on the issue tracker at: https://github.com/authpass/authpass/issues/
+
+Also join the community on our discord channel at https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""

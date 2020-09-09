@@ -1,5 +1,5 @@
 {
-    "@@locale": "lt",
+    "@@locale": "en",
     "fieldUserName": "Naudotojas",
     "@fieldUserName": {},
     "fieldPassword": "Slaptažodis",
@@ -27,6 +27,10 @@
     "openLocalFile": "Atidaryti\nVietinis failas",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
+    },
+    "openFile": "Atidaryti failą",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
     },
     "loadFrom": "Iškelti iš {cloudStorageName}",
     "@loadFrom": {
@@ -169,14 +173,224 @@
             }
         }
     },
+    "savedFiles": "{numFiles,plural, one {Vienas failas išsaugotas: {files}}, kiti {{numFiles} failai išsaugoti: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "Tvarkyti grupes",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Užrakinti failus",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Ieškoti",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "clear": "Valyti",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Filtras:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Pasirinkite slaptažodžio įrašą automatiniam užpildymui.",
+    "@autofillPrompt": {
+        "description": ""
+    },
     "copiedToClipboard": "Nukopijuota į iškarpinę.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(nėra pavadinimo)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(nėra naudotojo vardo)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Pritaikyti …",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Kopijuoti slaptažodį",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Kopijuoti naudotojo vardą",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedPassword": "Nukopijuotas slaptažodis į iškarpinę.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Nukopijuotas naudotojo vardas į iškarpinę.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "emptyPasswordVaultPlaceholder": "Jūs dar neturite jokio slaptažodžio duomenų bazėje.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Sukurkite savo pirmą slaptažodį",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loadingFile": "Atidaromas failas …",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "Vidinis failas",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Duomenų bazė prieš tai sukurta su „AuthPass“",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Failų parinkėjas",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Atidaryti failą iš įrenginio.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Kredencialai",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Įveskite slaptažodį:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
     },
     "masterPasswordInputLabel": "Slaptažodis",
     "@masterPasswordInputLabel": {
         "description": "",
         "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Prašome įvesti slaptažodį.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Neteisingas slaptažodis",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Naudoti rakto failą",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Išsaugoti slaptažodį su biometriniu raktu?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "errorUnlockFileTitle": "Nepavyko atidaryti failo",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Nežinoma klaida bandant atidaryti failą. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Tęsti",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Siųsti klaidos ataskaitą/pagalba",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterDescription": "Pasirinkite kokias grupes rodyti (rekursyviai)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Pasirinkti viską",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Atžymėti viską",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Sukurti pogrupį",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Redaguoti",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Ištrinti",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Grupė ištrinta.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Anuliuoti",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "initialNewGroupName": "Nauja grupė",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Nepavyko ištrinti grupės",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Ši grupė dar turi kitų grupių. Jūs galite ištrinti tik tuščias grupes.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Ši grupė dar turi kitų slaptažodžių įrašų. Jūs galite ištrinti tik tuščias grupes.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Grupės",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Filtruoti pagal grupes",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
     },
     "unexpectedError": "Nenumatyta klaida: {error}",
     "@unexpectedError": {
