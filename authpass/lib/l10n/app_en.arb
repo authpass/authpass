@@ -187,7 +187,7 @@
       }
     }
   },
-  "savedFiles": "{numFiles,plural, one {One file saved: {files}}, other {{numFiles} files saved: {files}}}",
+  "savedFiles": "{numFiles, plural, one {One file saved: {files}} other {{numFiles} files saved: {files}}}",
   "@savedFiles": {
     "description": "Message displayed when files were saved. (One or more).",
     "context": "Password list",
