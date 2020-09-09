@@ -1029,7 +1029,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           ext: _fileExtension(),
           source: widget.kdbxFilePath.typeDebug,
         );
-        await DialogUtils.showSimpleAlertDialog(
+        await DialogUtils.showErrorDialog(
           context,
           loc.errorUnlockFileTitle,
           loc.errorUnlockFileBody(e),
