@@ -37,7 +37,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get openLocalFile => 'Atidaryti\nVietinis failas';
 
   @override
-  String get openFile => 'Open File';
+  String get openFile => 'Atidaryti failą';
 
   @override
   String loadFrom(String cloudStorageName) {
@@ -194,149 +194,149 @@ class AppLocalizationsLt extends AppLocalizations {
     return intl.Intl.pluralLogic(
       numFiles,
       locale: localeName,
-      other: '${numFiles} files saved: ${files}',
+      other: '${numFiles} failai išsaugoti: ${files}',
     );
   }
 
   @override
-  String get manageGroups => 'Manage Groups';
+  String get manageGroups => 'Tvarkyti grupes';
 
   @override
-  String get lockFiles => 'Lock Files';
+  String get lockFiles => 'Užrakinti failus';
 
   @override
-  String get searchHint => 'Search';
+  String get searchHint => 'Ieškoti';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Valyti';
 
   @override
-  String get autofillFilterPrefix => 'Filter:';
+  String get autofillFilterPrefix => 'Filtras:';
 
   @override
-  String get autofillPrompt => 'Select password entry for autofill.';
+  String get autofillPrompt => 'Pasirinkite slaptažodžio įrašą automatiniam užpildymui.';
 
   @override
   String get copiedToClipboard => 'Nukopijuota į iškarpinę.';
 
   @override
-  String get noTitle => '(no title)';
+  String get noTitle => '(nėra pavadinimo)';
 
   @override
-  String get noUsername => '(no username)';
+  String get noUsername => '(nėra naudotojo vardo)';
 
   @override
-  String get filterCustomize => 'Customize …';
+  String get filterCustomize => 'Pritaikyti …';
 
   @override
-  String get swipeCopyPassword => 'Copy Password';
+  String get swipeCopyPassword => 'Kopijuoti slaptažodį';
 
   @override
-  String get swipeCopyUsername => 'Copy Username';
+  String get swipeCopyUsername => 'Kopijuoti naudotojo vardą';
 
   @override
-  String get doneCopiedPassword => 'Copied password to clipboard.';
+  String get doneCopiedPassword => 'Nukopijuotas slaptažodis į iškarpinę.';
 
   @override
-  String get doneCopiedUsername => 'Copied username to clipboard.';
+  String get doneCopiedUsername => 'Nukopijuotas naudotojo vardas į iškarpinę.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'You do not have any password in your database yet.';
+  String get emptyPasswordVaultPlaceholder => 'Jūs dar neturite jokio slaptažodžio duomenų bazėje.';
 
   @override
-  String get emptyPasswordVaultButtonLabel => 'Create your first Password';
+  String get emptyPasswordVaultButtonLabel => 'Sukurkite savo pirmą slaptažodį';
 
   @override
-  String get loadingFile => 'Loading file …';
+  String get loadingFile => 'Atidaromas failas …';
 
   @override
-  String get internalFile => 'Internal file';
+  String get internalFile => 'Vidinis failas';
 
   @override
-  String get internalFileSubtitle => 'Database previously created with AuthPass';
+  String get internalFileSubtitle => 'Duomenų bazė prieš tai sukurta su „AuthPass“';
 
   @override
-  String get filePicker => 'File Picker';
+  String get filePicker => 'Failų parinkėjas';
 
   @override
-  String get filePickerSubtitle => 'Open file from the device.';
+  String get filePickerSubtitle => 'Atidaryti failą iš įrenginio.';
 
   @override
-  String get credentialsAppBarTitle => 'Credentials';
+  String get credentialsAppBarTitle => 'Kredencialai';
 
   @override
-  String get credentialLabel => 'Enter the password for:';
+  String get credentialLabel => 'Įveskite slaptažodį:';
 
   @override
   String get masterPasswordInputLabel => 'Slaptažodis';
 
   @override
-  String get masterPasswordEmptyValidator => 'Please enter your password.';
+  String get masterPasswordEmptyValidator => 'Prašome įvesti slaptažodį.';
 
   @override
-  String get masterPasswordIncorrectValidator => 'Invalid password';
+  String get masterPasswordIncorrectValidator => 'Neteisingas slaptažodis';
 
   @override
-  String get useKeyFile => 'Use Key File';
+  String get useKeyFile => 'Naudoti rakto failą';
 
   @override
-  String get saveMasterPasswordBiometric => 'Save Password with biometric key store?';
+  String get saveMasterPasswordBiometric => 'Išsaugoti slaptažodį su biometriniu raktu?';
 
   @override
-  String get errorUnlockFileTitle => 'Unable to open File';
+  String get errorUnlockFileTitle => 'Nepavyko atidaryti failo';
 
   @override
   String errorUnlockFileBody(Object error) {
-    return 'Unknown error while trying to open file. ${error}';
+    return 'Nežinoma klaida bandant atidaryti failą. ${error}';
   }
 
   @override
-  String get dialogContinue => 'Continue';
+  String get dialogContinue => 'Tęsti';
 
   @override
-  String get dialogSendErrorReport => 'Send Error Report/Help';
+  String get dialogSendErrorReport => 'Siųsti klaidos ataskaitą/pagalba';
 
   @override
-  String get groupFilterDescription => 'Select which Groups to show (recursively)';
+  String get groupFilterDescription => 'Pasirinkite kokias grupes rodyti (rekursyviai)';
 
   @override
-  String get groupFilterSelectAll => 'Select all';
+  String get groupFilterSelectAll => 'Pasirinkti viską';
 
   @override
-  String get groupFilterDeselectAll => 'Deselect all';
+  String get groupFilterDeselectAll => 'Atžymėti viską';
 
   @override
-  String get createSubgroup => 'Create Subgroup';
+  String get createSubgroup => 'Sukurti pogrupį';
 
   @override
-  String get editAction => 'Edit';
+  String get editAction => 'Redaguoti';
 
   @override
-  String get deleteAction => 'Delete';
+  String get deleteAction => 'Ištrinti';
 
   @override
-  String get successfullyDeletedGroup => 'Deleted group.';
+  String get successfullyDeletedGroup => 'Grupė ištrinta.';
 
   @override
-  String get undoButtonLabel => 'Undo';
+  String get undoButtonLabel => 'Anuliuoti';
 
   @override
-  String get initialNewGroupName => 'New Group';
+  String get initialNewGroupName => 'Nauja grupė';
 
   @override
-  String get deleteGroupErrorTitle => 'Unable to delete group';
+  String get deleteGroupErrorTitle => 'Nepavyko ištrinti grupės';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsGroup => 'Ši grupė dar turi kitų grupių. Jūs galite ištrinti tik tuščias grupes.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsEntries => 'Ši grupė dar turi kitų slaptažodžių įrašų. Jūs galite ištrinti tik tuščias grupes.';
 
   @override
-  String get groupListAppBarTitle => 'Groups';
+  String get groupListAppBarTitle => 'Grupės';
 
   @override
-  String get groupListFilterAppbarTitle => 'Filter by groups';
+  String get groupListFilterAppbarTitle => 'Filtruoti pagal grupes';
 
   @override
   String unexpectedError(String error) {
