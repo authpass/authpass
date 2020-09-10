@@ -31,6 +31,7 @@ class Analytics {
 
   usage.Analytics _ga;
   final List<VoidCallback> _gaQ = [];
+  String _dbg;
 
   /// global analytics tracker we use for error reporting.
   static usage.Analytics _errorGa;
@@ -71,6 +72,7 @@ class Analytics {
           'Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
           'UserAgent: $userAgent');
 
+      _dbg = '(ga)';
       _ga = await analyticsCreate(
         env.secrets.analyticsGoogleAnalyticsId,
         info.appName,
@@ -86,16 +88,18 @@ class Analytics {
           _gaPropertyMapping['platform'], AuthPassPlatform.operatingSystem);
       // set application id to package name.
       _ga.setSessionValue('aid', info.packageName);
-
-      for (final cb in _gaQ) {
-        cb();
-      }
-      _gaQ.clear();
     } else {
       _logger.info('No analytics Id defined. Not tracking anything.');
+      _errorGa = _ga = usage.AnalyticsMock();
+      _dbg = '(noop)';
     }
 
-    _logger.finest('Registering analytics tracker.');
+    for (final cb in _gaQ) {
+      cb();
+    }
+    _gaQ.clear();
+
+    _logger.finest('$_dbg Registering analytics tracker.');
     events.registerTracker((event, params) {
       final eventParams = <String, String>{};
       int value;
@@ -133,8 +137,8 @@ class Analytics {
 
   void trackScreen(@NonNls String screenName) {
     _requireGa((ga) {
-      _logger.finer('trackScreen($screenName)');
       ga.sendScreenView(screenName);
+      _logger.finer('$_dbg screen($screenName)');
     });
   }
 
@@ -152,18 +156,18 @@ class Analytics {
       {String category, String label}) {
     _requireGa((ga) {
       ga.sendTiming(variableName, timeMs, category: category, label: label);
-      _logger.finest('timing($variableName, $timeMs, '
+      _logger.finest('$_dbg timing($variableName, $timeMs, '
           'category: $category, label: $label)');
     });
   }
 
   void _sendEvent(String category, String action,
       {String label, int value, Map<String, String> parameters}) {
-    _logger.finer(
-        'event($category, $action, $label, $value) - parameters: $parameters');
     _requireGa((ga) {
       ga.sendEvent(category, action,
           label: label, value: value, parameters: parameters);
+      _logger.finer(
+          '$_dbg event($category, $action, $label, $value) - parameters: $parameters');
     });
   }
 
