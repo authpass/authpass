@@ -268,6 +268,23 @@ class _EntryDetailsState extends State<EntryDetails>
       if (event.type == KeyboardShortcutType.copyPassword) {
         final context = FocusManager.instance.primaryFocus?.context;
         if (context != null) {
+          _logger.fine('context: $context');
+          if (context?.widget is EditableText) {
+            final ctrl = (context.widget as EditableText).controller;
+            if (!ctrl.selection.isCollapsed && ctrl.selection.isNormalized) {
+              final data = ctrl.selection.textInside(ctrl.text);
+              if (data != null && data.isNotEmpty) {
+                Clipboard.setData(ClipboardData(text: data));
+                if (mounted) {
+                  final loc = AppLocalizations.of(context);
+                  Scaffold.of(context).showSnackBar(
+                      SnackBar(content: Text(loc.copiedToClipboard)));
+                }
+                return;
+              }
+            }
+          }
+
           final entryFieldState =
               context.findAncestorStateOfType<_EntryFieldState>();
           if (entryFieldState != null) {
