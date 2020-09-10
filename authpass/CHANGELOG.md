@@ -1,3 +1,10 @@
+# (unreleased) 1.7.7
+
+* Fix: Make sure files can only be opened once at the same time, even from different sources.
+  (ie. prevent opening a copy of a file at the same time as the original)
+* Fix: Synchronized saving of kdbx files - previously saving the same file twice at the same time
+  could lead to corrupted database files.
+
 # 1.7.6
 
 * Password generator: Allow generated passwords of custom length >40 characters.

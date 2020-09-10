@@ -359,6 +359,12 @@ abstract class AppLocalizations {
   // Label for the checkbox to save master password for quick unlock.
   String get saveMasterPasswordBiometric;
 
+  // Trying to open a database from a second file source which is already open.
+  String get errorOpenFileAlreadyOpenTitle;
+
+  // Trying to open a database from a second file source which is already open.
+  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource);
+
   // generic error when opening a file (dialog title)
   String get errorUnlockFileTitle;
 

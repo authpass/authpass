@@ -283,6 +283,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get saveMasterPasswordBiometric => 'Save Password with biometric key store?';
 
   @override
+  String get errorOpenFileAlreadyOpenTitle => 'File already open';
+
+  @override
+  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
+    return 'The selected database ${databaseName} is already open from ${openFileSource} (Tried to open from ${newFileSource})';
+  }
+
+  @override
   String get errorUnlockFileTitle => 'Unable to open File';
 
   @override

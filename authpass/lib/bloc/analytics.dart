@@ -304,7 +304,16 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 enum TryUnlockResult {
   success,
   invalidCredential,
+  alreadyOpen,
   failure,
+}
+
+extension TryUnlockResultExt on TryUnlockResult {
+  static const DOT_POS = 16;
+  String get name {
+    assert(runtimeType.toString().length == DOT_POS - 1);
+    return toString().substring(DOT_POS);
+  }
 }
 
 enum GroupDeleteResult {

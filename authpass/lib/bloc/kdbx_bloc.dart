@@ -43,6 +43,31 @@ class FileExistsException extends KdbxException {
   }
 }
 
+class FileAlreadyOpenException extends KdbxException {
+  FileAlreadyOpenException({
+    @required this.newFileSource,
+    @required this.newFile,
+    @required this.openFileSource,
+    @required this.openFile,
+  }) : assert(newFile.body.rootGroup.uuid == openFile.body.rootGroup.uuid);
+
+  FileSource newFileSource;
+  KdbxFile newFile;
+  FileSource openFileSource;
+  KdbxFile openFile;
+
+  @override
+  String toString() {
+    final map = {
+      'newFileSource': newFileSource.toString(),
+      'openFileSource': openFileSource.toString(),
+      'uuid': newFile.body.rootGroup.uuid,
+      'databaseName': newFile.body.meta.databaseName.get(),
+    };
+    return 'FileAlreadyOpenException{$map}';
+  }
+}
+
 class QuickUnlockStorage {
   QuickUnlockStorage({
     @required this.cloudStorageBloc,
@@ -277,6 +302,7 @@ class KdbxBloc {
       openedFile = await _openFileContent(
           file, credentials, fileContent, addToQuickUnlock);
       addToQuickUnlock = false;
+
       yield OpenFileResult(
         kdbxOpenedFile: openedFile,
         fileContent: fileContent,
@@ -309,6 +335,21 @@ class KdbxBloc {
       throw kdbxReadFile.exception;
     }
     final kdbxFile = kdbxReadFile.file;
+
+    // make sure kdbxFile is not already opened with another FileSource.
+    final openedUuid = kdbxFile.body.rootGroup.uuid;
+    for (final openedFile in _openedFiles.value.values) {
+      if (openedFile.kdbxFile.body.rootGroup.uuid == openedUuid &&
+          openedFile.fileSource != file) {
+        throw FileAlreadyOpenException(
+          newFileSource: file,
+          newFile: kdbxFile,
+          openFileSource: openedFile.fileSource,
+          openFile: openedFile.kdbxFile,
+        );
+      }
+    }
+
     final openedFile = await appDataBloc.openedFile(
       file,
       name: kdbxFile.body.meta.databaseName.get(),

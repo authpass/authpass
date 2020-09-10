@@ -1022,18 +1022,27 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           _invalidPassword = pw;
           _formKey.currentState.validate();
         });
+      } on FileAlreadyOpenException catch (e, stackTrace) {
+        _logger.fine('File already open.', e, stackTrace);
+        await _handleOpenError(
+          analytics: analytics,
+          result: TryUnlockResult.alreadyOpen,
+          errorTitle: loc.errorOpenFileAlreadyOpenTitle,
+          errorBody: loc.errorOpenFileAlreadyOpenBody(
+            e.newFile.body.meta.databaseName.get(),
+            e.openFileSource.displayPath,
+            e.newFileSource.displayPath,
+          ),
+          stopWatch: stopWatch,
+        );
       } catch (e, stackTrace) {
         _logger.fine('Unable to open kdbx file. ', e, stackTrace);
-        analytics.events.trackTryUnlock(
-          action: TryUnlockResult.failure,
-          ext: _fileExtension(),
-          source: widget.kdbxFilePath.typeDebug,
-        );
-        await DialogUtils.showErrorDialog(
-          context,
-          loc.errorUnlockFileTitle,
-          loc.errorUnlockFileBody(e),
-          routeAppend: 'errorOpenFile',
+        await _handleOpenError(
+          analytics: analytics,
+          result: TryUnlockResult.failure,
+          errorTitle: loc.errorUnlockFileTitle,
+          errorBody: loc.errorUnlockFileBody(e),
+          stopWatch: stopWatch,
         );
       } finally {
         if (mounted) {
@@ -1046,5 +1055,31 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         }
       }
     }
+  }
+
+  Future<void> _handleOpenError({
+    @required Analytics analytics,
+    @required TryUnlockResult result,
+    @required String errorTitle,
+    @required String errorBody,
+    @required Stopwatch stopWatch,
+  }) async {
+    analytics.trackTiming(
+      'tryUnlockFile',
+      stopWatch.elapsedMilliseconds,
+      category: 'unlock',
+      label: 'error: $result',
+    );
+    analytics.events.trackTryUnlock(
+      action: TryUnlockResult.alreadyOpen,
+      ext: _fileExtension(),
+      source: widget.kdbxFilePath.typeDebug,
+    );
+    await DialogUtils.showErrorDialog(
+      context,
+      errorTitle,
+      errorBody,
+      routeAppend: 'errorOpenFile',
+    );
   }
 }

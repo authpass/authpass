@@ -325,6 +325,23 @@
     "description": "Label for the checkbox to save master password for quick unlock.",
     "context": "credential screen"
   },
+
+  "errorOpenFileAlreadyOpenTitle": "File already open",
+  "@errorOpenFileAlreadyOpenTitle": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen"
+  },
+  "errorOpenFileAlreadyOpenBody": "The selected database {databaseName} is already open from {openFileSource} (Tried to open from {newFileSource})",
+  "@errorOpenFileAlreadyOpenBody": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen",
+    "placeholders": {
+      "databaseName": {},
+      "openFileSource": {},
+      "newFileSource": {}
+    }
+  },
+
   "errorUnlockFileTitle": "Unable to open File",
   "@errorUnlockFileTitle": {
     "description": "generic error when opening a file (dialog title)",
