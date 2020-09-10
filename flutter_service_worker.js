@@ -20,7 +20,7 @@ const RESOURCES = {
 "assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
 "assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"main.dart.js": "dc4d4d7214586b3d20715da7b98ffe05",
+"main.dart.js": "e8792a4abe99564c8c675c7e4b93c735",
 "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "index.html": "5e77dbe07c6e53b56d12472982ef2f81",
