@@ -47,3 +47,4 @@ metrics.json
 /authpass/ios/fastlane/screenshots/**/*.png
 /authpass/ios/fastlane/framed
 /authpass/android/fastlane/metadata/framed
+/authpass/_tools/secrets/fosshub_token.txt
