@@ -10,9 +10,12 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_et.dart';
+import 'app_localizations_fi.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_lt.dart';
 import 'app_localizations_ru.dart';
+import 'app_localizations_uk.dart';
 
 /// Callers can lookup localized strings with an instance of AppLocalizations returned
 /// by `AppLocalizations.of(context)`.
@@ -99,9 +102,12 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('en'),
     Locale('es'),
+    Locale('et'),
+    Locale('fi'),
     Locale('fr'),
     Locale('lt'),
-    Locale('ru')
+    Locale('ru'),
+    Locale('uk')
   ];
 
   // No description provided in @fieldUserName
@@ -118,6 +124,21 @@ abstract class AppLocalizations {
 
   // Label for fields of TOTP (Time based one time passwords)
   String get fieldTotp;
+
+  // 
+  String get english;
+
+  // 
+  String get german;
+
+  // 
+  String get russian;
+
+  // 
+  String get ukrainian;
+
+  // 
+  String get lithuanian;
 
   // No description provided in @selectKeepassFile
   String get selectKeepassFile;
@@ -432,7 +453,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'lt', 'ru'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'et', 'fi', 'fr', 'lt', 'ru', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -447,9 +468,12 @@ AppLocalizations _lookupAppLocalizations(Locale locale) {
     case 'de': return AppLocalizationsDe();
     case 'en': return AppLocalizationsEn();
     case 'es': return AppLocalizationsEs();
+    case 'et': return AppLocalizationsEt();
+    case 'fi': return AppLocalizationsFi();
     case 'fr': return AppLocalizationsFr();
     case 'lt': return AppLocalizationsLt();
     case 'ru': return AppLocalizationsRu();
+    case 'uk': return AppLocalizationsUk();
   }
 
   assert(false, 'AppLocalizations.delegate failed to load unsupported locale "$locale"');

@@ -22,7 +22,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fieldTitle => 'Название';
 
   @override
-  String get fieldTotp => 'One Time Password (Time Based)';
+  String get fieldTotp => 'Одноразовый пароль (основанный на времени)';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get german => 'German';
+
+  @override
+  String get russian => 'Russian';
+
+  @override
+  String get ukrainian => 'Ukrainian';
+
+  @override
+  String get lithuanian => 'Lithuanian';
 
   @override
   String get selectKeepassFile => 'AuthPass - выберите KeePass файл';
@@ -37,7 +52,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get openLocalFile => 'Открыть\nлокальный файл';
 
   @override
-  String get openFile => 'Open File';
+  String get openFile => 'Открыть файл';
 
   @override
   String loadFrom(String cloudStorageName) {

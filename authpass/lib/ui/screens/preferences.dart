@@ -5,6 +5,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('preferences');
 
@@ -32,6 +34,13 @@ class PreferencesScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class LocaleInfo {
+  LocaleInfo(@NonNls this.locale, @NonNls this.nativeName, this.translatedName);
+  final String locale;
+  final String nativeName;
+  final String translatedName;
 }
 
 class PreferencesBody extends StatefulWidget {
@@ -91,13 +100,16 @@ class _PreferencesBodyState extends State<PreferencesBody>
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     final commonFields = context.watch<CommonFields>();
-    final locales = {
-      null: loc.preferenceSystemDefault,
-      'de': 'Deutsch', // NON-NLS
-      'en': 'English', // NON-NLS
-      'lt': 'lietuviškai', // NON-NLS
-      'ru': 'русский', // NON-NLS
-    };
+    final localeInfo = [
+      LocaleInfo(null, loc.preferenceSystemDefault, null),
+      LocaleInfo('de', 'Deutsch', loc.german),
+      LocaleInfo('en', 'English', loc.english),
+      LocaleInfo('lt', 'lietuviškai', loc.lithuanian),
+      LocaleInfo('ru', 'русский', loc.russian),
+      LocaleInfo('uk', 'українська', loc.ukrainian),
+    ];
+    final locales =
+        Map.fromEntries(localeInfo.map((e) => MapEntry(e.locale, e)));
     return Column(
       children: <Widget>[
         ...?(_autofillStatus == AutofillServiceStatus.unsupported ||
@@ -224,18 +236,20 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ListTile(
           leading: const FaIcon(FontAwesomeIcons.language),
           title: Text(loc.preferenceLanguage),
-          trailing: Text(locales[_appData.localeOverride]),
+          trailing: Text(locales[_appData.localeOverride].nativeName),
           onTap: () async {
-            final result = await showDialog<String>(
+            final result = await showDialog<LocaleInfo>(
                 context: context,
                 builder: (_) => SelectLanguageDialog(
-                      locales: locales,
+                      locales: localeInfo,
                       localeOverride: _appData.localeOverride,
                     ));
-            await _appDataBloc
-                .update((builder, data) => builder.localeOverride = result);
-            _analytics.events
-                .trackPreferences(setting: 'localeOverride', to: '$result');
+            if (result != null) {
+              await _appDataBloc.update(
+                  (builder, data) => builder.localeOverride = result.locale);
+            }
+            _analytics.events.trackPreferences(
+                setting: 'localeOverride', to: result?.locale ?? 'null');
           },
         ),
         CheckboxListTile(
@@ -263,7 +277,7 @@ class SelectLanguageDialog extends StatelessWidget {
   const SelectLanguageDialog({Key key, this.locales, this.localeOverride})
       : super(key: key);
 
-  final Map<String, String> locales;
+  final List<LocaleInfo> locales;
   final String localeOverride;
 
   @override
@@ -271,13 +285,17 @@ class SelectLanguageDialog extends StatelessWidget {
     final loc = AppLocalizations.of(context);
     return SimpleDialog(
       title: Text(loc.preferenceSelectLanguage),
-      children: locales.entries
-          .map((e) => RadioListTile<String>(
-                title: Text(e.value),
-                value: e.key,
+      children: locales
+          .map((LocaleInfo e) => RadioListTile<String>(
+                title: Text(e.nativeName),
+                subtitle: e.translatedName
+                    ?.takeIf((n) => n != e.nativeName)
+                    ?.let((name) => Text(e.translatedName)),
+                secondary: e.locale?.let((locale) => Text(locale)),
+                value: e.locale,
                 groupValue: localeOverride,
                 onChanged: (value) {
-                  Navigator.of(context).pop(e.key);
+                  Navigator.of(context).pop(e);
                 },
               ))
           .toList(),

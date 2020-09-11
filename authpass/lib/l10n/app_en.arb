@@ -12,6 +12,26 @@
   "@fieldTotp": {
     "description": "Label for fields of TOTP (Time based one time passwords)"
   },
+  "english": "English",
+  "@english": {
+    "description": ""
+  },
+  "german": "German",
+  "@german": {
+    "description": ""
+  },
+  "russian": "Russian",
+  "@russian": {
+    "description": ""
+  },
+  "ukrainian": "Ukrainian",
+  "@ukrainian": {
+    "description": ""
+  },
+  "lithuanian": "Lithuanian",
+  "@lithuanian": {
+    "description": ""
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {

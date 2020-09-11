@@ -25,6 +25,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get fieldTotp => 'Einmalpasswort (Zeitbasiert)';
 
   @override
+  String get english => 'English';
+
+  @override
+  String get german => 'German';
+
+  @override
+  String get russian => 'Russian';
+
+  @override
+  String get ukrainian => 'Ukrainian';
+
+  @override
+  String get lithuanian => 'Lithuanian';
+
+  @override
   String get selectKeepassFile => 'AuthPass - Wähle eine KeePass Datei';
 
   @override
