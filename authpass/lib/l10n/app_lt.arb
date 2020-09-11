@@ -1,5 +1,5 @@
 {
-    "@@locale": "lt",
+    "@@locale": "en",
     "fieldUserName": "Naudotojas",
     "@fieldUserName": {},
     "fieldPassword": "Slaptažodis",
@@ -173,7 +173,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles,plural, one {Vienas failas išsaugotas: {files}}, other {{numFiles} failai išsaugoti: {files}}}",
+    "savedFiles": "{numFiles, plural, one {Vienas failas išsaugotas: {files}} other {{numFiles} failai išsaugoti: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",

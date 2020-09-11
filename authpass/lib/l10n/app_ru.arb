@@ -1,5 +1,5 @@
 {
-    "@@locale": "ru",
+    "@@locale": "en",
     "fieldUserName": "Пользователь",
     "@fieldUserName": {},
     "fieldPassword": "Пароль",
@@ -8,6 +8,10 @@
     "@fieldWebsite": {},
     "fieldTitle": "Название",
     "@fieldTitle": {},
+    "fieldTotp": "Одноразовый пароль (основанный на времени)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
     "selectKeepassFile": "AuthPass - выберите KeePass файл",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -23,6 +27,10 @@
     "openLocalFile": "Открыть\nлокальный файл",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
+    },
+    "openFile": "Открыть файл",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
     },
     "loadFrom": "Загрузить из {cloudStorageName}",
     "@loadFrom": {

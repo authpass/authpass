@@ -1,0 +1,403 @@
+{
+    "@@locale": "en",
+    "fieldUserName": "Користувач",
+    "@fieldUserName": {},
+    "fieldPassword": "Пароль",
+    "@fieldPassword": {},
+    "fieldWebsite": "Сайт",
+    "@fieldWebsite": {},
+    "fieldTitle": "Найменування",
+    "@fieldTitle": {},
+    "fieldTotp": "Одноразовий пароль (залежить від часу)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
+    "selectKeepassFile": "AuthPass - виберіть KeePass файл",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Швидке розблокування файлів",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
+    },
+    "selectKeepassFileLabel": "Оберіть файл KeePass (.kdbx).",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "openLocalFile": "Відкрити\nлокальний файл",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "openFile": "Відкрити файл",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFrom": "Завантажити з {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Завантажити з URL",
+    "@loadFromUrl": {},
+    "createNewKeepass": "Вперше у KeePass?\nСтворити нову базу паролів",
+    "@createNewKeepass": {},
+    "labelLastOpenFiles": "Останні відкриті файли:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Не було відкрито жодного файлу.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Оберіть мову",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Мова",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Коефіцієнт масштабування тексту",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Візуальна щільність",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Тема",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Світла",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Темна",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Системні налаштування",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Типово",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Заблокувати всі відкриті файли",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Дозволити знімки екрану",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Увімкнути автозаповнення",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "Підтримується лише на Android Oreo (8.0) або новіше.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Налаштування",
+    "@preferenceTitle": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Ми раді будь-яким відгукам!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Також не забудьте відвідати наш сайт",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "І джерельний код програми",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "Файл журналу: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "menuItemGeneratePassword": "Згенерувати пароль",
+    "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Налаштування",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Відкрити інший файл",
+    "@menuItemOpenAnotherFile": {},
+    "menuItemCheckForUpdates": "Перевірити наявність оновлень",
+    "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Підтримка по електронній пошті",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Надіслати журнали електронною поштою та запитом про допомогу.",
+    "@menuItemSupportSubtitle": {},
+    "menuItemHelp": "Допомога",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Показати документацію",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "Про програму",
+    "@menuItemAbout": {},
+    "passwordPlainText": "Показати пароль",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Пароль",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Згенерувати пароль",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Готово",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "Використовувати за замовчуванням",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Нижній регістр (а-я)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Верхній регістр (A-Я)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Цифри (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Умляути (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Спеціальні символи (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Довжина",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Особлива довжина",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Використовується лише для довжини > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural, one {Один файл збережено: {files}} few {{numFiles} файли збережено: {files}} many {{numFiles} файлів збережено: {files}} other {{numFiles} файли збережено: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "Керування групами",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Блокування файлів",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Пошук",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "clear": "Очистити",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Фільтр:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Оберіть пароль для автозаповнення.",
+    "@autofillPrompt": {
+        "description": ""
+    },
+    "copiedToClipboard": "Скопійовано до буфера обміну.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(нема заголовка)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(нема ім'я користувача)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Налаштувати …",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Копіювати пароль",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Копіювати ім'я користувача",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedPassword": "Пароль скопійовано до буфера обміну.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Ім'я користувача було скопійовано до буфера обміну.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "emptyPasswordVaultPlaceholder": "Ви ще не маєте жодного пароля в базі даних.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Створити свій перший пароль",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loadingFile": "Завантаження файлу …",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "Внутрішній файл",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Попередня база паролів створена в AuthPass",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Вибір файлу",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Відкрити файл з пристрою.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Облікові дані",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Введіть пароль для:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Пароль",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Будь ласка, введіть ваш пароль.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Невірний пароль",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Використати файл-ключ",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Зберегти пароль із біометричним сховищем ключів?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "errorUnlockFileTitle": "Не вдалося відкрити файл",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Сталася невідома помилка під час спроби відкрити файл. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Продовжити",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Надіслати звіт про помилку/запит про допомогу",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterDescription": "Виберіть, які групи показувати (рекурсивно)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Обрати все",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Зняти всі виділення",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Створити підгрупу",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Редагувати",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Видалити",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Видалити групу.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Скасувати",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "initialNewGroupName": "Нова група",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Не вдалося видалити групу",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Ця група містить підгрупи. Ви можете видаляти лише порожні групи.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Ця група все ще містить збережені паролі. Видалити можна тільки порожні групи.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Групи",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Фільтрувати за групами",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "unexpectedError": "Неочікувана помилка: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    }
+}

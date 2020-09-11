@@ -1,5 +1,5 @@
 {
-    "@@locale": "de",
+    "@@locale": "en",
     "fieldUserName": "Benutzer",
     "@fieldUserName": {},
     "fieldPassword": "Passwort",
@@ -173,7 +173,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles,plural, one {Eine Datei gespeichert: {files}}, other {{numFiles} Dateien gespeichert: {files}}}",
+    "savedFiles": "{numFiles, plural, one {Eine Datei gespeichert: {files}} other {{numFiles} Dateien gespeichert: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",
