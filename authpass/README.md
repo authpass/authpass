@@ -9,18 +9,10 @@ see [../README.md](../README.md) for details.
 ### Build with Flutter
 
 ```
-# I use `flutter_dev` as an alias to a flutter dev channel.
+# Use the  correct flutter version from _tools/_flutter_version.sh
 
-flutter_dev clean
-FLT=~/dev/flutter/flutter__dev/bin/flutter _tools/release.sh macos
-
-or:
-flutter channel dev && flutter upgrade && flutter clean && _tools/release.sh macos
-
-OLD:
-flutter_dev clean
-flutter_dev pub get
-flutter_dev build macos -t lib/env/production.dart --release
+_tools/flutter_run.sh clean
+_tools/release.sh macos
 ```
 
 ### Open Xcode
@@ -28,29 +20,48 @@ flutter_dev build macos -t lib/env/production.dart --release
 Product -> Archive Project.
 
 
+## Releasing
 
-### Deprecated:
+One day I have to automate this...
 
-```
-flutter channel master && flutter upgrade
-flutter clean
-# Update buildnumber in `pubspec.yaml`(?)
-flutter build macos -t lib/env/production.dart --release
-
-cd build/macos/Build/Products/Release/
-
-# <workaround>
-rm AuthPass.app/Contents/Frameworks/App.framework/Versions/Current
-ls -l AuthPass.app/Contents/Frameworks/App.framework/Versions/
-# </workarorund>
-
-codesign --entitlements ~/dev/authpass/authpass/macos/AuthPass-release.entitlements --options=runtime -f -v --timestamp --deep -s 'Developer ID Application: TaPo-IT OG (2N9YTZSQBW)' AuthPass.app
-
-cd $basedir/macos/
-# bundle install
-bundle exec fastlane hptest # notarize
-
-```
+* Write CHANGELOG
+  * [`CHANGELOG.md`](./CHANGELOG.md)
+  * copy&paste current build to fdroid changelog `metadata/android/en-US/changelogs/XXX.txt`
+* push to `stable` branch `git push origin HEAD:push` and wait for github builds
+  * Already generates all artifacts except macos
+  * Run macOS build locally (see above step), publish to app store and create distribution zip file
+  * `_tools/upload-artifact.sh /Users/herbert/Downloads/tmp/AuthPass.app-1.7.7_1519.zip`
+* run `appcast.generate.sh` to generate windows appcast update.
+* create tag called `v1.2.3` and `fdroid-v1.2.3`
+* data.authpass.app
+  * update `public_html/authpass-data/data/artifacts/.stable.map.txt` (used for website links and `download-artifact` urls).
+    ```
+    AuthPass-setup-stable.exe AuthPass-setup-1.7.6_1513.exe
+    authpass-linux-stable.tar.gz authpass-linux-1.7.6_1513.tar.gz
+    authpass_stable_amd64.snap authpass_1.7.6_1513_amd64.snap
+    authpass-linux-latest.tar.gz authpass-linux-1.7.6_1513.tar.gz
+    ```
+  * update `public_html/authpass-data/data/fdroid-version.txt`
+* Create GitHub Release
+  * Upload:
+    * AuthPass-setup-1.7.7_1519.exe
+    * authpass-sideload-1519.apk
+    * AuthPass.app-1.7.7-b1519.zip
+    * authpass-linux-1.7.7_1519.tar.gz
+* Upload Artifacts to [fosshub.com](https://devzone.fosshub.com/dashboard/projects)
+  * run `_tools/fosshub-releaes.sh`
+* Submit release to
+  * https://play.google.com/apps/publish
+  * https://appstoreconnect.apple.com/apps
+  * [Samsung Apps](https://seller.samsungapps.com/main/sellerMain.as#)
+  * [Huawei App Gallery](https://developer.huawei.com/consumer/en/service/josp/agc/index.html)
+  * [Amazon Appstore](https://developer.amazon.com/apps-and-games/console/apps/list.html)
+  * Linux PPA - use [authpass/authpass-deb](https://github.com/authpass/authpass-deb)
+    ```shell
+    docker-compose run bionic ./update.sh focal
+    docker-compose run bionic ./update.sh bionic
+    ```
+  * snapcraft.io is already published to `edge` channel. [release it to stable](https://snapcraft.io/authpass/releases).
 
 ## Resources
 

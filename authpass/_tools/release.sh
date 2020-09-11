@@ -83,10 +83,11 @@ case "${flavor}" in
         open macos/Runner.xcworkspace
     ;;
     samsungapps | huawei | sideload | amazon)
+        version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
         $FLT build -v apk -t lib/env/production.dart --release --build-number $buildnumber --flavor ${flavor}
         apkpath="build/app/outputs/apk/${flavor}/release"
         apk="${apkpath}/app-${flavor}-release.apk"
-        outputfilename="authpass-${flavor}-${buildnumber}.apk"
+        outputfilename="authpass-${flavor}-${version}_${buildnumber}.apk"
         outputpath="${apkpath}/${outputfilename}"
         echo "Copying to output apk ${apk}"
         cp ${apk} ${outputpath}
