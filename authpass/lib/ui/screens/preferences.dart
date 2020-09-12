@@ -107,6 +107,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
       LocaleInfo('lt', 'lietuviškai', loc.lithuanian),
       LocaleInfo('ru', 'русский', loc.russian),
       LocaleInfo('uk', 'українська', loc.ukrainian),
+      LocaleInfo('fr', 'Français', loc.french),
     ];
     final locales =
         Map.fromEntries(localeInfo.map((e) => MapEntry(e.locale, e)));

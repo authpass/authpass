@@ -14,23 +14,27 @@
   },
   "english": "English",
   "@english": {
-    "description": ""
+    "description": "language switcher subtitle"
   },
   "german": "German",
   "@german": {
-    "description": ""
+    "description": "language switcher subtitle"
   },
   "russian": "Russian",
   "@russian": {
-    "description": ""
+    "description": "language switcher subtitle"
   },
   "ukrainian": "Ukrainian",
   "@ukrainian": {
-    "description": ""
+    "description": "language switcher subtitle"
   },
   "lithuanian": "Lithuanian",
   "@lithuanian": {
-    "description": ""
+    "description": "language switcher subtitle"
+  },
+  "french": "French",
+  "@french": {
+    "description": "language switcher subtitle"
   },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",

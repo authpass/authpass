@@ -125,20 +125,23 @@ abstract class AppLocalizations {
   // Label for fields of TOTP (Time based one time passwords)
   String get fieldTotp;
 
-  // 
+  // language switcher subtitle
   String get english;
 
-  // 
+  // language switcher subtitle
   String get german;
 
-  // 
+  // language switcher subtitle
   String get russian;
 
-  // 
+  // language switcher subtitle
   String get ukrainian;
 
-  // 
+  // language switcher subtitle
   String get lithuanian;
+
+  // language switcher subtitle
+  String get french;
 
   // No description provided in @selectKeepassFile
   String get selectKeepassFile;
