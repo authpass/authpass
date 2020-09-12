@@ -209,7 +209,7 @@ class AuthPassAboutDialog extends StatelessWidget {
               '&utm_medium=app_help&utm_campaign=app_help#documentation');
         },
       ),
-      createAboutMenuItem(context)
+      createAboutMenuItem(context),
     ];
   }
 

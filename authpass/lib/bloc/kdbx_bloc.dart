@@ -80,6 +80,9 @@ class QuickUnlockStorage {
   Analytics analytics;
   bool _supported;
 
+  /// should only be used if used in non interactive callbacks.
+  bool get supportsBiometricKeystoreAlready => _supported;
+
   Future<bool> supportsBiometricKeyStore() async {
     if (_supported != null) {
       return _supported;
@@ -93,6 +96,11 @@ class QuickUnlockStorage {
 
   Future<BiometricStorageFile> _storageFile() => _storageFileCached ??=
       BiometricStorage().getStorage('${env.storageNamespace ?? ''}QuickUnlock');
+
+  Future<void> deleteQuickUnlock() async {
+    final storageFile = await _storageFile();
+    await storageFile.delete();
+  }
 
   Future<void> updateQuickUnlockFile(
       Map<FileSource, Credentials> fileCredentials) async {

@@ -100,6 +100,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     final commonFields = context.watch<CommonFields>();
+    final kdbxBloc = context.watch<KdbxBloc>();
     final localeInfo = [
       LocaleInfo(null, loc.preferenceSystemDefault, null),
       LocaleInfo('de', 'Deutsch', loc.german),
@@ -269,6 +270,17 @@ class _PreferencesBodyState extends State<PreferencesBody>
           },
           tristate: false,
         ),
+        if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready) ...[
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.bug),
+            title: const Text('Delete Quick Unlock'),
+            onTap: () async {
+              await kdbxBloc.quickUnlockStorage.deleteQuickUnlock();
+              Scaffold.of(context).showSnackBar(
+                  const SnackBar(content: Text('Deleted Quick Unlock.')));
+            },
+          ),
+        ],
       ],
     );
   }
@@ -371,7 +383,7 @@ class ValueSelectorTile extends StatelessWidget {
                 onPressed: () => onChanged(null),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
