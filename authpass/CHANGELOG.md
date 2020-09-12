@@ -1,6 +1,7 @@
 # (unreleased) 1.7.8
 
-* TODO
+* Android: improve autofill input field detection for usernames.
+* French translations.
 
 # 1.7.7
 

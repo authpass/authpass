@@ -1,8 +1,9 @@
 rewrite:
   - pattern: 'samsung-galaxy-s10-plus'
-    replace: 'samsung-galaxy-s10-plus-samsungapps'
+    replace: 'samsungapps-samsung-galaxy-s10-plus'
     action: duplicate
 images:
-  samsung-galaxy-s10-plus-samsungapps:
+  samsungapps-samsung-galaxy-s10-plus:
     cropHeight: 2600
     device: 'samsung-galaxy-s10-plus'
+    previewLabel: 'Samsung App Store'

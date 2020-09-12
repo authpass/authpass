@@ -19,18 +19,20 @@ staging: /var/tmp/screenshots
 
 # A list of locales supported by the app
 locales:
-  - en-US
-  - de-DE
-  - lt-LT
-  - ru-RU
+  # - en-US
+  # - de-DE
+  # - lt-LT
+  # - ru-RU
+  # - uk-UA
+  - fr-FR
 
 # A map of devices to emulate
 devices:
-  ios:
-    iPhone Xs Max:
-#  android:
+#  ios:
+#    iPhone Xs Max:
+  android:
 #    Nexus 6P:
-#    samsung-galaxy-s10-plus:
+    samsung-galaxy-s10-plus:
 
 # Frame screenshots
 frame: false
