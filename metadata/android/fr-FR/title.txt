@@ -1,1 +1,1 @@
-AuthPass - KeePass compatible Password Manager
+AuthPass - Gestionnaire de mots de passe compatible KeePass

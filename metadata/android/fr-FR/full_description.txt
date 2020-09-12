@@ -1,16 +1,16 @@
-<p>Easily and securely keep track of all your Passwords!</p>
+<p>Conservez facilement et en toute sécurité la trace de tous vos mots de passe !</p>
 
-<p>AuthPass is a stand alone password manager with support for the popular and proven Keepass (kdbx) format. 
-Store your passwords, share across all your devices and easily find them whenever you need to login.</p>
+<p>AuthPass est un gestionnaire de mots de passe autonome prenant en charge le format Keepass (kdbx), populaire et éprouvé. 
+Stockez vos mots de passe, partagez-les sur tous vos appareils et trouvez-les facilement chaque fois que vous avez besoin de vous connecter.</p>
 
 <ul>
-<li>All your passwords in one place.<li>
-<li>Generate secure random passwords for each of your accounts.</li>
-<li>Quick Unlock secured with biometric lock (android only right now)</li>
-<li>Keep track of your accounts across the web.</li>
-<li>App available for Mac, iOS, Android, Linux and Windows.</li>
-<li>Open Source available on https://github.com/authpass/authpass/</li>
-<li>Contributions welcome and encouraged ;-) (Always looking for developers, translators, documentation writers, UI designer, etcc. :) ), just join our discord channel.</li>
+<li>Tous vos mots de passe au même endroit.<li>
+<li>Générez des mots de passe sécurisés aléatoires pour chacun de vos comptes.</li>
+<li>Déverrouillage rapide sécurisé avec verrou biométrique (Android uniquement)</li>
+<li>Gardez une trace de vos comptes sur le Web.</li>
+<li>Appli disponible sous Mac, iOS, Android, Linux et Windows.</li>
+<li>Code Open Source, disponible sur https://github. om/authpass/authpass/</li>
+<li>Contributions bienvenues et encouragées ;-) (en constante recherche de développeurs, traducteurs, rédacteurs de documentation, designer d'interface, etc. :) ), rejoignez notre canal discord.</li>
 </ul>
 
-<p>Join our discord channel at https://authpass.app/go/discord - In case of any Problems, Feedback, etc. or just to hang out.</p>
+<p>Rejoignez notre canal discord sur https://authpass. pp/go/discord - En cas de problèmes, de retour, etc. ou simplement pour flâner.</p>

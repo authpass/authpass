@@ -35,7 +35,7 @@ Werde Teil der Community und besuche unseren <a href=""https://authpass.app/go/d
 "playstore_title","AuthPass - KeePass kompatibler Passwort Manager","Google Play Title","50",""
 "playstore_short_description","Sichere Aufbewahrung aller Passwörter und Benutzerkonten über alle Geräten.","Short description in play store.","80",""
 "apple-appstore-title","AuthPass - Passwort Manager","apple-appstore-title","30",""
-"apple-appstore-subtitle","Sicher, Effizient, Privat.","apple-appstore-subtitle","30",""
+"apple-appstore-subtitle","Sicher, Effizient, Privat.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","Einfache und sichere Verwaltung all Deiner Passwörter und Konten!
 
 AuthPass ist ein nativer Passwort Manager der das populäre und auf Sicherheit erprobte Format von KeePass verwendet. Dies stellt sicher, dass all Deine Passwörter verschlüsselt und sicher gespeichert sind. Außerdem erlaubt es all deine Passwörter zwischen all deinen Geräten zu synchronisieren und deine Zugangsdaten zu finden, wo auch immer du sie brauchst.

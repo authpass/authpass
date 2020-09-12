@@ -34,7 +34,7 @@ Taip pat prisijunkite prie mūsų <a href=""https://authpass.app/go/discord"">�
 "playstore_title","„AuthPass“ - Su „KeePass“ suderinama slapt. tvark.","Google Play Title","50",""
 "playstore_short_description","Laikykite savo slaptažodžius saugiai visose platformose ir įrenginiuose.","Short description in play store.","80",""
 "apple-appstore-title","„AuthPass“ - slapt. tvarkyklė","apple-appstore-title","30",""
-"apple-appstore-subtitle","Vienas slapt. visuose įreng.","apple-appstore-subtitle","30",""
+"apple-appstore-subtitle","Vienas slapt. visuose įreng.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","Lengvai ir saugiai tvarkykite visus savo slaptažodžius!
 
 „AuthPass“ yra atskira slaptažodžių tvarkyklė su palaikymu populiariesiems ir patikrintiems „KeePass“ (kdbx 3.x or kdbx 4.x) formatams. Laikykite savo slaptažodžius, bendrinkite visuose savo įrenginiuose ir lengvai raskite juos kada norite prisijungti.
