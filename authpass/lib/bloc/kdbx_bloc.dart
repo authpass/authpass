@@ -417,6 +417,7 @@ class KdbxBloc {
   Future<void> continueLoadInBackground(
     StreamIterator<OpenFileResult> openIt, {
     @required String debugName,
+    @required FileSource fileSource,
   }) async {
     try {
       while (await openIt.moveNext()) {
@@ -424,7 +425,10 @@ class KdbxBloc {
         _logger.fine('load:$debugName new data from ${r.fileContent.source}');
       }
     } catch (e, stackTrace) {
-      _logger.severe('load:$debugName error while loading subsequent data.', e,
+      _logger.severe(
+          'load:$debugName error while loading subsequent '
+          'data from $fileSource.',
+          e,
           stackTrace);
       rethrow;
     }
@@ -449,8 +453,8 @@ class KdbxBloc {
               final open = StreamIterator(openFile(file.key, file.value));
               await open.moveNext();
               filesOpened++;
-              unawaited(
-                  continueLoadInBackground(open, debugName: '$fileLabel'));
+              unawaited(continueLoadInBackground(open,
+                  debugName: '$fileLabel', fileSource: file.key));
             } catch (e, stackTrace) {
               _logger.severe(
                   'Panic, error while trying to open file from '

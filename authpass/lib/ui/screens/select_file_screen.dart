@@ -1001,8 +1001,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           ext: _fileExtension(),
           source: widget.kdbxFilePath.typeDebug,
         );
+        final fileSource = fileResult.kdbxOpenedFile.fileSource;
         unawaited(kdbxBloc.continueLoadInBackground(openIt,
-            debugName: '${fileResult.kdbxOpenedFile.fileSource.displayName}'));
+            debugName: '${fileSource.displayName}', fileSource: fileSource));
         await Navigator.of(context)
             .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
