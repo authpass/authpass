@@ -8,16 +8,16 @@ import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
+import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
-import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
-import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -70,7 +70,7 @@ class SelectFileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(loc.selectKeepassFile),
         actions: <Widget>[
-          AuthPassAboutDialog.createAboutPopupAction(context),
+          AppBarMenu.createOverflowMenuButton(context),
         ],
       ),
       body: Provider<CloudStorageBloc>.value(

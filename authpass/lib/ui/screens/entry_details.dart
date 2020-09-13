@@ -11,7 +11,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
-import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/entry_totp.dart';
 import 'package:authpass/ui/screens/group_list.dart';
@@ -96,7 +96,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                     onPressed: saveCallback,
                   ),
                 ],
-          AuthPassAboutDialog.createAboutPopupAction(
+          AppBarMenu.createOverflowMenuButton(
             context,
             builder: (context) => [
               PopupMenuItem(

@@ -1,4 +1,4 @@
-import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
@@ -50,7 +50,7 @@ class _GroupEditScreenState extends State<GroupEditScreen>
                     onPressed: saveCallback,
                   ),
                 ],
-          AuthPassAboutDialog.createAboutPopupAction(context),
+          AppBarMenu.createOverflowMenuButton(context),
         ],
       ),
       body: SingleChildScrollView(

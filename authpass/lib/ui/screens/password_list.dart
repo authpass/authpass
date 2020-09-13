@@ -9,7 +9,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
-import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/cloud/cloud_mailbox.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
@@ -645,7 +645,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                 ),
                 ...?_buildAuthPassCloudMenuItems(
                     context, cloudStatusSnapshot.data),
-                ...AuthPassAboutDialog.createDefaultPopupMenuItems(
+                ...AppBarMenu.createDefaultPopupMenuItems(
                     context, kdbxBloc.openedFiles),
                 PopupMenuItem(
                   value: () {
