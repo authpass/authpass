@@ -15,6 +15,10 @@ Big thanks to all contributors. Let me know if I forgot someone.
 * Tomurisk: Translations 🇱🇹 [![TWTR][]](https://twitter.com/Tomurisk)
 * OliBug: Translations 🇫🇷️
 
+# Thanks
+
+* [Crowdin](https://crowdin.com) - for providing their great [crowdsourcing translation platform](https://translate.authpass.app/authpass) 🇦🇹️🇫🇷️🇺🇸️🇱🇹️
+
 [TWTR]:_docs/icon-twitter.svg
 [GH]:_docs/icon-github.svg
 [Website]:_docs/icon-website.svg
