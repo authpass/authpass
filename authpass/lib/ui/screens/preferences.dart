@@ -97,7 +97,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
   @override
   Widget build(BuildContext context) {
     if (_appData == null) {
-      return const Text('loading');
+      return const Text('loading'); // NON-NLS
     }
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
@@ -140,8 +140,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 ),
                 SwitchListTile(
                   secondary: const Icon(FontAwesomeIcons.bug),
-                  title: const Text('Enable debug'),
-                  subtitle: const Text('Shows for every input field'),
+                  title: Text(loc.enableAutofillDebug),
+                  subtitle: Text(loc.enableAutofillDebugSubtitle),
                   value: _autofillPrefs.enableDebug,
                   onChanged: (val) async {
                     _logger.fine('Setting debug to $val');
@@ -218,9 +218,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
             ? null
             : [
                 SwitchListTile(
-                    title: const Text('Opt in to in app news, surveys.'),
-                    subtitle: const Text(
-                        'Will occasionally send a network request to fetch news.'),
+                    title: Text(loc.diacOptIn),
+                    subtitle: Text(loc.diacOptInSubtitle),
                     value: _appData.diacOptIn == true,
                     onChanged: (value) {
                       _appDataBloc
@@ -247,11 +246,11 @@ class _PreferencesBodyState extends State<PreferencesBody>
           },
         ),
         CheckboxListTile(
+          secondary: const FaIcon(FontAwesomeIcons.download),
           value: _appData.fetchWebsiteIconsOrDefault,
-          title: const Text('Dynamically load Icons'),
-          subtitle: Text(
-              'Will make http requests with the value in "${commonFields.url.displayName}" '
-              'field to load website icons.'),
+          title: Text(loc.preferenceDynamicLoadIcons),
+          subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
+              commonFields.url.displayName)),
           isThreeLine: true,
           onChanged: (value) {
             _logger.fine('Changed to $value');
@@ -449,7 +448,7 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
                 subtitle: Text(loc.clearQuickUnlockSubtitle),
               ),
               value: () async {
-                kdbxBloc.closeAllFiles(clearQuickUnlock: true);
+                await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
                 Scaffold.of(context).showSnackBar(
                     SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
                 await SelectFileScreen.navigate(context);

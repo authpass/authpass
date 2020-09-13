@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -24,17 +25,26 @@ class CreateFile extends StatefulWidget {
 
 class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final TextEditingController _databaseName =
-      TextEditingController(text: 'PersonalPasswords');
+  final TextEditingController _databaseName = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final FocusNode _passwordFocus = FocusNode();
   bool _passwordObscured = true;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final loc = AppLocalizations.of(context);
+    if (_databaseName.text.isEmpty) {
+      _databaseName.text = loc.databaseCreateDefaultName;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Password Database'),
+        title: Text(loc.createPasswordDatabase),
       ),
       body: Form(
         key: _formKey,
@@ -45,16 +55,16 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
             children: <Widget>[
               TextFormField(
                 controller: _databaseName,
-                decoration: const InputDecoration(
-                  labelText: 'Name of your new Database',
-                  suffixText: '.kdbx',
+                decoration: InputDecoration(
+                  labelText: loc.nameNewPasswordDatabase,
+                  suffixText: '.kdbx', // NON-NLS
                   filled: true,
                 ),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (val) => _passwordFocus.requestFocus(),
                 validator: (val) {
                   if (val.isEmpty) {
-                    return 'Please enter a name for your new database.';
+                    return loc.validatorNameMissing;
                   }
                   return null;
                 },
@@ -67,8 +77,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 focusNode: _passwordFocus,
                 onFieldSubmitted: (val) => _submitCallback()(),
                 decoration: InputDecoration(
-                  labelText:
-                      'Select a secure master Password. Make sure to remember it.',
+                  labelText: loc.masterPasswordHelpText,
                   filled: true,
                   suffix: InkWell(
                     child: _passwordObscured
@@ -83,7 +92,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 ),
                 validator: (val) {
                   if (val.isEmpty) {
-                    return 'Please enter a secure, rememberable password.';
+                    return loc.masterPasswordMissingCreate;
                   }
                   return null;
                 },
@@ -95,7 +104,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                     ? const CircularProgressIndicator()
                     : PrimaryButton(
                         large: false,
-                        child: const Text('Create Database'),
+                        child: Text(loc.createDatabaseAction),
                         onPressed: _submitCallback(),
                       ),
               ),
@@ -120,11 +129,11 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (e, stackTrace) {
             _logger.warning('Showing file exists error dialog.', e, stackTrace);
+            final loc = AppLocalizations.of(context);
             await DialogUtils.showSimpleAlertDialog(
               context,
-              'File Exists',
-              'Error while trying to create database. '
-                  'File already exists. Please choose another name. ${e.path}',
+              loc.databaseExistsError,
+              loc.databaseExistsErrorDescription(e.path),
               routeAppend: 'createFileExists',
             );
           } catch (e, stackTrace) {

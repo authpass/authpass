@@ -455,6 +455,51 @@ abstract class AppLocalizations {
   // 
   String get clearQuickUnlockSuccess;
 
+  // No description provided in @diacOptIn
+  String get diacOptIn;
+
+  // No description provided in @diacOptInSubtitle
+  String get diacOptInSubtitle;
+
+  // only visible in debug build. Preference to enable Auto-Fill Debugging.
+  String get enableAutofillDebug;
+
+  // only visible in debug build. Preference to enable Auto-Fill Debugging.
+  String get enableAutofillDebugSubtitle;
+
+  // 
+  String get createPasswordDatabase;
+
+  // creating new kdbx file, prompt
+  String get nameNewPasswordDatabase;
+
+  // Error message when no password database name is given.
+  String get validatorNameMissing;
+
+  // help text for master password when creating new password database
+  String get masterPasswordHelpText;
+
+  // Text displayed when master password is empty while creating new password database
+  String get masterPasswordMissingCreate;
+
+  // Label for button to create new database
+  String get createDatabaseAction;
+
+  // dialog title for error message when creating a new database with a name which already exists.
+  String get databaseExistsError;
+
+  // dialog body for error message when creating a new database with a name which already exists.
+  String databaseExistsErrorDescription(Object filePath);
+
+  // Default database name when creating a new database file. (WITHOUT .kdbx extension)
+  String get databaseCreateDefaultName;
+
+  // preferences: dynamically load website icons
+  String get preferenceDynamicLoadIcons;
+
+  // preferences: dynamically load website icons help text.
+  String preferenceDynamicLoadIconsSubtitle(Object urlFieldName);
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

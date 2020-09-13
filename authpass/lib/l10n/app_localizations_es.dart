@@ -377,6 +377,55 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
 
   @override
+  String get diacOptIn => 'Opt in to In-App News, Surveys.';
+
+  @override
+  String get diacOptInSubtitle => 'Will occasionally send a network request to fetch news.';
+
+  @override
+  String get enableAutofillDebug => 'AutoFill: Enable debug';
+
+  @override
+  String get enableAutofillDebugSubtitle => 'Shows information overlays for every input field';
+
+  @override
+  String get createPasswordDatabase => 'Create Password Database';
+
+  @override
+  String get nameNewPasswordDatabase => 'Name of your new Database';
+
+  @override
+  String get validatorNameMissing => 'Please enter a name for your new database.';
+
+  @override
+  String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
+
+  @override
+  String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
+
+  @override
+  String get createDatabaseAction => 'Create Database';
+
+  @override
+  String get databaseExistsError => 'File Exists';
+
+  @override
+  String databaseExistsErrorDescription(Object filePath) {
+    return 'Error while trying to create database ${filePath}. File already exists. Please choose another name.';
+  }
+
+  @override
+  String get databaseCreateDefaultName => 'PersonalPasswords';
+
+  @override
+  String get preferenceDynamicLoadIcons => 'Dynamically load Icons';
+
+  @override
+  String preferenceDynamicLoadIconsSubtitle(Object urlFieldName) {
+    return 'Will make http requests with the value in ${urlFieldName} field to load website icons.';
+  }
+
+  @override
   String unexpectedError(String error) {
     return 'Unexpected Error: ${error}';
   }
