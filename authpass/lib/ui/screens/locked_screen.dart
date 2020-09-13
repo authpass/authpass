@@ -33,27 +33,44 @@ class LockedScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(Env.AuthPass),
       ),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FaIcon(
-              FontAwesomeIcons.lock,
-              size: 128,
-              color: Theme.of(context).primaryColor.withOpacity(0.5),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FaIcon(
+                  FontAwesomeIcons.lock,
+                  size: 128,
+                  color: Theme.of(context).primaryColor.withOpacity(0.5),
+                ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  child: Text(loc.unlock),
+                  onPressed: () {
+                    SelectFileScreen.navigate(context);
+                  },
+                ),
+                const SizedBox(height: 80),
+              ],
             ),
-            const SizedBox(height: 16),
-            PrimaryButton(
-              child: Text(loc.unlock),
-              onPressed: () {
-                SelectFileScreen.navigate(context);
+          ),
+          Container(
+            padding:
+                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            alignment: Alignment.center,
+            child: TextButton(
+              child: Text(loc.closePasswordFiles.toUpperCase()),
+              onPressed: () async {
+                await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
+                await SelectFileScreen.navigate(context);
               },
             ),
-            const SizedBox(height: 128),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

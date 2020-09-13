@@ -460,6 +460,10 @@
   "@unlock": {
     "description": ""
   },
+  "closePasswordFiles": "close password files",
+  "@closePasswordFiles": {
+    "description": "delete quick unlock (passwords stored in biometric storage)"
+  },
   "clearQuickUnlockSuccess": "Removed saved master passwords from biometric storage.",
   "@clearQuickUnlockSuccess": {
     "description": ""

@@ -452,6 +452,9 @@ abstract class AppLocalizations {
   // 
   String get unlock;
 
+  // delete quick unlock (passwords stored in biometric storage)
+  String get closePasswordFiles;
+
   // 
   String get clearQuickUnlockSuccess;
 

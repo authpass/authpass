@@ -376,6 +376,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get unlock => 'Unlock Files';
 
   @override
+  String get closePasswordFiles => 'close password files';
+
+  @override
   String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
 
   @override
