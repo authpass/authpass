@@ -114,9 +114,15 @@ class QuickUnlockStorage {
     );
     _logger.fine('Getting storage file.');
     final storage = await _storageFile();
-    _logger.fine('got storage, writing credentials.');
+    _logger.fine('got storage, writing credentials.'
+        ' ${quickUnlockCredentials.length}');
     try {
-      await storage.write(json.encode(quickUnlockCredentials));
+      if (quickUnlockCredentials.isEmpty) {
+        _logger.fine('Deleting quick unlock.');
+        await storage.delete();
+      } else {
+        await storage.write(json.encode(quickUnlockCredentials));
+      }
     } catch (e, stackTrace) {
       _logger.severe(
           'Error while writing quick unlock credentials.', e, stackTrace);
@@ -435,6 +441,8 @@ class KdbxBloc {
     _logger.fine('load:$debugName finished.');
   }
 
+  bool hasQuickUnlockOpen() => _openedFilesQuickUnlock.isNotEmpty;
+
   Future<int> reopenQuickUnlock([TaskProgress progress]) =>
       _quickUnlockCheckRunning ??= (() async {
         try {
@@ -484,6 +492,7 @@ class KdbxBloc {
     final fileSource = fileForKdbxFile(file).fileSource;
     _openedFiles.value = OpenedKdbxFiles(
         Map.from(_openedFiles.value._files)..remove(fileSource));
+    file.dispose();
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
       await _updateQuickUnlockStore();
@@ -492,14 +501,21 @@ class KdbxBloc {
     }
   }
 
-  void closeAllFiles() {
+  Future<void> closeAllFiles({@required bool clearQuickUnlock}) async {
     _logger.finer('Closing all files, clearing quick unlock.');
-    analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
+    for (final file in _openedFiles.value.values) {
+      file.kdbxFile.dispose();
+    }
     _openedFiles.value = OpenedKdbxFiles({});
-    if (_openedFilesQuickUnlock.isNotEmpty) {
-      // clear all quick unlock data.
-      _openedFilesQuickUnlock.clear();
-      quickUnlockStorage.updateQuickUnlockFile({});
+    if (clearQuickUnlock) {
+      if (_openedFilesQuickUnlock.isNotEmpty) {
+        // clear all quick unlock data.
+        _openedFilesQuickUnlock.clear();
+        await quickUnlockStorage.updateQuickUnlockFile({});
+      }
+      analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
+    } else {
+      analytics.events.trackLockAllFiles(count: _openedFiles.value?.length);
     }
   }
 

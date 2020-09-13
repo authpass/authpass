@@ -443,6 +443,18 @@ abstract class AppLocalizations {
   // title in the app bar for group lists when displayed for filtering password list
   String get groupListFilterAppbarTitle;
 
+  // 
+  String get clearQuickUnlock;
+
+  // 
+  String get clearQuickUnlockSubtitle;
+
+  // 
+  String get unlock;
+
+  // 
+  String get clearQuickUnlockSuccess;
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

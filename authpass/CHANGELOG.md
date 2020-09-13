@@ -1,6 +1,8 @@
 # (unreleased) 1.7.8
 
 * Android: improve autofill input field detection for usernames.
+* Improve locking with biometric storage.
+  (Files can now be closed/locked without removing saved master passwords)
 * French translations.
 
 # 1.7.7

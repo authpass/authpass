@@ -1,5 +1,6 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
@@ -191,7 +192,7 @@ class EmptyStateInitialRoute extends StatelessWidget {
                   : [
                       const SizedBox(height: 64),
                       Image.asset('assets/images/logo_icon.png'),
-                      Text('AuthPass',
+                      Text(Env.AuthPass,
                           style: Theme.of(context).textTheme.headline3),
                       Text(
                           'password manager, open source, available on all platforms.',

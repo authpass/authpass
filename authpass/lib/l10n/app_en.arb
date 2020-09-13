@@ -448,6 +448,22 @@
   "@groupListFilterAppbarTitle": {
     "description": "title in the app bar for group lists when displayed for filtering password list"
   },
+  "clearQuickUnlock": "Clear Biometric Storage",
+  "@clearQuickUnlock": {
+    "description": ""
+  },
+  "clearQuickUnlockSubtitle": "Remove saved master passwords",
+  "@clearQuickUnlockSubtitle": {
+    "description": ""
+  },
+  "unlock": "Unlock Files",
+  "@unlock": {
+    "description": ""
+  },
+  "clearQuickUnlockSuccess": "Removed saved master passwords from biometric storage.",
+  "@clearQuickUnlockSuccess": {
+    "description": ""
+  },
 
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {

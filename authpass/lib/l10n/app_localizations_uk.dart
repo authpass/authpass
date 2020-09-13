@@ -367,6 +367,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get groupListFilterAppbarTitle => 'Фільтрувати за групами';
 
   @override
+  String get clearQuickUnlock => 'Clear Biometric Storage';
+
+  @override
+  String get clearQuickUnlockSubtitle => 'Remove saved master passwords';
+
+  @override
+  String get unlock => 'Unlock Files';
+
+  @override
+  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+
+  @override
   String unexpectedError(String error) {
     return 'Неочікувана помилка: ${error}';
   }

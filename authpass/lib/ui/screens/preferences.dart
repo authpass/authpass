@@ -4,6 +4,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
@@ -28,6 +29,7 @@ class PreferencesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).preferenceTitle),
+        actions: [PreferencesOverflowMenuAction()],
       ),
       body: Scrollbar(
         child: SingleChildScrollView(child: PreferencesBody()),
@@ -100,7 +102,6 @@ class _PreferencesBodyState extends State<PreferencesBody>
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     final commonFields = context.watch<CommonFields>();
-    final kdbxBloc = context.watch<KdbxBloc>();
     final localeInfo = [
       LocaleInfo(null, loc.preferenceSystemDefault, null),
       LocaleInfo('de', 'Deutsch', loc.german),
@@ -165,15 +166,6 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   },
                 ),
               ],
-        ListTile(
-          leading: const Icon(FontAwesomeIcons.signOutAlt),
-          title: Text(loc.lockAllFiles),
-          onTap: () async {
-            _kdbxBloc.closeAllFiles();
-            await Navigator.of(context)
-                .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
-          },
-        ),
         ListTile(
           leading: const Icon(
             FontAwesomeIcons.lightbulb,
@@ -270,17 +262,6 @@ class _PreferencesBodyState extends State<PreferencesBody>
           },
           tristate: false,
         ),
-        if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready) ...[
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.bug),
-            title: const Text('Delete Quick Unlock'),
-            onTap: () async {
-              await kdbxBloc.quickUnlockStorage.deleteQuickUnlock();
-              Scaffold.of(context).showSnackBar(
-                  const SnackBar(content: Text('Deleted Quick Unlock.')));
-            },
-          ),
-        ],
       ],
     );
   }
@@ -447,6 +428,50 @@ class _SliderSelectorState extends State<SliderSelector> {
           widget.onChanged(value);
         });
       },
+    );
+  }
+}
+
+class PreferencesOverflowMenuAction extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<VoidCallback>(
+      itemBuilder: (context) {
+        final kdbxBloc = context.read<KdbxBloc>();
+        final loc = AppLocalizations.of(context);
+
+        return [
+          if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready) ...[
+            PopupMenuItem(
+              child: ListTile(
+                leading: const Icon(FontAwesomeIcons.bug),
+                title: Text(loc.clearQuickUnlock),
+                subtitle: Text(loc.clearQuickUnlockSubtitle),
+              ),
+              value: () async {
+                kdbxBloc.closeAllFiles(clearQuickUnlock: true);
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
+                await SelectFileScreen.navigate(context);
+              },
+            ),
+          ],
+          if (kdbxBloc.openedFilesWithSources.isNotEmpty) ...[
+            PopupMenuItem(
+              child: ListTile(
+                leading: const Icon(FontAwesomeIcons.signOutAlt),
+                title: Text(loc.lockAllFiles),
+              ),
+              value: () async {
+                await kdbxBloc.closeAllFiles(clearQuickUnlock: false);
+                await Navigator.of(context, rootNavigator: true)
+                    .pushAndRemoveUntil(LockedScreen.route(), (_) => false);
+              },
+            ),
+          ],
+        ];
+      },
+      onSelected: (value) => value(),
     );
   }
 }

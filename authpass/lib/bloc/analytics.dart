@@ -238,7 +238,9 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackAddField({@required @NonNls String key});
 
-  void trackCloseAllFiles({int count});
+  void trackCloseAllFiles({@required int count});
+
+  void trackLockAllFiles({@required int count});
 
   void trackUserType({@NonNls String userType});
 

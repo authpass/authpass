@@ -47,6 +47,9 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackCloseAllFiles({int count}) =>
       trackEvent('closeAllFiles', <String, dynamic>{'count': count});
   @override
+  void trackLockAllFiles({int count}) =>
+      trackEvent('lockAllFiles', <String, dynamic>{'count': count});
+  @override
   void trackUserType({String userType}) =>
       trackEvent('userType', <String, dynamic>{'userType': userType});
   @override

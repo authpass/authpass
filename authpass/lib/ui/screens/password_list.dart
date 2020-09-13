@@ -14,6 +14,7 @@ import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/cloud/cloud_mailbox.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
+import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/password_list_drawer.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
@@ -653,10 +654,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                         .events
                         .trackActionPressed(action: 'lockFiles');
                     Provider.of<KdbxBloc>(context, listen: false)
-                        .closeAllFiles();
+                        .closeAllFiles(clearQuickUnlock: false);
                     Navigator.of(context, rootNavigator: true)
                         .pushAndRemoveUntil(
-                      SelectFileScreen.route(skipQuickUnlock: true),
+                      LockedScreen.route(),
                       (_) => false,
                     );
                   },

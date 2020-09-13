@@ -365,6 +365,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get groupListFilterAppbarTitle => 'Nach Gruppen filtern';
 
   @override
+  String get clearQuickUnlock => 'Clear Biometric Storage';
+
+  @override
+  String get clearQuickUnlockSubtitle => 'Remove saved master passwords';
+
+  @override
+  String get unlock => 'Unlock Files';
+
+  @override
+  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+
+  @override
   String unexpectedError(String error) {
     return 'Unerwarteter Fehler: ${error}';
   }
