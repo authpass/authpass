@@ -282,6 +282,10 @@
   "@doneCopiedUsername": {
     "description": "snackbar confirmation that username was copied."
   },
+  "doneCopiedField": "Copied.",
+  "@doneCopiedField": {
+    "description": ""
+  },
   "emptyPasswordVaultPlaceholder": "You do not have any password in your database yet.",
   "@emptyPasswordVaultPlaceholder": {
     "description": "Placeholder text shown when a user opens an empty password file."
@@ -424,6 +428,10 @@
   "@undoButtonLabel": {
     "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
   },
+  "saveButtonLabel": "Save",
+  "@saveButtonLabel": {
+    "description": "save file, for example button displayed in entry details"
+  },
   "initialNewGroupName": "New Group",
   "@initialNewGroupName": {
     "description": "initial name of groups when user creates a new one."
@@ -546,6 +554,90 @@
       }
     }
   },
+  "entryInfoFile": "File:",
+  "@entryInfoFile": {
+    "description": ""
+  },
+  "entryInfoGroup": "Group:",
+  "@entryInfoGroup": {
+    "description": ""
+  },
+  "entryInfoLastModified": "Last Modified:",
+  "@entryInfoLastModified": {
+    "description": ""
+  },
+  "movedEntryToGroup": "Moved entry into {groupName}",
+  "@movedEntryToGroup": {
+    "description": "",
+    "placeholders": {
+      "groupName": {
+        "description": "Name of the group the entry was moved to."
+      }
+    }
+  },
+  "sizeBytes": "{count} bytes",
+  "@sizeBytes": {
+    "description": "",
+    "placeholders": {
+      "bytes": {
+        "description": "file size in bytes",
+        "example": "123"
+      }
+    }
+  },
+  "entryAddAttachment": "Add Attachment",
+  "@entryAddAttachment": {
+    "description": ""
+  },
+  "entryAttachmentSizeWarning": "Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.",
+  "@entryAttachmentSizeWarning": {
+    "description": ""
+  },
+  "entryAddField": "Add Field",
+  "@entryAddField": {
+    "description": ""
+  },
+  "entryCustomField": "Custom Field",
+  "@entryCustomField": {
+    "description": ""
+  },
+  "entryCustomFieldTitle": "Adding new custom Field",
+  "@entryCustomFieldTitle": {
+    "description": ""
+  },
+  "entryCustomFieldInputLabel": "Enter a name for the field",
+  "@entryCustomFieldInputLabel": {
+    "description": ""
+  },
+  "swipeCopyField": "Copy Field",
+  "@swipeCopyField": {
+    "description": ""
+  },
+  "fieldRename": "Rename",
+  "@fieldRename": {
+    "description": ""
+  },
+  "fieldGeneratePassword": "Generate Password …",
+  "@fieldGeneratePassword": {
+    "description": ""
+  },
+  "fieldProtect": "Protect Value",
+  "@fieldProtect": {
+    "description": ""
+  },
+  "fieldUnprotect": "Unprotect Value",
+  "@fieldUnprotect": {
+    "description": ""
+  },
+  "fieldPresent": "Present",
+  "@fieldPresent": {
+    "description": ""
+  },
+  "fieldGenerateEmail": "Generate Email",
+  "@fieldGenerateEmail": {
+    "description": ""
+  },
+
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {

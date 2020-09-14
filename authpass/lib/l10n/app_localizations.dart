@@ -341,6 +341,9 @@ abstract class AppLocalizations {
   // snackbar confirmation that username was copied.
   String get doneCopiedUsername;
 
+  // 
+  String get doneCopiedField;
+
   // Placeholder text shown when a user opens an empty password file.
   String get emptyPasswordVaultPlaceholder;
 
@@ -425,6 +428,9 @@ abstract class AppLocalizations {
   // undo action label (e.g. in a snackbar after deleting a group, or some other action)
   String get undoButtonLabel;
 
+  // save file, for example button displayed in entry details
+  String get saveButtonLabel;
+
   // initial name of groups when user creates a new one.
   String get initialNewGroupName;
 
@@ -505,6 +511,60 @@ abstract class AppLocalizations {
 
   // choosing a master password - calculated password strength.
   String passwordScore(Object score);
+
+  // 
+  String get entryInfoFile;
+
+  // 
+  String get entryInfoGroup;
+
+  // 
+  String get entryInfoLastModified;
+
+  // 
+  String movedEntryToGroup(Object groupName);
+
+  // 
+  String sizeBytes(Object bytes);
+
+  // 
+  String get entryAddAttachment;
+
+  // 
+  String get entryAttachmentSizeWarning;
+
+  // 
+  String get entryAddField;
+
+  // 
+  String get entryCustomField;
+
+  // 
+  String get entryCustomFieldTitle;
+
+  // 
+  String get entryCustomFieldInputLabel;
+
+  // 
+  String get swipeCopyField;
+
+  // 
+  String get fieldRename;
+
+  // 
+  String get fieldGeneratePassword;
+
+  // 
+  String get fieldProtect;
+
+  // 
+  String get fieldUnprotect;
+
+  // 
+  String get fieldPresent;
+
+  // 
+  String get fieldGenerateEmail;
 
   // No description provided in @unexpectedError
   String unexpectedError(String error);

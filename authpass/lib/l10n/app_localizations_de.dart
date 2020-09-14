@@ -259,6 +259,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get doneCopiedUsername => 'Benutzername in die Zwischenablage kopiert.';
 
   @override
+  String get doneCopiedField => 'Copied.';
+
+  @override
   String get emptyPasswordVaultPlaceholder => 'Du hast noch kein Passwort in deiner Datenbank.';
 
   @override
@@ -347,6 +350,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get undoButtonLabel => 'Rückgängig';
 
   @override
+  String get saveButtonLabel => 'Save';
+
+  @override
   String get initialNewGroupName => 'Neue Gruppe';
 
   @override
@@ -432,6 +438,64 @@ class AppLocalizationsDe extends AppLocalizations {
   String passwordScore(Object score) {
     return 'Strength: ${score} of 4';
   }
+
+  @override
+  String get entryInfoFile => 'File:';
+
+  @override
+  String get entryInfoGroup => 'Group:';
+
+  @override
+  String get entryInfoLastModified => 'Last Modified:';
+
+  @override
+  String movedEntryToGroup(Object groupName) {
+    return 'Moved entry into ${groupName}';
+  }
+
+  @override
+  String sizeBytes(Object bytes) {
+    return '{count} bytes';
+  }
+
+  @override
+  String get entryAddAttachment => 'Add Attachment';
+
+  @override
+  String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
+
+  @override
+  String get entryAddField => 'Add Field';
+
+  @override
+  String get entryCustomField => 'Custom Field';
+
+  @override
+  String get entryCustomFieldTitle => 'Adding new custom Field';
+
+  @override
+  String get entryCustomFieldInputLabel => 'Enter a name for the field';
+
+  @override
+  String get swipeCopyField => 'Copy Field';
+
+  @override
+  String get fieldRename => 'Rename';
+
+  @override
+  String get fieldGeneratePassword => 'Generate Password …';
+
+  @override
+  String get fieldProtect => 'Protect Value';
+
+  @override
+  String get fieldUnprotect => 'Unprotect Value';
+
+  @override
+  String get fieldPresent => 'Present';
+
+  @override
+  String get fieldGenerateEmail => 'Generate Email';
 
   @override
   String unexpectedError(String error) {

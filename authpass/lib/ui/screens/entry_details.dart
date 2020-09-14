@@ -384,6 +384,7 @@ class _EntryDetailsState extends State<EntryDetails>
     final entry = widget.entry.entry;
     final formatUtils = Provider.of<FormatUtils>(context);
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       child: Padding(
@@ -422,12 +423,12 @@ class _EntryDetailsState extends State<EntryDetails>
                       children: <Widget>[
                         const SizedBox(height: 16),
                         EntryMetaInfo(
-                          label: 'File:',
+                          label: loc.entryInfoFile,
                           value: entry.file.body.meta.databaseName.get(),
                         ),
                         EntryMetaInfo(
-                          label: 'Group:',
-                          value: vm.groupNames.join(' » '),
+                          label: loc.entryInfoGroup,
+                          value: vm.groupNames.join(' » '), // NON-NLS
                           onTap: () async {
                             // TODO
                             final file = vm.entry.file;
@@ -445,10 +446,10 @@ class _EntryDetailsState extends State<EntryDetails>
                               file.move(vm.entry, newGroup);
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(
-                                      'Moved entry into ${newGroup.name.get()}'),
+                                  content: Text(loc
+                                      .movedEntryToGroup(newGroup.name.get())),
                                   action: SnackBarAction(
-                                      label: 'Undo',
+                                      label: loc.undoButtonLabel,
                                       onPressed: () {
                                         file.move(vm.entry, oldGroup);
                                       }),
@@ -458,7 +459,7 @@ class _EntryDetailsState extends State<EntryDetails>
                           },
                         ),
                         EntryMetaInfo(
-                          label: 'Last Modified:',
+                          label: loc.entryInfoLastModified,
                           value: formatUtils.formatDateFull(
                               vm.entry.times.lastModificationTime.get()),
                         ),
@@ -535,7 +536,7 @@ class _EntryDetailsState extends State<EntryDetails>
                                     Text(e.key.key,
                                         style: theme.textTheme.subtitle1),
                                     const SizedBox(height: 2),
-                                    Text('${e.value.value.length} bytes',
+                                    Text(loc.sizeBytes(e.value.value.length),
                                         style: theme.textTheme.caption),
                                   ],
                                 ),
@@ -555,13 +556,13 @@ class _EntryDetailsState extends State<EntryDetails>
                     }),
               LinkButton(
                 icon: const Icon(Icons.attach_file),
-                child: const Text('Add attachment'),
+                child: Text(loc.entryAddAttachment),
                 onPressed: _attachFile,
               ),
               const SizedBox(height: 16),
               PrimaryButton(
                 icon: const Icon(Icons.save),
-                child: const Text('Save'),
+                child: Text(loc.saveButtonLabel),
                 onPressed: widget.onSavedPressed,
               ),
             ],
@@ -592,12 +593,12 @@ class _EntryDetailsState extends State<EntryDetails>
 
   Future<void> _attachFileContent(String fileName, Uint8List bytes) async {
     final analytics = Provider.of<Analytics>(context, listen: false);
+    final loc = AppLocalizations.of(context);
     if (bytes.lengthInBytes > 10 * 1024) {
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
-          content: 'Attached files will be embedded in password file. '
-              'This can significantly increase time required to open/save passwords.',
+          content: loc.entryAttachmentSizeWarning,
         ),
       )) {
         analytics.events.trackAttachmentAdd(
@@ -627,6 +628,7 @@ class _EntryDetailsState extends State<EntryDetails>
           return null;
         }
         if (totpCode.startsWith('otpauth://')) {
+          // NON-NLS
           return OtpAuth.fromUri(Uri.parse(totpCode));
         }
         final cleaned = totpCode?.replaceAll(' ', ''); //?.toUpperCase();
@@ -827,9 +829,10 @@ class AddFieldButton extends StatefulWidget {
 class _AddFieldButtonState extends State<AddFieldButton> {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return LinkButton(
       icon: const Icon(Icons.add_circle_outline),
-      child: const Text('Add Field'),
+      child: Text(loc.entryAddField),
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
         final overlay =
@@ -844,8 +847,8 @@ class _AddFieldButtonState extends State<AddFieldButton> {
         );
         final commonFields = Provider.of<CommonFields>(context, listen: false);
         final custom = CommonField(
-          displayName: 'Custom Field',
-          key: KdbxKey('__custom'),
+          displayName: loc.entryCustomField,
+          key: KdbxKey('__custom'), // NON-NLS
         );
         final fields = commonFields.fields.followedBy([custom]).map(
           (f) => PopupMenuItem(
@@ -873,9 +876,10 @@ class _AddFieldButtonState extends State<AddFieldButton> {
   }
 
   Future<void> _selectCustomKey() async {
-    final key = await const SimplePromptDialog(
-      title: 'Adding new Field',
-      labelText: 'Enter a name for the field',
+    final loc = AppLocalizations.of(context);
+    final key = await SimplePromptDialog(
+      title: loc.entryCustomFieldTitle,
+      labelText: loc.entryCustomFieldInputLabel,
     ).show(context);
     if (key != null && key.isNotEmpty) {
       widget.onAddField(KdbxKey(key));
@@ -988,6 +992,7 @@ class _EntryFieldState extends State<EntryField>
   @override
   Widget build(BuildContext context) {
     _logger.finer('building ${widget.fieldKey} ($_isValueObscured)');
+    final loc = AppLocalizations.of(context);
     return Dismissible(
       key: ValueKey(widget.fieldKey),
       background: Container(
@@ -996,10 +1001,10 @@ class _EntryFieldState extends State<EntryField>
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: const <Widget>[
-            Icon(Icons.lock),
-            SizedBox(height: 4),
-            Text('Copy Field'),
+          children: <Widget>[
+            const Icon(Icons.lock),
+            const SizedBox(height: 4),
+            Text(loc.swipeCopyField),
           ],
         ),
       ),
@@ -1010,7 +1015,7 @@ class _EntryFieldState extends State<EntryField>
       },
       child: HighlightWidget(
         key: _highlightWidgetKey,
-        childOnHighlight: Text('Copied!',
+        childOnHighlight: Text(loc.doneCopiedField,
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
@@ -1135,56 +1140,58 @@ class _EntryFieldState extends State<EntryField>
     }
   }
 
-  List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) =>
-      <PopupMenuEntry<EntryAction>>[
-        const PopupMenuItem(
-          value: EntryAction.copy,
-          child: ListTile(
-            leading: Icon(Icons.content_copy),
-            title: Text('Copy'),
-          ),
+  List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    return <PopupMenuEntry<EntryAction>>[
+      PopupMenuItem(
+        value: EntryAction.copy,
+        child: ListTile(
+          leading: const Icon(Icons.content_copy),
+          title: Text(loc.swipeCopyField),
         ),
-        const PopupMenuDivider(),
-        const PopupMenuItem(
-          value: EntryAction.rename,
-          child: ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Rename'),
-          ),
+      ),
+      const PopupMenuDivider(),
+      PopupMenuItem(
+        value: EntryAction.rename,
+        child: ListTile(
+          leading: const Icon(Icons.edit),
+          title: Text(loc.fieldRename),
         ),
-        const PopupMenuItem(
-          value: EntryAction.passwordGenerator,
-          child: ListTile(
-            leading: Icon(FontAwesomeIcons.random),
-            title: Text('Password Generator …'),
+      ),
+      PopupMenuItem(
+        value: EntryAction.passwordGenerator,
+        child: ListTile(
+          leading: const Icon(FontAwesomeIcons.random),
+          title: Text(loc.generatePassword),
 //            subtitle: null,
-          ),
         ),
-        ...?_buildMenuEntriesAuthPassCloud(context),
-        PopupMenuItem(
-          value: EntryAction.protect,
-          child: ListTile(
-            leading: Icon(
-                _isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
-            title: Text(_isProtected ? 'Unprotect value' : 'Protect Value'),
-          ),
+      ),
+      ...?_buildMenuEntriesAuthPassCloud(context),
+      PopupMenuItem(
+        value: EntryAction.protect,
+        child: ListTile(
+          leading: Icon(
+              _isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
+          title: Text(_isProtected ? loc.fieldUnprotect : loc.fieldProtect),
         ),
-        const PopupMenuItem(
-          value: EntryAction.delete,
-          child: ListTile(
-            leading: Icon(Icons.delete),
-            title: Text('Delete'),
-          ),
+      ),
+      PopupMenuItem(
+        value: EntryAction.delete,
+        child: ListTile(
+          leading: const Icon(Icons.delete),
+          title: Text(loc.deleteAction),
         ),
-        const PopupMenuItem(
-          value: EntryAction.show,
-          child: ListTile(
+      ),
+      PopupMenuItem(
+        value: EntryAction.show,
+        child: ListTile(
 //                    leading: Icon(Icons.present_to_all),
-            leading: Icon(FontAwesomeIcons.qrcode),
-            title: Text('Present'),
-          ),
+          leading: const Icon(FontAwesomeIcons.qrcode),
+          title: Text(loc.fieldPresent),
         ),
-      ];
+      ),
+    ];
+  }
 
   Future<void> _generatePassword() async {
     final appData =
@@ -1292,13 +1299,14 @@ class _EntryFieldState extends State<EntryField>
     if (authPassCloud.tokenStatus != TokenStatus.confirmed) {
       return null;
     }
+    final loc = AppLocalizations.of(context);
     return [
-      const PopupMenuItem(
+      PopupMenuItem(
           value: EntryAction.generateEmail,
           child: ListTile(
-            leading: Icon(Icons.cloud),
-            title: Text('Generate Email'),
-            subtitle: Text('AuthPass Cloud'),
+            leading: const Icon(Icons.cloud),
+            title: Text(loc.fieldGenerateEmail),
+            subtitle: const Text(Env.AuthPassCLoud),
           )),
     ];
   }
