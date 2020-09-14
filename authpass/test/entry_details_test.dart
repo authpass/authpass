@@ -1,3 +1,4 @@
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/l10n/app_localizations_en.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
@@ -37,6 +38,9 @@ void _testTotp(
             () => DateTime.utc(2020, 1, 1).subtract(const Duration(hours: 1))),
         () async {
       await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
         home: Scaffold(
           body: MultiProvider(
             providers: [
