@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:charcode/ascii.dart';
+import 'package:charcode/html_entity.dart';
 
 class PasswordGenerator {
   factory PasswordGenerator.singleton() => _instance;
@@ -22,7 +23,8 @@ abstract class CharacterSet {
   static const alphabetAsciiLowerCase = CharacterRange($a, $z);
   static const alphabetAsciiUpperCase = CharacterRange($A, $Z);
   static const numeric = CharacterRange($0, $9);
-  static const alphabetUmlauts = CharacterString('äüößÄÜÖ');
+  static const alphabetUmlauts = CharacterRange($Agrave, $yuml);
+  // CharacterString('äüößÄÜÖ');
   static const specialCharacters =
       CharacterString(r'''@%+\/$'!#$^?:,.(){}[]~-_''');
 
