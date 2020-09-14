@@ -9,17 +9,27 @@ class PasswordInputField extends StatefulWidget {
   const PasswordInputField({
     Key key,
     @required this.labelText,
+    this.autofocus = true,
+    this.focusNode,
     this.validator,
     this.onEditingComplete,
+    this.onFieldSubmitted,
+    this.onChanged,
     this.controller,
     this.autovalidate = false,
+    this.autovalidateMode,
   }) : super(key: key);
 
+  final FocusNode focusNode;
+  final bool autofocus;
   final String labelText;
   final FormFieldValidator<String> validator;
   final VoidCallback onEditingComplete;
+  final ValueChanged<String> onFieldSubmitted;
+  final ValueChanged<String> onChanged;
   final TextEditingController controller;
   final bool autovalidate;
+  final AutovalidateMode autovalidateMode;
 
   @override
   _PasswordInputFieldState createState() => _PasswordInputFieldState();
@@ -40,7 +50,10 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return TextFormField(
+      autofocus: widget.autofocus,
+      focusNode: widget.focusNode,
       controller: widget.controller,
+      onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
           labelText: widget.labelText,
           suffixIcon: IconButton(
@@ -55,11 +68,12 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             tooltip: loc.passwordPlainText,
           )),
       autocorrect: false,
-      autofocus: true,
       autovalidate: widget.autovalidate,
+      autovalidateMode: widget.autovalidateMode,
       obscureText: _obscureText,
       validator: widget.validator,
       onEditingComplete: widget.onEditingComplete,
+      onChanged: widget.onChanged,
     );
   }
 }

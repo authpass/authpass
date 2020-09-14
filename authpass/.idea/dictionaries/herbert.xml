@@ -3,6 +3,7 @@
     <words>
       <w>authpass</w>
       <w>autofill</w>
+      <w>autofocus</w>
       <w>autovalidate</w>
       <w>cors</w>
       <w>deps</w>
@@ -18,6 +19,7 @@
       <w>sqflite</w>
       <w>totp</w>
       <w>webdav</w>
+      <w>zxcvbn</w>
     </words>
   </dictionary>
 </component>

@@ -369,6 +369,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.32"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.5"
   esys_flutter_share:
     dependency: "direct main"
     description:
@@ -604,6 +611,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  hive:
+    dependency: transitive
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.4"
   html:
     dependency: transitive
     description:
@@ -760,6 +774,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4"
+  no_bloc:
+    dependency: transitive
+    description:
+      name: no_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.10"
   node_interop:
     dependency: transitive
     description:
@@ -824,7 +845,7 @@ packages:
       name: otp
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.3"
   package_config:
     dependency: transitive
     description:
@@ -1024,7 +1045,7 @@ packages:
       name: quick_log
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1"
+    version: "1.1.3"
   quiver:
     dependency: "direct main"
     description:
@@ -1032,6 +1053,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
+  recase:
+    dependency: "direct main"
+    description:
+      name: recase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   rxdart:
     dependency: "direct main"
     description:
@@ -1322,7 +1350,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   vector_math:
     dependency: transitive
     description:
@@ -1444,6 +1472,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  zxcvbn:
+    dependency: "direct main"
+    description:
+      name: zxcvbn
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
 sdks:
   dart: ">=2.10.0-4.0.dev <2.10.0"
   flutter: ">=1.18.0-6.0.pre <2.0.0"

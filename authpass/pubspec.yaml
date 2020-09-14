@@ -80,10 +80,11 @@ dependencies:
   biometric_storage: ^1.0.1+5
 #  biometric_storage:
 #    path: ../deps/biometric_storage
-  uuid: ^2.2.0
+  uuid: ^2.2.2
   url_launcher: ^5.5.0
   font_awesome_flutter: ^8.8.1
-  otp: ^2.2.1
+  otp: ^2.2.3
+  zxcvbn: ^0.0.1
 
 
   # UI Utilities and Widgets
@@ -96,7 +97,8 @@ dependencies:
   quiver: ">=2.0.0 <3.0.0"
   tuple: ^1.0.3
   rxdart: ^0.24.1
-  charcode: ^1.1.2 # For flutter 1.15.17 support, we have to keep 1.1.2 (fdroid)
+  charcode: ^1.1.3
+  recase: ^3.0.0
   # collection utilities:
   flinq: ^1.1.1
 

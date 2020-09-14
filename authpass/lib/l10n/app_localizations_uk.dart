@@ -431,6 +431,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String passwordScore(Object score) {
+    return 'Strength: ${score} of 4';
+  }
+
+  @override
   String unexpectedError(String error) {
     return 'Неочікувана помилка: ${error}';
   }

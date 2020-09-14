@@ -1,15 +1,20 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
+import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:provider/provider.dart';
-
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
+import 'package:recase/recase.dart';
+// ignore: implementation_imports
+import 'package:zxcvbn/src/result.dart';
+import 'package:zxcvbn/zxcvbn.dart';
 
 final _logger = Logger('create_file');
 
@@ -24,11 +29,14 @@ class CreateFile extends StatefulWidget {
 }
 
 class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
+  static final _zxcvbn = Zxcvbn();
+
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _databaseName = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final FocusNode _passwordFocus = FocusNode();
-  bool _passwordObscured = true;
+
+  Result _strength;
 
   @override
   void didChangeDependencies() {
@@ -52,6 +60,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
                 controller: _databaseName,
@@ -68,28 +77,26 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   }
                   return null;
                 },
-                autofocus: true,
               ),
               const SizedBox(height: 16),
-              TextFormField(
+              PasswordInputField(
+                labelText: loc.masterPasswordHelpText,
                 controller: _password,
-                obscureText: _passwordObscured,
                 focusNode: _passwordFocus,
+                autofocus: true,
                 onFieldSubmitted: (val) => _submitCallback()(),
-                decoration: InputDecoration(
-                  labelText: loc.masterPasswordHelpText,
-                  filled: true,
-                  suffix: InkWell(
-                    child: _passwordObscured
-                        ? const Icon(Icons.lock)
-                        : const Icon(Icons.lock_open),
-                    onTap: () {
-                      setState(() {
-                        _passwordObscured = !_passwordObscured;
-                      });
-                    },
-                  ),
-                ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                onChanged: (value) {
+                  final userInput = _databaseName.text.pathCase.split('/');
+                  setState(() {
+                    if (value.isEmpty) {
+                      _strength = null;
+                    } else {
+                      _strength =
+                          _zxcvbn.evaluate(value, userInputs: userInput);
+                    }
+                  });
+                },
                 validator: (val) {
                   if (val.isEmpty) {
                     return loc.masterPasswordMissingCreate;
@@ -97,11 +104,15 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   return null;
                 },
               ),
+              const SizedBox(height: 8),
+              PasswordStrengthDisplay(strength: _strength),
               Container(
                 padding: const EdgeInsets.only(top: 8),
                 alignment: Alignment.centerRight,
                 child: task != null
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(
+                        backgroundColor: Colors.red,
+                      )
                     : PrimaryButton(
                         large: false,
                         child: Text(loc.createDatabaseAction),
@@ -142,4 +153,102 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
           }
         }
       });
+}
+
+class PasswordStrengthDisplay extends ImplicitlyAnimatedWidget {
+  const PasswordStrengthDisplay({Key key, this.strength})
+      : super(key: key, duration: const Duration(milliseconds: 500));
+
+  final Result strength;
+
+  @override
+  _PasswordStrengthDisplayState createState() =>
+      _PasswordStrengthDisplayState();
+}
+
+class _PasswordStrengthDisplayState
+    extends AnimatedWidgetBaseState<PasswordStrengthDisplay> {
+  static final _strengthColors = [
+    Colors.redAccent,
+    Colors.orange,
+    Colors.yellow,
+    Colors.blueAccent,
+    Colors.lightGreenAccent
+  ];
+
+  Tween<double> _scoreTween;
+  ColorTween _colorTween;
+  ColorTween _backgroundColorTween;
+
+  @override
+  void forEachTween(visitor) {
+    _scoreTween = visitor(
+            _scoreTween,
+            widget.strength?.score?.let((val) => val + 1) ?? 0.0,
+            (dynamic value) => Tween<double>(begin: value as double))
+        as Tween<double>;
+    _colorTween = visitor(
+        _colorTween,
+        _strengthColors[widget.strength?.score?.toInt() ?? 0],
+        (dynamic value) => ColorTween(begin: value as Color)) as ColorTween;
+    _backgroundColorTween = visitor(
+        _backgroundColorTween,
+        widget.strength == null ? Colors.transparent : Colors.grey,
+        (dynamic value) => ColorTween(begin: value as Color)) as ColorTween;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _strength = widget.strength;
+    final loc = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final feedback = _strength?.feedback?.warning?.takeUnlessBlank() ??
+        // _strength?.feedback?.suggestions?.firstOrNull ??
+        ''; // NON-NLS
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (_strength != null) ...[
+          LinearProgressIndicator(
+            value: _scoreTween.evaluate(animation) / 5.0,
+            valueColor: AlwaysStoppedAnimation(
+              _colorTween.evaluate(animation),
+            ),
+            backgroundColor: _backgroundColorTween.evaluate(animation),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  loc.passwordScore(_strength.score.toInt()),
+                  style: theme.textTheme.caption,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              Text(
+                feedback,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: theme.textTheme.caption,
+              ),
+            ],
+          ),
+        ] else ...[
+          LinearProgressIndicator(
+            value: _scoreTween.evaluate(animation) / 5.0,
+            valueColor: AlwaysStoppedAnimation(_colorTween.evaluate(animation)),
+            backgroundColor: _backgroundColorTween.evaluate(animation),
+          ),
+          const SizedBox(height: 4),
+          const Text(' '), // NON-NLS
+        ],
+      ],
+    );
+  }
 }

@@ -503,6 +503,9 @@ abstract class AppLocalizations {
   // preferences: dynamically load website icons help text.
   String preferenceDynamicLoadIconsSubtitle(Object urlFieldName);
 
+  // choosing a master password - calculated password strength.
+  String passwordScore(Object score);
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }
