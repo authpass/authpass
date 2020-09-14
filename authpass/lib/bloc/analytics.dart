@@ -99,7 +99,7 @@ class Analytics {
     }
     _gaQ.clear();
 
-    _logger.finest('$_dbg Registering analytics tracker.');
+    _logger.finest('$_dbg Registering analytics tracker. ${_ga.clientId}');
     events.registerTracker((event, params) {
       final eventParams = <String, String>{};
       int value;
