@@ -3,30 +3,30 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/assets/images/logo_with_text.png": "5eebe4e497f49e52a2e232701b4700af",
-"assets/assets/images/logo_icon.png": "35479aa0e7346455edd778b808b77493",
-"assets/assets/fonts/Inter-Bold.otf": "753bd86618b0faefb54da21403a261bb",
-"assets/assets/fonts/Inter-Light.otf": "a3a9cc1541c9da02424062b5855a60ec",
-"assets/assets/fonts/Inter-Medium.otf": "8c46da0df447785681cc1dc57c1a9da9",
-"assets/assets/fonts/jetbrains/JetBrainsMono-Bold.ttf": "d8af470e44be6c1d2d07dee84db355f6",
-"assets/assets/fonts/jetbrains/JetBrainsMono-Regular.ttf": "e1caef645de334fee2f25834b0d03c28",
-"assets/assets/fonts/Inter-Regular.otf": "9a9eeddb3eb9ce4f64e378a8a7b9c042",
+  "main.dart.js": "fe6255f96ab4c300447cd15db394ceb3",
 "assets/NOTICES": "00c56262c12f67777c93a6ded088f4be",
-"assets/AssetManifest.json": "67d13d800eff9b8e6f6cce1d5d18f303",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "5a37ae808cf9f652198acde612b5328d",
+"assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "2aa350bd2aeab88b601a593f793734c0",
+"assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "5a37ae808cf9f652198acde612b5328d",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "2bca5ec802e40d3f4b60343e346cedde",
 "assets/packages/open_iconic_flutter/assets/open-iconic.woff": "3cf97837524dd7445e9d1462e3c4afe2",
-"assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
 "assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25",
-"favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"main.dart.js": "f27bc58f0bbaecd8cbab46042c6be251",
-"icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
-"icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
+"assets/assets/fonts/jetbrains/JetBrainsMono-Regular.ttf": "e1caef645de334fee2f25834b0d03c28",
+"assets/assets/fonts/jetbrains/JetBrainsMono-Bold.ttf": "d8af470e44be6c1d2d07dee84db355f6",
+"assets/assets/fonts/Inter-Bold.otf": "753bd86618b0faefb54da21403a261bb",
+"assets/assets/fonts/Inter-Medium.otf": "8c46da0df447785681cc1dc57c1a9da9",
+"assets/assets/fonts/Inter-Regular.otf": "9a9eeddb3eb9ce4f64e378a8a7b9c042",
+"assets/assets/fonts/Inter-Light.otf": "a3a9cc1541c9da02424062b5855a60ec",
+"assets/assets/images/logo_icon.png": "35479aa0e7346455edd778b808b77493",
+"assets/assets/images/logo_with_text.png": "5eebe4e497f49e52a2e232701b4700af",
+"assets/AssetManifest.json": "67d13d800eff9b8e6f6cce1d5d18f303",
+"favicon.png": "0f6bc457452337dff399ad2f7da1786a",
 "index.html": "5e77dbe07c6e53b56d12472982ef2f81",
 "/": "5e77dbe07c6e53b56d12472982ef2f81",
+"favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"favicon.png": "0f6bc457452337dff399ad2f7da1786a"
+"icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
+"icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31"
 };
 
 // The application shell files that are downloaded before a service worker can
