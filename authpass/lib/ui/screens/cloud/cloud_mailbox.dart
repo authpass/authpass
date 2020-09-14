@@ -244,11 +244,11 @@ class CloudMailboxList extends StatelessWidget {
       final entry = kdbxBloc.findEntryByUuid(mailbox.entryUuid);
 
       if (entry != null) {
-        final value = entry.getString(commonFields.title.key);
-        if (value is PlainValue) {
+        final label = entry.label;
+        if (label != null) {
           return MailboxViewModel(
             PredefinedIcons.iconFor(entry.icon.get()),
-            'Entry: ${value.getText()}',
+            'Entry: $label',
           );
         }
         return MailboxViewModel(
