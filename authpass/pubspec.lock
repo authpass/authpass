@@ -953,6 +953,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  pigment:
+    dependency: transitive
+    description:
+      name: pigment
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   platform:
     dependency: transitive
     description:
@@ -1263,6 +1270,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+2"
+  tinycolor:
+    dependency: "direct main"
+    description:
+      name: tinycolor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   tuple:
     dependency: "direct main"
     description:

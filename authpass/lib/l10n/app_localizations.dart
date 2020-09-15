@@ -161,8 +161,11 @@ abstract class AppLocalizations {
   // No description provided in @loadFrom
   String loadFrom(String cloudStorageName);
 
-  // No description provided in @loadFromUrl
+  // deprecated
   String get loadFromUrl;
+
+  // Overflow menu option to load KeePass file from URL.
+  String get loadFromRemoteUrl;
 
   // No description provided in @createNewKeepass
   String get createNewKeepass;
@@ -485,8 +488,11 @@ abstract class AppLocalizations {
   // Error message when no password database name is given.
   String get validatorNameMissing;
 
-  // help text for master password when creating new password database
+  // DEPRECATED FOR NOW help text for master password when creating new password database
   String get masterPasswordHelpText;
+
+  // Creating new file: input field for master password
+  String get inputMasterPasswordText;
 
   // Text displayed when master password is empty while creating new password database
   String get masterPasswordMissingCreate;

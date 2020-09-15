@@ -42,6 +42,7 @@ import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
+import 'package:tinycolor/color_extension.dart';
 
 import '../../theme.dart';
 
@@ -88,6 +89,21 @@ class SelectFileScreen extends StatelessWidget {
                       OnboardingScreen.route(), (route) => false);
                 },
               ),
+              PopupMenuItem(
+                  child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.fileCode),
+                    title: Text(loc.loadFromRemoteUrl),
+                  ),
+                  value: () async {
+                    final source = await showDialog<FileSourceUrl>(
+                        context: context,
+                        builder: (context) => SelectUrlDialog());
+                    if (source != null) {
+                      // _loadAndGoToCredentials(source);
+                      await Navigator.of(context)
+                          .push(CredentialsScreen.route(source));
+                    }
+                  }),
             ];
           }),
         ],
@@ -277,6 +293,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     final appData = Provider.of<AppData>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     final loc = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return ProgressOverlay(
       task: task,
       child: Container(
@@ -294,10 +311,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                         'Secret Service to store credentials for cloud storage.\n'
                         'Please run the following command:',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.caption.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).errorColor,
-                            ),
+                        style: theme.textTheme.caption.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.errorColor,
+                        ),
                       ),
                       LinkButton(
                           icon: const Icon(Icons.content_copy),
@@ -322,8 +339,11 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     ]
                   : null),
               const SizedBox(height: 16),
-              Text(loc.selectKeepassFileLabel),
-              const SizedBox(height: 16),
+              Text(
+                loc.selectKeepassFileLabel,
+                style: theme.textTheme.headline6,
+              ),
+              const SizedBox(height: 8),
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 16,
@@ -370,55 +390,17 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       },
                     ),
                   ),
+                  SelectFileAction(
+                    icon: Icons.create_new_folder,
+                    label: 'Create New File',
+                    backgroundColor: theme.primaryColor.darken(),
+                    onPressed: () {
+                      Navigator.of(context).push(CreateFile.route());
+                    },
+                  ),
                 ],
               ),
-              const SizedBox(
-                height: 4,
-              ),
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: LinkButton(
-                          key: const Key('downloadFromUrl'),
-                          onPressed: () async {
-                            final source = await showDialog<FileSourceUrl>(
-                                context: context,
-                                builder: (context) => SelectUrlDialog());
-                            if (source != null) {
-                              _loadAndGoToCredentials(source);
-                            }
-                          },
-                          child: Text(
-                            loc.loadFromUrl,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ),
-                    ),
-                    VerticalDivider(
-                      indent: 8,
-                      endIndent: 8,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    Expanded(
-                      child: LinkButton(
-                        onPressed: () {
-                          Navigator.of(context).push(CreateFile.route());
-                        },
-                        icon: const Icon(Icons.create_new_folder),
-                        child: Expanded(
-                            child: Text(loc.createNewKeepass, softWrap: true)),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               IntrinsicWidth(
                 stepWidth: 100,
                 child: ConstrainedBox(
@@ -429,27 +411,25 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     children: <Widget>[
                       Text(
                         loc.labelLastOpenFiles,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(fontWeight: FontWeight.bold),
+                        style: theme.textTheme.headline6,
                         textAlign: TextAlign.center,
                       ),
                       ...ListTile.divideTiles(
-                          context: context,
-                          tiles: appData?.previousFiles?.reversed?.take(5)?.map(
-                                    (f) => OpenedFileTile(
-                                      openedFile:
-                                          f.toFileSource(cloudStorageBloc),
-                                      color: f.color,
-                                      onPressed: () {
-                                        final source =
-                                            f.toFileSource(cloudStorageBloc);
-                                        _loadAndGoToCredentials(source);
-                                      },
-                                    ),
-                                  ) ??
-                              [Text(loc.noFilesHaveBeenOpenYet)]),
+                        context: context,
+                        tiles: appData?.previousFiles?.reversed?.take(5)?.map(
+                                  (f) => OpenedFileTile(
+                                    openedFile:
+                                        f.toFileSource(cloudStorageBloc),
+                                    color: f.color,
+                                    onPressed: () {
+                                      final source =
+                                          f.toFileSource(cloudStorageBloc);
+                                      _loadAndGoToCredentials(source);
+                                    },
+                                  ),
+                                ) ??
+                            [Text(loc.noFilesHaveBeenOpenYet)],
+                      ),
                     ],
                   ),
                 ),
@@ -584,11 +564,13 @@ class OpenedFileTile extends StatelessWidget {
     Key key,
     @required this.openedFile,
     this.onPressed,
+    this.onLongPressed,
     @required this.color,
   }) : super(key: key);
 
   final FileSource openedFile;
   final VoidCallback onPressed;
+  final VoidCallback onLongPressed;
   final Color color;
 
   @override
@@ -599,6 +581,7 @@ class OpenedFileTile extends StatelessWidget {
             theme.textTheme.caption.color);
     return InkWell(
       onTap: onPressed,
+      onLongPress: onLongPressed,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -637,11 +620,17 @@ class OpenedFileTile extends StatelessWidget {
 }
 
 class SelectFileAction extends StatelessWidget {
-  const SelectFileAction({Key key, this.icon, this.label, this.onPressed})
-      : super(key: key);
+  const SelectFileAction({
+    Key key,
+    this.icon,
+    this.label,
+    this.onPressed,
+    this.backgroundColor,
+  }) : super(key: key);
 
   final IconData icon;
   final String label;
+  final Color backgroundColor;
   final VoidCallback onPressed;
 
   @override
@@ -658,7 +647,7 @@ class SelectFileAction extends StatelessWidget {
       child: Material(
 //      shape: Border.all(),
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        color: theme.primaryColor,
+        color: backgroundColor ?? theme.primaryColor,
         elevation: 4,
         child: InkWell(
           onTap: onPressed,

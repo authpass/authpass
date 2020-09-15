@@ -100,6 +100,7 @@ void main() {
 }
 
 Future<void> _downloadFileAndOpen(FlutterDriver driver, String url) async {
+  await driver.tap(find.byValueKey('appBarOverflowMenu'));
   final downloadButton = find.byValueKey('downloadFromUrl');
   await driver.tap(downloadButton);
   await driver.waitUntilNoTransientCallbacks();

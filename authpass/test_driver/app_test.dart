@@ -43,6 +43,7 @@ void main() {
     });
 
     test('open kdbx 3 file', () async {
+      await driver.tap(find.byValueKey('appBarOverflowMenu'));
       await driver.tap(downloadButton);
 
       await driver.waitUntilNoTransientCallbacks();

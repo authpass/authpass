@@ -66,6 +66,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loadFromUrl => 'Download from URL';
 
   @override
+  String get loadFromRemoteUrl => 'Open kdbx from URL';
+
+  @override
   String get createNewKeepass => 'New to KeePass?\nCreate New Password Database';
 
   @override
@@ -410,6 +413,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
 
   @override
+  String get inputMasterPasswordText => 'Master Password';
+
+  @override
   String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
 
   @override
@@ -513,7 +519,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingYesOpenPasswords => 'Yes, open my passwords';
 
   @override
-  String get onboardingNoCreate => 'No, I\'m all new!';
+  String get onboardingNoCreate => 'I\'m all new! Get me started.';
 
   @override
   String unexpectedError(String error) {

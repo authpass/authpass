@@ -136,6 +136,7 @@ class AppBarMenu {
   }) {
     final openedFiles = Provider.of<OpenedKdbxFiles>(context);
     return PopupMenuButton<VoidCallback>(
+      key: const ValueKey('appBarOverflowMenu'),
       onSelected: (val) => val(),
       itemBuilder: (context) => [
         ...?(builder == null ? null : builder(context)),

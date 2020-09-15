@@ -71,7 +71,14 @@
     }
   },
   "loadFromUrl": "Download from URL",
-  "@loadFromUrl": {},
+  "@loadFromUrl": {
+    "description": "deprecated"
+  },
+  "loadFromRemoteUrl": "Open kdbx from URL",
+  "@loadFromRemoteUrl": {
+    "description": "Overflow menu option to load KeePass file from URL."
+  },
+
   "createNewKeepass": "New to KeePass?\nCreate New Password Database",
   "@createNewKeepass": {},
 
@@ -504,7 +511,11 @@
   },
   "masterPasswordHelpText": "Select a secure master Password. Make sure to remember it.",
   "@masterPasswordHelpText": {
-    "description": "help text for master password when creating new password database"
+    "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+  },
+  "inputMasterPasswordText": "Master Password",
+  "@inputMasterPasswordText": {
+    "description": "Creating new file: input field for master password"
   },
   "masterPasswordMissingCreate": "Please enter a secure, rememberable password.",
   "@masterPasswordMissingCreate": {
@@ -657,7 +668,7 @@
   "@onboardingYesOpenPasswords": {
     "description": ""
   },
-  "onboardingNoCreate": "No, I'm all new!",
+  "onboardingNoCreate": "I'm all new! Get me started.",
   "@onboardingNoCreate": {
     "description": ""
   },
