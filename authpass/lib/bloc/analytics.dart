@@ -152,8 +152,12 @@ class Analytics {
         parameters: parameters,
       );
 
-  void trackTiming(String variableName, int timeMs,
-      {String category, String label}) {
+  void trackTiming(
+    @NonNls String variableName,
+    int timeMs, {
+    @NonNls String category,
+    @NonNls String label,
+  }) {
     _requireGa((ga) {
       ga.sendTiming(variableName, timeMs, category: category, label: label);
       _logger.finest('$_dbg timing($variableName, $timeMs, '
