@@ -23,6 +23,26 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'value': value
       });
   @override
+  void trackOnboardingNew(
+          {String category = 'onboarding',
+          String action = 'click',
+          String label = 'onboardingNewbie'}) =>
+      trackEvent('onboardingNew', <String, dynamic>{
+        'category': category,
+        'action': action,
+        'label': label
+      });
+  @override
+  void trackOnboardingExisting(
+          {String category = 'onboarding',
+          String action = 'click',
+          String label = 'onboardingExisting'}) =>
+      trackEvent('onboardingExisting', <String, dynamic>{
+        'category': category,
+        'action': action,
+        'label': label
+      });
+  @override
   void trackActionPressed({String action}) =>
       trackEvent('actionPressed', <String, dynamic>{'action': action});
   @override

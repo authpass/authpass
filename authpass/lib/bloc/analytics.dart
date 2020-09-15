@@ -223,6 +223,18 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     @required int value,
   });
 
+  void trackOnboardingNew({
+    String category = 'onboarding',
+    String action = 'click',
+    String label = 'onboardingNewbie',
+  });
+
+  void trackOnboardingExisting({
+    String category = 'onboarding',
+    String action = 'click',
+    String label = 'onboardingExisting',
+  });
+
   void trackActionPressed({@required @NonNls String action});
 
   void trackCreateFile();
