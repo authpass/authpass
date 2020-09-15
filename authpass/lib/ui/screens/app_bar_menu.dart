@@ -10,6 +10,7 @@ import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/winsparkle_init_noop.dart'
     if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
@@ -19,7 +20,9 @@ import 'package:provider/provider.dart';
 
 class AppBarMenu {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
-      BuildContext context, OpenedKdbxFiles openedKdbxFiles) {
+      BuildContext context, OpenedKdbxFiles openedKdbxFiles,
+      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
+          secondaryBuilder}) {
     final openedFiles = openedKdbxFiles.values;
     final analytics = Provider.of<Analytics>(context, listen: false);
     final loc = AppLocalizations.of(context);
@@ -83,6 +86,7 @@ class AppBarMenu {
               .push(SelectFileScreen.route());
         },
       ),
+      if (secondaryBuilder != null) ...secondaryBuilder(context),
       const PopupMenuDivider(),
       ...?!AuthPassPlatform.isWindows
           ? null
@@ -96,21 +100,19 @@ class AppBarMenu {
                     winSparkleCheckUpdate();
                   }),
             ],
-      ...?!DialogUtils.sendLogsSupported()
-          ? null
-          : [
-              PopupMenuItem(
-                child: ListTile(
-                  leading: const Icon(Icons.email),
-                  title: Text(loc.menuItemSupport),
-                  subtitle: Text(loc.menuItemSupportSubtitle),
-                ),
-                value: () {
-                  analytics.events.trackActionPressed(action: 'emailSupport');
-                  DialogUtils.sendLogs(context);
-                },
-              )
-            ],
+      if (DialogUtils.sendLogsSupported()) ...[
+        PopupMenuItem(
+          child: ListTile(
+            leading: const Icon(Icons.email),
+            title: Text(loc.menuItemSupport),
+            subtitle: Text(loc.menuItemSupportSubtitle),
+          ),
+          value: () {
+            analytics.events.trackActionPressed(action: 'emailSupport');
+            DialogUtils.sendLogs(context);
+          },
+        )
+      ],
       PopupMenuItem(
         child: ListTile(
           leading: const Icon(Icons.help),
@@ -127,15 +129,22 @@ class AppBarMenu {
     ];
   }
 
-  static PopupMenuButton createOverflowMenuButton(BuildContext context,
-      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
-          builder}) {
+  static PopupMenuButton createOverflowMenuButton(
+    BuildContext context, {
+    List<PopupMenuItem<VoidCallback>> Function(BuildContext context) builder,
+    List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
+        secondaryBuilder,
+  }) {
     final openedFiles = Provider.of<OpenedKdbxFiles>(context);
     return PopupMenuButton<VoidCallback>(
       onSelected: (val) => val(),
       itemBuilder: (context) => [
         ...?(builder == null ? null : builder(context)),
-        ...AppBarMenu.createDefaultPopupMenuItems(context, openedFiles),
+        ...AppBarMenu.createDefaultPopupMenuItems(
+          context,
+          openedFiles,
+          secondaryBuilder: secondaryBuilder,
+        ),
       ],
     );
   }

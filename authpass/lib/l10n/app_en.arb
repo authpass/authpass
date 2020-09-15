@@ -637,6 +637,30 @@
   "@fieldGenerateEmail": {
     "description": ""
   },
+  "onboardingBackToOnboarding": "Tour",
+  "@onboardingBackToOnboarding": {
+    "description": "Context menu entry which reverts to onboarding"
+  },
+  "onboardingBackToOnboardingSubtitle": "Relive the first run experience \uD83D\uDE05️",
+  "@onboardingBackToOnboardingSubtitle": {
+    "description": "Context menu entry which reverts to onboarding"
+  },
+  "onboardingHeadline": "Let's get your Passwords Secure!",
+  "@onboardingHeadline": {
+    "description": ""
+  },
+  "onboardingQuestion": "Have you used a password manager before?",
+  "@onboardingQuestion": {
+    "description": ""
+  },
+  "onboardingYesOpenPasswords": "Yes, open my passwords",
+  "@onboardingYesOpenPasswords": {
+    "description": ""
+  },
+  "onboardingNoCreate": "No, I'm all new!",
+  "@onboardingNoCreate": {
+    "description": ""
+  },
 
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {

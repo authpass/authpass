@@ -500,6 +500,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get fieldGenerateEmail => 'Generate Email';
 
   @override
+  String get onboardingBackToOnboarding => 'Tour';
+
+  @override
+  String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
+
+  @override
+  String get onboardingHeadline => 'Let\'s get your Passwords Secure!';
+
+  @override
+  String get onboardingQuestion => 'Have you used a password manager before?';
+
+  @override
+  String get onboardingYesOpenPasswords => 'Yes, open my passwords';
+
+  @override
+  String get onboardingNoCreate => 'No, I\'m all new!';
+
+  @override
   String unexpectedError(String error) {
     return 'Неочікувана помилка: ${error}';
   }

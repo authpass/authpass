@@ -17,6 +17,7 @@ import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
+import 'package:authpass/ui/screens/onboarding/onboarding.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -73,7 +74,22 @@ class SelectFileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(loc.selectKeepassFile),
         actions: <Widget>[
-          AppBarMenu.createOverflowMenuButton(context),
+          AppBarMenu.createOverflowMenuButton(context,
+              secondaryBuilder: (context) {
+            return [
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.route),
+                  title: Text(loc.onboardingBackToOnboarding),
+                  subtitle: Text(loc.onboardingBackToOnboardingSubtitle),
+                ),
+                value: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      OnboardingScreen.route(), (route) => false);
+                },
+              ),
+            ];
+          }),
         ],
       ),
       body: Provider<CloudStorageBloc>.value(

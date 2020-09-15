@@ -566,6 +566,24 @@ abstract class AppLocalizations {
   // 
   String get fieldGenerateEmail;
 
+  // Context menu entry which reverts to onboarding
+  String get onboardingBackToOnboarding;
+
+  // Context menu entry which reverts to onboarding
+  String get onboardingBackToOnboardingSubtitle;
+
+  // 
+  String get onboardingHeadline;
+
+  // 
+  String get onboardingQuestion;
+
+  // 
+  String get onboardingYesOpenPasswords;
+
+  // 
+  String get onboardingNoCreate;
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

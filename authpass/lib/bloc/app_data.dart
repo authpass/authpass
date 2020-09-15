@@ -257,7 +257,7 @@ class AppDataBloc {
   static String createUuid() => UuidUtil.createUuid();
 
   Future<void> _init() async {
-    await Future<dynamic>.delayed(const Duration(seconds: 10));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 100));
     final data = await store.load();
     final appInfo = await env.getAppInfo();
     if (data.firstLaunchedAt == null ||
