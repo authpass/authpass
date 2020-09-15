@@ -645,7 +645,7 @@
   "@onboardingBackToOnboardingSubtitle": {
     "description": "Context menu entry which reverts to onboarding"
   },
-  "onboardingHeadline": "Let's get your Passwords Secure!",
+  "onboardingHeadline": "Let's make your Passwords Secure!",
   "@onboardingHeadline": {
     "description": ""
   },

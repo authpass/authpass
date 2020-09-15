@@ -23,7 +23,10 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: OnboardingContent(loc: loc, theme: theme),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: OnboardingContent(loc: loc, theme: theme),
+          ),
         ),
       ),
     );
@@ -60,8 +63,8 @@ class OnboardingContent extends StatelessWidget {
       children: [
         const SizedBox(height: 32),
         Image.asset(
-          'assets/images/authpass-logo-fit-512w.webp',
-          height: 96 * imageScaleFactor,
+          'assets/images/onboarding-header.webp',
+          // height: 96 * imageScaleFactor,
           width: 96 * imageScaleFactor,
           fit: BoxFit.contain,
         ),
@@ -80,7 +83,7 @@ class OnboardingContent extends StatelessWidget {
         ),
         const SizedBox(height: 32),
         OnboardingButton(
-          image: Image.asset('assets/images/safe-filled.webp'),
+          image: Image.asset('assets/images/safe-filled-v2.webp'),
           labelText: loc.onboardingYesOpenPasswords,
           onPressed: () {
             SelectFileScreen.navigate(context);
@@ -89,7 +92,7 @@ class OnboardingContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         OnboardingButton(
-          image: Image.asset('assets/images/safe-empty.webp'),
+          image: Image.asset('assets/images/safe-empty-v2.webp'),
           labelText: loc.onboardingNoCreate,
           onPressed: () {
             Navigator.of(context).push(CreateFile.route());
@@ -132,33 +135,30 @@ class OnboardingButton extends StatelessWidget {
       textStyle = textStyle.apply(fontSizeFactor: 0.8);
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 8,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-        // elevation: 8,
-        // borderRadius: const BorderRadius.all(Radius.circular(8)),
-        onPressed: onPressed,
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 16, bottom: 16, right: 16),
-              width: 96,
-              height: 96,
-              child: image,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      // elevation: 8,
+      // borderRadius: const BorderRadius.all(Radius.circular(8)),
+      onPressed: onPressed,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 16, bottom: 16, right: 16),
+            width: 96,
+            height: 96,
+            child: image,
+          ),
+          Expanded(
+            child: Text(
+              labelText,
+              maxLines: 2,
+              style: textStyle,
             ),
-            Expanded(
-              child: Text(
-                labelText,
-                maxLines: 2,
-                style: textStyle,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -504,7 +504,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
 
   @override
-  String get onboardingHeadline => 'Let\'s get your Passwords Secure!';
+  String get onboardingHeadline => 'Let\'s make your Passwords Secure!';
 
   @override
   String get onboardingQuestion => 'Have you used a password manager before?';
