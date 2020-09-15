@@ -200,7 +200,7 @@ class _PasswordStrengthDisplayState
   @override
   Widget build(BuildContext context) {
     final _strength = widget.strength;
-    final loc = AppLocalizations.of(context);
+    // final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final feedback = _strength?.feedback?.warning?.takeUnlessBlank() ??
         // _strength?.feedback?.suggestions?.firstOrNull ??
@@ -219,17 +219,17 @@ class _PasswordStrengthDisplayState
           ),
           const SizedBox(height: 4),
           Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                child: Text(
-                  loc.passwordScore(_strength.score.toInt()),
-                  style: theme.textTheme.caption,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
+              // Expanded(
+              //   child: Text(
+              //     loc.passwordScore(_strength.score.toInt()),
+              //     style: theme.textTheme.caption,
+              //     overflow: TextOverflow.ellipsis,
+              //     maxLines: 1,
+              //   ),
+              // ),
               Text(
                 feedback,
                 textAlign: TextAlign.right,
