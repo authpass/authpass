@@ -887,7 +887,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 child: PasswordInputField(
                   controller: _controller,
                   labelText: loc.masterPasswordInputLabel,
-                  autovalidate: _invalidPassword != null,
+                  autovalidateMode: _invalidPassword != null
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.onUserInteraction,
                   validator: (_keyFile == null || _invalidPassword != null
                           ? SValidator.notEmpty(
                               msg: loc.masterPasswordEmptyValidator)

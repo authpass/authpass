@@ -4,8 +4,8 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   argon2_ffi
-  file_chooser
   biometric_storage
+  file_chooser
   url_launcher_linux
 )
 

@@ -1656,7 +1656,7 @@ class HighlightWidgetState extends State<HighlightWidget>
             ))
           ])*/
         : Stack(
-            overflow: Overflow.visible,
+            clipBehavior: Clip.none,
             children: [
               widget.child,
               Positioned.fill(

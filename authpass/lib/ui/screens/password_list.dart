@@ -622,7 +622,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             showBadge: cloudStatusSnapshot.hasData &&
                 cloudStatusSnapshot.data.messagesUnread > 0,
             badgeColor: Theme.of(context).primaryColorDark,
-            position: BadgePosition.topRight(top: 0, right: 3),
+            position: BadgePosition.topEnd(top: 0, end: 3),
             child: PopupMenuButton<VoidCallback>(
               key: const ValueKey('appBarOverflowMenu'),
               onSelected: (item) {

@@ -16,7 +16,6 @@ class PasswordInputField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onChanged,
     this.controller,
-    this.autovalidate = false,
     this.autovalidateMode,
   }) : super(key: key);
 
@@ -28,7 +27,6 @@ class PasswordInputField extends StatefulWidget {
   final ValueChanged<String> onFieldSubmitted;
   final ValueChanged<String> onChanged;
   final TextEditingController controller;
-  final bool autovalidate;
   final AutovalidateMode autovalidateMode;
 
   @override
@@ -68,7 +66,6 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             tooltip: loc.passwordPlainText,
           )),
       autocorrect: false,
-      autovalidate: widget.autovalidate,
       autovalidateMode: widget.autovalidateMode,
       obscureText: _obscureText,
       validator: widget.validator,
