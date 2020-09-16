@@ -1,3 +1,4 @@
+import 'package:authpass/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -25,6 +26,7 @@ class FullScreenHud extends StatelessWidget {
                 value,
                 style: const TextStyle(
                   color: Colors.white,
+                  fontFamily: AuthPassTheme.monoFontFamily,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                 ),

@@ -8,6 +8,7 @@
 * French translations.
 * Create "Onboarding" screen for new users.
 * Cleanup 'Select File' dialog.
+* Use 'JetBrains Mono' font in "Present' view.
 
 # 1.7.7
 
