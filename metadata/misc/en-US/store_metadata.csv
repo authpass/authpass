@@ -1,6 +1,6 @@
 "playstore_full_description","Easily and securely keep track of all your Passwords!
 
-AuthPass is a stand alone password manager with support for the popular and proven <strong>Keepass</strong> (kdbx 3.x AND kdbx 4.x 🎉️) format. Store your passwords, <strong>share across all your devices</strong> and easily find them whenever you need to login.
+AuthPass is a stand alone password manager with support for the popular and proven <strong>KeePass</strong> (kdbx 3.x AND kdbx 4.x 🎉️) format. Store your passwords, <strong>share across all your devices</strong> and easily find them whenever you need to login.
 
 🗄 All your passwords in one place.
 🧬 Generate secure random passwords for each of your accounts.
@@ -32,7 +32,7 @@ This is an open source project which is still under heavy development, adding fe
 
 Also join the community on our <a href=""https://authpass.app/go/discord"">discord channel</a> at https://authpass.app/go/discord
 ","Google Play Store description","4000",""
-"playstore_title","AuthPass - Keepass compatible Password Manager","Google Play Title","50",""
+"playstore_title","AuthPass - KeePass compatible Password Manager","Google Play Title","50",""
 "playstore_short_description","Keep your passwords and accounts secure across all platforms and devices.","Short description in play store.","80",""
 "apple-appstore-title","AuthPass - Password Manager","","30",""
 "apple-appstore-subtitle","One Password, on all Devices.","","30",""
@@ -44,7 +44,7 @@ AuthPass is a stand alone password manager with support for the popular and secu
 • Generate secure random passwords for each of your accounts.
 • Quick Unlock secured with biometric lock.
 • Keep track of your accounts across the web.
-• App available all platform. Among them for Mac, iPhone and iPad.
+• App available on all platforms. Among them Mac, iPhone and iPad.
 • Open multiple password files at the same time (e.g. one for work, one for personal - or even share your password files with coworkers)
 • Save Time-based One Time Passwords for 2fa (Two Factor Authentication).
 • Attach binary files to your password entries. (Like offline TANs, etc)
