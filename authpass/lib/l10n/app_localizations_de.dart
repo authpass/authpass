@@ -52,6 +52,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get selectKeepassFileLabel => 'Bitte wähle eine KeePass (.kdbx) Datei.';
 
   @override
+  String get createNewFile => 'Create New File';
+
+  @override
   String get openLocalFile => 'Öffne\nLokale Datei';
 
   @override

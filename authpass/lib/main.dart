@@ -14,6 +14,7 @@ import 'package:authpass/env/fdroid.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
+import 'package:authpass/ui/screens/onboarding/onboarding.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/diac_utils.dart';
@@ -351,7 +352,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               'startup',
               startupStopwatch.elapsedMilliseconds,
               category: 'startup',
-              label: widget.isFirstRun ? 'startup firstRun' : 'startup',
+              label: widget.isFirstRun ? 'startup firstRun' : 'startup run',
             );
           }
           if (initialRoute.startsWith('/openFile')) {
@@ -366,7 +367,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             ];
           }
           return [
-            SelectFileScreen.route(),
+            widget.isFirstRun && widget.env.featureOnboarding
+                ? OnboardingScreen.route()
+                : SelectFileScreen.route(),
           ];
         },
         // this is actually never used. But i still have to define it,

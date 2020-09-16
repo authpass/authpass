@@ -50,6 +50,10 @@
   "@selectKeepassFileLabel": {
     "context": "select file screen, used as label."
   },
+  "createNewFile": "Create New File",
+  "@createNewFile": {
+    "description": "button on select file screen to create a new password database."
+  },
 
   "openLocalFile": "Open\nLocal File",
   "@openLocalFile": {
@@ -80,7 +84,9 @@
   },
 
   "createNewKeepass": "New to KeePass?\nCreate New Password Database",
-  "@createNewKeepass": {},
+  "@createNewKeepass": {
+    "description": "deprecated"
+  },
 
   "labelLastOpenFiles": "Last opened files:",
   "@labelLastOpenFiles": {},

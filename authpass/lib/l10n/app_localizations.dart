@@ -152,6 +152,9 @@ abstract class AppLocalizations {
   // No description provided in @selectKeepassFileLabel
   String get selectKeepassFileLabel;
 
+  // button on select file screen to create a new password database.
+  String get createNewFile;
+
   // No description provided in @openLocalFile
   String get openLocalFile;
 
@@ -167,7 +170,7 @@ abstract class AppLocalizations {
   // Overflow menu option to load KeePass file from URL.
   String get loadFromRemoteUrl;
 
-  // No description provided in @createNewKeepass
+  // deprecated
   String get createNewKeepass;
 
   // No description provided in @labelLastOpenFiles

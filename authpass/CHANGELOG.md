@@ -6,6 +6,8 @@
 * File Create: Show password strength #143
 * Password generator: include accented characters in 'Umlauts'
 * French translations.
+* Create "Onboarding" screen for new users.
+* Cleanup 'Select File' dialog.
 
 # 1.7.7
 

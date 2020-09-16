@@ -1,7 +1,9 @@
-import 'package:built_value/built_value.dart';
+import 'package:built_value/built_value.dart' hide nullable;
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
 
 part '_base.g.dart';
+part '_base.freezed.dart';
 
 enum EnvType { production, development }
 
@@ -19,17 +21,18 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   String get shortString => '$appName ($versionLabel)';
 }
 
-class EnvSecrets {
-  const EnvSecrets({
-    @required this.analyticsAmplitudeApiKey,
-    @required this.analyticsGoogleAnalyticsId,
-    @required this.googleClientId,
-    @required this.googleClientSecret,
-    @required this.dropboxKey,
-    @required this.dropboxSecret,
-    @required this.microsoftClientId,
-    @required this.microsoftClientSecret,
-  });
+@freezed
+abstract class EnvSecrets with _$EnvSecrets {
+  const factory EnvSecrets({
+    @required @nullable String analyticsAmplitudeApiKey,
+    @required @nullable String analyticsGoogleAnalyticsId,
+    @required @nullable String googleClientId,
+    @required @nullable String googleClientSecret,
+    @required @nullable String dropboxKey,
+    @required @nullable String dropboxSecret,
+    @required @nullable String microsoftClientId,
+    @required @nullable String microsoftClientSecret,
+  }) = _EnvSecrets;
 
   static const nullSecrets = EnvSecrets(
     analyticsAmplitudeApiKey: null,
@@ -41,15 +44,6 @@ class EnvSecrets {
     microsoftClientId: null,
     microsoftClientSecret: null,
   );
-
-  final String analyticsAmplitudeApiKey;
-  final String analyticsGoogleAnalyticsId;
-  final String googleClientId;
-  final String googleClientSecret;
-  final String dropboxKey;
-  final String dropboxSecret;
-  final String microsoftClientId;
-  final String microsoftClientSecret;
 }
 
 abstract class FeatureFlags
@@ -94,6 +88,9 @@ abstract class Env {
   /// e.g. for mac os to have a different configuration for
   /// debug build vs. production/app store build.
   String get storageNamespace => storageNamespaceFromEnvironment;
+
+  /// allow disabling of "onboarding".
+  bool get featureOnboarding => true;
 
   /// Support for dropbox, google drive.
   bool get featureCloudStorageProprietary => true;

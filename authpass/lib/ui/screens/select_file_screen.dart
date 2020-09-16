@@ -21,6 +21,7 @@ import 'package:authpass/ui/screens/onboarding/onboarding.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
@@ -339,9 +340,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     ]
                   : null),
               const SizedBox(height: 16),
-              Text(
-                loc.selectKeepassFileLabel,
-                style: theme.textTheme.headline6,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  loc.selectKeepassFileLabel,
+                  style: theme.textTheme.caption,
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 8),
               Wrap(
@@ -392,7 +397,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   ),
                   SelectFileAction(
                     icon: Icons.create_new_folder,
-                    label: 'Create New File',
+                    label: loc.createNewFile,
                     backgroundColor: theme.primaryColor.darken(),
                     onPressed: () {
                       Navigator.of(context).push(CreateFile.route());
@@ -411,12 +416,15 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     children: <Widget>[
                       Text(
                         loc.labelLastOpenFiles,
-                        style: theme.textTheme.headline6,
+                        style: theme.textTheme.caption,
                         textAlign: TextAlign.center,
                       ),
                       ...ListTile.divideTiles(
                         context: context,
-                        tiles: appData?.previousFiles?.reversed?.take(5)?.map(
+                        tiles: appData?.previousFiles?.reversed
+                                ?.take(5)
+                                ?.takeIfNotEmpty()
+                                ?.map(
                                   (f) => OpenedFileTile(
                                     openedFile:
                                         f.toFileSource(cloudStorageBloc),
@@ -428,7 +436,15 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                     },
                                   ),
                                 ) ??
-                            [Text(loc.noFilesHaveBeenOpenYet)],
+                            [
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  loc.noFilesHaveBeenOpenYet,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
                       ),
                     ],
                   ),

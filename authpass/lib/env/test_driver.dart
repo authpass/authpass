@@ -16,4 +16,7 @@ class TestDriverEnv extends EnvAppBase {
 
   @override
   bool get featureFetchWebsiteIconEnabledByDefault => true;
+
+  @override
+  bool get featureOnboarding => false;
 }

@@ -21,15 +21,39 @@ class OnboardingScreen extends StatelessWidget {
     final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: OnboardingContent(loc: loc, theme: theme),
+      body: Scrollbar(
+        child: ExpandToFitScreen(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: OnboardingContent(loc: loc, theme: theme),
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class ExpandToFitScreen extends StatelessWidget {
+  const ExpandToFitScreen({Key key, this.child}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: constraints.maxHeight,
+          ),
+          child: IntrinsicHeight(
+            child: child,
+          ),
+        ),
+      );
+    });
   }
 }
 
@@ -60,13 +84,18 @@ class OnboardingContent extends StatelessWidget {
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const SizedBox(height: 32),
-        Image.asset(
-          'assets/images/onboarding-header.webp',
-          // height: 96 * imageScaleFactor,
-          width: 96 * imageScaleFactor,
-          fit: BoxFit.contain,
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 64),
+          child: Image.asset(
+            'assets/images/onboarding-header.webp',
+            // height: 96 * imageScaleFactor,
+            width: 96 * imageScaleFactor,
+            fit: BoxFit.contain,
+          ),
         ),
         const SizedBox(height: 16),
         Text(
@@ -75,13 +104,15 @@ class OnboardingContent extends StatelessWidget {
           style: onboardingHeadlineStyle,
         ),
         const SizedBox(height: 16),
+        const Expanded(child: SizedBox()),
         Text(
           loc.onboardingQuestion,
           textAlign: TextAlign.center,
           style:
               theme.textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 16),
+        // Expanded(child: const SizedBox(height: 32)),
         OnboardingButton(
           image: Image.asset('assets/images/safe-filled-v2.webp'),
           labelText: loc.onboardingYesOpenPasswords,
@@ -91,14 +122,18 @@ class OnboardingContent extends StatelessWidget {
           },
         ),
         const SizedBox(height: 16),
-        OnboardingButton(
-          image: Image.asset('assets/images/safe-empty-v2.webp'),
-          labelText: loc.onboardingNoCreate,
-          onPressed: () {
-            Navigator.of(context).push(CreateFile.route());
-            context.read<Analytics>().events.trackOnboardingNew();
-          },
+        Container(
+          child: OnboardingButton(
+            image: Image.asset('assets/images/safe-empty-v2.webp'),
+            labelText: loc.onboardingNoCreate,
+            onPressed: () {
+              Navigator.of(context).push(CreateFile.route());
+              context.read<Analytics>().events.trackOnboardingNew();
+            },
+          ),
         ),
+        const Expanded(child: SizedBox()),
+        const SizedBox(height: 32),
       ],
     );
   }

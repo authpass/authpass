@@ -52,6 +52,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get selectKeepassFileLabel => 'Prašome pasirinkti „KeePass“ (.kdbx) failą.';
 
   @override
+  String get createNewFile => 'Create New File';
+
+  @override
   String get openLocalFile => 'Atidaryti\nVietinis failas';
 
   @override
