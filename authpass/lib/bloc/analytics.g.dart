@@ -14,7 +14,10 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   }
 
   @override
-  void trackLaunch() => trackEvent('launch', <String, dynamic>{});
+  void trackLaunch({Brightness systemBrightness}) =>
+      trackEvent('launch', <String, dynamic>{
+        'systemBrightness': systemBrightness?.toString()?.substring(11)
+      });
   @override
   void _trackInit({String userType, String device, int value}) =>
       trackEvent('init', <String, dynamic>{

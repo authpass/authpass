@@ -346,6 +346,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         onGenerateInitialRoutes: (initialRoute) {
           _logger.fine('initialRoute: $initialRoute');
           _deps.analytics.trackScreen(initialRoute);
+          _deps.analytics.events.trackLaunch(
+              systemBrightness:
+                  WidgetsBinding.instance.window.platformBrightness);
           if (startupStopwatch.isRunning) {
             startupStopwatch.stop();
             _deps.analytics.trackTiming(

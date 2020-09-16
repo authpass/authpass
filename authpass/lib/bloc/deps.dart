@@ -33,10 +33,11 @@ class Deps {
     @required this.analytics,
     @required this.cloudStorageBloc,
   }) {
-    appDataBloc.store.load().then((appData) {
+    Future<void>.delayed(const Duration(milliseconds: 100)).then((value) async {
+      final appData = await appDataBloc.store.load();
       final daysSinceLaunch =
           appData.firstLaunchedAt.difference(DateTime.now()).abs().inDays;
-      analytics.events.trackInit(
+      await analytics.events.trackInit(
         userType: appData.manualUserType,
         value: daysSinceLaunch,
       );

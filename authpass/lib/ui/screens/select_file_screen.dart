@@ -69,7 +69,6 @@ class SelectFileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<Analytics>(context).events.trackLaunch();
     final cloudBloc = CloudStorageBloc(Provider.of<Env>(context), PathUtils());
     final loc = AppLocalizations.of(context);
     return Scaffold(

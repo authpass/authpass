@@ -6,6 +6,7 @@ import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -36,17 +37,18 @@ class Analytics {
   /// global analytics tracker we use for error reporting.
   static usage.Analytics _errorGa;
   static const _gaPropertyMapping = <String, String>{
-    'platform': 'cd1',
-    'userType': 'cd2',
-    'device': 'cd3',
+    'platform': 'cd1', // NON-NLS
+    'userType': 'cd2', // NON-NLS
+    'device': 'cd3', // NON-NLS
+    'systemBrightness': 'cd4', // NON-NLS
   };
 
   Future<void> _init() async {
     if (env.secrets.analyticsGoogleAnalyticsId != null) {
       if (AuthPassPlatform.isAndroid) {
         const miscChannel = MethodChannel('app.authpass/misc');
-        final isFirebaseTestLab =
-            await miscChannel.invokeMethod<bool>('isFirebaseTestLab');
+        final isFirebaseTestLab = await miscChannel
+            .invokeMethod<bool>('isFirebaseTestLab'); // NON-NLS
         if (isFirebaseTestLab) {
           _logger.info(
               'running in firebase test lab. not initializing analytics.');
@@ -211,11 +213,12 @@ Future<String> deviceInfo() async {
     final iosInfo = await DeviceInfoPlugin().iosInfo;
     return iosInfo.utsname.machine;
   }
-  return 'unknown (${AuthPassPlatform.operatingSystem})';
+  return 'unknown ${AuthPassPlatform.operatingSystemVersion}'
+      ' (${AuthPassPlatform.operatingSystem})';
 }
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
-  void trackLaunch();
+  void trackLaunch({@required Brightness systemBrightness});
 
   Future<void> trackInit(
           {@required String userType, @required int value}) async =>
