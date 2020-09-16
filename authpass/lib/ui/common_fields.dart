@@ -47,6 +47,13 @@ class CommonFields {
             icon: Icons.label,
           ),
           CommonField(
+            key: KdbxKeyCommon.URL,
+            displayName: loc.fieldWebsite,
+            includeInSearch: true,
+            keyboardType: TextInputType.url,
+            icon: Icons.link,
+          ),
+          CommonField(
             key: KdbxKeyCommon.USER_NAME,
             displayName: loc.fieldUserName,
             includeInSearch: true,
@@ -58,13 +65,6 @@ class CommonFields {
             displayName: loc.fieldPassword,
             protect: true,
             icon: Icons.lock,
-          ),
-          CommonField(
-            key: KdbxKeyCommon.URL,
-            displayName: loc.fieldWebsite,
-            includeInSearch: true,
-            keyboardType: TextInputType.url,
-            icon: Icons.link,
           ),
           CommonField(
             key: KdbxKeyCommon.OTP,

@@ -1,4 +1,4 @@
-# (unreleased) 1.7.8
+# 1.7.8 - 2020-09-17
 
 * Android: improve autofill input field detection for usernames.
 * Improve locking with biometric storage.
