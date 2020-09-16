@@ -16,9 +16,9 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   int get buildNumber;
   String get packageName;
 
-  String get versionLabel => '$version+$buildNumber';
+  String get versionLabel => '$version+$buildNumber'; // NON-NLS
 
-  String get shortString => '$appName ($versionLabel)';
+  String get shortString => '$appName ($versionLabel)'; // NON-NLS
 }
 
 @freezed
@@ -63,14 +63,15 @@ abstract class Env {
 
   /// app name ;) basically it's just here so I don't have to translate it.
   static const AuthPass = 'AuthPass'; // NON-NLS
-  static const AuthPassCLoud = 'AuthPass Cloud'; // NON-NLS
+  static const AuthPassCloud = 'AuthPass Cloud'; // NON-NLS
+  static const KeePassExtension = 'kdbx'; // NON-NLS
 
   static Env value;
 
   final EnvType type;
   EnvSecrets get secrets;
 
-  String get diacEndpoint => 'https://cloud.authpass.app/diac';
+  String get diacEndpoint => 'https://cloud.authpass.app/diac'; // NON-NLS
 
   bool get diacHidden => false;
 
@@ -108,7 +109,7 @@ abstract class Env {
   final FeatureFlags featureFlags = FeatureFlags(
     (b) => b
       ..authpassCloud = true
-      ..authpassCloudUri = 'https://cloud.authpass.app/',
+      ..authpassCloudUri = 'https://cloud.authpass.app/', // NON-NLS
   );
 
   Future<AppInfo> getAppInfo();

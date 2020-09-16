@@ -12,6 +12,7 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
 
@@ -54,44 +55,45 @@ class GoogleDriveProvider
   }
 
   void _credentialsChanged(AccessCredentials credentials) {
-    final jsonString = <String, dynamic>{
+    final jsonString = nonNls(<String, dynamic>{
       'accessToken': _accessTokenToJson(credentials.accessToken),
       'refreshToken': credentials.refreshToken,
       'idToken': credentials.idToken,
       'scopes': credentials.scopes,
-    };
+    });
     storeCredentials(json.encode(jsonString));
   }
 
-  Map<String, dynamic> _accessTokenToJson(AccessToken at) => <String, dynamic>{
+  Map<String, dynamic> _accessTokenToJson(AccessToken at) =>
+      nonNls(<String, dynamic>{
         'type': at.type,
         'data': at.data,
         'expiry': at.expiry.toString(),
-      };
+      });
 
   AccessToken _accessTokenFromJson(Map<String, dynamic> map) {
-    return AccessToken(
+    return nonNls(AccessToken(
       map['type'] as String,
       map['data'] as String,
       DateTime.parse(map['expiry'] as String),
-    );
+    ));
   }
 
   AccessCredentials _parseAccessCredentials(String jsonString) {
     final map = json.decode(jsonString) as Map<String, dynamic>;
-    return AccessCredentials(
+    return nonNls(AccessCredentials(
       _accessTokenFromJson(map['accessToken'] as Map<String, dynamic>),
       map['refreshToken'] as String,
       (map['scopes'] as List).cast<String>(),
       idToken: map['idToken'] as String,
-    );
+    ));
   }
 
   @override
   bool get supportSearch => true;
 
   @override
-  Future<SearchResponse> search({String name = 'kdbx'}) async {
+  Future<SearchResponse> search({String name = Env.KeePassExtension}) async {
     return _search(SearchQueryTerm(const SearchQueryField('name'),
         QOperator.contains, SearchQueryValueLiteral(name)));
   }
@@ -112,7 +114,8 @@ class GoogleDriveProvider
             (f) => CloudStorageEntity(
               (b) => b
                 ..id = f.id
-                ..type = f.mimeType == 'application/vnd.google-apps.folder'
+                ..type = f.mimeType ==
+                        'application/vnd.google-apps.folder' // NON-NLS
                     ? CloudStorageEntityType.directory
                     : CloudStorageEntityType.file
                 ..name = f.name,
@@ -132,7 +135,7 @@ class GoogleDriveProvider
   }
 
   @override
-  String get displayName => 'Google Drive';
+  String get displayName => 'Google Drive'; // NON-NLS
 
   @override
   FileSourceIcon get displayIcon => FileSourceIcon.googleDrive;
@@ -189,7 +192,7 @@ abstract class SearchQueryAtom {
 
 @immutable
 class QOperator {
-  const QOperator._(this.op);
+  const QOperator._(@NonNls this.op);
 
   final String op;
 
@@ -200,7 +203,7 @@ class QOperator {
 }
 
 class SearchQueryField implements SearchQueryAtom {
-  const SearchQueryField(this.fieldName);
+  const SearchQueryField(@NonNls this.fieldName);
 
   final String fieldName;
 
@@ -209,18 +212,18 @@ class SearchQueryField implements SearchQueryAtom {
 }
 
 class SearchQueryValueLiteral implements SearchQueryAtom {
-  const SearchQueryValueLiteral(this.value);
+  const SearchQueryValueLiteral(@NonNls this.value);
 
   final Object value;
 
   String _quoteValues(dynamic value) {
     if (value is String) {
       final escaped = value.replaceAllMapped(
-          RegExp(r'''['\\]'''), (match) => '\\${match.group(0)}');
-      return "'$escaped'";
+          RegExp(r'''['\\]'''), (match) => '\\${match.group(0)}'); // NON-NLS
+      return "'$escaped'"; // NON-NLS
     }
     if (value is List) {
-      return '[${value.map((dynamic v) => _quoteValues(v)).join(',')}]';
+      return '[${value.map((dynamic v) => _quoteValues(v)).join(',')}]'; // NON-NLS
     } else {
       throw StateError('Unsupported type. ${value.runtimeType}');
     }
@@ -245,6 +248,6 @@ class SearchQueryTerm implements SearchQueryAtom {
 
   @override
   String toQuery() {
-    return '${left.toQuery()} ${operator.op} ${right.toQuery()}';
+    return '${left.toQuery()} ${operator.op} ${right.toQuery()}'; // NON-NLS
   }
 }

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -12,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part 'cloud_storage_provider.g.dart';
 
@@ -23,7 +25,7 @@ class LoadFileException implements Exception {
 
   @override
   String toString() {
-    return 'LoadFileException{message: $message}';
+    return 'LoadFileException{message: $message}'; // NON-NLS
   }
 }
 
@@ -40,7 +42,7 @@ class FileSourceConflictException implements Exception {
 
   @override
   String toString() {
-    return 'FileSourceConflictException{message: $message}';
+    return 'FileSourceConflictException{message: $message}'; // NON-NLS
   }
 }
 
@@ -60,20 +62,20 @@ abstract class CloudStorageEntity
   String get pathOrBaseName => path ?? name;
 
   static CloudStorageEntity fromSimpleFileInfo(Map<String, String> fileInfo) {
-    return CloudStorageEntity(
+    return nonNls(CloudStorageEntity(
       (b) => b
         ..id = fileInfo['id']
         ..type = CloudStorageEntityType.file
         ..name = fileInfo['name']
         ..path = fileInfo['path'],
-    );
+    ));
   }
 
-  Map<String, String> toSimpleFileInfo() => {
+  Map<String, String> toSimpleFileInfo() => nonNls({
         'id': id,
         'name': name,
         'path': path,
-      };
+      });
 }
 
 abstract class SearchResponse
@@ -160,7 +162,7 @@ abstract class CloudStorageProvider {
       PromptUserForCode<RESULT, DATA> prompt);
 
   /// make sure to check [supportSearch] before calling this method, otherwise a [UnsupportedError] will be thrown.
-  Future<SearchResponse> search({String name = 'kdbx'}) =>
+  Future<SearchResponse> search({String name = Env.KeePassExtension}) =>
       throw UnsupportedError('Search not supported');
   Future<SearchResponse> list({CloudStorageEntity parent});
 

@@ -8,6 +8,7 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_models.dart';
+import 'package:authpass/utils/format_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
@@ -15,6 +16,7 @@ import 'package:http_auth/http_auth.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:xml/xml.dart' as xml;
 
 final _logger = Logger('authpass.webdav_provider');
@@ -30,18 +32,24 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   WebDavProvider({@required CloudStorageHelperBase helper})
       : super(helper: helper);
 
+  static const METHOD_HEAD = 'HEAD'; // NON-NLS
+  static const METHOD_PUT = 'PUT'; // NON-NLS
+  static const METHOD_PROPFIND = 'PROPFIND'; // NON-NLS
+
   xml.XmlNode _propfindRequest() {
-    final builder = xml.XmlBuilder();
-    builder.processing('xml', 'version="1.0"');
-    builder.element('d:propfind', namespaces: {'DAV:': 'd'}, nest: () {
-      builder.element('d:prop', nest: () {
-        builder.element('d:getlastmodified');
-        builder.element('d:getetag');
-        builder.element('d:getcontenttype');
-        builder.element('d:resourcetype');
+    return nonNls(() {
+      final builder = xml.XmlBuilder();
+      builder.processing('xml', 'version="1.0"');
+      builder.element('d:propfind', namespaces: {'DAV:': 'd'}, nest: () {
+        builder.element('d:prop', nest: () {
+          builder.element('d:getlastmodified');
+          builder.element('d:getetag');
+          builder.element('d:getcontenttype');
+          builder.element('d:resourcetype');
+        });
       });
-    });
-    return builder.buildDocument();
+      return builder.buildDocument();
+    })();
   }
 
   @override
@@ -88,8 +96,8 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, saveAs.parent).resolve(saveAs.fileName);
     _logger.finer('Saving to $uri');
-    final request = Request('PUT', uri);
-    request.headers[HttpHeaders.ifNoneMatchHeader] = '*';
+    final request = Request(METHOD_PUT, uri);
+    request.headers[HttpHeaders.ifNoneMatchHeader] = Nls.STAR;
     request.bodyBytes = bytes;
     final response = await client.send(request);
     await _expectSuccessResponse(response);
@@ -113,7 +121,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   Future<String> _refetchEtagFromHead(Uri uri) async {
     final client = await requireAuthenticatedClient();
     _logger.info('No etag on PUT, fetch HEAD.');
-    final headResponse = await client.send(Request('HEAD', uri));
+    final headResponse = await client.send(Request(METHOD_HEAD, uri));
     await _expectSuccessResponse(headResponse);
     final etag = headResponse.headers[HttpHeaders.etagHeader];
     if (etag == null) {
@@ -126,13 +134,13 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   FileSourceIcon get displayIcon => FileSourceIcon.webDav;
 
   @override
-  String get displayName => 'WebDAV';
+  String get displayName => 'WebDAV'; // NON-NLS
 
   Uri _uriForEntity(WebDavClient client, CloudStorageEntity entity) {
     final uri = Uri.parse(client.credentials.baseUrl);
     if (entity != null) {
       if (entity.type == CloudStorageEntityType.directory) {
-        return uri.resolve(entity.id + '/');
+        return uri.resolve(entity.id + Nls.SLASH);
       }
       return uri.resolve(entity.id);
     }
@@ -142,8 +150,8 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   Future<SearchResponse> propFind(
       WebDavClient client, CloudStorageEntity parent) async {
     final parentUri = _uriForEntity(client, parent);
-    final request = Request('PROPFIND', parentUri);
-    request.headers['Depth'] = '1';
+    final request = Request(METHOD_PROPFIND, parentUri);
+    request.headers['Depth'] = '1'; // NON-NLS
     final body = _propfindRequest();
 //    _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
     request.body = body.toXmlString();
@@ -154,9 +162,10 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final bytes = await response.stream.toBytes();
     final doc = xml.XmlDocument.parse(utf8.decode(bytes));
 //    _logger.finer('Got propfind result: ${doc.toXmlString(pretty: true)}');
-    final entities = doc.findAllElements('response', namespace: 'DAV:');
+    final entities =
+        doc.findAllElements('response', namespace: 'DAV:'); // NON-NLS
     _logger.finer('entities: ${entities.length}');
-    final cloudStorageEntities = entities
+    final cloudStorageEntities = nonNls(entities
         .map((entity) {
           final hrefEls = entity.findAllElements('href', namespace: 'DAV:');
           final href = hrefEls.isEmpty ? null : hrefEls.first.text;
@@ -182,7 +191,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
           return cse;
         })
         .where((el) => el != null)
-        .toList();
+        .toList());
 
     return SearchResponse((b) => b
       ..results.addAll(cloudStorageEntities)
@@ -193,20 +202,20 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 
   CloudStorageEntity _toCloudStorageEntity(
       WebDavClient client, String href, CloudStorageEntityType type) {
-    href = href.replaceFirst(_removeTrailingSlash, '');
+    href = href.replaceFirst(_removeTrailingSlash, Nls.BLANK);
     final hrefUri = Uri.parse(href);
     _logger.fine(
         'Cloud entity to href: $href (pathSegments: ${hrefUri.pathSegments})');
     final basePath =
         path.joinAll(Uri.parse(client.credentials.baseUrl).pathSegments);
-    final pathSegments = hrefUri.pathSegments.where((val) => val != '');
+    final pathSegments = hrefUri.pathSegments.where((val) => val.isNotEmpty);
     return CloudStorageEntity(
       (b) => b
         ..id = href
         ..type = type
-        ..path = '/' +
+        ..path = Nls.SLASH +
             path.relative(path.joinAll(hrefUri.pathSegments), from: basePath)
-        ..name = pathSegments.isEmpty ? '/' : pathSegments.last,
+        ..name = pathSegments.isEmpty ? Nls.SLASH : pathSegments.last,
     );
   }
 
@@ -233,15 +242,16 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
       Uint8List bytes, Map<String, dynamic> previousMetadata) async {
     final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
-    final request = Request('PUT', uri);
+    final request = Request(METHOD_PUT, uri);
     if (previousMetadata == null) {
       _logger
           .severe('There was no previous metadata set?! Overwriting blindly.');
     } else {
       final metadata = WebDavFileMetadata.fromJson(previousMetadata);
       if (metadata.etag != null) {
+        // remove weak (W/) prefix from etag
         request.headers[HttpHeaders.ifMatchHeader] =
-            metadata.etag?.replaceFirst('W/', '');
+            metadata.etag?.replaceFirst('W/', ''); // NON-NLS
       } else {
         _logger.severe('No etag set for content. Overwriting blindly!');
       }

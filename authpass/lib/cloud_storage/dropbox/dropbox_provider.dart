@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:path/path.dart' as path;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('authpass.dropbox_provider');
 
@@ -26,8 +27,10 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   DropboxProvider({@required this.env, @required CloudStorageHelperBase helper})
       : super(helper: helper);
 
-  static const _oauthEndpoint = 'https://www.dropbox.com/oauth2/authorize';
-  static const _oauthToken = 'https://api.dropboxapi.com/oauth2/token';
+  static const _oauthEndpoint =
+      'https://www.dropbox.com/oauth2/authorize'; // NON-NLS
+  static const _oauthToken =
+      'https://api.dropboxapi.com/oauth2/token'; // NON-NLS
 
   Env env;
 
@@ -109,7 +112,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   bool get supportSearch => true;
 
   @override
-  Future<SearchResponse> search({String name = 'kdbx'}) async {
+  Future<SearchResponse> search({String name = Env.KeePassExtension}) async {
     final searchUri = Uri.parse('https://api.dropboxapi.com/2/files/search_v2');
     final client = await requireAuthenticatedClient();
     final response = await client.post(
@@ -117,7 +120,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       headers: {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
       },
-      body: json.encode(<String, String>{'query': name}),
+      body: json.encode(nonNls(<String, String>{'query': name})),
     );
     if (response.statusCode >= 300 || response.statusCode < 200) {
       _logger.severe('Error during call to dropbox endpoint. '
@@ -189,8 +192,8 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         Uri.parse('https://content.dropboxapi.com/2/files/download');
     final apiArg = json.encode(<String, String>{'path': '${file.id}'});
     _logger.finer('Downloading file with id ${file.id}');
-    final response =
-        await client.post(downloadUrl, headers: {'Dropbox-API-Arg': apiArg});
+    final response = await client.post(downloadUrl,
+        headers: nonNls({'Dropbox-API-Arg': apiArg}));
     _logger.finer(
         'downloaded file. status:${response.statusCode} byte length: ${response.bodyBytes.lengthInBytes} --- headers: ${response.headers}');
     if (response.statusCode ~/ 100 != 2) {
@@ -200,6 +203,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       if (contentType.subType == ContentType.json.subType) {
         final jsonBody = json.decode(response.body) as Map<String, dynamic>;
         if (jsonBody['error_summary'] != null) {
+          // NON-NLS
           throw LoadFileException(jsonBody['error_summary'].toString());
         }
         _logger.severe('got a json response?! ${response.body}');
@@ -237,10 +241,10 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         final fileMetadata = FileMetadata.fromJson(
             previousMetadata[_METADATA_KEY_DROPBOX_DATA]
                 as Map<String, dynamic>);
-        mode = <String, dynamic>{
+        mode = nonNls(<String, dynamic>{
           '.tag': 'update',
           'update': fileMetadata.rev,
-        };
+        });
         _logger.fine('Updating rev ${fileMetadata.rev}');
       }
     } else {
@@ -248,23 +252,25 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     }
     final uploadUrl =
         Uri.parse('https://content.dropboxapi.com/2/files/upload');
-    final apiArg = json.encode(<String, dynamic>{
+    final apiArg = json.encode(nonNls(<String, dynamic>{
       'path': path,
       'mode': mode,
       'autorename': false,
-    });
+    }));
     _logger.fine('sending apiArg: $apiArg');
     final client = await requireAuthenticatedClient();
     final response = await client.post(uploadUrl,
-        headers: {
+        headers: nonNls({
           HttpHeaders.contentTypeHeader: ContentType.binary.toString(),
           'Dropbox-API-Arg': apiArg,
-        },
+        }),
         body: bytes);
-    _logger.fine('Got rersponse ${response.statusCode}: ${response.body}');
+    _logger.fine('Got response ${response.statusCode}: ${response.body}');
     if (response.statusCode ~/ 100 != 2) {
+      @NonNls
       final info = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == HttpStatus.conflict) {
+        @NonNls
         final dynamic error = info['error'];
         if (error is Map<String, dynamic>) {
           if (error['conflict'] != null) {

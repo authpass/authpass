@@ -1306,7 +1306,7 @@ class _EntryFieldState extends State<EntryField>
           child: ListTile(
             leading: const Icon(Icons.cloud),
             title: Text(loc.fieldGenerateEmail),
-            subtitle: const Text(Env.AuthPassCLoud),
+            subtitle: const Text(Env.AuthPassCloud),
           )),
     ];
   }

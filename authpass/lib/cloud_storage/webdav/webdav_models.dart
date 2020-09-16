@@ -1,3 +1,4 @@
+import 'package:authpass/utils/format_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
@@ -19,10 +20,10 @@ class UserNamePasswordCredentials {
   final String password;
 
   static String _ensureEndsWithSlash(String baseUrl) {
-    if (baseUrl.endsWith('/')) {
+    if (baseUrl.endsWith(Nls.SLASH)) {
       return baseUrl;
     }
-    return '$baseUrl/';
+    return baseUrl + Nls.SLASH;
   }
 }
 

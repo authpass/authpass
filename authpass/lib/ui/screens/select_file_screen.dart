@@ -496,7 +496,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         continue;
       }
       _logger.finest('contains: ${dir.path}');
-      if (f.path.endsWith('kdbx')) {
+      if (f.path.endsWith(Env.KeePassExtension)) {
         // NON-NLS
         return true;
       }

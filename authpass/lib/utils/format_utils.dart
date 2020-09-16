@@ -34,7 +34,10 @@ class FormatUtils {
 /// (yes, that name should probably something be like `NonNlsConstants`
 /// but I'm lazy).
 class Nls {
+  static const String BLANK = ''; // NON-NLS
   static const String NL = '\n'; // NON-NLS
   static const String SP = ' '; // NON-NLS
   static const String COMMA_SPACE = ', '; // NON-NLS
+  static const String SLASH = '/'; // NON-NLS
+  static const String STAR = '*'; // NON-NLS
 }

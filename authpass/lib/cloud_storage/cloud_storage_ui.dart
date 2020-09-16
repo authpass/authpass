@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -185,7 +186,7 @@ class CloudStorageSearch extends StatefulWidget {
 
 class _CloudStorageSearchState extends State<CloudStorageSearch>
     with TaskStateMixin {
-  final _searchController = TextEditingController(text: 'kdbx');
+  final _searchController = TextEditingController(text: Env.KeePassExtension);
   SearchResponse _searchResponse;
 
   @override
