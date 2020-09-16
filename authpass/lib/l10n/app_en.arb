@@ -36,6 +36,10 @@
   "@french": {
     "description": "language switcher subtitle"
   },
+  "spanish": "Spanish",
+  "@spanish": {
+    "description": "language switcher subtitle"
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {

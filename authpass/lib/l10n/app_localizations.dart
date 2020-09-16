@@ -143,6 +143,9 @@ abstract class AppLocalizations {
   // language switcher subtitle
   String get french;
 
+  // language switcher subtitle
+  String get spanish;
+
   // No description provided in @selectKeepassFile
   String get selectKeepassFile;
 

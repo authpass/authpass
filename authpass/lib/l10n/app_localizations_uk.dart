@@ -43,6 +43,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get french => 'French';
 
   @override
+  String get spanish => 'Spanish';
+
+  @override
   String get selectKeepassFile => 'AuthPass - виберіть KeePass файл';
 
   @override
