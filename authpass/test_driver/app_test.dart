@@ -32,6 +32,7 @@ void main() {
             'Resuming isolate: ${isolateRef.numberAsString}:${isolateRef.name}');
         isolateRef.resume();
       });
+      await driver.waitUntilFirstFrameRasterized();
     });
 
     // Close the connection to the driver after the tests have completed.

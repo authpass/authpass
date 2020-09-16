@@ -92,6 +92,7 @@ class SelectFileScreen extends StatelessWidget {
               ),
               PopupMenuItem(
                   child: ListTile(
+                    key: const ValueKey('downloadFromUrl'),
                     leading: const FaIcon(FontAwesomeIcons.fileCode),
                     title: Text(loc.loadFromRemoteUrl),
                   ),
