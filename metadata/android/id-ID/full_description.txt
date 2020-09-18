@@ -1,16 +1,17 @@
-<p>Easily and securely keep track of all your Passwords!</p>
+<p> Lacak semua Sandi Anda dengan mudah dan aman! </p>
 
-<p>AuthPass is a stand alone password manager with support for the popular and proven Keepass (kdbx) format. 
-Store your passwords, share across all your devices and easily find them whenever you need to login.</p>
+<p> AuthPass adalah sebuah pengelola kata sandi tunggal dengan dukungan format Keepass (kdbx) yang terbukti dan populer
+Simpan sandi Anda, bagikan, dan temukan sandi anda dengan mudah kapan pun Anda perlu login. </p>
 
 <ul>
-<li>All your passwords in one place.<li>
-<li>Generate secure random passwords for each of your accounts.</li>
-<li>Quick Unlock secured with biometric lock (android only right now)</li>
-<li>Keep track of your accounts across the web.</li>
-<li>App available for Mac, iOS, Android, Linux and Windows.</li>
-<li>Open Source available on https://github.com/authpass/authpass/</li>
-<li>Contributions welcome and encouraged ;-) (Always looking for developers, translators, documentation writers, UI designer, etcc. :) ), just join our discord channel.</li>
+<li> Akses semua sandi Anda di satu tenpat. <li>
+<li> Buat sandi aman secara acak untuk setiap akun Anda. </li>
+<li> Buka Cepat dengan pengaman biometrik (saat ini hanya android) </li>
+<li> Lacak akun Anda di seluruh web. </li>
+<li> Aplikasi tersedia untuk Mac, iOS, Android, Linux dan Windows. </li>
+<li> "Open Source" tersedia di https://github.com/authpass/authpass/ </li>
+<li> Semua bentuk kontribusi didukung dan diterima ;-) (Sedang mencari pengembang, penerjemah, penulis dokumentasi, perancang antarmuka pengguna, dll. :)), bergabunglah dengan saluran discord kami. </li>
 </ul>
 
-<p>Join our discord channel at https://authpass.app/go/discord - In case of any Problems, Feedback, etc. or just to hang out.</p>
+<p>Bergabunglah dengan saluran Discord kami di
+https://authpass.app/go/discord Jika anda menemukan masalah, ingin memberi masukan, dll. atau hanya untuk sekedar nongkrong. </p>

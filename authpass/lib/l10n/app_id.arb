@@ -1,3 +1,474 @@
 {
-    "@@locale": "id"
+    "@@locale": "id",
+    "fieldUserName": "Nama Pengguna",
+    "@fieldUserName": {},
+    "fieldPassword": "Kata Sandi",
+    "@fieldPassword": {},
+    "fieldWebsite": "Situs Web",
+    "@fieldWebsite": {},
+    "fieldTitle": "Judul",
+    "@fieldTitle": {},
+    "fieldTotp": "Kata Sandi sekali pakai (Berbasis Waktu)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
+    "english": "Inggris",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "Jerman",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Rusia",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Ukraina",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Lituania",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Prancis",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Spanyol",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "selectKeepassFile": "AuthPass - Pilih file KeePass",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Buka cepat file",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
+    },
+    "selectKeepassFileLabel": "Silahkan pilih file KeePass (.kdbx).",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "createNewFile": "Pilih File Baru",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
+    },
+    "openLocalFile": "Buka\nFile Lokal",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "openFile": "Buka File",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFrom": "Muat dari {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Download dari URL",
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
+    "loadFromRemoteUrl": "Buka kdbx dari URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
+    "createNewKeepass": "Pengguna baru di KeePass?\nBuat Database Kata Sandi Baru",
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
+    "labelLastOpenFiles": "File terakhir dibuka:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Belum ada file yang dibuka.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Pilih Bahasa",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Bahasa",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Faktor Skala Teks",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Kepadatan Visual",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Tema",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Terang",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Gelap",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Bawaan Sistem",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Bawaan",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Kunci Semua file terbuka",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Izinkan Menangkap Layar di aplikasi ini",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Izinkan Isi Otomatis",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "Hanya didukung di Android Oreo (8.0) atau keatas.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Preferensi",
+    "@preferenceTitle": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Kami menerima semua jenis masukan!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Jangan lupa cek situs web kami",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "Dan proyek Open Source kami",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "File Log: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "menuItemGeneratePassword": "Penghasil Kata Sandi",
+    "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Preferensi",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Buka File lain",
+    "@menuItemOpenAnotherFile": {},
+    "menuItemCheckForUpdates": "Cek pembaruan",
+    "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Dukungan Email",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Mengirim log melalui email / minta bantuan",
+    "@menuItemSupportSubtitle": {},
+    "menuItemHelp": "Bantuan",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Tampilkan dokumentasi",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "Tentang",
+    "@menuItemAbout": {},
+    "passwordPlainText": "Ungkap Kata Sandi",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Kata Sandi",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Penghasil Kata Sandi",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Selesai",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "Gunakan sebagai bawaan",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Huruf Kecil (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Huruf besar (A-Z)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Numerik (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Umlauts (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Spesial (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Panjang",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Panjang Khusus",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Hanya digunakan untuk panjang > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural,one {Satu file Tersimpan: {files}}other {{numFiles} file tersimpan: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "Kelola Grup",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Kunci File",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Cari",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "clear": "Bersihkan",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Saring:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Pilih entri kata sandi untuk isi otomatis.",
+    "@autofillPrompt": {
+        "description": ""
+    },
+    "copiedToClipboard": "Disalin ke papan klip.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(tanpa judul)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(Tanpa nama pengguna)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Sesuaikan…",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Salin Kata Sandi",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Salin Nama Pengguna",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedPassword": "Kata Sandi disalin ke papan klip.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Kata nama pengguna ke papan klip.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "doneCopiedField": "Disalin.",
+    "@doneCopiedField": {
+        "description": ""
+    },
+    "emptyPasswordVaultPlaceholder": "Anda belum memiliki kata sandi di database anda.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Buat Kata Sandi pertama anda",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loadingFile": "Memuat file…",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "File internal",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Database yang dibuat sebelumnya menggunakan AuthPass",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Pemilih file",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Buka file dari perangkat.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Kredensial",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Masukkan kata sandi untuk:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Kata Sandi",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Mohon masukkan kata sandi anda.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Kata sandi salah",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Gunakan Kunci File",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Simpan kata sandi dengan kunci biometri tersimpan?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenTitle": "File telah terbuka",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "Database terpilih {databaseName} telah terbuka dari {openFileSource} (mencoba memuat dari{newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
+    "errorUnlockFileTitle": "Tidak dapat membuka file",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Kesalahan tidak diketahui saat mencoba membuka file. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Lanjutkan",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Kirimkan Laporan Kesalahan / Bantuan",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterDescription": "Pilih grup yang akan ditampilkan (rekursif)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Pilih semua",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Hapus semua",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Buat Subgrup",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Sunting",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Hapus",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Grup terhapus.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Batalkan",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Simpan",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "initialNewGroupName": "Grup baru",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Tidak dapat menghapus grup",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Grup ini masih berisi grup lain. Anda hanya dapat menghapus grup kosong.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Grup ini masih berisi entri kata sandi. Anda hanya dapat menghapus grup kosong.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Grup",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Saring berdasarkan grup",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlock": "Hapus Penyimpanan biometrik",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
+    "clearQuickUnlockSubtitle": "Hapus kata sandi utama yang tersimpan",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "unlock": "Buka file",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "tutup file kata sandi",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    }
 }

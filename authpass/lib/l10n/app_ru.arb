@@ -12,6 +12,10 @@
     "@fieldTotp": {
         "description": "Label for fields of TOTP (Time based one time passwords)"
     },
+    "english": "English",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - выберите KeePass файл",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
