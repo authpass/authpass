@@ -10,207 +10,207 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
-  String get fieldUserName => 'User';
+  String get fieldUserName => 'Nama Pengguna';
 
   @override
-  String get fieldPassword => 'Password';
+  String get fieldPassword => 'Kata Sandi';
 
   @override
-  String get fieldWebsite => 'Website';
+  String get fieldWebsite => 'Situs Web';
 
   @override
-  String get fieldTitle => 'Title';
+  String get fieldTitle => 'Judul';
 
   @override
-  String get fieldTotp => 'One Time Password (Time Based)';
+  String get fieldTotp => 'Kata Sandi sekali pakai (Berbasis Waktu)';
 
   @override
-  String get english => 'English';
+  String get english => 'Inggris';
 
   @override
-  String get german => 'German';
+  String get german => 'Jerman';
 
   @override
-  String get russian => 'Russian';
+  String get russian => 'Rusia';
 
   @override
-  String get ukrainian => 'Ukrainian';
+  String get ukrainian => 'Ukraina';
 
   @override
-  String get lithuanian => 'Lithuanian';
+  String get lithuanian => 'Lituania';
 
   @override
-  String get french => 'French';
+  String get french => 'Prancis';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => 'Spanyol';
 
   @override
   String get indonesian => 'Indonesian';
 
   @override
-  String get selectKeepassFile => 'AuthPass - Select KeePass File';
+  String get selectKeepassFile => 'AuthPass - Pilih file KeePass';
 
   @override
-  String get quickUnlockingFiles => 'Quick unlocking files';
+  String get quickUnlockingFiles => 'Buka cepat file';
 
   @override
-  String get selectKeepassFileLabel => 'Please select a KeePass (.kdbx) file.';
+  String get selectKeepassFileLabel => 'Silahkan pilih file KeePass (.kdbx).';
 
   @override
-  String get createNewFile => 'Create New File';
+  String get createNewFile => 'Pilih File Baru';
 
   @override
-  String get openLocalFile => 'Open\nLocal File';
+  String get openLocalFile => 'Buka\nFile Lokal';
 
   @override
-  String get openFile => 'Open File';
+  String get openFile => 'Buka File';
 
   @override
   String loadFrom(String cloudStorageName) {
-    return 'Load from ${cloudStorageName}';
+    return 'Muat dari ${cloudStorageName}';
   }
 
   @override
-  String get loadFromUrl => 'Download from URL';
+  String get loadFromUrl => 'Download dari URL';
 
   @override
-  String get loadFromRemoteUrl => 'Open kdbx from URL';
+  String get loadFromRemoteUrl => 'Buka kdbx dari URL';
 
   @override
-  String get createNewKeepass => 'New to KeePass?\nCreate New Password Database';
+  String get createNewKeepass => 'Pengguna baru di KeePass?\nBuat Database Kata Sandi Baru';
 
   @override
-  String get labelLastOpenFiles => 'Last opened files:';
+  String get labelLastOpenFiles => 'File terakhir dibuka:';
 
   @override
-  String get noFilesHaveBeenOpenYet => 'No files have been opened yet.';
+  String get noFilesHaveBeenOpenYet => 'Belum ada file yang dibuka.';
 
   @override
-  String get preferenceSelectLanguage => 'Select Language';
+  String get preferenceSelectLanguage => 'Pilih Bahasa';
 
   @override
-  String get preferenceLanguage => 'Language';
+  String get preferenceLanguage => 'Bahasa';
 
   @override
-  String get preferenceTextScaleFactor => 'Text Scale Factor';
+  String get preferenceTextScaleFactor => 'Faktor Skala Teks';
 
   @override
-  String get preferenceVisualDensity => 'Visual Density';
+  String get preferenceVisualDensity => 'Kepadatan Visual';
 
   @override
-  String get preferenceTheme => 'Theme';
+  String get preferenceTheme => 'Tema';
 
   @override
-  String get preferenceThemeLight => 'Light';
+  String get preferenceThemeLight => 'Terang';
 
   @override
-  String get preferenceThemeDark => 'Dark';
+  String get preferenceThemeDark => 'Gelap';
 
   @override
-  String get preferenceSystemDefault => 'System Default';
+  String get preferenceSystemDefault => 'Bawaan Sistem';
 
   @override
-  String get preferenceDefault => 'Default';
+  String get preferenceDefault => 'Bawaan';
 
   @override
-  String get lockAllFiles => 'Lock all open files';
+  String get lockAllFiles => 'Kunci Semua file terbuka';
 
   @override
-  String get preferenceAllowScreenshots => 'Allow Screenshots of the App';
+  String get preferenceAllowScreenshots => 'Izinkan Menangkap Layar di aplikasi ini';
 
   @override
-  String get preferenceEnableAutoFill => 'Enable autofill';
+  String get preferenceEnableAutoFill => 'Izinkan Isi Otomatis';
 
   @override
-  String get preferenceAutoFillDescription => 'Only supported on Android Oreo (8.0) or later.';
+  String get preferenceAutoFillDescription => 'Hanya didukung di Android Oreo (8.0) atau keatas.';
 
   @override
-  String get preferenceTitle => 'Preferences';
+  String get preferenceTitle => 'Preferensi';
 
   @override
   String get aboutAppName => 'AuthPass';
 
   @override
-  String get aboutLinkFeedback => 'We welcome any kind of feedback!';
+  String get aboutLinkFeedback => 'Kami menerima semua jenis masukan!';
 
   @override
-  String get aboutLinkVisitWebsite => 'Also make sure to visit our website';
+  String get aboutLinkVisitWebsite => 'Jangan lupa cek situs web kami';
 
   @override
-  String get aboutLinkGitHub => 'And Open Source Project';
+  String get aboutLinkGitHub => 'Dan proyek Open Source kami';
 
   @override
   String aboutLogFile(String logFilePath) {
-    return 'Log File: ${logFilePath}';
+    return 'File Log: ${logFilePath}';
   }
 
   @override
-  String get menuItemGeneratePassword => 'Generate Password';
+  String get menuItemGeneratePassword => 'Penghasil Kata Sandi';
 
   @override
-  String get menuItemPreferences => 'Preferences';
+  String get menuItemPreferences => 'Preferensi';
 
   @override
-  String get menuItemOpenAnotherFile => 'Open another File';
+  String get menuItemOpenAnotherFile => 'Buka File lain';
 
   @override
-  String get menuItemCheckForUpdates => 'Check for updates';
+  String get menuItemCheckForUpdates => 'Cek pembaruan';
 
   @override
-  String get menuItemSupport => 'Email Support';
+  String get menuItemSupport => 'Dukungan Email';
 
   @override
-  String get menuItemSupportSubtitle => 'Send logs by email/ask for help.';
+  String get menuItemSupportSubtitle => 'Mengirim log melalui email / minta bantuan';
 
   @override
-  String get menuItemHelp => 'Help';
+  String get menuItemHelp => 'Bantuan';
 
   @override
-  String get menuItemHelpSubtitle => 'Show documentation';
+  String get menuItemHelpSubtitle => 'Tampilkan dokumentasi';
 
   @override
-  String get menuItemAbout => 'About';
+  String get menuItemAbout => 'Tentang';
 
   @override
-  String get passwordPlainText => 'Reveal password';
+  String get passwordPlainText => 'Ungkap Kata Sandi';
 
   @override
-  String get generatorPassword => 'Password';
+  String get generatorPassword => 'Kata Sandi';
 
   @override
-  String get generatePassword => 'Generate Password';
+  String get generatePassword => 'Penghasil Kata Sandi';
 
   @override
-  String get doneButtonLabel => 'Done';
+  String get doneButtonLabel => 'Selesai';
 
   @override
-  String get useAsDefault => 'Use as Default';
+  String get useAsDefault => 'Gunakan sebagai bawaan';
 
   @override
-  String get characterSetLowerCase => 'Lowercase (a-z)';
+  String get characterSetLowerCase => 'Huruf Kecil (a-z)';
 
   @override
-  String get characterSetUpperCase => 'Uppercase (A-Z)';
+  String get characterSetUpperCase => 'Huruf besar (A-Z)';
 
   @override
-  String get characterSetNumeric => 'Numeric (0-9)';
+  String get characterSetNumeric => 'Numerik (0-9)';
 
   @override
   String get characterSetUmlauts => 'Umlauts (ä)';
 
   @override
-  String get characterSetSpecial => 'Special (@%+)';
+  String get characterSetSpecial => 'Spesial (@%+)';
 
   @override
-  String get length => 'Length';
+  String get length => 'Panjang';
 
   @override
-  String get customLength => 'Custom Length';
+  String get customLength => 'Panjang Khusus';
 
   @override
   String customLengthHelperText(Object customMinLength) {
-    return 'Only used for length > ${customMinLength}';
+    return 'Hanya digunakan untuk panjang > ${customMinLength}';
   }
 
   @override
@@ -224,175 +224,175 @@ class AppLocalizationsId extends AppLocalizations {
     return intl.Intl.pluralLogic(
       numFiles,
       locale: localeName,
-      other: '${numFiles} files saved: ${files}',
+      other: '${numFiles} file tersimpan: ${files}',
     );
   }
 
   @override
-  String get manageGroups => 'Manage Groups';
+  String get manageGroups => 'Kelola Grup';
 
   @override
-  String get lockFiles => 'Lock Files';
+  String get lockFiles => 'Kunci File';
 
   @override
-  String get searchHint => 'Search';
+  String get searchHint => 'Cari';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Bersihkan';
 
   @override
-  String get autofillFilterPrefix => 'Filter:';
+  String get autofillFilterPrefix => 'Saring:';
 
   @override
-  String get autofillPrompt => 'Select password entry for autofill.';
+  String get autofillPrompt => 'Pilih entri kata sandi untuk isi otomatis.';
 
   @override
-  String get copiedToClipboard => 'Copied to clipboard.';
+  String get copiedToClipboard => 'Disalin ke papan klip.';
 
   @override
-  String get noTitle => '(no title)';
+  String get noTitle => '(tanpa judul)';
 
   @override
-  String get noUsername => '(no username)';
+  String get noUsername => '(Tanpa nama pengguna)';
 
   @override
-  String get filterCustomize => 'Customize …';
+  String get filterCustomize => 'Sesuaikan…';
 
   @override
-  String get swipeCopyPassword => 'Copy Password';
+  String get swipeCopyPassword => 'Salin Kata Sandi';
 
   @override
-  String get swipeCopyUsername => 'Copy Username';
+  String get swipeCopyUsername => 'Salin Nama Pengguna';
 
   @override
-  String get doneCopiedPassword => 'Copied password to clipboard.';
+  String get doneCopiedPassword => 'Kata Sandi disalin ke papan klip.';
 
   @override
-  String get doneCopiedUsername => 'Copied username to clipboard.';
+  String get doneCopiedUsername => 'Kata nama pengguna ke papan klip.';
 
   @override
-  String get doneCopiedField => 'Copied.';
+  String get doneCopiedField => 'Disalin.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'You do not have any password in your database yet.';
+  String get emptyPasswordVaultPlaceholder => 'Anda belum memiliki kata sandi di database anda.';
 
   @override
-  String get emptyPasswordVaultButtonLabel => 'Create your first Password';
+  String get emptyPasswordVaultButtonLabel => 'Buat Kata Sandi pertama anda';
 
   @override
-  String get loadingFile => 'Loading file …';
+  String get loadingFile => 'Memuat file…';
 
   @override
-  String get internalFile => 'Internal file';
+  String get internalFile => 'File internal';
 
   @override
-  String get internalFileSubtitle => 'Database previously created with AuthPass';
+  String get internalFileSubtitle => 'Database yang dibuat sebelumnya menggunakan AuthPass';
 
   @override
-  String get filePicker => 'File Picker';
+  String get filePicker => 'Pemilih file';
 
   @override
-  String get filePickerSubtitle => 'Open file from the device.';
+  String get filePickerSubtitle => 'Buka file dari perangkat.';
 
   @override
-  String get credentialsAppBarTitle => 'Credentials';
+  String get credentialsAppBarTitle => 'Kredensial';
 
   @override
-  String get credentialLabel => 'Enter the password for:';
+  String get credentialLabel => 'Masukkan kata sandi untuk:';
 
   @override
-  String get masterPasswordInputLabel => 'Password';
+  String get masterPasswordInputLabel => 'Kata Sandi';
 
   @override
-  String get masterPasswordEmptyValidator => 'Please enter your password.';
+  String get masterPasswordEmptyValidator => 'Mohon masukkan kata sandi anda.';
 
   @override
-  String get masterPasswordIncorrectValidator => 'Invalid password';
+  String get masterPasswordIncorrectValidator => 'Kata sandi salah';
 
   @override
-  String get useKeyFile => 'Use Key File';
+  String get useKeyFile => 'Gunakan Kunci File';
 
   @override
-  String get saveMasterPasswordBiometric => 'Save Password with biometric key store?';
+  String get saveMasterPasswordBiometric => 'Simpan kata sandi dengan kunci biometri tersimpan?';
 
   @override
-  String get errorOpenFileAlreadyOpenTitle => 'File already open';
+  String get errorOpenFileAlreadyOpenTitle => 'File telah terbuka';
 
   @override
   String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
-    return 'The selected database ${databaseName} is already open from ${openFileSource} (Tried to open from ${newFileSource})';
+    return 'Database terpilih ${databaseName} telah terbuka dari ${openFileSource} (mencoba memuat dari${newFileSource})';
   }
 
   @override
-  String get errorUnlockFileTitle => 'Unable to open File';
+  String get errorUnlockFileTitle => 'Tidak dapat membuka file';
 
   @override
   String errorUnlockFileBody(Object error) {
-    return 'Unknown error while trying to open file. ${error}';
+    return 'Kesalahan tidak diketahui saat mencoba membuka file. ${error}';
   }
 
   @override
-  String get dialogContinue => 'Continue';
+  String get dialogContinue => 'Lanjutkan';
 
   @override
-  String get dialogSendErrorReport => 'Send Error Report/Help';
+  String get dialogSendErrorReport => 'Kirimkan Laporan Kesalahan / Bantuan';
 
   @override
-  String get groupFilterDescription => 'Select which Groups to show (recursively)';
+  String get groupFilterDescription => 'Pilih grup yang akan ditampilkan (rekursif)';
 
   @override
-  String get groupFilterSelectAll => 'Select all';
+  String get groupFilterSelectAll => 'Pilih semua';
 
   @override
-  String get groupFilterDeselectAll => 'Deselect all';
+  String get groupFilterDeselectAll => 'Hapus semua';
 
   @override
-  String get createSubgroup => 'Create Subgroup';
+  String get createSubgroup => 'Buat Subgrup';
 
   @override
-  String get editAction => 'Edit';
+  String get editAction => 'Sunting';
 
   @override
-  String get deleteAction => 'Delete';
+  String get deleteAction => 'Hapus';
 
   @override
-  String get successfullyDeletedGroup => 'Deleted group.';
+  String get successfullyDeletedGroup => 'Grup terhapus.';
 
   @override
-  String get undoButtonLabel => 'Undo';
+  String get undoButtonLabel => 'Batalkan';
 
   @override
-  String get saveButtonLabel => 'Save';
+  String get saveButtonLabel => 'Simpan';
 
   @override
-  String get initialNewGroupName => 'New Group';
+  String get initialNewGroupName => 'Grup baru';
 
   @override
-  String get deleteGroupErrorTitle => 'Unable to delete group';
+  String get deleteGroupErrorTitle => 'Tidak dapat menghapus grup';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsGroup => 'Grup ini masih berisi grup lain. Anda hanya dapat menghapus grup kosong.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsEntries => 'Grup ini masih berisi entri kata sandi. Anda hanya dapat menghapus grup kosong.';
 
   @override
-  String get groupListAppBarTitle => 'Groups';
+  String get groupListAppBarTitle => 'Grup';
 
   @override
-  String get groupListFilterAppbarTitle => 'Filter by groups';
+  String get groupListFilterAppbarTitle => 'Saring berdasarkan grup';
 
   @override
-  String get clearQuickUnlock => 'Clear Biometric Storage';
+  String get clearQuickUnlock => 'Hapus Penyimpanan biometrik';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Remove saved master passwords';
+  String get clearQuickUnlockSubtitle => 'Hapus kata sandi utama yang tersimpan';
 
   @override
-  String get unlock => 'Unlock Files';
+  String get unlock => 'Buka file';
 
   @override
-  String get closePasswordFiles => 'close password files';
+  String get closePasswordFiles => 'tutup file kata sandi';
 
   @override
   String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
