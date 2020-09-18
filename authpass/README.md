@@ -43,13 +43,14 @@ One day I have to automate this...
     ```
   * update `public_html/authpass-data/data/fdroid-version.txt`
 * Create GitHub Release
-  * Upload:
+  * Create draft with v1.7.7
+  * Run `_tools/release/github-release.sh` - this will upload:
     * AuthPass-setup-1.7.7_1519.exe
     * authpass-sideload-1519.apk
     * AuthPass.app-1.7.7-b1519.zip
     * authpass-linux-1.7.7_1519.tar.gz
 * Upload Artifacts to [fosshub.com](https://devzone.fosshub.com/dashboard/projects)
-  * run `_tools/fosshub-releaes.sh`
+  * run `_tools/release/fosshub-releaes.sh`
 * Submit release to
   * https://play.google.com/apps/publish
   * https://appstoreconnect.apple.com/apps

@@ -1,0 +1,34 @@
+Easily and securely keep track of all your Passwords!
+
+AuthPass is a stand alone password manager with support for the popular and proven KeePass (kdbx 3.x AND kdbx 4.x) format. Store your passwords, share across all your devices and easily find them whenever you need to login.
+
+* All your passwords in one place.
+* Generate secure random passwords for each of your accounts.
+* Quick Unlock secured with biometric lock.
+* Keep track of your accounts across the web.
+* App available for Mac, iPhone, iPad, Android Phones and Tablets, Linux and Windows.
+* Open multiple password files at the same time (e.g. one for work, one for personal - or even share your password files with coworkers)
+* Open Source available on https://github.com/authpass/authpass/
+* Autofill your passwords (Android 9+, Support in browser only since Android 10+)
+* Dark Theme
+
+
+=== UNDER YOUR CONTROL ===
+AuthPass stores all your passwords in the open Keepass format, exactly where you want it. It does not send your passwords to our servers. But AuthPass supports saving to:
+
+* Any local content provider from Android
+* Native Google Drive Integration
+* Native Dropbox Integation
+* Native WebDAV support to store in your own NextCloud or OwnCloud (or similar)
+* Native Microsoft OneDrive integration
+
+=== FULL FEATURED, NO ADS, NO SUBSCRIPTION ===
+As an open source project there are no artificial feature restrictions, no ads and no requirement for payments.
+
+*Contributions welcome and encouraged* ;-) (Always looking for developers, translators, documentation writers, UI designer, etc. :) ), just join our discord channel: https://authpass.app/go/discord
+
+=== UNDER ACTIVE DEVELOPMENT ===
+This is an open source project which is still under heavy development, adding features. We would love your feedback via email or on the issue tracker at https://github.com/authpass/authpass/issues/
+
+Also join the community on our discord channel at https://authpass.app/go/discord
+
