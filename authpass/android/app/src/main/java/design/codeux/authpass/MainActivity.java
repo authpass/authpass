@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,12 +12,9 @@ import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.android.SplashScreen;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterFragmentActivity {
     private static final String CHANNEL = "app.authpass/misc";
-    private static final String TAG = "MainActivity";
-
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
     @Override
@@ -35,10 +33,8 @@ public class MainActivity extends FlutterFragmentActivity {
     }
 
     @Override
-    public void configureFlutterEngine(FlutterEngine flutterEngine) {
+    public void configureFlutterEngine(@NotNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
-//        GeneratedPluginRegistrant.registerWith(flutterEngine);
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler((call, result) -> {
             if ("isFirebaseTestLab".equals(call.method)) {
                 result.success("true".equals(Settings.System.getString(getContentResolver(), "firebase.test.lab")));
