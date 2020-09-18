@@ -55,8 +55,11 @@ One day I have to automate this...
   * https://play.google.com/apps/publish
   * https://appstoreconnect.apple.com/apps
   * [Samsung Apps](https://seller.samsungapps.com/main/sellerMain.as#)
+    * https://galaxy.store/authpass
   * [Huawei App Gallery](https://developer.huawei.com/consumer/en/service/josp/agc/index.html)
+    * https://appgallery.huawei.com/#/app/C101955193
   * [Amazon Appstore](https://developer.amazon.com/apps-and-games/console/apps/list.html)
+    * https://www.amazon.com/CodeUX-design-AuthPass-Password-Manageer/dp/B088X48S61
   * Linux PPA - use [authpass/authpass-deb](https://github.com/authpass/authpass-deb)
     ```shell
     docker-compose run bionic ./update.sh focal
