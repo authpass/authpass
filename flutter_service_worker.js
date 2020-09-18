@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "main.dart.js": "b15dbaa0d13e7c20d37d3e8f1481766d",
+  "main.dart.js": "0545d6b49f347b2d758b28af83bd0937",
 "assets/NOTICES": "3baa36847ca69273bb0e685f3a2ad86f",
 "assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "2aa350bd2aeab88b601a593f793734c0",
@@ -27,8 +27,8 @@ const RESOURCES = {
 "assets/assets/images/safe-filled-v2.webp": "b363d92ca6a9fb930a1b0085918dfe6b",
 "assets/AssetManifest.json": "88f6beeb8b499b276e680e9db8bd4172",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"index.html": "6510f3e9d200d49a49c1856ff400b78b",
-"/": "6510f3e9d200d49a49c1856ff400b78b",
+"index.html": "ae5aa96813794fb1b19292882147162a",
+"/": "ae5aa96813794fb1b19292882147162a",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
