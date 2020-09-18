@@ -46,6 +46,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get spanish => 'Spanish';
 
   @override
+  String get indonesian => 'Indonesian';
+
+  @override
   String get selectKeepassFile => '„AuthPass“ - Pasirinkti „KeePass“ failą';
 
   @override

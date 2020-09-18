@@ -46,6 +46,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get spanish => 'Spanish';
 
   @override
+  String get indonesian => 'Indonesian';
+
+  @override
   String get selectKeepassFile => 'AuthPass - Select KeePass File';
 
   @override

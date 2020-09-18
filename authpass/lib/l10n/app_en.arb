@@ -40,6 +40,10 @@
   "@spanish": {
     "description": "language switcher subtitle"
   },
+  "indonesian": "Indonesian",
+  "@indonesian": {
+    "description": "language switcher subtitle"
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {

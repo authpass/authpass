@@ -13,6 +13,7 @@ import 'app_localizations_es.dart';
 import 'app_localizations_et.dart';
 import 'app_localizations_fi.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_id.dart';
 import 'app_localizations_lt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_uk.dart';
@@ -105,6 +106,7 @@ abstract class AppLocalizations {
     Locale('et'),
     Locale('fi'),
     Locale('fr'),
+    Locale('id'),
     Locale('lt'),
     Locale('ru'),
     Locale('uk')
@@ -145,6 +147,9 @@ abstract class AppLocalizations {
 
   // language switcher subtitle
   String get spanish;
+
+  // language switcher subtitle
+  String get indonesian;
 
   // No description provided in @selectKeepassFile
   String get selectKeepassFile;
@@ -609,7 +614,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'et', 'fi', 'fr', 'lt', 'ru', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'et', 'fi', 'fr', 'id', 'lt', 'ru', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -627,6 +632,7 @@ AppLocalizations _lookupAppLocalizations(Locale locale) {
     case 'et': return AppLocalizationsEt();
     case 'fi': return AppLocalizationsFi();
     case 'fr': return AppLocalizationsFr();
+    case 'id': return AppLocalizationsId();
     case 'lt': return AppLocalizationsLt();
     case 'ru': return AppLocalizationsRu();
     case 'uk': return AppLocalizationsUk();

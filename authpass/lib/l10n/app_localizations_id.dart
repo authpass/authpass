@@ -5,9 +5,9 @@ import 'app_localizations.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-/// The translations for Estonian (`et`).
-class AppLocalizationsEt extends AppLocalizations {
-  AppLocalizationsEt([String locale = 'et']) : super(locale);
+/// The translations for Indonesian (`id`).
+class AppLocalizationsId extends AppLocalizations {
+  AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
   String get fieldUserName => 'User';
