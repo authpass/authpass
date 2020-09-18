@@ -3,8 +3,6 @@ append_commit_message: false
 files:
   - source: /metadata/android/en-US/*.txt
     translation: /metadata/android/%locale%/%original_file_name%
-  - source: /metadata/android/en-US/**/*.png
-    translation: /metadata/android/%locale%/%original_file_name%
   - source: /authpass/lib/l10n/app_en.arb
     translation: /authpass/lib/l10n/app_%two_letters_code%.arb
   - source: /authpass/android/fastlane/metadata/android/en-US/*.strings
