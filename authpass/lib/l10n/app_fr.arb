@@ -8,7 +8,7 @@
     "@fieldWebsite": {},
     "fieldTitle": "Titre",
     "@fieldTitle": {},
-    "fieldTotp": "Mot de passe à usage unique (base de temps)",
+    "fieldTotp": "Mot de passe à usage unique (basé sur le temps)",
     "@fieldTotp": {
         "description": "Label for fields of TOTP (Time based one time passwords)"
     },
@@ -36,6 +36,10 @@
     "@french": {
         "description": "language switcher subtitle"
     },
+    "spanish": "Espagnol",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Sélectionnez un fichier KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -47,6 +51,10 @@
     "selectKeepassFileLabel": "Veuillez sélectionner un fichier KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
+    },
+    "createNewFile": "Créer un nouveau fichier",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
     },
     "openLocalFile": "Ouvrir un fichier local",
     "@openLocalFile": {
@@ -65,10 +73,18 @@
             }
         }
     },
-    "loadFromUrl": "Télécharger depuis une adresse Web",
-    "@loadFromUrl": {},
+    "loadFromUrl": "Télécharger depuis une adresse URL",
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
+    "loadFromRemoteUrl": "Ouvrir kdbx à partir d'une adresse URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
     "createNewKeepass": "Nouveau sur KeePass?\nCréez une nouvelle base de données de mots de passe",
-    "@createNewKeepass": {},
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
     "labelLastOpenFiles": "Derniers fichiers ouverts :",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "Aucun fichier n'a été ouvert pour le moment.",
@@ -77,9 +93,9 @@
     "@preferenceSelectLanguage": {},
     "preferenceLanguage": "Langue",
     "@preferenceLanguage": {},
-    "preferenceTextScaleFactor": "Facteur d'échelle du texte",
+    "preferenceTextScaleFactor": "Taille du texte",
     "@preferenceTextScaleFactor": {},
-    "preferenceVisualDensity": "Densité visuelle",
+    "preferenceVisualDensity": "Espacement",
     "@preferenceVisualDensity": {},
     "preferenceTheme": "Thème",
     "@preferenceTheme": {},
@@ -93,7 +109,7 @@
     "@preferenceDefault": {},
     "lockAllFiles": "Verrouiller tous les fichiers ouverts",
     "@lockAllFiles": {},
-    "preferenceAllowScreenshots": "Autoriser les captures d'écran de l'appli",
+    "preferenceAllowScreenshots": "Autoriser les captures d'écran de l'application",
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Activer la saisie automatique",
     "@preferenceEnableAutoFill": {},
@@ -107,7 +123,7 @@
     "@aboutLinkFeedback": {},
     "aboutLinkVisitWebsite": "N'oubliez pas de visiter notre site Web",
     "@aboutLinkVisitWebsite": {},
-    "aboutLinkGitHub": "Et le projet Open Source",
+    "aboutLinkGitHub": "Et également le projet Open Source",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "Fichier Log : {logFilePath}",
     "@aboutLogFile": {
@@ -294,7 +310,7 @@
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
     },
-    "filePicker": "Sélecteur de fichier",
+    "filePicker": "Gestionnaire de fichiers",
     "@filePicker": {
         "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
@@ -334,7 +350,7 @@
         "description": "label for a key file in combination with mater password",
         "context": "credential screen"
     },
-    "saveMasterPasswordBiometric": "Enregistrer le mot de passe dans les clés biométriques ?",
+    "saveMasterPasswordBiometric": "Enregistrer le mot de passe dans les données biométriques ?",
     "@saveMasterPasswordBiometric": {
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
@@ -373,7 +389,7 @@
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
     },
-    "dialogSendErrorReport": "Envoyer un rapport d'erreur/aide",
+    "dialogSendErrorReport": "Envoyer un rapport d'erreur/Aide",
     "@dialogSendErrorReport": {
         "description": "action button in error dialogs to send email to support with log file.",
         "context": "error dialog"
@@ -443,7 +459,7 @@
     "@clearQuickUnlock": {
         "description": ""
     },
-    "clearQuickUnlockSubtitle": "Effacer le mot de passe maître",
+    "clearQuickUnlockSubtitle": "Supprimer les mots de passe principaux enregistrés",
     "@clearQuickUnlockSubtitle": {
         "description": ""
     },
@@ -451,23 +467,23 @@
     "@unlock": {
         "description": ""
     },
-    "closePasswordFiles": "fermer les fichiers contenant les mot de passe",
+    "closePasswordFiles": "fermer les fichiers contenant les mots de passe",
     "@closePasswordFiles": {
         "description": "delete quick unlock (passwords stored in biometric storage)"
     },
-    "clearQuickUnlockSuccess": "Effacer les mots de passe maître sauvegardés dans l’espace de stockage des données biométriques.",
+    "clearQuickUnlockSuccess": "Supprimer les mots de passe maître sauvegardés dans l’espace de stockage des données biométriques.",
     "@clearQuickUnlockSuccess": {
         "description": ""
     },
-    "diacOptIn": "Inscrivez-vous pour des actualités et des sondages.",
+    "diacOptIn": "Inscrivez-vous pour les actualités et sondages concernant l'application.",
     "@diacOptIn": {},
     "diacOptInSubtitle": "Envoie occasionnellement une requête réseau pour récupérer les actualités.",
     "@diacOptInSubtitle": {},
-    "enableAutofillDebug": "Remplissage automatique: Activer le débuggage",
+    "enableAutofillDebug": "Remplissage automatique : Activer le débogage",
     "@enableAutofillDebug": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
-    "enableAutofillDebugSubtitle": "Affiche des information supplémentaires pour chaque champ de saisie",
+    "enableAutofillDebugSubtitle": "Affiche des informations supplémentaires pour chaque champ de saisie",
     "@enableAutofillDebugSubtitle": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
@@ -485,7 +501,11 @@
     },
     "masterPasswordHelpText": "Sélectionnez un mot de passe principal sécurisé. Assurez-vous de vous en souvenir.",
     "@masterPasswordHelpText": {
-        "description": "help text for master password when creating new password database"
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Mot de passe principal",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
     },
     "masterPasswordMissingCreate": "S’il vous plait entrer un mot de passe sécurisé, que vous pouvez retenir.",
     "@masterPasswordMissingCreate": {
@@ -570,7 +590,7 @@
     "@entryAddAttachment": {
         "description": ""
     },
-    "entryAttachmentSizeWarning": "Les fichiers joints seront intégrés au fichier de mots de passe. Cela peut augmenter considérablement le temps nécessaire pour ouvrir/enregistrer les mots de passe.",
+    "entryAttachmentSizeWarning": "Les fichiers joints seront intégrés au fichier de mots de passe. Cela peut considérablement augmenter le temps nécessaire pour ouvrir/enregistrer les mots de passe.",
     "@entryAttachmentSizeWarning": {
         "description": ""
     },
@@ -610,7 +630,7 @@
     "@fieldUnprotect": {
         "description": ""
     },
-    "fieldPresent": "Présent",
+    "fieldPresent": "Afficher",
     "@fieldPresent": {
         "description": ""
     },
@@ -638,7 +658,7 @@
     "@onboardingYesOpenPasswords": {
         "description": ""
     },
-    "onboardingNoCreate": "Non, ceci est nouveau pour moi !",
+    "onboardingNoCreate": "Je suis tout nouveau ! Commençons ensemble.",
     "@onboardingNoCreate": {
         "description": ""
     },

@@ -13,12 +13,12 @@ AuthPass is a stand alone password manager with support for the popular and prov
 🔦 Dark Theme 😎️
 
 
-<strong>=== UNDER YOUR CONTRL ===</strong>
+<strong>=== UNDER YOUR CONTROL ===</strong>
 AuthPass stores all your passwords in the open Keepass format, exactly where you want it. It does not send your passwords to our servers. But AuthPass supports saving to:
 
 ✅️ Any local content provider from Android
 ✅️ Native Google Drive Integration
-✅️ Native Dropbox Integation
+✅️ Native Dropbox Integration
 ✅️ Native WebDAV support to store in your own NextCloud or OwnCloud (or similar)
 ✅️ Native Microsoft OneDrive integration
 

@@ -36,6 +36,10 @@
     "@french": {
         "description": "language switcher subtitle"
     },
+    "spanish": "Español",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -47,6 +51,10 @@
     "selectKeepassFileLabel": "Por favor seleccione un archivo KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
+    },
+    "createNewFile": "Crear nuevo archivo",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
     },
     "openLocalFile": "Abrir archivo local",
     "@openLocalFile": {
@@ -66,9 +74,17 @@
         }
     },
     "loadFromUrl": "Descargar desde URL",
-    "@loadFromUrl": {},
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
+    "loadFromRemoteUrl": "Abrir kdbx desde URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
     "createNewKeepass": "¿Nuevo en KeePass?\nCrear nueva base de datos de contraseñas",
-    "@createNewKeepass": {},
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
     "labelLastOpenFiles": "Últimos archivos abiertos:",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "Aún no se han abierto archivos.",
@@ -232,6 +248,10 @@
     "@autofillFilterPrefix": {
         "description": "Label displayed for android auto fill"
     },
+    "autofillPrompt": "Seleccione campo de contraseña para autollenado.",
+    "@autofillPrompt": {
+        "description": ""
+    },
     "copiedToClipboard": "Copiado al portapapeles.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
@@ -284,5 +304,183 @@
     "@internalFile": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Base de datos previamente creada con AuthPass",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Selector de archivos",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Abrir archivo desde el dispositivo.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Credenciales",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Introduzca la contraseña para:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Contraseña",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Por favor, introduzca su contraseña.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Contraseña inválida",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Usar archivo clave",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "¿Guardar contraseña con clave biométrica?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenTitle": "Archivo ya abierto",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "La base de datos seleccionada {databaseName} ya está abierta desde {openFileSource} (Se intentó abrir desde {newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
+    "errorUnlockFileTitle": "No se puede abrir el archivo",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Error desconocido al intentar abrir el archivo. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Continuar",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Enviar informe de errores/Ayuda",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterDescription": "Seleccione qué grupos mostrar (recursivamente)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Seleccionar todo",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Deseleccionar todo",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Crear subgrupo",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Editar",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Eliminar",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Grupo eliminado.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Deshacer",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Guardar",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "initialNewGroupName": "Nuevo grupo",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "No se puede eliminar el grupo",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "groupListAppBarTitle": "Grupos",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Filtrar por grupos",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlock": "Borrar almacenamiento biométrico",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
+    "unlock": "Desbloquear archivos",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "cerrar archivos de contraseñas",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "databaseExistsError": "El archivo ya existe",
+    "@databaseExistsError": {
+        "description": "dialog title for error message when creating a new database with a name which already exists."
+    },
+    "entryAddField": "Añadir campo",
+    "@entryAddField": {
+        "description": ""
+    },
+    "swipeCopyField": "Copiar campo",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "Renombrar",
+    "@fieldRename": {
+        "description": ""
+    },
+    "onboardingHeadline": "¡Hagamos que tus contraseñas sean seguras!",
+    "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Sí, abrir mis contraseñas",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
     }
 }

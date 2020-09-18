@@ -42,9 +42,13 @@
         }
     },
     "loadFromUrl": "Atsisiųsti iš URL",
-    "@loadFromUrl": {},
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
     "createNewKeepass": "Esate naujas „KeePass“ programoje?\nSukurti naują slaptažodžių duomenų bazę",
-    "@createNewKeepass": {},
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
     "labelLastOpenFiles": "Paskiausiai atidaryti failai:",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "Jokie failai dar nebuvo atidaryti.",

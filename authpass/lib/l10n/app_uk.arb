@@ -42,9 +42,13 @@
         }
     },
     "loadFromUrl": "Завантажити з URL",
-    "@loadFromUrl": {},
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
     "createNewKeepass": "Вперше у KeePass?\nСтворити нову базу паролів",
-    "@createNewKeepass": {},
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
     "labelLastOpenFiles": "Останні відкриті файли:",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "Не було відкрито жодного файлу.",

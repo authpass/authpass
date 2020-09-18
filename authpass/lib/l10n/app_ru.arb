@@ -42,9 +42,13 @@
         }
     },
     "loadFromUrl": "Загрузить из URL",
-    "@loadFromUrl": {},
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
     "createNewKeepass": "Впервые в KeePass?\nСоздать новую базу данных паролей",
-    "@createNewKeepass": {},
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
     "labelLastOpenFiles": "Последние открытые файлы:",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "Файлы ещё не были открыты.",

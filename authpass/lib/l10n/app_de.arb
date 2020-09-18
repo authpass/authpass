@@ -42,9 +42,13 @@
         }
     },
     "loadFromUrl": "Lade von URL",
-    "@loadFromUrl": {},
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
     "createNewKeepass": "KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen",
-    "@createNewKeepass": {},
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
     "labelLastOpenFiles": "Zuletzt geöffnete Dateien:",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "Keine Dateien bisher geöffnet.",

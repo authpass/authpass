@@ -31,9 +31,9 @@ Kaip atviro kodo projekte, čia nėra dirbtinių galimybių apribojimų, nėra r
 
 Taip pat prisijunkite prie mūsų <a href=""https://authpass.app/go/discord"">„Discord“ serverio</a> https://authpass.app/go/discord
 ","Google Play Store description","4000",""
-"playstore_title","„AuthPass“ - Su „KeePass“ suderinama slapt. tvark.","Google Play Title","50",""
+"playstore_title","","Google Play Title","50",""
 "playstore_short_description","Laikykite savo slaptažodžius saugiai visose platformose ir įrenginiuose.","Short description in play store.","80",""
-"apple-appstore-title","„AuthPass“ - slapt. tvarkyklė","apple-appstore-title","30",""
+"apple-appstore-title","„AuthPass“ - slapt. tvarkyklė","","30",""
 "apple-appstore-subtitle","Vienas slapt. visuose įreng.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","Lengvai ir saugiai tvarkykite visus savo slaptažodžius!
 
@@ -65,3 +65,5 @@ VYKSTA AKTYVUS KŪRIMAS
 
 Taip pat prisijunkite prie mūsų „Discord“ serverio https://authpass.app/go/discord
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
+"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+

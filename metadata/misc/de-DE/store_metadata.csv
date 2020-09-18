@@ -34,7 +34,7 @@ Werde Teil der Community und besuche unseren <a href=""https://authpass.app/go/d
 ","Google Play Store description","4000",""
 "playstore_title","AuthPass - KeePass kompatibler Passwort Manager","Google Play Title","50",""
 "playstore_short_description","Sichere Aufbewahrung aller Passwörter und Benutzerkonten über alle Geräten.","Short description in play store.","80",""
-"apple-appstore-title","AuthPass - Passwort Manager","apple-appstore-title","30",""
+"apple-appstore-title","AuthPass - Passwort Manager","","30",""
 "apple-appstore-subtitle","Sicher, Effizient, Privat.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","Einfache und sichere Verwaltung all Deiner Passwörter und Konten!
 
@@ -69,3 +69,5 @@ Dieses Open Source Projekt wird ständig weiter entwickelt und es gibt regelmä�
 
 Werde Teil der Community und besuche unseren discord channel unter https://authpass.app/go/discord
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
+"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+
