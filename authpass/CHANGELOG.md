@@ -1,3 +1,7 @@
+# (unreleased)
+
+* DEV: update flutter to 1.22.0-12.1.pre (from 1.22.0-1.0.pre)
+
 # 1.7.8 - 2020-09-18
 
 * Android: improve autofill input field detection for usernames.
