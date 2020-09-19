@@ -1588,6 +1588,10 @@ class StringEntryFieldEditor extends StatelessWidget {
         labelText: commonField?.displayName ?? fieldKey.key,
       ),
       keyboardType: commonField?.keyboardType,
+      autocorrect: commonField?.autocorrect ?? true,
+      enableSuggestions: commonField?.enableSuggestions ?? true,
+      textCapitalization:
+          commonField?.textCapitalization ?? TextCapitalization.sentences,
       controller: controller,
       onSaved: onSaved,
     );

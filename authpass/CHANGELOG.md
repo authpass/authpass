@@ -1,5 +1,7 @@
 # (unreleased)
 
+* Disable autocorrect/suggestions and text capitalization for URL and Username fields. #145
+* Translations: Added Indonesian.
 * DEV: update flutter to 1.22.0-12.1.pre (from 1.22.0-1.0.pre)
 
 # 1.7.8 - 2020-09-18

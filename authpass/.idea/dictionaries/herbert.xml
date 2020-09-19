@@ -2,6 +2,7 @@
   <dictionary name="herbert">
     <words>
       <w>authpass</w>
+      <w>autocorrect</w>
       <w>autofill</w>
       <w>autofocus</w>
       <w>autovalidate</w>

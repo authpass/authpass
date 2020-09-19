@@ -1,4 +1,5 @@
 import 'package:authpass/l10n/app_localizations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
@@ -12,6 +13,9 @@ class CommonField {
     this.includeInSearch = false,
     this.protect = false,
     this.keyboardType,
+    this.autocorrect = false,
+    this.enableSuggestions = false,
+    this.textCapitalization = TextCapitalization.none,
     this.icon = Icons.label_outline,
     this.showByDefault = true,
   });
@@ -21,6 +25,9 @@ class CommonField {
   final bool includeInSearch;
   final bool protect;
   final TextInputType keyboardType;
+  final bool autocorrect;
+  final bool enableSuggestions;
+  final TextCapitalization textCapitalization;
   final IconData icon;
   final bool showByDefault;
 
@@ -45,6 +52,9 @@ class CommonFields {
             displayName: loc.fieldTitle,
             includeInSearch: true,
             icon: Icons.label,
+            autocorrect: true,
+            enableSuggestions: true,
+            textCapitalization: TextCapitalization.sentences,
           ),
           CommonField(
             key: KdbxKeyCommon.URL,
