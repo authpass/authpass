@@ -155,6 +155,12 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'source': source,
         'category': category
       });
+  @override
+  void trackEntryAction(EntryActionType label, {String action = 'entry'}) =>
+      trackEvent('entryAction', <String, dynamic>{
+        'label': label?.toString()?.substring(16),
+        'action': action
+      });
 }
 
 // **************************************************************************

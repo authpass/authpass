@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:usage/usage.dart' as usage;
 
@@ -320,6 +321,14 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     @required String source,
     String category = 'tryUnlock',
   });
+
+  void trackEntryAction(EntryActionType label, {String action = 'entry'});
+}
+
+enum EntryActionType {
+  generateEmail,
+  generatePassword,
+  openUrl,
 }
 
 enum TryUnlockResult {
@@ -354,4 +363,9 @@ enum CloudAuthAction {
 enum AttachmentAddType {
   success,
   canceled,
+}
+
+extension ContextEvents on BuildContext {
+  AnalyticsEvents get events =>
+      Provider.of<Analytics>(this, listen: false).events;
 }

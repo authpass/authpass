@@ -149,6 +149,33 @@
       }
     }
   },
+  "unableToLaunchUrlTitle": "Unable to open Url",
+  "@unableToLaunchUrlTitle": {
+    "description": ""
+  },
+  "unableToLaunchUrlDescription": "Unable to launch {url}: {openError}",
+  "@unableToLaunchUrlDescription": {
+    "description": "",
+    "placeholders": {
+      "url": {"description": "URL which we tried to open."},
+      "openError": {
+        "description": "Information about the error"
+      }
+    }
+  },
+  "unableToLaunchUrlNoHandler": "No application available for url.",
+  "@unableToLaunchUrlNoHandler": {
+    "description": ""
+  },
+  "launchedUrl": "Opened URL: {url}",
+  "@launchedUrl": {
+    "description": "snackbar confirmation after opening a url externally",
+    "placeholders": {
+      "url": {
+        "description": "URL which was just launched."
+      }
+    }
+  },
 
   "menuItemGeneratePassword": "Generate Password",
   "@menuItemGeneratePassword": {},
@@ -168,6 +195,10 @@
   "@menuItemHelpSubtitle": {},
   "menuItemAbout": "About",
   "@menuItemAbout": {},
+  "actionOpenUrl": "Open URL",
+  "@actionOpenUrl": {
+    "description": "tooltip for button to open URL/Website of an entry."
+  },
 
   "passwordPlainText": "Reveal password",
   "@passwordPlainText": {

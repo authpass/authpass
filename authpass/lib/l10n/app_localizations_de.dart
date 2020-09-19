@@ -146,6 +146,22 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get unableToLaunchUrlTitle => 'Unable to open Url';
+
+  @override
+  String unableToLaunchUrlDescription(Object url, Object openError) {
+    return 'Unable to launch ${url}: ${openError}';
+  }
+
+  @override
+  String get unableToLaunchUrlNoHandler => 'No application available for url.';
+
+  @override
+  String launchedUrl(Object url) {
+    return 'Opened URL: ${url}';
+  }
+
+  @override
   String get menuItemGeneratePassword => 'Passwort generieren';
 
   @override
@@ -171,6 +187,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get menuItemAbout => 'Über AuthPass';
+
+  @override
+  String get actionOpenUrl => 'Open URL';
 
   @override
   String get passwordPlainText => 'Passwort anzeigen';

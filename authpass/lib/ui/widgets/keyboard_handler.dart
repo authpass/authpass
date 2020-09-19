@@ -116,9 +116,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
             final character = key.logicalKey;
             _logger.info(
                 'RawKeyboardListener.onKey: $modifiers + $character ($key)');
-            if (modifiers.length == 1 &&
-                (modifiers.single == ModifierKey.controlModifier ||
-                    modifiers.single == ModifierKey.metaModifier)) {
+            final hasControlModifier =
+                modifiers.contains(ModifierKey.controlModifier) ||
+                    modifiers.contains(ModifierKey.metaModifier);
+            if (modifiers.length == 1 && hasControlModifier) {
               final mapping = {
                 LogicalKeyboardKey.keyF:
                     const KeyboardShortcut(type: KeyboardShortcutType.search),
@@ -132,6 +133,8 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                     const KeyboardShortcut(type: KeyboardShortcutType.moveDown),
                 LogicalKeyboardKey.keyG: const KeyboardShortcut(
                     type: KeyboardShortcutType.generatePassword),
+                LogicalKeyboardKey.keyU:
+                    const KeyboardShortcut(type: KeyboardShortcutType.copyUrl),
               };
               final shortcut = mapping[character];
               if (shortcut != null) {
@@ -160,6 +163,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                   }
                 }
               }
+            } else if (hasControlModifier &&
+                modifiers.contains(ModifierKey.shiftModifier)) {
+              _keyboardShortcutEvents._shortcutEvents.add(
+                  const KeyboardShortcut(type: KeyboardShortcutType.openUrl));
             } else if (modifiers.isEmpty) {
               _logger.finer('modifiers is empty.. now check which key it is.');
               if (character == LogicalKeyboardKey.tab) {
@@ -201,6 +208,8 @@ enum KeyboardShortcutType {
   moveUp,
   moveDown,
   generatePassword,
+  copyUrl,
+  openUrl,
   escape,
 }
 

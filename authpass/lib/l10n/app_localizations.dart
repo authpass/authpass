@@ -244,6 +244,18 @@ abstract class AppLocalizations {
   // No description provided in @aboutLogFile
   String aboutLogFile(String logFilePath);
 
+  // 
+  String get unableToLaunchUrlTitle;
+
+  // 
+  String unableToLaunchUrlDescription(Object url, Object openError);
+
+  // 
+  String get unableToLaunchUrlNoHandler;
+
+  // snackbar confirmation after opening a url externally
+  String launchedUrl(Object url);
+
   // No description provided in @menuItemGeneratePassword
   String get menuItemGeneratePassword;
 
@@ -270,6 +282,9 @@ abstract class AppLocalizations {
 
   // No description provided in @menuItemAbout
   String get menuItemAbout;
+
+  // tooltip for button to open URL/Website of an entry.
+  String get actionOpenUrl;
 
   // Master password input: show password as plain text during input. (shown as tooltip)
   String get passwordPlainText;
