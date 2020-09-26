@@ -14,6 +14,7 @@ Big thanks to all contributors. Let me know if I forgot someone.
 * Herbert Poul: Core Dev 😅️ [![GH][]](https://github.com/hpoul) [![TWTR][]](https://twitter.com/HerbertPoul) [![Website][]](https://codeux.design)
 * Tomurisk: Translations 🇱🇹 [![TWTR][]](https://twitter.com/Tomurisk)
 * OliBug: Translations 🇫🇷️
+* Maximiliano Olaz: Translations 🇪🇸️ [![GH][]](https://github.com/Rahabhim) [![TWTR][]](https://twitter.com/Rahab) ‖ [IG](https://www.instagram.com/maxiolaz/) ‖ [LI](https://www.linkedin.com/in/maximiliano-olaz-bondarczuk-41773a93/)
 
 # Thanks
 
