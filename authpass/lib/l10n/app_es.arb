@@ -40,6 +40,10 @@
     "@spanish": {
         "description": "language switcher subtitle"
     },
+    "indonesian": "Indonesio",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -439,6 +443,14 @@
     "@deleteGroupErrorTitle": {
         "description": "Title of error dialog when group could not be deleted."
     },
+    "deleteGroupErrorBodyContainsGroup": "Este grupo aún contiene otros grupos. Actualmente sólo puede eliminar grupos vacíos.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Este grupo aún contiene entradas de contraseña. Actualmente sólo puede eliminar grupos vacíos.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
     "groupListAppBarTitle": "Grupos",
     "@groupListAppBarTitle": {
         "description": "title in the app bar for the groups list"
@@ -451,6 +463,10 @@
     "@clearQuickUnlock": {
         "description": ""
     },
+    "clearQuickUnlockSubtitle": "Eliminar contraseñas maestras guardadas",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
     "unlock": "Desbloquear archivos",
     "@unlock": {
         "description": ""
@@ -459,12 +475,143 @@
     "@closePasswordFiles": {
         "description": "delete quick unlock (passwords stored in biometric storage)"
     },
+    "clearQuickUnlockSuccess": "Eliminadas las contraseñas maestras guardadas del almacenamiento biométrico.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "Opte por las noticias en la aplicación, encuestas.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Ocasionalmente enviará una solicitud de red para obtener noticias.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "Autollenado: Habilitar depuración",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Muestra capas de información para cada campo de entrada",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Crear base de datos de contraseñas",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Nombre de su nueva base de datos",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "Por favor, introduzca un nombre para su nueva base de datos.",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "Seleccione una contraseña maestra segura. Asegúrese de recordarla.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Contraseña maestra",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "Por favor, introduzca una contraseña segura y recordable.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "Crear base de datos",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
     "databaseExistsError": "El archivo ya existe",
     "@databaseExistsError": {
         "description": "dialog title for error message when creating a new database with a name which already exists."
     },
+    "databaseExistsErrorDescription": "Error al intentar crear la base de datos {filePath}. El archivo ya existe. Por favor elija otro nombre.",
+    "@databaseExistsErrorDescription": {
+        "description": "dialog body for error message when creating a new database with a name which already exists.",
+        "placeholders": {
+            "filePath": {
+                "description": "file path which already existed."
+            }
+        }
+    },
+    "databaseCreateDefaultName": "ContraseñasPersonales",
+    "@databaseCreateDefaultName": {
+        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+    },
+    "preferenceDynamicLoadIcons": "Cargar iconos dinámicamente",
+    "@preferenceDynamicLoadIcons": {
+        "description": "preferences: dynamically load website icons"
+    },
+    "preferenceDynamicLoadIconsSubtitle": "Hará solicitudes http con el valor en el campo {urlFieldName} para cargar iconos del sitio web.",
+    "@preferenceDynamicLoadIconsSubtitle": {
+        "description": "preferences: dynamically load website icons help text.",
+        "placeholders": {
+            "urlFieldName": {
+                "example": "Website"
+            }
+        }
+    },
+    "passwordScore": "Fortaleza: {score} de 4",
+    "@passwordScore": {
+        "description": "choosing a master password - calculated password strength.",
+        "placeholders": {
+            "score": {
+                "description": "integer of the score.",
+                "example": "3"
+            }
+        }
+    },
+    "entryInfoFile": "Archivo:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "Grupo:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "Última modificación:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "movedEntryToGroup": "Entrada movida a {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
+    "sizeBytes": "{count} bytes",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "bytes": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
+    "entryAddAttachment": "Añadir archivo adjunto",
+    "@entryAddAttachment": {
+        "description": ""
+    },
+    "entryAttachmentSizeWarning": "Los archivos adjuntos serán incorporados en el archivo de contraseñas. Esto puede aumentar significativamente el tiempo necesario para abrir/guardar contraseñas.",
+    "@entryAttachmentSizeWarning": {
+        "description": ""
+    },
     "entryAddField": "Añadir campo",
     "@entryAddField": {
+        "description": ""
+    },
+    "entryCustomField": "Campo personalizado",
+    "@entryCustomField": {
+        "description": ""
+    },
+    "entryCustomFieldTitle": "Añadir nuevo campo personalizado",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
+    "entryCustomFieldInputLabel": "Ingrese un nombre para el campo",
+    "@entryCustomFieldInputLabel": {
         "description": ""
     },
     "swipeCopyField": "Copiar campo",
@@ -475,12 +622,56 @@
     "@fieldRename": {
         "description": ""
     },
+    "fieldGeneratePassword": "Generar contraseña …",
+    "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "Proteger Valor",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "Desproteger Valor",
+    "@fieldUnprotect": {
+        "description": ""
+    },
+    "fieldPresent": "Presentar",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Generar Email",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "Tour",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "Reviva la experiencia de la primera ejecución 😅",
+    "@onboardingBackToOnboardingSubtitle": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
     "onboardingHeadline": "¡Hagamos que tus contraseñas sean seguras!",
     "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingQuestion": "¿Ha usado un gestor de contraseñas antes?",
+    "@onboardingQuestion": {
         "description": ""
     },
     "onboardingYesOpenPasswords": "Sí, abrir mis contraseñas",
     "@onboardingYesOpenPasswords": {
         "description": ""
+    },
+    "onboardingNoCreate": "¡Soy todo nuevo! Empecemos.",
+    "@onboardingNoCreate": {
+        "description": ""
+    },
+    "unexpectedError": "Error inesperado: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
-<p> Lacak semua Sandi Anda dengan mudah dan aman! </p>
+<p>Lacak semua Kata Sandi Anda dengan mudah dan aman!</p>
 
-<p> AuthPass adalah sebuah pengelola kata sandi tunggal dengan dukungan format Keepass (kdbx) yang terbukti dan populer
+<p> AuthPass adalah sebuah pengelola kata sandi tunggal dengan dukungan format Keepass (kdbx) yang terbukti dan populer.
 Simpan sandi Anda, bagikan, dan temukan sandi anda dengan mudah kapan pun Anda perlu login. </p>
 
 <ul>

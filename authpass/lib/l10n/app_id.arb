@@ -40,6 +40,10 @@
     "@spanish": {
         "description": "language switcher subtitle"
     },
+    "indonesian": "Indonesia",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Pilih file KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -185,7 +189,7 @@
     "@characterSetNumeric": {
         "context": "Password generator"
     },
-    "characterSetUmlauts": "Umlauts (ä)",
+    "characterSetUmlauts": "Aksen (ä)",
     "@characterSetUmlauts": {
         "context": "Password generator"
     },
@@ -470,5 +474,204 @@
     "closePasswordFiles": "tutup file kata sandi",
     "@closePasswordFiles": {
         "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "Hapus Kata Sandi utama yang tersimpan dari penyimpanan biometrik.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "Ikut program tentang berita aplikasi dan survei.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Akan sesekali mengirim permintaan ke internet untuk memperoleh berita.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "Isi otomatis: Hidupkan debug",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Menunjukkan hamparan informasi untuk semua kolom masukan",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Buat Database Kata Sandi",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Nama Database baru anda",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "Mohon beri nama pada database baru kata sandi anda.",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "Buatlah master Kata Sandi anda. Pastikan anda mengingatnya.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Master Kata Sandi",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "Mohon masukkan kata sandi yang aman dan mudah anda diingat.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "Buat Database",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
+    "databaseExistsError": "File Sudah Ada",
+    "@databaseExistsError": {
+        "description": "dialog title for error message when creating a new database with a name which already exists."
+    },
+    "databaseExistsErrorDescription": "Kesalahan saat mencoba membuat database pada {filePath}. File sudah ada. Mohon pilih nama lain untuk database anda.",
+    "@databaseExistsErrorDescription": {
+        "description": "dialog body for error message when creating a new database with a name which already exists.",
+        "placeholders": {
+            "filePath": {
+                "description": "file path which already existed."
+            }
+        }
+    },
+    "databaseCreateDefaultName": "KataSandiPribadi",
+    "@databaseCreateDefaultName": {
+        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+    },
+    "preferenceDynamicLoadIcons": "Muat ikon secara Otomatis",
+    "@preferenceDynamicLoadIcons": {
+        "description": "preferences: dynamically load website icons"
+    },
+    "preferenceDynamicLoadIconsSubtitle": "Akan membuat permintaan http dari kolom nilai {urlFieldName} untuk memuat ikon situs web.",
+    "@preferenceDynamicLoadIconsSubtitle": {
+        "description": "preferences: dynamically load website icons help text.",
+        "placeholders": {
+            "urlFieldName": {
+                "example": "Website"
+            }
+        }
+    },
+    "passwordScore": "Skor Keamanan: {score} dari 4",
+    "@passwordScore": {
+        "description": "choosing a master password - calculated password strength.",
+        "placeholders": {
+            "score": {
+                "description": "integer of the score.",
+                "example": "3"
+            }
+        }
+    },
+    "entryInfoFile": "File:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "Grup:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "Terakhir di ubah:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "movedEntryToGroup": "Entri dipindah ke {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
+    "sizeBytes": "{count} bita",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "bytes": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
+    "entryAddAttachment": "Tambah Lampiran",
+    "@entryAddAttachment": {
+        "description": ""
+    },
+    "entryAttachmentSizeWarning": "File yang dilampirkan akan disematkan dalam file kata sandi. Ini dapat meningkatkan waktu yang dibutuhkan untuk membuka/menyimpan kata sandi.",
+    "@entryAttachmentSizeWarning": {
+        "description": ""
+    },
+    "entryAddField": "Tambah Kolom Baru",
+    "@entryAddField": {
+        "description": ""
+    },
+    "entryCustomField": "Kolom Khusus",
+    "@entryCustomField": {
+        "description": ""
+    },
+    "entryCustomFieldTitle": "Menambahkan kolom khusus baru",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
+    "entryCustomFieldInputLabel": "Masukkan nama untuk kolom khusus anda",
+    "@entryCustomFieldInputLabel": {
+        "description": ""
+    },
+    "swipeCopyField": "Salin Kolom",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "Ubah nama",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldGeneratePassword": "Hasilkan Kata Sandi …",
+    "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "Sembunyikan nilai masukan",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "Sembunyikan Nilai Entri",
+    "@fieldUnprotect": {
+        "description": ""
+    },
+    "fieldPresent": "Kode QR",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Penghasil Email",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "Tur",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "Menghidupkan kembali pengalaman pertama. 😅️",
+    "@onboardingBackToOnboardingSubtitle": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingHeadline": "Ayo buat Kata Sandi anda Aman!",
+    "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingQuestion": "Pernahkah anda menggunakan pengelola kata sandi lain sebelumnya?",
+    "@onboardingQuestion": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Ya, buka Kata Sandi tersimpan",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "onboardingNoCreate": "Saya pengguna baru, bantu saya!",
+    "@onboardingNoCreate": {
+        "description": ""
+    },
+    "unexpectedError": "Kesalahan tak terduga: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
     }
 }

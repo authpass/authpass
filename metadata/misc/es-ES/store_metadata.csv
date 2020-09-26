@@ -1,8 +1,80 @@
-"playstore_full_description","","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
-"playstore_short_description","","Short description in play store.","80",""
-"apple-appstore-title","","","30",""
-"apple-appstore-subtitle","","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
-"apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
-"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+"playstore_full_description","¡Mantenga un seguimiento fácil y seguro de todas sus contraseñas!
+
+AuthPass es un administrador de contraseñas independiente compatible con el popular y probado formato <strong>KeePass</strong> (kdbx 3.x Y kdbx 4.x 🎉️). Almacene sus contraseñas, <strong>compártalas en todos sus dispositivos</strong> y búsquelas fácilmente cuando necesite iniciar sesión.
+
+🗄 Todas tus contraseñas en un solo lugar.
+🧬 Genere contraseñas aleatorias seguras para cada una de sus cuentas.
+🔐 Desbloqueo rápido asegurado con sistema biométrico.
+🔍 Realice un seguimiento de sus cuentas en la web.
+🖥 Aplicación disponible para Mac, iPhone, iPad, teléfonos y tabletas Android, Linux y Windows.
+📂 Abra varios archivos de contraseñas al mismo tiempo (por ejemplo, uno para el trabajo, uno personal, o incluso comparta sus archivos de contraseñas con compañeros de trabajo)
+🤓 Código abierto disponible en https://github.com/authpass/authpass/
+✍ Autocomplete sus contraseñas (Android 9+, soporte en el navegador solo desde Android 10+)
+🔦 Tema oscuro 😎️
+
+
+<strong>=== BAJO SU CONTROL ===</strong>
+AuthPass almacena todas sus contraseñas en el formato abierto Keepass, exactamente donde lo desea. No envía sus contraseñas a nuestros servidores. Pero AuthPass admite guardar en:
+
+✅️ Cualquier proveedor de contenido local de Android
+✅️ Integración nativa de Google Drive
+✅️ Integración nativa de Dropbox
+✅️ Soporte nativo de WebDAV para almacenar en su propio NextCloud u OwnCloud (o similar)
+✅️ Integración nativa de Microsoft OneDrive
+
+<b>=== PRESTACIONES COMPLETAS, SIN ANUNCIOS, SIN SUSCRIPCIÓN ===</b>
+Como proyecto de código abierto, no existen restricciones de funciones artificiales, anuncios ni requisitos de pago.
+
+<strong>Las contribuciones son bienvenidas!</strong> 😅️ (Siempre buscando desarrolladores, traductores, redactores de documentación, diseñadores de interfaz de usuario, etc. :) ), solo únase a nuestro <a href=""https://authpass.app/go/discord "">canal de discord</a>.
+
+<b>=== EN DESARROLLO ACTIVO 🛠️ ===</b>
+Este es un proyecto de código abierto que aún se encuentra en un gran desarrollo, agregando características. Nos encantaría recibir sus comentarios por correo electrónico o en el <a href=""https://github.com/authpass/authpass/issues/""> rastreador de problemas </a> en https://github.com/authpass/authpass/issues/
+
+Únase también a la comunidad en nuestro <a href=""https://authpass.app/go/discord""> canal de discord </a> en https://authpass.app/go/discord
+","Google Play Store description","4000",""
+"playstore_title","AuthPass - Gestor de contraseñas con KeePass","Google Play Title","50",""
+"playstore_short_description","Mantén tus contraseñas y cuentas seguras en toda plataforma y dispositivo.","Short description in play store.","80",""
+"apple-appstore-title","AuthPass - Gestor de passwords","","30",""
+"apple-appstore-subtitle","Una contraseña para todo.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
+"apple-appstore-description","¡Mantenga un seguimiento fácil y seguro de todas sus contraseñas!
+
+AuthPass es un administrador de contraseñas independiente compatible con el popular y probado formato KeePass. Almacene sus contraseñas, compártalas en todos sus dispositivos y búsquelas fácilmente cuando necesite iniciar sesión.
+
+• Todas tus contraseñas en un solo lugar.
+• Genere contraseñas aleatorias seguras para cada una de sus cuentas.
+• Desbloqueo rápido asegurado con sistema biométrico.
+• Realice un seguimiento de sus cuentas en la web.
+• Aplicación disponible en todas las plataformas, entre ellas Mac, iPhone e iPad.
+• Abra varios archivos de contraseñas al mismo tiempo (por ejemplo, uno para el trabajo, uno personal, o incluso comparta sus archivos de contraseñas con compañeros de trabajo)
+• Guarde contraseñas de un solo uso basadas en tiempo para A2F (autenticación de dos factores)
+• Adjunte archivos binarios en los campos de contraseñas. (Como TANs offline, etc)
+• Código abierto disponible en https://github.com/authpass/authpass/
+• Tema oscuro ;-)
+
+
+=== BAJO SU CONTROL ===
+
+AuthPass almacena todas sus contraseñas en el formato abierto Keepass, exactamente donde lo desea. No envía sus contraseñas a nuestros servidores. Pero AuthPass admite guardar en:
+
+• Cualquier proveedor de documentos locales, como iCloud
+• Integración nativa de Google Drive
+• Integración nativa de Dropbox
+• Soporte nativo de WebDAV para almacenar en su propio NextCloud u OwnCloud (o similar)
+• Integración nativa de Microsoft OneDrive
+
+
+=== PRESTACIONES COMPLETAS, SIN ANUNCIOS, SIN SUSCRIPCIÓN ===
+
+Como proyecto de código abierto, no existen restricciones de funciones artificiales, anuncios ni requisitos de pago.
+
+Las contribuciones son bienvenidas! :-) (Siempre buscando desarrolladores, traductores, redactores de documentación, diseñadores de interfaz de usuario, etc. :) ), solo únase a nuestro canal de discord: https://authpass.app/go/discord .
+
+
+=== EN DESARROLLO ACTIVO ===
+
+Este es un proyecto de código abierto que aún se encuentra en un gran desarrollo, agregando características. Nos encantaría recibir sus comentarios por correo electrónico o en el rastreador de problemas: https://github.com/authpass/authpass/issues/
+
+Únase también a la comunidad en nuestro canal de discord en https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
+"apple-appstore-keywords","Gestor de contraseñas, password, Keepass, Kdbx, webdav, icloud, nextcloud, onedrive, google drive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 

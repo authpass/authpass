@@ -45,6 +45,10 @@
     "@loadFromUrl": {
         "description": "deprecated"
     },
+    "loadFromRemoteUrl": "Відкрити kdbx з URL-адреси",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
     "createNewKeepass": "Вперше у KeePass?\nСтворити нову базу паролів",
     "@createNewKeepass": {
         "description": "deprecated"
@@ -372,6 +376,10 @@
     "@undoButtonLabel": {
         "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
     },
+    "saveButtonLabel": "Зберегти",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
     "initialNewGroupName": "Нова група",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -395,6 +403,26 @@
     "groupListFilterAppbarTitle": "Фільтрувати за групами",
     "@groupListFilterAppbarTitle": {
         "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "entryAddField": "Створити поле",
+    "@entryAddField": {
+        "description": ""
+    },
+    "fieldRename": "Перейменувати",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldPresent": "QR код",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Згенерувати адресу електронної пошти",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Так, відкрити мої паролі",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
     },
     "unexpectedError": "Неочікувана помилка: {error}",
     "@unexpectedError": {

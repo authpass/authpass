@@ -1,8 +1,86 @@
-"playstore_full_description","","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
-"playstore_short_description","","Short description in play store.","80",""
-"apple-appstore-title","","","30",""
-"apple-appstore-subtitle","","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
-"apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
-"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+"playstore_full_description","Lacak semua Kata Sandi Anda dengan mudah dan Aman!
+
+AuthPass adalah pengelola kata sandi tunggal dengan dukungan untuk format <strong> KeePass </strong> (kdbx 3.x dan kdbx 4.x 🎉️) yang populer dan terbukti aman.
+Simpan sandi Anda, <strong> bagikan ke semua perangkat Anda </strong> dan temukan dengan mudah kapan pun Anda perlu masuk.
+
+🗄 Semua kata sandi Anda di satu tempat.
+🧬 Buat kata sandi acak yang aman untuk setiap akun Anda.
+ 🔐 Buka Kata Sandi dengan cepat diamankan dengan kunci biometrik anda.
+ 🔍 Lacak akun Anda di seluruh web.
+ 🖥 Aplikasi tersedia untuk Mac, iPhone, iPad, Ponsel/Tablet Android, Linux dan Windows.
+ 📂 Buka beberapa file kata sandi secara bersamaan (mis. Satu untuk kantor, satu untuk pribadi - atau bahkan bagikan file kata sandi Anda dengan rekan kerja)
+🤓 Open Source tersedia di
+https://github.com/authpass/authpass/
+✍ Isi otomatis kata sandi Anda (Android 9+, Dukungan di browser hanya sejak Android 10+)
+🔦 Tema Gelap 😎️
+
+
+<strong> === SEMUA DALAM KENDALI ANDA === </strong>
+AuthPass menyimpan semua kata sandi Anda dalam format Keepass (Open Source), tepat di tempat yang Anda inginkan. Kami tidak menyimpan Kata Sandi anda pada server kami.
+Tetapi AuthPass mendukung penyimpanan ke:
+
+✅️ Semua penyedia konten lokal dari Android
+✅️ Integrasi Google Drive
+✅️ Integrasi Dropbox
+✅️ Dukungan WebDAV untuk disimpan di NextCloud atau OwnCloud Anda (atau serupa)
+✅️ Integrasi Microsoft OneDrive
+
+<b> === FITUR LENGKAP, TANPA IKLAN, TANPA BERLANGGANAN === </b>
+Sebagai proyek open source maka tidak ada pembatasan secara artifisial, tidak ada iklan dan tidak ada persyaratan pembayaran.
+
+<strong> Semua bentu Kontribusi diterima dan diukung! </strong> 😅️ (Sedang mencari pengembang, penerjemah, penulis dokumentasi, perancang UI, dll. :)), cukup hanya dengan bergabung di <a href=""https://authpass.app/go/discord"">saluran discord kami</a>
+
+<b> === SEDANG DALAM PENGEMBANGAN AKTIF 🛠️ === </b>
+Ini adalah proyek open source yang masih dalam pengembangan berat dan penambahan fitur. Kami mengharapkan masukan Anda melalui email atau menggunakan <a href=""https://github.com/authpass/authpass/issues/""> pelacak masalah </a> di https://github.com/authpass/authpass/issues/
+
+Bergabunglah juga dengan komunitas  <a href=""https://authpass.app/go/discord""> saluran discord kami</a> di https://authpass.app/go/discord","Google Play Store description","4000",""
+"playstore_title","AuthPass - KeePass compatible Password Manager","Google Play Title","50",""
+"playstore_short_description","Simpan Kata Sandi dan Akun anda secara aman antar platform dan perangkat anda.","Short description in play store.","80",""
+"apple-appstore-title","AuthPass - Password Manager","","30",""
+"apple-appstore-subtitle","Satu Sandi, Semua Perangkat.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
+"apple-appstore-description","Lacak semua Kata Sandi Anda dengan mudah dan aman!
+
+AuthPass adalah pengelola kata sandi tunggal dengan dukungan untuk format KeePass yang populer dan terbukti keamanannya. Simpan kata sandi Anda, bagikan di semua perangkat Anda dan temukan dengan mudah kapan pun Anda perlu masuk.
+
+• Semua kata sandi Anda di satu tempat.
+• Buat kata sandi acak yang aman untuk setiap akun Anda.
+• Buka brankas secara cepat dengan diamankan oleh kunci biometrik anda.
+• Pantau akun Anda di seluruh web.
+• Aplikasi tersedia di semua platform. Diantaranya Mac, iPhone dan iPad.
+• Buka beberapa file kata sandi secara bersamaan (mis. Satu untuk kantor, satu untuk pribadi - atau bahkan berbagi file kata sandi Anda dengan rekan kerja)
+• Simpan Kata Sandi Sekali Pakai Berbasis Waktu untuk 2FA (Otentikasi Dua Faktor).
+• Lampirkan file biner ke entri kata sandi Anda. (Seperti TAN offline, dll)
+• Open Source tersedia di https://github.com/authpass/authpass/
+• Tema gelap ;-)
+
+
+=== SEMUA DALAM KENDALI ANDA ===
+
+AuthPass menyimpan semua kata sandi Anda dalam format Keepass terbuka, tepat di tempat yang Anda inginkan. 
+Kami tidak mengirim data kata sandi anda ke server kami, Tetapi AuthPass mendukung penyimpanan ke:
+
+• Semua penyedia dokumen lokal, seperti iCloud.
+• Integrasi Google Drive
+• Integrasi Dropbox
+• Dukungan WebDAV untuk disimpan di NextCloud atau OwnCloud Anda (atau yang serupa)
+• Integrasi Microsoft OneDrive
+
+
+=== FITUR LENGKAP, TANPA IKLAN, TANPA BERLANGGANAN ===
+
+Sebagai salah satu proyek open source maka tidak ada pembatasan fitur artifisial, iklan atau persyaratan pembayaran.
+
+Semua Jenis Kontribusi diterima dan didukung :-) (Sedang mencari pengembang, penerjemah, penulis dokumentasi, perancang antarmuka pengguna, dll. :) )
+Bergabunglah dengan saluran Discord kami: 
+https://authpass.app/go/discord.
+
+
+=== SEDANG DALAM PENGEMBANGAN AKTIF ===
+
+Aplikasi Ini adalah proyek open source yang sedang dalam pengembangan berat dan dalam proses penambahan fitur. Kami mengharapkan tanggapan Anda melalui email atau pelacak masalah di: https://github.com/authpass/authpass/issues/
+
+Bergabunglah juga dengan saluran komunitas discord kami di:
+https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
+"apple-appstore-keywords","Pengelola Sandi,Kata Sandi,Kelola,keystroke,Keysafe,Keepass,Kdbx,Webdav,Icloud,Nextcloud,One Drive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 
