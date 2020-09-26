@@ -58,7 +58,7 @@ jobs:
         GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
-        AUTHPASS_SKIP_FASTLANE: ${{ github.ref != 'refs/heads/master' }}
+#        AUTHPASS_SKIP_FASTLANE: ${{ github.ref != 'refs/heads/master' }}
       run: "./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}"
     - name: upload artifact
       if: ${{ steps.buildapk.outputs.outputfilename != null }}

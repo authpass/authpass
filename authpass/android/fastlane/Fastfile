@@ -49,5 +49,18 @@ platform :android do
       skip_upload_metadata:  true
     )
   end
+  # on the `beta` branch we will be pushing the dev release to public testing.
+  lane :devbeta do
+    debug
 
+    upload_to_play_store(
+      aab: '../build/app/outputs/bundle/playstoredevRelease/app-playstoredev-release.aab',
+      track: 'beta',
+      package_name: 'design.codeux.authpass.dev',
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_metadata:  true
+    )
+  end
 end

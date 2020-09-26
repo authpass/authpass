@@ -97,11 +97,19 @@ case "${flavor}" in
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
         cd android
-        if test "${AUTHPASS_SKIP_FASTLANE}" != "true" ; then
-            bundle install
-            bundle exec fastlane dev
+        bundle install
+        echo "Check if we are in a beta branch ${GITHUB_REF}"
+        exitCode=success
+        if [[ "${GITHUB_REF:-}" == *"beta"* ]] ; then
+          echo "Pushing to beta."
+          bundle exec fastlane devbeta || exitCode=$?
         else
-            echo "Skipping fastlane."
+          echo "Pushing to dev"
+          bundle exec fastlane dev || exitCode=$?
+        fi
+
+        if [[ "${exitCode}" != "success" ]] ; then
+          echo "fastlane failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
         fi
     ;;
     android)
