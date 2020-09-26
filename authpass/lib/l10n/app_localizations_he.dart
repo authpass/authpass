@@ -5,30 +5,30 @@ import 'app_localizations.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-/// The translations for German (`de`).
-class AppLocalizationsDe extends AppLocalizations {
-  AppLocalizationsDe([String locale = 'de']) : super(locale);
+/// The translations for Hebrew (`he`).
+class AppLocalizationsHe extends AppLocalizations {
+  AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
-  String get fieldUserName => 'Benutzer';
+  String get fieldUserName => 'User';
 
   @override
-  String get fieldPassword => 'Passwort';
+  String get fieldPassword => 'Password';
 
   @override
-  String get fieldWebsite => 'Webseite';
+  String get fieldWebsite => 'Website';
 
   @override
-  String get fieldTitle => 'Titel';
+  String get fieldTitle => 'Title';
 
   @override
-  String get fieldTotp => 'Einmalpasswort (Zeitbasiert)';
+  String get fieldTotp => 'One Time Password (Time Based)';
 
   @override
-  String get english => 'Englisch';
+  String get english => 'English';
 
   @override
-  String get german => 'Deutsch';
+  String get german => 'German';
 
   @override
   String get russian => 'Russian';
@@ -49,100 +49,100 @@ class AppLocalizationsDe extends AppLocalizations {
   String get indonesian => 'Indonesian';
 
   @override
-  String get selectKeepassFile => 'AuthPass - Wähle eine KeePass Datei';
+  String get selectKeepassFile => 'AuthPass - Select KeePass File';
 
   @override
-  String get quickUnlockingFiles => 'Quick-Unlock Dateien';
+  String get quickUnlockingFiles => 'Quick unlocking files';
 
   @override
-  String get selectKeepassFileLabel => 'Bitte wähle eine KeePass (.kdbx) Datei.';
+  String get selectKeepassFileLabel => 'Please select a KeePass (.kdbx) file.';
 
   @override
   String get createNewFile => 'Create New File';
 
   @override
-  String get openLocalFile => 'Öffne\nLokale Datei';
+  String get openLocalFile => 'Open\nLocal File';
 
   @override
-  String get openFile => 'Datei öffnen';
+  String get openFile => 'Open File';
 
   @override
   String loadFrom(String cloudStorageName) {
-    return 'Lade von ${cloudStorageName}';
+    return 'Load from ${cloudStorageName}';
   }
 
   @override
-  String get loadFromUrl => 'Lade von URL';
+  String get loadFromUrl => 'Download from URL';
 
   @override
   String get loadFromRemoteUrl => 'Open kdbx from URL';
 
   @override
-  String get createNewKeepass => 'KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen';
+  String get createNewKeepass => 'New to KeePass?\nCreate New Password Database';
 
   @override
-  String get labelLastOpenFiles => 'Zuletzt geöffnete Dateien:';
+  String get labelLastOpenFiles => 'Last opened files:';
 
   @override
-  String get noFilesHaveBeenOpenYet => 'Keine Dateien bisher geöffnet.';
+  String get noFilesHaveBeenOpenYet => 'No files have been opened yet.';
 
   @override
-  String get preferenceSelectLanguage => 'Sprache wählen';
+  String get preferenceSelectLanguage => 'Select Language';
 
   @override
-  String get preferenceLanguage => 'Sprache';
+  String get preferenceLanguage => 'Language';
 
   @override
-  String get preferenceTextScaleFactor => 'Text Skalierung';
+  String get preferenceTextScaleFactor => 'Text Scale Factor';
 
   @override
-  String get preferenceVisualDensity => 'Visuelle Dichte';
+  String get preferenceVisualDensity => 'Visual Density';
 
   @override
   String get preferenceTheme => 'Theme';
 
   @override
-  String get preferenceThemeLight => 'Hell';
+  String get preferenceThemeLight => 'Light';
 
   @override
-  String get preferenceThemeDark => 'Dunkel';
+  String get preferenceThemeDark => 'Dark';
 
   @override
-  String get preferenceSystemDefault => 'Geräte Standardeinstellung';
+  String get preferenceSystemDefault => 'System Default';
 
   @override
-  String get preferenceDefault => 'Standard';
+  String get preferenceDefault => 'Default';
 
   @override
-  String get lockAllFiles => 'Alle offenen Dateien schließen';
+  String get lockAllFiles => 'Lock all open files';
 
   @override
-  String get preferenceAllowScreenshots => 'Screenshots der App zulassen';
+  String get preferenceAllowScreenshots => 'Allow Screenshots of the App';
 
   @override
-  String get preferenceEnableAutoFill => 'Autofill aktivieren';
+  String get preferenceEnableAutoFill => 'Enable autofill';
 
   @override
-  String get preferenceAutoFillDescription => 'Wird nur auf ab Android Oreo (8.0) unterstützt.';
+  String get preferenceAutoFillDescription => 'Only supported on Android Oreo (8.0) or later.';
 
   @override
-  String get preferenceTitle => 'Einstellungen';
+  String get preferenceTitle => 'Preferences';
 
   @override
   String get aboutAppName => 'AuthPass';
 
   @override
-  String get aboutLinkFeedback => 'Wir freuen uns über jede Art von Feedback!';
+  String get aboutLinkFeedback => 'We welcome any kind of feedback!';
 
   @override
-  String get aboutLinkVisitWebsite => 'Besuchen Sie auch unsere Website';
+  String get aboutLinkVisitWebsite => 'Also make sure to visit our website';
 
   @override
-  String get aboutLinkGitHub => 'Und Open Source Projekt';
+  String get aboutLinkGitHub => 'And Open Source Project';
 
   @override
   String aboutLogFile(String logFilePath) {
-    return 'Log-Datei: ${logFilePath}';
+    return 'Log File: ${logFilePath}';
   }
 
   @override
@@ -162,74 +162,74 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get menuItemGeneratePassword => 'Passwort generieren';
+  String get menuItemGeneratePassword => 'Generate Password';
 
   @override
-  String get menuItemPreferences => 'Einstellungen';
+  String get menuItemPreferences => 'Preferences';
 
   @override
-  String get menuItemOpenAnotherFile => 'Weitere Datei öffnen';
+  String get menuItemOpenAnotherFile => 'Open another File';
 
   @override
-  String get menuItemCheckForUpdates => 'Nach Updates suchen';
+  String get menuItemCheckForUpdates => 'Check for updates';
 
   @override
-  String get menuItemSupport => 'E-Mail Support';
+  String get menuItemSupport => 'Email Support';
 
   @override
-  String get menuItemSupportSubtitle => 'Log-Datei per E-Mail versenden / Support kontaktieren.';
+  String get menuItemSupportSubtitle => 'Send logs by email/ask for help.';
 
   @override
-  String get menuItemHelp => 'Hilfe';
+  String get menuItemHelp => 'Help';
 
   @override
-  String get menuItemHelpSubtitle => 'Dokumentation anzeigen';
+  String get menuItemHelpSubtitle => 'Show documentation';
 
   @override
-  String get menuItemAbout => 'Über AuthPass';
+  String get menuItemAbout => 'About';
 
   @override
   String get actionOpenUrl => 'Open URL';
 
   @override
-  String get passwordPlainText => 'Passwort anzeigen';
+  String get passwordPlainText => 'Reveal password';
 
   @override
-  String get generatorPassword => 'Passwort';
+  String get generatorPassword => 'Password';
 
   @override
-  String get generatePassword => 'Passwort generieren';
+  String get generatePassword => 'Generate Password';
 
   @override
-  String get doneButtonLabel => 'Fertig';
+  String get doneButtonLabel => 'Done';
 
   @override
-  String get useAsDefault => 'Als Standard speichern';
+  String get useAsDefault => 'Use as Default';
 
   @override
-  String get characterSetLowerCase => 'Kleinbuchstaben (a-z)';
+  String get characterSetLowerCase => 'Lowercase (a-z)';
 
   @override
-  String get characterSetUpperCase => 'Großbuchstaben (A-Z)';
+  String get characterSetUpperCase => 'Uppercase (A-Z)';
 
   @override
-  String get characterSetNumeric => 'Ziffern (0-9)';
+  String get characterSetNumeric => 'Numeric (0-9)';
 
   @override
-  String get characterSetUmlauts => 'Umlaute (äöü)';
+  String get characterSetUmlauts => 'Umlauts (ä)';
 
   @override
-  String get characterSetSpecial => 'Sonderzeichen (@%+)';
+  String get characterSetSpecial => 'Special (@%+)';
 
   @override
-  String get length => 'Länge';
+  String get length => 'Length';
 
   @override
-  String get customLength => 'Andere Länge';
+  String get customLength => 'Custom Length';
 
   @override
   String customLengthHelperText(Object customMinLength) {
-    return 'Nur für > ${customMinLength} verwendet';
+    return 'Only used for length > ${customMinLength}';
   }
 
   @override
@@ -243,96 +243,96 @@ class AppLocalizationsDe extends AppLocalizations {
     return intl.Intl.pluralLogic(
       numFiles,
       locale: localeName,
-      other: '${numFiles} Dateien gespeichert: ${files}',
+      other: '${numFiles} files saved: ${files}',
     );
   }
 
   @override
-  String get manageGroups => 'Gruppen verwalten';
+  String get manageGroups => 'Manage Groups';
 
   @override
-  String get lockFiles => 'Dateien sperren/schließen';
+  String get lockFiles => 'Lock Files';
 
   @override
-  String get searchHint => 'Suchen';
+  String get searchHint => 'Search';
 
   @override
-  String get clear => 'Löschen';
+  String get clear => 'Clear';
 
   @override
   String get autofillFilterPrefix => 'Filter:';
 
   @override
-  String get autofillPrompt => 'Wähle einen Passwort-Eintrag für Autofill.';
+  String get autofillPrompt => 'Select password entry for autofill.';
 
   @override
-  String get copiedToClipboard => 'In die Zwischenablage kopiert.';
+  String get copiedToClipboard => 'Copied to clipboard.';
 
   @override
-  String get noTitle => '(kein Titel)';
+  String get noTitle => '(no title)';
 
   @override
-  String get noUsername => '(kein Benutzername)';
+  String get noUsername => '(no username)';
 
   @override
-  String get filterCustomize => 'Anpassen …';
+  String get filterCustomize => 'Customize …';
 
   @override
-  String get swipeCopyPassword => 'Passwort kopieren';
+  String get swipeCopyPassword => 'Copy Password';
 
   @override
-  String get swipeCopyUsername => 'Benutzername kopieren';
+  String get swipeCopyUsername => 'Copy Username';
 
   @override
-  String get doneCopiedPassword => 'Passwort in die Zwischenablage kopiert.';
+  String get doneCopiedPassword => 'Copied password to clipboard.';
 
   @override
-  String get doneCopiedUsername => 'Benutzername in die Zwischenablage kopiert.';
+  String get doneCopiedUsername => 'Copied username to clipboard.';
 
   @override
   String get doneCopiedField => 'Copied.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'Du hast noch kein Passwort in deiner Datenbank.';
+  String get emptyPasswordVaultPlaceholder => 'You do not have any password in your database yet.';
 
   @override
-  String get emptyPasswordVaultButtonLabel => 'Erstelle dein erstes Passwort';
+  String get emptyPasswordVaultButtonLabel => 'Create your first Password';
 
   @override
-  String get loadingFile => 'Datei wird geladen …';
+  String get loadingFile => 'Loading file …';
 
   @override
-  String get internalFile => 'Interne Dateien';
+  String get internalFile => 'Internal file';
 
   @override
-  String get internalFileSubtitle => 'Datenbank zuvor mit AuthPass erstellt';
+  String get internalFileSubtitle => 'Database previously created with AuthPass';
 
   @override
   String get filePicker => 'File Picker';
 
   @override
-  String get filePickerSubtitle => 'Datei vom lokalen Gerät öffnen.';
+  String get filePickerSubtitle => 'Open file from the device.';
 
   @override
-  String get credentialsAppBarTitle => 'Entschlüsselung';
+  String get credentialsAppBarTitle => 'Credentials';
 
   @override
-  String get credentialLabel => 'Passwort eingeben für:';
+  String get credentialLabel => 'Enter the password for:';
 
   @override
-  String get masterPasswordInputLabel => 'Passwort';
+  String get masterPasswordInputLabel => 'Password';
 
   @override
-  String get masterPasswordEmptyValidator => 'Bitte gib dein Passwort ein.';
+  String get masterPasswordEmptyValidator => 'Please enter your password.';
 
   @override
-  String get masterPasswordIncorrectValidator => 'Ungültiges Passwort';
+  String get masterPasswordIncorrectValidator => 'Invalid password';
 
   @override
-  String get useKeyFile => 'Schlüsseldatei verwenden';
+  String get useKeyFile => 'Use Key File';
 
   @override
-  String get saveMasterPasswordBiometric => 'Passwort sicher speichern (mit biometrischen Schutz)?';
+  String get saveMasterPasswordBiometric => 'Save Password with biometric key store?';
 
   @override
   String get errorOpenFileAlreadyOpenTitle => 'File already open';
@@ -343,63 +343,63 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get errorUnlockFileTitle => 'Datei kann nicht geöffnet werden';
+  String get errorUnlockFileTitle => 'Unable to open File';
 
   @override
   String errorUnlockFileBody(Object error) {
-    return 'Unbekannter Fehler beim Öffnen der Datei. ${error}';
+    return 'Unknown error while trying to open file. ${error}';
   }
 
   @override
-  String get dialogContinue => 'Weiter';
+  String get dialogContinue => 'Continue';
 
   @override
-  String get dialogSendErrorReport => 'Fehlerbericht senden/Hilfe';
+  String get dialogSendErrorReport => 'Send Error Report/Help';
 
   @override
-  String get groupFilterDescription => 'Wähle Gruppen die (rekursiv) angezeigt werden sollen';
+  String get groupFilterDescription => 'Select which Groups to show (recursively)';
 
   @override
-  String get groupFilterSelectAll => 'Alles auswählen';
+  String get groupFilterSelectAll => 'Select all';
 
   @override
-  String get groupFilterDeselectAll => 'Auswahl aufheben';
+  String get groupFilterDeselectAll => 'Deselect all';
 
   @override
-  String get createSubgroup => 'Untergruppe erstellen';
+  String get createSubgroup => 'Create Subgroup';
 
   @override
-  String get editAction => 'Bearbeiten';
+  String get editAction => 'Edit';
 
   @override
-  String get deleteAction => 'Löschen';
+  String get deleteAction => 'Delete';
 
   @override
-  String get successfullyDeletedGroup => 'Gruppe gelöscht.';
+  String get successfullyDeletedGroup => 'Deleted group.';
 
   @override
-  String get undoButtonLabel => 'Rückgängig';
+  String get undoButtonLabel => 'Undo';
 
   @override
   String get saveButtonLabel => 'Save';
 
   @override
-  String get initialNewGroupName => 'Neue Gruppe';
+  String get initialNewGroupName => 'New Group';
 
   @override
-  String get deleteGroupErrorTitle => 'Gruppe kann nicht gelöscht werden';
+  String get deleteGroupErrorTitle => 'Unable to delete group';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'Diese Gruppe enthält noch andere Gruppen. Sie können derzeit nur leere Gruppen löschen.';
+  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'Diese Gruppe enthält noch Passwort-Einträge. Sie können derzeit nur leere Gruppen löschen.';
+  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
 
   @override
-  String get groupListAppBarTitle => 'Gruppen';
+  String get groupListAppBarTitle => 'Groups';
 
   @override
-  String get groupListFilterAppbarTitle => 'Nach Gruppen filtern';
+  String get groupListFilterAppbarTitle => 'Filter by groups';
 
   @override
   String get clearQuickUnlock => 'Clear Biometric Storage';
@@ -551,6 +551,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String unexpectedError(String error) {
-    return 'Unerwarteter Fehler: ${error}';
+    return 'Unexpected Error: ${error}';
   }
 }

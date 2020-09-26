@@ -75,7 +75,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get loadFromUrl => 'Завантажити з URL';
 
   @override
-  String get loadFromRemoteUrl => 'Open kdbx from URL';
+  String get loadFromRemoteUrl => 'Відкрити kdbx з URL-адреси';
 
   @override
   String get createNewKeepass => 'Вперше у KeePass?\nСтворити нову базу паролів';
@@ -383,7 +383,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get undoButtonLabel => 'Скасувати';
 
   @override
-  String get saveButtonLabel => 'Save';
+  String get saveButtonLabel => 'Зберегти';
 
   @override
   String get initialNewGroupName => 'Нова група';
@@ -501,7 +501,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
 
   @override
-  String get entryAddField => 'Add Field';
+  String get entryAddField => 'Створити поле';
 
   @override
   String get entryCustomField => 'Custom Field';
@@ -516,7 +516,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get swipeCopyField => 'Copy Field';
 
   @override
-  String get fieldRename => 'Rename';
+  String get fieldRename => 'Перейменувати';
 
   @override
   String get fieldGeneratePassword => 'Generate Password …';
@@ -528,10 +528,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get fieldUnprotect => 'Unprotect Value';
 
   @override
-  String get fieldPresent => 'Present';
+  String get fieldPresent => 'QR код';
 
   @override
-  String get fieldGenerateEmail => 'Generate Email';
+  String get fieldGenerateEmail => 'Згенерувати адресу електронної пошти';
 
   @override
   String get onboardingBackToOnboarding => 'Tour';
@@ -546,7 +546,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get onboardingQuestion => 'Have you used a password manager before?';
 
   @override
-  String get onboardingYesOpenPasswords => 'Yes, open my passwords';
+  String get onboardingYesOpenPasswords => 'Так, відкрити мої паролі';
 
   @override
   String get onboardingNoCreate => 'I\'m all new! Get me started.';

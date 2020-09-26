@@ -46,7 +46,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get spanish => 'Espagnol';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'Indonésie';
 
   @override
   String get selectKeepassFile => 'AuthPass - Sélectionnez un fichier KeePass';

@@ -46,7 +46,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get spanish => 'Español';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'Indonesio';
 
   @override
   String get selectKeepassFile => 'AuthPass - Seleccionar archivo KeePass';
@@ -390,10 +390,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteGroupErrorTitle => 'No se puede eliminar el grupo';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsGroup => 'Este grupo aún contiene otros grupos. Actualmente sólo puede eliminar grupos vacíos.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsEntries => 'Este grupo aún contiene entradas de contraseña. Actualmente sólo puede eliminar grupos vacíos.';
 
   @override
   String get groupListAppBarTitle => 'Grupos';
@@ -405,7 +405,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clearQuickUnlock => 'Borrar almacenamiento biométrico';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Remove saved master passwords';
+  String get clearQuickUnlockSubtitle => 'Eliminar contraseñas maestras guardadas';
 
   @override
   String get unlock => 'Desbloquear archivos';
@@ -414,77 +414,77 @@ class AppLocalizationsEs extends AppLocalizations {
   String get closePasswordFiles => 'cerrar archivos de contraseñas';
 
   @override
-  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+  String get clearQuickUnlockSuccess => 'Eliminadas las contraseñas maestras guardadas del almacenamiento biométrico.';
 
   @override
-  String get diacOptIn => 'Opt in to In-App News, Surveys.';
+  String get diacOptIn => 'Opte por las noticias en la aplicación, encuestas.';
 
   @override
-  String get diacOptInSubtitle => 'Will occasionally send a network request to fetch news.';
+  String get diacOptInSubtitle => 'Ocasionalmente enviará una solicitud de red para obtener noticias.';
 
   @override
-  String get enableAutofillDebug => 'AutoFill: Enable debug';
+  String get enableAutofillDebug => 'Autollenado: Habilitar depuración';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Shows information overlays for every input field';
+  String get enableAutofillDebugSubtitle => 'Muestra capas de información para cada campo de entrada';
 
   @override
-  String get createPasswordDatabase => 'Create Password Database';
+  String get createPasswordDatabase => 'Crear base de datos de contraseñas';
 
   @override
-  String get nameNewPasswordDatabase => 'Name of your new Database';
+  String get nameNewPasswordDatabase => 'Nombre de su nueva base de datos';
 
   @override
-  String get validatorNameMissing => 'Please enter a name for your new database.';
+  String get validatorNameMissing => 'Por favor, introduzca un nombre para su nueva base de datos.';
 
   @override
-  String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
+  String get masterPasswordHelpText => 'Seleccione una contraseña maestra segura. Asegúrese de recordarla.';
 
   @override
-  String get inputMasterPasswordText => 'Master Password';
+  String get inputMasterPasswordText => 'Contraseña maestra';
 
   @override
-  String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
+  String get masterPasswordMissingCreate => 'Por favor, introduzca una contraseña segura y recordable.';
 
   @override
-  String get createDatabaseAction => 'Create Database';
+  String get createDatabaseAction => 'Crear base de datos';
 
   @override
   String get databaseExistsError => 'El archivo ya existe';
 
   @override
   String databaseExistsErrorDescription(Object filePath) {
-    return 'Error while trying to create database ${filePath}. File already exists. Please choose another name.';
+    return 'Error al intentar crear la base de datos ${filePath}. El archivo ya existe. Por favor elija otro nombre.';
   }
 
   @override
-  String get databaseCreateDefaultName => 'PersonalPasswords';
+  String get databaseCreateDefaultName => 'ContraseñasPersonales';
 
   @override
-  String get preferenceDynamicLoadIcons => 'Dynamically load Icons';
+  String get preferenceDynamicLoadIcons => 'Cargar iconos dinámicamente';
 
   @override
   String preferenceDynamicLoadIconsSubtitle(Object urlFieldName) {
-    return 'Will make http requests with the value in ${urlFieldName} field to load website icons.';
+    return 'Hará solicitudes http con el valor en el campo ${urlFieldName} para cargar iconos del sitio web.';
   }
 
   @override
   String passwordScore(Object score) {
-    return 'Strength: ${score} of 4';
+    return 'Fortaleza: ${score} de 4';
   }
 
   @override
-  String get entryInfoFile => 'File:';
+  String get entryInfoFile => 'Archivo:';
 
   @override
-  String get entryInfoGroup => 'Group:';
+  String get entryInfoGroup => 'Grupo:';
 
   @override
-  String get entryInfoLastModified => 'Last Modified:';
+  String get entryInfoLastModified => 'Última modificación:';
 
   @override
   String movedEntryToGroup(Object groupName) {
-    return 'Moved entry into ${groupName}';
+    return 'Entrada movida a ${groupName}';
   }
 
   @override
@@ -493,22 +493,22 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get entryAddAttachment => 'Add Attachment';
+  String get entryAddAttachment => 'Añadir archivo adjunto';
 
   @override
-  String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
+  String get entryAttachmentSizeWarning => 'Los archivos adjuntos serán incorporados en el archivo de contraseñas. Esto puede aumentar significativamente el tiempo necesario para abrir/guardar contraseñas.';
 
   @override
   String get entryAddField => 'Añadir campo';
 
   @override
-  String get entryCustomField => 'Custom Field';
+  String get entryCustomField => 'Campo personalizado';
 
   @override
-  String get entryCustomFieldTitle => 'Adding new custom Field';
+  String get entryCustomFieldTitle => 'Añadir nuevo campo personalizado';
 
   @override
-  String get entryCustomFieldInputLabel => 'Enter a name for the field';
+  String get entryCustomFieldInputLabel => 'Ingrese un nombre para el campo';
 
   @override
   String get swipeCopyField => 'Copiar campo';
@@ -517,40 +517,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fieldRename => 'Renombrar';
 
   @override
-  String get fieldGeneratePassword => 'Generate Password …';
+  String get fieldGeneratePassword => 'Generar contraseña …';
 
   @override
-  String get fieldProtect => 'Protect Value';
+  String get fieldProtect => 'Proteger Valor';
 
   @override
-  String get fieldUnprotect => 'Unprotect Value';
+  String get fieldUnprotect => 'Desproteger Valor';
 
   @override
-  String get fieldPresent => 'Present';
+  String get fieldPresent => 'Presentar';
 
   @override
-  String get fieldGenerateEmail => 'Generate Email';
+  String get fieldGenerateEmail => 'Generar Email';
 
   @override
   String get onboardingBackToOnboarding => 'Tour';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
+  String get onboardingBackToOnboardingSubtitle => 'Reviva la experiencia de la primera ejecución 😅';
 
   @override
   String get onboardingHeadline => '¡Hagamos que tus contraseñas sean seguras!';
 
   @override
-  String get onboardingQuestion => 'Have you used a password manager before?';
+  String get onboardingQuestion => '¿Ha usado un gestor de contraseñas antes?';
 
   @override
   String get onboardingYesOpenPasswords => 'Sí, abrir mis contraseñas';
 
   @override
-  String get onboardingNoCreate => 'I\'m all new! Get me started.';
+  String get onboardingNoCreate => '¡Soy todo nuevo! Empecemos.';
 
   @override
   String unexpectedError(String error) {
-    return 'Unexpected Error: ${error}';
+    return 'Error inesperado: ${error}';
   }
 }

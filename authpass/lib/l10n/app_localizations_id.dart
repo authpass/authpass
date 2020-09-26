@@ -46,7 +46,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get spanish => 'Spanyol';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'Indonesia';
 
   @override
   String get selectKeepassFile => 'AuthPass - Pilih file KeePass';
@@ -216,7 +216,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get characterSetNumeric => 'Numerik (0-9)';
 
   @override
-  String get characterSetUmlauts => 'Umlauts (ä)';
+  String get characterSetUmlauts => 'Aksen (ä)';
 
   @override
   String get characterSetSpecial => 'Spesial (@%+)';
@@ -414,143 +414,143 @@ class AppLocalizationsId extends AppLocalizations {
   String get closePasswordFiles => 'tutup file kata sandi';
 
   @override
-  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+  String get clearQuickUnlockSuccess => 'Hapus Kata Sandi utama yang tersimpan dari penyimpanan biometrik.';
 
   @override
-  String get diacOptIn => 'Opt in to In-App News, Surveys.';
+  String get diacOptIn => 'Ikut program tentang berita aplikasi dan survei.';
 
   @override
-  String get diacOptInSubtitle => 'Will occasionally send a network request to fetch news.';
+  String get diacOptInSubtitle => 'Akan sesekali mengirim permintaan ke internet untuk memperoleh berita.';
 
   @override
-  String get enableAutofillDebug => 'AutoFill: Enable debug';
+  String get enableAutofillDebug => 'Isi otomatis: Hidupkan debug';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Shows information overlays for every input field';
+  String get enableAutofillDebugSubtitle => 'Menunjukkan hamparan informasi untuk semua kolom masukan';
 
   @override
-  String get createPasswordDatabase => 'Create Password Database';
+  String get createPasswordDatabase => 'Buat Database Kata Sandi';
 
   @override
-  String get nameNewPasswordDatabase => 'Name of your new Database';
+  String get nameNewPasswordDatabase => 'Nama Database baru anda';
 
   @override
-  String get validatorNameMissing => 'Please enter a name for your new database.';
+  String get validatorNameMissing => 'Mohon beri nama pada database baru kata sandi anda.';
 
   @override
-  String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
+  String get masterPasswordHelpText => 'Buatlah master Kata Sandi anda. Pastikan anda mengingatnya.';
 
   @override
-  String get inputMasterPasswordText => 'Master Password';
+  String get inputMasterPasswordText => 'Master Kata Sandi';
 
   @override
-  String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
+  String get masterPasswordMissingCreate => 'Mohon masukkan kata sandi yang aman dan mudah anda diingat.';
 
   @override
-  String get createDatabaseAction => 'Create Database';
+  String get createDatabaseAction => 'Buat Database';
 
   @override
-  String get databaseExistsError => 'File Exists';
+  String get databaseExistsError => 'File Sudah Ada';
 
   @override
   String databaseExistsErrorDescription(Object filePath) {
-    return 'Error while trying to create database ${filePath}. File already exists. Please choose another name.';
+    return 'Kesalahan saat mencoba membuat database pada ${filePath}. File sudah ada. Mohon pilih nama lain untuk database anda.';
   }
 
   @override
-  String get databaseCreateDefaultName => 'PersonalPasswords';
+  String get databaseCreateDefaultName => 'KataSandiPribadi';
 
   @override
-  String get preferenceDynamicLoadIcons => 'Dynamically load Icons';
+  String get preferenceDynamicLoadIcons => 'Muat ikon secara Otomatis';
 
   @override
   String preferenceDynamicLoadIconsSubtitle(Object urlFieldName) {
-    return 'Will make http requests with the value in ${urlFieldName} field to load website icons.';
+    return 'Akan membuat permintaan http dari kolom nilai ${urlFieldName} untuk memuat ikon situs web.';
   }
 
   @override
   String passwordScore(Object score) {
-    return 'Strength: ${score} of 4';
+    return 'Skor Keamanan: ${score} dari 4';
   }
 
   @override
   String get entryInfoFile => 'File:';
 
   @override
-  String get entryInfoGroup => 'Group:';
+  String get entryInfoGroup => 'Grup:';
 
   @override
-  String get entryInfoLastModified => 'Last Modified:';
+  String get entryInfoLastModified => 'Terakhir di ubah:';
 
   @override
   String movedEntryToGroup(Object groupName) {
-    return 'Moved entry into ${groupName}';
+    return 'Entri dipindah ke ${groupName}';
   }
 
   @override
   String sizeBytes(Object bytes) {
-    return '{count} bytes';
+    return '{count} bita';
   }
 
   @override
-  String get entryAddAttachment => 'Add Attachment';
+  String get entryAddAttachment => 'Tambah Lampiran';
 
   @override
-  String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
+  String get entryAttachmentSizeWarning => 'File yang dilampirkan akan disematkan dalam file kata sandi. Ini dapat meningkatkan waktu yang dibutuhkan untuk membuka/menyimpan kata sandi.';
 
   @override
-  String get entryAddField => 'Add Field';
+  String get entryAddField => 'Tambah Kolom Baru';
 
   @override
-  String get entryCustomField => 'Custom Field';
+  String get entryCustomField => 'Kolom Khusus';
 
   @override
-  String get entryCustomFieldTitle => 'Adding new custom Field';
+  String get entryCustomFieldTitle => 'Menambahkan kolom khusus baru';
 
   @override
-  String get entryCustomFieldInputLabel => 'Enter a name for the field';
+  String get entryCustomFieldInputLabel => 'Masukkan nama untuk kolom khusus anda';
 
   @override
-  String get swipeCopyField => 'Copy Field';
+  String get swipeCopyField => 'Salin Kolom';
 
   @override
-  String get fieldRename => 'Rename';
+  String get fieldRename => 'Ubah nama';
 
   @override
-  String get fieldGeneratePassword => 'Generate Password …';
+  String get fieldGeneratePassword => 'Hasilkan Kata Sandi …';
 
   @override
-  String get fieldProtect => 'Protect Value';
+  String get fieldProtect => 'Sembunyikan nilai masukan';
 
   @override
-  String get fieldUnprotect => 'Unprotect Value';
+  String get fieldUnprotect => 'Sembunyikan Nilai Entri';
 
   @override
-  String get fieldPresent => 'Present';
+  String get fieldPresent => 'Kode QR';
 
   @override
-  String get fieldGenerateEmail => 'Generate Email';
+  String get fieldGenerateEmail => 'Penghasil Email';
 
   @override
-  String get onboardingBackToOnboarding => 'Tour';
+  String get onboardingBackToOnboarding => 'Tur';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
+  String get onboardingBackToOnboardingSubtitle => 'Menghidupkan kembali pengalaman pertama. 😅️';
 
   @override
-  String get onboardingHeadline => 'Let\'s make your Passwords Secure!';
+  String get onboardingHeadline => 'Ayo buat Kata Sandi anda Aman!';
 
   @override
-  String get onboardingQuestion => 'Have you used a password manager before?';
+  String get onboardingQuestion => 'Pernahkah anda menggunakan pengelola kata sandi lain sebelumnya?';
 
   @override
-  String get onboardingYesOpenPasswords => 'Yes, open my passwords';
+  String get onboardingYesOpenPasswords => 'Ya, buka Kata Sandi tersimpan';
 
   @override
-  String get onboardingNoCreate => 'I\'m all new! Get me started.';
+  String get onboardingNoCreate => 'Saya pengguna baru, bantu saya!';
 
   @override
   String unexpectedError(String error) {
-    return 'Unexpected Error: ${error}';
+    return 'Kesalahan tak terduga: ${error}';
   }
 }
