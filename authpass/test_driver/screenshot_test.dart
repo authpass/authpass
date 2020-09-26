@@ -34,6 +34,9 @@ void main() {
       await streamSubscription?.cancel();
     });
     test('open kdbx 3 file', () async {
+      await Future<void>.delayed(const Duration(seconds: 1));
+      await driver.waitUntilNoTransientCallbacks();
+
       final config = Config();
       while (!(await driver.requestData('nextTheme')).contains('light')) {}
 

@@ -24,7 +24,8 @@ locales:
   # - lt-LT
   # - ru-RU
   # - uk-UA
-  - fr-FR
+  # - fr-FR
+  - es-ES
 
 # A map of devices to emulate
 devices:
