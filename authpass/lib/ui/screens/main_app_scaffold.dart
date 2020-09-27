@@ -8,6 +8,7 @@ import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/utils/back_button_navigator_delegate.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -35,17 +36,12 @@ class MainAppScaffold extends StatelessWidget {
         observers: [
           AnalyticsNavigatorObserver(Provider.of<Analytics>(context))
         ],
-        onGenerateRoute: _onGenerateRoute,
+        onGenerateRoute: null,
+        onGenerateInitialRoutes: (navigator, initialRoute) => [
+          PasswordList.route(),
+        ],
       ),
     );
-  }
-
-  Route<dynamic> _onGenerateRoute(RouteSettings settings) {
-    if (settings.name == Navigator.defaultRouteName) {
-      return PasswordList.route();
-//      return MaterialPageRoute<void>(settings: settings, builder: (context) => PasswordList.);
-    }
-    return null;
   }
 }
 

@@ -6,6 +6,7 @@ class BackButtonNavigatorDelegate extends StatefulWidget {
     Key key,
     this.observers,
     @required this.onGenerateRoute,
+    this.onGenerateInitialRoutes,
   }) : super(key: key);
 
   /// A list of observers for this navigator.
@@ -13,6 +14,8 @@ class BackButtonNavigatorDelegate extends StatefulWidget {
 
   /// Called to generate a route for a given [RouteSettings].
   final RouteFactory onGenerateRoute;
+
+  final RouteListFactory onGenerateInitialRoutes;
 
   @override
   _BackButtonNavigatorDelegateState createState() =>
@@ -33,6 +36,7 @@ class _BackButtonNavigatorDelegateState
         key: _navigatorKey,
         observers: widget.observers,
         onGenerateRoute: widget.onGenerateRoute,
+        onGenerateInitialRoutes: widget.onGenerateInitialRoutes,
       ),
     );
   }

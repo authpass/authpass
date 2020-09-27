@@ -89,6 +89,16 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 
   @override
   Widget build(BuildContext context) {
+    // no keyboard shortcuts for mobile for android right now..
+    // it somehow breaks back button
+    // https://github.com/flutter/flutter/issues/66763
+    if (AuthPassPlatform.isAndroid) {
+      return Provider<KeyboardShortcutEvents>.value(
+        value: _keyboardShortcutEvents,
+        child: widget.child,
+      );
+    }
+
     return Provider<KeyboardShortcutEvents>.value(
       value: _keyboardShortcutEvents,
       child: RawKeyboardListener(
