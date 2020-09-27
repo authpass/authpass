@@ -146,19 +146,19 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get unableToLaunchUrlTitle => 'Unable to open Url';
+  String get unableToLaunchUrlTitle => 'No se pudo abrir la Url';
 
   @override
   String unableToLaunchUrlDescription(Object url, Object openError) {
-    return 'Unable to launch ${url}: ${openError}';
+    return 'No se puede abrir ${url}: ${openError}';
   }
 
   @override
-  String get unableToLaunchUrlNoHandler => 'No application available for url.';
+  String get unableToLaunchUrlNoHandler => 'Ninguna aplicación disponible para la url.';
 
   @override
   String launchedUrl(Object url) {
-    return 'Opened URL: ${url}';
+    return 'URL abierta: ${url}';
   }
 
   @override
@@ -189,7 +189,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get menuItemAbout => 'Acerca de';
 
   @override
-  String get actionOpenUrl => 'Open URL';
+  String get actionOpenUrl => 'Abrir URL';
 
   @override
   String get passwordPlainText => 'Mostrar contraseña';
