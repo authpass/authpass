@@ -1,0 +1,33 @@
+{
+    "@@locale": "tr",
+    "fieldPassword": "Şifre",
+    "@fieldPassword": {},
+    "fieldWebsite": "Web site",
+    "@fieldWebsite": {},
+    "english": "İngilizce",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "Almanca",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Fransızca",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "İspanyolca",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "preferenceLanguage": "Dil",
+    "@preferenceLanguage": {},
+    "preferenceThemeDark": "Koyu",
+    "@preferenceThemeDark": {},
+    "menuItemAbout": "Hakkında",
+    "@menuItemAbout": {},
+    "generatePassword": "Parola oluştur",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    }
+}
