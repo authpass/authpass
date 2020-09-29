@@ -4,6 +4,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
@@ -839,11 +840,29 @@ class _PasswordListContentState extends State<PasswordListContent>
     return [UnsupportedWrite(source: unsupportedWrite.key)];
   }
 
+  List<Widget> _buildCloudSyncPrefix() {
+    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final localFiles =
+        kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
+    if (localFiles.length > 0) {
+      return localFiles
+          .map((e) => MaterialBanner(content: Text("${e.key.displayName} is only saved locally!"), actions: [
+                FlatButton(
+                  child: Text("Backup"),
+                  onPressed: () {},
+                )
+              ]))
+          .toList();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
+      ...?_buildCloudSyncPrefix(),
       ...?_buildGroupFilterPrefix(),
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),
@@ -1228,9 +1247,7 @@ class PasswordEntryTile extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkTheme = theme.brightness == Brightness.dark;
     final fgColor = isSelected
-        ? isDarkTheme
-            ? theme.primaryColorLight
-            : theme.primaryColorDark
+        ? isDarkTheme ? theme.primaryColorLight : theme.primaryColorDark
         : null;
     final iconTheme = IconTheme.of(context);
     final size = iconTheme.size * 1.5;
