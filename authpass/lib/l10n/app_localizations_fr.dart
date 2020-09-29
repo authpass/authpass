@@ -146,19 +146,19 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get unableToLaunchUrlTitle => 'Unable to open Url';
+  String get unableToLaunchUrlTitle => 'Impossible d\'ouvrir l\'URL';
 
   @override
   String unableToLaunchUrlDescription(Object url, Object openError) {
-    return 'Unable to launch ${url}: ${openError}';
+    return 'Impossible d\'ouvrir l\'${url} : ${openError}';
   }
 
   @override
-  String get unableToLaunchUrlNoHandler => 'No application available for url.';
+  String get unableToLaunchUrlNoHandler => 'Aucune application disponible pour cette URL.';
 
   @override
   String launchedUrl(Object url) {
-    return 'Opened URL: ${url}';
+    return 'URL ${url} ouverte :';
   }
 
   @override
@@ -189,7 +189,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get menuItemAbout => 'À propos';
 
   @override
-  String get actionOpenUrl => 'Open URL';
+  String get actionOpenUrl => 'Ouvrir l\'URL';
 
   @override
   String get passwordPlainText => 'Afficher le mot de passe';
@@ -458,7 +458,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get databaseCreateDefaultName => 'Mots de passe personnel';
+  String get databaseCreateDefaultName => 'Mots de passe personnels';
 
   @override
   String get preferenceDynamicLoadIcons => 'Chargement dynamique des icônes';

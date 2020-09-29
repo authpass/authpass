@@ -10,7 +10,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get fieldUserName => 'User';
+  String get fieldUserName => 'Kullanıcı';
 
   @override
   String get fieldPassword => 'Şifre';
@@ -19,7 +19,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fieldWebsite => 'Web site';
 
   @override
-  String get fieldTitle => 'Title';
+  String get fieldTitle => 'Başlık';
 
   @override
   String get fieldTotp => 'One Time Password (Time Based)';
@@ -31,10 +31,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get german => 'Almanca';
 
   @override
-  String get russian => 'Russian';
+  String get russian => 'Rusça';
 
   @override
-  String get ukrainian => 'Ukrainian';
+  String get ukrainian => 'Ukraynaca';
 
   @override
   String get lithuanian => 'Lithuanian';
@@ -87,7 +87,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noFilesHaveBeenOpenYet => 'No files have been opened yet.';
 
   @override
-  String get preferenceSelectLanguage => 'Select Language';
+  String get preferenceSelectLanguage => 'Dil Seçin';
 
   @override
   String get preferenceLanguage => 'Dil';
@@ -99,7 +99,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferenceVisualDensity => 'Visual Density';
 
   @override
-  String get preferenceTheme => 'Theme';
+  String get preferenceTheme => 'Tema';
 
   @override
   String get preferenceThemeLight => 'Light';
@@ -108,19 +108,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferenceThemeDark => 'Koyu';
 
   @override
-  String get preferenceSystemDefault => 'System Default';
+  String get preferenceSystemDefault => 'Sistem varsayılanı';
 
   @override
-  String get preferenceDefault => 'Default';
+  String get preferenceDefault => 'Varsayılan';
 
   @override
   String get lockAllFiles => 'Lock all open files';
 
   @override
-  String get preferenceAllowScreenshots => 'Allow Screenshots of the App';
+  String get preferenceAllowScreenshots => 'Uygulamanın ekran görüntülerine izin verin';
 
   @override
-  String get preferenceEnableAutoFill => 'Enable autofill';
+  String get preferenceEnableAutoFill => 'Otomatik doldurmayı etkinleştir';
 
   @override
   String get preferenceAutoFillDescription => 'Only supported on Android Oreo (8.0) or later.';
@@ -132,13 +132,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get aboutAppName => 'AuthPass';
 
   @override
-  String get aboutLinkFeedback => 'We welcome any kind of feedback!';
+  String get aboutLinkFeedback => 'Her türlü geri bildirimi memnuniyetle karşılıyoruz!';
 
   @override
-  String get aboutLinkVisitWebsite => 'Also make sure to visit our website';
+  String get aboutLinkVisitWebsite => 'Ayrıca web sitemizi ziyaret ettiğinizden emin olun';
 
   @override
-  String get aboutLinkGitHub => 'And Open Source Project';
+  String get aboutLinkGitHub => 'Ve Açık Kaynak Projesi';
 
   @override
   String aboutLogFile(String logFilePath) {
@@ -146,7 +146,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get unableToLaunchUrlTitle => 'Unable to open Url';
+  String get unableToLaunchUrlTitle => 'Url açılamıyor';
 
   @override
   String unableToLaunchUrlDescription(Object url, Object openError) {
@@ -171,7 +171,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get menuItemOpenAnotherFile => 'Open another File';
 
   @override
-  String get menuItemCheckForUpdates => 'Check for updates';
+  String get menuItemCheckForUpdates => 'Güncellemeleri kontrol et';
 
   @override
   String get menuItemSupport => 'Email Support';
@@ -180,10 +180,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get menuItemSupportSubtitle => 'Send logs by email/ask for help.';
 
   @override
-  String get menuItemHelp => 'Help';
+  String get menuItemHelp => 'Yardım';
 
   @override
-  String get menuItemHelpSubtitle => 'Show documentation';
+  String get menuItemHelpSubtitle => 'Belgeleri göster';
 
   @override
   String get menuItemAbout => 'Hakkında';
@@ -192,10 +192,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get actionOpenUrl => 'Open URL';
 
   @override
-  String get passwordPlainText => 'Reveal password';
+  String get passwordPlainText => 'Şifreyi göster';
 
   @override
-  String get generatorPassword => 'Password';
+  String get generatorPassword => 'Şifre';
 
   @override
   String get generatePassword => 'Parola oluştur';
@@ -204,7 +204,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get doneButtonLabel => 'Done';
 
   @override
-  String get useAsDefault => 'Use as Default';
+  String get useAsDefault => 'Varsayılan olarak kullan';
 
   @override
   String get characterSetLowerCase => 'Lowercase (a-z)';
@@ -213,13 +213,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get characterSetUpperCase => 'Uppercase (A-Z)';
 
   @override
-  String get characterSetNumeric => 'Numeric (0-9)';
+  String get characterSetNumeric => 'Sayısal (0-9)';
 
   @override
   String get characterSetUmlauts => 'Umlauts (ä)';
 
   @override
-  String get characterSetSpecial => 'Special (@%+)';
+  String get characterSetSpecial => 'Özel (@%+)';
 
   @override
   String get length => 'Length';
@@ -248,25 +248,25 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get manageGroups => 'Manage Groups';
+  String get manageGroups => 'Grupları Yönet';
 
   @override
   String get lockFiles => 'Lock Files';
 
   @override
-  String get searchHint => 'Search';
+  String get searchHint => 'Ara';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Sil';
 
   @override
-  String get autofillFilterPrefix => 'Filter:';
+  String get autofillFilterPrefix => 'Filtrele:';
 
   @override
   String get autofillPrompt => 'Select password entry for autofill.';
 
   @override
-  String get copiedToClipboard => 'Copied to clipboard.';
+  String get copiedToClipboard => 'Panoya kopyalandı.';
 
   @override
   String get noTitle => '(no title)';
@@ -278,10 +278,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get filterCustomize => 'Customize …';
 
   @override
-  String get swipeCopyPassword => 'Copy Password';
+  String get swipeCopyPassword => 'Şifreyi Kopyala';
 
   @override
-  String get swipeCopyUsername => 'Copy Username';
+  String get swipeCopyUsername => 'Kullanıcı Adını Kopyala';
 
   @override
   String get doneCopiedPassword => 'Copied password to clipboard.';
@@ -290,7 +290,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get doneCopiedUsername => 'Copied username to clipboard.';
 
   @override
-  String get doneCopiedField => 'Copied.';
+  String get doneCopiedField => 'Kopyalandı.';
 
   @override
   String get emptyPasswordVaultPlaceholder => 'You do not have any password in your database yet.';
@@ -311,22 +311,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get filePicker => 'File Picker';
 
   @override
-  String get filePickerSubtitle => 'Open file from the device.';
+  String get filePickerSubtitle => 'Cihazdan dosyayı açın.';
 
   @override
   String get credentialsAppBarTitle => 'Credentials';
 
   @override
-  String get credentialLabel => 'Enter the password for:';
+  String get credentialLabel => 'Şunun için parolayı girin:';
 
   @override
-  String get masterPasswordInputLabel => 'Password';
+  String get masterPasswordInputLabel => 'Şifre';
 
   @override
-  String get masterPasswordEmptyValidator => 'Please enter your password.';
+  String get masterPasswordEmptyValidator => 'Lütfen şifrenizi giriniz.';
 
   @override
-  String get masterPasswordIncorrectValidator => 'Invalid password';
+  String get masterPasswordIncorrectValidator => 'Geçersiz şifre';
 
   @override
   String get useKeyFile => 'Use Key File';
@@ -347,11 +347,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String errorUnlockFileBody(Object error) {
-    return 'Unknown error while trying to open file. ${error}';
+    return 'Dosyayı açmaya çalışırken bilinmeyen hata. ${error}';
   }
 
   @override
-  String get dialogContinue => 'Continue';
+  String get dialogContinue => 'Devam';
 
   @override
   String get dialogSendErrorReport => 'Send Error Report/Help';
@@ -360,52 +360,52 @@ class AppLocalizationsTr extends AppLocalizations {
   String get groupFilterDescription => 'Select which Groups to show (recursively)';
 
   @override
-  String get groupFilterSelectAll => 'Select all';
+  String get groupFilterSelectAll => 'Hepsini seç';
 
   @override
-  String get groupFilterDeselectAll => 'Deselect all';
+  String get groupFilterDeselectAll => 'Tüm seçimleri kaldır';
 
   @override
-  String get createSubgroup => 'Create Subgroup';
+  String get createSubgroup => 'Alt Grup Oluşturun';
 
   @override
-  String get editAction => 'Edit';
+  String get editAction => 'Düzenle';
 
   @override
-  String get deleteAction => 'Delete';
+  String get deleteAction => 'Sil';
 
   @override
-  String get successfullyDeletedGroup => 'Deleted group.';
+  String get successfullyDeletedGroup => 'Grubu sil.';
 
   @override
-  String get undoButtonLabel => 'Undo';
+  String get undoButtonLabel => 'Geri al';
 
   @override
-  String get saveButtonLabel => 'Save';
+  String get saveButtonLabel => 'Kaydet';
 
   @override
-  String get initialNewGroupName => 'New Group';
+  String get initialNewGroupName => 'Yeni Grup';
 
   @override
-  String get deleteGroupErrorTitle => 'Unable to delete group';
+  String get deleteGroupErrorTitle => 'Grup silinemiyor';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsGroup => 'Bu grup hala başka grupları içerir. Şu anda yalnızca boş grupları silebilirsiniz.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsEntries => 'Bu grup hala şifre kayıtlarını içeriyor. Şu anda yalnızca boş grupları silebilirsiniz.';
 
   @override
-  String get groupListAppBarTitle => 'Groups';
+  String get groupListAppBarTitle => 'Gruplar';
 
   @override
-  String get groupListFilterAppbarTitle => 'Filter by groups';
+  String get groupListFilterAppbarTitle => 'Gruplara göre filtrele';
 
   @override
   String get clearQuickUnlock => 'Clear Biometric Storage';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Remove saved master passwords';
+  String get clearQuickUnlockSubtitle => 'Kaydedilmiş ana parolaları kaldırın';
 
   @override
   String get unlock => 'Unlock Files';
@@ -447,7 +447,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
 
   @override
-  String get createDatabaseAction => 'Create Database';
+  String get createDatabaseAction => 'Veritabanı Yarat';
 
   @override
   String get databaseExistsError => 'File Exists';
@@ -474,13 +474,13 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get entryInfoFile => 'File:';
+  String get entryInfoFile => 'Dosya:';
 
   @override
-  String get entryInfoGroup => 'Group:';
+  String get entryInfoGroup => 'Grup:';
 
   @override
-  String get entryInfoLastModified => 'Last Modified:';
+  String get entryInfoLastModified => 'Son düzenleme:';
 
   @override
   String movedEntryToGroup(Object groupName) {
@@ -499,7 +499,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
 
   @override
-  String get entryAddField => 'Add Field';
+  String get entryAddField => 'Alan Ekle';
 
   @override
   String get entryCustomField => 'Custom Field';
@@ -511,10 +511,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get entryCustomFieldInputLabel => 'Enter a name for the field';
 
   @override
-  String get swipeCopyField => 'Copy Field';
+  String get swipeCopyField => 'Alanı Kopyala';
 
   @override
-  String get fieldRename => 'Rename';
+  String get fieldRename => 'Yeniden adlandır';
 
   @override
   String get fieldGeneratePassword => 'Generate Password …';
@@ -529,10 +529,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fieldPresent => 'Present';
 
   @override
-  String get fieldGenerateEmail => 'Generate Email';
+  String get fieldGenerateEmail => 'E-posta Oluştur';
 
   @override
-  String get onboardingBackToOnboarding => 'Tour';
+  String get onboardingBackToOnboarding => 'Tur';
 
   @override
   String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
@@ -541,16 +541,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingHeadline => 'Let\'s make your Passwords Secure!';
 
   @override
-  String get onboardingQuestion => 'Have you used a password manager before?';
+  String get onboardingQuestion => 'Daha önce bir şifre yöneticisi kullandınız mı?';
 
   @override
-  String get onboardingYesOpenPasswords => 'Yes, open my passwords';
+  String get onboardingYesOpenPasswords => 'Evet, parolalarımı aç';
 
   @override
   String get onboardingNoCreate => 'I\'m all new! Get me started.';
 
   @override
   String unexpectedError(String error) {
-    return 'Unexpected Error: ${error}';
+    return 'Beklenmeyen Hata: ${error}';
   }
 }
