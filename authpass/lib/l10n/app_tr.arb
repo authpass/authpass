@@ -1,15 +1,27 @@
 {
     "@@locale": "tr",
+    "fieldUserName": "Kullanıcı",
+    "@fieldUserName": {},
     "fieldPassword": "Şifre",
     "@fieldPassword": {},
     "fieldWebsite": "Web site",
     "@fieldWebsite": {},
+    "fieldTitle": "Başlık",
+    "@fieldTitle": {},
     "english": "İngilizce",
     "@english": {
         "description": "language switcher subtitle"
     },
     "german": "Almanca",
     "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Rusça",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Ukraynaca",
+    "@ukrainian": {
         "description": "language switcher subtitle"
     },
     "french": "Fransızca",
@@ -20,14 +32,248 @@
     "@spanish": {
         "description": "language switcher subtitle"
     },
+    "preferenceSelectLanguage": "Dil Seçin",
+    "@preferenceSelectLanguage": {},
     "preferenceLanguage": "Dil",
     "@preferenceLanguage": {},
+    "preferenceTheme": "Tema",
+    "@preferenceTheme": {},
     "preferenceThemeDark": "Koyu",
     "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Sistem varsayılanı",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Varsayılan",
+    "@preferenceDefault": {},
+    "preferenceAllowScreenshots": "Uygulamanın ekran görüntülerine izin verin",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Otomatik doldurmayı etkinleştir",
+    "@preferenceEnableAutoFill": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Her türlü geri bildirimi memnuniyetle karşılıyoruz!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Ayrıca web sitemizi ziyaret ettiğinizden emin olun",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "Ve Açık Kaynak Projesi",
+    "@aboutLinkGitHub": {},
+    "unableToLaunchUrlTitle": "Url açılamıyor",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "menuItemCheckForUpdates": "Güncellemeleri kontrol et",
+    "@menuItemCheckForUpdates": {},
+    "menuItemHelp": "Yardım",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Belgeleri göster",
+    "@menuItemHelpSubtitle": {},
     "menuItemAbout": "Hakkında",
     "@menuItemAbout": {},
+    "passwordPlainText": "Şifreyi göster",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Şifre",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
     "generatePassword": "Parola oluştur",
     "@generatePassword": {
         "description": "screen title for password generator"
+    },
+    "useAsDefault": "Varsayılan olarak kullan",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Sayısal (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Özel (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "manageGroups": "Grupları Yönet",
+    "@manageGroups": {
+        "description": ""
+    },
+    "searchHint": "Ara",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "clear": "Sil",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Filtrele:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "copiedToClipboard": "Panoya kopyalandı.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "swipeCopyPassword": "Şifreyi Kopyala",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Kullanıcı Adını Kopyala",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedField": "Kopyalandı.",
+    "@doneCopiedField": {
+        "description": ""
+    },
+    "filePickerSubtitle": "Cihazdan dosyayı açın.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialLabel": "Şunun için parolayı girin:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Şifre",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Lütfen şifrenizi giriniz.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Geçersiz şifre",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Dosyayı açmaya çalışırken bilinmeyen hata. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Devam",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "groupFilterSelectAll": "Hepsini seç",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Tüm seçimleri kaldır",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Alt Grup Oluşturun",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Düzenle",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Sil",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Grubu sil.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Geri al",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Kaydet",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "initialNewGroupName": "Yeni Grup",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Grup silinemiyor",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Bu grup hala başka grupları içerir. Şu anda yalnızca boş grupları silebilirsiniz.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Bu grup hala şifre kayıtlarını içeriyor. Şu anda yalnızca boş grupları silebilirsiniz.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Gruplar",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Gruplara göre filtrele",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlockSubtitle": "Kaydedilmiş ana parolaları kaldırın",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "createDatabaseAction": "Veritabanı Yarat",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
+    "entryInfoFile": "Dosya:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "Grup:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "Son düzenleme:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "entryAddField": "Alan Ekle",
+    "@entryAddField": {
+        "description": ""
+    },
+    "swipeCopyField": "Alanı Kopyala",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "Yeniden adlandır",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "E-posta Oluştur",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "Tur",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingQuestion": "Daha önce bir şifre yöneticisi kullandınız mı?",
+    "@onboardingQuestion": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Evet, parolalarımı aç",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "unexpectedError": "Beklenmeyen Hata: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
     }
 }

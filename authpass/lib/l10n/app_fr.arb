@@ -138,6 +138,35 @@
             }
         }
     },
+    "unableToLaunchUrlTitle": "Impossible d'ouvrir l'URL",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "unableToLaunchUrlDescription": "Impossible d'ouvrir l'{url} : {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Aucune application disponible pour cette URL.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "URL {url} ouverte :",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
+    },
     "menuItemGeneratePassword": "Générer un mot de passe",
     "@menuItemGeneratePassword": {},
     "menuItemPreferences": "Paramètres",
@@ -156,6 +185,10 @@
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "À propos",
     "@menuItemAbout": {},
+    "actionOpenUrl": "Ouvrir l'URL",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
     "passwordPlainText": "Afficher le mot de passe",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
@@ -532,7 +565,7 @@
             }
         }
     },
-    "databaseCreateDefaultName": "Mots de passe personnel",
+    "databaseCreateDefaultName": "Mots de passe personnels",
     "@databaseCreateDefaultName": {
         "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
     },
