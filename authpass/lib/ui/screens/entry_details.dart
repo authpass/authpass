@@ -1308,6 +1308,13 @@ class _EntryFieldState extends State<EntryField>
           });
         });
       },
+      onShowPressed: () {
+        FullScreenHud.show(context, (context) {
+          return FullScreenHud(
+            value: _valueCurrent ?? ''
+          );
+        });
+      },
       fieldKey: widget.fieldKey,
       commonField: widget.commonField,
     );
@@ -1538,6 +1545,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
   const ObscuredEntryFieldEditor({
     Key key,
     @required this.onPressed,
+    @required this.onShowPressed,
     @required this.commonField,
     @required this.fieldKey,
   }) : super(key: key);
@@ -1545,6 +1553,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
   final CommonField commonField;
   final KdbxKey fieldKey;
   final VoidCallback onPressed;
+  final VoidCallback onShowPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -1590,16 +1599,10 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
           ],
         ), 
         IconButton(
-          icon: Icon(FontAwesomeIcons.eye),
+          icon: const Icon(FontAwesomeIcons.eye),
           color: ThemeUtil.iconColor(Theme.of(context), null),
           tooltip: 'Show protected field',
-          onPressed: () {
-            FullScreenHud.show(context, (context) {
-              return FullScreenHud(
-                value: fieldKey.key,
-              );
-            });
-          },
+          onPressed: onShowPressed,
         ),
       ],
     );
