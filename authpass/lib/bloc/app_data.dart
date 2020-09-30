@@ -189,6 +189,10 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   @nullable
   AppDataTheme get theme;
 
+  ///UUid's of local Files whose warnings were dismissed
+  @nullable
+  BuiltList<String> get dismissedBackupLocalFiles;
+
   @nullable
   double get themeVisualDensity;
 

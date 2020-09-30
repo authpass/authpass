@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:authpass/bloc/analytics.dart';
@@ -18,6 +19,7 @@ import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/password_list_drawer.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/ui/widgets/backup_warning_banner.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/cache_manager.dart';
@@ -32,6 +34,7 @@ import 'package:diac_client/diac_client.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -341,6 +344,8 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   GroupFilter get _groupFilter => _groupFilterNotifier.value;
 
+  StreamSubscription<AppData> _appDataStream;
+
 //  List<EntryViewModel> get _allEntries => _groupFilter == null
 //      ? widget.entries
 //      : _groupFilter
@@ -365,6 +370,21 @@ class _PasswordListContentState extends State<PasswordListContent>
     _updateAllEntries();
     _groupFilterNotifier.addListener(_updateAllEntries);
     _updateAutofillMetadata();
+    _subscribetoAppData();
+  }
+
+  void _subscribetoAppData() async {
+    _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
+        .store
+        .onValueChangedAndLoad
+        .listen(_updateDismissedFiles);
+  }
+
+  void _updateDismissedFiles(AppData data) {
+    _dismissedLocalFilesReady = true;
+    setState(() {
+      _dismissedLocalFiles = data.dismissedBackupLocalFiles;
+    });
   }
 
   void _updateAutofillMetadata() {
@@ -511,6 +531,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     WidgetsBinding.instance.removeObserver(this);
     _groupFilterNotifier.removeListener(_updateAllEntries);
     _groupFilterNotifier.dispose();
+    _appDataStream.cancel();
     super.dispose();
   }
 
@@ -840,18 +861,30 @@ class _PasswordListContentState extends State<PasswordListContent>
     return [UnsupportedWrite(source: unsupportedWrite.key)];
   }
 
-  List<Widget> _buildCloudSyncPrefix() {
+  BuiltList<String> _dismissedLocalFiles;
+  bool _dismissedLocalFilesReady = false;
+
+  List<Widget> _buildBackupWarningBanner() {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     final localFiles =
         kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
-    if (localFiles.length > 0) {
+    if (localFiles.length > 0 && _dismissedLocalFilesReady) {
       return localFiles
-          .map((e) => MaterialBanner(content: Text("${e.key.displayName} is only saved locally!"), actions: [
-                FlatButton(
-                  child: Text("Backup"),
-                  onPressed: () {},
-                )
-              ]))
+          .where((element) =>
+              !(_dismissedLocalFiles?.contains(element.key.uuid) ?? false))
+          .map((file) => BackupBanner(
+                "${file.key.displayName} isn't backed up!",
+                backupText: "Backup",
+                onBackup: () {},
+                dismissText: "Test",
+                onDismiss: () {
+                  Provider.of<AppDataBloc>(context, listen: false).update(
+                      (builder, data) => builder.dismissedBackupLocalFiles =
+                          data.dismissedBackupLocalFiles?.toBuilder() ??
+                              BuiltList<String>().toBuilder()
+                            ..add(file.key.uuid));
+                },
+              ))
           .toList();
     }
     return null;
@@ -862,7 +895,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
-      ...?_buildCloudSyncPrefix(),
+      ...?_buildBackupWarningBanner(),
       ...?_buildGroupFilterPrefix(),
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),
@@ -1247,7 +1280,9 @@ class PasswordEntryTile extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkTheme = theme.brightness == Brightness.dark;
     final fgColor = isSelected
-        ? isDarkTheme ? theme.primaryColorLight : theme.primaryColorDark
+        ? isDarkTheme
+            ? theme.primaryColorLight
+            : theme.primaryColorDark
         : null;
     final iconTheme = IconTheme.of(context);
     final size = iconTheme.size * 1.5;
