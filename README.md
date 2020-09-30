@@ -24,7 +24,7 @@ share AuthPass on twitter, reddit, etc.
 
 * Help us translate AuthPass (work in progress): [![Crowdin](https://badges.crowdin.net/e/df2e0329a54542fef35ab5412a893d23/localized.svg)](https://authpass.crowdin.com/authpass)
   * [Contact us for new languages](https://authpass.app/docs/contact/)
-* Interested in writing documentation? Let us new in our [discord channel](https://authpass.app/go/discord)
+* Interested in writing documentation? Let us know in our [discord channel](https://authpass.app/go/discord)
 * Want to code? See [CONTRIBUTING.md](https://github.com/authpass/authpass/blob/master/CONTRIBUTING.md).
   * If you need some slight introduction to the code, ask in the [discord channel](https://authpass.app/go/discord).
 * Good at design? Or marketing? Just get in contact ;-)
