@@ -32,7 +32,7 @@ class BackupBanner extends StatelessWidget {
                 _backupButton.currentContext.findRenderObject() as RenderBox;
 
             onBackup(RelativeRect.fromSize(
-              /*Rect.fromLTRB(
+                /*Rect.fromLTRB(
                 renderBox.localToGlobal(const Offset(0, 0)).dx,
                   renderBox.localToGlobal(const Offset(0, 0)).dy, 0,0 ),*/
                 Rect.fromPoints(

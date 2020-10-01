@@ -27,7 +27,7 @@ class SaveFileAs extends StatefulWidget {
       this.cs,
       this.onSave,
       this.subtitle})
-      : assert((icon != null && subtitle != null) || cs != null) ;
+      : assert((icon != null && subtitle != null) || cs != null);
 
   final Function onClose;
   final Function(Future<void>) onSave;
@@ -69,7 +69,8 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       subtitle: Text(widget.subtitle ?? widget.cs.displayName),
       onTap: () {
         widget.onClose?.call();
-        widget.onSave(widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs));
+        widget.onSave(
+            widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs));
       },
     );
   }
