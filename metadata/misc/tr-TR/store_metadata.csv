@@ -1,8 +1,8 @@
 "playstore_full_description","","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
-"playstore_short_description","","Short description in play store.","80",""
-"apple-appstore-title","","","30",""
-"apple-appstore-subtitle","","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
+"playstore_title","AuthPass - KeePass uyumlu Şifre Yöneticisi","Google Play Title","50",""
+"playstore_short_description","Parolalarınızı ve hesaplarınızı tüm platformlarda ve cihazlarda güvende tutun.","Short description in play store.","80",""
+"apple-appstore-title","AuthPass - Parola Yöneticisi","","30",""
+"apple-appstore-subtitle","Tüm cihazlarda tek parola.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 

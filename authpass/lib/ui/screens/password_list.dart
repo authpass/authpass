@@ -1013,44 +1013,50 @@ class _PasswordListContentState extends State<PasswordListContent>
                       confirmDismiss: (direction) async {
                         if (direction == DismissDirection.endToStart) {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                          await Clipboard.setData(ClipboardData(
-                              text: entry.entry
-                                  .getString(commonFields.userName.key)
-                                  .getText()));
-                          Scaffold.of(context).showSnackBar(
-                              SnackBar(content: Text(loc.doneCopiedUsername)));
-                        } else {
+                        await Clipboard.setData(ClipboardData(
+                            text: entry.entry
+                                .getString(commonFields.userName.key)
+                                .getText()));
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text(loc.doneCopiedUsername)));
+                        context
+                            .read<Analytics>()
+                            .events
+                            .trackSwipeCopyUsername();
+                      } else {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                          await Clipboard.setData(ClipboardData(
-                              text: entry.entry
-                                  .getString(commonFields.password.key)
-                                  .getText()));
-                          Scaffold.of(context).showSnackBar(
-                              SnackBar(content: Text(loc.doneCopiedPassword)));
-                        }
-                        return false;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Container(
-                          decoration: widget.selectedEntry != entry.entry
-                              ? (fileColor == null
-                                  ? null
-                                  : BoxDecoration(
-                                      border: Border(
-                                          left: BorderSide(
-                                              color: fileColor, width: 4))))
-                              : BoxDecoration(
-                                  color: Theme.of(context).selectedRowColor,
-                                  border: Border(
-                                    right: BorderSide(
-                                        color: Theme.of(context).primaryColor,
-                                        width: 4),
-                                    left: fileColor == null
-                                        ? BorderSide.none
-                                        : BorderSide(
-                                            color: fileColor, width: 4),
-                                  ),
+                        await Clipboard.setData(ClipboardData(
+                            text: entry.entry
+                                .getString(commonFields.password.key)
+                                .getText()));
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text(loc.doneCopiedPassword)));
+                        context
+                            .read<Analytics>()
+                            .events
+                            .trackSwipeCopyPassword();
+                      }
+                      return false;
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        decoration: widget.selectedEntry != entry.entry
+                            ? (fileColor == null
+                                ? null
+                                : BoxDecoration(
+                                    border: Border(
+                                        left: BorderSide(
+                                            color: fileColor, width: 4))))
+                            : BoxDecoration(
+                                color: Theme.of(context).selectedRowColor,
+                                border: Border(
+                                  right: BorderSide(
+                                      color: Theme.of(context).primaryColor,
+                                      width: 4),
+                                  left: fileColor == null
+                                      ? BorderSide.none
+                                      : BorderSide(color: fileColor, width: 4),
                                 ),
                           child: PasswordEntryTile(
                             vm: entry,
