@@ -202,7 +202,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   title: const Text('Path'),
                   subtitle: Text(_file.fileSource.displayPath),
                   trailing: PopupMenuButton<String>(
-                    onSelected: (_) => print("Popped"),
+                    onSelected: (_) => print('Popped'),
                     itemBuilder: (context) => [
                       PopupMenuItem(
                           child: SaveFileAs(
@@ -210,20 +210,20 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                             _file,
                             //Due to the onTap listener inside the underlying ListTile PopupMenuItem doesnt receive the selected event
                             onClose: () async {
-                              Navigator.pop(context, "local");
+                              Navigator.pop(context, 'local');
                             },
                             onSave: (Future<void> filefuture) {
                               asyncRunTask((progress) async {
                                 await filefuture;
                               }, label: loc.saving);
                             },
-                            icon: Icon(FontAwesomeIcons.hdd),
+                            icon: const Icon(FontAwesomeIcons.hdd),
                             onFileSourceChanged: (FileSource source) {
                               widget.onFileSourceChanged(source);
                             },
                             subtitle: 'Local File',
                           ),
-                          value: "local"),
+                          value: 'local'),
                       ...cloudStorageBloc.availableCloudStorage.map(
                         (cs) => PopupMenuItem(
                             child: SaveFileAs(

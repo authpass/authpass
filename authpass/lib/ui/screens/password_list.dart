@@ -375,7 +375,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     _subscribetoAppData();
   }
 
-  void _subscribetoAppData() async {
+  void _subscribetoAppData(){
     _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
         .store
         .onValueChangedAndLoad

@@ -6,10 +6,8 @@ class BackupBanner extends StatelessWidget {
       @required this.onBackup,
       this.dismissText,
       this.onDismiss})
-      : assert(backupText != null && onBackup != null) {
-    _dismissable = dismissText != null && onDismiss != null;
-  }
-  bool _dismissable;
+      : assert(backupText != null && onBackup != null);
+  bool get _dismissable => dismissText != null && onDismiss != null;
 
   final String bannerText;
 
@@ -21,7 +19,7 @@ class BackupBanner extends StatelessWidget {
 
   final Function(RelativeRect position) onBackup;
 
-  GlobalKey _backupButton = GlobalKey();
+  final GlobalKey _backupButton = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,7 @@ class BackupBanner extends StatelessWidget {
           key: _backupButton,
           child: Text(backupText),
           onPressed: () {
-            final RenderBox renderBox =
+            final renderBox =
                 _backupButton.currentContext.findRenderObject() as RenderBox;
 
             onBackup(RelativeRect.fromSize(

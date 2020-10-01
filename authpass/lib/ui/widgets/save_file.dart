@@ -1,4 +1,4 @@
-import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'dart:io';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
@@ -6,46 +6,38 @@ import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
-import 'package:authpass/utils/platform.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'dart:io';
 
 import 'package:authpass/bloc/app_data.dart';
-import 'package:authpass/bloc/kdbx/file_source_local.dart';
-import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_async_utils/flutter_async_utils.dart'
-    hide FutureTaskStateMixin;
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 
 final _logger = Logger('manage_file');
 
 class SaveFileAs extends StatefulWidget {
-  SaveFileAs(this.title, this.file,
+  const SaveFileAs(this.title, this.file,
       {this.onFileSourceChanged,
       this.onClose,
       this.icon,
       this.cs,
       this.onSave,
       this.subtitle})
-      : assert((icon != null && subtitle != null) || cs != null) {
-    local = cs == null;
-  }
+      : assert((icon != null && subtitle != null) || cs != null) ;
 
-  Function onClose;
-  Function(Future<void>) onSave;
-  Function onFileSourceChanged;
-  KdbxOpenedFile file;
-  String title;
-  String subtitle;
-  Icon icon;
-  bool local;
-  CloudStorageProvider cs;
+  final Function onClose;
+  final Function(Future<void>) onSave;
+  final Function onFileSourceChanged;
+  final KdbxOpenedFile file;
+  final String title;
+  final String subtitle;
+  final Icon icon;
+  final CloudStorageProvider cs;
+  bool get local => cs == null;
 
   @override
   _SaveFileAsState createState() => _SaveFileAsState();
@@ -66,9 +58,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   }
 
   void _init() {
-    if (kdbxBloc == null) {
-      kdbxBloc = Provider.of<KdbxBloc>(context);
-    }
+    kdbxBloc ??= Provider.of<KdbxBloc>(context);
   }
 
   @override
