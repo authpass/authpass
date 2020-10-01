@@ -1309,11 +1309,7 @@ class _EntryFieldState extends State<EntryField>
         });
       },
       onShowPressed: () {
-        FullScreenHud.show(context, (context) {
-          return FullScreenHud(
-            value: _valueCurrent ?? ''
-          );
-        });
+        _handleMenuEntrySelected(EntryAction.show);
       },
       fieldKey: widget.fieldKey,
       commonField: widget.commonField,
