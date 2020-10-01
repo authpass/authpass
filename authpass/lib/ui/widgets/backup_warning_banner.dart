@@ -11,35 +11,43 @@ class BackupBanner extends StatelessWidget {
   }
   bool _dismissable;
 
-  ///Text of the banner
-  String bannerText;
+  final String bannerText;
 
-  ///Text of the dismiss button
-  String dismissText;
+  final String dismissText;
 
-  ///Text of the backup button
-  String backupText;
+  final String backupText;
 
-  ///Called when dismissed
-  Function onDismiss;
+  final Function onDismiss;
 
-  ///Called when backup is pressed
-  Function onBackup;
+  final Function(RelativeRect position) onBackup;
+
+  GlobalKey _backupButton = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialBanner(
-        content: Text(backupText),
-        actions: [
-          FlatButton(
-            child: Text(backupText),
-            onPressed: () =>onBackup(),
-          ),
-          if (_dismissable)
-            FlatButton(
-              child: Text(dismissText),
-              onPressed: () => onDismiss(),
-            ),
-        ]);
+    return MaterialBanner(content: Text(bannerText), actions: [
+      FlatButton(
+          key: _backupButton,
+          child: Text(backupText),
+          onPressed: () {
+            final RenderBox renderBox =
+                _backupButton.currentContext.findRenderObject() as RenderBox;
+
+            onBackup(RelativeRect.fromSize(
+              /*Rect.fromLTRB(
+                renderBox.localToGlobal(const Offset(0, 0)).dx,
+                  renderBox.localToGlobal(const Offset(0, 0)).dy, 0,0 ),*/
+                Rect.fromPoints(
+                    renderBox.localToGlobal(const Offset(0, 0)),
+                    renderBox.localToGlobal(
+                        renderBox.size.bottomRight(Offset.zero))),
+                renderBox.size));
+          }),
+      if (_dismissable)
+        FlatButton(
+          child: Text(dismissText),
+          onPressed: () => onDismiss(),
+        ),
+    ]);
   }
 }

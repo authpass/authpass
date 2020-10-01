@@ -31,12 +31,14 @@ class SaveFileAs extends StatefulWidget {
       this.onClose,
       this.icon,
       this.cs,
+      this.onSave,
       this.subtitle})
       : assert((icon != null && subtitle != null) || cs != null) {
     local = cs == null;
   }
 
   Function onClose;
+  Function(Future<void>) onSave;
   Function onFileSourceChanged;
   KdbxOpenedFile file;
   String title;
@@ -49,7 +51,7 @@ class SaveFileAs extends StatefulWidget {
   _SaveFileAsState createState() => _SaveFileAsState();
 }
 
-class _SaveFileAsState extends State<SaveFileAs> {
+class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   KdbxBloc kdbxBloc;
 
   @override
@@ -77,7 +79,7 @@ class _SaveFileAsState extends State<SaveFileAs> {
       subtitle: Text(widget.subtitle ?? widget.cs.displayName),
       onTap: () {
         widget.onClose?.call();
-        widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs);
+        widget.onSave(widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs));
       },
     );
   }

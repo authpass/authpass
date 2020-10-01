@@ -2,6 +2,7 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/save_file.dart';
@@ -149,6 +150,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 
   void _init() {
     _logger.fine('Updating widget. _init()');
+    _kdbxBloc = Provider.of<KdbxBloc>(context);
     _file = Provider.of<KdbxBloc>(context).fileForFileSource(widget.fileSource);
 //    _databaseName.text = _file.kdbxFile.body.meta.databaseName.get();
   }
@@ -158,6 +160,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     _logger.finest('Is rebuilding with color ${_file.openedFile.color}');
     final databaseName = _file.kdbxFile.body.meta.databaseName.get();
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
+    final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     return ProgressOverlay(
       task: task,
@@ -192,7 +195,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         _file,
                         _file.fileSource.copyWithDatabaseName(newName),
                       );
-                    }, label: 'Saving');
+                    }, label: loc.saving);
                   },
                 ),
                 ListTile(
@@ -203,25 +206,37 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     itemBuilder: (context) => [
                       PopupMenuItem(
                           child: SaveFileAs(
-                            'Save As...',
+                            loc.saveAs,
                             _file,
                             //Due to the onTap listener inside the underlying ListTile PopupMenuItem doesnt receive the selected event
-                            onClose: () {
+                            onClose: () async {
                               Navigator.pop(context, "local");
                             },
+                            onSave: (Future<void> filefuture) {
+                              asyncRunTask((progress) async {
+                                await filefuture;
+                              }, label: loc.saving);
+                            },
                             icon: Icon(FontAwesomeIcons.hdd),
-                            onFileSourceChanged: widget.onFileSourceChanged,
+                            onFileSourceChanged: (FileSource source) {
+                              widget.onFileSourceChanged(source);
+                            },
                             subtitle: 'Local File',
                           ),
                           value: "local"),
                       ...cloudStorageBloc.availableCloudStorage.map(
                         (cs) => PopupMenuItem(
                             child: SaveFileAs(
-                              'Save As...',
+                              loc.saveAs,
                               _file,
                               //Due to the onTap listener inside the underlying ListTile PopupMenuItem doesnt receive the selected event
                               onClose: () {
                                 Navigator.pop(context, cs.id);
+                              },
+                              onSave: (Future<void> filefuture) {
+                                asyncRunTask((progress) async {
+                                  await filefuture;
+                                }, label: loc.saving);
                               },
                               onFileSourceChanged: widget.onFileSourceChanged,
                               cs: cs,
