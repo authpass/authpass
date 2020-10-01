@@ -48,6 +48,7 @@ import 'package:otp/otp.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+import 'package:authpass/utils/theme_utils.dart';
 
 final _logger = Logger('entry_details');
 
@@ -1307,6 +1308,9 @@ class _EntryFieldState extends State<EntryField>
           });
         });
       },
+      onShowPressed: () {
+        _handleMenuEntrySelected(EntryAction.show);
+      },
       fieldKey: widget.fieldKey,
       commonField: widget.commonField,
     );
@@ -1537,6 +1541,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
   const ObscuredEntryFieldEditor({
     Key key,
     @required this.onPressed,
+    @required this.onShowPressed,
     @required this.commonField,
     @required this.fieldKey,
   }) : super(key: key);
@@ -1544,44 +1549,56 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
   final CommonField commonField;
   final KdbxKey fieldKey;
   final VoidCallback onPressed;
+  final VoidCallback onShowPressed;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.centerRight,
       children: [
-        InputDecorator(
-          decoration: InputDecoration(
-            prefixIcon:
-                commonField?.icon == null ? null : Icon(commonField.icon),
-            labelText: commonField?.displayName ?? fieldKey.key,
-            filled: true,
-          ),
-          child: const Text(
-            '*****************',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        Positioned.fill(
-          child: ClipRect(
-            child: BackdropFilter(
-              filter: ui.ImageFilter.blur(
-                sigmaX: 0.5,
-                sigmaY: 0.5,
+        Stack(
+          children: [
+            InputDecorator(
+              decoration: InputDecoration(
+                prefixIcon:
+                    commonField?.icon == null ? null : Icon(commonField.icon),
+                labelText: commonField?.displayName ?? fieldKey.key,
+                filled: true,
               ),
-              child: LinkButton(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16),
-                  child: const Text(
-                    'Protected field. Click to reveal.',
-                    style: TextStyle(
-                        shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
-                  ),
-                ),
-                onPressed: onPressed,
+              child: const Text(
+                '*****************',
+                style: TextStyle(color: Colors.white),
               ),
             ),
-          ),
+            Positioned.fill(
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(
+                    sigmaX: 0.5,
+                    sigmaY: 0.5,
+                  ),
+                  child: LinkButton(
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16, right: 12),
+                      child: const Text(
+                        'Protected field. Click to reveal.',
+                        style: TextStyle(
+                            shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
+                      ),
+                    ),
+                    onPressed: onPressed,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ), 
+        IconButton(
+          icon: const Icon(FontAwesomeIcons.eye),
+          color: ThemeUtil.iconColor(Theme.of(context), null),
+          tooltip: 'Show protected field',
+          onPressed: onShowPressed,
         ),
       ],
     );
