@@ -717,7 +717,31 @@
   "@onboardingNoCreate": {
     "description": ""
   },
-
+  "backupButton" : "Backup now",
+  "@backupButton": {
+    "description" : "Button that is displayed in backup warnings"
+  },
+  "dismissBackupButton" : "Dismiss",
+  "@dismissBackupButton" : {
+    "description" : "Button that is displayed in backup warnings to dismiss the warning"
+  },
+  "backupWarningMessage": "Your passwords in {databasename} are only saved locally!",
+  "@backupWarningMessage": {
+    "description": "Warning message that is displayed in backup warnings",
+    "placeholders": {
+      "databasename": {
+        "example": "PassowrdDatabase"
+      }
+    }
+  },
+  "saveAs" : "Save As...",
+  "@saveAs" : {
+    "description" : "Save as text"
+  },
+  "saving" : "Saving",
+  "@saving" : {
+    "description" : "Saving text"
+  },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {
