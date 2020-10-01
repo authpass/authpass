@@ -69,7 +69,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       subtitle: Text(widget.subtitle ?? widget.cs.displayName),
       onTap: () {
         widget.onClose?.call();
-        widget.onSave(
+        widget.onSave?.call(
             widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs));
       },
     );
