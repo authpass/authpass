@@ -25,13 +25,6 @@ void main() {
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      streamSubscription = driver.serviceClient.onIsolateRunnable
-          .asBroadcastStream()
-          .listen((isolateRef) {
-        print(
-            'Resuming isolate: ${isolateRef.numberAsString}:${isolateRef.name}');
-        isolateRef.resume();
-      });
       await driver.waitUntilFirstFrameRasterized();
     });
 
