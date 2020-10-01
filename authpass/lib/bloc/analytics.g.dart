@@ -156,6 +156,16 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'category': category
       });
   @override
+  void trackSwipeCopyPassword(
+          {String action = 'swipe', String label = 'password'}) =>
+      trackEvent('swipeCopyPassword',
+          <String, dynamic>{'action': action, 'label': label});
+  @override
+  void trackSwipeCopyUsername(
+          {String action = 'swipe', String label = 'username'}) =>
+      trackEvent('swipeCopyUsername',
+          <String, dynamic>{'action': action, 'label': label});
+  @override
   void trackEntryAction(EntryActionType label, {String action = 'entry'}) =>
       trackEvent('entryAction', <String, dynamic>{
         'label': label?.toString()?.substring(16),

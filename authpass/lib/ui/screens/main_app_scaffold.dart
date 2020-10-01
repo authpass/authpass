@@ -8,7 +8,6 @@ import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/utils/back_button_navigator_delegate.dart';
-import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';

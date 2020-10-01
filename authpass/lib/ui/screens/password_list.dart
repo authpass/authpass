@@ -936,6 +936,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                                 .getText()));
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text(loc.doneCopiedUsername)));
+                        context
+                            .read<Analytics>()
+                            .events
+                            .trackSwipeCopyUsername();
                       } else {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
                         await Clipboard.setData(ClipboardData(
@@ -944,6 +948,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                                 .getText()));
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text(loc.doneCopiedPassword)));
+                        context
+                            .read<Analytics>()
+                            .events
+                            .trackSwipeCopyPassword();
                       }
                       return false;
                     },

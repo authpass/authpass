@@ -322,6 +322,16 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     String category = 'tryUnlock',
   });
 
+  void trackSwipeCopyPassword({
+    String action = 'swipe',
+    String label = 'password',
+  });
+
+  void trackSwipeCopyUsername({
+    String action = 'swipe',
+    String label = 'username',
+  });
+
   void trackEntryAction(EntryActionType label, {String action = 'entry'});
 }
 
