@@ -7,14 +7,14 @@ If you want to contribute documentation or code, never hesitate to [get in conta
 
 # Translations
 
-The actual translations are handled by the crowdin platform at: <https://translate.authpass.app/authpass>. Do **not** modify any translated any
-app_XX.arb files manually.
+The actual translations are handled by the crowdin platform at: <https://translate.authpass.app/authpass>. Do **not** modify any translated 
+`app_XX.arb` files manually.
 
 ## New strings
 
-All new code should have translatable strings, even the code base still does not 100% use URL translations.
+All new code should have translatable strings, even if the code base still does not 100% use externalized strings. See https://github.com/authpass/authpass/issues/78 -- This might also be a good first PR ;-) Pick a few source files and externalize the strings.
 
-* Add your string into `app_en.arb` - give a useful `description` (or `context`). (do NOT translate it in any other `app_XX.arb` file, as this is handled [through crowdin](https://translate.authpass.app/authpass)).
+* Add your string into `app_en.arb` - give a useful `description` (and/or `context`). (do NOT translate it in any other `app_XX.arb` file, as this is handled [through crowdin](https://translate.authpass.app/authpass)).
 * In the code typically use a variable in the `build` method: `final loc = AppLocalizations.of(context)` and access your string through `loc.xxxx`.
 * See the flutter [i18n/l10n documentation](https://flutter.dev/go/i18n-user-guide).
 
