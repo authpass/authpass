@@ -966,6 +966,10 @@ class _EntryFieldState extends State<EntryField>
   void initState() {
     super.initState();
     _focusNode.addListener(_focusNodeChanged);
+    initController();
+  }
+
+  void initController() {
     if (_fieldValue is ProtectedValue || widget.commonField?.protect == true) {
       _isValueObscured = true;
       _controller = TextEditingController();
@@ -1123,6 +1127,7 @@ class _EntryFieldState extends State<EntryField>
             _isValueObscured = true;
           }
         });
+        initController();
         break;
       case EntryAction.delete:
         widget.entry.removeString(widget.fieldKey);
@@ -1593,7 +1598,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
               ),
             ),
           ],
-        ), 
+        ),
         IconButton(
           icon: const Icon(FontAwesomeIcons.eye),
           color: ThemeUtil.iconColor(Theme.of(context), null),
