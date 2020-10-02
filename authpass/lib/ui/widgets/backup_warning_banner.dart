@@ -24,6 +24,11 @@ class BackupBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialBanner(content: Text(bannerText), actions: [
+      if (_dismissable)
+        FlatButton(
+          child: Text(dismissText),
+          onPressed: () => onDismiss(),
+        ),
       FlatButton(
           key: _backupButton,
           child: Text(backupText),
@@ -41,11 +46,6 @@ class BackupBanner extends StatelessWidget {
                         renderBox.size.bottomRight(Offset.zero))),
                 renderBox.size));
           }),
-      if (_dismissable)
-        FlatButton(
-          child: Text(dismissText),
-          onPressed: () => onDismiss(),
-        ),
     ]);
   }
 }
