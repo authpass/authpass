@@ -18,14 +18,17 @@ _tools/flutter_run.sh pub global run \
   --annotations-output-file "${reporoot}/annotations.json" --annotations-path-root "${reporoot}" \
   --metrics-output-file metrics.json || true
 
-cat "${reporoot}/annotations.json" | jq -c '.[:50]' > "${reporoot}/annotations_first_50.json"
+cat "${reporoot}/annotations.json" | jq -c '.[:50]' >"${reporoot}/annotations_first_50.json"
 total_annotations=$(cat "${reporoot}/annotations.json" | jq -c '. | length')
 
 echo "::set-output name=total_annotations::${total_annotations}"
 
-curl --request POST \
+tokenfile="_tools/secrets/artifact_token.txt"
+
+if test -f "${tokenfile}"; then
+  curl --request POST \
     --url https://data.authpass.app/data/artifact.push \
     --fail \
-    --form token=$( cat _tools/secrets/artifact_token.txt ) \
-    --form metrics="$( cat metrics.json )"
-
+    --form token=$(cat "${tokenfile}") \
+    --form metrics="$(cat metrics.json)"
+fi
