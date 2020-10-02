@@ -5,7 +5,20 @@ We appreciate any kind of contributions to AuthPass 😅️
 
 If you want to contribute documentation or code, never hesitate to [get in contact](https://authpass.app/docs/about-authpass-password-manager/#getting-in-touch).
 
-# Code
+# Translations
+
+The actual translations are handled by the crowdin platform at: <https://translate.authpass.app/authpass>. Do **not** modify any translated any
+app_XX.arb files manually.
+
+## New strings
+
+All new code should have translatable strings, even the code base still does not 100% use URL translations.
+
+* Add your string into `app_en.arb` - give a useful `description` (or `context`). (do NOT translate it in any other `app_XX.arb` file, as this is handled [through crowdin](https://translate.authpass.app/authpass)).
+* In the code typically use a variable in the `build` method: `final loc = AppLocalizations.of(context)` and access your string through `loc.xxxx`.
+* See the flutter [i18n/l10n documentation](https://flutter.dev/go/i18n-user-guide).
+
+# Code / Development
 
 AuthPass is based on Flutter, so you should get familiar with the Dart programming language
 as well as Flutter itself. You can checkout the Flutter website at https://flutter.dev/
@@ -31,7 +44,7 @@ permission denied errors when you clone using ssh. To work around those you migh
 1. [Download Flutter](https://flutter.dev/docs/get-started/install) and make sure `flutter doctor` shows no errors.
    * Latest Flutter stable or beta channel should typically work, check out
      [authpass/_tools/install_flutter.sh](authpass/_tools/install_flutter.sh) for what's being used in the CI.
-   * ⚠️ **NOTE**: Right now one extra step is required after installing flutter: in the flutter directory change to `flutter/dev/tools` and run: `flutter pub get`. See the (flutter issue #65023)[https://github.com/flutter/flutter/issues/65023] for details.
+   * ⚠️ *no longer required*: (this should be fixed, just leaving it in, in case people still see this error) Right now one extra step is required after installing flutter: in the flutter directory change to `flutter/dev/tools` and run: `flutter pub get`. See the (flutter issue #65023)[https://github.com/flutter/flutter/issues/65023] for details.
      otherwise you will stumble on errors like:
      ```flutter/dev/tools/localization/bin/gen_l10n.dart:7:8: Error: Error when reading '/flutter/.pub-cache/hosted/pub.dartlang.org/args-1.6.0/lib/args.dart': The system cannot find the path specified.```
 2. Clone the repository `git clone https://github.com/authpass/authpass.git` (or better yet, create your own fork to make later creating Pull Requests easier).

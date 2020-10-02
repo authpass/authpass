@@ -1,5 +1,9 @@
 # see https://flutter.dev/go/i18n-user-guide
 # https://docs.google.com/document/d/10e0saTfAv32OZLRmONy866vnaw0I2jwL8zukykpgWBc/edit#
+#
+# WARNING: DO NOT translate app_XX.arb files directly here. For translations please see:
+# https://translate.authpass.app/authpass
+# (only the source language, app_en.arb is edited manually here).
 
 header: '// ignore_for_file: omit_local_variable_types,unused_local_variable'
           #---  Generated file, do not modify.'
