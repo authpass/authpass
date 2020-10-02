@@ -6,6 +6,7 @@ import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/save_file.dart';
+import 'package:authpass/ui/widgets/utils/save_file_helper.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:logging/logging.dart';
@@ -135,7 +136,6 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   Widget build(BuildContext context) {
     _logger.finest('Is rebuilding with color ${_file.openedFile.color}');
     final databaseName = _file.kdbxFile.body.meta.databaseName.get();
-    final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     return ProgressOverlay(
@@ -177,50 +177,12 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                 ListTile(
                   title: const Text('Path'),
                   subtitle: Text(_file.fileSource.displayPath),
-                  trailing: PopupMenuButton<String>(
-                    onSelected: (_) => _,
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                          child: SaveFileAs(
-                            loc.saveAs,
-                            _file,
-                            //Due to the onTap listener inside the underlying ListTile PopupMenuItem doesnt receive the selected event
-                            onClose: () async {
-                              Navigator.pop(context, 'local');
-                            },
-                            onSave: (Future<void> filefuture) {
-                              asyncRunTask((progress) async {
-                                await filefuture;
-                              }, label: loc.saving);
-                            },
-                            icon: const Icon(FontAwesomeIcons.hdd),
-                            onFileSourceChanged: (FileSource source) {
-                              widget.onFileSourceChanged(source);
-                            },
-                            subtitle: 'Local File',
-                          ),
-                          value: 'local'),
-                      ...cloudStorageBloc.availableCloudStorage.map(
-                        (cs) => PopupMenuItem(
-                            child: SaveFileAs(
-                              loc.saveAs,
-                              _file,
-                              //Due to the onTap listener inside the underlying ListTile PopupMenuItem doesnt receive the selected event
-                              onClose: () {
-                                Navigator.pop(context, cs.id);
-                              },
-                              onSave: (Future<void> filefuture) {
-                                asyncRunTask((progress) async {
-                                  await filefuture;
-                                }, label: loc.saving);
-                              },
-                              onFileSourceChanged: widget.onFileSourceChanged,
-                              cs: cs,
-                            ),
-                            value: cs.id),
-                      ),
-                    ],
-                  ),
+                  trailing: SaveFileAsDialogButton(_file,
+                      onSave: (Future<void> filefuture) {
+                    asyncRunTask((progress) async {
+                      await filefuture;
+                    }, label: loc.saving);
+                  }, onFileSourceChanged: widget.onFileSourceChanged, local: true),
                 ),
                 ListTile(
                   title: const Text('Color'),

@@ -717,11 +717,11 @@
   "@onboardingNoCreate": {
     "description": ""
   },
-  "backupButton" : "Backup now",
+  "backupButton" : "SAVE TO CLOUD",
   "@backupButton": {
     "description" : "Button that is displayed in backup warnings"
   },
-  "dismissBackupButton" : "Dismiss",
+  "dismissBackupButton" : "DISMISS",
   "@dismissBackupButton" : {
     "description" : "Button that is displayed in backup warnings to dismiss the warning"
   },
@@ -730,11 +730,11 @@
     "description": "Warning message that is displayed in backup warnings",
     "placeholders": {
       "databasename": {
-        "example": "PassowrdDatabase"
+        "example": "PasswordDatabase"
       }
     }
   },
-  "saveAs" : "Save As...",
+  "saveAs" : "Save In...",
   "@saveAs" : {
     "description" : "Save as text"
   },

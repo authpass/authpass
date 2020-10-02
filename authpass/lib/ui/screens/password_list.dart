@@ -24,6 +24,7 @@ import 'package:authpass/ui/widgets/backup_warning_banner.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/save_file.dart';
+import 'package:authpass/ui/widgets/utils/save_file_helper.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -375,7 +376,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     _subscribetoAppData();
   }
 
-  void _subscribetoAppData(){
+  void _subscribetoAppData() {
     _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
         .store
         .onValueChangedAndLoad
@@ -868,51 +869,44 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   List<Widget> _buildBackupWarningBanners() {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
-    final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     final loc = AppLocalizations.of(context);
     final localFiles =
         kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
-    if (localFiles.isNotEmpty && _dismissedLocalFilesReady) {
-      return localFiles
+    final localFiles3 = localFiles.where((file) =>
+        file.value.body.rootGroup
+            .getAllGroups()
+            .where((element) => element != file.value.recycleBin)
+            .expand((element) => element.getAllEntries())
+            .length >=
+        3);
+    if (localFiles3.isNotEmpty && _dismissedLocalFilesReady) {
+      final file = localFiles3
           .where((element) =>
               !(_dismissedLocalFiles?.contains(element.key.uuid) ?? false))
-          .map((file) => BackupBanner(
-                loc.backupWarningMessage(file.key.displayName),
-                backupText: loc.backupButton,
-                onBackup: (RelativeRect position) {
-                  showMenu<String>(
-                      context: context,
-                      position: position,
-                      items: cloudStorageBloc.availableCloudStorage
-                          .map(
-                            (cs) => PopupMenuItem<String>(
-                                child: SaveFileAs(
-                                  loc.saveAs,
-                                  kdbxBloc.fileForFileSource(file.key),
-                                  onClose: () {
-                                    Navigator.pop(context, cs.id);
-                                  },
-                                  onSave: (Future<void> saving) {
-                                    asyncRunTask((progress) async {
-                                      await saving;
-                                    }, label: loc.saving);
-                                  },
-                                  cs: cs,
-                                ),
-                                value: cs.id),
-                          )
-                          .toList());
-                },
-                dismissText: loc.dismissBackupButton,
-                onDismiss: () {
-                  Provider.of<AppDataBloc>(context, listen: false).update(
-                      (builder, data) => builder.dismissedBackupLocalFiles =
-                          data.dismissedBackupLocalFiles?.toBuilder() ??
-                              BuiltList<String>().toBuilder()
-                            ..add(file.key.uuid));
-                },
-              ))
-          .toList();
+          .first;
+      return [
+        BackupBanner(
+          loc.backupWarningMessage(file.key.displayName),
+          backupWidget: SaveFileAsDialogButton(
+            kdbxBloc.fileForFileSource(file.key),
+            child: Text(loc.backupButton,
+                style: Theme.of(context).textTheme.button),
+            onSave: (Future<void> filefuture) {
+              asyncRunTask((progress) async {
+                await filefuture;
+              }, label: loc.saving);
+            },
+          ),
+          dismissText: loc.dismissBackupButton,
+          onDismiss: () {
+            Provider.of<AppDataBloc>(context, listen: false).update(
+                (builder, data) => builder.dismissedBackupLocalFiles =
+                    data.dismissedBackupLocalFiles?.toBuilder() ??
+                        BuiltList<String>().toBuilder()
+                      ..add(file.key.uuid));
+          },
+        )
+      ];
     }
     return null;
   }
@@ -1013,50 +1007,52 @@ class _PasswordListContentState extends State<PasswordListContent>
                       confirmDismiss: (direction) async {
                         if (direction == DismissDirection.endToStart) {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                        await Clipboard.setData(ClipboardData(
-                            text: entry.entry
-                                .getString(commonFields.userName.key)
-                                .getText()));
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text(loc.doneCopiedUsername)));
-                        context
-                            .read<Analytics>()
-                            .events
-                            .trackSwipeCopyUsername();
-                      } else {
+                          await Clipboard.setData(ClipboardData(
+                              text: entry.entry
+                                  .getString(commonFields.userName.key)
+                                  .getText()));
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text(loc.doneCopiedUsername)));
+                          context
+                              .read<Analytics>()
+                              .events
+                              .trackSwipeCopyUsername();
+                        } else {
 //                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                        await Clipboard.setData(ClipboardData(
-                            text: entry.entry
-                                .getString(commonFields.password.key)
-                                .getText()));
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text(loc.doneCopiedPassword)));
-                        context
-                            .read<Analytics>()
-                            .events
-                            .trackSwipeCopyPassword();
-                      }
-                      return false;
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Container(
-                        decoration: widget.selectedEntry != entry.entry
-                            ? (fileColor == null
-                                ? null
-                                : BoxDecoration(
-                                    border: Border(
-                                        left: BorderSide(
-                                            color: fileColor, width: 4))))
-                            : BoxDecoration(
-                                color: Theme.of(context).selectedRowColor,
-                                border: Border(
-                                  right: BorderSide(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 4),
-                                  left: fileColor == null
-                                      ? BorderSide.none
-                                      : BorderSide(color: fileColor, width: 4),
+                          await Clipboard.setData(ClipboardData(
+                              text: entry.entry
+                                  .getString(commonFields.password.key)
+                                  .getText()));
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text(loc.doneCopiedPassword)));
+                          context
+                              .read<Analytics>()
+                              .events
+                              .trackSwipeCopyPassword();
+                        }
+                        return false;
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Container(
+                          decoration: widget.selectedEntry != entry.entry
+                              ? (fileColor == null
+                                  ? null
+                                  : BoxDecoration(
+                                      border: Border(
+                                          left: BorderSide(
+                                              color: fileColor, width: 4))))
+                              : BoxDecoration(
+                                  color: Theme.of(context).selectedRowColor,
+                                  border: Border(
+                                    right: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 4),
+                                    left: fileColor == null
+                                        ? BorderSide.none
+                                        : BorderSide(
+                                            color: fileColor, width: 4),
+                                  ),
                                 ),
                           child: PasswordEntryTile(
                             vm: entry,
