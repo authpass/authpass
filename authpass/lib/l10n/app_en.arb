@@ -44,6 +44,10 @@
   "@indonesian": {
     "description": "language switcher subtitle"
   },
+  "turkish": "Turkish",
+  "@turkish": {
+    "description": "Language switcher subtitle"
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {

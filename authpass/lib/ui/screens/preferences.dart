@@ -112,6 +112,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
       LocaleInfo('fr', 'Français', loc.french),
       LocaleInfo('es', 'Español', loc.spanish),
       LocaleInfo('id', 'Bahasa Indonesia', loc.indonesian),
+      LocaleInfo('tr', 'Türkçe', loc.turkish),
     ];
     final locales =
         Map.fromEntries(localeInfo.map((e) => MapEntry(e.locale, e)));

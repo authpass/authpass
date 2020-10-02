@@ -49,6 +49,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get indonesian => 'Indonesian';
 
   @override
+  String get turkish => 'Turkish';
+
+  @override
   String get selectKeepassFile => 'AuthPass - Wähle eine KeePass Datei';
 
   @override
@@ -58,7 +61,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get selectKeepassFileLabel => 'Bitte wähle eine KeePass (.kdbx) Datei.';
 
   @override
-  String get createNewFile => 'Create New File';
+  String get createNewFile => 'Datei Erstellen';
 
   @override
   String get openLocalFile => 'Öffne\nLokale Datei';
@@ -75,7 +78,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get loadFromUrl => 'Lade von URL';
 
   @override
-  String get loadFromRemoteUrl => 'Open kdbx from URL';
+  String get loadFromRemoteUrl => 'Lade von URL';
 
   @override
   String get createNewKeepass => 'KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen';
@@ -146,19 +149,19 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get unableToLaunchUrlTitle => 'Unable to open Url';
+  String get unableToLaunchUrlTitle => 'Kann URL nicht öffnen';
 
   @override
   String unableToLaunchUrlDescription(Object url, Object openError) {
-    return 'Unable to launch ${url}: ${openError}';
+    return 'Fehler beim öffnen von ${url}: ${openError}';
   }
 
   @override
-  String get unableToLaunchUrlNoHandler => 'No application available for url.';
+  String get unableToLaunchUrlNoHandler => 'Keine App für die URL gefunden.';
 
   @override
   String launchedUrl(Object url) {
-    return 'Opened URL: ${url}';
+    return 'URL ${url} geöffnet';
   }
 
   @override
@@ -189,7 +192,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemAbout => 'Über AuthPass';
 
   @override
-  String get actionOpenUrl => 'Open URL';
+  String get actionOpenUrl => 'URL Öffnen';
 
   @override
   String get passwordPlainText => 'Passwort anzeigen';
@@ -290,10 +293,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get doneCopiedUsername => 'Benutzername in die Zwischenablage kopiert.';
 
   @override
-  String get doneCopiedField => 'Copied.';
+  String get doneCopiedField => 'Kopiert.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'Du hast noch kein Passwort in deiner Datenbank.';
+  String get emptyPasswordVaultPlaceholder => 'Du hast noch keine Passworter in deiner Datenbank.';
 
   @override
   String get emptyPasswordVaultButtonLabel => 'Erstelle dein erstes Passwort';
@@ -335,11 +338,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get saveMasterPasswordBiometric => 'Passwort sicher speichern (mit biometrischen Schutz)?';
 
   @override
-  String get errorOpenFileAlreadyOpenTitle => 'File already open';
+  String get errorOpenFileAlreadyOpenTitle => 'Datei schon geöffnet';
 
   @override
   String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
-    return 'The selected database ${databaseName} is already open from ${openFileSource} (Tried to open from ${newFileSource})';
+    return 'Die Datenbank ${databaseName} ist bereits von ${openFileSource} aus geöffnet. (Versuchte ${newFileSource} zu öffnen)';
   }
 
   @override
@@ -381,7 +384,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get undoButtonLabel => 'Rückgängig';
 
   @override
-  String get saveButtonLabel => 'Save';
+  String get saveButtonLabel => 'Speichern';
 
   @override
   String get initialNewGroupName => 'Neue Gruppe';
@@ -402,89 +405,89 @@ class AppLocalizationsDe extends AppLocalizations {
   String get groupListFilterAppbarTitle => 'Nach Gruppen filtern';
 
   @override
-  String get clearQuickUnlock => 'Clear Biometric Storage';
+  String get clearQuickUnlock => 'Biometrischen Speicher löschen';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Remove saved master passwords';
+  String get clearQuickUnlockSubtitle => 'Lösche gespeicherte master Passwörter';
 
   @override
-  String get unlock => 'Unlock Files';
+  String get unlock => 'Dateien entsperren';
 
   @override
-  String get closePasswordFiles => 'close password files';
+  String get closePasswordFiles => 'schliesse Passwortdateien';
 
   @override
-  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+  String get clearQuickUnlockSuccess => 'Lösche gespeicherte master Passwörter vom biometrischen Speicher.';
 
   @override
-  String get diacOptIn => 'Opt in to In-App News, Surveys.';
+  String get diacOptIn => 'In-App Neuigkeiten und Umfragen erhalten.';
 
   @override
-  String get diacOptInSubtitle => 'Will occasionally send a network request to fetch news.';
+  String get diacOptInSubtitle => 'Kann gelegentlich Internetanfragen um Neuigkeiten zu sammeln verursachen.';
 
   @override
-  String get enableAutofillDebug => 'AutoFill: Enable debug';
+  String get enableAutofillDebug => 'AutoFill: Debugging aktivieren';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Shows information overlays for every input field';
+  String get enableAutofillDebugSubtitle => 'Zeigt informationen für jedes Eingabefeld in einem overlay';
 
   @override
-  String get createPasswordDatabase => 'Create Password Database';
+  String get createPasswordDatabase => 'Erstelle Passwort Datenbank';
 
   @override
-  String get nameNewPasswordDatabase => 'Name of your new Database';
+  String get nameNewPasswordDatabase => 'Name der neuen Datenbank';
 
   @override
-  String get validatorNameMissing => 'Please enter a name for your new database.';
+  String get validatorNameMissing => 'Bitte gib den namen der neuen Datenbank an';
 
   @override
-  String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
+  String get masterPasswordHelpText => 'Gib ein sicheres master Passwort an.';
 
   @override
-  String get inputMasterPasswordText => 'Master Password';
+  String get inputMasterPasswordText => 'Master Passwort';
 
   @override
-  String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
+  String get masterPasswordMissingCreate => 'Bitte gib ein sicheres Passwort an.';
 
   @override
-  String get createDatabaseAction => 'Create Database';
+  String get createDatabaseAction => 'Erstelle Datenbank';
 
   @override
-  String get databaseExistsError => 'File Exists';
+  String get databaseExistsError => 'Datei exisiert bereits';
 
   @override
   String databaseExistsErrorDescription(Object filePath) {
-    return 'Error while trying to create database ${filePath}. File already exists. Please choose another name.';
+    return 'Fehler beim versuch die Datenbank zu erstellen: ${filePath}. Die Datei exisitert bereits. Bitte wähle einen anderen Namen.';
   }
 
   @override
-  String get databaseCreateDefaultName => 'PersonalPasswords';
+  String get databaseCreateDefaultName => 'PersönlichePasswörter';
 
   @override
-  String get preferenceDynamicLoadIcons => 'Dynamically load Icons';
+  String get preferenceDynamicLoadIcons => 'Dynamisch Website icons laden';
 
   @override
   String preferenceDynamicLoadIconsSubtitle(Object urlFieldName) {
-    return 'Will make http requests with the value in ${urlFieldName} field to load website icons.';
+    return 'Macht abfragen auf ${urlFieldName} um Dynamisch Icons zu suchen.';
   }
 
   @override
   String passwordScore(Object score) {
-    return 'Strength: ${score} of 4';
+    return 'Stärke: ${score} von 4';
   }
 
   @override
-  String get entryInfoFile => 'File:';
+  String get entryInfoFile => 'Datei:';
 
   @override
-  String get entryInfoGroup => 'Group:';
+  String get entryInfoGroup => 'Gruppe:';
 
   @override
-  String get entryInfoLastModified => 'Last Modified:';
+  String get entryInfoLastModified => 'Letzte Änderung:';
 
   @override
   String movedEntryToGroup(Object groupName) {
-    return 'Moved entry into ${groupName}';
+    return 'Eintrag verschoben nach ${groupName}';
   }
 
   @override
@@ -493,61 +496,61 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get entryAddAttachment => 'Add Attachment';
+  String get entryAddAttachment => 'Anhang anfügen';
 
   @override
-  String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
+  String get entryAttachmentSizeWarning => 'Anhänge werden in der Passwort Datei gespeichert. Dies kann die Zeit zum öffnen der Passwörter stark erhöhen!';
 
   @override
-  String get entryAddField => 'Add Field';
+  String get entryAddField => 'Feld hinzufügen';
 
   @override
-  String get entryCustomField => 'Custom Field';
+  String get entryCustomField => 'Benutzerdefiniertes Feld';
 
   @override
-  String get entryCustomFieldTitle => 'Adding new custom Field';
+  String get entryCustomFieldTitle => 'Füge neues Benutzerdefiniertes Feld hinzu';
 
   @override
-  String get entryCustomFieldInputLabel => 'Enter a name for the field';
+  String get entryCustomFieldInputLabel => 'Namen für Feld eingeben';
 
   @override
-  String get swipeCopyField => 'Copy Field';
+  String get swipeCopyField => 'Feld kopieren';
 
   @override
-  String get fieldRename => 'Rename';
+  String get fieldRename => 'Umbenennen';
 
   @override
-  String get fieldGeneratePassword => 'Generate Password …';
+  String get fieldGeneratePassword => 'Passwort generieren …';
 
   @override
-  String get fieldProtect => 'Protect Value';
+  String get fieldProtect => 'Geschützter Wert';
 
   @override
-  String get fieldUnprotect => 'Unprotect Value';
+  String get fieldUnprotect => 'Ungeschützter Wert';
 
   @override
   String get fieldPresent => 'Present';
 
   @override
-  String get fieldGenerateEmail => 'Generate Email';
+  String get fieldGenerateEmail => 'Email generieren';
 
   @override
   String get onboardingBackToOnboarding => 'Tour';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
+  String get onboardingBackToOnboardingSubtitle => 'App tour neu erleben 😅️';
 
   @override
-  String get onboardingHeadline => 'Let\'s make your Passwords Secure!';
+  String get onboardingHeadline => 'Lass uns deine Passwörter sicher machen!';
 
   @override
-  String get onboardingQuestion => 'Have you used a password manager before?';
+  String get onboardingQuestion => 'Hast du schon einen Passwort Manager benutzt?';
 
   @override
-  String get onboardingYesOpenPasswords => 'Yes, open my passwords';
+  String get onboardingYesOpenPasswords => 'Ja, öffne meine Passwörter';
 
   @override
-  String get onboardingNoCreate => 'I\'m all new! Get me started.';
+  String get onboardingNoCreate => 'Ich bin neu. Lass uns loslegen!';
 
   @override
   String unexpectedError(String error) {

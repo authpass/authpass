@@ -49,6 +49,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get indonesian => 'Indonesian';
 
   @override
+  String get turkish => 'Turkish';
+
+  @override
   String get selectKeepassFile => 'AuthPass - Select KeePass File';
 
   @override
