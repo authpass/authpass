@@ -32,6 +32,10 @@
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
     },
+    "createNewFile": "Datei Erstellen",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
+    },
     "openLocalFile": "Öffne\nLokale Datei",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
@@ -52,6 +56,10 @@
     "loadFromUrl": "Lade von URL",
     "@loadFromUrl": {
         "description": "deprecated"
+    },
+    "loadFromRemoteUrl": "Lade von URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
     },
     "createNewKeepass": "KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen",
     "@createNewKeepass": {
@@ -106,6 +114,35 @@
             }
         }
     },
+    "unableToLaunchUrlTitle": "Kann URL nicht öffnen",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "unableToLaunchUrlDescription": "Fehler beim öffnen von {url}: {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Keine App für die URL gefunden.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "URL {url} geöffnet",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
+    },
     "menuItemGeneratePassword": "Passwort generieren",
     "@menuItemGeneratePassword": {},
     "menuItemPreferences": "Einstellungen",
@@ -124,6 +161,10 @@
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "Über AuthPass",
     "@menuItemAbout": {},
+    "actionOpenUrl": "URL Öffnen",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
     "passwordPlainText": "Passwort anzeigen",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
@@ -228,6 +269,10 @@
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
     },
+    "doneCopiedField": "Kopiert.",
+    "@doneCopiedField": {
+        "description": ""
+    },
     "noTitle": "(kein Titel)",
     "@noTitle": {
         "description": "Text to display in place of a title, when password entry has no name assigned."
@@ -256,7 +301,7 @@
     "@doneCopiedUsername": {
         "description": "snackbar confirmation that username was copied."
     },
-    "emptyPasswordVaultPlaceholder": "Du hast noch kein Passwort in deiner Datenbank.",
+    "emptyPasswordVaultPlaceholder": "Du hast noch keine Passworter in deiner Datenbank.",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
     },
@@ -323,6 +368,21 @@
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
     },
+    "errorOpenFileAlreadyOpenTitle": "Datei schon geöffnet",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "Die Datenbank {databaseName} ist bereits von {openFileSource} aus geöffnet. (Versuchte {newFileSource} zu öffnen)",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
     "errorUnlockFileTitle": "Datei kann nicht geöffnet werden",
     "@errorUnlockFileTitle": {
         "description": "generic error when opening a file (dialog title)",
@@ -376,6 +436,10 @@
     "@successfullyDeletedGroup": {
         "description": "snackbar after deleting a group."
     },
+    "saveButtonLabel": "Speichern",
+    "@saveButtonLabel": {
+      "description": "save file, for example button displayed in entry details"
+    },
     "undoButtonLabel": "Rückgängig",
     "@undoButtonLabel": {
         "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
@@ -403,6 +467,213 @@
     "groupListFilterAppbarTitle": "Nach Gruppen filtern",
     "@groupListFilterAppbarTitle": {
         "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlock": "Biometrischen Speicher löschen",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
+    "clearQuickUnlockSubtitle": "Lösche gespeicherte master Passwörter",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "unlock": "Dateien entsperren",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "schliesse Passwortdateien",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "Lösche gespeicherte master Passwörter vom biometrischen Speicher.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "In-App Neuigkeiten und Umfragen erhalten.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Kann gelegentlich Internetanfragen um Neuigkeiten zu sammeln verursachen.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "AutoFill: Debugging aktivieren",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Zeigt informationen für jedes Eingabefeld in einem overlay",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Erstelle Passwort Datenbank",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Name der neuen Datenbank",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "Bitte gib den namen der neuen Datenbank an",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "Gib ein sicheres master Passwort an.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Master Passwort",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "Bitte gib ein sicheres Passwort an.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "Erstelle Datenbank",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
+    "databaseExistsError": "Datei exisiert bereits",
+    "@databaseExistsError": {
+        "description": "dialog title for error message when creating a new database with a name which already exists."
+    },
+    "databaseExistsErrorDescription": "Fehler beim versuch die Datenbank zu erstellen: {filePath}. Die Datei exisitert bereits. Bitte wähle einen anderen Namen.",
+    "@databaseExistsErrorDescription": {
+        "description": "dialog body for error message when creating a new database with a name which already exists.",
+        "placeholders": {
+            "filePath": {
+                "description": "file path which already existed."
+            }
+        }
+    },
+    "databaseCreateDefaultName": "PersönlichePasswörter",
+    "@databaseCreateDefaultName": {
+        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+    },
+    "preferenceDynamicLoadIcons": "Dynamisch Website icons laden",
+    "@preferenceDynamicLoadIcons": {
+        "description": "preferences: dynamically load website icons"
+    },
+    "preferenceDynamicLoadIconsSubtitle": "Macht abfragen auf {urlFieldName} um Dynamisch Icons zu suchen.",
+    "@preferenceDynamicLoadIconsSubtitle": {
+        "description": "preferences: dynamically load website icons help text.",
+        "placeholders": {
+            "urlFieldName": {
+                "example": "Website"
+            }
+        }
+    },
+    "passwordScore": "Stärke: {score} von 4",
+    "@passwordScore": {
+        "description": "choosing a master password - calculated password strength.",
+        "placeholders": {
+            "score": {
+                "description": "integer of the score.",
+                "example": "3"
+            }
+        }
+    },
+    "entryInfoFile": "Datei:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "Gruppe:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "Letzte Änderung:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "movedEntryToGroup": "Eintrag verschoben nach {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
+    "sizeBytes": "{count} bytes",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "bytes": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
+    "entryAddAttachment": "Anhang anfügen",
+    "@entryAddAttachment": {
+        "description": ""
+    },
+    "entryAttachmentSizeWarning": "Anhänge werden in der Passwort Datei gespeichert. Dies kann die Zeit zum öffnen der Passwörter stark erhöhen!",
+    "@entryAttachmentSizeWarning": {
+        "description": ""
+    },
+    "entryAddField": "Feld hinzufügen",
+    "@entryAddField": {
+        "description": ""
+    },
+    "entryCustomField": "Benutzerdefiniertes Feld",
+    "@entryCustomField": {
+        "description": ""
+    },
+    "entryCustomFieldTitle": "Füge neues Benutzerdefiniertes Feld hinzu",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
+    "entryCustomFieldInputLabel": "Namen für Feld eingeben",
+    "@entryCustomFieldInputLabel": {
+        "description": ""
+    },
+    "swipeCopyField": "Feld kopieren",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "Umbenennen",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldGeneratePassword": "Passwort generieren …",
+    "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "Geschützter Wert",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "Ungeschützter Wert",
+    "@fieldUnprotect": {
+        "description": ""
+    },
+    "fieldPresent": "Present",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Email generieren",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "Tour",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "App tour neu erleben \uD83D\uDE05️",
+    "@onboardingBackToOnboardingSubtitle": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingHeadline": "Lass uns deine Passwörter sicher machen!",
+    "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingQuestion": "Hast du schon einen Passwort Manager benutzt?",
+    "@onboardingQuestion": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Ja, öffne meine Passwörter",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "onboardingNoCreate": "Ich bin neu. Lass uns loslegen!",
+    "@onboardingNoCreate": {
+        "description": ""
     },
     "unexpectedError": "Unerwarteter Fehler: {error}",
     "@unexpectedError": {
