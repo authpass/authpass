@@ -48,3 +48,4 @@ metrics.json
 /authpass/ios/fastlane/framed
 /authpass/android/fastlane/metadata/framed
 /authpass/_tools/secrets/fosshub_token.txt
+/authpass/lib/env/production.dart
