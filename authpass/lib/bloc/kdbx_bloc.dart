@@ -512,12 +512,11 @@ class KdbxBloc {
         _openedFilesQuickUnlock.clear();
         await quickUnlockStorage.updateQuickUnlockFile({});
       }
-      _openedFiles.value = OpenedKdbxFiles({});
       analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
     } else {
-      _openedFiles.value = OpenedKdbxFiles({});
       analytics.events.trackLockAllFiles(count: _openedFiles.value?.length);
     }
+    _openedFiles.value = OpenedKdbxFiles({});
   }
 
   static Future<ReadFileResponse> staticReadKdbxFile(
