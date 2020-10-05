@@ -872,18 +872,18 @@ class _PasswordListContentState extends State<PasswordListContent>
     final loc = AppLocalizations.of(context);
     final localFiles =
         kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
-    final localFiles3 = localFiles.where((file) =>
-        file.value.body.rootGroup
-            .getAllGroups()
-            .where((element) => element != file.value.recycleBin)
-            .expand((element) => element.getAllEntries())
-            .length >=
-        3);
+    final localFiles3 = localFiles
+        .where((file) =>
+            file.value.body.rootGroup
+                .getAllGroups()
+                .where((element) => element != file.value.recycleBin)
+                .expand((element) => element.getAllEntries())
+                .length >=
+            3)
+        .where((element) =>
+            !(_dismissedLocalFiles?.contains(element.key.uuid) ?? false));
     if (localFiles3.isNotEmpty && _dismissedLocalFilesReady) {
-      final file = localFiles3
-          .where((element) =>
-              !(_dismissedLocalFiles?.contains(element.key.uuid) ?? false))
-          .first;
+      final file = localFiles3.first;
       return [
         BackupBanner(
           loc.backupWarningMessage(file.key.displayName),
