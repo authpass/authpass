@@ -20,8 +20,10 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 final _logger = Logger('manage_file');
 
 class SaveFileAs extends StatefulWidget {
-  const SaveFileAs(this.title, this.file,
-      {this.onFileSourceChanged,
+  const SaveFileAs(
+      {this.title,
+      this.file,
+      this.onFileSourceChanged,
       this.onClose,
       this.icon,
       this.cs,
@@ -58,7 +60,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   }
 
   void _init() {
-    kdbxBloc ??= Provider.of<KdbxBloc>(context);
+    kdbxBloc ??= context.read<KdbxBloc>();
   }
 
   @override

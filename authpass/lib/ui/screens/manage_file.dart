@@ -1,12 +1,10 @@
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
-import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
-import 'package:authpass/ui/widgets/savefile/save_file.dart';
-import 'package:authpass/ui/widgets/savefile/save_file_helper.dart';
+import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:logging/logging.dart';
@@ -15,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart'
     hide FutureTaskStateMixin;
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -177,12 +174,16 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                 ListTile(
                   title: const Text('Path'),
                   subtitle: Text(_file.fileSource.displayPath),
-                  trailing: SaveFileAsDialogButton(_file,
-                      onSave: (Future<void> fileSave) {
-                    asyncRunTask((progress) async {
-                      await fileSave;
-                    }, label: loc.saving);
-                  }, onFileSourceChanged: widget.onFileSourceChanged, local: true),
+                  trailing: SaveFileAsDialogButton(
+                    file: _file,
+                    onSave: (Future<void> fileSave) {
+                      asyncRunTask((progress) async {
+                        await fileSave;
+                      }, label: loc.saving);
+                    },
+                    onFileSourceChanged: widget.onFileSourceChanged,
+                    includeLocal: true,
+                  ),
                 ),
                 ListTile(
                   title: const Text('Color'),

@@ -23,8 +23,7 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/backup_warning_banner.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
-import 'package:authpass/ui/widgets/savefile/save_file.dart';
-import 'package:authpass/ui/widgets/savefile/save_file_helper.dart';
+import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -868,7 +867,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   bool _dismissedLocalFilesReady = false;
 
   List<Widget> _buildBackupWarningBanners() {
-    final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final kdbxBloc = context.read<KdbxBloc>();
     final loc = AppLocalizations.of(context);
     final localFiles =
         kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
@@ -888,7 +887,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         BackupBanner(
           loc.backupWarningMessage(file.key.displayName),
           backupWidget: SaveFileAsDialogButton(
-            kdbxBloc.fileForFileSource(file.key),
+            file: kdbxBloc.fileForFileSource(file.key),
             child: Text(loc.backupButton,
                 style: Theme.of(context).textTheme.button),
             onSave: (Future<void> filefuture) {
@@ -899,13 +898,13 @@ class _PasswordListContentState extends State<PasswordListContent>
           ),
           dismissText: loc.dismissBackupButton,
           onDismiss: () {
-            Provider.of<AppDataBloc>(context, listen: false).update(
-                (builder, data) => builder.dismissedBackupLocalFiles =
+            context.read<AppDataBloc>().update((builder, data) =>
+                builder.dismissedBackupLocalFiles =
                     data.dismissedBackupLocalFiles?.toBuilder() ??
                         BuiltList<String>().toBuilder()
                       ..add(file.key.uuid));
           },
-        )
+        ),
       ];
     }
     return null;
