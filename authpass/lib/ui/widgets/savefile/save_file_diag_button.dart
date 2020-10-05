@@ -33,7 +33,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
   }
 
   List<SaveFileAsMenuItem> getItems(BuildContext context) {
-    final cloudStorageBloc = context.read<CloudStorageBloc>();
+    final cloudStorageBloc = context.watch<CloudStorageBloc>();
     final loc = AppLocalizations.of(context);
     return [
       if (includeLocal)

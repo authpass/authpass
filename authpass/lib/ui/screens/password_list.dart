@@ -867,7 +867,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   bool _dismissedLocalFilesReady = false;
 
   List<Widget> _buildBackupWarningBanners() {
-    final kdbxBloc = context.read<KdbxBloc>();
+    final kdbxBloc = context.watch<KdbxBloc>();
     final loc = AppLocalizations.of(context);
     final localFiles =
         kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
