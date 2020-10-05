@@ -966,10 +966,10 @@ class _EntryFieldState extends State<EntryField>
   void initState() {
     super.initState();
     _focusNode.addListener(_focusNodeChanged);
-    initController();
+    _initController();
   }
 
-  void initController() {
+  void _initController() {
     if (_fieldValue is ProtectedValue || widget.commonField?.protect == true) {
       _isValueObscured = true;
       _controller = TextEditingController();
@@ -1126,8 +1126,8 @@ class _EntryFieldState extends State<EntryField>
             _fieldValue = ProtectedValue.fromString(_valueCurrent ?? '');
             _isValueObscured = true;
           }
+          _initController();
         });
-        initController();
         break;
       case EntryAction.delete:
         widget.entry.removeString(widget.fieldKey);
@@ -1585,11 +1585,13 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                   child: LinkButton(
                     child: Container(
                       alignment: Alignment.bottomCenter,
-                      padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16, right: 12),
+                      padding: const EdgeInsets.only(
+                          left: 12.0 + 24.0, bottom: 16, right: 12),
                       child: const Text(
                         'Protected field. Click to reveal.',
-                        style: TextStyle(
-                            shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
+                        style: TextStyle(shadows: [
+                          Shadow(color: Colors.white, blurRadius: 5)
+                        ]),
                       ),
                     ),
                     onPressed: onPressed,
