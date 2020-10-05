@@ -6,7 +6,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    if: ${{ secrets.BLACKBOX_SECRET_KEY != '' }}
+    # do not run in PRs
+    if: ${{ github.head_ref == '' }}
 
     strategy:
       matrix:

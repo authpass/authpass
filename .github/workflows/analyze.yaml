@@ -39,9 +39,10 @@ jobs:
 #            text_description: ${{ steps.test.outputs.description }}
       - name: Annotate
         uses: Attest/annotations-action@master
+        if: ${{ github.head_ref == '' }}
         with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          secret: ${{ github.token }}
+          token: ${{ github.token }}
           path: './annotations_first_50.json'
           input: './annotations_first_50.json'
           title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
