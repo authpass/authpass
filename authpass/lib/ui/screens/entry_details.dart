@@ -1553,50 +1553,27 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = ThemeUtil.iconColor(Theme.of(context), null);
     return Stack(
       alignment: Alignment.centerRight,
       children: [
-        Stack(
-          children: [
-            InputDecorator(
-              decoration: InputDecoration(
-                prefixIcon:
-                    commonField?.icon == null ? null : Icon(commonField.icon),
-                labelText: commonField?.displayName ?? fieldKey.key,
-                filled: true,
-              ),
-              child: const Text(
-                '*****************',
-                style: TextStyle(color: Colors.white),
-              ),
+        InputDecorator(
+          decoration: InputDecoration(
+            prefixIcon:
+                commonField?.icon == null ? null : Icon(commonField.icon),
+            labelText: commonField?.displayName ?? fieldKey.key,
+            filled: true,
+          ),
+          child: Text(
+            '*****************',
+            style: TextStyle(
+                color: color
             ),
-            Positioned.fill(
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: ui.ImageFilter.blur(
-                    sigmaX: 0.5,
-                    sigmaY: 0.5,
-                  ),
-                  child: LinkButton(
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16, right: 12),
-                      child: const Text(
-                        'Protected field. Click to reveal.',
-                        style: TextStyle(
-                            shadows: [Shadow(color: Colors.white, blurRadius: 5)]),
-                      ),
-                    ),
-                    onPressed: onPressed,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ), 
+          ),
+        ),
         IconButton(
           icon: const Icon(FontAwesomeIcons.eye),
-          color: ThemeUtil.iconColor(Theme.of(context), null),
+          color: color,
           tooltip: 'Show protected field',
           onPressed: onShowPressed,
         ),
