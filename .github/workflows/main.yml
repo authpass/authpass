@@ -6,6 +6,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    if: ${{ secrets.BLACKBOX_SECRET_KEY != '' }}
 
     strategy:
       matrix:
