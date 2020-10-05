@@ -4,13 +4,14 @@ import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
-import 'package:authpass/ui/widgets/save_file.dart';
+import 'package:authpass/ui/widgets/savefile/save_file.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:googleapis/servicemanagement/v1.dart';
 import 'package:provider/provider.dart';
 
-class SaveFileAsDialogButton extends StatefulWidget {
+class SaveFileAsDialogButton extends StatelessWidget {
   const SaveFileAsDialogButton(this.file,
       {this.child,
       this.onFileSourceChanged,
@@ -24,47 +25,43 @@ class SaveFileAsDialogButton extends StatefulWidget {
   final Function(Future<void>) onSave;
   final bool local;
   final bool cloud;
-  @override
-  _SaveFileAsDialogButtonState createState() => _SaveFileAsDialogButtonState();
-}
 
-class _SaveFileAsDialogButtonState extends State<SaveFileAsDialogButton> {
-  void showBottomModal() {
+  void showBottomModal(BuildContext context) {
     showModalBottomSheet<KdbxOpenedFile>(
         context: context,
         builder: (context) => Column(
               mainAxisSize: MainAxisSize.min,
-              children: getItems(),
+              children: getItems(context),
             ));
   }
 
-  List<SaveFileAsMenuItem> getItems() {
+  List<SaveFileAsMenuItem> getItems(BuildContext context) {
     final cloudStorageBloc =
         Provider.of<CloudStorageBloc>(context, listen: false);
     final loc = AppLocalizations.of(context);
     return [
-      if (widget.local)
+      if (local)
         SaveFileAsMenuItem(
           loc.saveAs,
-          widget.file,
+          file,
           onClose: () {
-            Navigator.pop(context, widget.file);
+            Navigator.pop(context, file);
           },
-          onSave: widget.onSave,
+          onSave: onSave,
           icon: const Icon(FontAwesomeIcons.hdd),
-          onFileSourceChanged: widget.onFileSourceChanged,
+          onFileSourceChanged: onFileSourceChanged,
           subtitle: 'Local File',
         ),
-      if (widget.cloud)
+      if (cloud)
         ...cloudStorageBloc.availableCloudStorage.map(
           (cs) => SaveFileAsMenuItem(
             loc.saveAs,
-            widget.file,
+            file,
             onClose: () {
-              Navigator.pop(context, widget.file);
+              Navigator.pop(context, file);
             },
-            onSave: widget.onSave,
-            onFileSourceChanged: widget.onFileSourceChanged,
+            onSave: onSave,
+            onFileSourceChanged: onFileSourceChanged,
             cs: cs,
           ),
         )
@@ -74,21 +71,21 @@ class _SaveFileAsDialogButtonState extends State<SaveFileAsDialogButton> {
   @override
   Widget build(BuildContext context) {
     if (AuthPassPlatform.isAndroid || AuthPassPlatform.isIOS) {
-      if (widget.child != null) {
+      if (child != null) {
         return InkWell(
-          child: widget.child,
-          onTap: showBottomModal,
+          child: child,
+          onTap: () => showBottomModal(context),
         );
       }
       return IconButton(
         icon: const Icon(Icons.more_vert),
-        onPressed: showBottomModal,
+        onPressed: () => showBottomModal(context),
       );
     } else {
       return PopupMenuButton<KdbxOpenedFile>(
-        child: widget.child ?? widget.child,
+        child: child ?? child,
         onSelected: (_) => _,
-        itemBuilder: (context) => getItems(),
+        itemBuilder: (context) => getItems(context),
       );
     }
   }
