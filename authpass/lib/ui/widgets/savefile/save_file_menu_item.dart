@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 
 class SaveFileAsMenuItem extends PopupMenuEntry<KdbxOpenedFile> {
   const SaveFileAsMenuItem(
-      {this.title,
-      this.file,
+      {@required this.title,
+      @required this.file,
       this.onFileSourceChanged,
       this.onClose,
       this.icon,
       this.cs,
       this.onSave,
       this.subtitle})
-      : assert((icon != null && subtitle != null) || cs != null);
+      : assert((title != null && file != null) &&( (icon != null && subtitle != null) || cs != null));
 
   final Function onClose;
   final Function(Future<void>) onSave;

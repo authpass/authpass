@@ -10,11 +10,11 @@ import 'package:provider/provider.dart';
 
 class SaveFileAsDialogButton extends StatelessWidget {
   const SaveFileAsDialogButton(
-      {this.file,
+      {@required this.file,
       this.child,
       this.onFileSourceChanged,
       this.onSave,
-      this.includeLocal = false});
+      this.includeLocal = false}) : assert(file != null);
 
   final KdbxOpenedFile file;
   final Widget child;
