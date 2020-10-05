@@ -5,6 +5,7 @@
 * Translations: Added Indonesian.
 * Show icon to present protected values #161 (Thanks @Trekky12)
 * DEV: update flutter to 1.22.0-12.1.pre (from 1.22.0-1.0.pre)
+* Compatibility with KeePassXC: Accept arbitrary sort order of binaries in kdbx 3.
 
 # 1.7.8 - 2020-09-18
 
