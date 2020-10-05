@@ -178,9 +178,9 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   title: const Text('Path'),
                   subtitle: Text(_file.fileSource.displayPath),
                   trailing: SaveFileAsDialogButton(_file,
-                      onSave: (Future<void> filefuture) {
+                      onSave: (Future<void> fileSave) {
                     asyncRunTask((progress) async {
-                      await filefuture;
+                      await fileSave;
                     }, label: loc.saving);
                   }, onFileSourceChanged: widget.onFileSourceChanged, local: true),
                 ),
