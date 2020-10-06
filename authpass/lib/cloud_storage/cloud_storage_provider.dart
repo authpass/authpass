@@ -185,7 +185,7 @@ abstract class CloudStorageProvider {
   FileSource toFileSource(
     Map<String, String> fileInfo, {
     @required String uuid,
-    FileContent initialCachedContent,
+    @required FileContent initialCachedContent,
     String databaseName,
   }) =>
       FileSourceCloudStorage(

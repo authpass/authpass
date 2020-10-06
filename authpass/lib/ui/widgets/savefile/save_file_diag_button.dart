@@ -2,8 +2,6 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/widgets/savefile/save_file.dart';
-import 'package:authpass/ui/widgets/savefile/save_file_menu_item.dart';
-import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -12,52 +10,61 @@ class SaveFileAsDialogButton extends StatelessWidget {
   const SaveFileAsDialogButton({
     @required this.file,
     this.child,
-    this.onFileSourceChanged,
     this.onSave,
     this.includeLocal = false,
   }) : assert(file != null);
 
   final KdbxOpenedFile file;
   final Widget child;
-  final FileSourceChanged onFileSourceChanged;
   final OnSave onSave;
   final bool includeLocal;
 
-  void showBottomModal(BuildContext context) {
-    showModalBottomSheet<KdbxOpenedFile>(
+  void _showBottomModal(BuildContext context) {
+    showModalBottomSheet<void>(
       context: context,
-      builder: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: getItems(context),
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.3,
+        maxChildSize: 0.6,
+        expand: false,
+        builder: (context, scrollController) {
+          return Scrollbar(
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: _getItems(context),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  List<SaveFileAsMenuItem> getItems(BuildContext context) {
+  List<Widget> _getItems(BuildContext context) {
     final cloudStorageBloc = context.watch<CloudStorageBloc>();
     final loc = AppLocalizations.of(context);
     return [
       if (includeLocal)
-        SaveFileAsMenuItem(
+        SaveFileAs(
           title: loc.saveAs,
           file: file,
           onSave: (fileFuture) {
-            Navigator.pop(context, file);
+            Navigator.of(context).pop();
             onSave?.call(fileFuture);
           },
           icon: const Icon(FontAwesomeIcons.hdd),
-          onFileSourceChanged: onFileSourceChanged,
           subtitle: 'Local File',
         ),
       ...cloudStorageBloc.availableCloudStorage.map(
-        (cs) => SaveFileAsMenuItem(
+        (cs) => SaveFileAs(
           title: loc.saveAs,
           file: file,
           onSave: (saveFuture) {
-            Navigator.pop(context, file);
+            Navigator.of(context).pop();
             onSave?.call(saveFuture);
           },
-          onFileSourceChanged: onFileSourceChanged,
           cs: cs,
         ),
       ),
@@ -66,22 +73,15 @@ class SaveFileAsDialogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (AuthPassPlatform.isAndroid || AuthPassPlatform.isIOS) {
-      if (child != null) {
-        return InkWell(
-          child: child,
-          onTap: () => showBottomModal(context),
-        );
-      }
-      return IconButton(
-        icon: const Icon(Icons.more_vert),
-        onPressed: () => showBottomModal(context),
-      );
-    } else {
-      return PopupMenuButton<KdbxOpenedFile>(
+    if (child != null) {
+      return TextButton(
         child: child,
-        itemBuilder: (context) => getItems(context),
+        onPressed: () => _showBottomModal(context),
       );
     }
+    return IconButton(
+      icon: const Icon(Icons.more_vert),
+      onPressed: () => _showBottomModal(context),
+    );
   }
 }

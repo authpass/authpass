@@ -887,8 +887,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           loc.backupWarningMessage(file.key.displayName),
           backupWidget: SaveFileAsDialogButton(
             file: kdbxBloc.fileForFileSource(file.key),
-            child: Text(loc.backupButton,
-                style: Theme.of(context).textTheme.button),
+            child: Text(loc.backupButton),
             onSave: (saveFuture) {
               asyncRunTask((progress) async {
                 await saveFuture;

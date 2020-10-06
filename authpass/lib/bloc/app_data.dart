@@ -157,6 +157,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map).cast<String, String>(),
           uuid: uuid ?? UuidUtil.createUuid(),
           databaseName: name,
+          initialCachedContent: null,
         );
     }
     throw ArgumentError.value(sourceType, 'sourceType', 'Unsupported value.');
@@ -304,7 +305,9 @@ class AppDataBloc {
     final updated = await update((builder, data) {
       final nextTheme = data.theme == null
           ? AppDataTheme.light
-          : data.theme == AppDataTheme.light ? AppDataTheme.dark : null;
+          : data.theme == AppDataTheme.light
+              ? AppDataTheme.dark
+              : null;
       return builder.theme = nextTheme;
     });
     return updated;

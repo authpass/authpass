@@ -18,12 +18,15 @@ class BackupBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialBanner(content: Text(bannerText), actions: [
-      FlatButton(
-        child: Text(dismissText),
-        onPressed: () => onDismiss(),
-      ),
-      backupWidget
-    ]);
+    return MaterialBanner(
+      content: Text(bannerText),
+      actions: [
+        TextButton(
+          child: Text(dismissText),
+          onPressed: () => onDismiss(),
+        ),
+        backupWidget,
+      ],
+    );
   }
 }

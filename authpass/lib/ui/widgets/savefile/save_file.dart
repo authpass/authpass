@@ -21,23 +21,22 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 final _logger = Logger('manage_file');
 
 typedef FileSourceChanged = void Function(FileSource newFileSource);
-typedef OnSave = void Function(Future<void> saveFuture);
+typedef OnSave = void Function(Future<KdbxOpenedFile> saveFuture);
 
 class SaveFileAs extends StatefulWidget {
   const SaveFileAs({
     @required this.title,
     @required this.file,
-    this.onFileSourceChanged,
     this.icon,
     this.cs,
-    this.onSave,
+    @required this.onSave,
     this.subtitle,
   })  : assert(title != null),
         assert(file != null),
+        assert(onSave != null),
         assert((icon != null && subtitle != null) || cs != null);
 
   final OnSave onSave;
-  final FileSourceChanged onFileSourceChanged;
   final KdbxOpenedFile file;
   final String title;
   final String subtitle;
@@ -73,14 +72,25 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       leading: widget.icon ?? Icon(widget.cs.displayIcon.iconData),
       title: Text(widget.title),
       subtitle: Text(widget.subtitle ?? widget.cs.displayName),
-      onTap: () {
-        widget.onSave?.call(
-            widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs));
+      onTap: () async {
+        _logger.fine('saving. ${widget.local}');
+        if (widget.local) {
+          final fs = await _selectLocalFileSource();
+          if (fs != null) {
+            widget.onSave(kdbxBloc.saveAs(widget.file, fs));
+          }
+        } else {
+          final result = await _saveAsCloudStorage(widget.cs);
+          if (result != null) {
+            widget
+                .onSave(kdbxBloc.saveAsNewFile(widget.file, result, widget.cs));
+          }
+        }
       },
     );
   }
 
-  Future<void> _saveAsLocalFile() async {
+  Future<FileSource> _selectLocalFileSource() async {
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
           '${path.basenameWithoutExtension(widget.file.fileSource.displayPath)}.kdbx',
@@ -97,34 +107,22 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
 
       if (fileInfo == null) {
         _logger.info('User cancelled file picker.');
-        return;
+        return null;
       }
       _logger.fine('writing to ${fileInfo.uri} / ${fileInfo.fileName}');
-      final newFile = await kdbxBloc.saveAs(
-          widget.file,
-          FileSourceLocal(
-            File(fileInfo.fileName),
-            databaseName: widget.file.fileSource.displayName,
-            uuid: AppDataBloc.createUuid(),
-            filePickerIdentifier: fileInfo.toJsonString(),
-          ));
-      widget.onFileSourceChanged?.call(newFile.fileSource);
-      if (!mounted) {
-        _logger.severe(
-            '$runtimeType We are no longer mounted after writing file.');
-        return;
-      }
-//      setState(() {
-//        _file = newFile;
-//      });
-      return;
+      return FileSourceLocal(
+        File(fileInfo.fileName),
+        databaseName: widget.file.fileSource.displayName,
+        uuid: AppDataBloc.createUuid(),
+        filePickerIdentifier: fileInfo.toJsonString(),
+      );
     }
     final result = await showSavePanel(
       suggestedFileName: path.basename(widget.file.fileSource.displayPath),
       confirmButtonText: 'Save',
     );
     if (result.canceled) {
-      return;
+      return null;
     }
 
     final pathFile = result.paths.first;
@@ -135,18 +133,16 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       await outputFile.writeAsString('.');
       macOsBookmark = await SecureBookmarks().bookmark(outputFile);
     }
-    final newFile = await kdbxBloc.saveAs(
-      widget.file,
-      FileSourceLocal(
-        outputFile,
-        uuid: AppDataBloc.createUuid(),
-        macOsSecureBookmark: macOsBookmark,
-      ),
+    return FileSourceLocal(
+      outputFile,
+      uuid: AppDataBloc.createUuid(),
+      macOsSecureBookmark: macOsBookmark,
     );
-    widget.onFileSourceChanged?.call(newFile.fileSource);
   }
 
-  Future<void> _saveAsCloudStorage(CloudStorageProvider cs) async {
+  Future<CloudStorageSelectorSaveResult> _saveAsCloudStorage(
+      CloudStorageProvider cs) async {
+    _logger.fine('pushing cloud storage selector.');
     final createFileInfo =
         await Navigator.of(context).push(CloudStorageSelector.route(
       cs,
@@ -154,15 +150,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
           defaultFileName: path.basename(widget.file.fileSource.displayPath),
           isSave: true),
     ));
-    if (createFileInfo != null) {
-      final newFile =
-          await kdbxBloc.saveAsNewFile(widget.file, createFileInfo, cs);
-      //onFileSourceChanged should have the same effect as this setState by getting relayed to ManageFileScreen where the state of it is set
-      //setState(() {
-      //  widget.file = newFile;
-      //});
-      widget.onFileSourceChanged?.call(newFile.fileSource);
-//      cs.saveEntity(, bytes, previousMetadata)
-    }
+    _logger.fine('done. $createFileInfo');
+    return createFileInfo;
   }
 }
