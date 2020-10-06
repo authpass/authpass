@@ -1222,10 +1222,10 @@ class _EntryFieldState extends State<EntryField>
     String openError;
     try {
       var parsed = Uri.parse(url);
-      _logger.finer('Opening url $url ($parsed)');
       if (!parsed.hasScheme) {
-        parsed = parsed.replace(scheme: 'http'); // NON-NLS
+        parsed = Uri.parse('http://$url'); // NON-NLS
       }
+      _logger.finer('Opening url $url ($parsed)');
       if (await DialogUtils.openUrl(parsed.toString())) {
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text(loc.launchedUrl(url))));
@@ -1637,55 +1637,46 @@ class StringEntryFieldEditor extends StatelessWidget {
     final commonFields = Provider.of<CommonFields>(context);
     final loc = AppLocalizations.of(context);
     final color = ThemeUtil.iconColor(Theme.of(context), null);
-    return Stack(
-        alignment: Alignment.centerRight,
-        children: [
-          TextFormField(
-            key: formFieldKey,
-            maxLines: null,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-    //        fillColor: const Color(0xfff0f0f0),
-              filled: true,
-              prefixIcon: commonField?.icon == null ? null : Icon(commonField.icon),
-    //                        suffixIcon: _isProtected ? Icon(Icons.lock) : null,
-              labelText: commonField?.displayName ?? fieldKey.key,
-            ),
-            keyboardType: commonField?.keyboardType,
-            autocorrect: commonField?.autocorrect ?? true,
-            enableSuggestions: commonField?.enableSuggestions ?? true,
-            textCapitalization:
-                commonField?.textCapitalization ?? TextCapitalization.sentences,
-            controller: controller,
-            onSaved: onSaved,
-          ),
-          ValueListenableBuilder<TextEditingValue>(
-              valueListenable: controller,
-              builder: (context, value, child) {
-                if (fieldKey == commonFields.password.key &&
-                    controller.text.isEmpty) {
-                  return IconButton(
-    //                            padding: EdgeInsets.zero,
-                    tooltip: loc.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
-                    icon: const Icon(Icons.refresh),
-                    onPressed: delegate.generatePassword,
-                    color: color
-                  );
-                }
-                if (fieldKey == commonFields.url.key &&
-                    controller.text.isNotEmpty) {
-                  return IconButton(
-    //                            padding: EdgeInsets.zero,
-                    tooltip: loc.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
-                    icon: const Icon(Icons.open_in_new),
-                    onPressed: delegate.openUrl,
-                    color: color
-                  );
-                }
-                return const SizedBox();
-          })
-      ]
-    );
+    return Stack(alignment: Alignment.centerRight, children: [
+      TextFormField(
+        key: formFieldKey,
+        maxLines: null,
+        focusNode: focusNode,
+        decoration: InputDecoration(
+          filled: true,
+          prefixIcon: commonField?.icon == null ? null : Icon(commonField.icon),
+          labelText: commonField?.displayName ?? fieldKey.key,
+        ),
+        keyboardType: commonField?.keyboardType,
+        autocorrect: commonField?.autocorrect ?? true,
+        enableSuggestions: commonField?.enableSuggestions ?? true,
+        textCapitalization:
+            commonField?.textCapitalization ?? TextCapitalization.sentences,
+        controller: controller,
+        onSaved: onSaved,
+      ),
+      ValueListenableBuilder<TextEditingValue>(
+        valueListenable: controller,
+        builder: (context, value, child) {
+          if (fieldKey == commonFields.password.key &&
+              controller.text.isEmpty) {
+            return IconButton(
+                tooltip: loc.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
+                icon: const Icon(Icons.refresh),
+                onPressed: delegate.generatePassword,
+                color: color);
+          }
+          if (fieldKey == commonFields.url.key && controller.text.isNotEmpty) {
+            return IconButton(
+                tooltip: loc.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
+                icon: const Icon(Icons.open_in_new),
+                onPressed: delegate.openUrl,
+                color: color);
+          }
+          return const SizedBox();
+        },
+      ),
+    ]);
   }
 }
 

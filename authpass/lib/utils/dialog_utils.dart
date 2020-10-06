@@ -77,13 +77,7 @@ class DialogUtils {
   }
 
   static Future<bool> openUrl(@NonNls String url) async {
-    // for some reason windows plugin does not support canLaunch.
-    if (AuthPassPlatform.isWindows || await canLaunch(url)) {
-      return await launch(url, forceSafariVC: false, forceWebView: false);
-    } else {
-      _logger.severe('Unable to launch url $url');
-      return false;
-    }
+    return await launch(url, forceSafariVC: false, forceWebView: false);
   }
 
   static Future<bool> showConfirmDialog({
