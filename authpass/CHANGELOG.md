@@ -8,6 +8,7 @@
 * Compatibility with KeePassXC: Accept arbitrary sort order of binaries in kdbx 3.
 * Fix unprotecting field causes the field to be empty #162 (Thanks @stalkopat)
 * Recommend cloud storage to users of local storage. #167 (Thanks @stalkopat)
+* Android: Disable autocomplete for password fields.
 
 # 1.7.8 - 2020-09-18
 
