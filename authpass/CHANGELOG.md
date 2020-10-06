@@ -7,6 +7,7 @@
 * DEV: update flutter to 1.22.0-12.1.pre (from 1.22.0-1.0.pre)
 * Compatibility with KeePassXC: Accept arbitrary sort order of binaries in kdbx 3.
 * Fix unprotecting field causes the field to be empty #162 (Thanks @stalkopat)
+* Recommend cloud storage to users of local storage. #167 (Thanks @stalkopat)
 
 # 1.7.8 - 2020-09-18
 

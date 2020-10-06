@@ -882,6 +882,8 @@ class _PasswordListContentState extends State<PasswordListContent>
             !(_dismissedLocalFiles?.contains(element.key.uuid) ?? false));
     if (localFiles3.isNotEmpty && _dismissedLocalFilesReady) {
       final file = localFiles3.first;
+      final analytics = context.watch<Analytics>();
+      analytics.events.trackBackupBanner(BackupBannerAction.shown);
       return [
         BackupBanner(
           loc.backupWarningMessage(file.key.displayName),
@@ -890,12 +892,14 @@ class _PasswordListContentState extends State<PasswordListContent>
             child: Text(loc.backupButton),
             onSave: (saveFuture) {
               asyncRunTask((progress) async {
+                analytics.events.trackBackupBanner(BackupBannerAction.saved);
                 await saveFuture;
               }, label: loc.saving);
             },
           ),
           dismissText: loc.dismissBackupButton,
           onDismiss: () {
+            analytics.events.trackBackupBanner(BackupBannerAction.dismissed);
             context.read<AppDataBloc>().update((builder, data) =>
                 builder.dismissedBackupLocalFiles =
                     data.dismissedBackupLocalFiles?.toBuilder() ??
