@@ -178,11 +178,13 @@ class GoogleDriveProvider
     final newFile = await driveApi.files
         .create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));
     return toFileSource(
-        CloudStorageEntity((b) => b
-          ..id = newFile.id
-          ..name = newFile.name
-          ..type = CloudStorageEntityType.file).toSimpleFileInfo(),
-        uuid: AppDataBloc.createUuid());
+      CloudStorageEntity((b) => b
+        ..id = newFile.id
+        ..name = newFile.name
+        ..type = CloudStorageEntityType.file).toSimpleFileInfo(),
+      uuid: AppDataBloc.createUuid(),
+      initialCachedContent: FileContent(bytes),
+    );
   }
 }
 

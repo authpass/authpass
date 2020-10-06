@@ -20,7 +20,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
           () => new ListBuilder<OpenedFile>())
       ..addBuilderFactory(
           const FullType(BuiltSet, const [const FullType(String)]),
-          () => new SetBuilder<String>()))
+          () => new SetBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>()))
     .build();
 Serializer<OpenedFile> _$openedFileSerializer = new _$OpenedFileSerializer();
 Serializer<AppData> _$appDataSerializer = new _$AppDataSerializer();
@@ -178,6 +181,13 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(serializers.serialize(object.theme,
             specifiedType: const FullType(AppDataTheme)));
     }
+    if (object.dismissedBackupLocalFiles != null) {
+      result
+        ..add('dismissedBackupLocalFiles')
+        ..add(serializers.serialize(object.dismissedBackupLocalFiles,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
+    }
     if (object.themeVisualDensity != null) {
       result
         ..add('themeVisualDensity')
@@ -262,6 +272,13 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'theme':
           result.theme = serializers.deserialize(value,
               specifiedType: const FullType(AppDataTheme)) as AppDataTheme;
+          break;
+        case 'dismissedBackupLocalFiles':
+          result.dismissedBackupLocalFiles.replace(serializers.deserialize(
+                  value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList<Object>);
           break;
         case 'themeVisualDensity':
           result.themeVisualDensity = serializers.deserialize(value,
@@ -506,6 +523,8 @@ class _$AppData extends AppData {
   @override
   final AppDataTheme theme;
   @override
+  final BuiltList<String> dismissedBackupLocalFiles;
+  @override
   final double themeVisualDensity;
   @override
   final double themeFontSizeFactor;
@@ -530,6 +549,7 @@ class _$AppData extends AppData {
       this.manualUserType,
       this.firstLaunchedAt,
       this.theme,
+      this.dismissedBackupLocalFiles,
       this.themeVisualDensity,
       this.themeFontSizeFactor,
       this.diacOptIn,
@@ -565,6 +585,7 @@ class _$AppData extends AppData {
         manualUserType == other.manualUserType &&
         firstLaunchedAt == other.firstLaunchedAt &&
         theme == other.theme &&
+        dismissedBackupLocalFiles == other.dismissedBackupLocalFiles &&
         themeVisualDensity == other.themeVisualDensity &&
         themeFontSizeFactor == other.themeFontSizeFactor &&
         diacOptIn == other.diacOptIn &&
@@ -588,15 +609,19 @@ class _$AppData extends AppData {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc(0,
-                                                        previousFiles.hashCode),
-                                                    passwordGeneratorLength
+                                                    $jc(
+                                                        $jc(
+                                                            0,
+                                                            previousFiles
+                                                                .hashCode),
+                                                        passwordGeneratorLength
+                                                            .hashCode),
+                                                    passwordGeneratorCharacterSets
                                                         .hashCode),
-                                                passwordGeneratorCharacterSets
-                                                    .hashCode),
-                                            manualUserType.hashCode),
-                                        firstLaunchedAt.hashCode),
-                                    theme.hashCode),
+                                                manualUserType.hashCode),
+                                            firstLaunchedAt.hashCode),
+                                        theme.hashCode),
+                                    dismissedBackupLocalFiles.hashCode),
                                 themeVisualDensity.hashCode),
                             themeFontSizeFactor.hashCode),
                         diacOptIn.hashCode),
@@ -616,6 +641,7 @@ class _$AppData extends AppData {
           ..add('manualUserType', manualUserType)
           ..add('firstLaunchedAt', firstLaunchedAt)
           ..add('theme', theme)
+          ..add('dismissedBackupLocalFiles', dismissedBackupLocalFiles)
           ..add('themeVisualDensity', themeVisualDensity)
           ..add('themeFontSizeFactor', themeFontSizeFactor)
           ..add('diacOptIn', diacOptIn)
@@ -662,6 +688,13 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   AppDataTheme get theme => _$this._theme;
   set theme(AppDataTheme theme) => _$this._theme = theme;
 
+  ListBuilder<String> _dismissedBackupLocalFiles;
+  ListBuilder<String> get dismissedBackupLocalFiles =>
+      _$this._dismissedBackupLocalFiles ??= new ListBuilder<String>();
+  set dismissedBackupLocalFiles(
+          ListBuilder<String> dismissedBackupLocalFiles) =>
+      _$this._dismissedBackupLocalFiles = dismissedBackupLocalFiles;
+
   double _themeVisualDensity;
   double get themeVisualDensity => _$this._themeVisualDensity;
   set themeVisualDensity(double themeVisualDensity) =>
@@ -705,6 +738,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _manualUserType = _$v.manualUserType;
       _firstLaunchedAt = _$v.firstLaunchedAt;
       _theme = _$v.theme;
+      _dismissedBackupLocalFiles = _$v.dismissedBackupLocalFiles?.toBuilder();
       _themeVisualDensity = _$v.themeVisualDensity;
       _themeFontSizeFactor = _$v.themeFontSizeFactor;
       _diacOptIn = _$v.diacOptIn;
@@ -743,6 +777,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               manualUserType: manualUserType,
               firstLaunchedAt: firstLaunchedAt,
               theme: theme,
+              dismissedBackupLocalFiles: _dismissedBackupLocalFiles?.build(),
               themeVisualDensity: themeVisualDensity,
               themeFontSizeFactor: themeFontSizeFactor,
               diacOptIn: diacOptIn,
@@ -758,6 +793,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
 
         _$failedField = 'passwordGeneratorCharacterSets';
         passwordGeneratorCharacterSets.build();
+
+        _$failedField = 'dismissedBackupLocalFiles';
+        _dismissedBackupLocalFiles?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppData', _$failedField, e.toString());
