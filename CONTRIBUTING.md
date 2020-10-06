@@ -5,10 +5,17 @@ We appreciate any kind of contributions to AuthPass 😅️
 
 If you want to contribute documentation or code, never hesitate to [get in contact](https://authpass.app/docs/about-authpass-password-manager/#getting-in-touch).
 
+[💬 Also, join our discord channel. 💬](https://authpass.app/go/discord)
+
 # Translations
 
 The actual translations are handled by the crowdin platform at: <https://translate.authpass.app/authpass>. Do **not** modify any translated 
 `app_XX.arb` files manually.
+
+If you want to contribute new translations:
+
+1. check if your lanuage already exists at: <https://translate.authpass.app/authpass>
+2. If not, join [our discord channel and ping @hpoul](https://authpass.app/go/discord)
 
 ## New strings
 
@@ -77,3 +84,9 @@ flutter run --target=lib/env/development.dart --flavor=playstore
 Make sure to follow common Dart coding conventions, and follow all lints provided
 by `analysis_options.yaml` and [activate auto-formatting](https://flutter.dev/docs/development/tools/formatting) using `dartfmt`.
 
+# CLA - Contributor License Agreement
+
+When creating your first Pull Request you will be asked to sign the 
+[Contributor License Agreement](https://cla-assistant.io/authpass/authpass). This ensures there
+is no (less?) ambiguity regarding copyright and licensing rights in case of any disputes.
+If you have any concerns just ping [@hpoul](https://github.com/hpoul).
