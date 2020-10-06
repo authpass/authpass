@@ -16,13 +16,17 @@ if test "${1:-}" == "ios" ; then
     chmod +x blackbox.go.macos
     popd
     pushd "${root}"
-    echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.macos cipostdeploy
+    if ! test -z "${BLACKBOX_SECRET:-}" ; then
+        echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.macos cipostdeploy
+    fi
 elif test "${1:-}" == "windows" ; then
     curl -L -o blackbox.go.windows.amd64.exe https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.windows.amd64.exe
     #chmod +x blackbox.go.macos
     popd
     pushd "${root}"
-    echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.windows.amd64.exe cipostdeploy
+    if ! test -z "${BLACKBOX_SECRET:-}" ; then
+        echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.windows.amd64.exe cipostdeploy
+    fi
     popd
 
     pushd ${DEPS}

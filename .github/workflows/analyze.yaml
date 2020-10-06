@@ -16,10 +16,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Postdeploy
-        env:
-          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
-        run: authpass/_tools/postdeploy.sh
       - name: ci-install-deps
         run: "./authpass/_tools/ci-install-deps.sh android"
       - run: |
@@ -39,9 +35,10 @@ jobs:
 #            text_description: ${{ steps.test.outputs.description }}
       - name: Annotate
         uses: Attest/annotations-action@master
+        if: ${{ github.head_ref == '' }}
         with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          secret: ${{ github.token }}
+          token: ${{ github.token }}
           path: './annotations_first_50.json'
           input: './annotations_first_50.json'
           title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'

@@ -435,7 +435,7 @@ packages:
       name: file_picker_writable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0-dev.2"
+    version: "1.2.0+1"
   filesystem_picker:
     dependency: "direct main"
     description:

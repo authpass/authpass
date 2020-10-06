@@ -1,11 +1,17 @@
 name: build android
 
-on: [push]
+on:
+  push:
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    # do not run in PRs
+    if: ${{ github.head_ref == '' }}
 
     strategy:
       matrix:
