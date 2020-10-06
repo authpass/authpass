@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
@@ -19,21 +20,24 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 
 final _logger = Logger('manage_file');
 
-class SaveFileAs extends StatefulWidget {
-  const SaveFileAs(
-      {@required this.title,
-      @required this.file,
-      this.onFileSourceChanged,
-      this.onClose,
-      this.icon,
-      this.cs,
-      this.onSave,
-      this.subtitle})
-      : assert((title != null && file != null) && ((icon != null && subtitle != null) || cs != null));
+typedef FileSourceChanged = void Function(FileSource newFileSource);
+typedef OnSave = void Function(Future<void> saveFuture);
 
-  final Function onClose;
-  final Function(Future<void>) onSave;
-  final Function onFileSourceChanged;
+class SaveFileAs extends StatefulWidget {
+  const SaveFileAs({
+    @required this.title,
+    @required this.file,
+    this.onFileSourceChanged,
+    this.icon,
+    this.cs,
+    this.onSave,
+    this.subtitle,
+  })  : assert(title != null),
+        assert(file != null),
+        assert((icon != null && subtitle != null) || cs != null);
+
+  final OnSave onSave;
+  final FileSourceChanged onFileSourceChanged;
   final KdbxOpenedFile file;
   final String title;
   final String subtitle;
@@ -70,7 +74,6 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       title: Text(widget.title),
       subtitle: Text(widget.subtitle ?? widget.cs.displayName),
       onTap: () {
-        widget.onClose?.call();
         widget.onSave?.call(
             widget.local ? _saveAsLocalFile() : _saveAsCloudStorage(widget.cs));
       },

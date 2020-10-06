@@ -8,7 +8,6 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
-import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
@@ -31,12 +30,12 @@ import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:badges/badges.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -890,9 +889,9 @@ class _PasswordListContentState extends State<PasswordListContent>
             file: kdbxBloc.fileForFileSource(file.key),
             child: Text(loc.backupButton,
                 style: Theme.of(context).textTheme.button),
-            onSave: (Future<void> filefuture) {
+            onSave: (saveFuture) {
               asyncRunTask((progress) async {
-                await filefuture;
+                await saveFuture;
               }, label: loc.saving);
             },
           ),

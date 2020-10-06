@@ -4,20 +4,20 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:flutter/material.dart';
 
 class SaveFileAsMenuItem extends PopupMenuEntry<KdbxOpenedFile> {
-  const SaveFileAsMenuItem(
-      {@required this.title,
-      @required this.file,
-      this.onFileSourceChanged,
-      this.onClose,
-      this.icon,
-      this.cs,
-      this.onSave,
-      this.subtitle})
-      : assert((title != null && file != null) &&( (icon != null && subtitle != null) || cs != null));
+  const SaveFileAsMenuItem({
+    @required this.title,
+    @required this.file,
+    this.onFileSourceChanged,
+    this.icon,
+    this.cs,
+    this.onSave,
+    this.subtitle,
+  })  : assert(title != null),
+        assert(file != null),
+        assert((icon != null && subtitle != null) || cs != null);
 
-  final Function onClose;
-  final Function(Future<void>) onSave;
-  final Function onFileSourceChanged;
+  final OnSave onSave;
+  final FileSourceChanged onFileSourceChanged;
   final KdbxOpenedFile file;
   final String title;
   final String subtitle;
@@ -42,7 +42,6 @@ class _SaveFileAsMenuItemState extends State<SaveFileAsMenuItem> {
       title: widget.title,
       file: widget.file,
       onFileSourceChanged: widget.onFileSourceChanged,
-      onClose: widget.onClose,
       icon: widget.icon,
       cs: widget.cs,
       onSave: widget.onSave,

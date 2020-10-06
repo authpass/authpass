@@ -1,7 +1,7 @@
-import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/l10n/app_localizations.dart';
+import 'package:authpass/ui/widgets/savefile/save_file.dart';
 import 'package:authpass/ui/widgets/savefile/save_file_menu_item.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +9,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class SaveFileAsDialogButton extends StatelessWidget {
-  const SaveFileAsDialogButton(
-      {@required this.file,
-      this.child,
-      this.onFileSourceChanged,
-      this.onSave,
-      this.includeLocal = false}) : assert(file != null);
+  const SaveFileAsDialogButton({
+    @required this.file,
+    this.child,
+    this.onFileSourceChanged,
+    this.onSave,
+    this.includeLocal = false,
+  }) : assert(file != null);
 
   final KdbxOpenedFile file;
   final Widget child;
-  final Function(FileSource) onFileSourceChanged;
-  final Function(Future<void>) onSave;
+  final FileSourceChanged onFileSourceChanged;
+  final OnSave onSave;
   final bool includeLocal;
 
   void showBottomModal(BuildContext context) {
@@ -40,10 +41,10 @@ class SaveFileAsDialogButton extends StatelessWidget {
         SaveFileAsMenuItem(
           title: loc.saveAs,
           file: file,
-          onClose: () {
+          onSave: (fileFuture) {
             Navigator.pop(context, file);
+            onSave?.call(fileFuture);
           },
-          onSave: onSave,
           icon: const Icon(FontAwesomeIcons.hdd),
           onFileSourceChanged: onFileSourceChanged,
           subtitle: 'Local File',
@@ -52,10 +53,10 @@ class SaveFileAsDialogButton extends StatelessWidget {
         (cs) => SaveFileAsMenuItem(
           title: loc.saveAs,
           file: file,
-          onClose: () {
+          onSave: (saveFuture) {
             Navigator.pop(context, file);
+            onSave?.call(saveFuture);
           },
-          onSave: onSave,
           onFileSourceChanged: onFileSourceChanged,
           cs: cs,
         ),
