@@ -1586,7 +1586,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                   child: Text(
                     'Protected field. Click to reveal.',
                     style: TextStyle(
-                      color: theme.isDarkTheme ? theme.primaryColorLight: theme.primaryColor,
+                      color: theme.isDarkTheme ? Colors.white: theme.primaryColor,
                       shadows: [Shadow(color: theme.isDarkTheme ? Colors.black45: Colors.white, blurRadius: 5)],
                     ),
                   ),
