@@ -74,6 +74,7 @@ class CommonFields {
             key: KdbxKeyCommon.PASSWORD,
             displayName: loc.fieldPassword,
             protect: true,
+            keyboardType: TextInputType.visiblePassword,
             icon: Icons.lock,
           ),
           CommonField(

@@ -171,6 +171,10 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'label': label?.toString()?.substring(16),
         'action': action
       });
+  @override
+  void trackBackupBanner(BackupBannerAction action) => trackEvent(
+      'backupBanner',
+      <String, dynamic>{'action': action?.toString()?.substring(19)});
 }
 
 // **************************************************************************

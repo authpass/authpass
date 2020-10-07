@@ -631,6 +631,21 @@ abstract class AppLocalizations {
   // 
   String get onboardingNoCreate;
 
+  // Button that is displayed in backup warnings
+  String get backupButton;
+
+  // Button that is displayed in backup warnings to dismiss the warning
+  String get dismissBackupButton;
+
+  // Warning message that is displayed in backup warnings
+  String backupWarningMessage(Object databasename);
+
+  // Save as text
+  String get saveAs;
+
+  // Saving text
+  String get saving;
+
   // No description provided in @unexpectedError
   String unexpectedError(String error);
 }

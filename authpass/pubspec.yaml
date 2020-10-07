@@ -85,7 +85,7 @@ dependencies:
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^2.2.2
-  url_launcher: ^5.5.0
+  url_launcher: ^5.7.2
   font_awesome_flutter: ^8.8.1
   otp: ^2.2.3
   zxcvbn: ^0.0.1

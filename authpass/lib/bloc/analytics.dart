@@ -333,6 +333,14 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   });
 
   void trackEntryAction(EntryActionType label, {String action = 'entry'});
+
+  void trackBackupBanner(BackupBannerAction action);
+}
+
+enum BackupBannerAction {
+  shown,
+  dismissed,
+  saved,
 }
 
 enum EntryActionType {

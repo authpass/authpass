@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
@@ -17,8 +19,10 @@ import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/password_list_drawer.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/ui/widgets/backup_warning_banner.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -26,6 +30,7 @@ import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
 import 'package:badges/badges.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:flinq/flinq.dart';
@@ -329,7 +334,7 @@ class GroupFilter {
 }
 
 class _PasswordListContentState extends State<PasswordListContent>
-    with StreamSubscriberMixin, WidgetsBindingObserver {
+    with StreamSubscriberMixin, WidgetsBindingObserver, FutureTaskStateMixin {
   List<EntryViewModel> _filteredEntries;
   String _filterQuery;
   final _filterTextEditingController = TextEditingController();
@@ -339,6 +344,8 @@ class _PasswordListContentState extends State<PasswordListContent>
       ValueNotifier(GroupFilter.DEFAULT_GROUP_FILTER);
 
   GroupFilter get _groupFilter => _groupFilterNotifier.value;
+
+  StreamSubscription<AppData> _appDataStream;
 
 //  List<EntryViewModel> get _allEntries => _groupFilter == null
 //      ? widget.entries
@@ -364,6 +371,21 @@ class _PasswordListContentState extends State<PasswordListContent>
     _updateAllEntries();
     _groupFilterNotifier.addListener(_updateAllEntries);
     _updateAutofillMetadata();
+    _subscribetoAppData();
+  }
+
+  void _subscribetoAppData() {
+    _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
+        .store
+        .onValueChangedAndLoad
+        .listen(_updateDismissedFiles);
+  }
+
+  void _updateDismissedFiles(AppData data) {
+    _dismissedLocalFilesReady = true;
+    setState(() {
+      _dismissedLocalFiles = data.dismissedBackupLocalFiles;
+    });
   }
 
   void _updateAutofillMetadata() {
@@ -510,6 +532,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     WidgetsBinding.instance.removeObserver(this);
     _groupFilterNotifier.removeListener(_updateAllEntries);
     _groupFilterNotifier.dispose();
+    _appDataStream.cancel();
     super.dispose();
   }
 
@@ -839,11 +862,62 @@ class _PasswordListContentState extends State<PasswordListContent>
     return [UnsupportedWrite(source: unsupportedWrite.key)];
   }
 
+  BuiltList<String> _dismissedLocalFiles;
+  bool _dismissedLocalFilesReady = false;
+
+  List<Widget> _buildBackupWarningBanners() {
+    final kdbxBloc = context.watch<KdbxBloc>();
+    final loc = AppLocalizations.of(context);
+    final localFiles =
+        kdbxBloc.openedFilesWithSources.where((e) => e.key is FileSourceLocal);
+    final localFiles3 = localFiles
+        .where((file) =>
+            file.value.body.rootGroup
+                .getAllGroups()
+                .where((element) => element != file.value.recycleBin)
+                .expand((element) => element.getAllEntries())
+                .length >=
+            3)
+        .where((element) =>
+            !(_dismissedLocalFiles?.contains(element.key.uuid) ?? false));
+    if (localFiles3.isNotEmpty && _dismissedLocalFilesReady) {
+      final file = localFiles3.first;
+      final analytics = context.watch<Analytics>();
+      analytics.events.trackBackupBanner(BackupBannerAction.shown);
+      return [
+        BackupBanner(
+          loc.backupWarningMessage(file.key.displayName),
+          backupWidget: SaveFileAsDialogButton(
+            file: kdbxBloc.fileForFileSource(file.key),
+            child: Text(loc.backupButton),
+            onSave: (saveFuture) {
+              asyncRunTask((progress) async {
+                analytics.events.trackBackupBanner(BackupBannerAction.saved);
+                await saveFuture;
+              }, label: loc.saving);
+            },
+          ),
+          dismissText: loc.dismissBackupButton,
+          onDismiss: () {
+            analytics.events.trackBackupBanner(BackupBannerAction.dismissed);
+            context.read<AppDataBloc>().update((builder, data) =>
+                builder.dismissedBackupLocalFiles =
+                    data.dismissedBackupLocalFiles?.toBuilder() ??
+                        BuiltList<String>().toBuilder()
+                      ..add(file.key.uuid));
+          },
+        ),
+      ];
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
+      ...?_buildBackupWarningBanners(),
       ...?_buildGroupFilterPrefix(),
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),
@@ -869,129 +943,135 @@ class _PasswordListContentState extends State<PasswordListContent>
           },
         ),
       ),
-      body: _allEntries.isEmpty
-          ? NoPasswordsEmptyView(
-              listPrefix: listPrefix,
-              onPrimaryButtonPressed: () {
-                final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-                final entry = kdbxBloc.createEntry();
+      body: ProgressOverlay(
+        task: task,
+        child: _allEntries.isEmpty
+            ? NoPasswordsEmptyView(
+                listPrefix: listPrefix,
+                onPrimaryButtonPressed: () {
+                  final kdbxBloc =
+                      Provider.of<KdbxBloc>(context, listen: false);
+                  final entry = kdbxBloc.createEntry();
 //                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                widget.onEntrySelected(
-                    context, entry, EntrySelectionType.activeOpen);
-              },
-            )
-          : Scrollbar(
-              child: ListView.builder(
-                itemCount: entries.length + (listPrefix != null ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (listPrefix != null) {
-                    if (index == 0) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: listPrefix,
-                      );
-                    }
-                    index--;
-                  }
-                  final entry = entries[index];
-
-                  final openedFile = kdbxBloc.fileForKdbxFile(entry.entry.file);
-                  final fileColor = openedFile.openedFile.color;
-//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
-                  return Dismissible(
-                    key: ValueKey(entry.entry.uuid),
-                    resizeDuration: null,
-                    background: Container(
-                      alignment: Alignment.centerLeft,
-                      color: Colors.lightBlueAccent,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const Icon(Icons.lock),
-                          const SizedBox(height: 4),
-                          Text(loc.swipeCopyPassword),
-                        ],
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      alignment: Alignment.centerRight,
-                      color: Colors.limeAccent,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const Icon(Icons.account_circle),
-                          const SizedBox(height: 4),
-                          Text(loc.swipeCopyUsername),
-                        ],
-                      ),
-                    ),
-                    confirmDismiss: (direction) async {
-                      if (direction == DismissDirection.endToStart) {
-//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                        await Clipboard.setData(ClipboardData(
-                            text: entry.entry
-                                .getString(commonFields.userName.key)
-                                .getText()));
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text(loc.doneCopiedUsername)));
-                        context
-                            .read<Analytics>()
-                            .events
-                            .trackSwipeCopyUsername();
-                      } else {
-//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                        await Clipboard.setData(ClipboardData(
-                            text: entry.entry
-                                .getString(commonFields.password.key)
-                                .getText()));
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text(loc.doneCopiedPassword)));
-                        context
-                            .read<Analytics>()
-                            .events
-                            .trackSwipeCopyPassword();
+                  widget.onEntrySelected(
+                      context, entry, EntrySelectionType.activeOpen);
+                },
+              )
+            : Scrollbar(
+                child: ListView.builder(
+                  itemCount: entries.length + (listPrefix != null ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (listPrefix != null) {
+                      if (index == 0) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: listPrefix,
+                        );
                       }
-                      return false;
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Container(
-                        decoration: widget.selectedEntry != entry.entry
-                            ? (fileColor == null
-                                ? null
-                                : BoxDecoration(
-                                    border: Border(
-                                        left: BorderSide(
-                                            color: fileColor, width: 4))))
-                            : BoxDecoration(
-                                color: Theme.of(context).selectedRowColor,
-                                border: Border(
-                                  right: BorderSide(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 4),
-                                  left: fileColor == null
-                                      ? BorderSide.none
-                                      : BorderSide(color: fileColor, width: 4),
-                                ),
-                              ),
-                        child: PasswordEntryTile(
-                          vm: entry,
-                          isSelected: entry.entry == widget.selectedEntry,
-                          filterQuery: _filterQuery,
-                          onTap: () {
-//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                            widget.onEntrySelected(context, entry.entry,
-                                EntrySelectionType.activeOpen);
-                          },
+                      index--;
+                    }
+                    final entry = entries[index];
+
+                    final openedFile =
+                        kdbxBloc.fileForKdbxFile(entry.entry.file);
+                    final fileColor = openedFile.openedFile.color;
+//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
+                    return Dismissible(
+                      key: ValueKey(entry.entry.uuid),
+                      resizeDuration: null,
+                      background: Container(
+                        alignment: Alignment.centerLeft,
+                        color: Colors.lightBlueAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Icon(Icons.lock),
+                            const SizedBox(height: 4),
+                            Text(loc.swipeCopyPassword),
+                          ],
                         ),
                       ),
-                    ),
-                  );
-                },
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        color: Colors.limeAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Icon(Icons.account_circle),
+                            const SizedBox(height: 4),
+                            Text(loc.swipeCopyUsername),
+                          ],
+                        ),
+                      ),
+                      confirmDismiss: (direction) async {
+                        if (direction == DismissDirection.endToStart) {
+//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
+                          await Clipboard.setData(ClipboardData(
+                              text: entry.entry
+                                  .getString(commonFields.userName.key)
+                                  .getText()));
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text(loc.doneCopiedUsername)));
+                          context
+                              .read<Analytics>()
+                              .events
+                              .trackSwipeCopyUsername();
+                        } else {
+//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
+                          await Clipboard.setData(ClipboardData(
+                              text: entry.entry
+                                  .getString(commonFields.password.key)
+                                  .getText()));
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text(loc.doneCopiedPassword)));
+                          context
+                              .read<Analytics>()
+                              .events
+                              .trackSwipeCopyPassword();
+                        }
+                        return false;
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Container(
+                          decoration: widget.selectedEntry != entry.entry
+                              ? (fileColor == null
+                                  ? null
+                                  : BoxDecoration(
+                                      border: Border(
+                                          left: BorderSide(
+                                              color: fileColor, width: 4))))
+                              : BoxDecoration(
+                                  color: Theme.of(context).selectedRowColor,
+                                  border: Border(
+                                    right: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 4),
+                                    left: fileColor == null
+                                        ? BorderSide.none
+                                        : BorderSide(
+                                            color: fileColor, width: 4),
+                                  ),
+                                ),
+                          child: PasswordEntryTile(
+                            vm: entry,
+                            isSelected: entry.entry == widget.selectedEntry,
+                            filterQuery: _filterQuery,
+                            onTap: () {
+//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+                              widget.onEntrySelected(context, entry.entry,
+                                  EntrySelectionType.activeOpen);
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
+      ),
       floatingActionButton: _allEntries.isEmpty ||
               _filterQuery != null ||
               _autofillMetadata != null

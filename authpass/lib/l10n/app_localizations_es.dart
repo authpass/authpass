@@ -553,6 +553,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingNoCreate => '¡Soy todo nuevo! Empecemos.';
 
   @override
+  String get backupButton => 'SAVE TO CLOUD';
+
+  @override
+  String get dismissBackupButton => 'DISMISS';
+
+  @override
+  String backupWarningMessage(Object databasename) {
+    return 'Your passwords in ${databasename} are only saved locally!';
+  }
+
+  @override
+  String get saveAs => 'Save In...';
+
+  @override
+  String get saving => 'Saving';
+
+  @override
   String unexpectedError(String error) {
     return 'Error inesperado: ${error}';
   }
