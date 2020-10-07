@@ -76,7 +76,9 @@ import 'app_localizations_uk.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : assert(locale != null), localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+      : assert(locale != null),
+        localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   // ignore: unused_field
   final String localeName;
@@ -85,7 +87,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -97,7 +100,8 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -259,13 +263,13 @@ abstract class AppLocalizations {
   // No description provided in @aboutLogFile
   String aboutLogFile(String logFilePath);
 
-  // 
+  //
   String get unableToLaunchUrlTitle;
 
-  // 
+  //
   String unableToLaunchUrlDescription(Object url, Object openError);
 
-  // 
+  //
   String get unableToLaunchUrlNoHandler;
 
   // snackbar confirmation after opening a url externally
@@ -343,7 +347,7 @@ abstract class AppLocalizations {
   // Message displayed when files were saved. (One or more).
   String savedFiles(int numFiles, Object files);
 
-  // 
+  //
   String get manageGroups;
 
   // Close all files and return to start screen.
@@ -358,7 +362,7 @@ abstract class AppLocalizations {
   // Label displayed for android auto fill
   String get autofillFilterPrefix;
 
-  // 
+  //
   String get autofillPrompt;
 
   // Snackbar text when copying text to clipboard.
@@ -385,7 +389,7 @@ abstract class AppLocalizations {
   // snackbar confirmation that username was copied.
   String get doneCopiedUsername;
 
-  // 
+  //
   String get doneCopiedField;
 
   // Placeholder text shown when a user opens an empty password file.
@@ -415,13 +419,13 @@ abstract class AppLocalizations {
   // Label for the file/database being opened
   String get credentialLabel;
 
-  // 
+  //
   String get masterPasswordInputLabel;
 
-  // 
+  //
   String get masterPasswordEmptyValidator;
 
-  // 
+  //
   String get masterPasswordIncorrectValidator;
 
   // label for a key file in combination with mater password
@@ -434,7 +438,8 @@ abstract class AppLocalizations {
   String get errorOpenFileAlreadyOpenTitle;
 
   // Trying to open a database from a second file source which is already open.
-  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource);
+  String errorOpenFileAlreadyOpenBody(
+      Object databaseName, Object openFileSource, Object newFileSource);
 
   // generic error when opening a file (dialog title)
   String get errorUnlockFileTitle;
@@ -493,19 +498,19 @@ abstract class AppLocalizations {
   // title in the app bar for group lists when displayed for filtering password list
   String get groupListFilterAppbarTitle;
 
-  // 
+  //
   String get clearQuickUnlock;
 
-  // 
+  //
   String get clearQuickUnlockSubtitle;
 
-  // 
+  //
   String get unlock;
 
   // delete quick unlock (passwords stored in biometric storage)
   String get closePasswordFiles;
 
-  // 
+  //
   String get clearQuickUnlockSuccess;
 
   // No description provided in @diacOptIn
@@ -520,7 +525,7 @@ abstract class AppLocalizations {
   // only visible in debug build. Preference to enable Auto-Fill Debugging.
   String get enableAutofillDebugSubtitle;
 
-  // 
+  //
   String get createPasswordDatabase;
 
   // creating new kdbx file, prompt
@@ -559,58 +564,58 @@ abstract class AppLocalizations {
   // choosing a master password - calculated password strength.
   String passwordScore(Object score);
 
-  // 
+  //
   String get entryInfoFile;
 
-  // 
+  //
   String get entryInfoGroup;
 
-  // 
+  //
   String get entryInfoLastModified;
 
-  // 
+  //
   String movedEntryToGroup(Object groupName);
 
-  // 
+  //
   String sizeBytes(Object bytes);
 
-  // 
+  //
   String get entryAddAttachment;
 
-  // 
+  //
   String get entryAttachmentSizeWarning;
 
-  // 
+  //
   String get entryAddField;
 
-  // 
+  //
   String get entryCustomField;
 
-  // 
+  //
   String get entryCustomFieldTitle;
 
-  // 
+  //
   String get entryCustomFieldInputLabel;
 
-  // 
+  //
   String get swipeCopyField;
 
-  // 
+  //
   String get fieldRename;
 
-  // 
+  //
   String get fieldGeneratePassword;
 
-  // 
+  //
   String get fieldProtect;
 
-  // 
+  //
   String get fieldUnprotect;
 
-  // 
+  //
   String get fieldPresent;
 
-  // 
+  //
   String get fieldGenerateEmail;
 
   // Context menu entry which reverts to onboarding
@@ -619,16 +624,16 @@ abstract class AppLocalizations {
   // Context menu entry which reverts to onboarding
   String get onboardingBackToOnboardingSubtitle;
 
-  // 
+  //
   String get onboardingHeadline;
 
-  // 
+  //
   String get onboardingQuestion;
 
-  // 
+  //
   String get onboardingYesOpenPasswords;
 
-  // 
+  //
   String get onboardingNoCreate;
 
   // Button that is displayed in backup warnings
@@ -650,7 +655,8 @@ abstract class AppLocalizations {
   String unexpectedError(String error);
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -659,36 +665,67 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'de', 'en', 'es', 'et', 'fi', 'fr', 'he', 'id', 'lt', 'pa', 'pl', 'pt', 'ru', 'tr', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+        'ar',
+        'de',
+        'en',
+        'es',
+        'et',
+        'fi',
+        'fr',
+        'he',
+        'id',
+        'lt',
+        'pa',
+        'pl',
+        'pt',
+        'ru',
+        'tr',
+        'uk'
+      ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations _lookupAppLocalizations(Locale locale) {
-  
-  
-  
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar': return AppLocalizationsAr();
-    case 'de': return AppLocalizationsDe();
-    case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
-    case 'et': return AppLocalizationsEt();
-    case 'fi': return AppLocalizationsFi();
-    case 'fr': return AppLocalizationsFr();
-    case 'he': return AppLocalizationsHe();
-    case 'id': return AppLocalizationsId();
-    case 'lt': return AppLocalizationsLt();
-    case 'pa': return AppLocalizationsPa();
-    case 'pl': return AppLocalizationsPl();
-    case 'pt': return AppLocalizationsPt();
-    case 'ru': return AppLocalizationsRu();
-    case 'tr': return AppLocalizationsTr();
-    case 'uk': return AppLocalizationsUk();
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'et':
+      return AppLocalizationsEt();
+    case 'fi':
+      return AppLocalizationsFi();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'he':
+      return AppLocalizationsHe();
+    case 'id':
+      return AppLocalizationsId();
+    case 'lt':
+      return AppLocalizationsLt();
+    case 'pa':
+      return AppLocalizationsPa();
+    case 'pl':
+      return AppLocalizationsPl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'uk':
+      return AppLocalizationsUk();
   }
 
-  assert(false, 'AppLocalizations.delegate failed to load unsupported locale "$locale"');
+  assert(false,
+      'AppLocalizations.delegate failed to load unsupported locale "$locale"');
   return null;
 }

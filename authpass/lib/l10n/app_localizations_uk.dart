@@ -81,7 +81,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get loadFromRemoteUrl => 'Відкрити kdbx з URL-адреси';
 
   @override
-  String get createNewKeepass => 'Вперше у KeePass?\nСтворити нову базу паролів';
+  String get createNewKeepass =>
+      'Вперше у KeePass?\nСтворити нову базу паролів';
 
   @override
   String get labelLastOpenFiles => 'Останні відкриті файли:';
@@ -126,7 +127,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferenceEnableAutoFill => 'Увімкнути автозаповнення';
 
   @override
-  String get preferenceAutoFillDescription => 'Підтримується лише на Android Oreo (8.0) або новіше.';
+  String get preferenceAutoFillDescription =>
+      'Підтримується лише на Android Oreo (8.0) або новіше.';
 
   @override
   String get preferenceTitle => 'Налаштування';
@@ -180,7 +182,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemSupport => 'Підтримка по електронній пошті';
 
   @override
-  String get menuItemSupportSubtitle => 'Надіслати журнали електронною поштою та запитом про допомогу.';
+  String get menuItemSupportSubtitle =>
+      'Надіслати журнали електронною поштою та запитом про допомогу.';
 
   @override
   String get menuItemHelp => 'Допомога';
@@ -237,9 +240,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String savedFiles(int numFiles, Object files) {
-    final intl.NumberFormat numFilesNumberFormat = intl.NumberFormat.compactLong(
+    final intl.NumberFormat numFilesNumberFormat =
+        intl.NumberFormat.compactLong(
       locale: localeName,
-      
     );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
@@ -292,13 +295,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get doneCopiedPassword => 'Пароль скопійовано до буфера обміну.';
 
   @override
-  String get doneCopiedUsername => 'Ім\'я користувача було скопійовано до буфера обміну.';
+  String get doneCopiedUsername =>
+      'Ім\'я користувача було скопійовано до буфера обміну.';
 
   @override
   String get doneCopiedField => 'Copied.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'Ви ще не маєте жодного пароля в базі даних.';
+  String get emptyPasswordVaultPlaceholder =>
+      'Ви ще не маєте жодного пароля в базі даних.';
 
   @override
   String get emptyPasswordVaultButtonLabel => 'Створити свій перший пароль';
@@ -310,7 +315,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get internalFile => 'Внутрішній файл';
 
   @override
-  String get internalFileSubtitle => 'Попередня база паролів створена в AuthPass';
+  String get internalFileSubtitle =>
+      'Попередня база паролів створена в AuthPass';
 
   @override
   String get filePicker => 'Вибір файлу';
@@ -337,13 +343,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get useKeyFile => 'Використати файл-ключ';
 
   @override
-  String get saveMasterPasswordBiometric => 'Зберегти пароль із біометричним сховищем ключів?';
+  String get saveMasterPasswordBiometric =>
+      'Зберегти пароль із біометричним сховищем ключів?';
 
   @override
   String get errorOpenFileAlreadyOpenTitle => 'File already open';
 
   @override
-  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
+  String errorOpenFileAlreadyOpenBody(
+      Object databaseName, Object openFileSource, Object newFileSource) {
     return 'The selected database ${databaseName} is already open from ${openFileSource} (Tried to open from ${newFileSource})';
   }
 
@@ -359,10 +367,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get dialogContinue => 'Продовжити';
 
   @override
-  String get dialogSendErrorReport => 'Надіслати звіт про помилку/запит про допомогу';
+  String get dialogSendErrorReport =>
+      'Надіслати звіт про помилку/запит про допомогу';
 
   @override
-  String get groupFilterDescription => 'Виберіть, які групи показувати (рекурсивно)';
+  String get groupFilterDescription =>
+      'Виберіть, які групи показувати (рекурсивно)';
 
   @override
   String get groupFilterSelectAll => 'Обрати все';
@@ -395,10 +405,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get deleteGroupErrorTitle => 'Не вдалося видалити групу';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'Ця група містить підгрупи. Ви можете видаляти лише порожні групи.';
+  String get deleteGroupErrorBodyContainsGroup =>
+      'Ця група містить підгрупи. Ви можете видаляти лише порожні групи.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'Ця група все ще містить збережені паролі. Видалити можна тільки порожні групи.';
+  String get deleteGroupErrorBodyContainsEntries =>
+      'Ця група все ще містить збережені паролі. Видалити можна тільки порожні групи.';
 
   @override
   String get groupListAppBarTitle => 'Групи';
@@ -419,19 +431,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get closePasswordFiles => 'close password files';
 
   @override
-  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+  String get clearQuickUnlockSuccess =>
+      'Removed saved master passwords from biometric storage.';
 
   @override
   String get diacOptIn => 'Opt in to In-App News, Surveys.';
 
   @override
-  String get diacOptInSubtitle => 'Will occasionally send a network request to fetch news.';
+  String get diacOptInSubtitle =>
+      'Will occasionally send a network request to fetch news.';
 
   @override
   String get enableAutofillDebug => 'AutoFill: Enable debug';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Shows information overlays for every input field';
+  String get enableAutofillDebugSubtitle =>
+      'Shows information overlays for every input field';
 
   @override
   String get createPasswordDatabase => 'Create Password Database';
@@ -440,16 +455,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get nameNewPasswordDatabase => 'Name of your new Database';
 
   @override
-  String get validatorNameMissing => 'Please enter a name for your new database.';
+  String get validatorNameMissing =>
+      'Please enter a name for your new database.';
 
   @override
-  String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
+  String get masterPasswordHelpText =>
+      'Select a secure master Password. Make sure to remember it.';
 
   @override
   String get inputMasterPasswordText => 'Master Password';
 
   @override
-  String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
+  String get masterPasswordMissingCreate =>
+      'Please enter a secure, rememberable password.';
 
   @override
   String get createDatabaseAction => 'Create Database';
@@ -501,7 +519,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get entryAddAttachment => 'Add Attachment';
 
   @override
-  String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
+  String get entryAttachmentSizeWarning =>
+      'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
 
   @override
   String get entryAddField => 'Створити поле';
@@ -540,7 +559,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get onboardingBackToOnboarding => 'Tour';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
+  String get onboardingBackToOnboardingSubtitle =>
+      'Relive the first run experience 😅️';
 
   @override
   String get onboardingHeadline => 'Let\'s make your Passwords Secure!';

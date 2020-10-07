@@ -58,7 +58,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get quickUnlockingFiles => 'Desbloqueo rápido de archivos';
 
   @override
-  String get selectKeepassFileLabel => 'Por favor seleccione un archivo KeePass (.kdbx).';
+  String get selectKeepassFileLabel =>
+      'Por favor seleccione un archivo KeePass (.kdbx).';
 
   @override
   String get createNewFile => 'Crear nuevo archivo';
@@ -81,7 +82,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loadFromRemoteUrl => 'Abrir kdbx desde URL';
 
   @override
-  String get createNewKeepass => '¿Nuevo en KeePass?\nCrear nueva base de datos de contraseñas';
+  String get createNewKeepass =>
+      '¿Nuevo en KeePass?\nCrear nueva base de datos de contraseñas';
 
   @override
   String get labelLastOpenFiles => 'Últimos archivos abiertos:';
@@ -120,13 +122,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lockAllFiles => 'Bloquear todos los archivos abiertos';
 
   @override
-  String get preferenceAllowScreenshots => 'Permitir capturas de pantalla de la aplicación';
+  String get preferenceAllowScreenshots =>
+      'Permitir capturas de pantalla de la aplicación';
 
   @override
   String get preferenceEnableAutoFill => 'Habilitar autocompletar';
 
   @override
-  String get preferenceAutoFillDescription => 'Sólo compatible con Android Oreo (8.0) o posterior.';
+  String get preferenceAutoFillDescription =>
+      'Sólo compatible con Android Oreo (8.0) o posterior.';
 
   @override
   String get preferenceTitle => 'Preferencias';
@@ -138,7 +142,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get aboutLinkFeedback => '¡Agradecemos cualquier tipo de comentarios!';
 
   @override
-  String get aboutLinkVisitWebsite => 'También asegúrese de visitar nuestro sitio web';
+  String get aboutLinkVisitWebsite =>
+      'También asegúrese de visitar nuestro sitio web';
 
   @override
   String get aboutLinkGitHub => 'Y el proyecto de Código Abierto';
@@ -157,7 +162,8 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get unableToLaunchUrlNoHandler => 'Ninguna aplicación disponible para la url.';
+  String get unableToLaunchUrlNoHandler =>
+      'Ninguna aplicación disponible para la url.';
 
   @override
   String launchedUrl(Object url) {
@@ -180,7 +186,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get menuItemSupport => 'Email de Soporte';
 
   @override
-  String get menuItemSupportSubtitle => 'Enviar logs por correo electrónico/pedir ayuda.';
+  String get menuItemSupportSubtitle =>
+      'Enviar logs por correo electrónico/pedir ayuda.';
 
   @override
   String get menuItemHelp => 'Ayuda';
@@ -237,9 +244,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String savedFiles(int numFiles, Object files) {
-    final intl.NumberFormat numFilesNumberFormat = intl.NumberFormat.compactLong(
+    final intl.NumberFormat numFilesNumberFormat =
+        intl.NumberFormat.compactLong(
       locale: localeName,
-      
     );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
@@ -266,7 +273,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get autofillFilterPrefix => 'Filtro:';
 
   @override
-  String get autofillPrompt => 'Seleccione campo de contraseña para autollenado.';
+  String get autofillPrompt =>
+      'Seleccione campo de contraseña para autollenado.';
 
   @override
   String get copiedToClipboard => 'Copiado al portapapeles.';
@@ -296,7 +304,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get doneCopiedField => 'Copiado.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'Aún no tienes ninguna contraseña en tu base de datos.';
+  String get emptyPasswordVaultPlaceholder =>
+      'Aún no tienes ninguna contraseña en tu base de datos.';
 
   @override
   String get emptyPasswordVaultButtonLabel => 'Crea tu primera contraseña';
@@ -308,7 +317,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get internalFile => 'Archivo interno';
 
   @override
-  String get internalFileSubtitle => 'Base de datos previamente creada con AuthPass';
+  String get internalFileSubtitle =>
+      'Base de datos previamente creada con AuthPass';
 
   @override
   String get filePicker => 'Selector de archivos';
@@ -326,7 +336,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get masterPasswordInputLabel => 'Contraseña';
 
   @override
-  String get masterPasswordEmptyValidator => 'Por favor, introduzca su contraseña.';
+  String get masterPasswordEmptyValidator =>
+      'Por favor, introduzca su contraseña.';
 
   @override
   String get masterPasswordIncorrectValidator => 'Contraseña inválida';
@@ -335,13 +346,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get useKeyFile => 'Usar archivo clave';
 
   @override
-  String get saveMasterPasswordBiometric => '¿Guardar contraseña con clave biométrica?';
+  String get saveMasterPasswordBiometric =>
+      '¿Guardar contraseña con clave biométrica?';
 
   @override
   String get errorOpenFileAlreadyOpenTitle => 'Archivo ya abierto';
 
   @override
-  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
+  String errorOpenFileAlreadyOpenBody(
+      Object databaseName, Object openFileSource, Object newFileSource) {
     return 'La base de datos seleccionada ${databaseName} ya está abierta desde ${openFileSource} (Se intentó abrir desde ${newFileSource})';
   }
 
@@ -360,7 +373,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dialogSendErrorReport => 'Enviar informe de errores/Ayuda';
 
   @override
-  String get groupFilterDescription => 'Seleccione qué grupos mostrar (recursivamente)';
+  String get groupFilterDescription =>
+      'Seleccione qué grupos mostrar (recursivamente)';
 
   @override
   String get groupFilterSelectAll => 'Seleccionar todo';
@@ -393,10 +407,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteGroupErrorTitle => 'No se puede eliminar el grupo';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'Este grupo aún contiene otros grupos. Actualmente sólo puede eliminar grupos vacíos.';
+  String get deleteGroupErrorBodyContainsGroup =>
+      'Este grupo aún contiene otros grupos. Actualmente sólo puede eliminar grupos vacíos.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'Este grupo aún contiene entradas de contraseña. Actualmente sólo puede eliminar grupos vacíos.';
+  String get deleteGroupErrorBodyContainsEntries =>
+      'Este grupo aún contiene entradas de contraseña. Actualmente sólo puede eliminar grupos vacíos.';
 
   @override
   String get groupListAppBarTitle => 'Grupos';
@@ -408,7 +424,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clearQuickUnlock => 'Borrar almacenamiento biométrico';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Eliminar contraseñas maestras guardadas';
+  String get clearQuickUnlockSubtitle =>
+      'Eliminar contraseñas maestras guardadas';
 
   @override
   String get unlock => 'Desbloquear archivos';
@@ -417,19 +434,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get closePasswordFiles => 'cerrar archivos de contraseñas';
 
   @override
-  String get clearQuickUnlockSuccess => 'Eliminadas las contraseñas maestras guardadas del almacenamiento biométrico.';
+  String get clearQuickUnlockSuccess =>
+      'Eliminadas las contraseñas maestras guardadas del almacenamiento biométrico.';
 
   @override
   String get diacOptIn => 'Opte por las noticias en la aplicación, encuestas.';
 
   @override
-  String get diacOptInSubtitle => 'Ocasionalmente enviará una solicitud de red para obtener noticias.';
+  String get diacOptInSubtitle =>
+      'Ocasionalmente enviará una solicitud de red para obtener noticias.';
 
   @override
   String get enableAutofillDebug => 'Autollenado: Habilitar depuración';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Muestra capas de información para cada campo de entrada';
+  String get enableAutofillDebugSubtitle =>
+      'Muestra capas de información para cada campo de entrada';
 
   @override
   String get createPasswordDatabase => 'Crear base de datos de contraseñas';
@@ -438,16 +458,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nameNewPasswordDatabase => 'Nombre de su nueva base de datos';
 
   @override
-  String get validatorNameMissing => 'Por favor, introduzca un nombre para su nueva base de datos.';
+  String get validatorNameMissing =>
+      'Por favor, introduzca un nombre para su nueva base de datos.';
 
   @override
-  String get masterPasswordHelpText => 'Seleccione una contraseña maestra segura. Asegúrese de recordarla.';
+  String get masterPasswordHelpText =>
+      'Seleccione una contraseña maestra segura. Asegúrese de recordarla.';
 
   @override
   String get inputMasterPasswordText => 'Contraseña maestra';
 
   @override
-  String get masterPasswordMissingCreate => 'Por favor, introduzca una contraseña segura y recordable.';
+  String get masterPasswordMissingCreate =>
+      'Por favor, introduzca una contraseña segura y recordable.';
 
   @override
   String get createDatabaseAction => 'Crear base de datos';
@@ -499,7 +522,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get entryAddAttachment => 'Añadir archivo adjunto';
 
   @override
-  String get entryAttachmentSizeWarning => 'Los archivos adjuntos serán incorporados en el archivo de contraseñas. Esto puede aumentar significativamente el tiempo necesario para abrir/guardar contraseñas.';
+  String get entryAttachmentSizeWarning =>
+      'Los archivos adjuntos serán incorporados en el archivo de contraseñas. Esto puede aumentar significativamente el tiempo necesario para abrir/guardar contraseñas.';
 
   @override
   String get entryAddField => 'Añadir campo';
@@ -538,7 +562,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingBackToOnboarding => 'Tour';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Reviva la experiencia de la primera ejecución 😅';
+  String get onboardingBackToOnboardingSubtitle =>
+      'Reviva la experiencia de la primera ejecución 😅';
 
   @override
   String get onboardingHeadline => '¡Hagamos que tus contraseñas sean seguras!';
