@@ -1558,52 +1558,52 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = ThemeUtil.iconColor(Theme.of(context), null);
+    final theme = Theme.of(context);
+
     return Stack(
       alignment: Alignment.centerRight,
       children: [
-        Stack(
-          children: [
-            InputDecorator(
-              decoration: InputDecoration(
-                prefixIcon:
-                    commonField?.icon == null ? null : Icon(commonField.icon),
-                labelText: commonField?.displayName ?? fieldKey.key,
-                filled: true,
+        InputDecorator(
+          decoration: InputDecoration(
+            prefixIcon:
+                commonField?.icon == null ? null : Icon(commonField.icon),
+            labelText: commonField?.displayName ?? fieldKey.key,
+            filled: true,
+            labelStyle: TextStyle(color: color.withOpacity(0.2)),
+          ),
+          child: Text(
+            '*'*10,
+            style: TextStyle(color: color.withOpacity(0.2)),
+          ),
+        ),
+        Positioned.fill(
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(
+                sigmaX: 0.5,
+                sigmaY: 0.5,
               ),
-              child: const Text(
-                '*****************',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            Positioned.fill(
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: ui.ImageFilter.blur(
-                    sigmaX: 0.5,
-                    sigmaY: 0.5,
-                  ),
-                  child: LinkButton(
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: const EdgeInsets.only(
-                          left: 12.0 + 24.0, bottom: 16, right: 12),
-                      child: const Text(
-                        'Protected field. Click to reveal.',
-                        style: TextStyle(shadows: [
-                          Shadow(color: Colors.white, blurRadius: 5)
-                        ]),
-                      ),
+              child: LinkButton(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16),
+                  child: Text(
+                    'Protected field. Click to reveal.',
+                    style: TextStyle(
+                      color: theme.isDarkTheme ? Colors.white: theme.primaryColor,
+                      shadows: [Shadow(color: theme.isDarkTheme ? Colors.black45: Colors.white, blurRadius: 5)],
                     ),
-                    onPressed: onPressed,
                   ),
                 ),
+                onPressed: onPressed,
               ),
             ),
-          ],
+          ),
         ),
         IconButton(
           icon: const Icon(FontAwesomeIcons.eye),
-          color: ThemeUtil.iconColor(Theme.of(context), null),
+          color: color,
           tooltip: 'Show protected field',
           onPressed: onShowPressed,
         ),
