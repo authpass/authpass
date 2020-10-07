@@ -81,7 +81,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get loadFromRemoteUrl => 'Buka kdbx dari URL';
 
   @override
-  String get createNewKeepass => 'Pengguna baru di KeePass?\nBuat Database Kata Sandi Baru';
+  String get createNewKeepass =>
+      'Pengguna baru di KeePass?\nBuat Database Kata Sandi Baru';
 
   @override
   String get labelLastOpenFiles => 'File terakhir dibuka:';
@@ -120,13 +121,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get lockAllFiles => 'Kunci Semua file terbuka';
 
   @override
-  String get preferenceAllowScreenshots => 'Izinkan Menangkap Layar di aplikasi ini';
+  String get preferenceAllowScreenshots =>
+      'Izinkan Menangkap Layar di aplikasi ini';
 
   @override
   String get preferenceEnableAutoFill => 'Izinkan Isi Otomatis';
 
   @override
-  String get preferenceAutoFillDescription => 'Hanya didukung di Android Oreo (8.0) atau keatas.';
+  String get preferenceAutoFillDescription =>
+      'Hanya didukung di Android Oreo (8.0) atau keatas.';
 
   @override
   String get preferenceTitle => 'Preferensi';
@@ -180,7 +183,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get menuItemSupport => 'Dukungan Email';
 
   @override
-  String get menuItemSupportSubtitle => 'Mengirim log melalui email / minta bantuan';
+  String get menuItemSupportSubtitle =>
+      'Mengirim log melalui email / minta bantuan';
 
   @override
   String get menuItemHelp => 'Bantuan';
@@ -237,9 +241,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String savedFiles(int numFiles, Object files) {
-    final intl.NumberFormat numFilesNumberFormat = intl.NumberFormat.compactLong(
+    final intl.NumberFormat numFilesNumberFormat =
+        intl.NumberFormat.compactLong(
       locale: localeName,
-      
     );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
@@ -296,7 +300,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get doneCopiedField => 'Disalin.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'Anda belum memiliki kata sandi di database anda.';
+  String get emptyPasswordVaultPlaceholder =>
+      'Anda belum memiliki kata sandi di database anda.';
 
   @override
   String get emptyPasswordVaultButtonLabel => 'Buat Kata Sandi pertama anda';
@@ -308,7 +313,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get internalFile => 'File internal';
 
   @override
-  String get internalFileSubtitle => 'Database yang dibuat sebelumnya menggunakan AuthPass';
+  String get internalFileSubtitle =>
+      'Database yang dibuat sebelumnya menggunakan AuthPass';
 
   @override
   String get filePicker => 'Pemilih file';
@@ -335,13 +341,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get useKeyFile => 'Gunakan Kunci File';
 
   @override
-  String get saveMasterPasswordBiometric => 'Simpan kata sandi dengan kunci biometri tersimpan?';
+  String get saveMasterPasswordBiometric =>
+      'Simpan kata sandi dengan kunci biometri tersimpan?';
 
   @override
   String get errorOpenFileAlreadyOpenTitle => 'File telah terbuka';
 
   @override
-  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
+  String errorOpenFileAlreadyOpenBody(
+      Object databaseName, Object openFileSource, Object newFileSource) {
     return 'Database terpilih ${databaseName} telah terbuka dari ${openFileSource} (mencoba memuat dari${newFileSource})';
   }
 
@@ -360,7 +368,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get dialogSendErrorReport => 'Kirimkan Laporan Kesalahan / Bantuan';
 
   @override
-  String get groupFilterDescription => 'Pilih grup yang akan ditampilkan (rekursif)';
+  String get groupFilterDescription =>
+      'Pilih grup yang akan ditampilkan (rekursif)';
 
   @override
   String get groupFilterSelectAll => 'Pilih semua';
@@ -393,10 +402,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get deleteGroupErrorTitle => 'Tidak dapat menghapus grup';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'Grup ini masih berisi grup lain. Anda hanya dapat menghapus grup kosong.';
+  String get deleteGroupErrorBodyContainsGroup =>
+      'Grup ini masih berisi grup lain. Anda hanya dapat menghapus grup kosong.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'Grup ini masih berisi entri kata sandi. Anda hanya dapat menghapus grup kosong.';
+  String get deleteGroupErrorBodyContainsEntries =>
+      'Grup ini masih berisi entri kata sandi. Anda hanya dapat menghapus grup kosong.';
 
   @override
   String get groupListAppBarTitle => 'Grup';
@@ -408,7 +419,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get clearQuickUnlock => 'Hapus Penyimpanan biometrik';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Hapus kata sandi utama yang tersimpan';
+  String get clearQuickUnlockSubtitle =>
+      'Hapus kata sandi utama yang tersimpan';
 
   @override
   String get unlock => 'Buka file';
@@ -417,19 +429,22 @@ class AppLocalizationsId extends AppLocalizations {
   String get closePasswordFiles => 'tutup file kata sandi';
 
   @override
-  String get clearQuickUnlockSuccess => 'Hapus Kata Sandi utama yang tersimpan dari penyimpanan biometrik.';
+  String get clearQuickUnlockSuccess =>
+      'Hapus Kata Sandi utama yang tersimpan dari penyimpanan biometrik.';
 
   @override
   String get diacOptIn => 'Ikut program tentang berita aplikasi dan survei.';
 
   @override
-  String get diacOptInSubtitle => 'Akan sesekali mengirim permintaan ke internet untuk memperoleh berita.';
+  String get diacOptInSubtitle =>
+      'Akan sesekali mengirim permintaan ke internet untuk memperoleh berita.';
 
   @override
   String get enableAutofillDebug => 'Isi otomatis: Hidupkan debug';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Menunjukkan hamparan informasi untuk semua kolom masukan';
+  String get enableAutofillDebugSubtitle =>
+      'Menunjukkan hamparan informasi untuk semua kolom masukan';
 
   @override
   String get createPasswordDatabase => 'Buat Database Kata Sandi';
@@ -438,16 +453,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get nameNewPasswordDatabase => 'Nama Database baru anda';
 
   @override
-  String get validatorNameMissing => 'Mohon beri nama pada database baru kata sandi anda.';
+  String get validatorNameMissing =>
+      'Mohon beri nama pada database baru kata sandi anda.';
 
   @override
-  String get masterPasswordHelpText => 'Buatlah master Kata Sandi anda. Pastikan anda mengingatnya.';
+  String get masterPasswordHelpText =>
+      'Buatlah master Kata Sandi anda. Pastikan anda mengingatnya.';
 
   @override
   String get inputMasterPasswordText => 'Master Kata Sandi';
 
   @override
-  String get masterPasswordMissingCreate => 'Mohon masukkan kata sandi yang aman dan mudah anda diingat.';
+  String get masterPasswordMissingCreate =>
+      'Mohon masukkan kata sandi yang aman dan mudah anda diingat.';
 
   @override
   String get createDatabaseAction => 'Buat Database';
@@ -499,7 +517,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get entryAddAttachment => 'Tambah Lampiran';
 
   @override
-  String get entryAttachmentSizeWarning => 'File yang dilampirkan akan disematkan dalam file kata sandi. Ini dapat meningkatkan waktu yang dibutuhkan untuk membuka/menyimpan kata sandi.';
+  String get entryAttachmentSizeWarning =>
+      'File yang dilampirkan akan disematkan dalam file kata sandi. Ini dapat meningkatkan waktu yang dibutuhkan untuk membuka/menyimpan kata sandi.';
 
   @override
   String get entryAddField => 'Tambah Kolom Baru';
@@ -511,7 +530,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get entryCustomFieldTitle => 'Menambahkan kolom khusus baru';
 
   @override
-  String get entryCustomFieldInputLabel => 'Masukkan nama untuk kolom khusus anda';
+  String get entryCustomFieldInputLabel =>
+      'Masukkan nama untuk kolom khusus anda';
 
   @override
   String get swipeCopyField => 'Salin Kolom';
@@ -538,13 +558,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get onboardingBackToOnboarding => 'Tur';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Menghidupkan kembali pengalaman pertama. 😅️';
+  String get onboardingBackToOnboardingSubtitle =>
+      'Menghidupkan kembali pengalaman pertama. 😅️';
 
   @override
   String get onboardingHeadline => 'Ayo buat Kata Sandi anda Aman!';
 
   @override
-  String get onboardingQuestion => 'Pernahkah anda menggunakan pengelola kata sandi lain sebelumnya?';
+  String get onboardingQuestion =>
+      'Pernahkah anda menggunakan pengelola kata sandi lain sebelumnya?';
 
   @override
   String get onboardingYesOpenPasswords => 'Ya, buka Kata Sandi tersimpan';

@@ -58,7 +58,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get quickUnlockingFiles => 'Quick-Unlock Dateien';
 
   @override
-  String get selectKeepassFileLabel => 'Bitte wähle eine KeePass (.kdbx) Datei.';
+  String get selectKeepassFileLabel =>
+      'Bitte wähle eine KeePass (.kdbx) Datei.';
 
   @override
   String get createNewFile => 'Datei Erstellen';
@@ -81,7 +82,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get loadFromRemoteUrl => 'Lade von URL';
 
   @override
-  String get createNewKeepass => 'KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen';
+  String get createNewKeepass =>
+      'KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen';
 
   @override
   String get labelLastOpenFiles => 'Zuletzt geöffnete Dateien:';
@@ -126,7 +128,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferenceEnableAutoFill => 'Autofill aktivieren';
 
   @override
-  String get preferenceAutoFillDescription => 'Wird nur auf ab Android Oreo (8.0) unterstützt.';
+  String get preferenceAutoFillDescription =>
+      'Wird nur auf ab Android Oreo (8.0) unterstützt.';
 
   @override
   String get preferenceTitle => 'Einstellungen';
@@ -180,7 +183,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemSupport => 'E-Mail Support';
 
   @override
-  String get menuItemSupportSubtitle => 'Log-Datei per E-Mail versenden / Support kontaktieren.';
+  String get menuItemSupportSubtitle =>
+      'Log-Datei per E-Mail versenden / Support kontaktieren.';
 
   @override
   String get menuItemHelp => 'Hilfe';
@@ -237,9 +241,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String savedFiles(int numFiles, Object files) {
-    final intl.NumberFormat numFilesNumberFormat = intl.NumberFormat.compactLong(
+    final intl.NumberFormat numFilesNumberFormat =
+        intl.NumberFormat.compactLong(
       locale: localeName,
-      
     );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
@@ -290,13 +294,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get doneCopiedPassword => 'Passwort in die Zwischenablage kopiert.';
 
   @override
-  String get doneCopiedUsername => 'Benutzername in die Zwischenablage kopiert.';
+  String get doneCopiedUsername =>
+      'Benutzername in die Zwischenablage kopiert.';
 
   @override
   String get doneCopiedField => 'Kopiert.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'Du hast noch keine Passworter in deiner Datenbank.';
+  String get emptyPasswordVaultPlaceholder =>
+      'Du hast noch keine Passworter in deiner Datenbank.';
 
   @override
   String get emptyPasswordVaultButtonLabel => 'Erstelle dein erstes Passwort';
@@ -335,13 +341,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get useKeyFile => 'Schlüsseldatei verwenden';
 
   @override
-  String get saveMasterPasswordBiometric => 'Passwort sicher speichern (mit biometrischen Schutz)?';
+  String get saveMasterPasswordBiometric =>
+      'Passwort sicher speichern (mit biometrischen Schutz)?';
 
   @override
   String get errorOpenFileAlreadyOpenTitle => 'Datei schon geöffnet';
 
   @override
-  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
+  String errorOpenFileAlreadyOpenBody(
+      Object databaseName, Object openFileSource, Object newFileSource) {
     return 'Die Datenbank ${databaseName} ist bereits von ${openFileSource} aus geöffnet. (Versuchte ${newFileSource} zu öffnen)';
   }
 
@@ -360,7 +368,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get dialogSendErrorReport => 'Fehlerbericht senden/Hilfe';
 
   @override
-  String get groupFilterDescription => 'Wähle Gruppen die (rekursiv) angezeigt werden sollen';
+  String get groupFilterDescription =>
+      'Wähle Gruppen die (rekursiv) angezeigt werden sollen';
 
   @override
   String get groupFilterSelectAll => 'Alles auswählen';
@@ -393,10 +402,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get deleteGroupErrorTitle => 'Gruppe kann nicht gelöscht werden';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'Diese Gruppe enthält noch andere Gruppen. Sie können derzeit nur leere Gruppen löschen.';
+  String get deleteGroupErrorBodyContainsGroup =>
+      'Diese Gruppe enthält noch andere Gruppen. Sie können derzeit nur leere Gruppen löschen.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'Diese Gruppe enthält noch Passwort-Einträge. Sie können derzeit nur leere Gruppen löschen.';
+  String get deleteGroupErrorBodyContainsEntries =>
+      'Diese Gruppe enthält noch Passwort-Einträge. Sie können derzeit nur leere Gruppen löschen.';
 
   @override
   String get groupListAppBarTitle => 'Gruppen';
@@ -408,7 +419,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get clearQuickUnlock => 'Biometrischen Speicher löschen';
 
   @override
-  String get clearQuickUnlockSubtitle => 'Lösche gespeicherte master Passwörter';
+  String get clearQuickUnlockSubtitle =>
+      'Lösche gespeicherte master Passwörter';
 
   @override
   String get unlock => 'Dateien entsperren';
@@ -417,19 +429,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get closePasswordFiles => 'schliesse Passwortdateien';
 
   @override
-  String get clearQuickUnlockSuccess => 'Lösche gespeicherte master Passwörter vom biometrischen Speicher.';
+  String get clearQuickUnlockSuccess =>
+      'Lösche gespeicherte master Passwörter vom biometrischen Speicher.';
 
   @override
   String get diacOptIn => 'In-App Neuigkeiten und Umfragen erhalten.';
 
   @override
-  String get diacOptInSubtitle => 'Kann gelegentlich Internetanfragen um Neuigkeiten zu sammeln verursachen.';
+  String get diacOptInSubtitle =>
+      'Kann gelegentlich Internetanfragen um Neuigkeiten zu sammeln verursachen.';
 
   @override
   String get enableAutofillDebug => 'AutoFill: Debugging aktivieren';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Zeigt informationen für jedes Eingabefeld in einem overlay';
+  String get enableAutofillDebugSubtitle =>
+      'Zeigt informationen für jedes Eingabefeld in einem overlay';
 
   @override
   String get createPasswordDatabase => 'Erstelle Passwort Datenbank';
@@ -438,7 +453,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get nameNewPasswordDatabase => 'Name der neuen Datenbank';
 
   @override
-  String get validatorNameMissing => 'Bitte gib den namen der neuen Datenbank an';
+  String get validatorNameMissing =>
+      'Bitte gib den namen der neuen Datenbank an';
 
   @override
   String get masterPasswordHelpText => 'Gib ein sicheres master Passwort an.';
@@ -447,7 +463,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get inputMasterPasswordText => 'Master Passwort';
 
   @override
-  String get masterPasswordMissingCreate => 'Bitte gib ein sicheres Passwort an.';
+  String get masterPasswordMissingCreate =>
+      'Bitte gib ein sicheres Passwort an.';
 
   @override
   String get createDatabaseAction => 'Erstelle Datenbank';
@@ -499,7 +516,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get entryAddAttachment => 'Anhang anfügen';
 
   @override
-  String get entryAttachmentSizeWarning => 'Anhänge werden in der Passwort Datei gespeichert. Dies kann die Zeit zum öffnen der Passwörter stark erhöhen!';
+  String get entryAttachmentSizeWarning =>
+      'Anhänge werden in der Passwort Datei gespeichert. Dies kann die Zeit zum öffnen der Passwörter stark erhöhen!';
 
   @override
   String get entryAddField => 'Feld hinzufügen';
@@ -508,7 +526,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get entryCustomField => 'Benutzerdefiniertes Feld';
 
   @override
-  String get entryCustomFieldTitle => 'Füge neues Benutzerdefiniertes Feld hinzu';
+  String get entryCustomFieldTitle =>
+      'Füge neues Benutzerdefiniertes Feld hinzu';
 
   @override
   String get entryCustomFieldInputLabel => 'Namen für Feld eingeben';
@@ -544,7 +563,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get onboardingHeadline => 'Lass uns deine Passwörter sicher machen!';
 
   @override
-  String get onboardingQuestion => 'Hast du schon einen Passwort Manager benutzt?';
+  String get onboardingQuestion =>
+      'Hast du schon einen Passwort Manager benutzt?';
 
   @override
   String get onboardingYesOpenPasswords => 'Ja, öffne meine Passwörter';

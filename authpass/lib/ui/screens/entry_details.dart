@@ -10,7 +10,6 @@ import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/l10n/app_localizations.dart';
-import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
@@ -1586,14 +1585,21 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                   child: LinkButton(
                     child: Container(
                       alignment: Alignment.bottomLeft,
-                      padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16, right: 12),
+                      padding: const EdgeInsets.only(
+                          left: 12.0 + 24.0, bottom: 16, right: 12),
                       child: Text(
                         'Protected field.\nClick to reveal.',
                         textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.bodyText2.copyWith(
-                            fontWeight: FontWeight.w500,
-                            shadows: [Shadow(color: Theme.of(context).isDarkTheme ? Colors.black: Colors.white, blurRadius: 5)],
-                            ),
+                          fontWeight: FontWeight.w500,
+                          shadows: [
+                            Shadow(
+                                color: Theme.of(context).isDarkTheme
+                                    ? Colors.black
+                                    : Colors.white,
+                                blurRadius: 5)
+                          ],
+                        ),
                       ),
                     ),
                     onPressed: onPressed,

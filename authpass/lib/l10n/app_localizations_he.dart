@@ -81,7 +81,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get loadFromRemoteUrl => 'Open kdbx from URL';
 
   @override
-  String get createNewKeepass => 'New to KeePass?\nCreate New Password Database';
+  String get createNewKeepass =>
+      'New to KeePass?\nCreate New Password Database';
 
   @override
   String get labelLastOpenFiles => 'Last opened files:';
@@ -126,7 +127,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferenceEnableAutoFill => 'Enable autofill';
 
   @override
-  String get preferenceAutoFillDescription => 'Only supported on Android Oreo (8.0) or later.';
+  String get preferenceAutoFillDescription =>
+      'Only supported on Android Oreo (8.0) or later.';
 
   @override
   String get preferenceTitle => 'Preferences';
@@ -237,9 +239,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String savedFiles(int numFiles, Object files) {
-    final intl.NumberFormat numFilesNumberFormat = intl.NumberFormat.compactLong(
+    final intl.NumberFormat numFilesNumberFormat =
+        intl.NumberFormat.compactLong(
       locale: localeName,
-      
     );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
@@ -296,7 +298,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get doneCopiedField => 'Copied.';
 
   @override
-  String get emptyPasswordVaultPlaceholder => 'You do not have any password in your database yet.';
+  String get emptyPasswordVaultPlaceholder =>
+      'You do not have any password in your database yet.';
 
   @override
   String get emptyPasswordVaultButtonLabel => 'Create your first Password';
@@ -308,7 +311,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get internalFile => 'Internal file';
 
   @override
-  String get internalFileSubtitle => 'Database previously created with AuthPass';
+  String get internalFileSubtitle =>
+      'Database previously created with AuthPass';
 
   @override
   String get filePicker => 'File Picker';
@@ -335,13 +339,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get useKeyFile => 'Use Key File';
 
   @override
-  String get saveMasterPasswordBiometric => 'Save Password with biometric key store?';
+  String get saveMasterPasswordBiometric =>
+      'Save Password with biometric key store?';
 
   @override
   String get errorOpenFileAlreadyOpenTitle => 'File already open';
 
   @override
-  String errorOpenFileAlreadyOpenBody(Object databaseName, Object openFileSource, Object newFileSource) {
+  String errorOpenFileAlreadyOpenBody(
+      Object databaseName, Object openFileSource, Object newFileSource) {
     return 'The selected database ${databaseName} is already open from ${openFileSource} (Tried to open from ${newFileSource})';
   }
 
@@ -360,7 +366,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get dialogSendErrorReport => 'Send Error Report/Help';
 
   @override
-  String get groupFilterDescription => 'Select which Groups to show (recursively)';
+  String get groupFilterDescription =>
+      'Select which Groups to show (recursively)';
 
   @override
   String get groupFilterSelectAll => 'Select all';
@@ -393,10 +400,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get deleteGroupErrorTitle => 'Unable to delete group';
 
   @override
-  String get deleteGroupErrorBodyContainsGroup => 'This group still contains other groups. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsGroup =>
+      'This group still contains other groups. You can currently only delete empty groups.';
 
   @override
-  String get deleteGroupErrorBodyContainsEntries => 'This group still contains password entries. You can currently only delete empty groups.';
+  String get deleteGroupErrorBodyContainsEntries =>
+      'This group still contains password entries. You can currently only delete empty groups.';
 
   @override
   String get groupListAppBarTitle => 'Groups';
@@ -417,19 +426,22 @@ class AppLocalizationsHe extends AppLocalizations {
   String get closePasswordFiles => 'close password files';
 
   @override
-  String get clearQuickUnlockSuccess => 'Removed saved master passwords from biometric storage.';
+  String get clearQuickUnlockSuccess =>
+      'Removed saved master passwords from biometric storage.';
 
   @override
   String get diacOptIn => 'Opt in to In-App News, Surveys.';
 
   @override
-  String get diacOptInSubtitle => 'Will occasionally send a network request to fetch news.';
+  String get diacOptInSubtitle =>
+      'Will occasionally send a network request to fetch news.';
 
   @override
   String get enableAutofillDebug => 'AutoFill: Enable debug';
 
   @override
-  String get enableAutofillDebugSubtitle => 'Shows information overlays for every input field';
+  String get enableAutofillDebugSubtitle =>
+      'Shows information overlays for every input field';
 
   @override
   String get createPasswordDatabase => 'Create Password Database';
@@ -438,16 +450,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get nameNewPasswordDatabase => 'Name of your new Database';
 
   @override
-  String get validatorNameMissing => 'Please enter a name for your new database.';
+  String get validatorNameMissing =>
+      'Please enter a name for your new database.';
 
   @override
-  String get masterPasswordHelpText => 'Select a secure master Password. Make sure to remember it.';
+  String get masterPasswordHelpText =>
+      'Select a secure master Password. Make sure to remember it.';
 
   @override
   String get inputMasterPasswordText => 'Master Password';
 
   @override
-  String get masterPasswordMissingCreate => 'Please enter a secure, rememberable password.';
+  String get masterPasswordMissingCreate =>
+      'Please enter a secure, rememberable password.';
 
   @override
   String get createDatabaseAction => 'Create Database';
@@ -499,7 +514,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get entryAddAttachment => 'Add Attachment';
 
   @override
-  String get entryAttachmentSizeWarning => 'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
+  String get entryAttachmentSizeWarning =>
+      'Attached files will be embedded in password file. This can significantly increase time required to open/save passwords.';
 
   @override
   String get entryAddField => 'Add Field';
@@ -538,7 +554,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get onboardingBackToOnboarding => 'Tour';
 
   @override
-  String get onboardingBackToOnboardingSubtitle => 'Relive the first run experience 😅️';
+  String get onboardingBackToOnboardingSubtitle =>
+      'Relive the first run experience 😅️';
 
   @override
   String get onboardingHeadline => 'Let\'s make your Passwords Secure!';

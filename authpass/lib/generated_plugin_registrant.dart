@@ -13,7 +13,8 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 // ignore: public_member_api_docs
 void registerPlugins(PluginRegistry registry) {
-  BiometricStoragePluginWeb.registerWith(registry.registrarFor(BiometricStoragePluginWeb));
+  BiometricStoragePluginWeb.registerWith(
+      registry.registrarFor(BiometricStoragePluginWeb));
   UrlLauncherPlugin.registerWith(registry.registrarFor(UrlLauncherPlugin));
   VideoPlayerPlugin.registerWith(registry.registrarFor(VideoPlayerPlugin));
   registry.registerMessageHandler();
