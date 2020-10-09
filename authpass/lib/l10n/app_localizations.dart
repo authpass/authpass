@@ -166,6 +166,9 @@ abstract class AppLocalizations {
   // Language switcher subtitle
   String get turkish;
 
+  // Language switcher subtitle
+  String get hebrew;
+
   // No description provided in @selectKeepassFile
   String get selectKeepassFile;
 

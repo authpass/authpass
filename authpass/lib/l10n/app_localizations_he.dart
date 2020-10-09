@@ -10,81 +10,84 @@ class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
-  String get fieldUserName => 'User';
+  String get fieldUserName => 'משתמש';
 
   @override
-  String get fieldPassword => 'Password';
+  String get fieldPassword => 'סיסמה';
 
   @override
-  String get fieldWebsite => 'Website';
+  String get fieldWebsite => 'אתר';
 
   @override
-  String get fieldTitle => 'Title';
+  String get fieldTitle => 'כותרת';
 
   @override
-  String get fieldTotp => 'One Time Password (Time Based)';
+  String get fieldTotp => 'סיסמה חד פעמית (מבוסס זמן)';
 
   @override
-  String get english => 'English';
+  String get english => 'אגלית';
 
   @override
-  String get german => 'German';
+  String get german => 'גרמנית';
 
   @override
-  String get russian => 'Russian';
+  String get russian => 'רוסית';
 
   @override
-  String get ukrainian => 'Ukrainian';
+  String get ukrainian => 'אוקראינית';
 
   @override
-  String get lithuanian => 'Lithuanian';
+  String get lithuanian => 'ליטאית';
 
   @override
-  String get french => 'French';
+  String get french => 'צרפתית';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => 'ספרדית';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'אינדונזית';
 
   @override
   String get turkish => 'Turkish';
 
   @override
-  String get selectKeepassFile => 'AuthPass - Select KeePass File';
+  String get hebrew => 'Hebrew';
 
   @override
-  String get quickUnlockingFiles => 'Quick unlocking files';
+  String get selectKeepassFile => 'AuthPass - בחר קובץ KeePass';
 
   @override
-  String get selectKeepassFileLabel => 'Please select a KeePass (.kdbx) file.';
+  String get quickUnlockingFiles => 'פתיחה מהירה של קבצים';
 
   @override
-  String get createNewFile => 'Create New File';
+  String get selectKeepassFileLabel => 'אנא בחרו קובץ KeePass מסוג kdbx.';
 
   @override
-  String get openLocalFile => 'Open\nLocal File';
+  String get createNewFile => 'צור קובץ חדש';
 
   @override
-  String get openFile => 'Open File';
+  String get openLocalFile => 'פתח קובץ לוקאלי';
+
+  @override
+  String get openFile => 'פתח קובץ';
 
   @override
   String loadFrom(String cloudStorageName) {
-    return 'Load from ${cloudStorageName}';
+    return 'טען מ (cloudStorageName)';
   }
 
   @override
-  String get loadFromUrl => 'Download from URL';
+  String get loadFromUrl => 'הורד מ-URL';
 
   @override
-  String get loadFromRemoteUrl => 'Open kdbx from URL';
+  String get loadFromRemoteUrl => 'פתח kdbx מ-URL';
 
   @override
-  String get createNewKeepass => 'New to KeePass?\nCreate New Password Database';
+  String get createNewKeepass => 'חדש ל-KeePass? צור מאגר סיסמאות חדש';
 
   @override
-  String get labelLastOpenFiles => 'Last opened files:';
+  String get labelLastOpenFiles => 'קבצים שנפתחו לאחרונה:';
 
   @override
   String get noFilesHaveBeenOpenYet => 'No files have been opened yet.';
