@@ -269,10 +269,6 @@
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
     },
-    "doneCopiedField": "Kopiert.",
-    "@doneCopiedField": {
-        "description": ""
-    },
     "noTitle": "(kein Titel)",
     "@noTitle": {
         "description": "Text to display in place of a title, when password entry has no name assigned."
@@ -300,6 +296,10 @@
     "doneCopiedUsername": "Benutzername in die Zwischenablage kopiert.",
     "@doneCopiedUsername": {
         "description": "snackbar confirmation that username was copied."
+    },
+    "doneCopiedField": "Kopiert.",
+    "@doneCopiedField": {
+        "description": ""
     },
     "emptyPasswordVaultPlaceholder": "Du hast noch keine Passworter in deiner Datenbank.",
     "@emptyPasswordVaultPlaceholder": {
@@ -436,13 +436,13 @@
     "@successfullyDeletedGroup": {
         "description": "snackbar after deleting a group."
     },
-    "saveButtonLabel": "Speichern",
-    "@saveButtonLabel": {
-      "description": "save file, for example button displayed in entry details"
-    },
     "undoButtonLabel": "Rückgängig",
     "@undoButtonLabel": {
         "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Speichern",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
     },
     "initialNewGroupName": "Neue Gruppe",
     "@initialNewGroupName": {
@@ -589,16 +589,6 @@
             }
         }
     },
-    "sizeBytes": "{count} bytes",
-    "@sizeBytes": {
-        "description": "",
-        "placeholders": {
-            "bytes": {
-                "description": "file size in bytes",
-                "example": "123"
-            }
-        }
-    },
     "entryAddAttachment": "Anhang anfügen",
     "@entryAddAttachment": {
         "description": ""
@@ -643,19 +633,11 @@
     "@fieldUnprotect": {
         "description": ""
     },
-    "fieldPresent": "Present",
-    "@fieldPresent": {
-        "description": ""
-    },
     "fieldGenerateEmail": "Email generieren",
     "@fieldGenerateEmail": {
         "description": ""
     },
-    "onboardingBackToOnboarding": "Tour",
-    "@onboardingBackToOnboarding": {
-        "description": "Context menu entry which reverts to onboarding"
-    },
-    "onboardingBackToOnboardingSubtitle": "App tour neu erleben \uD83D\uDE05️",
+    "onboardingBackToOnboardingSubtitle": "App tour neu erleben 😅️",
     "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },
