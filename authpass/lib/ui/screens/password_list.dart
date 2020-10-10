@@ -251,7 +251,12 @@ class PasswordListFilterIsolateRunner {
               .isEmpty &&
           entry.groupNames
               .where((string) => string.toLowerCase().contains(term))
-              .isEmpty) {
+              .isEmpty &&
+          // check for extra URL fields as well
+          entry.entry.stringEntries
+              .where((field) =>
+                  field.key.key.startsWith('KP2A_URL') && field.value.toString().contains(term)
+              ).isEmpty) {
         return false;
       }
     }
