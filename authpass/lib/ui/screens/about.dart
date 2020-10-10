@@ -1,13 +1,13 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/env/_base.dart';
-import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthPassAboutDialog extends StatelessWidget {
   const AuthPassAboutDialog({Key key, this.env}) : super(key: key);

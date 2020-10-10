@@ -4,6 +4,10 @@
 # WARNING: DO NOT translate app_XX.arb files directly here. For translations please see:
 # https://translate.authpass.app/authpass
 # (only the source language, app_en.arb is edited manually here).
+#
+# We are now using synthetic packages, so to use `AppLocalizations` inside the code
+# you have to add the following import:
+# import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 header: '// ignore_for_file: omit_local_variable_types,unused_local_variable'
           #---  Generated file, do not modify.'
@@ -11,4 +15,4 @@ arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 #preferred-supported-locales: '["en"]'
-synthetic-package: false
+synthetic-package: true

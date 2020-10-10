@@ -11,7 +11,11 @@ if ! test -f "$packages" ; then
 	exit 1
 fi
 
-flutter=`cat "$packages" | grep "^flutter:" | sed "s/^flutter:file:\/\///" | sed "s/\/packages.*//"`
+flutter=`cat "$packages" | grep "^flutter:" | sed "s/^flutter://" | sed "s/^file:\/\///" | sed "s/\/packages.*//"`
+
+if ! [[ $flutter == "/*" ]] ; then
+	flutter="${root}/$flutter"
+fi
 
 if ! test -e "$flutter/bin/flutter" ; then
 	echo "Unable to find flutter in $flutter"

@@ -9,7 +9,6 @@ import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
-import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
@@ -29,6 +28,7 @@ import 'package:authpass/utils/otpauth.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
+import 'package:authpass/utils/theme_utils.dart';
 import 'package:barcode_scan/barcode_scan.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
@@ -39,6 +39,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
@@ -48,7 +49,6 @@ import 'package:otp/otp.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-import 'package:authpass/utils/theme_utils.dart';
 
 final _logger = Logger('entry_details');
 
@@ -1573,7 +1573,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
             labelStyle: TextStyle(color: color.withOpacity(0.2)),
           ),
           child: Text(
-            '*'*10,
+            '*' * 10,
             style: TextStyle(color: color.withOpacity(0.2)),
           ),
         ),
@@ -1591,8 +1591,15 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                   child: Text(
                     'Protected field. Click to reveal.',
                     style: TextStyle(
-                      color: theme.isDarkTheme ? Colors.white: theme.primaryColor,
-                      shadows: [Shadow(color: theme.isDarkTheme ? Colors.black45: Colors.white, blurRadius: 5)],
+                      color:
+                          theme.isDarkTheme ? Colors.white : theme.primaryColor,
+                      shadows: [
+                        Shadow(
+                            color: theme.isDarkTheme
+                                ? Colors.black45
+                                : Colors.white,
+                            blurRadius: 5)
+                      ],
                     ),
                   ),
                 ),

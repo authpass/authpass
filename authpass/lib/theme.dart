@@ -143,7 +143,9 @@ ThemeData createDarkTheme() {
   return _customize(ThemeData(
     typography: _getTypography(),
     primaryColor: colorScheme.primary,
-    textSelectionHandleColor: AuthPassTheme.primarySwatch[800],
+    textSelectionTheme: TextSelectionThemeData(
+      selectionHandleColor: AuthPassTheme.primarySwatch[800],
+    ),
 //    textSelectionColor: Colors.red,
     toggleableActiveColor: colorScheme.primary,
 //    cursorColor: Colors.red,

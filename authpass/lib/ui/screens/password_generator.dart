@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:authpass/bloc/app_data.dart';
-import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/slide_hide_widget.dart';
 import 'package:authpass/utils/extension_methods.dart';
@@ -9,6 +8,7 @@ import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/iterables.dart' as iterables;
 

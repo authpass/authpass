@@ -9,7 +9,6 @@ import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
-import 'package:authpass/l10n/app_localizations.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
@@ -38,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
@@ -711,11 +711,13 @@ class _PasswordListContentState extends State<PasswordListContent>
       );
     } else {
       return theme.copyWith(
-        textSelectionColor: theme.colorScheme.secondary,
-        textSelectionHandleColor: theme.colorScheme.secondary,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: theme.colorScheme.secondary,
+          selectionHandleColor: theme.colorScheme.secondary,
+        ),
         //primaryColor: Colors.blue,
 //        cursorColor: Colors.red,
-        cursorColor: Colors.white,
       );
     }
   }
@@ -746,7 +748,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         child: TextField(
           style: theme.textTheme.headline6,
           // we also want the same cursorColor for mac/ios
-          cursorColor: theme.cursorColor,
+          cursorColor: theme.textSelectionTheme.cursorColor,
           focusNode: _filterFocusNode,
           controller: _filterTextEditingController,
           onChanged: (newQuery) async {

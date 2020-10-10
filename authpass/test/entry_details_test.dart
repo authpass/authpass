@@ -1,11 +1,11 @@
-import 'package:authpass/l10n/app_localizations.dart';
-import 'package:authpass/l10n/app_localizations_en.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging_appenders/logging_appenders.dart';
