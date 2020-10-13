@@ -44,6 +44,14 @@
     "@indonesian": {
         "description": "language switcher subtitle"
     },
+    "turkish": "Turco",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Hebreo",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -698,6 +706,31 @@
     "onboardingNoCreate": "¡Soy todo nuevo! Empecemos.",
     "@onboardingNoCreate": {
         "description": ""
+    },
+    "backupButton": "GUARDAR EN LA NUBE",
+    "@backupButton": {
+        "description": "Button that is displayed in backup warnings"
+    },
+    "dismissBackupButton": "DESCARTAR",
+    "@dismissBackupButton": {
+        "description": "Button that is displayed in backup warnings to dismiss the warning"
+    },
+    "backupWarningMessage": "¡Tus contraseñas en {databasename} solo se guardan localmente!",
+    "@backupWarningMessage": {
+        "description": "Warning message that is displayed in backup warnings",
+        "placeholders": {
+            "databasename": {
+                "example": "PasswordDatabase"
+            }
+        }
+    },
+    "saveAs": "Guardar en...",
+    "@saveAs": {
+        "description": "Save as text"
+    },
+    "saving": "Guardando",
+    "@saving": {
+        "description": "Saving text"
     },
     "unexpectedError": "Error inesperado: {error}",
     "@unexpectedError": {

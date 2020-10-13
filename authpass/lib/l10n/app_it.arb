@@ -1,0 +1,175 @@
+{
+    "@@locale": "it",
+    "fieldUserName": "Utente",
+    "@fieldUserName": {},
+    "fieldPassword": "Password",
+    "@fieldPassword": {},
+    "fieldWebsite": "Sito web",
+    "@fieldWebsite": {},
+    "fieldTitle": "Titolo",
+    "@fieldTitle": {},
+    "english": "Inglese",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "Tedesco",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Russo",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Ucraino",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Lituano",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Francese",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Spagnolo",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "Indonesiano",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "Turco",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Ebraico",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "selectKeepassFile": "AuthPass - Seleziona il File KeePass",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "openLocalFile": "Apri\nFile Locale",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "openFile": "Apri File",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFrom": "Carica da {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Carica da URL",
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
+    "labelLastOpenFiles": "File recenti:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Nessun file è stato ancora aperto.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Seleziona la lingua",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Linguaggio",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Dimensione Testo",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Densità Testo",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Tema",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Chiaro",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Scuro",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Predefinito Di Sistema",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Predefinito",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Blocca tutti i file aperti",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Consenti screenshot dell'app",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Abilita riempimento automatico",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "Supportato solo su Android Oreo (8.0) o versioni successive.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Impostazioni",
+    "@preferenceTitle": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Siamo aperti a qualsiasi suggerimento!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Assicurati di visitare il nostro sito",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "E supportare il progetto su GitHub",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "File Log: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "unableToLaunchUrlTitle": "Impossibile aprire l'URL",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "actionOpenUrl": "Apri URL",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
+    "length": "Lunghezza",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Lunghezza Personalizzata",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "manageGroups": "Gestisci I Gruppi",
+    "@manageGroups": {
+        "description": ""
+    },
+    "searchHint": "Cerca",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "swipeCopyPassword": "Copia la Password",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Copia il Nome Utente",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedPassword": "Password copiata negli appunti.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Nome utente copiato negli appunti.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "doneCopiedField": "Copiato.",
+    "@doneCopiedField": {
+        "description": ""
+    },
+    "emptyPasswordVaultPlaceholder": "Non hai alcuna password nel tuo database.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    }
+}
