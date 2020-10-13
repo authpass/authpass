@@ -52,6 +52,10 @@
   "@hebrew": {
     "description": "Language switcher subtitle"
   },
+  "italian": "italian",
+  "@italian": {
+    "description": "Language switcher subtitle"
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {
