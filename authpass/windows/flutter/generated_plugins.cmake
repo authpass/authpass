@@ -5,8 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   argon2_ffi
   file_chooser
-  path_provider_fde
-  url_launcher_fde
   url_launcher_windows
   winsparkle_flutter
 )

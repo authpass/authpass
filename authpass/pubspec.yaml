@@ -64,8 +64,8 @@ dependencies:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
   device_info: ^0.4.2+7
-  path_provider: ^1.6.14
-  path_provider_macos: ^0.0.4+3
+  path_provider: ^1.6.18
+  path_provider_macos: ^0.0.4+4
   path_provider_linux: ">=0.0.1 <2.0.0"
   #path_provider_windows: '>=0.0.1+2 <2.0.0'
   analytics_event: ^0.1.2
@@ -137,21 +137,10 @@ dependencies:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/file_chooser
-      ref: 1feed8db2e5222af4e5d8495ac45135a2701c755
+      ref: 8ea9f1ce79f04e44bd6392f4155a014b0a7eb6e8
 #      ref: android-dummy-plugin
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
-  url_launcher_fde:
-    git:
-      url: https://github.com/google/flutter-desktop-embedding.git
-      path: plugins/flutter_plugins/url_launcher_fde
-      ref: 1feed8db2e5222af4e5d8495ac45135a2701c755
-  # Used for windows, for now:
-  path_provider_fde:
-    git:
-      url: https://github.com/google/flutter-desktop-embedding.git
-      path: plugins/flutter_plugins/path_provider_fde
-      ref: 1feed8db2e5222af4e5d8495ac45135a2701c755
 
   macos_secure_bookmarks: ^0.1.2
 
