@@ -418,10 +418,11 @@ class _EntryDetailsState extends State<EntryDetails>
                           entry.customIcon = null;
                           entry.icon.set(predefined);
                         }, custom: (custom) {
-                          // TODO support changing to a custom icon.
-                          throw StateError('not yet supported.');
+                          entry.customIcon = custom;
+//                          entry.icon.set(null);
                         });
                       },
+                      kdbxFile: entry.file,
                     ),
                   ),
                   const SizedBox(width: 16),

@@ -45,11 +45,11 @@ class _GroupEditScreenState extends State<GroupEditScreen>
           ...?!isDirty
               ? null
               : [
-                  IconButton(
-                    icon: const Icon(Icons.save),
-                    onPressed: saveCallback,
-                  ),
-                ],
+            IconButton(
+              icon: const Icon(Icons.save),
+              onPressed: saveCallback,
+            ),
+          ],
           AppBarMenu.createOverflowMenuButton(context),
         ],
       ),
@@ -92,8 +92,8 @@ class _GroupEditState extends State<GroupEdit> {
       widget.group.customIcon = null;
       widget.group.icon.set(predefined);
     }, custom: (custom) {
-      // TODO support changing to a custom icon.
-      throw StateError('not yet supported.');
+      widget.group.customIcon = custom;
+//      widget.group.icon.set(null); //unexpected argument dunno why
     });
   }
 
@@ -111,6 +111,7 @@ class _GroupEditState extends State<GroupEdit> {
               initialValue: SelectedIcon.fromObject(widget.group),
               onSaved: _saveIcon,
               onChanged: _saveIcon,
+              kdbxFile: widget.group.file,
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
@@ -119,29 +120,29 @@ class _GroupEditState extends State<GroupEdit> {
               onTap: widget.group.parent == null
                   ? null
                   : () async {
-                      // TODO
-                      final file = widget.group.file;
-                      final newGroupList = await Navigator.of(context).push(
-                          GroupListFlat.route({widget.group.parent},
-                              groupListMode: GroupListMode.singleSelect,
-                              rootGroup: file.body.rootGroup));
-                      final newGroup = newGroupList?.first;
-                      if (newGroup != null) {
-                        final oldGroup = widget.group.parent;
-                        file.move(widget.group, newGroup);
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text('Moved entry into ${newGroup.name.get()}'),
-                            action: SnackBarAction(
-                                label: 'Undo',
-                                onPressed: () {
-                                  file.move(widget.group, oldGroup);
-                                }),
-                          ),
-                        );
-                      }
-                    },
+                // TODO
+                final file = widget.group.file;
+                final newGroupList = await Navigator.of(context).push(
+                    GroupListFlat.route({widget.group.parent},
+                        groupListMode: GroupListMode.singleSelect,
+                        rootGroup: file.body.rootGroup));
+                final newGroup = newGroupList?.first;
+                if (newGroup != null) {
+                  final oldGroup = widget.group.parent;
+                  file.move(widget.group, newGroup);
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                      Text('Moved entry into ${newGroup.name.get()}'),
+                      action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () {
+                            file.move(widget.group, oldGroup);
+                          }),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 8),
             TextFormField(

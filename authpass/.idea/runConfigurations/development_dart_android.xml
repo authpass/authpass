@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="development.dart android" type="FlutterRunConfigurationType" factoryName="Flutter">
+  <configuration default="false" name="development.dart android" type="FlutterRunConfigurationType" factoryName="Flutter" singleton="false">
     <option name="buildFlavor" value="playstore" />
     <option name="filePath" value="$PROJECT_DIR$/lib/env/development.dart" />
     <method v="2" />
