@@ -13,7 +13,7 @@ fi
 
 flutter=`cat "$packages" | grep "^flutter:" | sed "s/^flutter://" | sed "s/^file:\/\///" | sed "s/\/packages.*//"`
 
-if ! [[ $flutter == "/*" ]] ; then
+if ! [[ $flutter == "/"* ]] ; then
 	flutter="${root}/$flutter"
 fi
 
