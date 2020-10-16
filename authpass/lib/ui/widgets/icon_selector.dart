@@ -15,16 +15,16 @@ import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 part 'icon_selector.freezed.dart';
 
 final _logger = Logger('authpass.icon_selector');
 
-//TODO 3: implement to change also group icon
-
 class IconSelectorDialog extends StatefulWidget {
-  const IconSelectorDialog({Key key, this.initialSelection, this.kdbxFile}) : super(key: key);
+  const IconSelectorDialog({Key key, this.initialSelection, this.kdbxFile})
+      : super(key: key);
 
   final SelectedIcon initialSelection;
   final KdbxFile kdbxFile;
@@ -36,14 +36,17 @@ class IconSelectorDialog extends StatefulWidget {
       {SelectedIcon initialSelection, KdbxFile kdbxFile}) {
     return showDialog<SelectedIcon>(
       context: context,
-      builder: (context) =>
-          IconSelectorDialog(initialSelection: initialSelection, kdbxFile: kdbxFile,),
+      builder: (context) => IconSelectorDialog(
+        initialSelection: initialSelection,
+        kdbxFile: kdbxFile,
+      ),
     );
   }
 }
 
 class _IconSelectorDialogState extends State<IconSelectorDialog> {
   final _selectorKey = GlobalKey<_IconSelectorState>();
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -71,7 +74,8 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
 }
 
 class IconSelector extends StatefulWidget {
-  const IconSelector({Key key, @required this.initialSelection, @required this.kdbxFile})
+  const IconSelector(
+      {Key key, @required this.initialSelection, @required this.kdbxFile})
       : super(key: key);
 
   final SelectedIcon initialSelection;
@@ -89,14 +93,6 @@ class _IconSelectorState extends State<IconSelector> {
   void initState() {
     super.initState();
     _selection = widget.initialSelection;
-//    _initialPredefined = _selection.map(
-//      predefined: (value) => value.icon,
-//      custom: (value) => null,
-//    );
-//    _initialCustom = _selection.map(
-//      predefined: (value) => null,
-//      custom: (value) => value.custom,
-//    );
     _kdbxFile = widget.kdbxFile;
   }
 
@@ -113,33 +109,33 @@ class _IconSelectorState extends State<IconSelector> {
         children: <Widget>[
           InkWell(
             child: const Icon(FontAwesomeIcons.plus),
-            onTap: (){
+            onTap: () {
               _readFile();
             },
           ),
-          ..._kdbxFile.body.meta.customIcons.values.map((value) => IconSelectorCustomIcon(
-              iconData: value.data,
-              isSelected: _checkSelected(_selection, value),
-              onTap: (){
-                _logger.fine('Selected custom icon.');
-                setState(() => _selection = SelectedIcon.custom(value));
-              }
-          )),
+          ..._kdbxFile.body.meta.customIcons.values
+              .map((value) => IconSelectorCustomIcon(
+                  iconData: value.data,
+                  isSelected: _checkSelected(_selection, value),
+                  onTap: () {
+                    _logger.fine('Selected custom icon.');
+                    setState(() => _selection = SelectedIcon.custom(value));
+                  })),
           ...KdbxIcon.values.map((icon) => IconSelectorIcon(
-            iconData: PredefinedIcons.iconFor(icon),
-            isSelected: _checkSelected(_selection, icon),
-            onTap: () {
-              _logger.fine('Selected icon $icon');
-              setState(() => _selection = SelectedIcon.predefined(icon));
-            },
-          )),
+                iconData: PredefinedIcons.iconFor(icon),
+                isSelected: _checkSelected(_selection, icon),
+                onTap: () {
+                  _logger.fine('Selected icon $icon');
+                  setState(() => _selection = SelectedIcon.predefined(icon));
+                },
+              )),
         ],
       ),
     );
 //    });
   }
 
-  bool _checkSelected(SelectedIcon selection, dynamic value){
+  bool _checkSelected(SelectedIcon selection, dynamic value) {
     final predefined = selection.map(
       predefined: (value) => value.icon,
       custom: (value) => null,
@@ -172,23 +168,23 @@ class _IconSelectorState extends State<IconSelector> {
   }
 
   Future<void> _savePngFile(String fileName, Uint8List bytes) async {
-//    if (bytes.lengthInBytes > 10 * 1024) {
-//      if (!await DialogUtils.showConfirmDialog(
-//        context: context,
-//        params: ConfirmDialogParams(
-//          content: 'Chosen PNG file is too big.',
-//        ),
-//      )) {
-//        return;
-//      }
-//      return;
-//    }
-    final reg = RegExp(r'(\.png)$');
-    if(!reg.hasMatch(fileName)){
+    final loc = AppLocalizations.of(context);
+    if (bytes.lengthInBytes > 10 * 1024) {
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
-          content: 'Chosen file is not a PNG.',
+          content: loc.iconPngSizeWarning,
+        ),
+      )) {
+        return;
+      }
+      return;
+    }
+    if (!fileName.endsWith('.png')) {
+      if (!await DialogUtils.showConfirmDialog(
+        context: context,
+        params: ConfirmDialogParams(
+          content: loc.notPngWarning,
         ),
       )) {
         return;
@@ -198,6 +194,7 @@ class _IconSelectorState extends State<IconSelector> {
     final newIcon = KdbxCustomIcon(uuid: KdbxUuid.random(), data: bytes);
     setState(() {
       _kdbxFile.body.meta.addCustomIcon(newIcon);
+      _selection = SelectedIcon.custom(newIcon);
     });
   }
 }
@@ -263,12 +260,14 @@ class IconSelectorCustomIcon extends StatelessWidget {
 @freezed
 abstract class SelectedIcon with _$SelectedIcon {
   const factory SelectedIcon.predefined(KdbxIcon icon) =
-  _SelectedIconPredefined;
+      _SelectedIconPredefined;
+
   const factory SelectedIcon.custom(KdbxCustomIcon custom) =
-  _SelectedIconCustom;
+      _SelectedIconCustom;
+
   factory SelectedIcon.fromObject(KdbxObject object) =>
       object.customIcon?.let((custom) => SelectedIcon.custom(custom)) ??
-          object.icon.get()?.let((icon) => SelectedIcon.predefined(icon));
+      object.icon.get()?.let((icon) => SelectedIcon.predefined(icon));
 }
 
 class IconSelectorFormField extends StatelessWidget {
