@@ -6,11 +6,11 @@ Salva le tue password, accessibili da ogni tuo dispositivo e facili da trovare p
 <ul>
 <li>Tutte le tue passowrd in un unico posto sicuro.<li>
 <li>Genera password ad alto livello di sicurezza per ogni tuo account.</li>
-<li>Usa funzioni biometriche per sbloccare rapidamente ma in sicurezza (solo su Android per ora).</li>
+<li>Usa il riconoscimento facciale e l'impronta digitale per sbloccare rapidamente ma in sicurezza (solo su Android per ora).</li>
 <li>Tieni traccia di tutti i tuoi account sul web.</li>
 <li>App avviabile per tutte le piattaforme: Mac, iOS, Android, Linux e Windows</li>
 <li>Software libero, codice sorgente su: https://github.com/authpass/authpass/</li>
-<li>I volontari sono sempre i benvenuti 😉, abbiamo sempre bisogno di sviluppatori, traduttori, persone che scrivono la documentaizone, designer per l'UI, etc. 😃 Entra nel nostro server Discord!</li>
+<li>I volontari sono sempre i benvenuti 😉, abbiamo sempre bisogno di sviluppatori, traduttori, persone che scrivono la documentazione, designer per l'UI, etc. 😃 Entra nel nostro server Discord!</li>
 </ul>
 
 <p>Entra nel nostro server Discord qui: https://authpass.app/go/discord - anche in caso di problemi, suggerimenti o solo per fare due chiacchere.</p>

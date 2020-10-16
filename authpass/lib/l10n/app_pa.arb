@@ -1,3 +1,7 @@
 {
-    "@@locale": "pa"
+    "@@locale": "pa",
+    "fieldUserName": "User",
+    "@fieldUserName": {},
+    "fieldPassword": "ਪਾਸਵਰਡ",
+    "@fieldPassword": {}
 }

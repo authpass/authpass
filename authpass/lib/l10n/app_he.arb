@@ -218,6 +218,10 @@
         "description": "Button Label for Password generator settings: use as defaults",
         "context": "Password generator"
     },
+    "characterSetNumeric": "ספרות(0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
     "characterSetSpecial": "מיוחד(@%+)",
     "@characterSetSpecial": {
         "context": "Password generator"
@@ -323,6 +327,46 @@
     "@internalFileSubtitle": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "בוחר קבצים",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "פתח קובץ ממכשיר.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "אישורים",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "הכנס את הסיסמה עבור:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "סיסמה",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "בבקשה הכנס את הסיסמה שלך.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "סיסמה לא תקינה",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "השתמש בקובץ מפתח",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
     },
     "createDatabaseAction": "צור מסד נתונים",
     "@createDatabaseAction": {
