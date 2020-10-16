@@ -1,4 +1,4 @@
-# (unreleased)
+# 1.7.9 - 2020-10-17
 
 * Allow opening of URLs of entries. (On desktop using shift+cmd+U). #140
 * Disable autocorrect/suggestions and text capitalization for URL and Username fields. #145
