@@ -26,12 +26,12 @@ const RESOURCES = {
 "assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
 "assets/NOTICES": "9ca847e8803adc17ceb2bbfd03f283e2",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"version.json": "fc0aa40236f275b3c2bc32ae540bff50",
-"main.dart.js": "8ee021e7d76ef34d21141eacce9073ed",
+"version.json": "0821a79aed2f89d963d3871f01e6ef41",
+"main.dart.js": "4a016237ab664256bfa5de4a4ece1d4c",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"index.html": "e6eb5ba3ab7266df5f27dc407d00d16f",
-"/": "e6eb5ba3ab7266df5f27dc407d00d16f",
+"index.html": "d227247423d978a8572f7ebecb1c9f9e",
+"/": "d227247423d978a8572f7ebecb1c9f9e",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31"
 };
