@@ -52,6 +52,10 @@
     "@hebrew": {
         "description": "Language switcher subtitle"
     },
+    "italian": "italiano",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"

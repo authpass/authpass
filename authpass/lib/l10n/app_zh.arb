@@ -1,0 +1,129 @@
+{
+    "@@locale": "zh",
+    "fieldUserName": "请输入用户名",
+    "@fieldUserName": {},
+    "fieldPassword": "请填入密码",
+    "@fieldPassword": {},
+    "fieldWebsite": "请输入目标网站的网址",
+    "@fieldWebsite": {},
+    "fieldTitle": "请输入标题",
+    "@fieldTitle": {},
+    "fieldTotp": "双重认证 (TOTP)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
+    "selectKeepassFileLabel": "请选择一个 KeePass数据库 文件。(后缀名是.kdbx)",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "createNewFile": "创建新的数据库",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
+    },
+    "openLocalFile": "打开\n已有数据库",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "openFile": "打开文件",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFrom": "从 {cloudStorageName} 加载",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "createNewKeepass": "初来乍到？新建一个密码数据库吧！",
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
+    "preferenceSelectLanguage": "选择界面语言",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "界面语言",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "字体大小",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "图标密度",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "应用程序主题",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "亮",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "暗",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "跟随系统",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "默认",
+    "@preferenceDefault": {},
+    "lockAllFiles": "锁定所有数据库",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "允许对本应用截屏",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "启用自动填充",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "仅在 Android Oreo (8.0) 或更高版本上支持。",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "设置",
+    "@preferenceTitle": {},
+    "aboutAppName": "真理之匙",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "我们欢迎反馈意见！",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "别忘了参观一下我们的网站",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "和这个自由开源项目的托管地址！",
+    "@aboutLinkGitHub": {},
+    "unableToLaunchUrlTitle": "无法打开链接",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "menuItemSupportSubtitle": "通过电子邮件发送日志/请求帮助。",
+    "@menuItemSupportSubtitle": {},
+    "menuItemHelp": "寻求帮助",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "显示用户文档",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "关于本应用",
+    "@menuItemAbout": {},
+    "actionOpenUrl": "打开链接",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
+    "passwordPlainText": "显示密码",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "请填入密码",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "生成随机密码",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "完成",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "用作默认密码",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "小写 (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "searchHint": "吾将上下而求索...",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "emptyPasswordVaultPlaceholder": "这个地方空空如也。。。难道你已经大彻大悟了？",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    }
+}
