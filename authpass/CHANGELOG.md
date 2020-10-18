@@ -1,3 +1,7 @@
+# 1.7.10 - unreleased
+
+* Add Chinese Simplified
+
 # 1.7.9 - 2020-10-17
 
 * Allow opening of URLs of entries. (On desktop using shift+cmd+U). #140
