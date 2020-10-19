@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude all shared preferences (required to exclude biometric storage prefs) -->
+    <exclude
+        domain="sharedpref"
+        path="." />
+</full-backup-content>
