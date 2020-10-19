@@ -1,5 +1,7 @@
-# 1.7.10 - unreleased
+# 1.7.10 - 2020-10-19
 
+* Fix bug which broke android autofill.
+* Fix protected field overlay alignment.
 * Add Chinese Simplified
 
 # 1.7.9 - 2020-10-17
