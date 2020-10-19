@@ -1586,8 +1586,12 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
               ),
               child: LinkButton(
                 child: Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.only(left: 12.0 + 24.0, bottom: 16),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(
+                    left: 24.0,
+                    right: 24.0,
+                    // bottom: 16,
+                  ),
                   child: Text(
                     'Protected field. Click to reveal.',
                     style: TextStyle(
@@ -1596,7 +1600,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                       shadows: [
                         Shadow(
                             color: theme.isDarkTheme
-                                ? Colors.black45
+                                ? Colors.black87
                                 : Colors.white,
                             blurRadius: 5)
                       ],
