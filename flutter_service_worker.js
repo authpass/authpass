@@ -27,11 +27,11 @@ const RESOURCES = {
 "assets/NOTICES": "9ca847e8803adc17ceb2bbfd03f283e2",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
 "version.json": "0821a79aed2f89d963d3871f01e6ef41",
-"main.dart.js": "4a016237ab664256bfa5de4a4ece1d4c",
+"main.dart.js": "7a19d3d4f1b1f4692ac1a7d754d97bb9",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"index.html": "d227247423d978a8572f7ebecb1c9f9e",
-"/": "d227247423d978a8572f7ebecb1c9f9e",
+"index.html": "9767bc107db37bc04ddc9269623dd212",
+"/": "9767bc107db37bc04ddc9269623dd212",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31"
 };
