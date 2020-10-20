@@ -1,3 +1,7 @@
+# 1.7.11 - unreleased
+
+* Allow changing of custom icons #157 (thanks @PatrikKoscelansky)
+
 # 1.7.10 - 2020-10-19
 
 * Fix bug which broke android autofill.
