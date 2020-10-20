@@ -178,7 +178,9 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 //          _logger.fine('Got entity: $href ($isFolder,$isFile) (${entity.toXmlString(pretty: true)})');
           final type = isFolder
               ? CloudStorageEntityType.directory
-              : isFile ? CloudStorageEntityType.file : null;
+              : isFile
+                  ? CloudStorageEntityType.file
+                  : null;
           if (type == null) {
             return null;
           }

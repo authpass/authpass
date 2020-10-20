@@ -10,8 +10,8 @@ import 'package:yaml/yaml.dart' as yaml;
 /// Called by integration test to capture images.
 Future screenshot(final FlutterDriver driver, Config config, String name,
     {Duration timeout = const Duration(seconds: 30),
-      bool silent = false,
-      bool waitUntilNoTransientCallbacks = true}) async {
+    bool silent = false,
+    bool waitUntilNoTransientCallbacks = true}) async {
   if (config.isScreenShotsAvailable) {
     // todo: auto-naming scheme
     if (waitUntilNoTransientCallbacks) {
@@ -21,14 +21,13 @@ Future screenshot(final FlutterDriver driver, Config config, String name,
     final pixels = await driver.screenshot();
     final testDir = '${config.stagingDir}/$kTestScreenshotsDir';
     final file =
-    await File('$testDir/$name.$kImageExtension').create(recursive: true);
+        await File('$testDir/$name.$kImageExtension').create(recursive: true);
     await file.writeAsBytes(pixels);
     print('Screenshot $name created');
   } else {
     print('Warning: screenshot $name not created');
   }
 }
-
 
 const kEnvConfigPath = 'SCREENSHOTS_YAML';
 
@@ -63,7 +62,7 @@ class Config {
   // Note: order of boolean tests is important
   bool get isScreenShotsAvailable =>
       Platform.environment[kEnvConfigPath] != null ||
-          File(configPath).existsSync();
+      File(configPath).existsSync();
 
   final String configPath;
 
@@ -73,17 +72,14 @@ class Config {
   String get stagingDir => _configInfo['staging'] as String;
 }
 
-
 /// Parse a yaml file.
 Map parseYamlFile(String yamlPath) =>
-    jsonDecode(jsonEncode(yaml.loadYaml(fs.file(yamlPath).readAsStringSync()))) as Map;
+    jsonDecode(jsonEncode(yaml.loadYaml(fs.file(yamlPath).readAsStringSync())))
+        as Map;
 
 /// Parse a yaml string.
 Map parseYamlStr(String yamlString) =>
     jsonDecode(jsonEncode(yaml.loadYaml(yamlString))) as Map;
-
-
-
 
 /// default config file name
 const String kConfigFileName = 'screenshots.yaml';
