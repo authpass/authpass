@@ -169,7 +169,7 @@ class _IconSelectorState extends State<IconSelector> {
 
   Future<void> _savePngFile(String fileName, Uint8List bytes) async {
     final loc = AppLocalizations.of(context);
-    if (!fileName.endsWith('.png')) {
+    if (!fileName.toLowerCase().endsWith('.png')) {
       await DialogUtils.showSimpleAlertDialog(
         context,
         null,
