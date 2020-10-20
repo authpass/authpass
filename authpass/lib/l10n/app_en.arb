@@ -663,11 +663,11 @@
   },
   "iconPngSizeWarning": "Custom icons will be embedded in password file. This can significantly increase time required to open/save passwords.",
   "@iconPngSizeWarning": {
-    "description": ""
+    "description": "Warning shown when user selects a large png file as custom icon."
   },
-  "notPngWarning": "Chosen file is not a PNG.",
-  "@notPngWarning": {
-    "description": ""
+  "notPngError": "Chosen file is not a PNG.",
+  "@notPngError": {
+    "description": "Error when user selects an unsupported file as custom icon."
   },
   "entryAddField": "Add Field",
   "@entryAddField": {

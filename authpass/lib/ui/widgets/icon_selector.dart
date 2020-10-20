@@ -169,6 +169,15 @@ class _IconSelectorState extends State<IconSelector> {
 
   Future<void> _savePngFile(String fileName, Uint8List bytes) async {
     final loc = AppLocalizations.of(context);
+    if (!fileName.endsWith('.png')) {
+      await DialogUtils.showSimpleAlertDialog(
+        context,
+        null,
+        loc.notPngError,
+        routeAppend: 'customIconPngError',
+      );
+      return;
+    }
     if (bytes.lengthInBytes > 10 * 1024) {
       if (!await DialogUtils.showConfirmDialog(
         context: context,
@@ -178,18 +187,6 @@ class _IconSelectorState extends State<IconSelector> {
       )) {
         return;
       }
-      return;
-    }
-    if (!fileName.endsWith('.png')) {
-      if (!await DialogUtils.showConfirmDialog(
-        context: context,
-        params: ConfirmDialogParams(
-          content: loc.notPngWarning,
-        ),
-      )) {
-        return;
-      }
-      return;
     }
     final newIcon = KdbxCustomIcon(uuid: KdbxUuid.random(), data: bytes);
     setState(() {
@@ -246,11 +243,14 @@ class IconSelectorCustomIcon extends StatelessWidget {
       color: isSelected ? theme.primaryColorLight : null,
       child: InkWell(
         onTap: onTap,
-        child: Image.memory(
-          iconData,
-          width: iconSize,
-          height: iconSize,
-          fit: BoxFit.contain,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.memory(
+            iconData,
+            width: iconSize,
+            height: iconSize,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );
