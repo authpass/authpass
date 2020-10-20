@@ -32,3 +32,15 @@ if test -f "${tokenfile}"; then
     --form token=$(cat "${tokenfile}") \
     --form metrics="$(cat metrics.json)"
 fi
+
+fail=()
+
+_tools/flutter_run.sh analyze || fail+=('analyze')
+
+_tools/flutter_run.sh format -n --set-exit-if-changed $(find . -name "*.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" | xargs) || fail+=('format')
+
+if [[ ${fail[@]} ]]; then
+  echo "Errors: $fail"
+  exit 1
+fi
+
