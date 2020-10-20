@@ -92,8 +92,7 @@ class _GroupEditState extends State<GroupEdit> {
       widget.group.customIcon = null;
       widget.group.icon.set(predefined);
     }, custom: (custom) {
-      // TODO support changing to a custom icon.
-      throw StateError('not yet supported.');
+      widget.group.customIcon = custom;
     });
   }
 
@@ -111,6 +110,7 @@ class _GroupEditState extends State<GroupEdit> {
               initialValue: SelectedIcon.fromObject(widget.group),
               onSaved: _saveIcon,
               onChanged: _saveIcon,
+              kdbxFile: widget.group.file,
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(

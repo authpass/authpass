@@ -28,9 +28,9 @@ class GroupViewModel {
 
   bool get isRoot => group.parent == null;
 
-  IconData get icon => isRoot
-      ? kdbxBloc.fileForKdbxFile(file).fileSource.displayIcon.iconData
-      : PredefinedIcons.iconForGroup(group.icon.get());
+  IconData get icon => group.icon.get() != null
+      ? PredefinedIcons.iconForGroup(group.icon.get())
+      : kdbxBloc.fileForKdbxFile(file).fileSource.displayIcon.iconData;
 
   String get name =>
       (isRoot ? file.body.meta.databaseName.get() : group.name.get())
@@ -187,9 +187,9 @@ class _GroupViewModel {
 
   bool get isRoot => group.parent == null;
 
-  IconData get icon => isRoot
-      ? file.fileSource.displayIcon.iconData
-      : PredefinedIcons.iconForGroup(group.icon.get());
+  IconData get icon => group.icon.get() != null
+      ? PredefinedIcons.iconForGroup(group.icon.get())
+      : file.fileSource.displayIcon.iconData;
 
   String get name =>
       (isRoot ? file.kdbxFile.body.meta.databaseName.get() : group.name.get())
@@ -795,11 +795,17 @@ class GroupListTile extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: ThemeUtil.iconColor(theme, group.color)))),
             ...?_buildSelectWidget(),
-            Icon(
-              group.icon,
-              size: 24,
-              color: ThemeUtil.iconColor(theme, group.color),
-            ),
+            group.group.customIcon?.let((customIcon) => Image.memory(
+                      customIcon.data,
+                      width: 24,
+                      height: 24,
+                      fit: BoxFit.contain,
+                    )) ??
+                Icon(
+                  group.icon,
+                  color: ThemeUtil.iconColor(theme, group.color),
+                  size: 24,
+                ),
             const SizedBox(width: 16),
             Expanded(
               child: Align(

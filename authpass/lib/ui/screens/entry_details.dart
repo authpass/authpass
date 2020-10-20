@@ -74,6 +74,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
         KdbxObjectSavableStateMixin<EntryDetailsScreen> {
   @override
   KdbxFile get file => widget.entry.file;
+
   @override
   Changeable get kdbxObject => widget.entry;
   @override
@@ -174,10 +175,14 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
     on State<T>, TaskStateMixin<T>, StreamSubscriberMixin<T> {
   GlobalKey<FormState> get formKey;
+
   KdbxFile get file;
+
   bool _isObjectDirty = false;
+
   bool get isDirty => _isObjectDirty || isFormDirty;
   bool isFormDirty = false;
+
   Changeable get kdbxObject;
 
   @override
@@ -418,10 +423,10 @@ class _EntryDetailsState extends State<EntryDetails>
                           entry.customIcon = null;
                           entry.icon.set(predefined);
                         }, custom: (custom) {
-                          // TODO support changing to a custom icon.
-                          throw StateError('not yet supported.');
+                          entry.customIcon = custom;
                         });
                       },
+                      kdbxFile: entry.file,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -933,6 +938,7 @@ enum EntryAction {
 
 abstract class FieldDelegate {
   Future<void> generatePassword();
+
   Future<void> openUrl();
 }
 
@@ -946,6 +952,7 @@ class _EntryFieldState extends State<EntryField>
   CommonFields _commonFields;
 
   StringValue get _fieldValue => widget.entry.getString(widget.fieldKey);
+
   set _fieldValue(StringValue value) {
     widget.entry.setString(widget.fieldKey, value);
   }
@@ -953,6 +960,7 @@ class _EntryFieldState extends State<EntryField>
   bool get _isProtected => _fieldValue == null
       ? widget.commonField?.protect == true
       : _fieldValue is ProtectedValue;
+
   String get _valueCurrent =>
       (_isValueObscured
           ? widget.entry.getString(widget.fieldKey)?.getText()
