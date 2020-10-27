@@ -1,16 +1,16 @@
-<p>Easily and securely keep track of all your Passwords!</p>
+<p>Salve todas as suas senhas com facilidade e segurança!</p>
 
-<p>AuthPass is a stand alone password manager with support for the popular and proven Keepass (kdbx) format. 
-Store your passwords, share across all your devices and easily find them whenever you need to login.</p>
+<p>O AuthPass é um gerenciador de senhas independente com suporte ao formato do popular programa Keepass (kdbx). 
+Armazene suas senhas, compartilhe em todos os seus dispositivos e encontre-as facilmente sempre que você precisar fazer o login.</p>
 
 <ul>
-<li>All your passwords in one place.<li>
-<li>Generate secure random passwords for each of your accounts.</li>
-<li>Quick Unlock secured with biometric lock (android only right now)</li>
-<li>Keep track of your accounts across the web.</li>
-<li>App available for Mac, iOS, Android, Linux and Windows.</li>
-<li>Open Source available on https://github.com/authpass/authpass/</li>
-<li>Contributions welcome and encouraged ;-) (Always looking for developers, translators, documentation writers, UI designer, etcc. :) ), just join our discord channel.</li>
+<li>Todas as suas senhas em um só lugar.<li>
+<li>Gere senhas aleatórias seguras para cada uma das suas contas.</li>
+<li>Desbloqueio Rápido protegido com bloqueio de dados biométricos (somente Android por enquanto)</li>
+<li>Mantenha o controle de suas contas na web.</li>
+<li>App disponível para Mac, iOS, Android, Linux e Windows.</li>
+<li>Open Source disponível em https://github.com/authpass/authpass/</li>
+<li>Contribuições são bem vindas e encorajadas ;-) (Sempre procurando desenvolvedores, tradutores, escritores de documentação, UI Designer, etc. :) ), só entrar no nosso canal de discord.</li>
 </ul>
 
-<p>Join our discord channel at https://authpass.app/go/discord - In case of any Problems, Feedback, etc. or just to hang out.</p>
+<p>Entre em nosso canal de discord em https://authpass.app/go/discord - Em caso de quaisquer Problemas, Feedback, etc. ou apenas para curtir.</p>

@@ -31,10 +31,10 @@ Siccome è un progetto Open Source (Software Libero, aperto a tutti), AuthPass n
 Quest'app è Open Source, sempre in costante evoluzione, al passo coi tempi e con ancora più funzioni in futuro. Manca qualcosa nell'app? scrivici una Email oppure richiedi nel <a href=""https://github.com/authpass/authpass/issues/"">issue tracker</a> su https://github.com/authpass/authpass/issues/
 
 Cosa aspetti? unisciti alla community nel <a href=""https://authpass.app/go/discord"">Server Discord!</a> tramite: https://authpass.app/go/discord","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
+"playstore_title","AuthPass - Password Manager","Google Play Title","50",""
 "playstore_short_description","Tieni le tue Password al sicuro su tutte le piattaforme e dispositivi.","Short description in play store.","80",""
 "apple-appstore-title","AuthPass - Password Manager","","30",""
 "apple-appstore-subtitle","Le tue Password, Ovunque.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
-"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+"apple-appstore-keywords","Password Manager, Password, Manage, Keystore, Keysafe,Keepass,Kdbx,webdav,icloud,nextcloud,onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 

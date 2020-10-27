@@ -48,6 +48,14 @@
     "@hebrew": {
         "description": "Language switcher subtitle"
     },
+    "italian": "italiano",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Cinese Semplificato",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleziona il File KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -193,6 +201,10 @@
     "@characterSetNumeric": {
         "context": "Password generator"
     },
+    "characterSetUmlauts": "Accenti (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
     "characterSetSpecial": "Speciali (@%+)",
     "@characterSetSpecial": {
         "context": "Password generator"
@@ -325,6 +337,125 @@
         "description": "",
         "context": "credential screen"
     },
+    "errorOpenFileAlreadyOpenTitle": "File già aperto",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorUnlockFileTitle": "Impossibile aprire il File",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "dialogContinue": "Continua",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Segnala Errori/Aiuto",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterSelectAll": "Seleziona tutto",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Deseleziona tutto",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Crea Un Sottogruppo",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Modifica",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Elimina",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Gruppo eliminato.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Annulla",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Salva",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "initialNewGroupName": "Crea Gruppo",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Impossibile eliminare il gruppo",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Questo gruppo contiene ancora altri gruppi. Al momento puoi eliminare solo gruppi vuoti.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Questo gruppo contiene delle password. Al momento puoi eliminare solo gruppi vuoti.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Gruppi",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Filtra per gruppi",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlockSubtitle": "Rimuovi la Master Password salvata",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "diacOptIn": "Attiva per News e Sondaggi In-App.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Periodicamente verrà inviata una richiesta alla rete per recuperare notizie.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "Autocompletamento: Abilita il debug",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Mostra informazioni in sovrimpressione per ogni campo",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Crea un Nuovo Database",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Dai un Nome al tuo Database",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "Inserisci un nome per il tuo nuovo database.",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "Inserisci una Master Password. ASSICURATI DI RICORDARLA.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Master Password",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "Inserisci una password sicura che puoi ricordarti.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "Crea Un Database",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
     "databaseExistsError": "Il File è già Esistente",
     "@databaseExistsError": {
         "description": "dialog title for error message when creating a new database with a name which already exists."
@@ -377,6 +508,15 @@
     "@entryInfoLastModified": {
         "description": ""
     },
+    "movedEntryToGroup": "Elemento spostato in {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
     "sizeBytes": "{count} byte",
     "@sizeBytes": {
         "description": "",
@@ -403,8 +543,16 @@
     "@entryCustomField": {
         "description": ""
     },
+    "entryCustomFieldTitle": "Aggiungi un campo personalizzato",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
     "entryCustomFieldInputLabel": "Inserisci un nome per il campo",
     "@entryCustomFieldInputLabel": {
+        "description": ""
+    },
+    "swipeCopyField": "Copia",
+    "@swipeCopyField": {
         "description": ""
     },
     "fieldRename": "Rinomina",
@@ -421,6 +569,10 @@
     },
     "onboardingBackToOnboarding": "Tour",
     "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "Rivivi i primi passi 😅️",
+    "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },
     "onboardingHeadline": "Rendi sicure le tue Password!",

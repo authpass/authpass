@@ -20,6 +20,46 @@
     "@german": {
         "description": "language switcher subtitle"
     },
+    "russian": "Russisch",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Ukrainisch",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Litauisch",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Französisch",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Spanisch",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "Indonesisch",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "Türkisch",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Hebräisch",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "Italienisch",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Vereinfachtes Chinesisch",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Wähle eine KeePass Datei",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -589,6 +629,16 @@
             }
         }
     },
+    "sizeBytes": "{count} Bytes",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "bytes": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
     "entryAddAttachment": "Anhang anfügen",
     "@entryAddAttachment": {
         "description": ""
@@ -633,9 +683,17 @@
     "@fieldUnprotect": {
         "description": ""
     },
+    "fieldPresent": "Präsentieren",
+    "@fieldPresent": {
+        "description": ""
+    },
     "fieldGenerateEmail": "Email generieren",
     "@fieldGenerateEmail": {
         "description": ""
+    },
+    "onboardingBackToOnboarding": "Führung",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
     },
     "onboardingBackToOnboardingSubtitle": "App tour neu erleben 😅️",
     "@onboardingBackToOnboardingSubtitle": {
@@ -656,6 +714,27 @@
     "onboardingNoCreate": "Ich bin neu. Lass uns loslegen!",
     "@onboardingNoCreate": {
         "description": ""
+    },
+    "backupButton": "IN DER CLOUD SPEICHERN",
+    "@backupButton": {
+        "description": "Button that is displayed in backup warnings"
+    },
+    "backupWarningMessage": "Ihre Passwörter in {databasename} sind nur lokal gespeichert!",
+    "@backupWarningMessage": {
+        "description": "Warning message that is displayed in backup warnings",
+        "placeholders": {
+            "databasename": {
+                "example": "PasswordDatabase"
+            }
+        }
+    },
+    "saveAs": "Speichern in...",
+    "@saveAs": {
+        "description": "Save as text"
+    },
+    "saving": "Speichere",
+    "@saving": {
+        "description": "Saving text"
     },
     "unexpectedError": "Unerwarteter Fehler: {error}",
     "@unexpectedError": {

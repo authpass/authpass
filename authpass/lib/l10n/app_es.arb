@@ -56,6 +56,10 @@
     "@italian": {
         "description": "Language switcher subtitle"
     },
+    "chineseSimplified": "Chino simplificado",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
