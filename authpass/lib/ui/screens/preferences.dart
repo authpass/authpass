@@ -116,6 +116,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
       LocaleInfo('he', 'עִבְרִית', loc.hebrew),
       LocaleInfo('it', 'Italiano', loc.italian),
       LocaleInfo('zh', 'Chinese Simplified', loc.chineseSimplified),
+      LocaleInfo('zh_TW', 'Chinese Traditional', loc.chineseTraditional),
+      LocaleInfo('pt_BR', 'Portuguese, Brazilian', loc.portugueseBrazilian),
     ];
     final locales =
         Map.fromEntries(localeInfo.map((e) => MapEntry(e.locale, e)));
