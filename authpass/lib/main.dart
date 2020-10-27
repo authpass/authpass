@@ -385,8 +385,16 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   }
 
   // TODO maybe support more than language code?
-  Locale _parseLocale(String localeString) =>
-      localeString == null ? null : Locale(localeString);
+  Locale _parseLocale(String localeString) {
+    if (localeString == null) {
+      return null;
+    }
+    final parts = localeString.split('_');
+    if (parts.length == 1) {
+      return Locale(parts[0]);
+    }
+    return Locale(parts[0], parts[1]);
+  }
 
   ThemeMode _toThemeMode(AppDataTheme theme) {
     if (theme == null) {
