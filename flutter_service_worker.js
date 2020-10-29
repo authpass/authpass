@@ -28,10 +28,10 @@ const RESOURCES = {
 "assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "5a37ae808cf9f652198acde612b5328d",
 "assets/AssetManifest.json": "88f6beeb8b499b276e680e9db8bd4172",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"main.dart.js": "b12d666c963af37ad83c7ea67b4780ed",
+"main.dart.js": "dbf54de87502b507337b57a9169c8716",
 "version.json": "049f3d93d88ff96aae80118eb3218b9e",
-"index.html": "08b42d5e896ab4b8a34da26dbfd41e96",
-"/": "08b42d5e896ab4b8a34da26dbfd41e96",
+"index.html": "201d92be6ebd551bb7b2928384165ddd",
+"/": "201d92be6ebd551bb7b2928384165ddd",
 "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de"
 };
