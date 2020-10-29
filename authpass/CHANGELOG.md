@@ -1,6 +1,8 @@
 # 1.7.11 - unreleased
 
 * Allow changing of custom icons #157 (thanks @PatrikKoscelansky)
+* Added Traditional Chinese (thanks Bob Chao)
+* Added Brazilian Portuguese (thanks igorruckert)
 
 # 1.7.10 - 2020-10-19
 
