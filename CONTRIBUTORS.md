@@ -15,7 +15,7 @@ Big thanks to all contributors. Let me know if I forgot someone.
 * Tomurisk: Translations 🇱🇹 [![TWTR][]](https://twitter.com/Tomurisk)
 * OliBug: Translations 🇫🇷️
 * Maximiliano Olaz: Translations 🇪🇸️ [![GH][]](https://github.com/Rahabhim) [![TWTR][]](https://twitter.com/Rahab) ‖ [IG](https://www.instagram.com/maxiolaz/) ‖ [LI](https://www.linkedin.com/in/maximiliano-olaz-bondarczuk-41773a93/)
-* Bob Chao: Translations 🇹🇼
+* Po-chiang (Bob) Chao: Translations 🇹🇼 [![GH][]](https://github.com/bobchao)
 * igorruckert: Translations 🇧🇷
 
 # Thanks
