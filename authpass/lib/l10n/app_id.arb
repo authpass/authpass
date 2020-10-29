@@ -217,21 +217,6 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural,one {Satu file Tersimpan: {files}}other {{numFiles} file tersimpan: {files}}}",
-    "@savedFiles": {
-        "description": "Message displayed when files were saved. (One or more).",
-        "context": "Password list",
-        "placeholders": {
-            "numFiles": {
-                "description": "Number of files that have been saved (at least 1)",
-                "type": "int",
-                "format": "compactLong"
-            },
-            "files": {
-                "description": "Comma separated list of vault names."
-            }
-        }
-    },
     "manageGroups": "Kelola Grup",
     "@manageGroups": {
         "description": ""

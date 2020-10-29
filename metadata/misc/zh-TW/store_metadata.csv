@@ -1,8 +1,76 @@
-"playstore_full_description","","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
-"playstore_short_description","","Short description in play store.","80",""
-"apple-appstore-title","","","30",""
-"apple-appstore-subtitle","","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
-"apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
-"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+"playstore_full_description","記錄所有的密碼，輕鬆寫意！
+
+AuthPass 支援知名密碼檔格式 <strong>KeePass</strong> （kdbx 3.x 與 kdbx 4.x 🎉️），是社群獨立開發的密碼管理工具。 
+儲存密碼、輕鬆搜尋、<strong>跨機取用</strong>，任何需要登入的地方，都少不了他。
+
+🗄 將所有密碼都存進來
+🧬 為帳號隨機建立安全的密碼
+🔐 以生物辨識快速解鎖
+🔍 記錄網路上使用的帳號
+🖥 支援 Mac、iPhone、iPad、Android 手機與平板、Linux 及 Windows
+📂 同時開啟多個密碼資料庫（例：個人的、公事的、同事共用的…）
+🤓 開放原始碼： https://github.com/authpass/authpass/
+✍ 自動填入密碼（Android 9 以上，自動填寫瀏覽器表單僅 Android 10 以上支援）
+🔦 深色模式 😎️
+
+
+<strong>=== 一手掌握 ===</strong>
+AuthPass 如您所需，把所有密碼以 KeePass 開放格式儲存。它不會傳輸任何密碼到我們的主機，但您可以選擇存到
+
+✅️ 所有 Android 提供的本機位置
+✅️ 內建整合 Google Drive
+✅️ 內建整合 Dropbox
+✅️ 內建整合 WebDAV，可以用以存放到您自營的 NextCloud 或 OwnCloud 等服務
+✅️ 內建整合 Microsoft OneDrive
+
+<b>=== 全功能、無廣告、免訂購 ===</b>
+這是開放源碼的專案，不刻意設下任何限制、沒有廣告、毋須付費。
+
+<strong>歡迎大家協助補綴！</strong>無限期徵求開發、翻譯、介面設計、文件寫手等等，<a href=""https://authpass.app/go/discord"">請加入我們的 Discord 頻道</a>。
+
+<b>=== 銳意製作中 🛠️ ===</b>
+這是個持續開發、經常加上新功能的開放原始碼專案，歡迎利用電子郵件或 <a href=""https://github.com/authpass/authpass/issues/"">問題追蹤系統</a> （https://github.com/authpass/authpass/issues/）提供任何建議。
+
+也請加入我們的 <a href=""https://authpass.app/go/discord"">Discord 頻道</a>（https://authpass.app/go/discord）
+","Google Play Store description","4000",""
+"playstore_title","AuthPass – 支援 KeePass 格式的密碼管理工具","Google Play Title","50",""
+"playstore_short_description","安全地在所有設備上隨處使用、儲存密碼。","Short description in play store.","80",""
+"apple-appstore-title","AuthPass – 密碼管理工具","","30",""
+"apple-appstore-subtitle","一份密碼、多機共取","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
+"apple-appstore-description","記錄所有的密碼，輕鬆寫意！
+
+AuthPass 支援知名密碼檔格式 KeePass，是社群獨立開發的密碼管理工具。 儲存密碼、輕鬆搜尋、跨機取用，任何需要登入的地方，都少不了他。
+
+• 將所有密碼都存進來
+• 為帳號隨機建立安全的密碼
+• 以生物辨識快速解鎖
+• 記錄網路上使用的帳號
+• 支援許多系統，包括 Mac、iPhone、iPad 等
+• 同時開啟多個密碼資料庫（例：個人的、公事的、同事共用的…）
+• 儲存隨時間變化的 OTP 一次性密碼（用於雙因素驗證）
+• 附加各式檔案到密碼資料中
+• 開放原始碼： https://github.com/authpass/authpass/
+• 深色模式
+
+
+=== 一手掌握 ===
+AuthPass 如您所需，把所有密碼以 KeePass 開放格式儲存。它不會傳輸任何密碼到我們的主機，但您可以選擇存到
+
+• 所有本機可用的檔案空間，包括 iCloud
+• 內建整合 Google Drive
+• 內建整合 Dropbox
+• 內建整合 WebDAV，可以用以存放到您自營的 NextCloud 或 OwnCloud 等服務
+• 內建整合 Microsoft OneDrive
+
+=== 全功能、無廣告、免訂購 ===
+這是開放源碼的專案，不刻意設下任何限制、沒有廣告、毋須付費。
+
+歡迎大家協助補綴！無限期徵求開發、翻譯、介面設計、文件寫手等等，請加入我們的 Discord 頻道。
+
+=== 銳意製作中 ===
+這是個持續開發、經常加上新功能的開放原始碼專案，歡迎利用電子郵件或問題追蹤系統提供任何建議。 https://github.com/authpass/authpass/issues/
+
+加入我們的 Discord 頻道 https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
+"apple-appstore-keywords","Passwords, Manage, Keystore, Keysafe,Keepass,Kdbx,webdav,icloud,nextcloud,onedrive,密碼","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 

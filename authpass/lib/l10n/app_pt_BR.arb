@@ -1,5 +1,5 @@
 {
-    "@@locale": "pt_BR",
+    "@@locale": "pt",
     "fieldUserName": "Usuário",
     "@fieldUserName": {},
     "fieldPassword": "Senha",
@@ -58,6 +58,14 @@
     },
     "chineseSimplified": "Chinês Simplificado",
     "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "Chinês Tradicional",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Português (Brasil)",
+    "@portugueseBrazilian": {
         "description": "Language switcher subtitle"
     },
     "selectKeepassFile": "AuthPass - Selecionar Arquivo do KeePass",
@@ -266,7 +274,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, one {Um arquivo salvo: {files}} other {{numFiles} arquivos salvos: {files}}}",
+    "savedFiles": "{numFiles, plural, one {} =1 {Um arquivo salvo: {files}} other {{numFiles} arquivos salvos: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",
@@ -646,6 +654,14 @@
     "entryAttachmentSizeWarning": "Arquivos anexados serão incorporados no arquivo de senha. Isto pode aumentar significativamente o tempo necessário para abrir/salvar senhas.",
     "@entryAttachmentSizeWarning": {
         "description": ""
+    },
+    "iconPngSizeWarning": "Ícones personalizados serão incorporados no arquivo de senha. Isto pode aumentar significativamente o tempo necessário para abrir/salvar senhas.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "O arquivo escolhido não é um PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
     },
     "entryAddField": "Adicionar Campo",
     "@entryAddField": {

@@ -226,21 +226,6 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, one {保存了一个文件： {files}} other {{numFiles} 已保存文件： {files}}}",
-    "@savedFiles": {
-        "description": "Message displayed when files were saved. (One or more).",
-        "context": "Password list",
-        "placeholders": {
-            "numFiles": {
-                "description": "Number of files that have been saved (at least 1)",
-                "type": "int",
-                "format": "compactLong"
-            },
-            "files": {
-                "description": "Comma separated list of vault names."
-            }
-        }
-    },
     "manageGroups": "分组管理",
     "@manageGroups": {
         "description": ""

@@ -266,21 +266,6 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, one {Un archivo guardado: {files}} other {{numFiles} archivos guardados: {files}}}",
-    "@savedFiles": {
-        "description": "Message displayed when files were saved. (One or more).",
-        "context": "Password list",
-        "placeholders": {
-            "numFiles": {
-                "description": "Number of files that have been saved (at least 1)",
-                "type": "int",
-                "format": "compactLong"
-            },
-            "files": {
-                "description": "Comma separated list of vault names."
-            }
-        }
-    },
     "manageGroups": "Gestionar Grupos",
     "@manageGroups": {
         "description": ""

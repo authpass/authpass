@@ -1,12 +1,12 @@
-<p>紀錄所有的密碼，輕鬆寫意！</p>
+<p>記錄所有的密碼，輕鬆寫意！</p>
 
-<p>AuthPass 支援知名、密碼檔格式 Keepass （kdbx），是社群獨立開發的密碼管理工具。 
+<p>AuthPass 支援知名密碼檔格式 Keepass （kdbx），是社群獨立開發的密碼管理工具。 
 儲存密碼、輕鬆搜尋、跨機分享，任何需要登入的地方，都少不了他。</p>
 
 <ul>
 <li>將所有密碼都存進來。<li>
 <li>為帳號隨機建立安全的密碼。</li>
-<li>以生物辨識快速解鎖（目前僅支援 Android）</li>
+<li>以生物辨識快速解鎖</li>
 <li>在網路上追蹤使用的帳號。</li>
 <li>支援 macOS、iOS、Android、Linux 及 Windows。</li>
 <li>開放原始碼： https://github.com/authpass/authpass/</li>

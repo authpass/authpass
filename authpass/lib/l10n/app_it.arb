@@ -219,21 +219,6 @@
         "description": "Label for custom length field",
         "context": "Password generator"
     },
-    "savedFiles": "{numFiles, plural, one {Un file salvato: {files}} other {{numFiles} file salvati: {files}}}",
-    "@savedFiles": {
-        "description": "Message displayed when files were saved. (One or more).",
-        "context": "Password list",
-        "placeholders": {
-            "numFiles": {
-                "description": "Number of files that have been saved (at least 1)",
-                "type": "int",
-                "format": "compactLong"
-            },
-            "files": {
-                "description": "Comma separated list of vault names."
-            }
-        }
-    },
     "manageGroups": "Gestisci I Gruppi",
     "@manageGroups": {
         "description": ""
