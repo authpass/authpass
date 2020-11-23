@@ -175,6 +175,9 @@ class GoogleDriveProvider
       metadata.parents = [saveAs.parent?.id];
     }
     final byteStream = ByteStream.fromBytes(bytes);
+    _logger
+        .fine('Creating google drive entity. bytes.length: ${bytes.length} / '
+            'lengthInBytes: ${bytes.lengthInBytes}');
     final newFile = await driveApi.files
         .create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));
     return toFileSource(
