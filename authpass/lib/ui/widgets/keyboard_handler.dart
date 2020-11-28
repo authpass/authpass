@@ -175,8 +175,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
               }
             } else if (hasControlModifier &&
                 modifiers.contains(ModifierKey.shiftModifier)) {
-              _keyboardShortcutEvents._shortcutEvents.add(
-                  const KeyboardShortcut(type: KeyboardShortcutType.openUrl));
+              if (character == LogicalKeyboardKey.keyO) {
+                _keyboardShortcutEvents._shortcutEvents.add(
+                    const KeyboardShortcut(type: KeyboardShortcutType.openUrl));
+              }
             } else if (modifiers.isEmpty) {
               _logger.finer('modifiers is empty.. now check which key it is.');
               if (character == LogicalKeyboardKey.tab) {
