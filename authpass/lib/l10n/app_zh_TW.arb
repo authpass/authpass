@@ -1,5 +1,5 @@
 {
-    "@@locale": "zh_TW",
+    "@@locale": "zh",
     "fieldUserName": "帳號名稱",
     "@fieldUserName": {},
     "fieldPassword": "密碼",
@@ -92,7 +92,7 @@
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
     },
-    "loadFrom": "開啟雲端檔 {cloudStorageName}",
+    "loadFrom": "開啟雲端檔案 {cloudStorageName}",
     "@loadFrom": {
         "placeholders": {
             "cloudStorageName": {
@@ -127,9 +127,9 @@
     "@preferenceVisualDensity": {},
     "preferenceTheme": "佈景主題",
     "@preferenceTheme": {},
-    "preferenceThemeLight": "明亮",
+    "preferenceThemeLight": "淺色",
     "@preferenceThemeLight": {},
-    "preferenceThemeDark": "黑暗",
+    "preferenceThemeDark": "深色",
     "@preferenceThemeDark": {},
     "preferenceSystemDefault": "系統預設",
     "@preferenceSystemDefault": {},
@@ -153,7 +153,7 @@
     "@aboutLinkVisitWebsite": {},
     "aboutLinkGitHub": "還有開源專案",
     "@aboutLinkGitHub": {},
-    "aboutLogFile": "紀錄檔： {logFilePath}",
+    "aboutLogFile": "記錄檔： {logFilePath}",
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -201,7 +201,7 @@
     "@menuItemCheckForUpdates": {},
     "menuItemSupport": "Email 支援",
     "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "用郵件寄出紀錄檔，以尋求協助。",
+    "menuItemSupportSubtitle": "寄出記錄檔以尋求協助",
     "@menuItemSupportSubtitle": {},
     "menuItemHelp": "說明",
     "@menuItemHelp": {},
@@ -264,7 +264,7 @@
         "description": "Label for custom length field",
         "context": "Password generator"
     },
-    "customLengthHelperText": "僅在字數超過 {customMinLength} 時有用",
+    "customLengthHelperText": "僅供超過 {customMinLength} 字時使用",
     "@customLengthHelperText": {
         "description": "Help text for custom length field",
         "context": "Password generator",
@@ -301,7 +301,7 @@
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
-    "clear": "清除",
+    "clear": "清除篩選條件",
     "@clear": {
         "description": "Remove existing group filter from password list"
     },
@@ -386,7 +386,7 @@
         "description": "Credential screen to enter master password when opening kdbx file.",
         "context": "credential screen"
     },
-    "credentialLabel": "輸入密碼：",
+    "credentialLabel": "輸入密碼，開啟資料庫",
     "@credentialLabel": {
         "description": "Label for the file/database being opened",
         "context": "credential screen"
@@ -597,7 +597,7 @@
     "@preferenceDynamicLoadIcons": {
         "description": "preferences: dynamically load website icons"
     },
-    "preferenceDynamicLoadIconsSubtitle": "將產生 HTTP 連線到 {urlFieldName} 欄位指定的網站，以讀取圖網站圖示。",
+    "preferenceDynamicLoadIconsSubtitle": "將產生 HTTP 連線到 {urlFieldName} 欄位指定的網站，以讀取網站圖示。",
     "@preferenceDynamicLoadIconsSubtitle": {
         "description": "preferences: dynamically load website icons help text.",
         "placeholders": {
@@ -679,7 +679,7 @@
     "@entryCustomFieldInputLabel": {
         "description": ""
     },
-    "swipeCopyField": "複製欄位",
+    "swipeCopyField": "複製內容",
     "@swipeCopyField": {
         "description": ""
     },
@@ -699,7 +699,7 @@
     "@fieldUnprotect": {
         "description": ""
     },
-    "fieldPresent": "展示",
+    "fieldPresent": "展示 QRCode",
     "@fieldPresent": {
         "description": ""
     },
