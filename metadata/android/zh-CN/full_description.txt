@@ -1,16 +1,16 @@
-<p>Easily and securely keep track of all your Passwords!</p>
+<p>轻松和安全地记录您所有的密码 ！</p>
 
-<p>AuthPass is a stand alone password manager with support for the popular and proven Keepass (kdbx) format. 
-Store your passwords, share across all your devices and easily find them whenever you need to login.</p>
+<p>誓约 (Authpass) 是一个使用广受欢迎的 Keepass (.kdbx) 格式的独立密码管理器。 
+保存您的密码，同步到您所有的设备，并且随时随地找到您需要的密码。</p>
 
 <ul>
-<li>All your passwords in one place.<li>
-<li>Generate secure random passwords for each of your accounts.</li>
-<li>Quick Unlock secured with biometric lock (android only right now)</li>
-<li>Keep track of your accounts across the web.</li>
-<li>App available for Mac, iOS, Android, Linux and Windows.</li>
-<li>Open Source available on https://github.com/authpass/authpass/</li>
-<li>Contributions welcome and encouraged ;-) (Always looking for developers, translators, documentation writers, UI designer, etcc. :) ), just join our discord channel.</li>
+<li>您的所有密码在一个地方都有。<li>
+<li>为您的帐户生成安全的随机密码。</li>
+<li>使用生物识别来快速解锁 (目前仅安卓平台可用)。</li>
+<li>在全网同步您的帐户。</li>
+<li>应用程序可用于 Mac、 iOS、 Android、 Linux 和 Windows。</li>
+<li>开源代码在 https://github.com/authpass/authpass/</li>
+<li>欢迎和鼓励捐款；-) (我们总是需要开发者、翻译者、文档撰写者和用户界面设计者等等！ :) ), 只需加入我们的Discord频道,</li>
 </ul>
 
-<p>Join our discord channel at https://authpass.app/go/discord - In case of any Problems, Feedback, etc. or just to hang out.</p>
+<p>加入我们的Discord频道--在 https://authpasss pp/go/discord - 如果有任何问题、反馈等问题或只是悬停。</p>
