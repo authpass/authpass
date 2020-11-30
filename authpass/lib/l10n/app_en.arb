@@ -68,6 +68,10 @@
   "@portugueseBrazilian": {
     "description": "Language switcher subtitle"
   },
+  "slovak": "Slovak",
+  "@slovak": {
+    "description": "Language switcher subtitle"
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {

@@ -3,6 +3,7 @@
 * Allow changing of custom icons #157 (thanks @PatrikKoscelansky)
 * Added Traditional Chinese (thanks Bob Chao)
 * Added Brazilian Portuguese (thanks igorruckert)
+* Added Slovak (thanks @draxe)
 
 # 1.7.10 - 2020-10-19
 
