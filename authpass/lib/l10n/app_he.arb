@@ -8,11 +8,11 @@
     "@fieldWebsite": {},
     "fieldTitle": "כותרת",
     "@fieldTitle": {},
-    "fieldTotp": "סיסמה חד פעמית (מבוסס זמן)",
+    "fieldTotp": "סיסמה חד־פעמית (מבוססת זמן)",
     "@fieldTotp": {
         "description": "Label for fields of TOTP (Time based one time passwords)"
     },
-    "english": "אגלית",
+    "english": "אנגלית",
     "@english": {
         "description": "language switcher subtitle"
     },
@@ -52,31 +52,47 @@
     "@hebrew": {
         "description": "Language switcher subtitle"
     },
-    "selectKeepassFile": "AuthPass - בחר קובץ KeePass",
+    "italian": "איטלקית",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "סינית מפושטת",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "סינית מסורתית",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "פורטוגלית ברזילאית",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "selectKeepassFile": "AuthPass - בחירת קובץ KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "פתיחה מהירה של קבצים",
+    "quickUnlockingFiles": "שחרור קבצים מהיר",
     "@quickUnlockingFiles": {
         "context": "select file screen"
     },
-    "selectKeepassFileLabel": "אנא בחרו קובץ KeePass מסוג kdbx.",
+    "selectKeepassFileLabel": "נא לבחור בקובץ KeePass‏ (‎.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
     },
-    "createNewFile": "צור קובץ חדש",
+    "createNewFile": "יצירת קובץ חדש",
     "@createNewFile": {
         "description": "button on select file screen to create a new password database."
     },
-    "openLocalFile": "פתח קובץ לוקאלי",
+    "openLocalFile": "פתיחת קובץ מקומי",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
     },
-    "openFile": "פתח קובץ",
+    "openFile": "פתיחת קובץ",
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
     },
-    "loadFrom": "טען מ (cloudStorageName)",
+    "loadFrom": "לטעון מתוך {cloudStorageName}",
     "@loadFrom": {
         "placeholders": {
             "cloudStorageName": {
@@ -85,21 +101,21 @@
             }
         }
     },
-    "loadFromUrl": "הורד מ-URL",
+    "loadFromUrl": "להוריד מכתובת",
     "@loadFromUrl": {
         "description": "deprecated"
     },
-    "loadFromRemoteUrl": "פתח kdbx מ-URL",
+    "loadFromRemoteUrl": "לפתוח kdbx מכתובת",
     "@loadFromRemoteUrl": {
         "description": "Overflow menu option to load KeePass file from URL."
     },
-    "createNewKeepass": "חדש ל-KeePass? צור מאגר סיסמאות חדש",
+    "createNewKeepass": "אין לך ניסיון עם KeePass?\nכדאי ליצור מסד נתוני סיסמאות חדש",
     "@createNewKeepass": {
         "description": "deprecated"
     },
-    "labelLastOpenFiles": "קבצים שנפתחו לאחרונה:",
+    "labelLastOpenFiles": "הקבצים האחרונים שנפתחו:",
     "@labelLastOpenFiles": {},
-    "noFilesHaveBeenOpenYet": "אין אף קבצים שנפתחו עדיין.",
+    "noFilesHaveBeenOpenYet": "עדיין לא נפתחו קבצים.",
     "@noFilesHaveBeenOpenYet": {},
     "preferenceSelectLanguage": "בחר שפה",
     "@preferenceSelectLanguage": {},
@@ -109,21 +125,21 @@
     "@preferenceTextScaleFactor": {},
     "preferenceVisualDensity": "צפיפות חזותית",
     "@preferenceVisualDensity": {},
-    "preferenceTheme": "נושא",
+    "preferenceTheme": "ערכת עיצוב",
     "@preferenceTheme": {},
-    "preferenceThemeLight": "בהיר",
+    "preferenceThemeLight": "בהירה",
     "@preferenceThemeLight": {},
     "preferenceThemeDark": "כהה",
     "@preferenceThemeDark": {},
-    "preferenceSystemDefault": "ברירת מחדל של המערכת",
+    "preferenceSystemDefault": "ברירת המחדל של המערכת",
     "@preferenceSystemDefault": {},
     "preferenceDefault": "ברירת מחדל",
     "@preferenceDefault": {},
-    "lockAllFiles": "נעל את כל הקבציפ הפתוחים",
+    "lockAllFiles": "לנעול את כל הקבצים הפתוחים",
     "@lockAllFiles": {},
-    "preferenceAllowScreenshots": "אפשר צילומי מסך של הישומון",
+    "preferenceAllowScreenshots": "לאפשר לצלם את מסך היישומון",
     "@preferenceAllowScreenshots": {},
-    "preferenceEnableAutoFill": "אפשר מילוי אוטומטי",
+    "preferenceEnableAutoFill": "הפעלת מילוי אוטומטי",
     "@preferenceEnableAutoFill": {},
     "preferenceAutoFillDescription": "נתמך רק באנדרואיד אוריאו (8.0) ומעלה.",
     "@preferenceAutoFillDescription": {},
@@ -131,13 +147,13 @@
     "@preferenceTitle": {},
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
-    "aboutLinkFeedback": "אנו מברכים על כל משוב!",
+    "aboutLinkFeedback": "אנו פתוחים לכל סוג של משוב!",
     "@aboutLinkFeedback": {},
-    "aboutLinkVisitWebsite": "אנא בקרו גם באתר שלנו",
+    "aboutLinkVisitWebsite": "מזמינים אותך לבקר באתר שלנו",
     "@aboutLinkVisitWebsite": {},
-    "aboutLinkGitHub": "וגם הפרויקט הקוד פתוח",
+    "aboutLinkGitHub": "ובמיזם הקוד הפתוח",
     "@aboutLinkGitHub": {},
-    "aboutLogFile": "קובץ לוג {logFilePath}",
+    "aboutLogFile": "קובץ יומן: {logFilePath}",
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -146,11 +162,11 @@
             }
         }
     },
-    "unableToLaunchUrlTitle": "לא ניתן לפתוח את הקישור",
+    "unableToLaunchUrlTitle": "לא ניתן לפתוח את הכתובת",
     "@unableToLaunchUrlTitle": {
         "description": ""
     },
-    "unableToLaunchUrlDescription": "נכשל לפתוח {url}: {openError}",
+    "unableToLaunchUrlDescription": "הפתיחה של {url} נכשלה: {openError}",
     "@unableToLaunchUrlDescription": {
         "description": "",
         "placeholders": {
@@ -162,11 +178,11 @@
             }
         }
     },
-    "unableToLaunchUrlNoHandler": "אין ישומון מתאים ל-url.",
+    "unableToLaunchUrlNoHandler": "לא נמצא יישומון זמין לכתובת.",
     "@unableToLaunchUrlNoHandler": {
         "description": ""
     },
-    "launchedUrl": "URL שנפתח {url}",
+    "launchedUrl": "כתובת שנפתחה: {url}",
     "@launchedUrl": {
         "description": "snackbar confirmation after opening a url externally",
         "placeholders": {
@@ -175,54 +191,66 @@
             }
         }
     },
-    "menuItemGeneratePassword": "צור סיסמא",
+    "menuItemGeneratePassword": "יצירת סיסמה",
     "@menuItemGeneratePassword": {},
     "menuItemPreferences": "העדפות",
     "@menuItemPreferences": {},
-    "menuItemOpenAnotherFile": "פתח קובץ נוסף",
+    "menuItemOpenAnotherFile": "לפתוח קובץ אחר",
     "@menuItemOpenAnotherFile": {},
-    "menuItemCheckForUpdates": "בדוק עדכונים",
+    "menuItemCheckForUpdates": "לבדוק עדכונים",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "שלח מייל לתמיכה",
+    "menuItemSupport": "שליחת דוא״ל לתמיכה",
     "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "תשלח לוגים על0ידי מייל/בקש עזרה.",
+    "menuItemSupportSubtitle": "שליחת יומנים בדוא״ל/בקשת עזרה.",
     "@menuItemSupportSubtitle": {},
     "menuItemHelp": "עזרה",
     "@menuItemHelp": {},
-    "menuItemHelpSubtitle": "הצג תיעוד",
+    "menuItemHelpSubtitle": "הצגת תיעוד",
     "@menuItemHelpSubtitle": {},
-    "menuItemAbout": "אודות",
+    "menuItemAbout": "על אודות",
     "@menuItemAbout": {},
-    "actionOpenUrl": "פתח URL",
+    "actionOpenUrl": "פתיחת כתובת",
     "@actionOpenUrl": {
         "description": "tooltip for button to open URL/Website of an entry."
     },
-    "passwordPlainText": "הצג סיסמא",
+    "passwordPlainText": "חשיפת הסיסמה",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
     },
-    "generatorPassword": "סיסמא",
+    "generatorPassword": "סיסמה",
     "@generatorPassword": {
         "description": "Label for generated password"
     },
-    "generatePassword": "צור סיסמא",
+    "generatePassword": "יצירת סיסמה",
     "@generatePassword": {
         "description": "screen title for password generator"
     },
-    "doneButtonLabel": "סיים",
+    "doneButtonLabel": "בוצע",
     "@doneButtonLabel": {
         "description": "generic button label for 'Done' action."
     },
-    "useAsDefault": "תשתמש כברירת מחדל",
+    "useAsDefault": "להשתמש כברירת מחדל",
     "@useAsDefault": {
         "description": "Button Label for Password generator settings: use as defaults",
         "context": "Password generator"
     },
-    "characterSetNumeric": "ספרות(0-9)",
+    "characterSetLowerCase": "אותיות קטנות (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "אותיות גדולות (A-Z)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "ספרות (0-9)",
     "@characterSetNumeric": {
         "context": "Password generator"
     },
-    "characterSetSpecial": "מיוחד(@%+)",
+    "characterSetUmlauts": "עם נקודות דיאקריטיות (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "תווים מיוחדים (@%+)",
     "@characterSetSpecial": {
         "context": "Password generator"
     },
@@ -236,7 +264,7 @@
         "description": "Label for custom length field",
         "context": "Password generator"
     },
-    "customLengthHelperText": "בשימוש רק עבור אורך > {customMinLength}",
+    "customLengthHelperText": "משמש לאורך > {customMinLength}",
     "@customLengthHelperText": {
         "description": "Help text for custom length field",
         "context": "Password generator",
@@ -246,11 +274,26 @@
             }
         }
     },
-    "manageGroups": "נהל קבוצות",
+    "savedFiles": "{numFiles, plural, one {} two {שני קבצים נשמרו: {files}} many {{numFiles} קבצים נשמרו: {files}} =1 {קובץ אחד נשמר: {files}} other {{numFiles} קבצים נשמרו: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "ניהול קבוצות",
     "@manageGroups": {
         "description": ""
     },
-    "lockFiles": "נעל קבצים",
+    "lockFiles": "נעילת קבצים",
     "@lockFiles": {
         "description": "Close all files and return to start screen."
     },
@@ -258,7 +301,7 @@
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
-    "clear": "נקה",
+    "clear": "פינוי",
     "@clear": {
         "description": "Remove existing group filter from password list"
     },
@@ -266,11 +309,11 @@
     "@autofillFilterPrefix": {
         "description": "Label displayed for android auto fill"
     },
-    "autofillPrompt": "בחר סיסמא עבור קלט למילוי אוטומטי.",
+    "autofillPrompt": "נא לבחור רשומת סיסמה למילוי אוטומטי.",
     "@autofillPrompt": {
         "description": ""
     },
-    "copiedToClipboard": "הועתק ללוח.",
+    "copiedToClipboard": "הועתק ללוח הגזירים.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
     },
@@ -286,19 +329,19 @@
     "@filterCustomize": {
         "description": "Customize filter in password list"
     },
-    "swipeCopyPassword": "העתק סיסמא",
+    "swipeCopyPassword": "העתקת סיסמה",
     "@swipeCopyPassword": {
         "description": "swipe action in password list to copy password"
     },
-    "swipeCopyUsername": "העתק שם משתמש",
+    "swipeCopyUsername": "העתקת שם משתמש",
     "@swipeCopyUsername": {
         "description": "swipe action in password list to copy username"
     },
-    "doneCopiedPassword": "סיסמא הועתקה ללוח.",
+    "doneCopiedPassword": "הסיסמה הועתקה ללוח הגזירים.",
     "@doneCopiedPassword": {
         "description": "snackbar confirmation that password was copied."
     },
-    "doneCopiedUsername": "שם משתמש הועתק ללוח.",
+    "doneCopiedUsername": "שם המשתמש הועתק ללוח הגזירים.",
     "@doneCopiedUsername": {
         "description": "snackbar confirmation that username was copied."
     },
@@ -306,15 +349,15 @@
     "@doneCopiedField": {
         "description": ""
     },
-    "emptyPasswordVaultPlaceholder": "אין לכם עדייו סיסמא במסד הנתונים שלכם.",
+    "emptyPasswordVaultPlaceholder": "אין לך עדיין סיסמאות במסד הנתונים שלך.",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
     },
-    "emptyPasswordVaultButtonLabel": "צור את הסיסמא הראשונה שלך",
+    "emptyPasswordVaultButtonLabel": "יצירת הסיסמה הראשונה שלך",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
     },
-    "loadingFile": "טוען קובץ…",
+    "loadingFile": "הקובץ נטען…",
     "@loadingFile": {
         "description": "credential screen while unlocking file."
     },
@@ -323,7 +366,7 @@
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
     },
-    "internalFileSubtitle": "מסד נתונים נוצר מקודם עם AuthPass",
+    "internalFileSubtitle": "מסד נתונים שנוצר קודם לכן עם AuthPass",
     "@internalFileSubtitle": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
@@ -333,17 +376,17 @@
         "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
     },
-    "filePickerSubtitle": "פתח קובץ ממכשיר.",
+    "filePickerSubtitle": "פתיחת קובץ מהמכשיר.",
     "@filePickerSubtitle": {
         "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
     },
-    "credentialsAppBarTitle": "אישורים",
+    "credentialsAppBarTitle": "פרטי זהות",
     "@credentialsAppBarTitle": {
         "description": "Credential screen to enter master password when opening kdbx file.",
         "context": "credential screen"
     },
-    "credentialLabel": "הכנס את הסיסמה עבור:",
+    "credentialLabel": "נא למלא את הסיסמה עבור:",
     "@credentialLabel": {
         "description": "Label for the file/database being opened",
         "context": "credential screen"
@@ -353,23 +396,372 @@
         "description": "",
         "context": "credential screen"
     },
-    "masterPasswordEmptyValidator": "בבקשה הכנס את הסיסמה שלך.",
+    "masterPasswordEmptyValidator": "נא למלא את הסיסמה שלך.",
     "@masterPasswordEmptyValidator": {
         "description": "",
         "context": "credential screen"
     },
-    "masterPasswordIncorrectValidator": "סיסמה לא תקינה",
+    "masterPasswordIncorrectValidator": "סיסמה שגויה",
     "@masterPasswordIncorrectValidator": {
         "description": "",
         "context": "credential screen"
     },
-    "useKeyFile": "השתמש בקובץ מפתח",
+    "useKeyFile": "להשתמש בקובץ מפתח",
     "@useKeyFile": {
         "description": "label for a key file in combination with mater password",
         "context": "credential screen"
     },
-    "createDatabaseAction": "צור מסד נתונים",
+    "saveMasterPasswordBiometric": "לשמור את הססמה עם אחסון מפתחות ביומטרי?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenTitle": "הקובץ כבר פתוח",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "מסד הנתונים הנבחר {databaseName} כבר פתוח דרך {openFileSource} (ניסיתי לפתוח מתוך {newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
+    "errorUnlockFileTitle": "לא ניתן לפתוח קובץ",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "אירעה שגיאה בלתי ידועה בעת ניסיון פתיחת הקובץ. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "להמשיך",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "לשלוח דוח שגיאה/עזרה",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "groupFilterDescription": "נא לבחור אילו קבוצות תוצגנה (רקורסיבית)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "לבחור הכול",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "לבטל בחירה",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "ליצור תת־קבוצה",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "עריכה",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "מחיקה",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "נמחקה קבוצה.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "החזרה",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "שמירה",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "initialNewGroupName": "קבוצה חדשה",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "לא ניתן למחוק קבוצה",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "הקבוצה הזו עדיין מכילה קבוצות אחרות. כרגע ניתן למחוק קבוצות ריקות בלבד.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "הקבוצה הזו עדיין מכילה רשומות של ססמאות. כרגע ניתן למחוק קבוצות ריקות בלבד.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "קבוצות",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "סינון לפי קבוצות",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlock": "פינוי אחסון ביומטרי",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
+    "clearQuickUnlockSubtitle": "הסרת ססמאות הורה שמורות",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "unlock": "שחרור קבצים",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "סגירת קובצי ססמאות",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "סיסמת ההורה שנשמרה הוסרה מהאחסון הביומטרי.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "ניתן להירשם כדי לקבל חדשות וסקרים בתוך היישומון.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "יגרום לשליחת בקשות רשת מדי פעם בפעם כדי לקבל חדשות.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "מילוי אוטומטי: הפעלת ניפוי שגיאות",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "תוצג שכבת מידע מעל כל שדה פלט שהוא",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "יצירת מסד נתוני סיסמאות",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "שם מסד הנתונים החדש שלך",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "נא למלא את שם מסד הנתונים החדש שלך.",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "נא לבחור סיסמת הורה מאובטחת. חשוב לזכור אותה.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "סיסמת הורה",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "נא למלא סיסמה מאובטחת וזכירה.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "יצירת מסד נתונים",
     "@createDatabaseAction": {
         "description": "Label for button to create new database"
+    },
+    "databaseExistsError": "הקובץ קיים",
+    "@databaseExistsError": {
+        "description": "dialog title for error message when creating a new database with a name which already exists."
+    },
+    "databaseExistsErrorDescription": "אירעה שגיאה בניסיון יצירת מסד הנתונים {filePath}. הקובץ כבר קיים. נא לבחור בשם אחר.",
+    "@databaseExistsErrorDescription": {
+        "description": "dialog body for error message when creating a new database with a name which already exists.",
+        "placeholders": {
+            "filePath": {
+                "description": "file path which already existed."
+            }
+        }
+    },
+    "databaseCreateDefaultName": "סיסמאות_אישיות",
+    "@databaseCreateDefaultName": {
+        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+    },
+    "preferenceDynamicLoadIcons": "לטעון סמלים דינמית",
+    "@preferenceDynamicLoadIcons": {
+        "description": "preferences: dynamically load website icons"
+    },
+    "preferenceDynamicLoadIconsSubtitle": "יבצע בקשת http עם הערך של השדה {urlFieldName} כדי לטעון סמלים של אתרים.",
+    "@preferenceDynamicLoadIconsSubtitle": {
+        "description": "preferences: dynamically load website icons help text.",
+        "placeholders": {
+            "urlFieldName": {
+                "example": "Website"
+            }
+        }
+    },
+    "passwordScore": "חוזק: {score} מתוך 4",
+    "@passwordScore": {
+        "description": "choosing a master password - calculated password strength.",
+        "placeholders": {
+            "score": {
+                "description": "integer of the score.",
+                "example": "3"
+            }
+        }
+    },
+    "entryInfoFile": "קובץ:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "קבוצה:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "שינוי אחרון:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "movedEntryToGroup": "הרשומה הועברה לתוך {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
+    "sizeBytes": "{count} בתים",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "bytes": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
+    "entryAddAttachment": "צירוף קובץ",
+    "@entryAddAttachment": {
+        "description": ""
+    },
+    "entryAttachmentSizeWarning": "הקובץ המצורף יוטמע בקובץ הססמאות. מה שעלול להגדיל את הזמן שנדרש לפתיחת/שמירת סיסמאות.",
+    "@entryAttachmentSizeWarning": {
+        "description": ""
+    },
+    "iconPngSizeWarning": "סמלים מותאמים אישית יוטמעו בקובץ הססמאות. מה שעלול להגדיל את הזמן שנדרש לפתיחת/שמירת סיסמאות.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "הקובץ שנבחר אינו PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
+    },
+    "entryAddField": "הוספת שדה",
+    "@entryAddField": {
+        "description": ""
+    },
+    "entryCustomField": "שדה בהתאמה אישית",
+    "@entryCustomField": {
+        "description": ""
+    },
+    "entryCustomFieldTitle": "נוסף שדה בהתאמה אישית",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
+    "entryCustomFieldInputLabel": "נא למלא את שם השדה",
+    "@entryCustomFieldInputLabel": {
+        "description": ""
+    },
+    "swipeCopyField": "העתקת שדה",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "שינוי שם",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldGeneratePassword": "יצירת סיסמה…",
+    "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "הגנה על ערך",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "הסרת הגנת ערך",
+    "@fieldUnprotect": {
+        "description": ""
+    },
+    "fieldPresent": "נוכחי",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "יצירת דוא״ל",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "סיור",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "החוויה הראשונית שלך מחדש",
+    "@onboardingBackToOnboardingSubtitle": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingHeadline": "הגיע הזמן לאבטח לך את הסיסמאות!",
+    "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingQuestion": "כבר השתמשת פעם במנהל סיסמאות?",
+    "@onboardingQuestion": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "כן, לפתוח את הסיסמאות שלי",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "onboardingNoCreate": "הרגע נחתי! בואו נתחיל.",
+    "@onboardingNoCreate": {
+        "description": ""
+    },
+    "backupButton": "לשמור לענן",
+    "@backupButton": {
+        "description": "Button that is displayed in backup warnings"
+    },
+    "dismissBackupButton": "להתעלם",
+    "@dismissBackupButton": {
+        "description": "Button that is displayed in backup warnings to dismiss the warning"
+    },
+    "backupWarningMessage": "הסיסמאות שבתוך {databasename} תישמרנה מקומית בלבד!",
+    "@backupWarningMessage": {
+        "description": "Warning message that is displayed in backup warnings",
+        "placeholders": {
+            "databasename": {
+                "example": "PasswordDatabase"
+            }
+        }
+    },
+    "saveAs": "שמירה ב…",
+    "@saveAs": {
+        "description": "Save as text"
+    },
+    "saving": "נשמר",
+    "@saving": {
+        "description": "Saving text"
+    },
+    "unexpectedError": "שגיאה בלתי צפויה: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
     }
 }
