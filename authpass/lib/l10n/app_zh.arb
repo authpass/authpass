@@ -16,8 +16,56 @@
     "@english": {
         "description": "language switcher subtitle"
     },
+    "german": "德语",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "俄语",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "乌克兰语",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "立陶宛语",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "法语",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "西班牙语",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "印度尼西亚语",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "土耳其语",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "希伯来语",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "意大利语",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
     "chineseSimplified": "简体中文",
     "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "繁体中文",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "葡萄牙文（巴西）",
+    "@portugueseBrazilian": {
         "description": "Language switcher subtitle"
     },
     "selectKeepassFile": "誓约 - 打开数据库文件",
@@ -223,6 +271,21 @@
         "placeholders": {
             "customMinLength": {
                 "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural, =1 {一个文件已保存: {files}} other {{numFiles} 个已保存的文件: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
             }
         }
     },
@@ -591,6 +654,14 @@
     "entryAttachmentSizeWarning": "附件可以是任何文件，该文件将与密码文件结合。这个功能是为了方便携带与密码相关的文件，但这会大大增加打开/保存密码所需的时间。",
     "@entryAttachmentSizeWarning": {
         "description": ""
+    },
+    "iconPngSizeWarning": "自定义图标将合并入密码数据库。这会增加打开/保存密码所需的时间。",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "只支持PNG (.png) 格式",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
     },
     "entryAddField": "添加项目",
     "@entryAddField": {
