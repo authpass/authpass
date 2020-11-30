@@ -18,13 +18,22 @@ void main() {
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      streamSubscription = driver.serviceClient.onIsolateRunnable
-          .asBroadcastStream()
-          .listen((isolateRef) {
-        print(
-            'Resuming isolate: ${isolateRef.numberAsString}:${isolateRef.name}');
-        isolateRef.resume();
+      // TODO port this?
+      // streamSubscription = driver.serviceClient.onIsolateRunnable
+      //     .asBroadcastStream()
+      //     .listen((isolateRef) {
+      //   print(
+      //       'Resuming isolate: ${isolateRef.numberAsString}:${isolateRef.name}');
+      //   isolateRef.resume();
+      // });
+      /*
+      maybe something like:
+      driver.serviceClient.onIsolateEvent.asBroadcastStream().listen((event) {
+        if (event.kind == 'IsolateRunnable') {
+          // event.isolate.
+        }
       });
+       */
     });
     // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
