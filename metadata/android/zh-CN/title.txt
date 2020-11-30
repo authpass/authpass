@@ -1,1 +1,1 @@
-AuthPass - KeePass compatible Password Manager
+誓约 - 兼容KeePass的密码管理器
