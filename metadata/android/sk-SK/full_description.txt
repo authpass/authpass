@@ -1,0 +1,16 @@
+<p>Jednoducho a bezpečne majte prehľad o všetkých svojich heslách!</p>
+
+<p>AuthPass je samostatný správca hesiel s podporou populárneho a osvedčeného formátu KeePass (kdbx). 
+Ukladajte svoje heslá, zdieľajte ich na všetkých svojich zariadeniach a ľahko ich vyhľadajte, kedykoľvek sa potrebujete prihlásiť.</p>
+
+<ul>
+<li>Všetky vaše heslá na jednom mieste.<li>
+<li>Generujte bezpečné, náhodné heslá pre každý váš účet.</li>
+<li>Rychlo odomknite zamknutý obsah pomocou biometrického kľúča(iba Android zariadenia)</li>
+<li>Majte prehľad o svojich účtoch napriek internetom.</li>
+<li>Aplikácia pre Mac, iOS, Android, Linux a Windows.</li>
+<li>Aplikácia je open source, kód nájdete na https://github.com/authpass/authpass</li>
+<li>Príspevky vítané a odporúčané ;-) (Vždy hľadáme vývojárov, prekladateľov, autorov dokumentácie, dizajnérov používateľského rozhrania atď. :)), stačí sa pripojiť na náš Discord server.</li>
+</ul>
+
+<p>Pripojte sa na náš Discord server pomocou tohto link-u https://authpass.app/go/discord.</p>
