@@ -60,6 +60,14 @@
     "@chineseSimplified": {
         "description": "Language switcher subtitle"
     },
+    "chineseTraditional": "Chino Tradicional",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Portugués, Basilero",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -263,6 +271,21 @@
         "placeholders": {
             "customMinLength": {
                 "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural, =1 {Un archivo guardado: {files}} other {{numFiles} archivos guardados: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
             }
         }
     },
@@ -631,6 +654,14 @@
     "entryAttachmentSizeWarning": "Los archivos adjuntos serán incorporados en el archivo de contraseñas. Esto puede aumentar significativamente el tiempo necesario para abrir/guardar contraseñas.",
     "@entryAttachmentSizeWarning": {
         "description": ""
+    },
+    "iconPngSizeWarning": "Los iconos personalizados se incorporarán en el archivo de contraseñas. Esto puede aumentar significativamente el tiempo necesario para abrir/guardar contraseñas.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "El archivo elegido no es PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
     },
     "entryAddField": "Añadir campo",
     "@entryAddField": {
