@@ -4,6 +4,7 @@ import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
+import 'package:authpass/utils/password_entropy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -30,6 +31,7 @@ class CreateFile extends StatefulWidget {
 
 class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   static final _zxcvbn = Zxcvbn();
+  static final _calculatePasswordEntropy=PasswordEntropy();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _databaseName = TextEditingController();
@@ -37,6 +39,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   final FocusNode _passwordFocus = FocusNode();
 
   Result _strength;
+  String _passwordEntropy;
 
   @override
   void didChangeDependencies() {
@@ -96,9 +99,12 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                     setState(() {
                       if (value.isEmpty) {
                         _strength = null;
+                        _passwordEntropy = null;
                       } else {
                         _strength =
                             _zxcvbn.evaluate(value, userInputs: userInput);
+                        _passwordEntropy =
+                            _calculatePasswordEntropy.passwordEntropy(value);
                       }
                     });
                   },
@@ -111,6 +117,8 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 ),
                 const SizedBox(height: 8),
                 PasswordStrengthDisplay(strength: _strength),
+                const SizedBox(height: 8),
+                _passwordEntropy!=null?Text('Entrophy: $_passwordEntropy'):Container(),
                 const SizedBox(height: 8),
                 Text(
                   'The master password is used to securely encrypt your password database. Make sure to remember it, it can not be restored.',
