@@ -66,7 +66,7 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('Error during api call. ${snapshot.error}'),
-                RaisedButton(
+                ElevatedButton(
                   child: const Text('Retry'),
                   onPressed: () {
                     setState(() {
@@ -142,7 +142,7 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text('Error during api call. ${snapshot.error}'),
-                  RaisedButton(
+                  ElevatedButton(
                     child: const Text('Retry'),
                     onPressed: () {
                       setState(() {

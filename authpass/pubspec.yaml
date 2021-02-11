@@ -1,6 +1,6 @@
 name: authpass
 description: Password Manager with support for kdbx 3.x and 4.x
-
+publish_to: none
 version: 1.7.11+150
 
 environment:

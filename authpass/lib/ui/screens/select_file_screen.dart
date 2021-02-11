@@ -328,7 +328,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           onPressed: () async {
                             await Clipboard.setData(const ClipboardData(
                                 text: _linuxAppArmorCommand));
-                            Scaffold.of(context)
+                            ScaffoldMessenger.of(context)
                               ..hideCurrentSnackBar()
                               ..showSnackBar(
                                 SnackBar(
@@ -744,13 +744,13 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: const Text('Cancel'),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -907,7 +907,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(right: 32, left: 32),
-                child: FlatButton.icon(
+                child: TextButton.icon(
 //                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   icon: Icon(_keyFile == null
                       ? FontAwesomeIcons.folderOpen

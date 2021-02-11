@@ -37,7 +37,7 @@ class DialogUtils {
             content: Text(content),
             actions: <Widget>[
               ...?moreActions,
-              FlatButton(
+              TextButton(
                 child: Text(materialLoc.okButtonLabel),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -63,7 +63,7 @@ class DialogUtils {
       moreActions: !sendLogsSupported()
           ? null
           : [
-              FlatButton(
+              TextButton(
                 child: Text(loc.dialogSendErrorReport),
                 onPressed: () {
                   sendLogs(
@@ -147,7 +147,7 @@ class LogViewerDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         // ...?moreActions,
-        FlatButton(
+        TextButton(
           child: const Text('Ok'),
           onPressed: () {
             Navigator.of(context).pop();
@@ -203,11 +203,11 @@ class ConfirmDialog extends StatelessWidget {
       title: params.title != null ? Text(params.title) : null,
       content: Text(params.content),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(params.negativeButtonText),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(params.positiveButtonText),
         ),
@@ -392,13 +392,13 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: const Text('Cancel'),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop(_controller.text);
           },

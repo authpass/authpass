@@ -101,7 +101,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
                     msg: 'Please enter a valid email address.') +
                 SValidator.email(msg: 'Please enter a valid email address.'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: _submitCallback(),
             child: const Text('Confirm Address'),
           ),
@@ -177,7 +177,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
                       Theme.of(context).textTheme.caption.copyWith(height: 1.4),
                 ),
                 const SizedBox(height: 32),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () {
                     context
                         .read<Analytics>()

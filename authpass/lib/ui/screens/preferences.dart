@@ -458,7 +458,7 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
               ),
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
                 await SelectFileScreen.navigate(context);
               },

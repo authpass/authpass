@@ -109,7 +109,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 value: () {
                   final oldGroup = entry.parent;
                   entry.file.deleteEntry(entry);
-                  Scaffold.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Text('Deleted entry.'),
                     action: SnackBarAction(
                         label: 'Undo',
@@ -283,7 +283,7 @@ class _EntryDetailsState extends State<EntryDetails>
                 Clipboard.setData(ClipboardData(text: data));
                 if (mounted) {
                   final loc = AppLocalizations.of(context);
-                  Scaffold.of(context).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(loc.copiedToClipboard)));
                 }
                 return;
@@ -328,15 +328,15 @@ class _EntryDetailsState extends State<EntryDetails>
     }
     final entry = widget.entry.entry;
     final value = entry.getString(commonField.key);
-    Scaffold.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     if (value != null && value.getText() != null) {
       await Clipboard.setData(ClipboardData(text: value.getText()));
 //      await ClipboardManager.copyToClipBoard(value.getText());
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${commonField.displayName} copied.'),
       ));
     } else {
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${commonField.displayName} is empty.'),
       ));
     }
@@ -458,7 +458,7 @@ class _EntryDetailsState extends State<EntryDetails>
                             if (newGroup != null) {
                               final oldGroup = vm.entry.parent;
                               file.move(vm.entry, newGroup);
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(loc
                                       .movedEntryToGroup(newGroup.name.get())),
@@ -1235,7 +1235,7 @@ class _EntryFieldState extends State<EntryField>
       }
       _logger.finer('Opening url $url ($parsed)');
       if (await DialogUtils.openUrl(parsed.toString())) {
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(loc.launchedUrl(url))));
       } else {
         openError = loc.unableToLaunchUrlNoHandler;

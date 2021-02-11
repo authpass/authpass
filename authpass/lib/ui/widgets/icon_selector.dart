@@ -56,13 +56,13 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
         kdbxFile: widget.kdbxFile,
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        TextButton(
           child: const Text('Select icon'),
           onPressed: () {
             Navigator.of(context).pop(_selectorKey.currentState._selection);

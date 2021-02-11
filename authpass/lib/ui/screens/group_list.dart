@@ -133,7 +133,7 @@ class GroupList extends StatelessWidget {
                       _logger.fine('We should delete ${group.name}');
                       final oldParent = group.group.parent;
                       group.file.deleteGroup(group.group);
-                      Scaffold.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: const Text('Deleted group.'),
                           action: SnackBarAction(
@@ -426,7 +426,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
                     builder: (context) => IconButton(
                       icon: const Icon(Icons.save),
                       onPressed: () async {
-                        final scaffold = Scaffold.of(context);
+                        final scaffold = ScaffoldMessenger.of(context);
                         final savedFiles = <String>[];
                         for (final entry in kdbxBloc.openedFiles.entries) {
                           if (entry.key.supportsWrite &&
@@ -607,7 +607,7 @@ class GroupListFlatList extends StatelessWidget {
                 final oldParent = group.group.parent;
                 group.file.kdbxFile.deleteGroup(group.group);
                 analytics.events.trackGroupDelete(GroupDeleteResult.deleted);
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(loc.successfullyDeletedGroup),
                     action: SnackBarAction(

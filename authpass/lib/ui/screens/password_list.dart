@@ -552,7 +552,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                   builder: (context) => IconButton(
                     icon: const Icon(Icons.save),
                     onPressed: () async {
-                      final scaffold = Scaffold.of(context);
+                      final scaffold = ScaffoldMessenger.of(context);
                       final savedFiles = <String>[];
                       for (final entry in kdbxBloc.openedFiles.entries) {
                         if (entry.key.supportsWrite &&
@@ -802,7 +802,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
         content: Text('${_groupFilter.name}'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text(loc.clear),
             onPressed: () {
               _groupFilterNotifier.value = GroupFilter.DEFAULT_GROUP_FILTER;
@@ -1014,7 +1014,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                               text: entry.entry
                                   .getString(commonFields.userName.key)
                                   .getText()));
-                          Scaffold.of(context).showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(loc.doneCopiedUsername)));
                           context
                               .read<Analytics>()
@@ -1026,7 +1026,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                               text: entry.entry
                                   .getString(commonFields.password.key)
                                   .getText()));
-                          Scaffold.of(context).showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(loc.doneCopiedPassword)));
                           context
                               .read<Analytics>()
@@ -1274,7 +1274,7 @@ class UnsupportedWrite extends StatelessWidget {
 //                          child: const Text('Dismiss'),
 //                          onPressed: () {},
 //                        ),
-                        FlatButton(
+                        TextButton(
                           child: const Text('Save locally'),
                           onPressed: () {
                             final bloc =

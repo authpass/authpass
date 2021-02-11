@@ -138,7 +138,7 @@ class _GeneratePasswordState extends State<GeneratePassword>
               child: InkWell(
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: _password));
-                  Scaffold.of(context)
+                  ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar(reason: SnackBarClosedReason.remove)
                     ..showSnackBar(
                         SnackBar(content: Text(loc.copiedToClipboard)));

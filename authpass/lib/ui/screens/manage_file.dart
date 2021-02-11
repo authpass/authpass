@@ -211,9 +211,10 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           onPressed: asyncTaskCallback((progress) async {
                             _file.kdbxFile.upgrade(KdbxVersion.V4.major);
                             await _kdbxBloc.saveFile(_file.kdbxFile);
-                            Scaffold.of(context).showSnackBar(const SnackBar(
-                                content: Text(
-                                    'Successfully upgraded file and saved.')));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Successfully upgraded file and saved.')));
                           }),
                         )
                       : null,
@@ -221,7 +222,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                 ButtonBar(
                   // mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    FlatButton.icon(
+                    TextButton.icon(
                       icon: const Icon(Icons.refresh),
                       label: const Text('Reload'),
                       onPressed: asyncTaskCallback((progress) async {
@@ -249,7 +250,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         }
                       }),
                     ),
-                    FlatButton(
+                    TextButton(
                       child: const Text('Close/Lock'),
                       onPressed: () async {
                         await _kdbxBloc.close(_file.kdbxFile);
@@ -262,7 +263,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   ButtonBar(
                     // mainAxisSize: MainAxisSize.min,
                     children: [
-                      FlatButton(
+                      TextButton(
                         child: Text(
                             'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
                         onPressed: () async {
@@ -405,7 +406,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop(_selectedColor);
           },

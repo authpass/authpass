@@ -129,7 +129,7 @@ class _GroupEditState extends State<GroupEdit> {
                       if (newGroup != null) {
                         final oldGroup = widget.group.parent;
                         file.move(widget.group, newGroup);
-                        Scaffold.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content:
                                 Text('Moved entry into ${newGroup.name.get()}'),

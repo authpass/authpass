@@ -30,9 +30,9 @@ class PrimaryButton extends StatelessWidget {
           );
     return Theme(
       data: _createMainButtonTheme(Theme.of(context), large: large),
-      child: RaisedButton(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(elevation: 0),
 //                    color: Theme.of(context).primaryColor,
-        elevation: 0,
         child: childWidget,
         onPressed: onPressed,
       ),

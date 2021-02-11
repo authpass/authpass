@@ -21,20 +21,24 @@ class LinkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return icon == null
-        ? FlatButton(
+        ? TextButton(
             child: child,
             onPressed: onPressed,
-            textColor: theme.primaryColor,
-            padding: padding,
-            materialTapTargetSize: materialTapTargetSize,
+            style: TextButton.styleFrom(
+              primary: theme.primaryColor,
+              padding: padding,
+              tapTargetSize: materialTapTargetSize,
+            ),
           )
-        : FlatButton.icon(
+        : TextButton.icon(
             onPressed: onPressed,
             icon: icon,
             label: child,
-            textColor: theme.primaryColor,
-            padding: padding,
-            materialTapTargetSize: materialTapTargetSize,
+            style: TextButton.styleFrom(
+              primary: theme.primaryColor,
+              padding: padding,
+              tapTargetSize: materialTapTargetSize,
+            ),
           );
   }
 }

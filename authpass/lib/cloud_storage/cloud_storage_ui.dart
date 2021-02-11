@@ -363,7 +363,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              FlatButton.icon(
+              TextButton.icon(
                 onPressed: () {
                   _folderBreadcrumbs.clear();
                   _listFolder();
@@ -373,7 +373,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
               ),
               ..._folderBreadcrumbs.expand((f) => [
                     const Text('  >  '),
-                    FlatButton.icon(
+                    TextButton.icon(
                       icon: const Icon(FontAwesomeIcons.folderOpen),
                       label: Text(f.name),
                       onPressed: () {
@@ -517,12 +517,12 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
             child: const Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop();
             }),
-        FlatButton(
+        TextButton(
           child: const Text('Ok'),
           onPressed: () {
             if (_formKey.currentState.validate()) {
