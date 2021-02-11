@@ -3,37 +3,38 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "version.json": "049f3d93d88ff96aae80118eb3218b9e",
+  "main.dart.js": "aa6d301a84ecf8d65405cf5c0160984f",
+"icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
+"icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"main.dart.js": "e62eed0a7efe1219242dfb6c92698347",
-"index.html": "368002f5f84facb38958eff9133b1137",
-"/": "368002f5f84facb38958eff9133b1137",
-"favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"assets/AssetManifest.json": "88f6beeb8b499b276e680e9db8bd4172",
+"assets/NOTICES": "6076616882c64a8d0cfb65bfca7d0d87",
 "assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac",
-"assets/FontManifest.json": "4691fa422d6c4bbdf7d730d440f644f2",
-"assets/packages/open_iconic_flutter/assets/open-iconic.woff": "3cf97837524dd7445e9d1462e3c4afe2",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "5a37ae808cf9f652198acde612b5328d",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "2bca5ec802e40d3f4b60343e346cedde",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "2aa350bd2aeab88b601a593f793734c0",
-"assets/assets/fonts/jetbrains/JetBrainsMono-Regular.ttf": "e1caef645de334fee2f25834b0d03c28",
-"assets/assets/fonts/jetbrains/JetBrainsMono-Bold.ttf": "d8af470e44be6c1d2d07dee84db355f6",
+"assets/FontManifest.json": "0b24ea5adcc797f82f2d7827c3d5a53b",
+"assets/AssetManifest.json": "b49b958f0303817304faa197e403ff53",
+"assets/assets/fonts/Inter-Regular.otf": "9a9eeddb3eb9ce4f64e378a8a7b9c042",
 "assets/assets/fonts/Inter-Light.otf": "a3a9cc1541c9da02424062b5855a60ec",
 "assets/assets/fonts/Inter-Bold.otf": "753bd86618b0faefb54da21403a261bb",
-"assets/assets/fonts/Inter-Regular.otf": "9a9eeddb3eb9ce4f64e378a8a7b9c042",
 "assets/assets/fonts/Inter-Medium.otf": "8c46da0df447785681cc1dc57c1a9da9",
-"assets/assets/images/safe-empty-v2.webp": "f6b70e9bf07eb46f169d5f7573fd263d",
+"assets/assets/fonts/jetbrains/JetBrainsMono-Bold.ttf": "d8af470e44be6c1d2d07dee84db355f6",
+"assets/assets/fonts/jetbrains/JetBrainsMono-Regular.ttf": "e1caef645de334fee2f25834b0d03c28",
+"assets/assets/images/onboarding-header.webp": "7d66953934b52bf1dca2c49c5a0b64cf",
+"assets/assets/images/safe-filled-v2.webp": "b363d92ca6a9fb930a1b0085918dfe6b",
 "assets/assets/images/safe-empty.webp": "634514bcdcf32f8867539bc360861947",
+"assets/assets/images/authpass-logo-fit-512w.webp": "1be2a6113e3710ecc981f1f083004da0",
+"assets/assets/images/safe-empty-v2.webp": "f6b70e9bf07eb46f169d5f7573fd263d",
 "assets/assets/images/logo_with_text.png": "5eebe4e497f49e52a2e232701b4700af",
 "assets/assets/images/safe-filled.webp": "164f125783ea068b36bdeb70f7e3a1cd",
 "assets/assets/images/logo_icon.png": "35479aa0e7346455edd778b808b77493",
-"assets/assets/images/safe-filled-v2.webp": "b363d92ca6a9fb930a1b0085918dfe6b",
-"assets/assets/images/authpass-logo-fit-512w.webp": "1be2a6113e3710ecc981f1f083004da0",
-"assets/assets/images/onboarding-header.webp": "7d66953934b52bf1dca2c49c5a0b64cf",
-"assets/NOTICES": "fde7dcc5dcb50d629ceb01f756b06d34",
+"assets/packages/wakelock_web/assets/no_sleep.js": "7748a45cd593f33280669b29c2c8919a",
+"assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "2bca5ec802e40d3f4b60343e346cedde",
+"assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "2aa350bd2aeab88b601a593f793734c0",
+"assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "5a37ae808cf9f652198acde612b5328d",
+"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
+"version.json": "049f3d93d88ff96aae80118eb3218b9e",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
-"icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31"
+"favicon.png": "0f6bc457452337dff399ad2f7da1786a",
+"index.html": "ff96c06cae5641d3c079bd1d347ea1f6",
+"/": "ff96c06cae5641d3c079bd1d347ea1f6"
 };
 
 // The application shell files that are downloaded before a service worker can
@@ -177,7 +178,7 @@ async function downloadOffline() {
     }
     currentContent[key] = true;
   }
-  for (var resourceKey in Object.keys(RESOURCES)) {
+  for (var resourceKey of Object.keys(RESOURCES)) {
     if (!currentContent[resourceKey]) {
       resources.push(resourceKey);
     }
