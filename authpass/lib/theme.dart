@@ -137,6 +137,7 @@ ThemeData createTheme() {
 ThemeData createDarkTheme() {
   final colorScheme = ColorScheme.dark(
     primary: AuthPassTheme.primaryColor,
+    onPrimary: Colors.white,
     secondary: AuthPassTheme.primarySwatch[300],
     secondaryVariant: AuthPassTheme.primarySwatch[500],
   );
