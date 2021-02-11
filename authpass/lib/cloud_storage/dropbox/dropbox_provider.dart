@@ -92,8 +92,8 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final params = Map<String, String>.from(
         authUrl.queryParameters); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
-    final code = await oAuthTokenPrompt(
-        prompt as PromptUserForCode<dynamic, dynamic>, url.toString());
+    final code =
+        await oAuthTokenPrompt(prompt as PromptUserForCode, url.toString());
     if (code == null) {
       _logger.warning('User cancelled authorization. (did not provide code)');
       return null;

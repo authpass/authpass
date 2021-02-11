@@ -62,7 +62,7 @@ class SelectFileScreen extends StatelessWidget {
         ),
       );
   static Future<void> navigate(BuildContext context) =>
-      Navigator.of(context, rootNavigator: true, nullOk: true)
+      Navigator.of(context, rootNavigator: true)
           .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
 
   final bool skipQuickUnlock;

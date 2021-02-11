@@ -45,8 +45,8 @@ dependencies:
   http: ^0.12.2
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.0.1
-  intl: ^0.16.1
-  path: ^1.7.0
+  intl: ^0.17.0-nullsafety.1
+  path: ^1.8.0-nullsafety.3
   isolate: ^2.0.3
 #  clipboard_manager: ^0.0.4
 
@@ -204,6 +204,9 @@ dependency_overrides:
   # but blocked by e.g flutter_cache_manager
   file: ^6.0.0-nullsafety.1
   process: ^4.0.0-nullsafety.1
+  path: ^1.8.0
+  intl: ^0.17.0
+  clock: ^1.1.0
 
 
 #  openapi_base:
