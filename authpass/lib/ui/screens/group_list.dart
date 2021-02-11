@@ -410,7 +410,11 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: Icon(
+            Icons.close,
+            semanticLabel: loc.close,
+          ),
+          tooltip: loc.close,
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -424,7 +428,11 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
               : [
                   Builder(
                     builder: (context) => IconButton(
-                      icon: const Icon(Icons.save),
+                      icon: Icon(
+                        Icons.save,
+                        semanticLabel: loc.saveButtonLabel,
+                      ),
+                      tooltip: loc.saveButtonLabel,
                       onPressed: () async {
                         final scaffold = ScaffoldMessenger.of(context);
                         final savedFiles = <String>[];
@@ -448,7 +456,10 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
           ...?widget.groupListMode.isSelection
               ? [
                   IconButton(
-                    icon: const Icon(Icons.check),
+                    icon: Icon(
+                      Icons.check,
+                      semanticLabel: loc.selectItem,
+                    ),
                     onPressed: () {
                       _popResult();
                     },

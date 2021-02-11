@@ -72,6 +72,10 @@
   "@slovak": {
     "description": "Language switcher subtitle"
   },
+  "selectItem": "Select",
+  "@selectItem": {
+    "description": "semantic label for checkboxes to select item."
+  },
 
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {
@@ -318,6 +322,14 @@
   "@searchHint": {
     "description": "Placeholder in the password list search box"
   },
+  "searchButtonLabel": "Search",
+  "@searchButtonLabel": {
+    "description": "search button tooltip/semantic label"
+  },
+  "filterButtonLabel": "Filter by group",
+  "@filterButtonLabel": {
+    "description": "tooltip/semantic label for filter app bar icon."
+  },
   "clear": "Clear",
   "@clear": {
     "description": "Remove existing group filter from password list"
@@ -433,7 +445,14 @@
     "description": "Label for the checkbox to save master password for quick unlock.",
     "context": "credential screen"
   },
-
+  "close": "Close",
+  "@close": {
+    "description": "Tooltip/semantic label for close button"
+  },
+  "addNewPassword": "Add New Password",
+  "@addNewPassword": {
+    "description": "Tooltip for adding new password button (floating action button)"
+  },
   "errorOpenFileAlreadyOpenTitle": "File already open",
   "@errorOpenFileAlreadyOpenTitle": {
     "description": "Trying to open a database from a second file source which is already open.",
@@ -777,6 +796,18 @@
   "saving" : "Saving",
   "@saving" : {
     "description" : "Saving text"
+  },
+  "increaseValue": "Increase",
+  "@increaseValue": {
+    "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+  },
+  "decreaseValue": "Decrease",
+  "@decreaseValue": {
+    "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+  },
+  "resetValue": "Reset",
+  "@resetValue": {
+    "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
   },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {

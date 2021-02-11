@@ -550,7 +550,10 @@ class _PasswordListContentState extends State<PasswordListContent>
             : [
                 Builder(
                   builder: (context) => IconButton(
-                    icon: const Icon(Icons.save),
+                    icon: Icon(
+                      Icons.save,
+                      semanticLabel: loc.saveButtonLabel,
+                    ),
                     onPressed: () async {
                       final scaffold = ScaffoldMessenger.of(context);
                       final savedFiles = <String>[];
@@ -585,6 +588,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 //        ),
         PopupMenuButton<VoidCallback>(
           icon: const Icon(FontAwesomeIcons.filter),
+          tooltip: loc.filterButtonLabel,
           onSelected: (value) async {
             value();
             _logger.fine('onchanged - $value');
@@ -631,6 +635,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         ),
         IconButton(
             icon: const Icon(Icons.search),
+            tooltip: loc.searchButtonLabel,
             onPressed: () {
               setState(() {
                 _filteredEntries = _allEntries;
@@ -1081,6 +1086,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           : kdbxBloc.openedFiles.length == 1 || _groupFilter.groups.length == 1
               ? FloatingActionButton(
                   child: const Icon(Icons.add),
+                  tooltip: loc.addNewPassword,
                   onPressed: () {
                     final group = _groupFilter.groups.isEmpty
                         ? null
@@ -1095,6 +1101,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                 )
               : SpeedDial(
                   child: Icon(_speedDialOpen ? Icons.close : Icons.add),
+                  tooltip: _speedDialOpen ? '' : loc.addNewPassword,
                   onOpen: () => setState(() => _speedDialOpen = true),
                   onClose: () => setState(() => _speedDialOpen = false),
                   overlayColor: theme.brightness == Brightness.dark

@@ -360,15 +360,24 @@ class ValueSelectorTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               IconButton(
-                icon: const FaIcon(FontAwesomeIcons.minusSquare),
+                icon: FaIcon(
+                  FontAwesomeIcons.minusSquare,
+                  semanticLabel: loc.decreaseValue,
+                ),
                 onPressed: () => _updateValue(-1),
               ),
               IconButton(
-                icon: const FaIcon(FontAwesomeIcons.plusSquare),
+                icon: FaIcon(
+                  FontAwesomeIcons.plusSquare,
+                  semanticLabel: loc.increaseValue,
+                ),
                 onPressed: () => _updateValue(1),
               ),
               IconButton(
-                icon: const FaIcon(FontAwesomeIcons.times),
+                icon: FaIcon(
+                  FontAwesomeIcons.times,
+                  semanticLabel: loc.resetValue,
+                ),
                 onPressed: () => onChanged(null),
               ),
             ],
