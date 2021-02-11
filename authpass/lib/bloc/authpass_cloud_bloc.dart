@@ -14,7 +14,6 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
-import 'package:quiver/check.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:http/http.dart' as http;
@@ -142,8 +141,8 @@ class AuthPassCloudBloc with ChangeNotifier {
             _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
         // TODO: The following should only matter for old stored tokens,
         //       this can probably be removed in the next version.
-        checkNotNull(_storedToken.authToken);
-        checkNotNull(_storedToken.isConfirmed);
+        ArgumentError.checkNotNull(_storedToken.authToken);
+        ArgumentError.checkNotNull(_storedToken.isConfirmed);
       } on AuthException catch (e, stackTrace) {
         _storedToken = null;
         _logger.warning(
@@ -196,7 +195,7 @@ class AuthPassCloudBloc with ChangeNotifier {
   }
 
   Future<bool> checkConfirmed() async {
-    checkNotNull(_storedToken);
+    ArgumentError.checkNotNull(_storedToken);
     final client = await _getClient();
     final response = await client.emailStatusGet().requireSuccess();
     if (response.status == EmailStatusGetResponseBody200Status.confirmed) {
