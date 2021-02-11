@@ -1,4 +1,5 @@
 authpass/_tools/deploy-key/github-deploy-key
+authpass/_tools/secrets/AuthKey_S5PTZMY9P8.p8
 authpass/_tools/secrets/api-project-284252947431-83b019c3ca1e.json
 authpass/_tools/secrets/artifact_token.txt
 authpass/_tools/secrets/fastlane_match_certificates_id_rsa
