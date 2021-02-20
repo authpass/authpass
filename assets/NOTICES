@@ -6248,7 +6248,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 device_info
 device_info_platform_interface
 package_info
-url_launcher_platform_interface
 
 // Copyright 2017 The Chromium Authors. All rights reserved.
 //
@@ -15264,6 +15263,7 @@ path_provider_linux
 path_provider_macos
 path_provider_windows
 url_launcher
+url_launcher_platform_interface
 video_player
 video_player_platform_interface
 video_player_web
