@@ -1,3 +1,7 @@
+# 1.7.12 - unreleased
+
+* todo
+
 # 1.7.11 - 2021-02-21
 
 * Allow changing of custom icons #157 (thanks @PatrikKoscelansky)
