@@ -41,7 +41,8 @@ jobs:
         libsecret-1-dev
     - name: ci-install-deps
       run: "./authpass/_tools/ci-install-deps.sh linux"
-    - run: ~/deps/flutter/bin/flutter channel master && ~/deps/flutter/bin/flutter upgrade && ~/deps/flutter/bin/flutter config --enable-linux-desktop
+#    - run: ~/deps/flutter/bin/flutter channel master && ~/deps/flutter/bin/flutter upgrade && ~/deps/flutter/bin/flutter config --enable-linux-desktop
+    - run: ~/deps/flutter/bin/flutter config --enable-linux-desktop
     - name: build ${{ matrix.flavor }} apk
       id: buildapk
       env:

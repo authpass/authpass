@@ -29,15 +29,15 @@ elif test "${1:-}" == "windows" ; then
     fi
     popd
 
-    pushd ${DEPS}
-    git clone https://github.com/flutter/flutter.git
-    cd flutter/bin
-    ./flutter upgrade
-    ./flutter config --enable-windows-desktop
-    cd "${DEPS}/flutter/dev/tools"
-    "${DEPS}/flutter/bin/flutter" pub get
-
-    exit 0
+#    pushd ${DEPS}
+#    git clone https://github.com/flutter/flutter.git
+#    cd flutter/bin
+#    ./flutter upgrade
+#    ./flutter config --enable-windows-desktop
+#    cd "${DEPS}/flutter/dev/tools"
+#    "${DEPS}/flutter/bin/flutter" pub get
+#
+#    exit 0
 else
 #git clone https://github.com/mipmip/blackbox
     git clone https://github.com/StackExchange/blackbox
