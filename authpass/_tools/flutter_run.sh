@@ -11,7 +11,7 @@ if ! test -f "$packages" ; then
 	exit 1
 fi
 
-flutter=`cat "$packages" | grep "^flutter:" | sed "s/^flutter://" | sed "s/^file:\/\///" | sed "s/\/packages.*//"`
+flutter=`cat "$packages" | grep "^flutter:" | sed "s/^flutter://" | sed "s/^file:\/\///" | sed "s/\/packages.*//" | sed "s/\/C:\//\/c\//"`
 
 if ! [[ $flutter == "/"* ]] ; then
 	flutter="${root}/$flutter"

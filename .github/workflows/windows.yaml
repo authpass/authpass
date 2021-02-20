@@ -43,7 +43,9 @@ jobs:
       shell: bash
       env:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
-      run: ./authpass/_tools/ci-install-deps.sh windows
+      run: |
+        ./authpass/_tools/ci-install-deps.sh windows
+        ~/deps/flutter/bin/flutter config --enable-windows-desktop
     - name: build ${{ matrix.flavor }} apk
       id: buildapk
       shell: bash

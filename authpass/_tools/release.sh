@@ -121,12 +121,13 @@ case "${flavor}" in
     linux)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
         $FLT build -v ${flavor} -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor}
+        arch=x64
 
         outputfilename="authpass-${flavor}-${version}_${buildnumber}.tar.gz"
-        outputpath="build/${flavor}/release/${outputfilename}"
-        echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
-        echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
-        tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/release/bundle
+        outputpath="build/${flavor}/${arch}/release/${outputfilename}"
+        echo "${version}+${buildnumber}" > build/${flavor}/${arch}/release/version.txt
+        echo "${version}+${buildnumber}" > build/${flavor}/${arch}/release/bundle/version.txt
+        tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/x64/release/bundle
         echo "::set-output name=appversion::${version}"
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"

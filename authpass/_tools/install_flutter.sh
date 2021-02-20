@@ -33,6 +33,11 @@ case "${platform}" in
                 FLUTTER_SHA256=${FLUTTER_MACOS_SHA256}
                 FLUTTER_ARCHIVE=${FLUTTER_MACOS_ARCHIVE}
     ;;
+    MINGW*)     FLUTTER_PLATFORM=windows
+                FLUTTER_VERSION=${FLUTTER_WINDOWS_VERSION}
+                FLUTTER_SHA256=${FLUTTER_WINDOWS_SHA256}
+                FLUTTER_ARCHIVE=${FLUTTER_WINDOWS_ARCHIVE}
+    ;;
     *)          echo "Unknown platform ${platform}" ; exit 1 ;;
 esac
 
