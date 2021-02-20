@@ -1,0 +1,8 @@
+# 1.7.11
+
+* Allow changing of custom icons #157 (thanks @PatrikKoscelansky)
+* Added Traditional Chinese (thanks Bob Chao)
+* Added Brazilian Portuguese (thanks igorruckert)
+* Added Slovak (thanks @draxe)
+* Improve a couple of accessibility labels #214
+
