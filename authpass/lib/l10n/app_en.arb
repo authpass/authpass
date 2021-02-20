@@ -682,7 +682,7 @@
   "@sizeBytes": {
     "description": "",
     "placeholders": {
-      "bytes": {
+      "count": {
         "description": "file size in bytes",
         "example": "123"
       }

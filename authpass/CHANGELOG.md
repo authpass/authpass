@@ -4,6 +4,7 @@
 * Added Traditional Chinese (thanks Bob Chao)
 * Added Brazilian Portuguese (thanks igorruckert)
 * Added Slovak (thanks @draxe)
+* Improve a couple of accessibility labels #214
 
 # 1.7.10 - 2020-10-19
 
