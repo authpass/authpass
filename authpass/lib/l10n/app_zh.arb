@@ -1,5 +1,5 @@
 {
-    "@@locale": "zh_CN",
+    "@@locale": "zh",
     "fieldUserName": "请输入登录帐号",
     "@fieldUserName": {},
     "fieldPassword": "请填入密码",
