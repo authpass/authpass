@@ -1,6 +1,6 @@
 {
     "@@locale": "id",
-    "fieldUserName": "Nama Pengguna",
+    "fieldUserName": "Pengguna",
     "@fieldUserName": {},
     "fieldPassword": "Kata Sandi",
     "@fieldPassword": {},
@@ -43,6 +43,34 @@
     "indonesian": "Indonesia",
     "@indonesian": {
         "description": "language switcher subtitle"
+    },
+    "turkish": "Turki",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Ibrani",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "italia",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Cina (sederhana)",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "Cina (Tradisional)",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Portugis, Brazil",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "Sovakia",
+    "@slovak": {
+        "description": "Language switcher subtitle"
     },
     "selectKeepassFile": "AuthPass - Pilih file KeePass",
     "@selectKeepassFile": {
@@ -138,6 +166,35 @@
             }
         }
     },
+    "unableToLaunchUrlTitle": "Tidak dapat membuka alamat Url",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "unableToLaunchUrlDescription": "Tidak dapat menjalankan {url}: {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Tidak ada aplikasi yang tersedia untuk alamat url tersebut.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "URL yang dibuka: {url}",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
+    },
     "menuItemGeneratePassword": "Penghasil Kata Sandi",
     "@menuItemGeneratePassword": {},
     "menuItemPreferences": "Preferensi",
@@ -156,6 +213,10 @@
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "Tentang",
     "@menuItemAbout": {},
+    "actionOpenUrl": "Buka URL",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
     "passwordPlainText": "Ungkap Kata Sandi",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
@@ -217,6 +278,21 @@
             }
         }
     },
+    "savedFiles": "{numFiles, plural,one {Satu berkas tersimpan: {files}}other {{numFiles} berkas tersimpan: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
     "manageGroups": "Kelola Grup",
     "@manageGroups": {
         "description": ""
@@ -228,6 +304,10 @@
     "searchHint": "Cari",
     "@searchHint": {
         "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "Cari",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
     },
     "clear": "Bersihkan",
     "@clear": {
@@ -569,7 +649,7 @@
     "@sizeBytes": {
         "description": "",
         "placeholders": {
-            "bytes": {
+            "count": {
                 "description": "file size in bytes",
                 "example": "123"
             }
@@ -582,6 +662,14 @@
     "entryAttachmentSizeWarning": "File yang dilampirkan akan disematkan dalam file kata sandi. Ini dapat meningkatkan waktu yang dibutuhkan untuk membuka/menyimpan kata sandi.",
     "@entryAttachmentSizeWarning": {
         "description": ""
+    },
+    "iconPngSizeWarning": "Ikon kustom akan disematkan dalam berkas kata sandi. Ini dapat meningkatkan waktu yang dibutuhkan untuk membuka/menyimpan kata sandi.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "Berkas yang dipilih bukan sebuah berkas PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
     },
     "entryAddField": "Tambah Kolom Baru",
     "@entryAddField": {
@@ -650,6 +738,31 @@
     "onboardingNoCreate": "Saya pengguna baru, bantu saya!",
     "@onboardingNoCreate": {
         "description": ""
+    },
+    "backupButton": "SIMPAN KE CLOUD",
+    "@backupButton": {
+        "description": "Button that is displayed in backup warnings"
+    },
+    "dismissBackupButton": "ABAIKAN",
+    "@dismissBackupButton": {
+        "description": "Button that is displayed in backup warnings to dismiss the warning"
+    },
+    "backupWarningMessage": "Kata sandi Anda dalam {databasename} hanya disimpan secara lokal!",
+    "@backupWarningMessage": {
+        "description": "Warning message that is displayed in backup warnings",
+        "placeholders": {
+            "databasename": {
+                "example": "PasswordDatabase"
+            }
+        }
+    },
+    "saveAs": "Simpan Dalam...",
+    "@saveAs": {
+        "description": "Save as text"
+    },
+    "saving": "Menyimpan",
+    "@saving": {
+        "description": "Saving text"
     },
     "unexpectedError": "Kesalahan tak terduga: {error}",
     "@unexpectedError": {

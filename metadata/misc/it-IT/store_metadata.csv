@@ -1,20 +1,20 @@
 "playstore_full_description","Memorizza facilmente e in sicurezza le tue password!
 
-AuthPass è un Password Manager che supporta l'ormai popolare e sicuro formato  <strong>KeePass</strong> (kdbx 3.x AND kdbx 4.x 🎉️). Salva le tue password, <strong>accessibili da ogni tuo dispositivo</strong> e facili da trovare ogni volta che devi fare il login.
+AuthPass è un Password Manager che supporta l'ormai popolare e sicuro formato <strong>KeePass</strong> (kdbx 3.x E kdbx 4.x 🎉️). Salva le tue password, <strong>accessibili da ogni tuo dispositivo</strong> e facili da trovare ogni volta che devi fare il login.
 
 🗄 Tutte le tue password in un posto sicuro.
-🧬Genera password ad alto livello di sicurezza per ogni tuo account.
-🔐 Usa il riconoscimento facciale e impronte digitali per sbloccare rapidamente e in sicurezza (solo su Android per ora).
+🧬Genera password casuali sicure per ogni tuo account.
+🔐 Usa il riconoscimento facciale e impronte digitali per sbloccare rapidamente e in sicurezza.
 🔍 Tieni traccia di tutti i tuoi account sul web.
 🖥 App disponibile per tutte le piattaforme: Mac, iOS, Android, Linux e Windows.
 📂Apri più database contemporaneamente (es. uno per il lavoro, uno per gli account personali - puoi anche condividerli con i tuoi colleghi!).
 🤓 Software libero, codice sorgente su: https://github.com/authpass/authpass/
-✍ Auto-completamento delle password (da Android 9+, supporto solo con i browser da Android 10+).
+✍ Auto-completamento delle password (da Android 9+, supporto nei browser solo da Android 10+).
 🔦 Tema scuro.😎️
 
 
 <strong>=== MANTIENI IL CONTROLLO ===</strong>
-AuthPass salva le tue password nel formato KeePass (kdbx), famoso nell'ambiente del software libero per la sua sicurezza, esattamente dove vuoi tu. non manda le tue passowrd a nessun server, ma nel caso usufruisci di servizi cloud supporta:
+AuthPass salva le tue password nel formato KeePass (kdbx), famoso nell'ambiente del software libero per la sua sicurezza, esattamente dove vuoi tu. Le tue password non vengono inviate ai nostri server. Ma con AuthPass puoi salvarle su:
 
 ✅️ Qualsiasi provider di servizi Android
 ✅️ Google Drive
@@ -22,19 +22,59 @@ AuthPass salva le tue password nel formato KeePass (kdbx), famoso nell'ambiente 
 ✅️ WebDAV per salvare nei TUOI server NextCloud o OwnCloud (o simili)
 ✅️ Microsoft One Drive
 
-<b>=== TOP DI GAMMA, NO PUBBLICITA', NO CARTA DI CREDITO ===</b>
-Siccome è un progetto Open Source (Software Libero, aperto a tutti), AuthPass non ha alcuna restrizione, nessuna pubblicità e mai ti chiedera i dati della tua Poste Pay 😎️.
+<b>=== FUNZIONALITÀ COMPLETE, NO PUBBLICITA', NO CARTA DI CREDITO ===</b>
+Siccome è un progetto Open Source (Software Libero, aperto a tutti), AuthPass non ha alcuna restrizione, nessuna pubblicità e mai ti chiederà i dati della tua Poste Pay 😎️ (è gratuita).
 
 <strong>Volontari sono sempre ben accetti!</strong> 😅️ Abbiamo sempre bisogno di sviluppatori, traduttori, persone che scrivono la documentazione, designer per l'UI, etc. 😃 Entra nel nostro <a href=""https://authpass.app/go/discord"">server Discord!</a>.
 
 <b>=== SVILUPPO ATTIVO E COSTANTE 🛠️ ===</b>
 Quest'app è Open Source, sempre in costante evoluzione, al passo coi tempi e con ancora più funzioni in futuro. Manca qualcosa nell'app? scrivici una Email oppure richiedi nel <a href=""https://github.com/authpass/authpass/issues/"">issue tracker</a> su https://github.com/authpass/authpass/issues/
 
-Cosa aspetti? unisciti alla community nel <a href=""https://authpass.app/go/discord"">Server Discord!</a> tramite: https://authpass.app/go/discord","Google Play Store description","4000",""
-"playstore_title","AuthPass - Password Manager","Google Play Title","50",""
+Cosa aspetti? unisciti alla community nel <a href=""https://authpass.app/go/discord"">Server Discord!</a> tramite: https://authpass.app/go/discord
+","Google Play Store description","4000",""
+"playstore_title","AuthPass - Password Manager compatibile KeePass","Google Play Title","50",""
 "playstore_short_description","Tieni le tue Password al sicuro su tutte le piattaforme e dispositivi.","Short description in play store.","80",""
 "apple-appstore-title","AuthPass - Password Manager","","30",""
 "apple-appstore-subtitle","Le tue Password, Ovunque.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
-"apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
+"apple-appstore-description","Tieni traccia di tutte le tue password in modo semplice e sicuro!
+
+AuthPass è un gestore di password standalone con supporto per il popolare e collaudato formato KeePass. Memorizza le tue password, condividile su tutti i tuoi dispositivi così puoi trovarle facilmente ogni volta che hai bisogno di effettuare il login.
+
+• Tutte le tue password in un unico posto.
+• Genera password casuali sicure per ciascuno dei tuoi account.
+• Sblocco rapido protetto con blocco biometrico.
+• Tieni traccia dei tuoi account sul web.
+• App disponibile su tutte le piattaforme. Tra cui Mac, iPhone e iPad.
+• Aprire contemporaneamente più database di password contemporaneamente (ad es. uno per lavoro, uno personale - o anche condividere i database di password con i tuoi colleghi di lavoro)
+• Salva una password basata sul tempo per 2fa (Autenticazione a due fattori).
+• Allega i file binari alle voci della password. (Come TAN offline, ecc)
+• Codice sorgente disponibile su https://github. om/authpass/authpass/
+• Tema scuro ; )
+
+
+=== SOTTO IL TUO CONTRLLO ===
+
+AuthPass memorizza tutte le tue password nel formato aperto Keepass, esattamente dove vuoi. Non invia le password ai nostri server. Ma AuthPass supporta il salvataggio:
+
+• Qualsiasi fornitore di documenti locale, come iCloud.
+• Integrazione Nativa con Google Drive
+• Integrazione Nativa Dropbox
+• Supporto Nativo WebDAV da memorizzare nel tuo NextCloud o OwnCloud (o simile)
+• Integrazione Nativa di Microsoft OneDrive
+
+
+=== FUNZIONALITÀ COMPLETE, NO PUBBLICITÀ, NO ABBONAMENTI===
+
+Siccome è un progetto open source (codice libero sviluppato eticamente da volontari) non ci sono restrizioni, nessuna pubblicità e nessun obbligo di pagamento (è gratuita).
+
+I volontari sono i benvenuti :-) (Siamo sempre alla ricerca di sviluppatori, traduttori, scrittori per la documentazione, UI designer, ecc :) ), basta unirsi al nostro canale discord: https://authpass.app/go/discord.
+
+
+=== SOTTO CONTINUO SVILUPPO ===
+
+Questo è un progetto open source che è ancora in fase di intenso sviluppo per aggiungere funzionalità. Ci piacerebbe il tuo feedback via email o sul tracker dei problemi all'indirizzo: https://github.com/authpass/authpass/issues/
+
+Unisciti anche alla community nel nostro canale discord su https://authpass.app/go/discord
+","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","Password Manager, Password, Manage, Keystore, Keysafe,Keepass,Kdbx,webdav,icloud,nextcloud,onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 

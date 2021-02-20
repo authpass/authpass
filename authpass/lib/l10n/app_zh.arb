@@ -1,5 +1,5 @@
 {
-    "@@locale": "zh",
+    "@@locale": "zh_CN",
     "fieldUserName": "请输入登录帐号",
     "@fieldUserName": {},
     "fieldPassword": "请填入密码",
@@ -66,6 +66,10 @@
     },
     "portugueseBrazilian": "葡萄牙文（巴西）",
     "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "斯洛伐克语",
+    "@slovak": {
         "description": "Language switcher subtitle"
     },
     "selectKeepassFile": "誓约 - 打开数据库文件",
@@ -300,6 +304,10 @@
     "searchHint": "吾将上下而求索...",
     "@searchHint": {
         "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "吾将上下而求索...",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
     },
     "clear": "清空",
     "@clear": {
@@ -641,7 +649,7 @@
     "@sizeBytes": {
         "description": "",
         "placeholders": {
-            "bytes": {
+            "count": {
                 "description": "file size in bytes",
                 "example": "123"
             }
@@ -711,7 +719,7 @@
     "@onboardingBackToOnboarding": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingBackToOnboardingSubtitle": "我想再一次立下誓约 ~",
+    "onboardingBackToOnboardingSubtitle": "我想再一次立下誓约 ~ ( >ω･)～☆",
     "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },

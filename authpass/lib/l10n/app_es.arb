@@ -68,6 +68,10 @@
     "@portugueseBrazilian": {
         "description": "Language switcher subtitle"
     },
+    "slovak": "Eslovaco",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleccionar archivo KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -300,6 +304,10 @@
     "searchHint": "Buscar",
     "@searchHint": {
         "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "Buscar",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
     },
     "clear": "Borrar",
     "@clear": {
@@ -641,7 +649,7 @@
     "@sizeBytes": {
         "description": "",
         "placeholders": {
-            "bytes": {
+            "count": {
                 "description": "file size in bytes",
                 "example": "123"
             }

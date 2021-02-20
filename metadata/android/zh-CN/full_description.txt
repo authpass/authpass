@@ -4,13 +4,13 @@
 保存您的密码，同步到您所有的设备，并且随时随地找到您需要的密码。</p>
 
 <ul>
-<li>您的所有密码在一个地方都有。<li>
+<li>不必劳心费神记忆每一个密码！<li>
 <li>为您的帐户生成安全的随机密码。</li>
 <li>使用生物识别来快速解锁 (目前仅安卓平台可用)。</li>
 <li>在全网同步您的帐户。</li>
 <li>应用程序可用于 Mac、 iOS、 Android、 Linux 和 Windows。</li>
-<li>开源代码在 https://github.com/authpass/authpass/</li>
+<li>本程序是自由开源软件！代码发布在 https://github.com/authpass/authpass/</li>
 <li>欢迎和鼓励捐款；-) (我们总是需要开发者、翻译者、文档撰写者和用户界面设计者等等！ :) ), 只需加入我们的Discord频道,</li>
 </ul>
 
-<p>加入我们的Discord频道--在 https://authpasss pp/go/discord - 如果有任何问题、反馈等问题或只是悬停。</p>
+<p>加入我们的Discord频道--在 https://authpasss.app/go/discord - 如果您有任何问题、建议或者只是逛逛。</p>

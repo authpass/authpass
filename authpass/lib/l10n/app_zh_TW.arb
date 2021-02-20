@@ -68,6 +68,10 @@
     "@portugueseBrazilian": {
         "description": "Language switcher subtitle"
     },
+    "slovak": "斯洛伐克語",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - 選取 KeePass 格式檔",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -300,6 +304,10 @@
     "searchHint": "搜尋",
     "@searchHint": {
         "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "搜尋",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
     },
     "clear": "清除篩選條件",
     "@clear": {
@@ -641,7 +649,7 @@
     "@sizeBytes": {
         "description": "",
         "placeholders": {
-            "bytes": {
+            "count": {
                 "description": "file size in bytes",
                 "example": "123"
             }

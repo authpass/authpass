@@ -189,6 +189,10 @@
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
+    "searchButtonLabel": "Ieškoti",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
     "clear": "Valyti",
     "@clear": {
         "description": "Remove existing group filter from password list"

@@ -101,6 +101,10 @@
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
+    "searchButtonLabel": "Ara",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
     "clear": "Sil",
     "@clear": {
         "description": "Remove existing group filter from password list"

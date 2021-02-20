@@ -193,6 +193,10 @@
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
+    "searchButtonLabel": "Пошук",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
     "clear": "Очистити",
     "@clear": {
         "description": "Remove existing group filter from password list"

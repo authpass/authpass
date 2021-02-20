@@ -8,6 +8,10 @@
     "@fieldWebsite": {},
     "fieldTitle": "Nome",
     "@fieldTitle": {},
+    "fieldTotp": "Password monouso (varia nel tempo)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
     "english": "Inglese",
     "@english": {
         "description": "language switcher subtitle"
@@ -56,9 +60,25 @@
     "@chineseSimplified": {
         "description": "Language switcher subtitle"
     },
+    "chineseTraditional": "Cinese Tradizionale",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Portoghese, Brasiliano",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "Slovacco",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
     "selectKeepassFile": "AuthPass - Seleziona il File KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Sblocco rapido dei file",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
     },
     "selectKeepassFileLabel": "Seleziona un file KeePass ( .kdbx).",
     "@selectKeepassFileLabel": {
@@ -88,6 +108,10 @@
     "loadFromUrl": "Carica da URL",
     "@loadFromUrl": {
         "description": "deprecated"
+    },
+    "loadFromRemoteUrl": "Apri kdbx da URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
     },
     "createNewKeepass": "Nuovo su KeePass?\nCrea un Nuovo Database per le tue Password",
     "@createNewKeepass": {
@@ -145,6 +169,31 @@
     "unableToLaunchUrlTitle": "Impossibile aprire l'URL",
     "@unableToLaunchUrlTitle": {
         "description": ""
+    },
+    "unableToLaunchUrlDescription": "Impossibile aprire {url}: {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Nessuna applicazione disponibile per l'URL.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "URL aperto: {url}",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
     },
     "menuItemGeneratePassword": "Genera una Password",
     "@menuItemGeneratePassword": {},
@@ -219,13 +268,46 @@
         "description": "Label for custom length field",
         "context": "Password generator"
     },
+    "customLengthHelperText": "Valore utilizzato solo se la lunghezza è > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural, one {} =1 {Un file salvato: {files}} other {{numFiles} file salvati: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
     "manageGroups": "Gestisci I Gruppi",
     "@manageGroups": {
         "description": ""
     },
+    "lockFiles": "Nascondi i file",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
     "searchHint": "Cerca",
     "@searchHint": {
         "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "Cerca",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
     },
     "clear": "Rimuovi",
     "@clear": {
@@ -287,9 +369,19 @@
     "@loadingFile": {
         "description": "credential screen while unlocking file."
     },
+    "internalFile": "File interno",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
     "internalFileSubtitle": "Database creato in precedenza con AuthPass",
     "@internalFileSubtitle": {
         "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Sfoglia",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
     },
     "filePickerSubtitle": "Apri il file dal dispositivo.",
@@ -322,15 +414,45 @@
         "description": "",
         "context": "credential screen"
     },
+    "useKeyFile": "Usa file autenticazione",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Salvare la password nella memoria ad accesso biometrico?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
     "errorOpenFileAlreadyOpenTitle": "File già aperto",
     "@errorOpenFileAlreadyOpenTitle": {
         "description": "Trying to open a database from a second file source which is already open.",
         "context": "credential screen"
     },
+    "errorOpenFileAlreadyOpenBody": "Il database selezionato {databaseName} è già aperto da {openFileSource} (Si è tentato di aprire da {newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
     "errorUnlockFileTitle": "Impossibile aprire il File",
     "@errorUnlockFileTitle": {
         "description": "generic error when opening a file (dialog title)",
         "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Errore sconosciuto durante l'apertura del file. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
     },
     "dialogContinue": "Continua",
     "@dialogContinue": {
@@ -340,6 +462,11 @@
     "@dialogSendErrorReport": {
         "description": "action button in error dialogs to send email to support with log file.",
         "context": "error dialog"
+    },
+    "groupFilterDescription": "Seleziona quali Gruppi mostrare (e relativi sottogruppi)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
     },
     "groupFilterSelectAll": "Seleziona tutto",
     "@groupFilterSelectAll": {
@@ -397,8 +524,24 @@
     "@groupListFilterAppbarTitle": {
         "description": "title in the app bar for group lists when displayed for filtering password list"
     },
+    "clearQuickUnlock": "Cancella Archivio Biometrico",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
     "clearQuickUnlockSubtitle": "Rimuovi la Master Password salvata",
     "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "unlock": "Mostra i file",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "chiudi i file contenenti le password",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "Password principale rimossa dalla memoria biometrica.",
+    "@clearQuickUnlockSuccess": {
         "description": ""
     },
     "diacOptIn": "Attiva per News e Sondaggi In-App.",
@@ -506,7 +649,7 @@
     "@sizeBytes": {
         "description": "",
         "placeholders": {
-            "bytes": {
+            "count": {
                 "description": "file size in bytes",
                 "example": "123"
             }
@@ -519,6 +662,14 @@
     "entryAttachmentSizeWarning": "I file allegati saranno incorporati nel file di password. Questo può aumentare significativamente il tempo necessario per aprire/salvare le password.",
     "@entryAttachmentSizeWarning": {
         "description": ""
+    },
+    "iconPngSizeWarning": "Le icone personalizzate saranno incorporate nel file delle password. Questo può aumentare significativamente il tempo necessario per aprire/salvare le password.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "Il file scelto non è nel formato PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
     },
     "entryAddField": "Aggiungi Campo",
     "@entryAddField": {
@@ -550,6 +701,10 @@
     },
     "fieldPresent": "Mostra (QR Code)",
     "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Genera Email",
+    "@fieldGenerateEmail": {
         "description": ""
     },
     "onboardingBackToOnboarding": "Tour",
@@ -592,6 +747,10 @@
                 "example": "PasswordDatabase"
             }
         }
+    },
+    "saveAs": "Salva In...",
+    "@saveAs": {
+        "description": "Save as text"
     },
     "saving": "Salvataggio in Corso",
     "@saving": {

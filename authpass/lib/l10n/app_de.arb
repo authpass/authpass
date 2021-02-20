@@ -293,6 +293,10 @@
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
+    "searchButtonLabel": "Suchen",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
     "clear": "Löschen",
     "@clear": {
         "description": "Remove existing group filter from password list"
@@ -633,7 +637,7 @@
     "@sizeBytes": {
         "description": "",
         "placeholders": {
-            "bytes": {
+            "count": {
                 "description": "file size in bytes",
                 "example": "123"
             }
