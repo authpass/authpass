@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "main.dart.js": "aa6d301a84ecf8d65405cf5c0160984f",
+  "main.dart.js": "bc59e657d799f42c5bfc07ebba3d5bba",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"assets/NOTICES": "6076616882c64a8d0cfb65bfca7d0d87",
+"assets/NOTICES": "ebbc45d49450d9aede6534a404c7190e",
 "assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac",
 "assets/FontManifest.json": "0b24ea5adcc797f82f2d7827c3d5a53b",
 "assets/AssetManifest.json": "b49b958f0303817304faa197e403ff53",
@@ -33,8 +33,8 @@ const RESOURCES = {
 "version.json": "049f3d93d88ff96aae80118eb3218b9e",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"index.html": "cba1d2baf2ef15363939bdd41e0d9520",
-"/": "cba1d2baf2ef15363939bdd41e0d9520"
+"index.html": "685dc7ebee4b993171225ea4a0743475",
+"/": "685dc7ebee4b993171225ea4a0743475"
 };
 
 // The application shell files that are downloaded before a service worker can
@@ -52,7 +52,7 @@ self.addEventListener("install", (event) => {
   return event.waitUntil(
     caches.open(TEMP).then((cache) => {
       return cache.addAll(
-        CORE.map((value) => new Request(value + '?revision=' + RESOURCES[value], {'cache': 'reload'})));
+        CORE.map((value) => new Request(value, {'cache': 'reload'})));
     })
   );
 });
