@@ -27,7 +27,7 @@ One day I have to automate this...
 * Write CHANGELOG
   * [`CHANGELOG.md`](./CHANGELOG.md)
   * copy&paste current build to fdroid changelog `metadata/android/en-US/changelogs/XXX.txt`
-* push to `stable` branch `git push origin HEAD:push` and wait for github builds
+* push to `stable` branch `git push origin HEAD:stable` and wait for github builds
   * Already generates all artifacts except macos
   * Run macOS build locally (see above step), publish to app store and create distribution zip file
   * `_tools/upload-artifact.sh /Users/herbert/Downloads/tmp/AuthPass.app-1.7.7_1519.zip`
@@ -50,7 +50,7 @@ One day I have to automate this...
     * AuthPass.app-1.7.7-b1519.zip
     * authpass-linux-1.7.7_1519.tar.gz
 * Upload Artifacts to [fosshub.com](https://devzone.fosshub.com/dashboard/projects)
-  * run `_tools/release/fosshub-releaes.sh`
+  * run `_tools/release/fosshub-release.sh`
 * Submit release to
   * https://play.google.com/apps/publish
   * https://appstoreconnect.apple.com/apps

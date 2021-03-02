@@ -7,6 +7,10 @@ on:
         description: 'Never Mind'
         required: false
         default: ''
+  push:
+    branches:
+      - 'stable'
+      - 'beta'
 
 
 jobs:
