@@ -27,26 +27,26 @@ class AppBarMenu {
     final loc = AppLocalizations.of(context);
     return [
       PopupMenuItem(
-        child: ListTile(
-          key: const ValueKey('openPasswordGenerator'),
-          leading: const Icon(FontAwesomeIcons.random),
-          title: Text(loc.menuItemGeneratePassword),
-        ),
         value: () {
           analytics.events.trackActionPressed(action: 'generatePassword');
           Navigator.of(context).push(PasswordGeneratorScreen.route(
               finishButton: FinishButtonStyle.save));
         },
+        child: ListTile(
+          key: const ValueKey('openPasswordGenerator'),
+          leading: const Icon(FontAwesomeIcons.random),
+          title: Text(loc.menuItemGeneratePassword),
+        ),
       ),
       PopupMenuItem(
-        child: ListTile(
-          leading: const Icon(FontAwesomeIcons.cogs),
-          title: Text(loc.menuItemPreferences),
-        ),
         value: () {
           analytics.events.trackActionPressed(action: 'preferences');
           Navigator.of(context).push(PreferencesScreen.route());
         },
+        child: ListTile(
+          leading: const Icon(FontAwesomeIcons.cogs),
+          title: Text(loc.menuItemPreferences),
+        ),
       ),
       ...?(openedFiles?.isNotEmpty != true
           ? null
@@ -54,6 +54,11 @@ class AppBarMenu {
               .followedBy(
               openedFiles.map(
                 (file) => PopupMenuItem(
+                  value: () {
+                    analytics.events.trackActionPressed(action: 'manageFile');
+                    Navigator.of(context, rootNavigator: true)
+                        .push(ManageFileScreen.route(file.fileSource));
+                  },
                   child: ListTile(
                     leading: Icon(file.fileSource.displayIcon.iconData,
                         color: file.openedFile.color),
@@ -65,25 +70,20 @@ class AppBarMenu {
                       maxLines: 1,
                     ),
                   ),
-                  value: () {
-                    analytics.events.trackActionPressed(action: 'manageFile');
-                    Navigator.of(context, rootNavigator: true)
-                        .push(ManageFileScreen.route(file.fileSource));
-                  },
                 ),
               ),
             )),
       PopupMenuItem(
-        child: ListTile(
-          key: const ValueKey('openAnotherFile'),
-          leading: const Icon(FontAwesomeIcons.folderPlus),
-          title: Text(loc.menuItemOpenAnotherFile),
-        ),
         value: () {
           analytics.events.trackActionPressed(action: 'openFile');
           Navigator.of(context, rootNavigator: true)
               .push(SelectFileScreen.route());
         },
+        child: ListTile(
+          key: const ValueKey('openAnotherFile'),
+          leading: const Icon(FontAwesomeIcons.folderPlus),
+          title: Text(loc.menuItemOpenAnotherFile),
+        ),
       ),
       if (secondaryBuilder != null) ...secondaryBuilder(context),
       const PopupMenuDivider(),
@@ -91,38 +91,39 @@ class AppBarMenu {
           ? null
           : [
               PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.update),
-                    title: Text(loc.menuItemCheckForUpdates),
-                  ),
-                  value: () {
-                    winSparkleCheckUpdate();
-                  }),
+                value: () {
+                  winSparkleCheckUpdate();
+                },
+                child: ListTile(
+                  leading: const Icon(Icons.update),
+                  title: Text(loc.menuItemCheckForUpdates),
+                ),
+              ),
             ],
       if (DialogUtils.sendLogsSupported()) ...[
         PopupMenuItem(
+          value: () {
+            analytics.events.trackActionPressed(action: 'emailSupport');
+            DialogUtils.sendLogs(context);
+          },
           child: ListTile(
             leading: const Icon(Icons.email),
             title: Text(loc.menuItemSupport),
             subtitle: Text(loc.menuItemSupportSubtitle),
           ),
-          value: () {
-            analytics.events.trackActionPressed(action: 'emailSupport');
-            DialogUtils.sendLogs(context);
-          },
         )
       ],
       PopupMenuItem(
-        child: ListTile(
-          leading: const Icon(Icons.help),
-          title: Text(loc.menuItemHelp),
-          subtitle: Text(loc.menuItemHelpSubtitle),
-        ),
         value: () async {
           analytics.events.trackActionPressed(action: 'help');
           await DialogUtils.openUrl('https://authpass.app/docs/?utm_source=app'
               '&utm_medium=app_help&utm_campaign=app_help#documentation');
         },
+        child: ListTile(
+          leading: const Icon(Icons.help),
+          title: Text(loc.menuItemHelp),
+          subtitle: Text(loc.menuItemHelpSubtitle),
+        ),
       ),
       AuthPassAboutDialog.createAboutMenuItem(context),
     ];

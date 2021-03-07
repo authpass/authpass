@@ -22,8 +22,8 @@ class BackupBanner extends StatelessWidget {
       content: Text(bannerText),
       actions: [
         TextButton(
-          child: Text(dismissText),
           onPressed: () => onDismiss(),
+          child: Text(dismissText),
         ),
         backupWidget,
       ],

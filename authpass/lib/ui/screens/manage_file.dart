@@ -251,11 +251,11 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       }),
                     ),
                     TextButton(
-                      child: const Text('Close/Lock'),
                       onPressed: () async {
                         await _kdbxBloc.close(_file.kdbxFile);
                         Navigator.of(context).pop();
                       },
+                      child: const Text('Close/Lock'),
                     ),
                   ],
                 ),
@@ -264,14 +264,14 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     // mainAxisSize: MainAxisSize.min,
                     children: [
                       TextButton(
-                        child: Text(
-                            'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(
                               text: _file.kdbxFile.body
                                   .toXml()
                                   .toXmlString(pretty: true)));
                         },
+                        child: Text(
+                            'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
                       ),
                     ],
                   ),

@@ -57,16 +57,16 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: const Text('Cancel'),
         ),
         TextButton(
-          child: const Text('Select icon'),
           onPressed: () {
             Navigator.of(context).pop(_selectorKey.currentState._selection);
           },
+          child: const Text('Select icon'),
         ),
       ],
     );
@@ -108,10 +108,10 @@ class _IconSelectorState extends State<IconSelector> {
         crossAxisCount: width ~/ 80,
         children: <Widget>[
           InkWell(
-            child: const Icon(FontAwesomeIcons.plus),
             onTap: () {
               _readFile();
             },
+            child: const Icon(FontAwesomeIcons.plus),
           ),
           ..._kdbxFile.body.meta.customIcons.values
               .map((value) => IconSelectorCustomIcon(

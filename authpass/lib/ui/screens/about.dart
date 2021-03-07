@@ -85,14 +85,14 @@ class AuthPassAboutDialog extends StatelessWidget {
     final analytics = Provider.of<Analytics>(context, listen: false);
     final loc = AppLocalizations.of(context);
     return PopupMenuItem<VoidCallback>(
-      child: ListTile(
-        leading: const ImageIcon(AssetImage('assets/images/logo_icon.png')),
-        title: Text(loc.menuItemAbout),
-      ),
       value: () {
         analytics.events.trackActionPressed(action: 'about');
         AuthPassAboutDialog.openDialog(context);
       },
+      child: ListTile(
+        leading: const ImageIcon(AssetImage('assets/images/logo_icon.png')),
+        title: Text(loc.menuItemAbout),
+      ),
     );
   }
 }

@@ -146,11 +146,11 @@ class PasswordList extends StatelessWidget {
         color: Colors.white,
         alignment: Alignment.center,
         child: PrimaryButton(
-          child: Text(loc.openFile),
           onPressed: () {
             Navigator.of(context, rootNavigator: true)
                 .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
           },
+          child: Text(loc.openFile),
         ),
       );
     }
@@ -611,10 +611,6 @@ class _PasswordListContentState extends State<PasswordListContent>
               ),
 //              const Divider(),
               PopupMenuItem(
-                child: ListTile(
-                  leading: const Icon(Icons.folder),
-                  title: Text(loc.filterCustomize),
-                ),
                 value: () async {
                   final groupFilter = await Navigator.of(context).push(
                       GroupListFlat.route(
@@ -629,6 +625,10 @@ class _PasswordListContentState extends State<PasswordListContent>
                   }
                   _createGroupFilter(groupFilter);
                 },
+                child: ListTile(
+                  leading: const Icon(Icons.folder),
+                  title: Text(loc.filterCustomize),
+                ),
               ),
             ];
           },
@@ -661,10 +661,6 @@ class _PasswordListContentState extends State<PasswordListContent>
               },
               itemBuilder: (context) => [
                 PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.category),
-                    title: Text(loc.manageGroups),
-                  ),
                   value: () async {
                     await Navigator.of(context).push(GroupListFlat.route(
                       {},
@@ -674,6 +670,10 @@ class _PasswordListContentState extends State<PasswordListContent>
 //                  _createGroupFilter({group});
 //                }
                   },
+                  child: ListTile(
+                    leading: const Icon(Icons.category),
+                    title: Text(loc.manageGroups),
+                  ),
                 ),
                 ...?_buildAuthPassCloudMenuItems(
                     context, cloudStatusSnapshot.data),
@@ -808,10 +808,10 @@ class _PasswordListContentState extends State<PasswordListContent>
         content: Text('${_groupFilter.name}'),
         actions: <Widget>[
           TextButton(
-            child: Text(loc.clear),
             onPressed: () {
               _groupFilterNotifier.value = GroupFilter.DEFAULT_GROUP_FILTER;
             },
+            child: Text(loc.clear),
           )
         ],
       ),
@@ -896,13 +896,13 @@ class _PasswordListContentState extends State<PasswordListContent>
           loc.backupWarningMessage(file.key.displayName),
           backupWidget: SaveFileAsDialogButton(
             file: kdbxBloc.fileForFileSource(file.key),
-            child: Text(loc.backupButton),
             onSave: (saveFuture) {
               asyncRunTask((progress) async {
                 analytics.events.trackBackupBanner(BackupBannerAction.saved);
                 await saveFuture;
               }, label: loc.saving);
             },
+            child: Text(loc.backupButton),
           ),
           dismissText: loc.dismissBackupButton,
           onDismiss: () {
@@ -1085,7 +1085,6 @@ class _PasswordListContentState extends State<PasswordListContent>
           ? null
           : kdbxBloc.openedFiles.length == 1 || _groupFilter.groups.length == 1
               ? FloatingActionButton(
-                  child: const Icon(Icons.add),
                   tooltip: loc.addNewPassword,
                   onPressed: () {
                     final group = _groupFilter.groups.isEmpty
@@ -1098,9 +1097,9 @@ class _PasswordListContentState extends State<PasswordListContent>
                     widget.onEntrySelected(
                         context, entry, EntrySelectionType.activeOpen);
                   },
+                  child: const Icon(Icons.add),
                 )
               : SpeedDial(
-                  child: Icon(_speedDialOpen ? Icons.close : Icons.add),
                   tooltip: _speedDialOpen ? '' : loc.addNewPassword,
                   onOpen: () => setState(() => _speedDialOpen = true),
                   onClose: () => setState(() => _speedDialOpen = false),
@@ -1124,6 +1123,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                             }),
                       )
                       .toList(),
+                  child: Icon(_speedDialOpen ? Icons.close : Icons.add),
                 ),
     );
   }
@@ -1157,6 +1157,10 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (bloc.tokenStatus == TokenStatus.confirmed) {
       return [
         PopupMenuItem(
+          value: () {
+            Navigator.of(context, rootNavigator: true)
+                .push(CloudMailboxTabScreen.route());
+          },
           child: ListTile(
             leading: Badge(
               badgeContent:
@@ -1176,23 +1180,19 @@ class _PasswordListContentState extends State<PasswordListContent>
             ),
             title: const Text('AuthPass Mailboxes'),
           ),
-          value: () {
-            Navigator.of(context, rootNavigator: true)
-                .push(CloudMailboxTabScreen.route());
-          },
         )
       ];
     } else {
       return [
         PopupMenuItem(
-          child: const ListTile(
-            leading: Icon(Icons.cloud),
-            title: Text('Authenticate with AuthPass Cloud'),
-          ),
           value: () {
             Navigator.of(context, rootNavigator: true)
                 .push(AuthPassCloudAuthScreen.route());
           },
+          child: const ListTile(
+            leading: Icon(Icons.cloud),
+            title: Text('Authenticate with AuthPass Cloud'),
+          ),
         )
       ];
     }
@@ -1236,8 +1236,8 @@ class NoPasswordsEmptyView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   PrimaryButton(
-                    child: Text(loc.emptyPasswordVaultButtonLabel),
                     onPressed: onPrimaryButtonPressed,
+                    child: Text(loc.emptyPasswordVaultButtonLabel),
                   ),
                 ],
               ),
@@ -1282,12 +1282,12 @@ class UnsupportedWrite extends StatelessWidget {
 //                          onPressed: () {},
 //                        ),
                         TextButton(
-                          child: const Text('Save locally'),
                           onPressed: () {
                             final bloc =
                                 Provider.of<KdbxBloc>(context, listen: false);
                             bloc.saveLocally(source);
                           },
+                          child: const Text('Save locally'),
                         )
                       ],
                     )

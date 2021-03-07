@@ -22,13 +22,13 @@ class LinkButton extends StatelessWidget {
     final theme = Theme.of(context);
     return icon == null
         ? TextButton(
-            child: child,
             onPressed: onPressed,
             style: TextButton.styleFrom(
               primary: theme.primaryColor,
               padding: padding,
               tapTargetSize: materialTapTargetSize,
             ),
+            child: child,
           )
         : TextButton.icon(
             onPressed: onPressed,

@@ -2,6 +2,10 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
+// TODO: remove the following when migrating to nnbd
+//       (info: 'nullable' is deprecated and shouldn't be used. Has no effect.)
+// ignore_for_file: deprecated_member_use
+
 part 'webdav_models.g.dart';
 
 @JsonSerializable(nullable: false)

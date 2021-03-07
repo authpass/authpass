@@ -460,30 +460,30 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
         return [
           if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready) ...[
             PopupMenuItem(
-              child: ListTile(
-                leading: const Icon(FontAwesomeIcons.bug),
-                title: Text(loc.clearQuickUnlock),
-                subtitle: Text(loc.clearQuickUnlockSubtitle),
-              ),
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
                 await SelectFileScreen.navigate(context);
               },
+              child: ListTile(
+                leading: const Icon(FontAwesomeIcons.bug),
+                title: Text(loc.clearQuickUnlock),
+                subtitle: Text(loc.clearQuickUnlockSubtitle),
+              ),
             ),
           ],
           if (kdbxBloc.openedFilesWithSources.isNotEmpty) ...[
             PopupMenuItem(
-              child: ListTile(
-                leading: const Icon(FontAwesomeIcons.signOutAlt),
-                title: Text(loc.lockAllFiles),
-              ),
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: false);
                 await Navigator.of(context, rootNavigator: true)
                     .pushAndRemoveUntil(LockedScreen.route(), (_) => false);
               },
+              child: ListTile(
+                leading: const Icon(FontAwesomeIcons.signOutAlt),
+                title: Text(loc.lockAllFiles),
+              ),
             ),
           ],
         ];

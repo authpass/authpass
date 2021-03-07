@@ -48,10 +48,10 @@ class LockedScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 PrimaryButton(
-                  child: Text(loc.unlock),
                   onPressed: () {
                     SelectFileScreen.navigate(context);
                   },
+                  child: Text(loc.unlock),
                 ),
                 const SizedBox(height: 80),
               ],
@@ -62,11 +62,11 @@ class LockedScreen extends StatelessWidget {
                 EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
             alignment: Alignment.center,
             child: TextButton(
-              child: Text(loc.closePasswordFiles.toUpperCase()),
               onPressed: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
                 await SelectFileScreen.navigate(context);
               },
+              child: Text(loc.closePasswordFiles.toUpperCase()),
             ),
           ),
         ],

@@ -102,10 +102,6 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
             context,
             builder: (context) => [
               PopupMenuItem(
-                child: const ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text('Delete'),
-                ),
                 value: () {
                   final oldGroup = entry.parent;
                   entry.file.deleteEntry(entry);
@@ -118,19 +114,23 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                         }),
                   ));
                 },
+                child: const ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('Delete'),
+                ),
               ),
               ...?!env.isDebug
                   ? null
                   : [
                       PopupMenuItem(
-                        child: const ListTile(
-                          leading: Icon(Icons.bug_report),
-                          title: Text('Debug: Copy XML'),
-                        ),
                         value: () {
                           Clipboard.setData(ClipboardData(
                               text: entry.toXml().toXmlString(pretty: true)));
                         },
+                        child: const ListTile(
+                          leading: Icon(Icons.bug_report),
+                          title: Text('Debug: Copy XML'),
+                        ),
                       ),
                     ]
             ],
@@ -142,18 +142,6 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 //        onPressed: () {},
 //      ),
       body: WillPopScope(
-        child: Form(
-          key: formKey,
-          child: EntryDetails(
-            entry: vm,
-            onSavedPressed: !isDirty && !entry.isDirty ? null : saveCallback,
-          ),
-          onChanged: () {
-            if (!isFormDirty) {
-              setState(() => isFormDirty = true);
-            }
-          },
-        ),
         onWillPop: () async {
           if (!isDirty && !entry.isDirty) {
             return true;
@@ -167,6 +155,18 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 positiveButtonText: 'Discard Changes'),
           );
         },
+        child: Form(
+          key: formKey,
+          onChanged: () {
+            if (!isFormDirty) {
+              setState(() => isFormDirty = true);
+            }
+          },
+          child: EntryDetails(
+            entry: vm,
+            onSavedPressed: !isDirty && !entry.isDirty ? null : saveCallback,
+          ),
+        ),
       ),
     );
   }
@@ -532,6 +532,14 @@ class _EntryDetailsState extends State<EntryDetails>
                   ? []
                   : entry.binaryEntries.map((e) {
                       return InkWell(
+                        onTap: () async {
+                          await showModalBottomSheet<void>(
+                              context: context,
+                              builder: (context) => AttachmentBottomSheet(
+                                    entry: entry,
+                                    attachment: e,
+                                  ));
+                        },
                         child: Container(
                           constraints: const BoxConstraints(minWidth: 500),
                           padding: const EdgeInsets.symmetric(
@@ -558,26 +566,18 @@ class _EntryDetailsState extends State<EntryDetails>
                             ],
                           ),
                         ),
-                        onTap: () async {
-                          await showModalBottomSheet<void>(
-                              context: context,
-                              builder: (context) => AttachmentBottomSheet(
-                                    entry: entry,
-                                    attachment: e,
-                                  ));
-                        },
                       );
                     }),
               LinkButton(
                 icon: const Icon(Icons.attach_file),
-                child: Text(loc.entryAddAttachment),
                 onPressed: _attachFile,
+                child: Text(loc.entryAddAttachment),
               ),
               const SizedBox(height: 16),
               PrimaryButton(
                 icon: const Icon(Icons.save),
-                child: Text(loc.saveButtonLabel),
                 onPressed: widget.onSavedPressed,
+                child: Text(loc.saveButtonLabel),
               ),
             ],
           ),
@@ -846,7 +846,6 @@ class _AddFieldButtonState extends State<AddFieldButton> {
     final loc = AppLocalizations.of(context);
     return LinkButton(
       icon: const Icon(Icons.add_circle_outline),
-      child: Text(loc.entryAddField),
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
         final overlay =
@@ -886,6 +885,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
           }
         }
       },
+      child: Text(loc.entryAddField),
     );
   }
 
@@ -1593,6 +1593,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                 sigmaY: 0.5,
               ),
               child: LinkButton(
+                onPressed: onPressed,
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.only(
@@ -1615,7 +1616,6 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: onPressed,
               ),
             ),
           ),

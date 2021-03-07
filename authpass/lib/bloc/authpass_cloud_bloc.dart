@@ -22,6 +22,7 @@ part 'authpass_cloud_bloc.g.dart';
 
 final _logger = Logger('authpass_cloud_bloc');
 
+// ignore: deprecated_member_use
 @JsonSerializable(nullable: false)
 class _StoredToken {
   _StoredToken({

@@ -79,32 +79,33 @@ class SelectFileScreen extends StatelessWidget {
               secondaryBuilder: (context) {
             return [
               PopupMenuItem(
+                value: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      OnboardingScreen.route(), (route) => false);
+                },
                 child: ListTile(
                   leading: const FaIcon(FontAwesomeIcons.route),
                   title: Text(loc.onboardingBackToOnboarding),
                   subtitle: Text(loc.onboardingBackToOnboardingSubtitle),
                 ),
-                value: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      OnboardingScreen.route(), (route) => false);
-                },
               ),
               PopupMenuItem(
-                  child: ListTile(
-                    key: const ValueKey('downloadFromUrl'),
-                    leading: const FaIcon(FontAwesomeIcons.fileCode),
-                    title: Text(loc.loadFromRemoteUrl),
-                  ),
-                  value: () async {
-                    final source = await showDialog<FileSourceUrl>(
-                        context: context,
-                        builder: (context) => SelectUrlDialog());
-                    if (source != null) {
-                      // _loadAndGoToCredentials(source);
-                      await Navigator.of(context)
-                          .push(CredentialsScreen.route(source));
-                    }
-                  }),
+                value: () async {
+                  final source = await showDialog<FileSourceUrl>(
+                      context: context,
+                      builder: (context) => SelectUrlDialog());
+                  if (source != null) {
+                    // _loadAndGoToCredentials(source);
+                    await Navigator.of(context)
+                        .push(CredentialsScreen.route(source));
+                  }
+                },
+                child: ListTile(
+                  key: const ValueKey('downloadFromUrl'),
+                  leading: const FaIcon(FontAwesomeIcons.fileCode),
+                  title: Text(loc.loadFromRemoteUrl),
+                ),
+              ),
             ];
           }),
         ],
@@ -318,25 +319,26 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                         ),
                       ),
                       LinkButton(
-                          icon: const Icon(Icons.content_copy),
-                          child: const Text(
-                            _linuxAppArmorCommand,
-                            style: TextStyle(
-                                fontFamily: AuthPassTheme.monoFontFamily),
-                            maxLines: null,
-                          ),
-                          onPressed: () async {
-                            await Clipboard.setData(const ClipboardData(
-                                text: _linuxAppArmorCommand));
-                            ScaffoldMessenger.of(context)
-                              ..hideCurrentSnackBar()
-                              ..showSnackBar(
-                                SnackBar(
-                                  content: Text(loc.copiedToClipboard),
-                                ),
-                              );
-                            await _linuxAppArmorCheck();
-                          }),
+                        icon: const Icon(Icons.content_copy),
+                        onPressed: () async {
+                          await Clipboard.setData(
+                              const ClipboardData(text: _linuxAppArmorCommand));
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                content: Text(loc.copiedToClipboard),
+                              ),
+                            );
+                          await _linuxAppArmorCheck();
+                        },
+                        child: const Text(
+                          _linuxAppArmorCommand,
+                          style: TextStyle(
+                              fontFamily: AuthPassTheme.monoFontFamily),
+                          maxLines: null,
+                        ),
+                      ),
                     ]
                   : null),
               const SizedBox(height: 16),
@@ -972,10 +974,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                         child: CircularProgressIndicator())
                     : LinkButton(
                         key: const ValueKey('continue'),
-                        child: Text(loc.dialogContinue),
                         onPressed: () async {
                           await _tryUnlock();
                         },
+                        child: Text(loc.dialogContinue),
                       ),
               ),
             ],

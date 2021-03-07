@@ -665,12 +665,12 @@ class GroupListFlatList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: LinkButton(
-            child: _allSelected
-                ? Text(loc.groupFilterDeselectAll)
-                : Text(loc.groupFilterSelectAll),
             onPressed: () {
               onChangedAll(!_allSelected);
             },
+            child: _allSelected
+                ? Text(loc.groupFilterDeselectAll)
+                : Text(loc.groupFilterSelectAll),
           ),
         ),
       ],

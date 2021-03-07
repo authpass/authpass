@@ -1,6 +1,10 @@
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+// TODO: remove the following when migrating to nnbd
+//       (info: 'nullable' is deprecated and shouldn't be used. Has no effect.)
+// ignore_for_file: deprecated_member_use
+
 part 'dropbox_models.g.dart';
 
 @JsonSerializable(nullable: false)

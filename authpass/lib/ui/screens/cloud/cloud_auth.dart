@@ -78,14 +78,14 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           LinkButton(
+            onPressed: () {
+              DialogUtils.openUrl('https://authpass.app/docs/authpass-cloud/');
+            },
             child: const Text(
               'AuthPass Cloud\n'
               'For details visit https://authpass.app/docs/authpass-cloud/',
               textAlign: TextAlign.center,
             ),
-            onPressed: () {
-              DialogUtils.openUrl('https://authpass.app/docs/authpass-cloud/');
-            },
           ),
           TextFormField(
             controller: _email,

@@ -67,12 +67,14 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
               children: <Widget>[
                 Text('Error during api call. ${snapshot.error}'),
                 ElevatedButton(
-                  child: const Text('Retry'),
                   onPressed: () {
-                    setState(() {
-                      _future = widget.produceFuture(context);
-                    });
+                    setState(
+                      () {
+                        _future = widget.produceFuture(context);
+                      },
+                    );
                   },
+                  child: const Text('Retry'),
                 ),
               ],
             ),
@@ -143,7 +145,6 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
                 children: <Widget>[
                   Text('Error during api call. ${snapshot.error}'),
                   ElevatedButton(
-                    child: const Text('Retry'),
                     onPressed: () {
                       setState(() {
                         if (widget.retry != null) {
@@ -153,6 +154,7 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
                         }
                       });
                     },
+                    child: const Text('Retry'),
                   ),
                 ],
               ),

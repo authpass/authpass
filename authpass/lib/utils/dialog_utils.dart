@@ -38,10 +38,10 @@ class DialogUtils {
             actions: <Widget>[
               ...?moreActions,
               TextButton(
-                child: Text(materialLoc.okButtonLabel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                child: Text(materialLoc.okButtonLabel),
               ),
             ],
           );
@@ -64,13 +64,13 @@ class DialogUtils {
           ? null
           : [
               TextButton(
-                child: Text(loc.dialogSendErrorReport),
                 onPressed: () {
                   sendLogs(
                     context,
                     errorDescription: 'title: $title\ncontent: $content',
                   );
                 },
+                child: Text(loc.dialogSendErrorReport),
               ),
             ],
     );
@@ -148,10 +148,10 @@ class LogViewerDialog extends StatelessWidget {
       actions: <Widget>[
         // ...?moreActions,
         TextButton(
-          child: const Text('Ok'),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: const Text('Ok'),
         ),
       ],
     );

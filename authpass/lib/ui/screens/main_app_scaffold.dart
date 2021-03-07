@@ -197,12 +197,12 @@ class EmptyStateInitialRoute extends StatelessWidget {
               const Text('Select a password.'),
               const SizedBox(height: 32),
               PrimaryButton(
-                child: const Text('Add new Password'),
                 onPressed: () {
                   final newEntry = Provider.of<KdbxBloc>(context).createEntry();
                   Navigator.of(context)
                       .push(EntryDetailsScreen.route(entry: newEntry));
                 },
+                child: const Text('Add new Password'),
               ),
             ],
           ),

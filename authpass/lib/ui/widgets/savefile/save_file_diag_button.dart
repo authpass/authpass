@@ -75,8 +75,8 @@ class SaveFileAsDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (child != null) {
       return TextButton(
-        child: child,
         onPressed: () => _showBottomModal(context),
+        child: child,
       );
     }
     return IconButton(

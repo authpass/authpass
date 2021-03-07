@@ -215,6 +215,7 @@ class _GeneratePasswordState extends State<GeneratePassword>
             ),
             SlideHideWidget(
               hide: _passwordLength < passwordLengthMax.toDouble(),
+              vsync: this,
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(bottom: 16),
@@ -245,14 +246,12 @@ class _GeneratePasswordState extends State<GeneratePassword>
                   ),
                 ),
               ),
-              vsync: this,
             ),
             ...?(widget.doneButtonOnPressed == null
                 ? null
                 : [
                     Center(
                       child: PrimaryButton(
-                        child: Text(widget.doneButtonLabel),
                         onPressed: () {
                           final appDataBloc =
                               Provider.of<AppDataBloc>(context, listen: false);
@@ -266,6 +265,7 @@ class _GeneratePasswordState extends State<GeneratePassword>
                         icon: widget.doneButtonIcon ??
                             const Icon(Icons.check_circle_outline),
                         large: false,
+                        child: Text(widget.doneButtonLabel),
                       ),
                     )
                   ]),
@@ -324,6 +324,9 @@ class OptionToggleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        onChanged(!value);
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0.0),
         child: Row(
@@ -337,9 +340,6 @@ class OptionToggleTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {
-        onChanged(!value);
-      },
     );
   }
 }

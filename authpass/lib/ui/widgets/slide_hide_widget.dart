@@ -18,6 +18,7 @@ class SlideHideWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSize(
       vsync: vsync,
+      duration: const Duration(milliseconds: 300),
 //      firstChild: child,
 //      secondChild: Container(
 //        height: 0,
@@ -32,7 +33,6 @@ class SlideHideWidget extends StatelessWidget {
                   child: child,
                 )
               : child,
-      duration: const Duration(milliseconds: 300),
     );
   }
 }

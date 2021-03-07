@@ -104,10 +104,10 @@ class CloudStorageAuthentication extends StatelessWidget {
         children: <Widget>[
           PrimaryButton(
             icon: const Icon(FontAwesomeIcons.signInAlt),
-            child: Text('Login to ${provider.displayName}'),
             onPressed: () async {
               await _startLoginFlow(context);
             },
+            child: Text('Login to ${provider.displayName}'),
           ),
           const SizedBox(height: 16),
           Text(
@@ -117,13 +117,13 @@ class CloudStorageAuthentication extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           LinkButton(
+            onPressed: () async {
+              await _startLoginFlow(context, forceNoOpenUrl: true);
+            },
             child: const Text(
               'Enter code',
               textScaleFactor: 0.75,
             ),
-            onPressed: () async {
-              await _startLoginFlow(context, forceNoOpenUrl: true);
-            },
           ),
         ],
       ),
@@ -434,12 +434,12 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                         const SizedBox(width: 8),
                         LinkButton(
                           icon: const Icon(FontAwesomeIcons.save),
-                          child: const Text('Save'),
                           onPressed: () {
                             Navigator.of(context).pop(
                                 CloudStorageSelectorSaveResult(
                                     _folder, _fileNameController.text));
                           },
+                          child: const Text('Save'),
                         )
                       ],
                     ),
@@ -518,18 +518,19 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
       ),
       actions: <Widget>[
         TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
         TextButton(
-          child: const Text('Ok'),
           onPressed: () {
             if (_formKey.currentState.validate()) {
               Navigator.of(context).pop(UrlUsernamePasswordResult(
                   _url.text, _username.text, _password.text));
             }
           },
+          child: const Text('Ok'),
         ),
       ],
     );

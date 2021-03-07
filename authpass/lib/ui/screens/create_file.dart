@@ -125,8 +125,8 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                         )
                       : PrimaryButton(
                           large: false,
-                          child: Text(loc.createDatabaseAction),
                           onPressed: _submitCallback(),
+                          child: Text(loc.createDatabaseAction),
                         ),
                 ),
               ],
