@@ -89,11 +89,7 @@ dependencies:
 
 
   # UI Utilities and Widgets
-  #badges: ^1.1.1
-  badges: # overflow -> clipBehavior
-    git:
-      url: https://github.com/worldofsites/flutter_badges.git
-      ref: 1d989d27d8a6cabbd6d5694719f1957684e481b9
+  badges: ^1.2.0
   qr_flutter: ^3.2.0
   flushbar: ^1.10.4
   filesystem_picker: ^1.0.2
