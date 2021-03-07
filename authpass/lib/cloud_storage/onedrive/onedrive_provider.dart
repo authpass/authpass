@@ -195,7 +195,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     }
     final createJson = json.decode(createResponse.body) as Map<String, dynamic>;
     final uploadUrl = createJson['uploadUrl'] as String;
-    final uploadResponse = await client.put(uploadUrl, body: bytes);
+    final uploadResponse = await client.put(Uri.parse(uploadUrl), body: bytes);
     _assertSuccessResponse(uploadResponse);
     _logger.fine('uploadResponse: ${uploadResponse.statusCode}');
     final driveItem = OneDriveItem.fromJson(

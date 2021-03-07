@@ -14,25 +14,25 @@ Future<void> initWinSparkle(Env env) async {
   final freePointers = <Pointer<NativeType>>[];
   try {
     final url =
-        Utf8.toUtf8('https://data.authpass.app/data/artifacts/appcast.xml');
+        'https://data.authpass.app/data/artifacts/appcast.xml'.toNativeUtf8();
     win_sparkle_set_appcast_url(url);
 
     final appInfo = await env.getAppInfo();
-    final companyName = Utf16.toUtf16('CodeUX.design');
-    final name = Utf16.toUtf16(appInfo.appName);
-    final appVersion = Utf16.toUtf16(appInfo.versionLabel);
+    final companyName = 'CodeUX.design'.toNativeUtf16();
+    final name = appInfo.appName.toNativeUtf16();
+    final appVersion = appInfo.versionLabel.toNativeUtf16();
     freePointers.addAll([companyName, name, appVersion]);
 //    final
     win_sparkle_set_app_details(companyName, name, appVersion);
 
-    final buildVersion = Utf16.toUtf16(appInfo.buildNumber.toString());
+    final buildVersion = appInfo.buildNumber.toString().toNativeUtf16();
     win_sparkle_set_app_build_version(buildVersion);
 
     win_sparkle_init();
   } catch (e, stackTrace) {
     _logger.severe('Error while interacting with winsparkle.', e, stackTrace);
     try {
-      freePointers.forEach(free);
+      freePointers.forEach(calloc.free);
     } catch (e, stackTrace) {
       _logger.warning('Error while freeing pointer.', e, stackTrace);
     }

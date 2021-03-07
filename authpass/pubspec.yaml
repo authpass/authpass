@@ -14,35 +14,32 @@ dependencies:
   #  kdbx: ^0.2.0
   kdbx:
     path: ../deps/kdbx.dart
-  argon2_ffi:
-    git:
-      url: https://github.com/authpass/argon2_ffi.git
-      ref: 6c798276436f96315f34c717a6c0b8d94de45255
+  argon2_ffi: ^1.0.0
   simple_form_field_validator:
     git:
       url: https://github.com/hpoul/flutter_utils.git
       path: packages/simple_form_field_validator
       ref: 4c65f09005a1086525ebe2ae004eccdc2dd56fe1
   logging: ^1.0.0-nullsafety
-  logging_appenders: ^0.4.2+5
+  logging_appenders: ^1.0.0
   diac_client:
     path: ../deps/diac/diac_client
 
-  synchronized: ^2.2.0+2
+  synchronized: ^3.0.0
 #  file_picker: ^1.6.2
-  file_picker_writable: ^1.2.0+1
+  file_picker_writable: ^2.0.0
   #  file_picker_writable:
 #    path: /Users/herbert/dev/file_picker_writable
 #  file_picker_writable:
 #    git:
 #      url: https://github.com/hpoul/file_picker_writable.git
 #      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
-  json_annotation: ^3.0.1
-  freezed_annotation: ^0.11.0+1
-  built_value: ^7.1.0
-  simple_json_persistence: ^1.0.2
+  json_annotation: ^4.0.0
+  freezed_annotation: ^0.14.0
+  built_value: ^8.0.0
+  simple_json_persistence: ^2.0.0-nullsafety.4
   provider: ^4.3.2+1
-  http: ^0.12.2
+  http: ^0.13.0
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.0.1
   intl: ^0.17.0-nullsafety.1
@@ -57,16 +54,16 @@ dependencies:
     git:
       url: https://github.com/hpoul/usage.git
       ref: custom-user-agent
-  package_info: ^0.4.3
+  package_info: ^2.0.0
 #  package_info: ^0.4.0+13
 #  package_info_macos:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info: ^0.4.2+7
-  path_provider: ^1.6.18
-  path_provider_macos: ^0.0.4+4
-  path_provider_linux: ">=0.0.1 <2.0.0"
+  device_info: ^2.0.0
+  path_provider: ^2.0.1
+#  path_provider_macos: ^0.0.4+4
+#  path_provider_linux: ">=0.0.1 <2.0.0"
   #path_provider_windows: '>=0.0.1+2 <2.0.0'
   analytics_event: ^0.1.2
   autofill_service:
@@ -79,13 +76,13 @@ dependencies:
       url: https://github.com/authpass/flutter_speed_dial.git
       ref: 7ad1672e22627d1106151ed8602b52bb99b9a8d2
   flutter_email_sender: ^3.0.1
-  flutter_store_listing: ^0.1.1+2
+  flutter_store_listing: ^0.2.0
 
-  biometric_storage: ^1.1.0+1
+  biometric_storage: ^2.0.1
 #  biometric_storage:
 #    path: ../deps/biometric_storage
-  uuid: ^2.2.2
-  url_launcher: ^5.7.10
+  uuid: ^3.0.1
+  url_launcher: ^6.0.2
   font_awesome_flutter: ^8.8.1
   otp: ^3.0.0-nullsafety.0
   zxcvbn: ^0.0.1
@@ -105,7 +102,7 @@ dependencies:
   # (Small) utility packages
   quiver: ">=3.0.0-nullsafety.3 <4.0.0"
   tuple: ^1.0.3
-  rxdart: ^0.24.1
+  rxdart: ^0.26.0
   charcode: ^1.1.3
   recase: ^3.0.0
   # collection utilities:
@@ -117,8 +114,8 @@ dependencies:
   http_auth: ^0.3.1
 
   # google drive
-  googleapis: ^0.55.0
-  googleapis_auth: ^0.2.12
+  googleapis: ^2.0.0
+  googleapis_auth: ^1.0.0
 
   # dropbox
   #oauth2: ^1.3.0
@@ -126,7 +123,7 @@ dependencies:
     #path: /Users/herbert/dev/patches/oauth2
     git:
       url: https://github.com/authpass/oauth2.git
-      ref: 508e542284733bbf0e0515d8ef0bbb5d39d47021
+      ref: 595e5829bd3a36a69999a99473d3aad6fd8febc8
 
   # FDE
   file_chooser:
@@ -138,7 +135,7 @@ dependencies:
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
 
-  macos_secure_bookmarks: ^0.1.2
+  macos_secure_bookmarks: ^0.1.2+1
 
   # UI Utils
   percent_indicator: ^2.1.5
@@ -150,27 +147,31 @@ dependencies:
     git:
       url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git
       ref: 85cfc7efee91c3444d24435486cf292a32f04499
-  open_file: ^3.0.1
+  #open_file: ^3.0.3
+  open_file:
+    git:
+      url: https://github.com/mit-mit/open_file.git
+      ref: 267da7866fec41377ecf6e2075f63d49413f30ba
   esys_flutter_share: ^1.0.2
   flutter_windowmanager: ^0.0.2
 
   mime: ^0.9.7
   pedantic: ^1.9.2
-  ffi: ^0.1.3
+  ffi: ^1.0.0
   # AuthPass Cloud email deps
-  enough_mail: ^0.0.32
+  enough_mail: ^0.2.1
   flutter_html: ^1.2.0
   flutter_linkify: ^3.1.3
-  openapi_base: ^0.1.5+3
-  flutter_cache_manager: ^1.4.1
-  cached_network_image: ^2.2.0+1
+  openapi_base: ^0.1.5+5
+  flutter_cache_manager: ^3.0.0-nullsafety.1
+  cached_network_image: ^3.0.0-nullsafety
   authpass_cloud_shared:
     path: ../deps/authpass-cloud/packages/authpass_cloud_shared
   # windows updater
   winsparkle_flutter:
     git:
       url: https://github.com/authpass/winsparkle_flutter.git
-      ref: 2c56009666a2a8b6802a87a87e5135ed724edfc2
+      ref: 1e124a5056709c00ec05f2c1e3bd8c2084fe962b
   
 dev_dependencies:
   flutter_test:
@@ -181,13 +182,13 @@ dev_dependencies:
   mockito: ^4.1.2
 #   https://github.com/flutter/flutter/issues/62240
 #  analyzer: ^0.39.17
-  json_serializable: ^3.4.0
+  json_serializable: ^4.0.2
   build_runner: ^1.10.2
   builder_static_text: ^0.0.1+2
-  built_value_generator: ^7.1.0
-  analytics_event_gen: ^0.1.2
-  freezed: ^0.11.5
-  plugin_platform_interface: ^1.0.2
+  built_value_generator: ^8.0.0
+  analytics_event_gen: ^0.1.2+1
+  freezed: ^0.12.7
+  plugin_platform_interface: ^2.0.0
 
 dependency_overrides:
 #  pedantic: ^1.9.2
@@ -196,10 +197,7 @@ dependency_overrides:
 #  petitparser: '>=3.0.0 <4.0.0'
   kdbx:
     path: ../deps/kdbx.dart
-  pointycastle:
-    git:
-      url: https://github.com/authpass/pointycastle.git
-      ref: 73dea5d9d441da30bd2c99adc16e5bf98d6c2a43
+  path_provider: ^2.0.1
   # The following two are required since flutter 1.21
   # but blocked by e.g flutter_cache_manager
   file: ^6.0.0-nullsafety.1
@@ -213,7 +211,11 @@ dependency_overrides:
   crypto: ^3.0.0
   archive: ^3.0.0
   logging: ^1.0.0-nullsafety
-
+  shelf: ^1.0.0
+  analyzer: ^0.41.0 # built_value_generator >=8.0.0-nullsafety.0 depends on analyzer ^0.40.0
+  http: ^0.13.0 # enough_mail >=0.0.30 depends on http ^0.12.2
+  convert: ^3.0.0 # enough_mail >=0.0.34 depends on basic_utils ^2.6.3 which depends on convert ^2.1.1, enough_mail >=0.0.34 requires convert ^2.1.1
+  basic_utils: ^3.0.0-nullsafety.0
 
 #  openapi_base:
 #    path: /Users/herbert/dev/authpass-cloud/deps/openapi_dart/packages/openapi_base

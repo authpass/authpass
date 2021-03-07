@@ -9,6 +9,7 @@ import 'package:clock/clock.dart';
 import 'package:enough_mail/enough_mail.dart' as enough;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -16,7 +17,6 @@ import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:http/http.dart' as http;
 
 part 'authpass_cloud_bloc.g.dart';
 
@@ -384,15 +384,15 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   final LazyBehaviorSubject<T> _stream;
   final ValueStream<T> _valueStream;
 
-  @override
-  bool get hasValue => _valueStream.hasValue;
-
-  @override
-  T get value => _valueStream.value;
-
   Future<T> load() async => _stream.load();
 
   Future<T> reload() async => await _stream.reload();
+
+  @override
+  ErrorAndStackTrace get errorAndStackTrace => _valueStream.errorAndStackTrace;
+
+  @override
+  ValueWrapper<T> get valueWrapper => _valueStream.valueWrapper;
 }
 
 class LazyBehaviorSubject<T> {

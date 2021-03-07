@@ -24,7 +24,7 @@ class GoogleDriveProvider
 
   final Env env;
 
-  static const _scopes = [DriveApi.DriveScope];
+  static const _scopes = [DriveApi.driveScope];
 
   ClientId get _clientId =>
       ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
@@ -141,7 +141,7 @@ class GoogleDriveProvider
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final dynamic response = await driveApi.files
-        .get(file.id, downloadOptions: DownloadOptions.FullMedia);
+        .get(file.id, downloadOptions: DownloadOptions.fullMedia);
     final media = response as Media;
     final bytes = BytesBuilder(copy: false);
     // ignore: prefer_foreach

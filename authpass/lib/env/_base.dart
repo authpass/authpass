@@ -1,4 +1,5 @@
 import 'package:built_value/built_value.dart' hide nullable;
+import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
 

@@ -22,8 +22,9 @@ Future<void> main() async {
     'FLUTTER_URL': FLUTTER_URL,
   };
   for (final platform in platforms) {
-    final response = await get('https://storage.googleapis.com/flutter_infra/'
-        'releases/releases_$platform.json');
+    final response =
+        await get(Uri.parse('https://storage.googleapis.com/flutter_infra/'
+            'releases/releases_$platform.json'));
     if (response.statusCode != 200) {
       throw StateError(
           'Unsuccessful fetching release json. ${response.statusCode} - ${response.body}');

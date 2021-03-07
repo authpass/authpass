@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../flutter/flutter__dev/.pub-cache/git/argon2_ffi-6c798276436f96315f34c717a6c0b8d94de45255" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../flutter/flutter__dev/.pub-cache/git/flutter_barcode_reader-85cfc7efee91c3444d24435486cf292a32f04499" vcs="Git" />
   </component>
 </project>

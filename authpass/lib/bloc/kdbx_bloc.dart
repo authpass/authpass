@@ -268,14 +268,13 @@ class KdbxBloc {
       KdbxOpenedFile file, void Function(OpenedFileBuilder b) updater) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
     await appDataBloc.update((b, data) {
-      b
-        ..previousFiles.map((f) {
-          if (!f.isSameFileAs(file.openedFile)) {
-            return f;
-          }
+      b.previousFiles.map((f) {
+        if (!f.isSameFileAs(file.openedFile)) {
+          return f;
+        }
 //          return (f.toBuilder()..update(updater)).build();
-          return updatedFile;
-        });
+        return updatedFile;
+      });
     });
     final newFile = KdbxOpenedFile(
       fileSource: file.fileSource,
@@ -283,10 +282,10 @@ class KdbxBloc {
       kdbxFile: file.kdbxFile,
       kdbxFileContent: file.kdbxFileContent,
     );
-    _openedFiles.value = OpenedKdbxFiles({
+    _openedFiles.add(OpenedKdbxFiles({
       ..._openedFiles.value._files,
       file.fileSource: newFile,
-    });
+    }));
     _logger.info('new values: ${_openedFiles.value}');
     return newFile;
   }
@@ -375,10 +374,10 @@ class KdbxBloc {
       kdbxFile: kdbxFile,
       kdbxFileContent: fileContent,
     );
-    _openedFiles.value = OpenedKdbxFiles({
+    _openedFiles.add(OpenedKdbxFiles({
       ..._openedFiles.value._files,
       file: kdbxOpenedFile,
-    });
+    }));
     analytics.events.trackOpenFile(type: file.typeDebug);
     analytics.events.trackOpenFile2(
       generator: kdbxFile.body.meta.generator.get() ?? 'NULL',
@@ -490,8 +489,8 @@ class KdbxBloc {
     _logger.fine('Close file.');
     analytics.events.trackCloseFile();
     final fileSource = fileForKdbxFile(file).fileSource;
-    _openedFiles.value = OpenedKdbxFiles(
-        Map.from(_openedFiles.value._files)..remove(fileSource));
+    _openedFiles.add(OpenedKdbxFiles(
+        Map.from(_openedFiles.value._files)..remove(fileSource)));
     file.dispose();
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
@@ -516,7 +515,7 @@ class KdbxBloc {
     } else {
       analytics.events.trackLockAllFiles(count: _openedFiles.value?.length);
     }
-    _openedFiles.value = OpenedKdbxFiles({});
+    _openedFiles.add(OpenedKdbxFiles({}));
   }
 
   static Future<ReadFileResponse> staticReadKdbxFile(
@@ -650,11 +649,11 @@ class KdbxBloc {
       kdbxFile: oldFile.kdbxFile,
       kdbxFileContent: fileContent,
     );
-    _openedFiles.value = OpenedKdbxFiles({
+    _openedFiles.add(OpenedKdbxFiles({
       ...Map.fromEntries(_openedFiles.value._files.entries
           .where((entry) => entry.key != oldSource)),
       newFile.fileSource: newFile,
-    });
+    }));
     // TODO also do not update quick unlock if this file is not in quick unlock.
     if (_openedFilesQuickUnlock.isNotEmpty) {
       try {
