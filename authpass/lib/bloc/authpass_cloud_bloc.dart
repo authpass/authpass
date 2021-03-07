@@ -294,10 +294,7 @@ class AuthPassCloudBloc with ChangeNotifier {
         _logger.finer('Marked mail as read.');
       })());
     }
-    final mimeMessage = enough.MimeMessage();
-    mimeMessage.bodyRaw = body;
-    mimeMessage.parse();
-    return mimeMessage;
+    return enough.MimeMessage.parseFromText(body);
   }
 
   Future<void> forwardMail(EmailMessage message) async {
