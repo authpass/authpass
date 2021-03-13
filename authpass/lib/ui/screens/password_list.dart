@@ -34,6 +34,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -108,6 +109,9 @@ extension on int {
   int unlessZero(int Function() cb) => this == 0 ? cb() : this;
 }
 
+typedef OnEntrySelected = void Function(
+    KdbxEntry entry, EntrySelectionType type);
+
 class PasswordList extends StatelessWidget {
   const PasswordList(
       {Key key, @required this.onEntrySelected, this.selectedEntry})
@@ -131,7 +135,7 @@ class PasswordList extends StatelessWidget {
       );
 
   final KdbxEntry selectedEntry;
-  final void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected;
+  final OnEntrySelected onEntrySelected;
 
   @override
   Widget build(BuildContext context) {
@@ -921,7 +925,6 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   @override
   Widget build(BuildContext context) {
-    final commonFields = Provider.of<CommonFields>(context);
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
       ...?_buildBackupWarningBanners(),
@@ -983,97 +986,15 @@ class _PasswordListContentState extends State<PasswordListContent>
                         kdbxBloc.fileForKdbxFile(entry.entry.file);
                     final fileColor = openedFile.openedFile.color;
 //                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
-                    return Dismissible(
-                      key: ValueKey(entry.entry.uuid),
-                      resizeDuration: null,
-                      background: Container(
-                        alignment: Alignment.centerLeft,
-                        color: Colors.lightBlueAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const Icon(Icons.lock),
-                            const SizedBox(height: 4),
-                            Text(loc.swipeCopyPassword),
-                          ],
-                        ),
-                      ),
-                      secondaryBackground: Container(
-                        alignment: Alignment.centerRight,
-                        color: Colors.limeAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const Icon(Icons.account_circle),
-                            const SizedBox(height: 4),
-                            Text(loc.swipeCopyUsername),
-                          ],
-                        ),
-                      ),
-                      confirmDismiss: (direction) async {
-                        if (direction == DismissDirection.endToStart) {
-//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.userName.key).getText());
-                          await Clipboard.setData(ClipboardData(
-                              text: entry.entry
-                                  .getString(commonFields.userName.key)
-                                  .getText()));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(loc.doneCopiedUsername)));
-                          context
-                              .read<Analytics>()
-                              .events
-                              .trackSwipeCopyUsername();
-                        } else {
-//                      await ClipboardManager.copyToClipBoard(entry.getString(commonFields.password.key).getText());
-                          await Clipboard.setData(ClipboardData(
-                              text: entry.entry
-                                  .getString(commonFields.password.key)
-                                  .getText()));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(loc.doneCopiedPassword)));
-                          context
-                              .read<Analytics>()
-                              .events
-                              .trackSwipeCopyPassword();
-                        }
-                        return false;
+                    return PasswordEntryListTileWrapper(
+                      entry: entry,
+                      fileColor: fileColor,
+                      filterQuery: _filterQuery,
+                      selectedEntry: widget.selectedEntry,
+                      onEntrySelected:
+                          (KdbxEntry entry, EntrySelectionType type) {
+                        widget.onEntrySelected(context, entry, type);
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Container(
-                          decoration: widget.selectedEntry != entry.entry
-                              ? (fileColor == null
-                                  ? null
-                                  : BoxDecoration(
-                                      border: Border(
-                                          left: BorderSide(
-                                              color: fileColor, width: 4))))
-                              : BoxDecoration(
-                                  color: Theme.of(context).selectedRowColor,
-                                  border: Border(
-                                    right: BorderSide(
-                                        color: Theme.of(context).primaryColor,
-                                        width: 4),
-                                    left: fileColor == null
-                                        ? BorderSide.none
-                                        : BorderSide(
-                                            color: fileColor, width: 4),
-                                  ),
-                                ),
-                          child: PasswordEntryTile(
-                            vm: entry,
-                            isSelected: entry.entry == widget.selectedEntry,
-                            filterQuery: _filterQuery,
-                            onTap: () {
-//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                              widget.onEntrySelected(context, entry.entry,
-                                  EntrySelectionType.activeOpen);
-                            },
-                          ),
-                        ),
-                      ),
                     );
                   },
                 ),
@@ -1196,6 +1117,126 @@ class _PasswordListContentState extends State<PasswordListContent>
         )
       ];
     }
+  }
+}
+
+class PasswordEntryListTileWrapper extends StatelessWidget {
+  const PasswordEntryListTileWrapper({
+    Key key,
+    @required this.entry,
+    @required this.selectedEntry,
+    @required this.fileColor,
+    @required String filterQuery,
+    @required this.onEntrySelected,
+  })  : _filterQuery = filterQuery,
+        super(key: key);
+
+  final EntryViewModel entry;
+  final KdbxEntry selectedEntry;
+  final Color fileColor;
+  final String _filterQuery;
+  final OnEntrySelected onEntrySelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final commonFields = Provider.of<CommonFields>(context);
+    return Semantics(
+      customSemanticsActions: {
+        CustomSemanticsAction(label: loc.swipeCopyPassword): () =>
+            _copyPassword(context, commonFields, loc, action: 'semantic'),
+        CustomSemanticsAction(label: loc.swipeCopyUsername): () =>
+            _copyUsername(context, commonFields, loc, action: 'semantic'),
+      },
+      child: Dismissible(
+        key: ValueKey(entry.entry.uuid),
+        resizeDuration: null,
+        background: Container(
+          alignment: Alignment.centerLeft,
+          color: Colors.lightBlueAccent,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Icon(Icons.lock),
+              const SizedBox(height: 4),
+              Text(loc.swipeCopyPassword),
+            ],
+          ),
+        ),
+        secondaryBackground: Container(
+          alignment: Alignment.centerRight,
+          color: Colors.limeAccent,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Icon(Icons.account_circle),
+              const SizedBox(height: 4),
+              Text(loc.swipeCopyUsername),
+            ],
+          ),
+        ),
+        confirmDismiss: (direction) async {
+          if (direction == DismissDirection.endToStart) {
+            await _copyUsername(context, commonFields, loc);
+          } else {
+            await _copyPassword(context, commonFields, loc);
+          }
+          return false;
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Container(
+            decoration: selectedEntry != entry.entry
+                ? (fileColor == null
+                    ? null
+                    : BoxDecoration(
+                        border: Border(
+                            left: BorderSide(color: fileColor, width: 4))))
+                : BoxDecoration(
+                    color: Theme.of(context).selectedRowColor,
+                    border: Border(
+                      right: BorderSide(
+                          color: Theme.of(context).primaryColor, width: 4),
+                      left: fileColor == null
+                          ? BorderSide.none
+                          : BorderSide(color: fileColor, width: 4),
+                    ),
+                  ),
+            child: PasswordEntryTile(
+              vm: entry,
+              isSelected: entry.entry == selectedEntry,
+              filterQuery: _filterQuery,
+              onTap: () {
+//                      Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
+                onEntrySelected(entry.entry, EntrySelectionType.activeOpen);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _copyUsername(
+      BuildContext context, CommonFields commonFields, AppLocalizations loc,
+      {String action = 'swipe'}) async {
+    await Clipboard.setData(ClipboardData(
+        text: entry.entry.getString(commonFields.userName.key).getText()));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(loc.doneCopiedUsername)));
+    context.read<Analytics>().events.trackSwipeCopyUsername();
+  }
+
+  Future<void> _copyPassword(
+      BuildContext context, CommonFields commonFields, AppLocalizations loc,
+      {String action = 'swipe'}) async {
+    await Clipboard.setData(ClipboardData(
+        text: entry.entry.getString(commonFields.password.key).getText()));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(loc.doneCopiedPassword)));
+    context.read<Analytics>().events.trackSwipeCopyPassword();
   }
 }
 
