@@ -60,6 +60,10 @@
     "@chineseSimplified": {
         "description": "Language switcher subtitle"
     },
+    "selectItem": "Auswählen",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - Wähle eine KeePass Datei",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -297,6 +301,10 @@
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
+    "filterButtonLabel": "Nach Gruppe filtern",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
     "clear": "Löschen",
     "@clear": {
         "description": "Remove existing group filter from password list"
@@ -411,6 +419,14 @@
     "@saveMasterPasswordBiometric": {
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
+    },
+    "close": "Schließen",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Neues Passwort hinzufügen",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
     },
     "errorOpenFileAlreadyOpenTitle": "Datei schon geöffnet",
     "@errorOpenFileAlreadyOpenTitle": {
@@ -739,6 +755,18 @@
     "saving": "Speichere",
     "@saving": {
         "description": "Saving text"
+    },
+    "increaseValue": "Vergrößern",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "Verkleinern",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "Zurücksetzen",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
     "unexpectedError": "Unerwarteter Fehler: {error}",
     "@unexpectedError": {

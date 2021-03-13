@@ -1,12 +1,12 @@
 {
     "@@locale": "zh",
-    "fieldUserName": "请输入登录帐号",
+    "fieldUserName": "用户",
     "@fieldUserName": {},
-    "fieldPassword": "请填入密码",
+    "fieldPassword": "密码",
     "@fieldPassword": {},
-    "fieldWebsite": "请输入要登录的网站的网址",
+    "fieldWebsite": "目标网站",
     "@fieldWebsite": {},
-    "fieldTitle": "请输入标题",
+    "fieldTitle": "标题",
     "@fieldTitle": {},
     "fieldTotp": "双重认证 (TOTP)",
     "@fieldTotp": {
@@ -72,7 +72,11 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
-    "selectKeepassFile": "誓约 - 打开数据库文件",
+    "selectItem": "选择...",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
+    "selectKeepassFile": "誓约 - 打开密码箱",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
@@ -80,15 +84,15 @@
     "@quickUnlockingFiles": {
         "context": "select file screen"
     },
-    "selectKeepassFileLabel": "请打开一个你的数据库！(后缀名是.kdbx)",
+    "selectKeepassFileLabel": "请打开或者新建一个密码箱（格式为.kdbx）",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
     },
-    "createNewFile": "创建新的数据库",
+    "createNewFile": "新建密码箱",
     "@createNewFile": {
         "description": "button on select file screen to create a new password database."
     },
-    "openLocalFile": "打开\n已有数据库",
+    "openLocalFile": "打开\n现有密码箱",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
     },
@@ -96,7 +100,7 @@
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
     },
-    "loadFrom": "从 {cloudStorageName} 加载",
+    "loadFrom": "从 {cloudStorageName} 导入",
     "@loadFrom": {
         "placeholders": {
             "cloudStorageName": {
@@ -109,15 +113,15 @@
     "@loadFromUrl": {
         "description": "deprecated"
     },
-    "loadFromRemoteUrl": "从链接打开 kdbx数据库",
+    "loadFromRemoteUrl": "从链接打开 kdbx密码箱",
     "@loadFromRemoteUrl": {
         "description": "Overflow menu option to load KeePass file from URL."
     },
-    "createNewKeepass": "初来乍到？创建你的第一个密码数据库吧！",
+    "createNewKeepass": "初来乍到？创建你的第一个密码库吧！",
     "@createNewKeepass": {
         "description": "deprecated"
     },
-    "labelLastOpenFiles": "上次打开的数据库:",
+    "labelLastOpenFiles": "上次打开的密码库:",
     "@labelLastOpenFiles": {},
     "noFilesHaveBeenOpenYet": "这里还空着呢，赶快创建一个！",
     "@noFilesHaveBeenOpenYet": {},
@@ -143,15 +147,15 @@
     "@lockAllFiles": {},
     "preferenceAllowScreenshots": "允许对本应用截屏",
     "@preferenceAllowScreenshots": {},
-    "preferenceEnableAutoFill": "启用自动填充",
+    "preferenceEnableAutoFill": "启用密码自动填充",
     "@preferenceEnableAutoFill": {},
-    "preferenceAutoFillDescription": "仅在 安卓 8.0 (Oreo) 或更高版本上支持。",
+    "preferenceAutoFillDescription": "仅支持安卓 8.0 (Oreo) 或更高版本。",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "设置",
     "@preferenceTitle": {},
     "aboutAppName": "誓约",
     "@aboutAppName": {},
-    "aboutLinkFeedback": "我们随时欢迎任何意见！",
+    "aboutLinkFeedback": "我们欢迎反馈意见！",
     "@aboutLinkFeedback": {},
     "aboutLinkVisitWebsite": "别忘了参观一下我们的网站",
     "@aboutLinkVisitWebsite": {},
@@ -205,7 +209,7 @@
     "@menuItemCheckForUpdates": {},
     "menuItemSupport": "向开发组求助（使用电邮）",
     "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "通过电子邮件发送日志/请求帮助。",
+    "menuItemSupportSubtitle": "通过电子邮件发送日志，或者请求帮助。",
     "@menuItemSupportSubtitle": {},
     "menuItemHelp": "寻求帮助",
     "@menuItemHelp": {},
@@ -221,7 +225,7 @@
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
     },
-    "generatorPassword": "请填入密码",
+    "generatorPassword": "密码",
     "@generatorPassword": {
         "description": "Label for generated password"
     },
@@ -309,6 +313,10 @@
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
+    "filterButtonLabel": "按组筛选",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
     "clear": "清空",
     "@clear": {
         "description": "Remove existing group filter from password list"
@@ -374,7 +382,7 @@
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
     },
-    "internalFileSubtitle": "之前使用 誓约 创建的数据库",
+    "internalFileSubtitle": "之前使用 誓约 创建的密码库",
     "@internalFileSubtitle": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
@@ -423,6 +431,14 @@
     "@saveMasterPasswordBiometric": {
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
+    },
+    "close": "关闭",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "添加新密码",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
     },
     "errorOpenFileAlreadyOpenTitle": "文件已经打开",
     "@errorOpenFileAlreadyOpenTitle": {
@@ -556,19 +572,19 @@
     "@enableAutofillDebugSubtitle": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
-    "createPasswordDatabase": "新建密码数据库",
+    "createPasswordDatabase": "新建密码库",
     "@createPasswordDatabase": {
         "description": ""
     },
-    "nameNewPasswordDatabase": "您新密码集的名称",
+    "nameNewPasswordDatabase": "您新密码库的名称",
     "@nameNewPasswordDatabase": {
         "description": "creating new kdbx file, prompt"
     },
-    "validatorNameMissing": "请为您的新密码集起一个名字。",
+    "validatorNameMissing": "请为您的新密码库起一个名字。",
     "@validatorNameMissing": {
         "description": "Error message when no password database name is given."
     },
-    "masterPasswordHelpText": "选择一个安全的主密码。请务必牢记。",
+    "masterPasswordHelpText": "设置一个安全的主密码。请务必牢记。",
     "@masterPasswordHelpText": {
         "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
     },
@@ -576,7 +592,7 @@
     "@inputMasterPasswordText": {
         "description": "Creating new file: input field for master password"
     },
-    "masterPasswordMissingCreate": "请输入一个既安全又好记的密码",
+    "masterPasswordMissingCreate": "请务必输入一个既安全又好记的密码~",
     "@masterPasswordMissingCreate": {
         "description": "Text displayed when master password is empty while creating new password database"
     },
@@ -584,11 +600,11 @@
     "@createDatabaseAction": {
         "description": "Label for button to create new database"
     },
-    "databaseExistsError": "文件已存在",
+    "databaseExistsError": "已经有同名的文件了呀~",
     "@databaseExistsError": {
         "description": "dialog title for error message when creating a new database with a name which already exists."
     },
-    "databaseExistsErrorDescription": "创建失败。这个位置已经有了同名文件。 请换一个名字。\n出错位置：{filePath}",
+    "databaseExistsErrorDescription": "创建失败了！这个位置已经有了同名的文件了，请换一个名字吧。\n出错位置：{filePath}",
     "@databaseExistsErrorDescription": {
         "description": "dialog body for error message when creating a new database with a name which already exists.",
         "placeholders": {
@@ -747,7 +763,7 @@
     "@dismissBackupButton": {
         "description": "Button that is displayed in backup warnings to dismiss the warning"
     },
-    "backupWarningMessage": "您在 {databasename} 中的密码只保存在了本地！",
+    "backupWarningMessage": "{databasename} 密码库中的密码没有上传到云端！",
     "@backupWarningMessage": {
         "description": "Warning message that is displayed in backup warnings",
         "placeholders": {
@@ -763,6 +779,18 @@
     "saving": "正在保存...",
     "@saving": {
         "description": "Saving text"
+    },
+    "increaseValue": "增加",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "减少",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "重置",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
     "unexpectedError": "意外错误: {error}",
     "@unexpectedError": {
