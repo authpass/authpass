@@ -1,8 +1,8 @@
 "playstore_full_description","","Google Play Store description","4000",""
-"playstore_title","","Google Play Title","50",""
-"playstore_short_description","","Short description in play store.","80",""
-"apple-appstore-title","","","30",""
-"apple-appstore-subtitle","你的密码，触手可及","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
+"playstore_title","誓约 - 兼容 KeePass 的密码管理器","Google Play Title","50",""
+"playstore_short_description","全平台同步您的帐号和密码，安全又方便！","Short description in play store.","80",""
+"apple-appstore-title","誓约 - 密码管理器","","30",""
+"apple-appstore-subtitle","一句誓约，万里相随","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
-"apple-appstore-keywords","","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
+"apple-appstore-keywords","密码管理器、密码、管理、密钥库、密钥安全、Keepass、Kdbx、webdav、icloud、nextcloud、onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 
