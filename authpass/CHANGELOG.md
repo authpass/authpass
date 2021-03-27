@@ -1,6 +1,7 @@
 # 1.7.12 - unreleased
 
-* todo
+* Support for v2 keyfiles https://forum.authpass.app/t/issuues-with-keyfile/84/4
+* Enable Keyboard shortcuts for Android app. (Should allow shortcuts on android).
 
 # 1.7.11 - 2021-02-21
 
