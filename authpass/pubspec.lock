@@ -736,7 +736,7 @@ packages:
       path: "../deps/kdbx.dart"
       relative: true
     source: path
-    version: "0.4.2"
+    version: "1.0.0"
   linkify:
     dependency: transitive
     description:
@@ -840,7 +840,7 @@ packages:
     source: git
     version: "3.1.0"
   openapi_base:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: openapi_base
       url: "https://pub.dartlang.org"
@@ -986,13 +986,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
-  prompts:
-    dependency: transitive
-    description:
-      name: prompts
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.1"
   provider:
     dependency: "direct main"
     description:
