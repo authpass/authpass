@@ -131,6 +131,15 @@
   "labelLastOpenFiles": "Last opened files:",
   "@labelLastOpenFiles": {},
 
+  "removeLastOpenedFiles": "Remove from last opened file list?",
+  "@removeLastOpenedFiles": {},
+
+  "cancelLastOpenedFiles": "Cancel",
+  "@cancelLastOpenedFiles": {},
+
+  "removeFromFileList": "Remove",
+  "@removeFromFileList": {},
+
   "noFilesHaveBeenOpenYet": "No files have been opened yet.",
   "@noFilesHaveBeenOpenYet": {},
 
