@@ -47,7 +47,7 @@ dependencies:
   isolate: ^2.0.3
 #  clipboard_manager: ^0.0.4
 
-  flutter_async_utils: ^0.1.0
+  flutter_async_utils: ^1.0.0-nullsafety.1
   flutter_svg: ">=0.20.0-nullsafety.3 <1.0.0"
   #usage: ^3.4.1
   usage:
@@ -89,7 +89,7 @@ dependencies:
 
 
   # UI Utilities and Widgets
-  badges: ^1.2.0
+  badges: ^2.0.0-nullsafety.1
   qr_flutter: ^3.2.0
   flushbar: ^1.10.4
   filesystem_picker: ^1.0.2
@@ -98,7 +98,7 @@ dependencies:
   # (Small) utility packages
   quiver: ">=3.0.0-nullsafety.3 <4.0.0"
   tuple: ^1.0.3
-  rxdart: ^0.26.0
+  rxdart: ^0.27.0
   charcode: ^1.1.3
   recase: ^3.0.0
   # collection utilities:

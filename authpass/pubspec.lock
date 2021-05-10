@@ -98,7 +98,7 @@ packages:
       name: badges
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "2.0.0-nullsafety.1"
   barcode_scan2:
     dependency: "direct main"
     description:
@@ -483,7 +483,7 @@ packages:
       name: flutter_async_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "1.0.0-nullsafety.1"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -497,7 +497,7 @@ packages:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-nullsafety.1"
+    version: "3.0.2"
   flutter_colorpicker:
     dependency: "direct main"
     description:
@@ -657,7 +657,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.0"
+    version: "0.13.3"
   http_auth:
     dependency: "direct main"
     description:
@@ -755,7 +755,7 @@ packages:
       name: logging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   logging_appenders:
     dependency: "direct main"
     description:
@@ -1053,7 +1053,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.26.0"
+    version: "0.27.0"
   shelf:
     dependency: "direct overridden"
     description:
@@ -1137,7 +1137,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0+2"
+    version: "2.0.0+3"
   sqflite_common:
     dependency: transitive
     description:
@@ -1270,7 +1270,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -1321,7 +1321,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.4"
   vector_math:
     dependency: transitive
     description:
