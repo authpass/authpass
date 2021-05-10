@@ -263,7 +263,7 @@ class EmailRead extends StatelessWidget {
                     child: htmlData != null && !forcePlainText
                         ? Html(
                             data: htmlData,
-                            onLinkTap: (link) {
+                            onLinkTap: (link, context, attributes, element) {
                               DialogUtils.openUrl(link);
                             },
                           )
@@ -275,7 +275,7 @@ class EmailRead extends StatelessWidget {
                                       vm.mimeMessage?.decodeContentText())
                                   .replaceAll('\r', ''),
                               maxLines: null,
-                              options: LinkifyOptions(
+                              options: const LinkifyOptions(
                                 humanize: false,
                               ),
                               onOpen: (link) async {

@@ -38,7 +38,7 @@ dependencies:
   freezed_annotation: ^0.14.1
   built_value: ^8.0.6
   simple_json_persistence: ^2.0.0-nullsafety.4
-  provider: ^4.3.2+1
+  provider: ^5.0.0
   http: ^0.13.0
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.1.0
@@ -69,13 +69,13 @@ dependencies:
   autofill_service:
     path: ../deps/autofill_service
 
-  flutter_colorpicker: ^0.3.4
+  flutter_colorpicker: ^0.4.0
   # flutter_speed_dial: ^1.2.5
   flutter_speed_dial: # overflow -> clipBehavior
     git:
       url: https://github.com/authpass/flutter_speed_dial.git
       ref: 7ad1672e22627d1106151ed8602b52bb99b9a8d2
-  flutter_email_sender: ^3.0.1
+  flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.0
 
   biometric_storage: ^2.0.1
@@ -83,31 +83,31 @@ dependencies:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
   url_launcher: ^6.0.2
-  font_awesome_flutter: ^8.8.1
+  font_awesome_flutter: ^9.0.0
   otp: ^3.0.0-nullsafety.0
   zxcvbn: ^0.0.1
 
 
   # UI Utilities and Widgets
   badges: ^2.0.0-nullsafety.1
-  qr_flutter: ^3.2.0
+  qr_flutter: ^4.0.0
   flushbar: ^1.10.4
-  filesystem_picker: ^1.0.2
+  filesystem_picker: ^2.0.0-nullsafety.0
   tinycolor: ^1.0.3
 
   # (Small) utility packages
   quiver: ">=3.0.0-nullsafety.3 <4.0.0"
-  tuple: ^1.0.3
+  tuple: ^2.0.0
   rxdart: ^0.27.0
   charcode: ^1.1.3
-  recase: ^3.0.0
+  recase: ^4.0.0
   # collection utilities:
-  flinq: ^1.1.1
+  flinq: ^2.0.2
 
-  string_literal_finder_annotations: ^0.1.1+1
+  string_literal_finder_annotations: ^1.0.0
 
   # WebDAV
-  http_auth: ^0.3.1
+  http_auth: ^1.0.0
 
   # google drive
   googleapis: ^2.0.0
@@ -131,10 +131,10 @@ dependencies:
 #      url: https://github.com/google/flutter-desktop-embedding.git
 #      path: plugins/file_chooser
 
-  macos_secure_bookmarks: ^0.1.2+1
+  macos_secure_bookmarks: ^0.2.0
 
   # UI Utils
-  percent_indicator: ^2.1.5
+  percent_indicator: ^3.3.0-nullsafety.1
 
   # Plugins
   #flutter_barcode_scanner: ^0.1.7
@@ -157,8 +157,8 @@ dependencies:
   ffi: ^1.0.0
   # AuthPass Cloud email deps
   enough_mail: ^1.2.2
-  flutter_html: ^1.2.0
-  flutter_linkify: ^3.1.3
+  flutter_html: ^2.0.0-nullsafety.1
+  flutter_linkify: ^5.0.2
 #  openapi_base: ^0.1.5+5
   flutter_cache_manager: ^3.0.0-nullsafety.1
   cached_network_image: ^3.0.0-nullsafety
