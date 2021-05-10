@@ -170,12 +170,14 @@ dependencies:
       ref: 1e124a5056709c00ec05f2c1e3bd8c2084fe962b
   
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-  test: any
-  mockito: ^4.1.2
+#  test: any
+  mockito: ^5.0.4
 #   https://github.com/flutter/flutter/issues/62240
 #  analyzer: ^0.39.17
   json_serializable: ^4.0.2

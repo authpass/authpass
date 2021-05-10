@@ -4,10 +4,10 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/utils/uuid_util.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:test/test.dart';
 
 final _logger = Logger('generic_cloud_storage');
 

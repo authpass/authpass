@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:authpass/cloud_storage/onedrive/onedrive_provider.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
-import 'package:test/test.dart';
 
 import '../util/test_util.dart';
 import 'generic_cloud_storage.dart';
