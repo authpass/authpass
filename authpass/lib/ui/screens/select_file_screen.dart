@@ -26,6 +26,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:built_collection/src/list.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
@@ -77,37 +78,37 @@ class SelectFileScreen extends StatelessWidget {
         actions: <Widget>[
           AppBarMenu.createOverflowMenuButton(context,
               secondaryBuilder: (context) {
-            return [
-              PopupMenuItem(
-                value: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      OnboardingScreen.route(), (route) => false);
-                },
-                child: ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.route),
-                  title: Text(loc.onboardingBackToOnboarding),
-                  subtitle: Text(loc.onboardingBackToOnboardingSubtitle),
-                ),
-              ),
-              PopupMenuItem(
-                value: () async {
-                  final source = await showDialog<FileSourceUrl>(
-                      context: context,
-                      builder: (context) => SelectUrlDialog());
-                  if (source != null) {
-                    // _loadAndGoToCredentials(source);
-                    await Navigator.of(context)
-                        .push(CredentialsScreen.route(source));
-                  }
-                },
-                child: ListTile(
-                  key: const ValueKey('downloadFromUrl'),
-                  leading: const FaIcon(FontAwesomeIcons.fileCode),
-                  title: Text(loc.loadFromRemoteUrl),
-                ),
-              ),
-            ];
-          }),
+                return [
+                  PopupMenuItem(
+                    value: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          OnboardingScreen.route(), (route) => false);
+                    },
+                    child: ListTile(
+                      leading: const FaIcon(FontAwesomeIcons.route),
+                      title: Text(loc.onboardingBackToOnboarding),
+                      subtitle: Text(loc.onboardingBackToOnboardingSubtitle),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: () async {
+                      final source = await showDialog<FileSourceUrl>(
+                          context: context,
+                          builder: (context) => SelectUrlDialog());
+                      if (source != null) {
+                        // _loadAndGoToCredentials(source);
+                        await Navigator.of(context)
+                            .push(CredentialsScreen.route(source));
+                      }
+                    },
+                    child: ListTile(
+                      key: const ValueKey('downloadFromUrl'),
+                      leading: const FaIcon(FontAwesomeIcons.fileCode),
+                      title: Text(loc.loadFromRemoteUrl),
+                    ),
+                  ),
+                ];
+              }),
         ],
       ),
       body: Provider<CloudStorageBloc>.value(
@@ -145,38 +146,38 @@ class ProgressOverlay extends StatelessWidget {
             firstChild: !_hasProgress
                 ? Container()
                 : Container(
-                    color: Colors.black12,
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: theme.cardColor
-                              .withAlpha(250), //Color(0xefffffff),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                        ),
-                        padding: const EdgeInsets.all(32),
-                        child: ValueListenableBuilder<FutureTask>(
-                          valueListenable: task,
-                          builder: (context, value, child) {
-                            _logger.fine('Generating progress dialog'
-                                ' with label ${value?.progressLabel}');
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const CircularProgressIndicator(),
-                                ...?(value.progressLabel == null
-                                    ? null
-                                    : [
-                                        const SizedBox(height: 16),
-                                        Text(value.progressLabel),
-                                      ]),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+              color: Colors.black12,
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.cardColor
+                        .withAlpha(250), //Color(0xefffffff),
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(8)),
                   ),
+                  padding: const EdgeInsets.all(32),
+                  child: ValueListenableBuilder<FutureTask>(
+                    valueListenable: task,
+                    builder: (context, value, child) {
+                      _logger.fine('Generating progress dialog'
+                          ' with label ${value?.progressLabel}');
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const CircularProgressIndicator(),
+                          ...?(value.progressLabel == null
+                              ? null
+                              : [
+                            const SizedBox(height: 16),
+                            Text(value.progressLabel),
+                          ]),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
             secondChild: Container(),
             crossFadeState: _hasProgress
                 ? CrossFadeState.showFirst
@@ -247,24 +248,24 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   Future<void> _checkQuickUnlock() => asyncRunTask((progress) async {
-        if (_quickUnlockAttempted) {
-          _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
-          return;
-        }
-        _quickUnlockAttempted = true;
-        progress.progressLabel = 'Quick unlocking files ...';
-        final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-        if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
-          _logger
-              .fine('We already have files open. Not attempting quick unlock.');
-          return;
-        }
-        _logger.finer(
-            'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
-        final opened = await kdbxBloc.reopenQuickUnlock(progress);
-        _logger.info(
-            'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
-        if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
+    if (_quickUnlockAttempted) {
+      _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
+      return;
+    }
+    _quickUnlockAttempted = true;
+    progress.progressLabel = 'Quick unlocking files ...';
+    final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+    if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
+      _logger
+          .fine('We already have files open. Not attempting quick unlock.');
+      return;
+    }
+    _logger.finer(
+        'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
+    final opened = await kdbxBloc.reopenQuickUnlock(progress);
+    _logger.info(
+        'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
+    if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
 //          if (AuthPassPlatform.isMacOS) {
 //            _logger.fine('Lets chill for a second.');
 //            await Future<int>.delayed(const Duration(seconds: 3));
@@ -273,9 +274,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //            _logger.fine('Lets chill for a second.');
 //            await Future<int>.delayed(const Duration(seconds: 3));
 //          }
-          _logger.finer('Pushing main app scaffold. (mounted: $mounted)');
-          unawaited(
-              Navigator.of(context).pushReplacement(MainAppScaffold.route()));
+      _logger.finer('Pushing main app scaffold. (mounted: $mounted)');
+      unawaited(
+          Navigator.of(context).pushReplacement(MainAppScaffold.route()));
 //          WidgetsBinding.instance.scheduleFrameCallback((timeStamp) {
 //            _logger.fine('Frame Callback. adding post frame callback.');
 //            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -287,12 +288,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //              }
 //            });
 //          });
-        }
-      }, label: AppLocalizations.of(context).quickUnlockingFiles);
+    }
+  }, label: AppLocalizations.of(context).quickUnlockingFiles);
 
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
+    final appDataBloc = Provider.of<AppDataBloc>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -307,39 +309,39 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
             children: <Widget>[
               ...?(_showLinuxAppArmorMessage
                   ? [
-                      const SizedBox(height: 16),
-                      Text(
-                        'AuthPass requires permission to communicate with '
-                        'Secret Service to store credentials for cloud storage.\n'
-                        'Please run the following command:',
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.caption.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.errorColor,
+                const SizedBox(height: 16),
+                Text(
+                  'AuthPass requires permission to communicate with '
+                      'Secret Service to store credentials for cloud storage.\n'
+                      'Please run the following command:',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.caption.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.errorColor,
+                  ),
+                ),
+                LinkButton(
+                  icon: const Icon(Icons.content_copy),
+                  onPressed: () async {
+                    await Clipboard.setData(
+                        const ClipboardData(text: _linuxAppArmorCommand));
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text(loc.copiedToClipboard),
                         ),
-                      ),
-                      LinkButton(
-                        icon: const Icon(Icons.content_copy),
-                        onPressed: () async {
-                          await Clipboard.setData(
-                              const ClipboardData(text: _linuxAppArmorCommand));
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                content: Text(loc.copiedToClipboard),
-                              ),
-                            );
-                          await _linuxAppArmorCheck();
-                        },
-                        child: const Text(
-                          _linuxAppArmorCommand,
-                          style: TextStyle(
-                              fontFamily: AuthPassTheme.monoFontFamily),
-                          maxLines: null,
-                        ),
-                      ),
-                    ]
+                      );
+                    await _linuxAppArmorCheck();
+                  },
+                  child: const Text(
+                    _linuxAppArmorCommand,
+                    style: TextStyle(
+                        fontFamily: AuthPassTheme.monoFontFamily),
+                    maxLines: null,
+                  ),
+                ),
+              ]
                   : null),
               const SizedBox(height: 16),
               Padding(
@@ -383,7 +385,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     },
                   ),
                   ...cloudStorageBloc.availableCloudStorage.map(
-                    (cs) => SelectFileAction(
+                        (cs) => SelectFileAction(
                       icon: cs.displayIcon.iconData,
                       label: loc.loadFrom(cs.displayName),
                       onPressed: () async {
@@ -424,20 +426,55 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       ...ListTile.divideTiles(
                         context: context,
                         tiles: appData?.previousFiles?.reversed
-                                ?.take(5)
-                                ?.takeIfNotEmpty()
-                                ?.map(
-                                  (f) => OpenedFileTile(
-                                    openedFile:
-                                        f.toFileSource(cloudStorageBloc),
-                                    color: f.color,
-                                    onPressed: () {
-                                      final source =
-                                          f.toFileSource(cloudStorageBloc);
-                                      _loadAndGoToCredentials(source);
-                                    },
-                                  ),
-                                ) ??
+                            ?.take(5)
+                            ?.takeIfNotEmpty()
+                            ?.map(
+                              (f) => OpenedFileTile(
+                              openedFile:
+                              f.toFileSource(cloudStorageBloc),
+                              color: f.color,
+                              onPressed: () {
+                                final source =
+                                f.toFileSource(cloudStorageBloc);
+                                _loadAndGoToCredentials(source);
+                              },
+                              onLongPressed: () async {
+                                await showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        title:
+                                        Text(loc.removeLastOpenedFiles),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                                loc.cancelLastOpenedFiles),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              final tempList = appData
+                                                  .previousFiles
+                                                  .toBuilder();
+                                              tempList.remove(f);
+                                              await appDataBloc.update(
+                                                      (builder, data) => builder
+                                                      .previousFiles =
+                                                      tempList);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                                loc.removeFromFileList,
+                                                style: const TextStyle(
+                                                    color: Colors.red)),
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              }),
+                        ) ??
                             [
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -549,7 +586,7 @@ class OpenFileBottomSheet extends StatelessWidget {
               final filePath = await FilesystemPicker.open(
                 context: context,
                 rootDirectory:
-                    await PathUtils().getAppDocDirectory(ensureCreated: true),
+                await PathUtils().getAppDocDirectory(ensureCreated: true),
                 fsType: FilesystemType.file,
                 allowedExtensions: ['.kdbx'],
                 fileTileSelectMode: FileTileSelectMode.wholeTile,
@@ -680,7 +717,7 @@ class SelectFileAction extends StatelessWidget {
                   Icon(
                     icon,
                     color:
-                        theme.primaryTextTheme.bodyText2.color.withOpacity(0.8),
+                    theme.primaryTextTheme.bodyText2.color.withOpacity(0.8),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -773,11 +810,11 @@ class CredentialsScreen extends StatefulWidget {
   const CredentialsScreen({Key key, this.kdbxFilePath}) : super(key: key);
 
   static Route<void> route(FileSource kdbxFilePath) => MaterialPageRoute<void>(
-        settings: const RouteSettings(name: '/credentials'),
-        builder: (context) => CredentialsScreen(
-          kdbxFilePath: kdbxFilePath,
-        ),
-      );
+    settings: const RouteSettings(name: '/credentials'),
+    builder: (context) => CredentialsScreen(
+      kdbxFilePath: kdbxFilePath,
+    ),
+  );
 
   final FileSource kdbxFilePath;
 
@@ -847,9 +884,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     _kdbxBloc.quickUnlockStorage
         .supportsBiometricKeyStore()
         .then((bool biometricQuickUnlock) => setState(() {
-              _biometricQuickUnlockSupported = biometricQuickUnlock;
-              _biometricQuickUnlockActivated ??= true;
-            }));
+      _biometricQuickUnlockSupported = biometricQuickUnlock;
+      _biometricQuickUnlockActivated ??= true;
+    }));
   }
 
   @override
@@ -893,9 +930,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       ? AutovalidateMode.always
                       : AutovalidateMode.onUserInteraction,
                   validator: (_keyFile == null || _invalidPassword != null
-                          ? SValidator.notEmpty(
-                              msg: loc.masterPasswordEmptyValidator)
-                          : SValidator<String>([])) +
+                      ? SValidator.notEmpty(
+                      msg: loc.masterPasswordEmptyValidator)
+                      : SValidator<String>([])) +
                       SValidator.invalidValue(
                           invalidValue: _invalidPassword,
                           message: loc.masterPasswordIncorrectValidator),
@@ -951,34 +988,34 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
               ),
               ...(_biometricQuickUnlockSupported
                   ? [
-                      Container(
-                        child: CheckboxListTile(
-                          value: _biometricQuickUnlockActivated,
-                          dense: true,
-                          title: Text(
-                            loc.saveMasterPasswordBiometric,
-                            textAlign: TextAlign.right,
-                          ),
-                          onChanged: (value) => setState(() {
-                            _biometricQuickUnlockActivated = value;
-                          }),
-                        ),
-                      ),
-                    ]
+                Container(
+                  child: CheckboxListTile(
+                    value: _biometricQuickUnlockActivated,
+                    dense: true,
+                    title: Text(
+                      loc.saveMasterPasswordBiometric,
+                      textAlign: TextAlign.right,
+                    ),
+                    onChanged: (value) => setState(() {
+                      _biometricQuickUnlockActivated = value;
+                    }),
+                  ),
+                ),
+              ]
                   : []),
               Container(
                 alignment: Alignment.centerRight,
                 child: _loadingFile != null
                     ? const Padding(
-                        padding: EdgeInsets.all(32),
-                        child: CircularProgressIndicator())
+                    padding: EdgeInsets.all(32),
+                    child: CircularProgressIndicator())
                     : LinkButton(
-                        key: const ValueKey('continue'),
-                        onPressed: () async {
-                          await _tryUnlock();
-                        },
-                        child: Text(loc.dialogContinue),
-                      ),
+                  key: const ValueKey('continue'),
+                  onPressed: () async {
+                    await _tryUnlock();
+                  },
+                  child: Text(loc.dialogContinue),
+                ),
               ),
             ],
           ),
