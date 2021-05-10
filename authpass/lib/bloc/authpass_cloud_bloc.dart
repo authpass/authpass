@@ -387,10 +387,25 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   Future<T> reload() async => await _stream.reload();
 
   @override
-  ErrorAndStackTrace get errorAndStackTrace => _valueStream.errorAndStackTrace;
+  Object get error => _valueStream.error;
 
   @override
-  ValueWrapper<T> get valueWrapper => _valueStream.valueWrapper;
+  Object get errorOrNull => _valueStream.errorOrNull;
+
+  @override
+  bool get hasError => _valueStream.hasError;
+
+  @override
+  bool get hasValue => _valueStream.hasValue;
+
+  @override
+  StackTrace get stackTrace => _valueStream.stackTrace;
+
+  @override
+  T get value => _valueStream.value;
+
+  @override
+  T get valueOrNull => _valueStream.valueOrNull;
 }
 
 class LazyBehaviorSubject<T> {

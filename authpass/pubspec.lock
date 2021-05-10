@@ -70,7 +70,7 @@ packages:
       name: asn1lib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.0-nullsafety.0"
+    version: "1.0.0"
   async:
     dependency: transitive
     description:
@@ -119,7 +119,7 @@ packages:
       name: basic_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-nullsafety.0"
+    version: "3.0.2"
   biometric_storage:
     dependency: "direct main"
     description:
@@ -364,21 +364,21 @@ packages:
       name: encrypt
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0-beta.1"
+    version: "5.0.0"
   enough_convert:
     dependency: transitive
     description:
       name: enough_convert
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.3.0"
   enough_mail:
     dependency: "direct main"
     description:
       name: enough_mail
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "1.2.2"
   enough_serialization:
     dependency: transitive
     description:
@@ -948,7 +948,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2"
+    version: "4.1.0"
   pigment:
     dependency: transitive
     description:
@@ -976,7 +976,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-nullsafety.2"
+    version: "3.0.1"
   pool:
     dependency: transitive
     description:
@@ -1442,7 +1442,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.2"
+    version: "5.1.0"
   yaml:
     dependency: transitive
     description:
