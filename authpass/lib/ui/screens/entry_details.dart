@@ -29,7 +29,7 @@ import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
-import 'package:barcode_scan/barcode_scan.dart' as barcode;
+import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -668,8 +668,8 @@ class _EntryDetailsState extends State<EntryDetails>
 //            '#ff6666', 'Cancel', true, ScanMode.QR);
 
         final barcodeResult = await barcode.BarcodeScanner.scan();
-        if (barcodeResult != null) {
-          return _cleanOtpCodeCode(barcodeResult);
+        if (barcodeResult.type == barcode.ResultType.Barcode) {
+          return _cleanOtpCodeCode(barcodeResult.rawContent);
         }
 
 //        final scanResult = await barcode.BarcodeScanner.scan();

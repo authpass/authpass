@@ -99,15 +99,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  barcode_scan:
+  barcode_scan2:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "85cfc7efee91c3444d24435486cf292a32f04499"
-      resolved-ref: "85cfc7efee91c3444d24435486cf292a32f04499"
-      url: "https://github.com/RohitKumarMishra/flutter_barcode_reader.git"
-    source: git
-    version: "1.0.0"
+      name: barcode_scan2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.3"
   base32:
     dependency: transitive
     description:
@@ -993,6 +991,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.1"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   provider:
     dependency: "direct main"
     description:
@@ -1305,11 +1310,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: custom-user-agent
-      resolved-ref: "748be41f1801916bcfcc651f972763cd48596bce"
+      ref: custom-user-agent-rebased
+      resolved-ref: "2c4fd200d60c6f722988d342bfe0e587f18eb8ec"
       url: "https://github.com/hpoul/usage.git"
     source: git
-    version: "3.4.1"
+    version: "4.0.2"
   uuid:
     dependency: "direct main"
     description:
