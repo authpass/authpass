@@ -788,7 +788,9 @@ class _PasswordListContentState extends State<PasswordListContent>
       _filteredEntries = entries;
       if (_filteredEntries.isNotEmpty &&
           (widget.selectedEntry == null ||
-              !_filteredEntries.contains(widget.selectedEntry))) {
+              !_filteredEntries
+                  .map((e) => e.entry)
+                  .contains(widget.selectedEntry))) {
         widget.onEntrySelected(context, _filteredEntries.first.entry,
             EntrySelectionType.passiveHighlight);
 //                  // TODO this looks a bit like a workaround. But on MacOS we lose focus when

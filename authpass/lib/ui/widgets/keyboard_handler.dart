@@ -72,7 +72,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     debugLabel: 'AuthPassKeyboardFocus',
     onKey: (focusNode, rawKeyEvent) {
 //      _logger.info('got onKey: ($focusNode) $rawKeyEvent');
-      return false;
+      return KeyEventResult.ignored;
     },
   );
 

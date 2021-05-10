@@ -35,8 +35,8 @@ dependencies:
 #      url: https://github.com/hpoul/file_picker_writable.git
 #      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
   json_annotation: ^4.0.0
-  freezed_annotation: ^0.14.0
-  built_value: ^8.0.0
+  freezed_annotation: ^0.14.1
+  built_value: ^8.0.6
   simple_json_persistence: ^2.0.0-nullsafety.4
   provider: ^4.3.2+1
   http: ^0.13.0
@@ -65,7 +65,7 @@ dependencies:
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
   #path_provider_windows: '>=0.0.1+2 <2.0.0'
-  analytics_event: ^0.1.2
+  analytics_event: ^1.0.0
   autofill_service:
     path: ../deps/autofill_service
 
@@ -151,7 +151,7 @@ dependencies:
   esys_flutter_share: ^1.0.2
   flutter_windowmanager: ^0.0.2
 
-  mime: ^0.9.7
+  mime: ^1.0.0
   pedantic: ^1.9.2
   ffi: ^1.0.0
   # AuthPass Cloud email deps
@@ -175,15 +175,15 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   test: any
-  mockito: ^4.1.2
+  mockito: ^5.0.7
 #   https://github.com/flutter/flutter/issues/62240
 #  analyzer: ^0.39.17
   json_serializable: ^4.0.2
-  build_runner: ^1.10.2
-  builder_static_text: ^0.0.1+2
-  built_value_generator: ^8.0.0
-  analytics_event_gen: ^0.1.2+1
-  freezed: ^0.12.7
+  build_runner: ^2.0.2
+  builder_static_text: ^0.1.0
+  built_value_generator: ^8.0.6
+  analytics_event_gen: ^1.0.0
+  freezed: ^0.14.1+3
   plugin_platform_interface: ^2.0.0
 
 dependency_overrides:
@@ -206,8 +206,8 @@ dependency_overrides:
   crypto: ^3.0.0
 #  archive: ^3.0.0
 #  logging: ^1.0.0-nullsafety
-  shelf: ^1.0.0
-  analyzer: ^0.41.0 # built_value_generator >=8.0.0-nullsafety.0 depends on analyzer ^0.40.0
+  shelf: ^1.1.2
+#  analyzer: ^0.41.0 # built_value_generator >=8.0.0-nullsafety.0 depends on analyzer ^0.40.0
 #  http: ^0.13.0 # enough_mail >=0.0.30 depends on http ^0.12.2
 #  convert: ^3.0.0 # enough_mail >=0.0.34 depends on basic_utils ^2.6.3 which depends on convert ^2.1.1, enough_mail >=0.0.34 requires convert ^2.1.1
 #  basic_utils: ^3.0.0-nullsafety.0
