@@ -153,7 +153,6 @@ ThemeData createDarkTheme() {
     brightness: Brightness.dark,
     colorScheme: colorScheme,
     primarySwatch: AuthPassTheme.primarySwatch,
-    accentColor: AuthPassTheme.primaryColor,
     selectedRowColor: colorScheme.surface,
   ));
 }

@@ -3,9 +3,9 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:path/path.dart' as path;
 
 import 'package:http/http.dart';
+import 'package:path/path.dart' as path;
 
 // const FLUTTER_VERSION = '1.22.0-1.0.pre';
 // const FLUTTER_VERSION = '1.23.0-18.0.pre';

@@ -17,10 +17,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:logging/logging.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
-
-import 'package:logging/logging.dart';
 
 final _logger = Logger('cloud_mail_read');
 

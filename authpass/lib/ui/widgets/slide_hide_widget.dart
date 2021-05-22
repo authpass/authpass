@@ -6,18 +6,15 @@ class SlideHideWidget extends StatelessWidget {
     @required this.hide,
     this.padding,
     @required this.child,
-    @required this.vsync,
   }) : super(key: key);
 
   final bool hide;
   final Widget child;
   final EdgeInsetsGeometry padding;
-  final TickerProvider vsync;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
-      vsync: vsync,
       duration: const Duration(milliseconds: 300),
 //      firstChild: child,
 //      secondChild: Container(

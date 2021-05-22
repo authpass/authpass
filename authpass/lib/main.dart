@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart' as flushbar_route;
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
@@ -24,11 +26,9 @@ import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/winsparkle_init_noop.dart'
-if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
+    if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:another_flushbar/flushbar_route.dart' as flushbar_route;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -36,7 +36,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
-
 // TODO: Remove the following two lines once path provider endorses the linux plugin
 import 'package:path_provider_linux/path_provider_linux.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -70,8 +69,7 @@ Future<void> startApp(Env env) async {
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info('Initialized logger. '
-      '(${AuthPassPlatform.operatingSystem}, ${AuthPassPlatform
-      .operatingSystemVersion}) ${startupStopwatch.elapsedMilliseconds}');
+      '(${AuthPassPlatform.operatingSystem}, ${AuthPassPlatform.operatingSystemVersion}) ${startupStopwatch.elapsedMilliseconds}');
 
   FlutterError.onError = (errorDetails) {
     _logger.shout(
@@ -177,20 +175,19 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     _appData = _deps.appDataBloc.store.cachedValue;
     handleSubscription(
         _deps.appDataBloc.store.onValueChangedAndLoad.listen((appData) {
-          if (_appData != appData) {
-            setState(() {
-              _appData = appData;
-            });
-            if (AuthPassPlatform.isAndroid) {
-              if (appData.secureWindowOrDefault) {
-                FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-              } else {
-                FlutterWindowManager.clearFlags(
-                    FlutterWindowManager.FLAG_SECURE);
-              }
-            }
+      if (_appData != appData) {
+        setState(() {
+          _appData = appData;
+        });
+        if (AuthPassPlatform.isAndroid) {
+          if (appData.secureWindowOrDefault) {
+            FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+          } else {
+            FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
           }
-        }));
+        }
+      }
+    }));
     if (AuthPassPlatform.isWindows) {
       initWinSparkle(widget.env);
     }
@@ -259,8 +256,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         ProxyProvider2<AppData, Env, FeatureFlags>(
           update: (_, appData, env, __) {
             if (appData?.manualUserType == 'admin') {
-              return (env.featureFlags.toBuilder()
-                ..authpassCloud = true)
+              return (env.featureFlags.toBuilder()..authpassCloud = true)
                   .build();
             }
             return env.featureFlags;
@@ -287,12 +283,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           lazy: false,
         ),
         StreamProvider<KdbxBloc>(
-          create: (context) =>
-              _deps.kdbxBloc.openedFilesChanged
-                  .map((_) => _deps.kdbxBloc)
-                  .doOnData((data) {
-                _logger.info('KdbxBloc updated.');
-              }),
+          create: (context) => _deps.kdbxBloc.openedFilesChanged
+              .map((_) => _deps.kdbxBloc)
+              .doOnData((data) {
+            _logger.info('KdbxBloc updated.');
+          }),
           updateShouldNotify: (a, b) => true,
           initialData: _deps.kdbxBloc,
         ),
@@ -307,7 +302,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         navigatorKey: widget.navigatorKey,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales:
-        const [Locale('en')] + AppLocalizations.supportedLocales,
+            const [Locale('en')] + AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
@@ -321,7 +316,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             viewportSizeHeight: mq.size.height,
             displaySizeWidth: WidgetsBinding.instance.window.physicalSize.width,
             displaySizeHeight:
-            WidgetsBinding.instance.window.physicalSize.height,
+                WidgetsBinding.instance.window.physicalSize.height,
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
@@ -353,7 +348,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           _deps.analytics.trackScreen(initialRoute);
           _deps.analytics.events.trackLaunch(
               systemBrightness:
-              WidgetsBinding.instance.window.platformBrightness);
+                  WidgetsBinding.instance.window.platformBrightness);
           if (startupStopwatch.isRunning) {
             startupStopwatch.stop();
             _deps.analytics.trackTiming(
@@ -421,8 +416,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 
     final visualDensity = appData.themeVisualDensity != null
         ? VisualDensity(
-        horizontal: appData.themeVisualDensity,
-        vertical: appData.themeVisualDensity)
+            horizontal: appData.themeVisualDensity,
+            vertical: appData.themeVisualDensity)
         : theme.visualDensity;
     _logger.fine('appData.themeFontSizeFactor: ${appData.themeFontSizeFactor}');
 //    final textTheme = appData.themeFontSizeFactor != null
@@ -448,41 +443,38 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           initialConfig: !disableOnlineMessages || _deps.env.diacHidden
               ? null
               : DiacConfig(
-            updatedAt: DateTime(2020, 5, 18),
-            messages: [
-              DiacMessage(
-                uuid: 'e7373fa7-a793-4ed5-a2d1-d0a037ad778a',
-                body:
-                'Hello ${widget.env is FDroid
-                    ? 'F-Droid user'
-                    : 'there'}, thanks for using AuthPass! '
-                    'I would love to occasionally display relevant news, surveys, etc (like this one ;), '
-                    'no ads, spam, etc). You can disable it anytime.',
-                key: 'ask-opt-in',
-                expression: 'user.days > 0',
-                actions: const [
-                  DiacMessageAction(
-                    key: 'yes',
-                    label: '👍️ Yes, Opt In',
-                    url: 'diac:diacOptIn',
-                  ),
-                  DiacMessageAction(
-                    key: 'no',
-                    label: 'No, Sorry',
-                    url: 'diac:diacNoOptIn',
-                  ),
-                ],
-              ),
-            ],
-          ),
+                  updatedAt: DateTime(2020, 5, 18),
+                  messages: [
+                    DiacMessage(
+                      uuid: 'e7373fa7-a793-4ed5-a2d1-d0a037ad778a',
+                      body:
+                          'Hello ${widget.env is FDroid ? 'F-Droid user' : 'there'}, thanks for using AuthPass! '
+                          'I would love to occasionally display relevant news, surveys, etc (like this one ;), '
+                          'no ads, spam, etc). You can disable it anytime.',
+                      key: 'ask-opt-in',
+                      expression: 'user.days > 0',
+                      actions: const [
+                        DiacMessageAction(
+                          key: 'yes',
+                          label: '👍️ Yes, Opt In',
+                          url: 'diac:diacOptIn',
+                        ),
+                        DiacMessageAction(
+                          key: 'no',
+                          label: 'No, Sorry',
+                          url: 'diac:diacNoOptIn',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
           packageInfo: () async =>
               (await _deps.env.getAppInfo()).toDiacPackageInfo()),
-      contextBuilder: () async =>
-      {
+      contextBuilder: () async => {
         'env': <String, Object>{
           'isDebug': _deps.env.isDebug,
           'isGoogleStore': (await _deps.env.getAppInfo()).packageName ==
-              'design.codeux.authpass' &&
+                  'design.codeux.authpass' &&
               AuthPassPlatform.isAndroid,
           'isIOS': AuthPassPlatform.isIOS,
           'isAndroid': AuthPassPlatform.isAndroid,
@@ -521,8 +513,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           return true;
         }
       },
-    )
-      ..events.listen((event) {
+    )..events.listen((event) {
         _deps.analytics.trackGenericEvent(
           'diac',
           event is DiacEventWithAction

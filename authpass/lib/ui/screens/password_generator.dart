@@ -66,8 +66,7 @@ class GeneratePassword extends StatefulWidget {
   _GeneratePasswordState createState() => _GeneratePasswordState();
 }
 
-class _GeneratePasswordState extends State<GeneratePassword>
-    with SingleTickerProviderStateMixin {
+class _GeneratePasswordState extends State<GeneratePassword> {
   static Map<String, CharacterSet> characterSets(AppLocalizations loc) => {
         loc.characterSetLowerCase: CharacterSet.alphabetAsciiLowerCase,
         loc.characterSetUpperCase: CharacterSet.alphabetAsciiUpperCase,
@@ -215,7 +214,6 @@ class _GeneratePasswordState extends State<GeneratePassword>
             ),
             SlideHideWidget(
               hide: _passwordLength < passwordLengthMax.toDouble(),
-              vsync: this,
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(bottom: 16),
