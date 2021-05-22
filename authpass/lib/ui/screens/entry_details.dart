@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -31,7 +32,6 @@ import 'package:authpass/utils/theme_utils.dart';
 import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,10 @@ import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 
 final _logger = Logger('entry_details');
@@ -726,7 +729,7 @@ class AttachmentBottomSheet extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.share),
             title: const Text('Share'),
-            onTap: () {
+            onTap: () async {
               analytics.events.trackAttachmentAction('share');
               final mimeType = lookupMimeType(
                 attachment.key.key,
@@ -737,8 +740,21 @@ class AttachmentBottomSheet extends StatelessWidget {
                     : null,
               );
               _logger.fine('Opening attachment with mimeType $mimeType');
-              Share.file('Attachment', attachment.key.key,
-                  attachment.value.value, mimeType);
+
+              final tempDir = await getTemporaryDirectory();
+              final f =
+                  await File('${tempDir.path}/${attachment.key.key}').create();
+              await f.writeAsBytes(attachment.value.value);
+
+              try {
+                await Share.shareFiles([f.path],
+                    mimeTypes: [mimeType], subject: 'Attachment');
+              } finally {
+                unawaited(f.delete());
+              }
+
+              // Share.file('Attachment', attachment.key.key,
+              //     attachment.value.value, mimeType);
               Navigator.of(context).pop();
             },
           ),
