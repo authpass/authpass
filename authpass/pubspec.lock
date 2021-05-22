@@ -740,13 +740,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  isolate:
-    dependency: "direct main"
+  isolates:
+    dependency: transitive
     description:
-      name: isolate
+      name: isolates
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "3.0.3+8"
   js:
     dependency: transitive
     description:
@@ -774,7 +774,7 @@ packages:
       path: "../deps/kdbx.dart"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "2.0.0"
   linkify:
     dependency: transitive
     description:
