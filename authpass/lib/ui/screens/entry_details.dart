@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -33,8 +32,8 @@ import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
-import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -595,11 +594,10 @@ class _EntryDetailsState extends State<EntryDetails>
         return fileInfo;
       });
     } else {
-      final result = await showOpenPanel();
-      if (!result.canceled) {
-        final file = result.paths[0];
-        final fileName = path.basename(file);
-        final bytes = await File(file).readAsBytes();
+      final file = await openFile(acceptedTypeGroups: []);
+      if (file != null) {
+        final fileName = path.basename(file.path);
+        final bytes = await file.readAsBytes();
         await _attachFileContent(fileName, bytes);
       }
     }

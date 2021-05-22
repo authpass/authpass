@@ -26,8 +26,8 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
-import 'package:file_chooser/file_chooser.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -364,16 +364,16 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           AuthPassPlatform.isAndroid) {
                         await _openIosAndAndroidLocalFilePicker();
                       } else {
-                        final result = await showOpenPanel();
-                        if (!result.canceled) {
+                        final file = await openFile();
+                        if (file != null) {
                           String macOsBookmark;
                           if (AuthPassPlatform.isMacOS) {
                             macOsBookmark = await SecureBookmarks()
-                                .bookmark(File(result.paths[0]));
+                                .bookmark(File(file.path));
                           }
                           await Navigator.of(context)
                               .push(CredentialsScreen.route(FileSourceLocal(
-                            File(result.paths[0]),
+                            File(file.path),
                             uuid: AppDataBloc.createUuid(),
                             macOsSecureBookmark: macOsBookmark,
                             filePickerIdentifier: null,
@@ -935,10 +935,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                         setState(() => _keyFile = null);
                       }
                     } else {
-                      final result = await showOpenPanel();
-                      if (!result.canceled) {
+                      final file = await openFile();
+                      if (file != null) {
                         setState(() {
-                          _keyFile = KeyFileFile(File(result.paths[0]));
+                          _keyFile = KeyFileFile(File(file.path));
                         });
                       } else {
                         setState(() {

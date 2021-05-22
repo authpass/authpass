@@ -122,14 +122,10 @@ dependencies:
       ref: 595e5829bd3a36a69999a99473d3aad6fd8febc8
 
   # FDE
-  file_chooser:
-    git:
-      url: https://github.com/google/flutter-desktop-embedding.git
-      path: plugins/file_chooser
-      ref: 8ea9f1ce79f04e44bd6392f4155a014b0a7eb6e8
-#      ref: android-dummy-plugin
-#      url: https://github.com/google/flutter-desktop-embedding.git
-#      path: plugins/file_chooser
+  file_selector: ^0.8.2
+  file_selector_macos: ^0.0.4
+  file_selector_windows: ^0.0.2
+  file_selector_linux: ^0.0.2
 
   macos_secure_bookmarks: ^0.2.0
 

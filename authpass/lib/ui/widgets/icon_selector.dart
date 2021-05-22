@@ -1,21 +1,22 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:authpass/ui/widgets/centered_icon.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
-import 'package:file_chooser/file_chooser.dart';
-import 'package:authpass/utils/dialog_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 part 'icon_selector.freezed.dart';
@@ -157,11 +158,14 @@ class _IconSelectorState extends State<IconSelector> {
         return fileInfo;
       });
     } else {
-      final result = await showOpenPanel();
-      if (!result.canceled) {
-        final file = result.paths[0];
-        final fileName = path.basename(file);
-        final bytes = await File(file).readAsBytes();
+      final typeGroup = XTypeGroup(
+        label: 'images',
+        extensions: ['jpg', 'png', 'jpeg', 'gif'],
+      );
+      final file = await openFile(acceptedTypeGroups: [typeGroup]);
+      if (file != null) {
+        final fileName = path.basename(file.path);
+        final bytes = await file.readAsBytes();
         await _savePngFile(fileName, bytes);
       }
     }

@@ -1,22 +1,21 @@
 import 'dart:io';
-import 'package:authpass/bloc/kdbx/file_source.dart';
-import 'package:authpass/bloc/kdbx/file_source_local.dart';
-import 'package:authpass/bloc/kdbx_bloc.dart';
-import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
-import 'package:authpass/bloc/kdbx/file_source_ui.dart';
-import 'package:authpass/utils/platform.dart';
-import 'package:logging/logging.dart';
-import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
-import 'package:file_chooser/file_chooser.dart';
-import 'package:file_picker_writable/file_picker_writable.dart';
 
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_local.dart';
+import 'package:authpass/bloc/kdbx/file_source_ui.dart';
+import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
-import 'package:path/path.dart' as path;
+import 'package:authpass/utils/platform.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:logging/logging.dart';
+import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
+import 'package:path/path.dart' as path;
+import 'package:provider/provider.dart';
 
 final _logger = Logger('manage_file');
 
@@ -117,15 +116,15 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
         filePickerIdentifier: fileInfo.toJsonString(),
       );
     }
-    final result = await showSavePanel(
-      suggestedFileName: path.basename(widget.file.fileSource.displayPath),
+    final pathFile = await getSavePath(
+      suggestedName: path.basename(widget.file.fileSource.displayPath),
       confirmButtonText: 'Save',
     );
-    if (result.canceled) {
+    if (pathFile == null) {
+      // Operation was canceled by the user.
       return null;
     }
 
-    final pathFile = result.paths.first;
     final outputFile = File(pathFile);
     String macOsBookmark;
     if (AuthPassPlatform.isMacOS) {
