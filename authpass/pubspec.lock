@@ -586,12 +586,10 @@ packages:
   flutter_speed_dial:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "7ad1672e22627d1106151ed8602b52bb99b9a8d2"
-      resolved-ref: "7ad1672e22627d1106151ed8602b52bb99b9a8d2"
-      url: "https://github.com/authpass/flutter_speed_dial.git"
-    source: git
-    version: "1.2.5"
+      name: flutter_speed_dial
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.5"
   flutter_store_listing:
     dependency: "direct main"
     description:

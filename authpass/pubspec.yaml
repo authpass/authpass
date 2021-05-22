@@ -69,11 +69,7 @@ dependencies:
     path: ../deps/autofill_service
 
   flutter_colorpicker: ^0.4.0
-  # flutter_speed_dial: ^1.2.5
-  flutter_speed_dial: # overflow -> clipBehavior
-    git:
-      url: https://github.com/authpass/flutter_speed_dial.git
-      ref: 7ad1672e22627d1106151ed8602b52bb99b9a8d2
+  flutter_speed_dial: ^3.0.5
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.0
 
