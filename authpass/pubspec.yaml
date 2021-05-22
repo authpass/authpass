@@ -19,7 +19,7 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter_utils.git
       path: packages/simple_form_field_validator
-      ref: 4c65f09005a1086525ebe2ae004eccdc2dd56fe1
+      ref: 05ca3bddea2fda0d94e672839a53c68f367be3bc
   logging: ^1.0.0
   logging_appenders: ^1.0.0
   diac_client:
@@ -139,11 +139,7 @@ dependencies:
 #      url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git
 #      ref: 85cfc7efee91c3444d24435486cf292a32f04499
   barcode_scan2: ^4.1.3
-  #open_file: ^3.0.3
-  open_file:
-    git:
-      url: https://github.com/mit-mit/open_file.git
-      ref: 267da7866fec41377ecf6e2075f63d49413f30ba
+  open_file: ^3.2.1
   esys_flutter_share: ^1.0.2
   flutter_windowmanager: ^0.0.2
 

@@ -897,7 +897,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                               msg: loc.masterPasswordEmptyValidator)
                           : SValidator<String>([])) +
                       SValidator.invalidValue(
-                          invalidValue: _invalidPassword,
+                          invalidValue: () => _invalidPassword,
                           message: loc.masterPasswordIncorrectValidator),
                   onEditingComplete: () {
                     FocusScope.of(context).unfocus();

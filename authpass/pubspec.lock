@@ -871,12 +871,10 @@ packages:
   open_file:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "267da7866fec41377ecf6e2075f63d49413f30ba"
-      resolved-ref: "267da7866fec41377ecf6e2075f63d49413f30ba"
-      url: "https://github.com/mit-mit/open_file.git"
-    source: git
-    version: "3.1.0"
+      name: open_file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.1"
   openapi_base:
     dependency: transitive
     description:
@@ -1119,11 +1117,11 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/simple_form_field_validator"
-      ref: "4c65f09005a1086525ebe2ae004eccdc2dd56fe1"
-      resolved-ref: "4c65f09005a1086525ebe2ae004eccdc2dd56fe1"
+      ref: "05ca3bddea2fda0d94e672839a53c68f367be3bc"
+      resolved-ref: "05ca3bddea2fda0d94e672839a53c68f367be3bc"
       url: "https://github.com/hpoul/flutter_utils.git"
     source: git
-    version: "0.0.1"
+    version: "1.0.0"
   simple_json_persistence:
     dependency: "direct main"
     description:
