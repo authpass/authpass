@@ -80,7 +80,11 @@ dependencies:
   url_launcher: ^6.0.2
   font_awesome_flutter: ^9.0.0
   otp: ^3.0.0-nullsafety.0
-  zxcvbn: ^0.0.1
+  #zxcvbn: ^0.0.1
+  zxcvbn: # null-safety https://github.com/careapp-inc/zxcvbn-dart/pull/7
+    git:
+      url: https://github.com/authpass/zxcvbn-dart.git
+      ref: 7f000c71c176162bbfc32a45a0800bca47ffb1a0
 
 
   # UI Utilities and Widgets
@@ -88,7 +92,11 @@ dependencies:
   qr_flutter: ^4.0.0
   another_flushbar: ^1.10.20
   filesystem_picker: ^2.0.0-nullsafety.0
-  tinycolor: ^1.0.3
+  #tinycolor: ^1.0.3
+  tinycolor: # null-safety https://github.com/FooStudio/tinycolor/pull/13
+    git:
+      url: https://github.com/authpass/tinycolor.git
+      ref: 87f654ce7b79daddfbe7cdf7b7d9bb27574a8b89
 
   # (Small) utility packages
   quiver: ">=3.0.0-nullsafety.3 <4.0.0"
@@ -136,7 +144,11 @@ dependencies:
 #      ref: 85cfc7efee91c3444d24435486cf292a32f04499
   barcode_scan2: ^4.1.3
   open_file: ^3.2.1
-  flutter_windowmanager: ^0.0.2
+#  flutter_windowmanager: ^0.0.2
+  flutter_windowmanager: # null-safety https://github.com/adaptant-labs/flutter_windowmanager/pull/12
+    git:
+      url: https://github.com/authpass/flutter_windowmanager.git
+      ref: e4840321aa994ce5bc479d0bc9d0d5d0efdad19e
 
   mime: ^1.0.0
   pedantic: ^1.9.2

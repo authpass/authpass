@@ -612,9 +612,11 @@ packages:
   flutter_windowmanager:
     dependency: "direct main"
     description:
-      name: flutter_windowmanager
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: e4840321aa994ce5bc479d0bc9d0d5d0efdad19e
+      resolved-ref: e4840321aa994ce5bc479d0bc9d0d5d0efdad19e
+      url: "https://github.com/authpass/flutter_windowmanager.git"
+    source: git
     version: "0.0.2"
   font_awesome_flutter:
     dependency: "direct main"
@@ -1270,9 +1272,11 @@ packages:
   tinycolor:
     dependency: "direct main"
     description:
-      name: tinycolor
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "87f654ce7b79daddfbe7cdf7b7d9bb27574a8b89"
+      resolved-ref: "87f654ce7b79daddfbe7cdf7b7d9bb27574a8b89"
+      url: "https://github.com/authpass/tinycolor.git"
+    source: git
     version: "1.0.3"
   tuple:
     dependency: "direct main"
@@ -1491,9 +1495,11 @@ packages:
   zxcvbn:
     dependency: "direct main"
     description:
-      name: zxcvbn
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "7f000c71c176162bbfc32a45a0800bca47ffb1a0"
+      resolved-ref: "7f000c71c176162bbfc32a45a0800bca47ffb1a0"
+      url: "https://github.com/authpass/zxcvbn-dart.git"
+    source: git
     version: "0.0.1"
 sdks:
   dart: ">=2.13.0 <3.0.0"
