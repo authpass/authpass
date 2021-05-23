@@ -30,7 +30,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                 final appData = await deps.appDataBloc.store.load();
                 final newData = await SimplePromptDialog(
                   labelText: 'debug usertype', // NON-NLS
-                  initialValue: appData?.manualUserType ?? '', // NON-NLS
+                  initialValue: appData.manualUserType ?? '', // NON-NLS
                 ).show(context);
                 if (newData != null) {
                   await deps.appDataBloc

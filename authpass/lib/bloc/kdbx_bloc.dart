@@ -15,19 +15,17 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:biometric_storage/biometric_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:authpass/utils/extension_methods.dart';
 
 final _logger = Logger('kdbx_bloc');
 
@@ -628,7 +626,7 @@ class KdbxBloc {
       _openedFilesByKdbxFile[file!] ??
       (() {
         throw StateError('Missing file source for kdbxFile.');
-      })()!;
+      })();
 
   KdbxOpenedFile? fileForFileSource(FileSource fileSource) =>
       _openedFiles.value[fileSource];

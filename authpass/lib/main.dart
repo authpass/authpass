@@ -103,14 +103,14 @@ Future<void> startApp(Env env) async {
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
-    navigatorKey.currentState?.overlay?.context?.let((context) {
+    navigatorKey.currentState?.overlay?.context.let((context) {
       String? message = 'Unexpected error: $error'; // NON-NLS
       try {
-        message = AppLocalizations.of(context!)?.unexpectedError('$error');
+        message = AppLocalizations.of(context)?.unexpectedError('$error');
       } catch (e, stackTrace) {
         _logger.fine('Error while localizing error message', e, stackTrace);
       }
-      DialogUtils.showErrorDialog(context!, null, message);
+      DialogUtils.showErrorDialog(context, null, message);
     });
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone,
@@ -180,7 +180,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           _appData = appData;
         });
         if (AuthPassPlatform.isAndroid) {
-          if (appData!.secureWindowOrDefault) {
+          if (appData.secureWindowOrDefault) {
             FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
           } else {
             FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
@@ -551,7 +551,7 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
   }
 
   String _screenNameFor(Route? route) {
-    final name = route?.settings?.name;
+    final name = route?.settings.name;
     if (name != null) {
       return name;
     }

@@ -154,8 +154,10 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           databaseName: name,
           initialCachedContent: null,
         );
+      default:
+        throw ArgumentError.value(
+            sourceType, 'sourceType', 'Unsupported value.');
     }
-    throw ArgumentError.value(sourceType, 'sourceType', 'Unsupported value.');
   }
 }
 
