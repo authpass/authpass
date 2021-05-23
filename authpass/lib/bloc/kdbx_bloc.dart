@@ -27,6 +27,7 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:authpass/utils/extension_methods.dart';
 
 final _logger = Logger('kdbx_bloc');
 
@@ -83,9 +84,9 @@ class QuickUnlockStorage {
   /// should only be used if used in non interactive callbacks.
   bool? get supportsBiometricKeystoreAlready => _supported;
 
-  Future<bool?> supportsBiometricKeyStore() async {
+  Future<bool> supportsBiometricKeyStore() async {
     if (_supported != null) {
-      return _supported;
+      return _supported!;
     }
     final canAuthenticate = await BiometricStorage().canAuthenticate();
     _logger.finer('supportBiometricKeyStore: $canAuthenticate');
@@ -134,7 +135,7 @@ class QuickUnlockStorage {
 
   Future<Map<FileSource, Credentials>> loadQuickUnlockFile(
       AppDataBloc appDataBloc) async {
-    if (!(await (supportsBiometricKeyStore() as FutureOr<bool>))) {
+    if (!(await supportsBiometricKeyStore())) {
       _logger.fine('Biometric store not supported. no quickunlock.');
       return {};
     }
@@ -147,13 +148,13 @@ class QuickUnlockStorage {
     final map = json.decode(jsonContent) as Map<String, dynamic>;
     final appData = await appDataBloc.store.load();
     return Map.fromEntries(map.entries.map((entry) {
-      final file = appData!.recentFileByUuid(entry.key);
+      final file = appData.recentFileByUuid(entry.key);
       if (file == null) {
         return null;
       }
       return MapEntry(file.toFileSource(cloudStorageBloc),
           HashCredentials(base64.decode(entry.value as String)));
-    }).where((e) => e != null) as Iterable<MapEntry<FileSource, Credentials>>);
+    }).whereNotNull());
   }
 }
 

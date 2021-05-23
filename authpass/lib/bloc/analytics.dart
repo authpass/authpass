@@ -173,7 +173,8 @@ class Analytics {
       ga!.sendEvent(category!, action!,
           label: label,
           value: value,
-          parameters: parameters as Map<String, String>?);
+          parameters:
+              parameters?.map((key, value) => MapEntry(key, value ?? '')));
       _logger.finer(
           '$_dbg event($category, $action, $label, $value) - parameters: $parameters');
     });

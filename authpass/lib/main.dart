@@ -249,13 +249,13 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           create: (context) => AuthPassCacheManager(pathUtils: PathUtils()),
           dispose: (context, obj) => obj.store.dispose(),
         ),
-        StreamProvider<AppData?>(
+        StreamProvider<AppData>(
           create: (context) => _deps!.appDataBloc.store.onValueChangedAndLoad,
-          initialData: _deps!.appDataBloc.store.cachedValue,
+          initialData: _deps!.appDataBloc.store.cachedValue ?? AppData(),
         ),
-        ProxyProvider2<AppData?, Env, FeatureFlags>(
+        ProxyProvider2<AppData, Env, FeatureFlags>(
           update: (_, appData, env, __) {
-            if (appData?.manualUserType == 'admin') {
+            if (appData.manualUserType == 'admin') {
               return (env.featureFlags.toBuilder()..authpassCloud = true)
                   .build();
             }
