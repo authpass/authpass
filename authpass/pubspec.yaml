@@ -46,7 +46,7 @@ dependencies:
   path: ^1.8.0
 #  clipboard_manager: ^0.0.4
 
-  flutter_async_utils: ^1.0.0-nullsafety.1
+  flutter_async_utils: ^1.0.0-nullsafety.2
   flutter_svg: ">=0.20.0-nullsafety.3 <1.0.0"
   #usage: ^3.4.1
   usage:
@@ -181,6 +181,14 @@ dependency_overrides:
 #  petitparser: '>=3.0.0 <4.0.0'
   kdbx:
     path: ../deps/kdbx.dart
+#  openapi_base:
+#    path: /Users/herbert/dev/openapi_dart/packages/openapi_base
+#  flutter_async_utils:
+#    path: /Users/herbert/dev/flutter_async_utils
+  expressions:
+    git:
+      url: https://github.com/authpass/expressions.git
+      ref: rxdart-0.27
   path_provider: ^2.0.1
   # The following two are required since flutter 1.21
   # but blocked by e.g flutter_cache_manager
@@ -191,7 +199,7 @@ dependency_overrides:
   flutter_svg: ">=0.20.0-nullsafety.3 <1.0.0"
 #  xml: "^5.0.0-nullsafety.0"
   quiver: ">=3.0.0-nullsafety.3 <4.0.0"
-  crypto: ^3.0.0
+#  crypto: ^3.0.0
 #  archive: ^3.0.0
 #  logging: ^1.0.0-nullsafety
   shelf: ^1.1.2
