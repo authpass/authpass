@@ -21,9 +21,12 @@ extension ListOptGet<T> on List<T> {
   T? optGet(int index) => length > index ? this[index] : null;
 }
 
-extension IterableNotNull<T> on Iterable<T> {
-  Iterable<T> whereNotNull() => where((element) => element != null);
+extension IterableNotEmpty<T> on Iterable<T> {
   Iterable<T>? takeIfNotEmpty() => isEmpty ? null : this;
+}
+
+extension IterableNotNull<T> on Iterable<T?> {
+  Iterable<T> whereNotNull() => where((element) => element != null).cast();
 }
 
 extension EdgeInsetsExt on EdgeInsets {

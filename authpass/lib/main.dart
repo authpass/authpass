@@ -253,7 +253,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           create: (context) => _deps!.appDataBloc.store.onValueChangedAndLoad,
           initialData: _deps!.appDataBloc.store.cachedValue,
         ),
-        ProxyProvider2<AppData, Env, FeatureFlags>(
+        ProxyProvider2<AppData?, Env, FeatureFlags>(
           update: (_, appData, env, __) {
             if (appData?.manualUserType == 'admin') {
               return (env.featureFlags.toBuilder()..authpassCloud = true)
