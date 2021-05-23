@@ -98,23 +98,23 @@ Future<void> startApp(Env env) async {
       env: env,
       deps: deps,
       navigatorKey: navigatorKey,
-      isFirstRun: appData.previousFiles.isEmpty,
+      isFirstRun: appData.previousFiles!.isEmpty,
     ));
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     Analytics.trackError(error.toString(), true);
     navigatorKey.currentState?.overlay?.context?.let((context) {
-      var message = 'Unexpected error: $error'; // NON-NLS
+      String? message = 'Unexpected error: $error'; // NON-NLS
       try {
-        message = AppLocalizations.of(context)?.unexpectedError('$error');
+        message = AppLocalizations.of(context!)?.unexpectedError('$error');
       } catch (e, stackTrace) {
         _logger.fine('Error while localizing error message', e, stackTrace);
       }
-      DialogUtils.showErrorDialog(context, null, message);
+      DialogUtils.showErrorDialog(context!, null, message);
     });
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone,
-        ZoneSpecification specification, Map zoneValues) {
+        ZoneSpecification? specification, Map? zoneValues) {
       print('Forking zone.'); // NON-NLS
       return parent.fork(zone, specification, zoneValues);
     },
@@ -125,7 +125,7 @@ Future<void> startApp(Env env) async {
 /// a supported platform (iOS for macOS, Android for Linux and Windows).
 /// Otherwise, do nothing.
 void _setTargetPlatformForDesktop() {
-  TargetPlatform targetPlatform;
+  TargetPlatform? targetPlatform;
   /*if (AuthPassPlatform.isMacOS) {
     targetPlatform = TargetPlatform.iOS;
   } else */
@@ -140,19 +140,19 @@ void _setTargetPlatformForDesktop() {
 
 class AuthPassApp extends StatefulWidget {
   const AuthPassApp({
-    Key key,
-    @required this.env,
+    Key? key,
+    required this.env,
     this.navigatorKey,
-    @required this.deps,
-    @required this.isFirstRun,
+    required this.deps,
+    required this.isFirstRun,
   }) : super(key: key);
 
   final Env env;
   final Deps deps;
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState>? navigatorKey;
   final bool isFirstRun;
   @visibleForTesting
-  static GlobalKey<NavigatorState> currentNavigatorKey;
+  static GlobalKey<NavigatorState>? currentNavigatorKey;
 
   @override
   _AuthPassAppState createState() {
@@ -162,9 +162,9 @@ class AuthPassApp extends StatefulWidget {
 }
 
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
-  Deps _deps;
-  AppData _appData;
-  FilePickerState _filePickerState;
+  Deps? _deps;
+  AppData? _appData;
+  FilePickerState? _filePickerState;
 
   @override
   void initState() {
@@ -172,15 +172,15 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     final _navigatorKey = widget.navigatorKey;
     _deps = widget.deps;
     PathUtils.runAppFinished.complete(true);
-    _appData = _deps.appDataBloc.store.cachedValue;
+    _appData = _deps!.appDataBloc.store.cachedValue;
     handleSubscription(
-        _deps.appDataBloc.store.onValueChangedAndLoad.listen((appData) {
+        _deps!.appDataBloc.store.onValueChangedAndLoad.listen((appData) {
       if (_appData != appData) {
         setState(() {
           _appData = appData;
         });
         if (AuthPassPlatform.isAndroid) {
-          if (appData.secureWindowOrDefault) {
+          if (appData!.secureWindowOrDefault) {
             FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
           } else {
             FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
@@ -201,7 +201,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           _logger.fine('got a new fileInfo: $fileInfo');
           final openRoute = () async {
             var i = 0;
-            while (_navigatorKey.currentState == null) {
+            while (_navigatorKey!.currentState == null) {
               _logger.finest('No navigator yet. waiting. $i');
               await Future<void>.delayed(const Duration(milliseconds: 100));
               if (i++ > 100) {
@@ -209,7 +209,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                 return;
               }
             }
-            await _navigatorKey.currentState
+            await _navigatorKey.currentState!
                 .push(CredentialsScreen.route(FileSourceLocal(
               file,
               uuid: AppDataBloc.createUuid(),
@@ -232,26 +232,26 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Widget build(BuildContext context) {
     // TODO generate localizations.
     _logger.fine('Building AuthPass App state. route: '
-        '${WidgetsBinding.instance.window.defaultRouteName}');
+        '${WidgetsBinding.instance!.window.defaultRouteName}');
     return MultiProvider(
       providers: [
         Provider<DiacBloc>(
           create: (context) => _createDiacBloc(),
           dispose: (context, diac) => diac.dispose(),
         ),
-        Provider<FilePickerState>.value(value: _filePickerState),
-        Provider<Env>.value(value: _deps.env),
-        Provider<Deps>.value(value: _deps),
-        Provider<Analytics>.value(value: _deps.analytics),
-        Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
-        Provider<AppDataBloc>.value(value: _deps.appDataBloc),
+        Provider<FilePickerState?>.value(value: _filePickerState),
+        Provider<Env>.value(value: _deps!.env),
+        Provider<Deps?>.value(value: _deps),
+        Provider<Analytics>.value(value: _deps!.analytics),
+        Provider<CloudStorageBloc>.value(value: _deps!.cloudStorageBloc),
+        Provider<AppDataBloc>.value(value: _deps!.appDataBloc),
         Provider<AuthPassCacheManager>(
           create: (context) => AuthPassCacheManager(pathUtils: PathUtils()),
           dispose: (context, obj) => obj.store.dispose(),
         ),
-        StreamProvider<AppData>(
-          create: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
-          initialData: _deps.appDataBloc.store.cachedValue,
+        StreamProvider<AppData?>(
+          create: (context) => _deps!.appDataBloc.store.onValueChangedAndLoad,
+          initialData: _deps!.appDataBloc.store.cachedValue,
         ),
         ProxyProvider2<AppData, Env, FeatureFlags>(
           update: (_, appData, env, __) {
@@ -262,7 +262,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             return env.featureFlags;
           },
         ),
-        ListenableProxyProvider<FeatureFlags, AuthPassCloudBloc>(
+        ListenableProxyProvider<FeatureFlags, AuthPassCloudBloc?>(
           create: (_) => null,
           update: (_, featureFlags, previous) {
             if (featureFlags == null ||
@@ -271,33 +271,33 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             }
 //            previous?.dispose();
             return AuthPassCloudBloc(
-              env: _deps.env,
+              env: _deps!.env,
               featureFlags: featureFlags,
             );
           },
           dispose: (_, prev) {
-            prev.dispose();
+            prev!.dispose();
           },
           // eagerly create bloc so everything is loaded once we
           // get into the context menu
           lazy: false,
         ),
         StreamProvider<KdbxBloc>(
-          create: (context) => _deps.kdbxBloc.openedFilesChanged
-              .map((_) => _deps.kdbxBloc)
+          create: (context) => _deps!.kdbxBloc.openedFilesChanged
+              .map((_) => _deps!.kdbxBloc)
               .doOnData((data) {
             _logger.info('KdbxBloc updated.');
           }),
           updateShouldNotify: (a, b) => true,
-          initialData: _deps.kdbxBloc,
+          initialData: _deps!.kdbxBloc,
         ),
         StreamProvider<OpenedKdbxFiles>.value(
-          value: _deps.kdbxBloc.openedFilesChanged,
-          initialData: _deps.kdbxBloc.openedFilesChanged.value,
+          value: _deps!.kdbxBloc.openedFilesChanged,
+          initialData: _deps!.kdbxBloc.openedFilesChanged.value,
         )
       ],
       child: MaterialApp(
-        navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
+        navigatorObservers: [AnalyticsNavigatorObserver(_deps!.analytics)],
         title: 'AuthPass',
         navigatorKey: widget.navigatorKey,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -311,16 +311,17 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 //        themeMode: ThemeMode.light,
         builder: (context, child) {
           final mq = MediaQuery.of(context);
-          _deps.analytics.updateSizes(
+          _deps!.analytics.updateSizes(
             viewportSizeWidth: mq.size.width,
             viewportSizeHeight: mq.size.height,
-            displaySizeWidth: WidgetsBinding.instance.window.physicalSize.width,
+            displaySizeWidth:
+                WidgetsBinding.instance!.window.physicalSize.width,
             displaySizeHeight:
-                WidgetsBinding.instance.window.physicalSize.height,
-            devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
+                WidgetsBinding.instance!.window.physicalSize.height,
+            devicePixelRatio: WidgetsBinding.instance!.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          final localizations = AppLocalizations.of(context);
+          final localizations = AppLocalizations.of(context)!;
           final Widget ret = MultiProvider(
             providers: [
               Provider.value(value: FormatUtils(locale: locale.toString())),
@@ -331,8 +332,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           if (_appData?.themeFontSizeFactor != null) {
             return TweenAnimationBuilder<double>(
                 tween: Tween<double>(
-                    begin: _appData.themeFontSizeFactor,
-                    end: _appData.themeFontSizeFactor),
+                    begin: _appData!.themeFontSizeFactor,
+                    end: _appData!.themeFontSizeFactor),
                 duration: const Duration(milliseconds: 100),
                 builder: (context, value, child) {
                   return MediaQuery(
@@ -345,13 +346,13 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         },
         onGenerateInitialRoutes: (initialRoute) {
           _logger.fine('initialRoute: $initialRoute');
-          _deps.analytics.trackScreen(initialRoute);
-          _deps.analytics.events.trackLaunch(
+          _deps!.analytics.trackScreen(initialRoute);
+          _deps!.analytics.events.trackLaunch(
               systemBrightness:
-                  WidgetsBinding.instance.window.platformBrightness);
+                  WidgetsBinding.instance!.window.platformBrightness);
           if (startupStopwatch.isRunning) {
             startupStopwatch.stop();
-            _deps.analytics.trackTiming(
+            _deps!.analytics.trackTiming(
               'startup',
               startupStopwatch.elapsedMilliseconds,
               category: 'startup',
@@ -360,7 +361,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           }
           if (initialRoute.startsWith('/openFile')) {
             final uri = Uri.parse(initialRoute);
-            final file = uri.queryParameters['file'];
+            final file = uri.queryParameters['file']!;
             _logger.finer('uri: $uri /// file: $file');
             return [
 //              MaterialPageRoute<void>(
@@ -370,9 +371,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             ];
           }
           return [
-            widget.isFirstRun && widget.env.featureOnboarding
+            (widget.isFirstRun && widget.env.featureOnboarding
                 ? OnboardingScreen.route()
-                : SelectFileScreen.route(),
+                : SelectFileScreen.route()) as Route<dynamic>,
           ];
         },
         // this is actually never used. But i still have to define it,
@@ -385,7 +386,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   }
 
   // TODO maybe support more than language code?
-  Locale _parseLocale(String localeString) {
+  Locale? _parseLocale(String? localeString) {
     if (localeString == null) {
       return null;
     }
@@ -396,7 +397,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     return Locale(parts[0], parts[1]);
   }
 
-  ThemeMode _toThemeMode(AppDataTheme theme) {
+  ThemeMode? _toThemeMode(AppDataTheme? theme) {
     if (theme == null) {
       return null;
     }
@@ -409,15 +410,15 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     throw StateError('Invalid theme $theme');
   }
 
-  ThemeData _customizeTheme(ThemeData theme, AppData appData) {
+  ThemeData _customizeTheme(ThemeData theme, AppData? appData) {
     if (appData == null) {
       return theme;
     }
 
     final visualDensity = appData.themeVisualDensity != null
         ? VisualDensity(
-            horizontal: appData.themeVisualDensity,
-            vertical: appData.themeVisualDensity)
+            horizontal: appData.themeVisualDensity!,
+            vertical: appData.themeVisualDensity!)
         : theme.visualDensity;
     _logger.fine('appData.themeFontSizeFactor: ${appData.themeFontSizeFactor}');
 //    final textTheme = appData.themeFontSizeFactor != null
@@ -431,16 +432,16 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 
   DiacBloc _createDiacBloc() {
     final disableOnlineMessages =
-        _deps.env.diacDefaultDisabled && _appData.diacOptIn != true;
+        _deps!.env.diacDefaultDisabled && _appData!.diacOptIn != true;
     _logger.finest('_createDiacBloc: $disableOnlineMessages = '
-        '${_deps.env.diacDefaultDisabled} && ${_appData.diacOptIn}');
+        '${_deps!.env.diacDefaultDisabled} && ${_appData!.diacOptIn}');
     return DiacBloc(
       opts: DiacOpts(
-          endpointUrl: _deps.env.diacEndpoint,
+          endpointUrl: _deps!.env.diacEndpoint,
           disableConfigFetch: disableOnlineMessages,
           // always reload after a new start.
           refetchIntervalCold: Duration.zero,
-          initialConfig: !disableOnlineMessages || _deps.env.diacHidden
+          initialConfig: !disableOnlineMessages || _deps!.env.diacHidden
               ? null
               : DiacConfig(
                   updatedAt: DateTime(2020, 5, 18),
@@ -469,11 +470,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                   ],
                 ),
           packageInfo: () async =>
-              (await _deps.env.getAppInfo()).toDiacPackageInfo()),
+              (await _deps!.env.getAppInfo()).toDiacPackageInfo()),
       contextBuilder: () async => {
         'env': <String, Object>{
-          'isDebug': _deps.env.isDebug,
-          'isGoogleStore': (await _deps.env.getAppInfo()).packageName ==
+          'isDebug': _deps!.env.isDebug,
+          'isGoogleStore': (await _deps!.env.getAppInfo()).packageName ==
                   'design.codeux.authpass' &&
               AuthPassPlatform.isAndroid,
           'isIOS': AuthPassPlatform.isIOS,
@@ -486,11 +487,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       },
       customActions: {
         'launchReview': (event) async {
-          _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
+          _deps!.analytics.trackGenericEvent('review', 'reviewLaunch');
           return await FlutterStoreListing().launchStoreListing();
         },
         'requestReview': (event) async {
-          _deps.analytics.trackGenericEvent('review', 'reviewRequest');
+          _deps!.analytics.trackGenericEvent('review', 'reviewRequest');
           return await FlutterStoreListing()
               .launchRequestReview(onlyNative: true);
         },
@@ -498,8 +499,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           final flushbar = FlushbarHelper.createSuccess(message: 'Thanks! 🎉️');
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
-          unawaited(widget.navigatorKey.currentState?.push<void>(route));
-          await _deps.appDataBloc
+          unawaited(widget.navigatorKey!.currentState?.push<void>(route));
+          await _deps!.appDataBloc
               .update((builder, data) => builder.diacOptIn = true);
           return true;
         },
@@ -509,12 +510,12 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                   'check out the preferences 🙏️.');
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
-          await widget.navigatorKey.currentState?.push<void>(route);
+          await widget.navigatorKey!.currentState?.push<void>(route);
           return true;
         }
       },
     )..events.listen((event) {
-        _deps.analytics.trackGenericEvent(
+        _deps!.analytics.trackGenericEvent(
           'diac',
           event is DiacEventWithAction
               ? '${event.type.toStringBare()}:${event.action?.key}'
@@ -531,25 +532,25 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
   final Analytics analytics;
 
   @override
-  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
     _logger.finest('didPush');
     _sendScreenView(route);
   }
 
   @override
-  void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     _sendScreenView(newRoute);
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     _sendScreenView(previousRoute);
   }
 
-  String _screenNameFor(Route route) {
+  String _screenNameFor(Route? route) {
     final name = route?.settings?.name;
     if (name != null) {
       return name;
@@ -565,7 +566,7 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
     return '${route?.runtimeType}';
   }
 
-  void _sendScreenView(Route route) {
+  void _sendScreenView(Route? route) {
     final screenName = _screenNameFor(route);
     if (screenName != null) {
       analytics.trackScreen(screenName);

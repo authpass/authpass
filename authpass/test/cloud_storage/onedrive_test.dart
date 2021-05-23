@@ -20,7 +20,7 @@ void main() {
   _logger.finest('init tests.');
 
   group('test one drive', () {
-    OneDriveProvider provider;
+    late OneDriveProvider provider;
     setUp(() async {
       final env = await TestUtil.createEnv();
       provider = OneDriveProvider(env: env, helper: CloudStorageHelperMock());
@@ -29,9 +29,9 @@ void main() {
     simpleCloudStorageTestSuite(
         providerCb: () => provider,
         selectParent: (provider) async {
-          final response = await provider.list();
+          final response = await provider!.list();
           final parent =
-              response.results.firstWhere((e) => e.path.contains('Documents'));
+              response.results!.firstWhere((e) => e!.path!.contains('Documents'));
           return parent;
         });
   }, skip: skip);

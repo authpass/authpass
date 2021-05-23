@@ -3,7 +3,7 @@ part of 'analytics.dart';
 // ignore_for_file: always_put_control_body_on_new_line,unnecessary_brace_in_string_interps, prefer_final_locals
 
 // copied from usage plugin and adopted to include android and iOS version.
-String _createUserAgent({String platformVersion, String deviceInfo}) {
+String _createUserAgent({String? platformVersion, String? deviceInfo}) {
   final locale = getPlatformLocale() ?? '';
 
   if (AuthPassPlatform.isAndroid) {
@@ -25,7 +25,7 @@ String _createUserAgent({String platformVersion, String deviceInfo}) {
 
 /// Return the string for the platform's locale; return's `null` if the locale
 /// can't be determined.
-String getPlatformLocale() {
+String? getPlatformLocale() {
   var locale = AuthPassPlatform.localeName;
   if (locale == null) return null;
 

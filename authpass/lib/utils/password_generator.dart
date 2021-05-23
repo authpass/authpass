@@ -50,25 +50,25 @@ abstract class CharacterSet {
   CharacterSet operator +(CharacterSet other) =>
       CharacterSetCollection([this, other]);
 
-  static String characterSetIdFor(CharacterSet set) =>
+  static String characterSetIdFor(CharacterSet? set) =>
       selectableCharacterSets.entries
           .firstWhere((entry) => entry.value == set)
           .key;
 
-  static Set<CharacterSet> characterSetFromIds(Iterable<String> ids) =>
+  static Set<CharacterSet?> characterSetFromIds(Iterable<String> ids) =>
       ids.map((setId) => CharacterSet.selectableCharacterSets[setId]).toSet();
 }
 
 class CharacterSetCollection extends CharacterSet {
   const CharacterSetCollection(this.sets);
 
-  final List<CharacterSet> sets;
+  final List<CharacterSet?> sets;
 
   @override
   int operator [](int pos) {
     var i = pos;
     for (final set in sets) {
-      if (i < set.length) {
+      if (i < set!.length) {
         return set[i];
       }
       i -= set.length;
@@ -77,7 +77,7 @@ class CharacterSetCollection extends CharacterSet {
   }
 
   @override
-  int get length => sets.fold(0, (prev, set) => prev + set.length);
+  int get length => sets.fold(0, (prev, set) => prev + set!.length);
 }
 
 class CharacterRange extends CharacterSet {

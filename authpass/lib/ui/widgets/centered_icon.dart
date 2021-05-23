@@ -4,15 +4,15 @@ import 'package:meta/meta.dart';
 /// Workaround for centered icons. see https://github.com/flutter/flutter/issues/24054#issuecomment-439167235
 class CenteredIcon extends StatelessWidget {
   const CenteredIcon({
-    Key key,
-    @required this.icon,
+    Key? key,
+    required this.icon,
     this.color,
     this.size,
   }) : super(key: key);
 
   final IconData icon;
-  final Color color;
-  final double size;
+  final Color? color;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {

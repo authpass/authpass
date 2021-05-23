@@ -45,7 +45,7 @@ class AuthPassCloudAuth extends StatelessWidget {
       case TokenStatus.created:
         return _ConfirmEmailAddress(bloc: bloc);
       case TokenStatus.confirmed:
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           Navigator.of(context).pop();
         });
         break;
@@ -55,7 +55,7 @@ class AuthPassCloudAuth extends StatelessWidget {
 }
 
 class _EnterEmailAddress extends StatefulWidget {
-  const _EnterEmailAddress({Key key, @required this.bloc})
+  const _EnterEmailAddress({Key? key, required this.bloc})
       : assert(bloc != null),
         super(key: key);
   final AuthPassCloudBloc bloc;
@@ -99,7 +99,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             onEditingComplete: () {},
             validator: SValidator.notEmpty(
                     msg: 'Please enter a valid email address.') +
-                SValidator.email(msg: 'Please enter a valid email address.'),
+                SValidator.email(msg: 'Please enter a valid email address.') as String? Function(String?)?,
           ),
           ElevatedButton(
             onPressed: _submitCallback(),
@@ -110,8 +110,8 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
     );
   }
 
-  VoidCallback _submitCallback() => asyncTaskCallback((progress) async {
-        if (_form.currentState.validate()) {
+  VoidCallback? _submitCallback() => asyncTaskCallback((progress) async {
+        if (_form.currentState!.validate()) {
           context
               .read<Analytics>()
               .events
@@ -122,7 +122,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
 }
 
 class _ConfirmEmailAddress extends StatefulWidget {
-  const _ConfirmEmailAddress({Key key, @required this.bloc})
+  const _ConfirmEmailAddress({Key? key, required this.bloc})
       : assert(bloc != null),
         super(key: key);
 
@@ -133,14 +133,14 @@ class _ConfirmEmailAddress extends StatefulWidget {
 }
 
 class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
-  Timer _timer;
+  Timer? _timer;
   bool _showResendButton = false;
-  Analytics _analytics;
+  late Analytics _analytics;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_timer == null || !_timer.isActive) {
+    if (_timer == null || !_timer!.isActive) {
       _scheduleCheck();
     }
     _analytics = context.read<Analytics>();
@@ -174,7 +174,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
                   'to request a new confirmation link.',
                   textAlign: TextAlign.center,
                   style:
-                      Theme.of(context).textTheme.caption.copyWith(height: 1.4),
+                      Theme.of(context).textTheme.caption!.copyWith(height: 1.4),
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
@@ -199,7 +199,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
     if (widget.bloc.tokenStatus != TokenStatus.confirmed) {
       _analytics.events.trackCloudAuth(CloudAuthAction.authCanceled);
     }
-    _timer.cancel();
+    _timer!.cancel();
     _timer = null;
   }
 }

@@ -57,9 +57,9 @@ final _logger = Logger('keyboard_handler');
 //}
 
 class KeyboardHandler extends StatefulWidget {
-  const KeyboardHandler({Key key, this.child}) : super(key: key);
+  const KeyboardHandler({Key? key, this.child}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
@@ -146,10 +146,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                 } else if (character == LogicalKeyboardKey.keyV) {
                   if (AuthPassPlatform.isLinux) {
                     final w = WidgetsBinding
-                        .instance.focusManager.primaryFocus.context.widget;
+                        .instance!.focusManager.primaryFocus!.context!.widget;
                     Clipboard.getData('text/plain').then((value) async {
 //                    await Future<void>.delayed(const Duration(seconds: 2));
-                      final newContent = value.text;
+                      final newContent = value!.text;
                       if (w is EditableText) {
                         final s = w.controller.selection;
                         final oldContent = w.controller.text;
@@ -157,7 +157,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                         final after = s.textAfter(oldContent);
                         w.controller.text = '$before$newContent$after';
                         w.controller.selection = TextSelection.collapsed(
-                            offset: s.start + newContent.length);
+                            offset: s.start + newContent!.length);
                       }
                     });
                   }
@@ -172,7 +172,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
             } else if (modifiers.isEmpty) {
               _logger.finer('modifiers is empty.. now check which key it is.');
               if (character == LogicalKeyboardKey.tab) {
-                WidgetsBinding.instance.focusManager.primaryFocus.nextFocus();
+                WidgetsBinding.instance!.focusManager.primaryFocus!.nextFocus();
                 // TODO(flutterbug) see https://github.com/flutter/flutter/issues/36976
               } else if (character == LogicalKeyboardKey.arrowUp ||
                   character.keyId == 0x0000f700) {
@@ -191,7 +191,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
             }
           }
         },
-        child: widget.child,
+        child: widget.child!,
       ),
     );
   }
@@ -216,7 +216,7 @@ enum KeyboardShortcutType {
 }
 
 class KeyboardShortcut {
-  const KeyboardShortcut({@required this.type});
+  const KeyboardShortcut({required this.type});
   final KeyboardShortcutType type;
 
   @override

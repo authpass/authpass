@@ -49,19 +49,19 @@ class FileSourceConflictException implements Exception {
 abstract class CloudStorageEntity
     implements Built<CloudStorageEntity, CloudStorageEntityBuilder> {
   factory CloudStorageEntity(
-          [void Function(CloudStorageEntityBuilder b) updates]) =
+          [void Function(CloudStorageEntityBuilder b)? updates]) =
       _$CloudStorageEntity;
   CloudStorageEntity._();
 
-  String get id;
-  CloudStorageEntityType get type;
-  String get name;
-  @nullable
-  String get path;
+  // TODO: make this non-nullable
+  String? get id;
+  CloudStorageEntityType? get type;
+  String? get name;
+  String? get path;
 
-  String get pathOrBaseName => path ?? name;
+  String? get pathOrBaseName => path ?? name;
 
-  static CloudStorageEntity fromSimpleFileInfo(Map<String, String> fileInfo) {
+  static CloudStorageEntity fromSimpleFileInfo(Map<String, String?> fileInfo) {
     return nonNls(CloudStorageEntity(
       (b) => b
         ..id = fileInfo['id']
@@ -71,7 +71,7 @@ abstract class CloudStorageEntity
     ));
   }
 
-  Map<String, String> toSimpleFileInfo() => nonNls({
+  Map<String, String?> toSimpleFileInfo() => nonNls({
         'id': id,
         'name': name,
         'path': path,
@@ -80,12 +80,12 @@ abstract class CloudStorageEntity
 
 abstract class SearchResponse
     implements Built<SearchResponse, SearchResponseBuilder> {
-  factory SearchResponse([void Function(SearchResponseBuilder b) updates]) =
+  factory SearchResponse([void Function(SearchResponseBuilder b)? updates]) =
       _$SearchResponse;
   SearchResponse._();
 
-  BuiltList<CloudStorageEntity> get results;
-  bool get hasMore;
+  BuiltList<CloudStorageEntity?>? get results;
+  bool? get hasMore;
 }
 
 enum PromptType {
@@ -97,7 +97,7 @@ abstract class UserAuthenticationPromptResult {}
 
 class OAuthTokenResult extends UserAuthenticationPromptResult {
   OAuthTokenResult(this.code);
-  final String code;
+  final String? code;
 }
 
 class UrlUsernamePasswordResult extends UserAuthenticationPromptResult {
@@ -108,7 +108,7 @@ class UrlUsernamePasswordResult extends UserAuthenticationPromptResult {
 }
 
 abstract class UserAuthenticationPromptData<
-    T extends UserAuthenticationPromptResult> {
+    T extends UserAuthenticationPromptResult?> {
   PromptType get type;
 }
 
@@ -140,10 +140,10 @@ typedef PromptUserForCode<T extends UserAuthenticationPromptResult,
         U extends UserAuthenticationPromptData<T>>
     = Future<void> Function(UserAuthenticationPrompt<T, U> prompt);
 typedef PromptUserResult<T extends UserAuthenticationPromptResult> = void
-    Function(T result);
+    Function(T? result);
 
 abstract class CloudStorageProvider {
-  CloudStorageProvider({@required this.helper});
+  CloudStorageProvider({required this.helper});
 
   @protected
   final CloudStorageHelperBase helper;
@@ -164,7 +164,7 @@ abstract class CloudStorageProvider {
   /// make sure to check [supportSearch] before calling this method, otherwise a [UnsupportedError] will be thrown.
   Future<SearchResponse> search({String name = Env.KeePassExtension}) =>
       throw UnsupportedError('Search not supported');
-  Future<SearchResponse> list({CloudStorageEntity parent});
+  Future<SearchResponse> list({CloudStorageEntity? parent});
 
   @protected
   Future<void> storeCredentials(String credentials) async {
@@ -172,21 +172,21 @@ abstract class CloudStorageProvider {
   }
 
   @protected
-  Future<String> loadCredentials() async {
+  Future<String?> loadCredentials() async {
     return await helper.loadCredentials(id);
   }
 
-  String displayNameFromPath(Map<String, String> fileInfo) =>
-      path.basename(displayPath(fileInfo));
+  String displayNameFromPath(Map<String, String?> fileInfo) =>
+      path.basename(displayPath(fileInfo)!);
 
-  String displayPath(Map<String, String> fileInfo) =>
+  String? displayPath(Map<String, String?> fileInfo) =>
       CloudStorageEntity.fromSimpleFileInfo(fileInfo).pathOrBaseName;
 
   FileSource toFileSource(
-    Map<String, String> fileInfo, {
-    @required String uuid,
-    @required FileContent initialCachedContent,
-    String databaseName,
+    Map<String, String?> fileInfo, {
+    required String uuid,
+    required FileContent? initialCachedContent,
+    String? databaseName,
   }) =>
       FileSourceCloudStorage(
         provider: this,
@@ -196,20 +196,20 @@ abstract class CloudStorageProvider {
         initialCachedContent: initialCachedContent,
       );
 
-  Future<FileContent> loadFile(Map<String, String> fileInfo) =>
+  Future<FileContent> loadFile(Map<String, String?> fileInfo) =>
       loadEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo));
 
   /// Saves the given bytes into the file source.
   /// [previousMetadata] will contain the metadata returned from the last [load] call.
   /// Can return a new metadata object for the next call.
-  Future<Map<String, dynamic>> saveFile(Map<String, String> fileInfo,
-          Uint8List bytes, Map<String, dynamic> previousMetadata) =>
+  Future<Map<String, dynamic>> saveFile(Map<String, String?> fileInfo,
+          Uint8List bytes, Map<String, dynamic>? previousMetadata) =>
       saveEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo), bytes,
           previousMetadata);
 
   Future<FileContent> loadEntity(CloudStorageEntity file);
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic> previousMetadata);
+      Uint8List bytes, Map<String, dynamic>? previousMetadata);
   Future<FileSource> createEntity(
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes);
 
@@ -220,17 +220,17 @@ abstract class CloudStorageProvider {
 
 abstract class CloudStorageHelperBase {
   PathUtil get pathUtil;
-  Future<String> loadCredentials(String cloudStorageId);
+  Future<String?> loadCredentials(String cloudStorageId);
 
   Future<void> saveCredentials(String cloudStorageId, String data);
 }
 
 abstract class CloudStorageProviderClientBase<CLIENT>
     extends CloudStorageProvider {
-  CloudStorageProviderClientBase({@required CloudStorageHelperBase helper})
+  CloudStorageProviderClientBase({required CloudStorageHelperBase helper})
       : super(helper: helper);
 
-  CLIENT _client;
+  CLIENT? _client;
 
   @override
   bool get isAuthenticated => _client != null;
@@ -245,14 +245,14 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   }
 
   @protected
-  Future<String> oAuthTokenPrompt(PromptUserForCode prompt, String uri) async {
+  Future<String?> oAuthTokenPrompt(PromptUserForCode prompt, String uri) async {
     final result = await promptUser<OAuthTokenResult, OAuthTokenFlowPromptData>(
         prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>,
         OAuthTokenFlowPromptData(uri));
     return result?.code;
   }
 
-  Future<RESULT> promptUser<RESULT extends UserAuthenticationPromptResult,
+  Future<RESULT?> promptUser<RESULT extends UserAuthenticationPromptResult,
           U extends UserAuthenticationPromptData<RESULT>>(
       PromptUserForCode<RESULT, U> prompt, U promptData) {
     final completer = Completer<RESULT>();
@@ -265,7 +265,7 @@ abstract class CloudStorageProviderClientBase<CLIENT>
             null,
             StackTrace.current);
       }
-    }).catchError((dynamic error, StackTrace stackTrace) {
+    }).catchError((Object error, StackTrace stackTrace) {
       completer.completeError(error, stackTrace);
     });
     return completer.future;
@@ -273,15 +273,15 @@ abstract class CloudStorageProviderClientBase<CLIENT>
 
   @protected
   Future<CLIENT> requireAuthenticatedClient() async {
-    return _client ??= await _loadStoredCredentials().then((client) async {
+    return (_client ??= await _loadStoredCredentials().then((client) async {
       if (client == null) {
         throw LoadFileException('Unable to load cloud storage credentials.');
       }
       return client;
-    });
+    }))!;
   }
 
-  Future<CLIENT> _loadStoredCredentials() async {
+  Future<CLIENT?> _loadStoredCredentials() async {
     final credentialsJson = await loadCredentials();
     _logger.finer(
         'Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}');
@@ -301,7 +301,7 @@ abstract class CloudStorageProviderClientBase<CLIENT>
 
   CLIENT clientWithStoredCredentials(String stored);
 
-  Future<CLIENT> clientFromAuthenticationFlow<
+  Future<CLIENT?> clientFromAuthenticationFlow<
           TF extends UserAuthenticationPromptResult,
           UF extends UserAuthenticationPromptData<TF>>(
       PromptUserForCode<TF, UF> prompt);
@@ -317,7 +317,7 @@ abstract class CloudStorageSelectorResult {}
 
 class CloudStorageSelectorSaveResult implements CloudStorageSelectorResult {
   CloudStorageSelectorSaveResult(this.parent, this.fileName);
-  final CloudStorageEntity parent;
+  final CloudStorageEntity? parent;
   final String fileName;
 }
 

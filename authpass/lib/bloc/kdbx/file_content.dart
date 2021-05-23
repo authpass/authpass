@@ -14,7 +14,7 @@ class FileContent {
   ]);
 
   final Uint8List content;
-  final Map<String, dynamic> metadata;
+  final Map<String, dynamic>? metadata;
   final FileContentSource source;
 }
 

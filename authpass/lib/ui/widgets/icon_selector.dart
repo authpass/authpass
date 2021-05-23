@@ -23,17 +23,17 @@ part 'icon_selector.freezed.dart';
 final _logger = Logger('authpass.icon_selector');
 
 class IconSelectorDialog extends StatefulWidget {
-  const IconSelectorDialog({Key key, this.initialSelection, this.kdbxFile})
+  const IconSelectorDialog({Key? key, this.initialSelection, this.kdbxFile})
       : super(key: key);
 
-  final SelectedIcon initialSelection;
-  final KdbxFile kdbxFile;
+  final SelectedIcon? initialSelection;
+  final KdbxFile? kdbxFile;
 
   @override
   _IconSelectorDialogState createState() => _IconSelectorDialogState();
 
-  static Future<SelectedIcon> show(BuildContext context,
-      {SelectedIcon initialSelection, KdbxFile kdbxFile}) {
+  static Future<SelectedIcon?> show(BuildContext context,
+      {SelectedIcon? initialSelection, KdbxFile? kdbxFile}) {
     return showDialog<SelectedIcon>(
       context: context,
       builder: (context) => IconSelectorDialog(
@@ -64,7 +64,7 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(_selectorKey.currentState._selection);
+            Navigator.of(context).pop(_selectorKey.currentState!._selection);
           },
           child: const Text('Select icon'),
         ),
@@ -75,19 +75,19 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
 
 class IconSelector extends StatefulWidget {
   const IconSelector(
-      {Key key, @required this.initialSelection, @required this.kdbxFile})
+      {Key? key, required this.initialSelection, required this.kdbxFile})
       : super(key: key);
 
-  final SelectedIcon initialSelection;
-  final KdbxFile kdbxFile;
+  final SelectedIcon? initialSelection;
+  final KdbxFile? kdbxFile;
 
   @override
   _IconSelectorState createState() => _IconSelectorState();
 }
 
 class _IconSelectorState extends State<IconSelector> {
-  SelectedIcon _selection;
-  KdbxFile _kdbxFile;
+  SelectedIcon? _selection;
+  KdbxFile? _kdbxFile;
 
   @override
   void initState() {
@@ -113,17 +113,17 @@ class _IconSelectorState extends State<IconSelector> {
             },
             child: const Icon(FontAwesomeIcons.plus),
           ),
-          ..._kdbxFile.body.meta.customIcons.values
+          ..._kdbxFile!.body.meta.customIcons.values
               .map((value) => IconSelectorCustomIcon(
                   iconData: value.data,
-                  isSelected: _checkSelected(_selection, value),
+                  isSelected: _checkSelected(_selection!, value),
                   onTap: () {
                     _logger.fine('Selected custom icon.');
                     setState(() => _selection = SelectedIcon.custom(value));
                   })),
           ...KdbxIcon.values.map((icon) => IconSelectorIcon(
                 iconData: PredefinedIcons.iconFor(icon),
-                isSelected: _checkSelected(_selection, icon),
+                isSelected: _checkSelected(_selection!, icon),
                 onTap: () {
                   _logger.fine('Selected icon $icon');
                   setState(() => _selection = SelectedIcon.predefined(icon));
@@ -176,7 +176,7 @@ class _IconSelectorState extends State<IconSelector> {
       await DialogUtils.showSimpleAlertDialog(
         context,
         null,
-        loc.notPngError,
+        loc!.notPngError,
         routeAppend: 'customIconPngError',
       );
       return;
@@ -185,7 +185,7 @@ class _IconSelectorState extends State<IconSelector> {
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
-          content: loc.iconPngSizeWarning,
+          content: loc!.iconPngSizeWarning,
         ),
       )) {
         return;
@@ -193,7 +193,7 @@ class _IconSelectorState extends State<IconSelector> {
     }
     final newIcon = KdbxCustomIcon(uuid: KdbxUuid.random(), data: bytes);
     setState(() {
-      _kdbxFile.body.meta.addCustomIcon(newIcon);
+      _kdbxFile!.body.meta.addCustomIcon(newIcon);
       _selection = SelectedIcon.custom(newIcon);
     });
   }
@@ -201,24 +201,24 @@ class _IconSelectorState extends State<IconSelector> {
 
 class IconSelectorIcon extends StatelessWidget {
   const IconSelectorIcon({
-    Key key,
+    Key? key,
     this.iconData,
     this.isSelected,
     this.onTap,
   }) : super(key: key);
 
-  final IconData iconData;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final IconData? iconData;
+  final bool? isSelected;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Ink(
-      color: isSelected ? theme.primaryColorLight : null,
+      color: isSelected! ? theme.primaryColorLight : null,
       child: InkWell(
         onTap: onTap,
-        child: Icon(iconData, color: isSelected ? null : theme.primaryColor),
+        child: Icon(iconData, color: isSelected! ? null : theme.primaryColor),
       ),
     );
   }
@@ -226,15 +226,15 @@ class IconSelectorIcon extends StatelessWidget {
 
 class IconSelectorCustomIcon extends StatelessWidget {
   const IconSelectorCustomIcon({
-    Key key,
+    Key? key,
     this.iconData,
     this.isSelected,
     this.onTap,
   }) : super(key: key);
 
-  final Uint8List iconData;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final Uint8List? iconData;
+  final bool? isSelected;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -243,13 +243,13 @@ class IconSelectorCustomIcon extends StatelessWidget {
     final iconSize = iconTheme.size;
 
     return Ink(
-      color: isSelected ? theme.primaryColorLight : null,
+      color: isSelected! ? theme.primaryColorLight : null,
       child: InkWell(
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.memory(
-            iconData,
+            iconData!,
             width: iconSize,
             height: iconSize,
             fit: BoxFit.contain,
@@ -269,29 +269,29 @@ abstract class SelectedIcon with _$SelectedIcon {
       _SelectedIconCustom;
 
   factory SelectedIcon.fromObject(KdbxObject object) =>
-      object.customIcon?.let((custom) => SelectedIcon.custom(custom)) ??
-      object.icon.get()?.let((icon) => SelectedIcon.predefined(icon));
+      (object.customIcon?.let((custom) => SelectedIcon.custom(custom!)) ??
+      object.icon.get()?.let((icon) => SelectedIcon.predefined(icon!)))!;
 }
 
 class IconSelectorFormField extends StatelessWidget {
   const IconSelectorFormField({
-    Key key,
-    @required this.initialValue,
-    @required this.onSaved,
-    @required this.kdbxFile,
+    Key? key,
+    required this.initialValue,
+    required this.onSaved,
+    required this.kdbxFile,
     this.onChanged,
   }) : super(key: key);
   final SelectedIcon initialValue;
-  final KdbxFile kdbxFile;
-  final void Function(SelectedIcon icon) onSaved;
-  final void Function(SelectedIcon icon) onChanged;
+  final KdbxFile? kdbxFile;
+  final void Function(SelectedIcon? icon) onSaved;
+  final void Function(SelectedIcon icon)? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return FormField<SelectedIcon>(
       builder: (formFieldState) {
         final theme = Theme.of(context);
-        final value = formFieldState.value;
+        final value = formFieldState.value!;
 
         const iconSize = 48.0;
         return Card(
@@ -320,7 +320,7 @@ class IconSelectorFormField extends StatelessWidget {
                       color: theme.primaryColor,
                     ),
                     custom: (custom) => Image.memory(
-                      custom.custom.data,
+                      custom.custom.data!,
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.contain,

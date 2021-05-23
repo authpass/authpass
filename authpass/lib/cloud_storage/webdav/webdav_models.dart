@@ -11,17 +11,17 @@ part 'webdav_models.g.dart';
 @JsonSerializable(nullable: false)
 class UserNamePasswordCredentials {
   UserNamePasswordCredentials({
-    @required String baseUrl,
-    @required this.username,
-    @required this.password,
+    required String baseUrl,
+    required this.username,
+    required this.password,
   }) : baseUrl = _ensureEndsWithSlash(baseUrl);
   factory UserNamePasswordCredentials.fromJson(Map<String, dynamic> json) =>
       _$UserNamePasswordCredentialsFromJson(json);
   Map<String, dynamic> toJson() => _$UserNamePasswordCredentialsToJson(this);
 
   final String baseUrl;
-  final String username;
-  final String password;
+  final String? username;
+  final String? password;
 
   static String _ensureEndsWithSlash(String baseUrl) {
     if (baseUrl.endsWith(Nls.SLASH)) {
@@ -34,11 +34,11 @@ class UserNamePasswordCredentials {
 @JsonSerializable(nullable: false)
 class WebDavFileMetadata {
   WebDavFileMetadata({
-    @required this.etag,
+    required this.etag,
   });
   factory WebDavFileMetadata.fromJson(Map<String, dynamic> json) =>
       _$WebDavFileMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$WebDavFileMetadataToJson(this);
 
-  final String etag;
+  final String? etag;
 }

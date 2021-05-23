@@ -16,18 +16,18 @@ import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 final _logger = Logger('authpass.google_drive_ui');
 
 class CloudStorageSelector extends StatefulWidget {
-  const CloudStorageSelector({Key key, this.provider, this.browserConfig})
+  const CloudStorageSelector({Key? key, this.provider, this.browserConfig})
       : super(key: key);
 
-  final CloudStorageProvider provider;
-  final CloudStorageSelectorConfig browserConfig;
+  final CloudStorageProvider? provider;
+  final CloudStorageSelectorConfig? browserConfig;
 
   @override
   _CloudStorageSelectorState createState() => _CloudStorageSelectorState();
 
   static Route<T> route<T extends CloudStorageSelectorResult>(
           CloudStorageProvider provider,
-          [CloudStorageSelectorConfig<T> browserConfig]) =>
+          [CloudStorageSelectorConfig<T>? browserConfig]) =>
       MaterialPageRoute<T>(
         settings: RouteSettings(name: '/cloudStorage/selector/${provider.id}'),
         builder: (context) => CloudStorageSelector(
@@ -38,14 +38,14 @@ class CloudStorageSelector extends StatefulWidget {
 }
 
 class _CloudStorageSelectorState extends State<CloudStorageSelector> {
-  bool _isSearch;
+  late bool _isSearch;
 
   @override
   void initState() {
     super.initState();
-    widget.provider.loadSavedAuth().then((val) => setState(() {}));
+    widget.provider!.loadSavedAuth().then((val) => setState(() {}));
     if (widget.browserConfig is CloudStorageBrowserConfig ||
-        !(widget.provider.supportSearch)) {
+        !(widget.provider!.supportSearch)) {
       _isSearch = false;
     } else {
       _isSearch = true;
@@ -57,20 +57,20 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
     final config = widget.browserConfig;
     return Scaffold(
       appBar: AppBar(
-        title: Text('CloudStorage - ${widget.provider.displayName}'),
-        actions: widget.provider.isAuthenticated != true
+        title: Text('CloudStorage - ${widget.provider!.displayName}'),
+        actions: widget.provider!.isAuthenticated != true
             ? null
             : <Widget>[
                 IconButton(
                   onPressed: () {
-                    widget.provider.logout();
+                    widget.provider!.logout();
                     setState(() {});
                   },
                   icon: const Icon(FontAwesomeIcons.signOutAlt),
                 ),
               ],
       ),
-      body: widget.provider.isAuthenticated != true
+      body: widget.provider!.isAuthenticated != true
           ? Center(
               child: CloudStorageAuthentication(
                   provider: widget.provider, onSuccess: () => setState(() {})))
@@ -89,11 +89,11 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
 
 class CloudStorageAuthentication extends StatelessWidget {
   const CloudStorageAuthentication(
-      {Key key, @required this.provider, this.onSuccess})
+      {Key? key, required this.provider, this.onSuccess})
       : super(key: key);
 
-  final CloudStorageProvider provider;
-  final void Function() onSuccess;
+  final CloudStorageProvider? provider;
+  final void Function()? onSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class CloudStorageAuthentication extends StatelessWidget {
             onPressed: () async {
               await _startLoginFlow(context);
             },
-            child: Text('Login to ${provider.displayName}'),
+            child: Text('Login to ${provider!.displayName}'),
           ),
           const SizedBox(height: 16),
           Text(
@@ -133,7 +133,7 @@ class CloudStorageAuthentication extends StatelessWidget {
   Future<void> _startLoginFlow(BuildContext context,
       {bool forceNoOpenUrl = false}) async {
     try {
-      final auth = await provider.startAuth((final prompt) async {
+      final auth = await provider!.startAuth((final prompt) async {
         if (prompt is UserAuthenticationPrompt<OAuthTokenResult,
             OAuthTokenFlowPromptData>) {
           final promptData = prompt.data;
@@ -153,7 +153,7 @@ class CloudStorageAuthentication extends StatelessWidget {
             }
           }
           final code = await SimpleAuthCodePromptDialog(
-            title: '${provider.displayName} Authentication',
+            title: '${provider!.displayName} Authentication',
             labelText: 'Authentication Code',
           ).show(context);
           prompt.result(OAuthTokenResult(code));
@@ -166,19 +166,19 @@ class CloudStorageAuthentication extends StatelessWidget {
         }
       });
       _logger.fine('finished launching. $auth');
-      onSuccess();
+      onSuccess!();
     } catch (e, stackTrace) {
       _logger.severe('Error while authenticating.', e, stackTrace);
       await DialogUtils.showErrorDialog(context, 'Error while authenticating',
-          'Error while trying to authenticate to ${provider.displayName}. $e');
+          'Error while trying to authenticate to ${provider!.displayName}. $e');
     }
   }
 }
 
 class CloudStorageSearch extends StatefulWidget {
-  const CloudStorageSearch({Key key, this.provider}) : super(key: key);
+  const CloudStorageSearch({Key? key, this.provider}) : super(key: key);
 
-  final CloudStorageProvider provider;
+  final CloudStorageProvider? provider;
 
   @override
   _CloudStorageSearchState createState() => _CloudStorageSearchState();
@@ -187,7 +187,7 @@ class CloudStorageSearch extends StatefulWidget {
 class _CloudStorageSearchState extends State<CloudStorageSearch>
     with TaskStateMixin {
   final _searchController = TextEditingController(text: Env.KeePassExtension);
-  SearchResponse _searchResponse;
+  SearchResponse? _searchResponse;
 
   @override
   void initState() {
@@ -249,10 +249,10 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
   Future<void> _search() => asyncRunTask(
         () async {
           final results =
-              await widget.provider.search(name: _searchController.text);
+              await widget.provider!.search(name: _searchController.text);
           _logger.fine('Got results:');
-          for (final result in results.results) {
-            _logger.fine('${result.name} (${result.id}');
+          for (final result in results.results!) {
+            _logger.fine('${result!.name} (${result.id}');
           }
           setState(() {
             _searchResponse = results;
@@ -263,29 +263,29 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
 
 class SearchResultListView extends StatelessWidget {
   const SearchResultListView({
-    Key key,
-    @required this.response,
-    @required this.onTap,
+    Key? key,
+    required this.response,
+    required this.onTap,
   }) : super(key: key);
 
-  final SearchResponse response;
+  final SearchResponse? response;
   final void Function(CloudStorageEntity entity) onTap;
 
   @override
   Widget build(BuildContext context) {
-    final length = response.results.length;
+    final length = response!.results!.length;
     return ListView.builder(
       itemBuilder: (context, itemId) {
         if (itemId >= length) {
           return ListTile(title: Text('$length Items in this folder.'));
         }
-        final entity = response.results[itemId];
+        final entity = response!.results![itemId]!;
         return ListTile(
           leading: Icon(entity.type == CloudStorageEntityType.file
               ? FontAwesomeIcons.file
               : FontAwesomeIcons.folder),
-          title: Text(entity.name),
-          subtitle: entity.path == null ? null : Text(entity.path),
+          title: Text(entity.name!),
+          subtitle: entity.path == null ? null : Text(entity.path!),
           onTap: () => onTap(entity),
         );
       },
@@ -303,17 +303,17 @@ class CloudStorageOpenConfig
 class CloudStorageBrowserConfig
     extends CloudStorageSelectorConfig<CloudStorageSelectorSaveResult> {
   CloudStorageBrowserConfig({this.defaultFileName, this.isSave = true});
-  final String defaultFileName;
+  final String? defaultFileName;
   final bool isSave;
 }
 
 class CloudStorageBrowser extends StatefulWidget {
   const CloudStorageBrowser({
-    Key key,
-    @required this.provider,
-    @required this.config,
+    Key? key,
+    required this.provider,
+    required this.config,
   }) : super(key: key);
-  final CloudStorageProvider provider;
+  final CloudStorageProvider? provider;
   final CloudStorageBrowserConfig config;
 
   @override
@@ -324,33 +324,33 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
     with FutureTaskStateMixin {
   final List<CloudStorageEntity> _folderBreadcrumbs = [];
   final TextEditingController _fileNameController = TextEditingController();
-  SearchResponse _response;
-  CloudStorageEntity get _folder =>
+  SearchResponse? _response;
+  CloudStorageEntity? get _folder =>
       _folderBreadcrumbs.isEmpty ? null : _folderBreadcrumbs.last;
 
   @override
   void initState() {
     super.initState();
-    _fileNameController.text = widget.config.defaultFileName;
+    _fileNameController.text = widget.config.defaultFileName!;
     _listFolder();
   }
 
   Future<void> _listFolder() async {
     await asyncRunTask((progress) async {
-      final response = await widget.provider.list(parent: _folder);
+      final response = await widget.provider!.list(parent: _folder);
       setState(() {
         _response = response.rebuild((b) => b.results
-          ..where((c) => c.type != CloudStorageEntityType.unknown)
+          ..where((c) => c!.type != CloudStorageEntityType.unknown)
           ..sort(_compare));
       });
     }, label: 'Loading');
   }
 
-  int _compare(CloudStorageEntity a, CloudStorageEntity b) {
-    if (a.type != b.type) {
-      return a.type.index - b.type.index;
+  int _compare(CloudStorageEntity? a, CloudStorageEntity? b) {
+    if (a!.type != b!.type) {
+      return a.type!.index - b.type!.index;
     }
-    return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    return a.name!.toLowerCase().compareTo(b.name!.toLowerCase());
   }
 
   @override
@@ -375,7 +375,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                     const Text('  >  '),
                     TextButton.icon(
                       icon: const Icon(FontAwesomeIcons.folderOpen),
-                      label: Text(f.name),
+                      label: Text(f.name!),
                       onPressed: () {
                         _folderBreadcrumbs.removeRange(
                             _folderBreadcrumbs.indexOf(f) + 1,
@@ -459,7 +459,7 @@ class CloudStorageBrowserItem extends StatelessWidget {
 }
 
 class UrlUsernamePasswordDialog extends StatefulWidget {
-  Future<UrlUsernamePasswordResult> show(BuildContext context) =>
+  Future<UrlUsernamePasswordResult?> show(BuildContext context) =>
       showDialog<UrlUsernamePasswordResult>(
           context: context, builder: (_) => this);
 
@@ -496,8 +496,9 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
               ),
               autocorrect: false,
               validator: SValidator.notEmpty(msg: 'Please enter a Url') +
-                  SValidator.isTrue((str) => _urlRegex.hasMatch(str),
-                      'Please enter a valid url with http:// or https://'),
+                      SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
+                          'Please enter a valid url with http:// or https://')
+                  as String? Function(String?)?,
             ),
             TextFormField(
               controller: _username,
@@ -525,7 +526,7 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
         ),
         TextButton(
           onPressed: () {
-            if (_formKey.currentState.validate()) {
+            if (_formKey.currentState!.validate()) {
               Navigator.of(context).pop(UrlUsernamePasswordResult(
                   _url.text, _username.text, _password.text));
             }

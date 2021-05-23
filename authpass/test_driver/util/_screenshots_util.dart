@@ -8,17 +8,17 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 /// Called by integration test to capture images.
-Future screenshot(final FlutterDriver driver, Config config, String name,
+Future screenshot(final FlutterDriver? driver, Config config, String name,
     {Duration timeout = const Duration(seconds: 30),
     bool silent = false,
     bool waitUntilNoTransientCallbacks = true}) async {
   if (config.isScreenShotsAvailable) {
     // todo: auto-naming scheme
     if (waitUntilNoTransientCallbacks) {
-      await driver.waitUntilNoTransientCallbacks(timeout: timeout);
+      await driver!.waitUntilNoTransientCallbacks(timeout: timeout);
     }
 
-    final pixels = await driver.screenshot();
+    final pixels = await driver!.screenshot();
     final testDir = '${config.stagingDir}/$kTestScreenshotsDir';
     final file =
         await File('$testDir/$name.$kImageExtension').create(recursive: true);
@@ -34,7 +34,7 @@ const kEnvConfigPath = 'SCREENSHOTS_YAML';
 /// Config info used to manage screenshots for android and ios.
 // Note: should not have context dependencies as is also used in driver.
 class Config {
-  Config({this.configPath = kConfigFileName, String configStr}) {
+  Config({this.configPath = kConfigFileName, String? configStr}) {
     if (configStr != null) {
       // used by tests
       _configInfo = parseYamlStr(configStr);
@@ -66,20 +66,20 @@ class Config {
 
   final String configPath;
 
-  Map _configInfo;
+  Map? _configInfo;
 
   // // Getters
-  String get stagingDir => _configInfo['staging'] as String;
+  String? get stagingDir => _configInfo!['staging'] as String?;
 }
 
 /// Parse a yaml file.
-Map parseYamlFile(String yamlPath) =>
+Map? parseYamlFile(String yamlPath) =>
     jsonDecode(jsonEncode(yaml.loadYaml(fs.file(yamlPath).readAsStringSync())))
-        as Map;
+        as Map?;
 
 /// Parse a yaml string.
-Map parseYamlStr(String yamlString) =>
-    jsonDecode(jsonEncode(yaml.loadYaml(yamlString))) as Map;
+Map? parseYamlStr(String yamlString) =>
+    jsonDecode(jsonEncode(yaml.loadYaml(yamlString))) as Map?;
 
 /// default config file name
 const String kConfigFileName = 'screenshots.yaml';

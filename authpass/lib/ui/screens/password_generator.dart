@@ -18,9 +18,10 @@ enum FinishButtonStyle {
 }
 
 class PasswordGeneratorScreen extends StatelessWidget {
-  const PasswordGeneratorScreen({Key key, this.finishButton}) : super(key: key);
+  const PasswordGeneratorScreen({Key? key, this.finishButton})
+      : super(key: key);
 
-  static Route<String> route({@required FinishButtonStyle finishButton}) =>
+  static Route<String> route({required FinishButtonStyle finishButton}) =>
       MaterialPageRoute(
         settings: const RouteSettings(name: '/passwordGenerator'),
         builder: (context) => PasswordGeneratorScreen(
@@ -29,11 +30,11 @@ class PasswordGeneratorScreen extends StatelessWidget {
       );
 
   /// Either a 'Done' for using in a form field, or 'Save as Default'
-  final FinishButtonStyle finishButton;
+  final FinishButtonStyle? finishButton;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,16 +52,16 @@ class PasswordGeneratorScreen extends StatelessWidget {
 
 class GeneratePassword extends StatefulWidget {
   const GeneratePassword({
-    Key key,
+    Key? key,
     this.doneButtonIcon,
-    @required this.doneButtonLabel,
+    required this.doneButtonLabel,
     this.doneButtonOnPressed,
   })  : assert(doneButtonLabel != null),
         super(key: key);
 
-  final Icon doneButtonIcon;
+  final Icon? doneButtonIcon;
   final String doneButtonLabel;
-  final void Function(String password) doneButtonOnPressed;
+  final void Function(String? password)? doneButtonOnPressed;
 
   @override
   _GeneratePasswordState createState() => _GeneratePasswordState();
@@ -75,7 +76,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
         loc.characterSetSpecial: CharacterSet.specialCharacters,
       };
 
-  Map<String, CharacterSet> _characterSets;
+  late Map<String, CharacterSet> _characterSets;
 
   static const _defaultCharacterSets = {
     CharacterSet.alphabetAsciiLowerCase,
@@ -89,10 +90,11 @@ class _GeneratePasswordState extends State<GeneratePassword> {
   /// prevent people from crashing the app.
   static const int passwordLengthCustomMax = 10000;
 
-  final Set<CharacterSet> _selectedCharacterSet = Set.of(_defaultCharacterSets);
+  final Set<CharacterSet?> _selectedCharacterSet =
+      Set.of(_defaultCharacterSets);
 
-  String _password;
-  int _passwordLength = 20;
+  String? _password;
+  int? _passwordLength = 20;
   final _passwordLengthCustom = TextEditingController();
 
   @override
@@ -105,13 +107,13 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     super.didChangeDependencies();
     final appData = Provider.of<AppData>(context);
     _passwordLength = appData.passwordGeneratorLength ?? _passwordLength;
-    if (appData.passwordGeneratorCharacterSets.isNotEmpty) {
+    if (appData.passwordGeneratorCharacterSets!.isNotEmpty) {
       _selectedCharacterSet
         ..clear()
         ..addAll(CharacterSet.characterSetFromIds(
-            appData.passwordGeneratorCharacterSets));
+            appData.passwordGeneratorCharacterSets!));
     }
-    _characterSets = characterSets(AppLocalizations.of(context));
+    _characterSets = characterSets(AppLocalizations.of(context)!);
     _generatePassword();
   }
 
@@ -119,13 +121,13 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     setState(() {
       _password = PasswordGenerator.singleton().generatePassword(
           CharacterSetCollection(_selectedCharacterSet.toList()),
-          _passwordLength);
+          _passwordLength!);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -153,7 +155,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                     // isDense: true,
                   ),
                   child: Text(
-                    _password,
+                    _password!,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -186,7 +188,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                 Text(loc.length),
                 Expanded(
                   child: Slider(
-                    value: min(_passwordLength.toDouble(),
+                    value: min(_passwordLength!.toDouble(),
                         passwordLengthMax.toDouble()),
                     min: passwordLengthMin.toDouble(),
                     max: passwordLengthMax.toDouble(),
@@ -213,7 +215,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
               ],
             ),
             SlideHideWidget(
-              hide: _passwordLength < passwordLengthMax.toDouble(),
+              hide: _passwordLength! < passwordLengthMax.toDouble(),
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(bottom: 16),
@@ -232,7 +234,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                     textAlign: TextAlign.right,
                     onChanged: (value) {
                       int.tryParse(value)?.let((number) {
-                        if (number > passwordLengthMax &&
+                        if (number! > passwordLengthMax &&
                             number <= passwordLengthCustomMax) {
                           setState(() {
                             _passwordLength = number;
@@ -258,7 +260,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                             ..passwordGeneratorCharacterSets.replace(
                                 _selectedCharacterSet.map<String>((set) =>
                                     CharacterSet.characterSetIdFor(set))));
-                          widget.doneButtonOnPressed(_password);
+                          widget.doneButtonOnPressed!(_password);
                         },
                         icon: widget.doneButtonIcon ??
                             const Icon(Icons.check_circle_outline),
@@ -276,9 +278,9 @@ class _GeneratePasswordState extends State<GeneratePassword> {
 
 class SimpleGridWidget extends StatelessWidget {
   const SimpleGridWidget({
-    Key key,
+    Key? key,
     this.columns = 2,
-    @required this.children,
+    required this.children,
   })  : assert(children != null),
         super(key: key);
 
@@ -306,14 +308,11 @@ class SimpleGridWidget extends StatelessWidget {
 
 class OptionToggleTile extends StatelessWidget {
   const OptionToggleTile({
-    Key key,
-    @required this.label,
-    @required this.value,
-    @required this.onChanged,
-  })  : assert(label != null),
-        assert(value != null),
-        assert(onChanged != null),
-        super(key: key);
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
 
   final String label;
   final bool value;
@@ -330,7 +329,7 @@ class OptionToggleTile extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Checkbox(value: value, onChanged: onChanged),
+            Checkbox(value: value, onChanged: (value) => onChanged(value!)),
             Expanded(
               child: Text(label, style: Theme.of(context).textTheme.subtitle1),
             ),

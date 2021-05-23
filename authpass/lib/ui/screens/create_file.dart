@@ -36,20 +36,20 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   final TextEditingController _password = TextEditingController();
   final FocusNode _passwordFocus = FocusNode();
 
-  Result _strength;
+  Result? _strength;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final loc = AppLocalizations.of(context);
     if (_databaseName.text.isEmpty) {
-      _databaseName.text = loc.databaseCreateDefaultName;
+      _databaseName.text = loc!.databaseCreateDefaultName;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +77,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (val) => _passwordFocus.requestFocus(),
                   validator: (val) {
-                    if (val.isEmpty) {
+                    if (val!.isEmpty) {
                       return loc.validatorNameMissing;
                     }
                     return null;
@@ -89,7 +89,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   controller: _password,
                   focusNode: _passwordFocus,
                   autofocus: true,
-                  onFieldSubmitted: (val) => _submitCallback()(),
+                  onFieldSubmitted: (val) => _submitCallback()!(),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (value) {
                     final userInput = _databaseName.text.pathCase.split('/');
@@ -103,7 +103,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                     });
                   },
                   validator: (val) {
-                    if (val.isEmpty) {
+                    if (val == null || val.isEmpty) {
                       return loc.masterPasswordMissingCreate;
                     }
                     return null;
@@ -137,8 +137,8 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
     );
   }
 
-  VoidCallback _submitCallback() => asyncTaskCallback((progress) async {
-        if (_formKey.currentState.validate()) {
+  VoidCallback? _submitCallback() => asyncTaskCallback((progress) async {
+        if (_formKey.currentState!.validate()) {
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
           try {
             final created = await kdbxBloc.createFile(
@@ -151,7 +151,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (e, stackTrace) {
             _logger.warning('Showing file exists error dialog.', e, stackTrace);
-            final loc = AppLocalizations.of(context);
+            final loc = AppLocalizations.of(context)!;
             await DialogUtils.showSimpleAlertDialog(
               context,
               loc.databaseExistsError,
@@ -167,10 +167,10 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
 }
 
 class PasswordStrengthDisplay extends ImplicitlyAnimatedWidget {
-  const PasswordStrengthDisplay({Key key, this.strength})
+  const PasswordStrengthDisplay({Key? key, this.strength})
       : super(key: key, duration: const Duration(milliseconds: 500));
 
-  final Result strength;
+  final Result? strength;
 
   @override
   _PasswordStrengthDisplayState createState() =>
@@ -187,25 +187,25 @@ class _PasswordStrengthDisplayState
     Colors.lightGreenAccent
   ];
 
-  Tween<double> _scoreTween;
-  ColorTween _colorTween;
-  ColorTween _backgroundColorTween;
+  Tween<double?>? _scoreTween;
+  ColorTween? _colorTween;
+  ColorTween? _backgroundColorTween;
 
   @override
   void forEachTween(visitor) {
     _scoreTween = visitor(
             _scoreTween,
-            widget.strength?.score?.let((val) => val + 1) ?? 0.0,
-            (dynamic value) => Tween<double>(begin: value as double))
-        as Tween<double>;
+            widget.strength?.score?.let((val) => val! + 1) ?? 0.0,
+            (dynamic value) => Tween<double>(begin: value as double?))
+        as Tween<double?>?;
     _colorTween = visitor(
         _colorTween,
         _strengthColors[widget.strength?.score?.toInt() ?? 0],
-        (dynamic value) => ColorTween(begin: value as Color)) as ColorTween;
+        (dynamic value) => ColorTween(begin: value as Color?)) as ColorTween?;
     _backgroundColorTween = visitor(
         _backgroundColorTween,
         widget.strength == null ? Colors.redAccent : Colors.grey,
-        (dynamic value) => ColorTween(begin: value as Color)) as ColorTween;
+        (dynamic value) => ColorTween(begin: value as Color?)) as ColorTween?;
   }
 
   @override
@@ -222,11 +222,11 @@ class _PasswordStrengthDisplayState
       children: [
         if (_strength != null) ...[
           LinearProgressIndicator(
-            value: _scoreTween.evaluate(animation) / 5.0,
+            value: _scoreTween!.evaluate(animation)! / 5.0,
             valueColor: AlwaysStoppedAnimation(
-              _colorTween.evaluate(animation),
+              _colorTween!.evaluate(animation),
             ),
-            backgroundColor: _backgroundColorTween.evaluate(animation),
+            backgroundColor: _backgroundColorTween!.evaluate(animation),
           ),
           const SizedBox(height: 4),
           Row(
@@ -252,9 +252,10 @@ class _PasswordStrengthDisplayState
           ),
         ] else ...[
           LinearProgressIndicator(
-            value: _scoreTween.evaluate(animation) / 5.0,
-            valueColor: AlwaysStoppedAnimation(_colorTween.evaluate(animation)),
-            backgroundColor: _backgroundColorTween.evaluate(animation),
+            value: _scoreTween!.evaluate(animation)! / 5.0,
+            valueColor:
+                AlwaysStoppedAnimation(_colorTween!.evaluate(animation)),
+            backgroundColor: _backgroundColorTween!.evaluate(animation),
           ),
           const SizedBox(height: 4),
           const Text(' '), // NON-NLS

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class BackupBanner extends StatelessWidget {
   const BackupBanner(
     this.bannerText, {
-    @required this.backupWidget,
-    @required this.dismissText,
+    required this.backupWidget,
+    required this.dismissText,
     this.onDismiss,
   }) : assert(backupWidget != null);
 
@@ -14,7 +14,7 @@ class BackupBanner extends StatelessWidget {
 
   final Widget backupWidget;
 
-  final Function onDismiss;
+  final Function? onDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class BackupBanner extends StatelessWidget {
       content: Text(bannerText),
       actions: [
         TextButton(
-          onPressed: () => onDismiss(),
+          onPressed: () => onDismiss!(),
           child: Text(dismissText),
         ),
         backupWidget,

@@ -32,7 +32,7 @@ final _logger = Logger('kdbx_bloc');
 
 class FileExistsException extends KdbxException {
   FileExistsException({
-    @required this.path,
+    required this.path,
   }) : assert(path != null);
 
   final String path;
@@ -45,10 +45,10 @@ class FileExistsException extends KdbxException {
 
 class FileAlreadyOpenException extends KdbxException {
   FileAlreadyOpenException({
-    @required this.newFileSource,
-    @required this.newFile,
-    @required this.openFileSource,
-    @required this.openFile,
+    required this.newFileSource,
+    required this.newFile,
+    required this.openFileSource,
+    required this.openFile,
   }) : assert(newFile.body.rootGroup.uuid == openFile.body.rootGroup.uuid);
 
   FileSource newFileSource;
@@ -70,20 +70,20 @@ class FileAlreadyOpenException extends KdbxException {
 
 class QuickUnlockStorage {
   QuickUnlockStorage({
-    @required this.cloudStorageBloc,
-    @required this.env,
-    @required this.analytics,
+    required this.cloudStorageBloc,
+    required this.env,
+    required this.analytics,
   });
 
   CloudStorageBloc cloudStorageBloc;
   Env env;
   Analytics analytics;
-  bool _supported;
+  bool? _supported;
 
   /// should only be used if used in non interactive callbacks.
-  bool get supportsBiometricKeystoreAlready => _supported;
+  bool? get supportsBiometricKeystoreAlready => _supported;
 
-  Future<bool> supportsBiometricKeyStore() async {
+  Future<bool?> supportsBiometricKeyStore() async {
     if (_supported != null) {
       return _supported;
     }
@@ -92,7 +92,7 @@ class QuickUnlockStorage {
     return _supported = (canAuthenticate == CanAuthenticateResponse.success);
   }
 
-  Future<BiometricStorageFile> _storageFileCached;
+  Future<BiometricStorageFile>? _storageFileCached;
 
   Future<BiometricStorageFile> _storageFile() => _storageFileCached ??=
       BiometricStorage().getStorage('${env.storageNamespace ?? ''}QuickUnlock');
@@ -104,7 +104,7 @@ class QuickUnlockStorage {
 
   Future<void> updateQuickUnlockFile(
       Map<FileSource, Credentials> fileCredentials) async {
-    if (!(await supportsBiometricKeyStore())) {
+    if (!(await (supportsBiometricKeyStore() as FutureOr<bool>))) {
       _logger.severe(
           'updateQuickUnlockFile must not be called when biometric store is not supported.');
       return;
@@ -134,7 +134,7 @@ class QuickUnlockStorage {
 
   Future<Map<FileSource, Credentials>> loadQuickUnlockFile(
       AppDataBloc appDataBloc) async {
-    if (!(await supportsBiometricKeyStore())) {
+    if (!(await (supportsBiometricKeyStore() as FutureOr<bool>))) {
       _logger.fine('Biometric store not supported. no quickunlock.');
       return {};
     }
@@ -147,30 +147,30 @@ class QuickUnlockStorage {
     final map = json.decode(jsonContent) as Map<String, dynamic>;
     final appData = await appDataBloc.store.load();
     return Map.fromEntries(map.entries.map((entry) {
-      final file = appData.recentFileByUuid(entry.key);
+      final file = appData!.recentFileByUuid(entry.key);
       if (file == null) {
         return null;
       }
       return MapEntry(file.toFileSource(cloudStorageBloc),
           HashCredentials(base64.decode(entry.value as String)));
-    }).where((e) => e != null));
+    }).where((e) => e != null) as Iterable<MapEntry<FileSource, Credentials>>);
   }
 }
 
 /// response to [KdbxBloc.readKdbxFile] will either be an exception OR a file.
 class ReadFileResponse {
   ReadFileResponse(this.file, this.exception, this.exceptionType);
-  final KdbxFile file;
-  final dynamic exception;
-  final String exceptionType;
+  final KdbxFile? file;
+  final Object? exception;
+  final String? exceptionType;
 }
 
 class KdbxOpenedFile {
   KdbxOpenedFile({
-    @required this.fileSource,
-    @required this.openedFile,
-    @required this.kdbxFile,
-    @required this.kdbxFileContent,
+    required this.fileSource,
+    required this.openedFile,
+    required this.kdbxFile,
+    required this.kdbxFileContent,
   })  : assert(fileSource != null),
         assert(openedFile != null),
         assert(kdbxFile != null);
@@ -192,7 +192,7 @@ class OpenedKdbxFiles {
 
 //  bool get isNotEmpty => _files.isNotEmpty;
 
-  KdbxOpenedFile operator [](FileSource fileSource) => _files[fileSource];
+  KdbxOpenedFile? operator [](FileSource? fileSource) => _files[fileSource!];
   Iterable<MapEntry<FileSource, KdbxOpenedFile>> get entries => _files.entries;
   Iterable<KdbxOpenedFile> get values => _files.values;
 
@@ -211,18 +211,18 @@ class OpenFileResult {
     this.unlockStopwatch,
     this.loadStopwatch,
   });
-  final KdbxOpenedFile kdbxOpenedFile;
-  final FileContent fileContent;
-  final Stopwatch unlockStopwatch;
-  final Stopwatch loadStopwatch;
+  final KdbxOpenedFile? kdbxOpenedFile;
+  final FileContent? fileContent;
+  final Stopwatch? unlockStopwatch;
+  final Stopwatch? loadStopwatch;
 }
 
 class KdbxBloc {
   KdbxBloc({
-    @required this.env,
-    @required this.appDataBloc,
-    @required this.analytics,
-    @required this.cloudStorageBloc,
+    required this.env,
+    required this.appDataBloc,
+    required this.analytics,
+    required this.cloudStorageBloc,
   }) : quickUnlockStorage = QuickUnlockStorage(
             cloudStorageBloc: cloudStorageBloc,
             env: env,
@@ -245,7 +245,7 @@ class KdbxBloc {
 
   final _openedFiles =
       BehaviorSubject<OpenedKdbxFiles>.seeded(OpenedKdbxFiles({}));
-  Map<KdbxFile, KdbxOpenedFile> _openedFilesByKdbxFile;
+  late Map<KdbxFile, KdbxOpenedFile> _openedFilesByKdbxFile;
   final _openedFilesQuickUnlock = <FileSource>{};
 
   Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources =>
@@ -257,7 +257,7 @@ class KdbxBloc {
       _openedFiles.value.values.map((value) => value.kdbxFile).toList();
   ValueStream<OpenedKdbxFiles> get openedFilesChanged => _openedFiles.stream;
 
-  Future<int> _quickUnlockCheckRunning;
+  Future<int>? _quickUnlockCheckRunning;
 
   void dispose() {
     _openedFiles.close();
@@ -292,8 +292,8 @@ class KdbxBloc {
 
   Stream<OpenFileResult> openFile(FileSource file, Credentials credentials,
       {bool addToQuickUnlock = false}) async* {
-    Uint8List previous;
-    KdbxOpenedFile openedFile;
+    Uint8List? previous;
+    late KdbxOpenedFile openedFile;
     await for (final fileContent in file.content()) {
       _logger.finer('$file got from ${fileContent.source}');
       final loadStopwatch = Stopwatch()..start();
@@ -336,18 +336,19 @@ class KdbxBloc {
 //        staticReadKdbxFile, readArgs,
 //        debugLabel: 'readKdbxFile');
     final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
-    if (kdbxReadFile.exception != null) {
+    final kdbxReadFileException = kdbxReadFile.exception;
+    if (kdbxReadFileException != null) {
       final mapping = <Type, Exception Function()>{
         KdbxInvalidKeyException: () => KdbxInvalidKeyException(),
         KdbxCorruptedFileException: () => KdbxCorruptedFileException(''),
       }.map((key, value) => MapEntry(key.toString(), value));
-      final exception = mapping[kdbxReadFile.exceptionType];
+      final exception = mapping[kdbxReadFile.exceptionType!];
       if (exception != null) {
         throw exception();
       }
-      throw kdbxReadFile.exception;
+      throw kdbxReadFileException;
     }
-    final kdbxFile = kdbxReadFile.file;
+    final kdbxFile = kdbxReadFile.file!;
 
     // make sure kdbxFile is not already opened with another FileSource.
     final openedUuid = kdbxFile.body.rootGroup.uuid;
@@ -363,11 +364,11 @@ class KdbxBloc {
       }
     }
 
-    final openedFile = await appDataBloc.openedFile(
+    final openedFile = await (appDataBloc.openedFile(
       file,
       name: kdbxFile.body.meta.databaseName.get(),
       defaultColor: _defaultNextColor(),
-    );
+    ) as FutureOr<OpenedFile>);
     final kdbxOpenedFile = KdbxOpenedFile(
       fileSource: file,
       openedFile: openedFile,
@@ -392,7 +393,7 @@ class KdbxBloc {
     return kdbxOpenedFile;
   }
 
-  Color _defaultNextColor() {
+  Color? _defaultNextColor() {
     for (final color in AuthPassTheme.defaultColorOrder) {
       if (!openedFiles.values
           .any((file) => file.openedFile.colorCode == color.value)) {
@@ -405,8 +406,8 @@ class KdbxBloc {
   /// writes all opened files into secure storage.
   Future<void> _updateQuickUnlockStore() async {
     final openedFiles = _openedFiles.value;
-    await quickUnlockStorage.updateQuickUnlockFile(
-        Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
+    await quickUnlockStorage.updateQuickUnlockFile(Map.fromEntries(
+        _openedFilesQuickUnlock.map((fileSource) {
       final openedFile = openedFiles[fileSource];
       if (openedFile == null) {
         _logger.warning(
@@ -414,20 +415,21 @@ class KdbxBloc {
         return null;
       }
       return MapEntry(fileSource, openedFile.kdbxFile.credentials);
-    }).where((entry) => entry != null)));
+    }).where((entry) => entry != null)
+            as Iterable<MapEntry<FileSource, Credentials>>));
   }
 
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
 
   Future<void> continueLoadInBackground(
     StreamIterator<OpenFileResult> openIt, {
-    @required String debugName,
-    @required FileSource fileSource,
+    required String debugName,
+    required FileSource fileSource,
   }) async {
     try {
       while (await openIt.moveNext()) {
         final r = openIt.current;
-        _logger.fine('load:$debugName new data from ${r.fileContent.source}');
+        _logger.fine('load:$debugName new data from ${r.fileContent!.source}');
       }
     } catch (e, stackTrace) {
       _logger.severe(
@@ -442,7 +444,7 @@ class KdbxBloc {
 
   bool hasQuickUnlockOpen() => _openedFilesQuickUnlock.isNotEmpty;
 
-  Future<int> reopenQuickUnlock([TaskProgress progress]) =>
+  Future<int> reopenQuickUnlock([TaskProgress? progress]) =>
       _quickUnlockCheckRunning ??= (() async {
         try {
           _logger.finer('Checking quick unlock.');
@@ -456,7 +458,7 @@ class KdbxBloc {
                   '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})';
 //              progress.progressLabel = 'Loading $fileLabel';
 //              await file.key.contentPreCache();
-              progress.progressLabel = 'Opening $fileLabel';
+              progress!.progressLabel = 'Opening $fileLabel';
               final open = StreamIterator(openFile(file.key, file.value));
               await open.moveNext();
               filesOpened++;
@@ -500,7 +502,7 @@ class KdbxBloc {
     }
   }
 
-  Future<void> closeAllFiles({@required bool clearQuickUnlock}) async {
+  Future<void> closeAllFiles({required bool clearQuickUnlock}) async {
     _logger.finer('Closing all files, clearing quick unlock.');
     for (final file in _openedFiles.value.values) {
       file.kdbxFile.dispose();
@@ -511,9 +513,9 @@ class KdbxBloc {
         _openedFilesQuickUnlock.clear();
         await quickUnlockStorage.updateQuickUnlockFile({});
       }
-      analytics.events.trackCloseAllFiles(count: _openedFiles.value?.length);
+      analytics.events.trackCloseAllFiles(count: _openedFiles.value.length);
     } else {
-      analytics.events.trackLockAllFiles(count: _openedFiles.value?.length);
+      analytics.events.trackLockAllFiles(count: _openedFiles.value.length);
     }
     _openedFiles.add(OpenedKdbxFiles({}));
   }
@@ -542,8 +544,8 @@ class KdbxBloc {
   /// Creates a new file in the application document directory by the given name.
   /// Throws a [FileExistsException] if a file of the same name already exists.
   Future<FileSourceLocal> createFile({
-    @required String password,
-    @required String databaseName,
+    required String password,
+    required String databaseName,
     bool openAfterCreate = false,
   }) async {
     assert(password != null);
@@ -564,7 +566,8 @@ class KdbxBloc {
     return localSource;
   }
 
-  Future<FileSourceLocal> _localFileSourceForDbName(String databaseName) async {
+  Future<FileSourceLocal> _localFileSourceForDbName(
+      String? databaseName) async {
     final fileName = '$databaseName.kdbx';
     final appDir = await PathUtils().getAppDocDirectory(ensureCreated: true);
     final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
@@ -578,13 +581,13 @@ class KdbxBloc {
   /// Creates a new password entry in [file] (default: the primary kdbx file),
   /// and adds it to [group] (default: main root group).
   KdbxEntry createEntry({
-    KdbxFile file,
-    KdbxGroup group,
+    KdbxFile? file,
+    KdbxGroup? group,
   }) {
     file ??= group?.file;
     if (file == null) {
       if (openedFilesKdbx.isEmpty) {
-        return null;
+        return throw StateError('No kdbxfiles are open. Specify a file.');
       }
       file = openedFilesKdbx.first;
     }
@@ -609,7 +612,8 @@ class KdbxBloc {
     return await file.save();
   }
 
-  Future<FileContent> saveFile(KdbxFile file, {FileSource toFileSource}) async {
+  Future<FileContent> saveFile(KdbxFile file,
+      {FileSource? toFileSource}) async {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
     final bytes = await _saveFileToBytes(file);
     final ret = await fileSource.contentWrite(bytes);
@@ -619,13 +623,13 @@ class KdbxBloc {
     return ret;
   }
 
-  KdbxOpenedFile fileForKdbxFile(KdbxFile file) =>
-      _openedFilesByKdbxFile[file] ??
+  KdbxOpenedFile fileForKdbxFile(KdbxFile? file) =>
+      _openedFilesByKdbxFile[file!] ??
       (() {
         throw StateError('Missing file source for kdbxFile.');
-      })();
+      })()!;
 
-  KdbxOpenedFile fileForFileSource(FileSource fileSource) =>
+  KdbxOpenedFile? fileForFileSource(FileSource fileSource) =>
       _openedFiles.value[fileSource];
 
   Future<KdbxOpenedFile> saveAs(
@@ -638,11 +642,11 @@ class KdbxBloc {
       FileContent fileContent) async {
     final oldSource = oldFile.fileSource;
     final databaseName = oldFile.kdbxFile.body.meta.databaseName.get();
-    final newOpenedFile = await appDataBloc.openedFile(
+    final newOpenedFile = await (appDataBloc.openedFile(
       output,
       name: databaseName,
       oldFile: oldFile.openedFile,
-    );
+    ) as FutureOr<OpenedFile>);
     final newFile = KdbxOpenedFile(
       fileSource: output,
       openedFile: newOpenedFile,
@@ -678,12 +682,12 @@ class KdbxBloc {
       CloudStorageProvider cs) async {
     final bytes = await _saveFileToBytes(oldFile.kdbxFile);
     final entity = await cs.createEntity(createFileInfo, bytes);
-    final lastContent = entity.lastContent;
+    final lastContent = entity.lastContent!;
     assert(bytes == lastContent.content);
     return await _savedAs(oldFile, entity, lastContent);
   }
 
-  Future<FileSource> saveLocally(FileSource source) async {
+  Future<FileSource> saveLocally(FileSource? source) async {
     final file = _openedFiles.value[source];
     if (file == null) {
       throw StateError('file for $source is not open.');
@@ -693,21 +697,21 @@ class KdbxBloc {
     return (await saveAs(file, localSource)).fileSource;
   }
 
-  Map<String, KdbxEntry> _entryUuidLookup;
+  Map<String, KdbxEntry>? _entryUuidLookup;
 
-  KdbxEntry findEntryByUuid(String uuid) {
+  KdbxEntry? findEntryByUuid(String? uuid) {
     _entryUuidLookup ??= Map.fromEntries(openedFilesKdbx.expand((file) => file
         .body.rootGroup
         .getAllEntries()
         .map((e) => MapEntry(e.uuid.uuid, e))));
 
-    return _entryUuidLookup[uuid];
+    return _entryUuidLookup![uuid!];
   }
 
   void clearEntryByUuidLookup() => _entryUuidLookup = null;
 
   Stream<ReloadStatus> reload(KdbxOpenedFile file) async* {
-    Uint8List bytes;
+    Uint8List? bytes;
     final dirtyObjects = file.kdbxFile.dirtyObjects;
     try {
       if (file.kdbxFile.isDirty) {
@@ -730,7 +734,7 @@ class KdbxBloc {
 
       _logger.info('\n\n\n===========\n\n\n');
       _logger.info('starting merge.');
-      file.kdbxFile.merge(kdbxReadFile.file);
+      file.kdbxFile.merge(kdbxReadFile.file!);
 
       _logger.info('\n\nDONE MERGE\n\n\n\n');
 

@@ -16,8 +16,8 @@ UserNamePasswordCredentials _$UserNamePasswordCredentialsFromJson(
     Map<String, dynamic> json) {
   return UserNamePasswordCredentials(
     baseUrl: json['baseUrl'] as String,
-    username: json['username'] as String,
-    password: json['password'] as String,
+    username: json['username'] as String?,
+    password: json['password'] as String?,
   );
 }
 
@@ -31,7 +31,7 @@ Map<String, dynamic> _$UserNamePasswordCredentialsToJson(
 
 WebDavFileMetadata _$WebDavFileMetadataFromJson(Map<String, dynamic> json) {
   return WebDavFileMetadata(
-    etag: json['etag'] as String,
+    etag: json['etag'] as String?,
   );
 }
 

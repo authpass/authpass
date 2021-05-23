@@ -17,8 +17,7 @@ import 'package:oauth2/oauth2.dart' as oauth2;
 final _logger = Logger('onedrive_provider');
 
 class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
-  OneDriveProvider(
-      {@required this.env, @required CloudStorageHelperBase helper})
+  OneDriveProvider({required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   final Env env;
@@ -37,17 +36,17 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   bool isSupported() => env.oauthRedirectUriSupported;
 
   @override
-  Future<oauth2.Client> clientFromAuthenticationFlow<
+  Future<oauth2.Client?> clientFromAuthenticationFlow<
       TF extends UserAuthenticationPromptResult,
       UF extends UserAuthenticationPromptData<TF>>(prompt) async {
     final grant = oauth2.AuthorizationCodeGrant(
-      env.secrets.microsoftClientId,
+      env.secrets!.microsoftClientId!,
       Uri.parse(_oauthEndpoint),
       Uri.parse(_oauthToken),
 //      secret: env.secrets.microsoftClientSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
-    final authUrl = grant.getAuthorizationUrl(Uri.parse(env.oauthRedirectUri),
+    final authUrl = grant.getAuthorizationUrl(Uri.parse(env.oauthRedirectUri!),
         scopes: ['offline_access', 'Files.ReadWrite']);
     final params = Map<String, String>.from(
         authUrl.queryParameters); //..remove('redirect_uri');
@@ -73,7 +72,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final credentials = oauth2.Credentials.fromJson(stored);
     return oauth2.Client(
       credentials,
-      identifier: env.secrets.microsoftClientId,
+      identifier: env.secrets!.microsoftClientId,
 //      secret: env.secrets.dropboxSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
@@ -85,8 +84,9 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   @override
   String get displayName => 'One Drive';
 
-  Uri _uri(List<String> subPath) {
-    return _baseUri.replace(pathSegments: _baseUri.pathSegments + subPath);
+  Uri _uri(List<String?> subPath) {
+    return _baseUri.replace(
+        pathSegments: _baseUri.pathSegments + (subPath as List<String>));
   }
 
   void _assertSuccessResponse(Response response) {
@@ -101,7 +101,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   }
 
   @override
-  Future<SearchResponse> list({CloudStorageEntity parent}) async {
+  Future<SearchResponse> list({CloudStorageEntity? parent}) async {
     final listUri = _uri(parent == null
         ? ['root', 'children']
         : ['items', parent.id, 'children']);
@@ -128,7 +128,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final uri = _uri(['items', file.id, 'content']);
-    final client = await requireAuthenticatedClient();
+    final Client client = await requireAuthenticatedClient();
     final response = await client.get(uri);
     return FileContent(response.bodyBytes, <String, dynamic>{
       _METADATA_ETAG: response.headers['etag'],
@@ -138,10 +138,10 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   @override
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     final driveItem = await _upload(
-      locationId: file.id,
-      cTag: previousMetadata[_METADATA_CTAG] as String,
+      locationId: file.id!,
+      cTag: previousMetadata![_METADATA_CTAG] as String?,
       bytes: bytes,
     );
     return <String, dynamic>{
@@ -151,17 +151,17 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   }
 
   Future<OneDriveItem> _upload({
-    @required String locationId,
-    String fileName,
-    String cTag,
-    @required Uint8List bytes,
+    required String locationId,
+    String? fileName,
+    String? cTag,
+    required Uint8List bytes,
   }) async {
     assert(locationId != null);
     assert(bytes != null);
     final uri = fileName == null
         ? _uri(['items', locationId, 'createUploadSession'])
         : _uri(['items', '$locationId:', '$fileName:', 'createUploadSession']);
-    final client = await requireAuthenticatedClient();
+    final Client client = await requireAuthenticatedClient();
     if (cTag != null) {
       _logger.finer('Setting if-match to: $cTag');
     }
@@ -208,7 +208,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   Future<FileSource> createEntity(
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
     final driveItem = await _upload(
-      locationId: saveAs.parent.id,
+      locationId: saveAs.parent!.id!,
       fileName: saveAs.fileName,
       bytes: bytes,
     );

@@ -26,12 +26,12 @@ void main() {
   _logger.fine('Starting webdav test for URL: $webDavUrl');
 
   group('simple webdav test', () {
-    WebDavProvider provider;
+    WebDavProvider? provider;
     setUp(() async {
       // final env = await TestUtil.createEnv();
       provider = WebDavProvider(helper: CloudStorageHelperMock());
       // authenticate
-      final result = await provider.startAuth((prompt) async {
+      final result = await provider!.startAuth((prompt) async {
         if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult,
             UrlUsernamePasswordPromptData>) {
           prompt.result(UrlUsernamePasswordResult(

@@ -14,32 +14,19 @@ part of '_base.dart';
 
 class _$AppInfo extends AppInfo {
   @override
-  final String appName;
+  final String? appName;
   @override
-  final String version;
+  final String? version;
   @override
-  final int buildNumber;
+  final int? buildNumber;
   @override
-  final String packageName;
+  final String? packageName;
 
-  factory _$AppInfo([void Function(AppInfoBuilder) updates]) =>
+  factory _$AppInfo([void Function(AppInfoBuilder)? updates]) =>
       (new AppInfoBuilder()..update(updates)).build();
 
   _$AppInfo._({this.appName, this.version, this.buildNumber, this.packageName})
-      : super._() {
-    if (appName == null) {
-      throw new BuiltValueNullFieldError('AppInfo', 'appName');
-    }
-    if (version == null) {
-      throw new BuiltValueNullFieldError('AppInfo', 'version');
-    }
-    if (buildNumber == null) {
-      throw new BuiltValueNullFieldError('AppInfo', 'buildNumber');
-    }
-    if (packageName == null) {
-      throw new BuiltValueNullFieldError('AppInfo', 'packageName');
-    }
-  }
+      : super._();
 
   @override
   AppInfo rebuild(void Function(AppInfoBuilder) updates) =>
@@ -78,32 +65,33 @@ class _$AppInfo extends AppInfo {
 }
 
 class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
-  _$AppInfo _$v;
+  _$AppInfo? _$v;
 
-  String _appName;
-  String get appName => _$this._appName;
-  set appName(String appName) => _$this._appName = appName;
+  String? _appName;
+  String? get appName => _$this._appName;
+  set appName(String? appName) => _$this._appName = appName;
 
-  String _version;
-  String get version => _$this._version;
-  set version(String version) => _$this._version = version;
+  String? _version;
+  String? get version => _$this._version;
+  set version(String? version) => _$this._version = version;
 
-  int _buildNumber;
-  int get buildNumber => _$this._buildNumber;
-  set buildNumber(int buildNumber) => _$this._buildNumber = buildNumber;
+  int? _buildNumber;
+  int? get buildNumber => _$this._buildNumber;
+  set buildNumber(int? buildNumber) => _$this._buildNumber = buildNumber;
 
-  String _packageName;
-  String get packageName => _$this._packageName;
-  set packageName(String packageName) => _$this._packageName = packageName;
+  String? _packageName;
+  String? get packageName => _$this._packageName;
+  set packageName(String? packageName) => _$this._packageName = packageName;
 
   AppInfoBuilder();
 
   AppInfoBuilder get _$this {
-    if (_$v != null) {
-      _appName = _$v.appName;
-      _version = _$v.version;
-      _buildNumber = _$v.buildNumber;
-      _packageName = _$v.packageName;
+    final $v = _$v;
+    if ($v != null) {
+      _appName = $v.appName;
+      _version = $v.version;
+      _buildNumber = $v.buildNumber;
+      _packageName = $v.packageName;
       _$v = null;
     }
     return this;
@@ -111,14 +99,12 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
 
   @override
   void replace(AppInfo other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AppInfo;
   }
 
   @override
-  void update(void Function(AppInfoBuilder) updates) {
+  void update(void Function(AppInfoBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -137,21 +123,14 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
 
 class _$FeatureFlags extends FeatureFlags {
   @override
-  final bool authpassCloud;
+  final bool? authpassCloud;
   @override
-  final String authpassCloudUri;
+  final String? authpassCloudUri;
 
-  factory _$FeatureFlags([void Function(FeatureFlagsBuilder) updates]) =>
+  factory _$FeatureFlags([void Function(FeatureFlagsBuilder)? updates]) =>
       (new FeatureFlagsBuilder()..update(updates)).build();
 
-  _$FeatureFlags._({this.authpassCloud, this.authpassCloudUri}) : super._() {
-    if (authpassCloud == null) {
-      throw new BuiltValueNullFieldError('FeatureFlags', 'authpassCloud');
-    }
-    if (authpassCloudUri == null) {
-      throw new BuiltValueNullFieldError('FeatureFlags', 'authpassCloudUri');
-    }
-  }
+  _$FeatureFlags._({this.authpassCloud, this.authpassCloudUri}) : super._();
 
   @override
   FeatureFlags rebuild(void Function(FeatureFlagsBuilder) updates) =>
@@ -184,24 +163,25 @@ class _$FeatureFlags extends FeatureFlags {
 
 class FeatureFlagsBuilder
     implements Builder<FeatureFlags, FeatureFlagsBuilder> {
-  _$FeatureFlags _$v;
+  _$FeatureFlags? _$v;
 
-  bool _authpassCloud;
-  bool get authpassCloud => _$this._authpassCloud;
-  set authpassCloud(bool authpassCloud) =>
+  bool? _authpassCloud;
+  bool? get authpassCloud => _$this._authpassCloud;
+  set authpassCloud(bool? authpassCloud) =>
       _$this._authpassCloud = authpassCloud;
 
-  String _authpassCloudUri;
-  String get authpassCloudUri => _$this._authpassCloudUri;
-  set authpassCloudUri(String authpassCloudUri) =>
+  String? _authpassCloudUri;
+  String? get authpassCloudUri => _$this._authpassCloudUri;
+  set authpassCloudUri(String? authpassCloudUri) =>
       _$this._authpassCloudUri = authpassCloudUri;
 
   FeatureFlagsBuilder();
 
   FeatureFlagsBuilder get _$this {
-    if (_$v != null) {
-      _authpassCloud = _$v.authpassCloud;
-      _authpassCloudUri = _$v.authpassCloudUri;
+    final $v = _$v;
+    if ($v != null) {
+      _authpassCloud = $v.authpassCloud;
+      _authpassCloudUri = $v.authpassCloudUri;
       _$v = null;
     }
     return this;
@@ -209,14 +189,12 @@ class FeatureFlagsBuilder
 
   @override
   void replace(FeatureFlags other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$FeatureFlags;
   }
 
   @override
-  void update(void Function(FeatureFlagsBuilder) updates) {
+  void update(void Function(FeatureFlagsBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

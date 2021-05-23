@@ -32,6 +32,7 @@ import 'package:authpass/utils/theme_utils.dart';
 import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +56,9 @@ import 'package:tuple/tuple.dart';
 final _logger = Logger('entry_details');
 
 class EntryDetailsScreen extends StatefulWidget {
-  const EntryDetailsScreen({Key key, @required this.entry}) : super(key: key);
+  const EntryDetailsScreen({Key? key, required this.entry}) : super(key: key);
 
-  static Route<void> route({@required KdbxEntry entry}) => MaterialPageRoute(
+  static Route<void> route({required KdbxEntry entry}) => MaterialPageRoute(
       settings: const RouteSettings(name: '/entry'),
       builder: (context) => EntryDetailsScreen(
             entry: entry,
@@ -75,7 +76,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
         StreamSubscriberMixin<EntryDetailsScreen>,
         KdbxObjectSavableStateMixin<EntryDetailsScreen> {
   @override
-  KdbxFile get file => widget.entry.file;
+  KdbxFile? get file => widget.entry.file;
 
   @override
   Changeable get kdbxObject => widget.entry;
@@ -90,7 +91,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(vm.label?.takeUnlessBlank() ?? loc.noTitle),
+        title: Text(vm.label?.takeUnlessBlank() ?? loc!.noTitle),
         actions: <Widget>[
           ...?!isDirty
               ? null
@@ -106,13 +107,13 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
               PopupMenuItem(
                 value: () {
                   final oldGroup = entry.parent;
-                  entry.file.deleteEntry(entry);
+                  entry.file!.deleteEntry(entry);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Text('Deleted entry.'),
                     action: SnackBarAction(
                         label: 'Undo',
                         onPressed: () {
-                          entry.file.move(entry, oldGroup);
+                          entry.file!.move(entry, oldGroup!);
                         }),
                   ));
                 },
@@ -178,14 +179,14 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
     on State<T>, TaskStateMixin<T>, StreamSubscriberMixin<T> {
   GlobalKey<FormState> get formKey;
 
-  KdbxFile get file;
+  KdbxFile? get file;
 
   bool _isObjectDirty = false;
 
   bool get isDirty => _isObjectDirty || isFormDirty;
   bool isFormDirty = false;
 
-  Changeable get kdbxObject;
+  Changeable? get kdbxObject;
 
   @override
   void initState() {
@@ -201,7 +202,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
 
   void _registerListener() {
     subscriptions.cancelSubscriptions();
-    handleSubscription(kdbxObject.changes.listen((change) {
+    handleSubscription(kdbxObject!.changes.listen((change) {
       _logger.finer(
           '_isObjectDirty = ${change.isDirty} (before: $_isObjectDirty / formDirty: $isFormDirty');
       setState(() {
@@ -211,13 +212,13 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
   }
 
   @protected
-  VoidCallback get saveCallback => asyncTaskCallback(() async {
-        if (formKey.currentState.validate()) {
-          formKey.currentState.save();
+  VoidCallback? get saveCallback => asyncTaskCallback(() async {
+        if (formKey.currentState!.validate()) {
+          formKey.currentState!.save();
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
           if (kdbxBloc.fileForKdbxFile(file).fileSource.supportsWrite) {
             try {
-              await kdbxBloc.saveFile(file);
+              await kdbxBloc.saveFile(file!);
             } on StorageException catch (e, stackTrace) {
               _logger.warning('Error while saving database.', e, stackTrace);
               await DialogUtils.showErrorDialog(
@@ -255,11 +256,11 @@ enum FieldType {
 
 class EntryDetails extends StatefulWidget {
   const EntryDetails(
-      {Key key, @required this.entry, @required this.onSavedPressed})
+      {Key? key, required this.entry, required this.onSavedPressed})
       : super(key: key);
 
   final EntryViewModel entry;
-  final VoidCallback onSavedPressed;
+  final VoidCallback? onSavedPressed;
 
   @override
   _EntryDetailsState createState() => _EntryDetailsState();
@@ -267,7 +268,7 @@ class EntryDetails extends StatefulWidget {
 
 class _EntryDetailsState extends State<EntryDetails>
     with StreamSubscriberMixin {
-  List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField>> _fieldKeys;
+  List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>>? _fieldKeys;
 
   void _initShortcutListener(
       KeyboardShortcutEvents events, CommonFields commonFields) {
@@ -284,7 +285,7 @@ class _EntryDetailsState extends State<EntryDetails>
               if (data != null && data.isNotEmpty) {
                 Clipboard.setData(ClipboardData(text: data));
                 if (mounted) {
-                  final loc = AppLocalizations.of(context);
+                  final loc = AppLocalizations.of(context)!;
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(loc.copiedToClipboard)));
                 }
@@ -316,8 +317,8 @@ class _EntryDetailsState extends State<EntryDetails>
     }));
   }
 
-  _EntryFieldState _fieldStateFor(CommonField commonField) => _fieldKeys
-      .firstWhere((f) => f.item2 == commonField.key, orElse: () => null)
+  _EntryFieldState? _fieldStateFor(CommonField commonField) => _fieldKeys!
+      .firstWhereOrNull((f) => f.item2 == commonField.key)
       ?.item1
       ?.currentState;
 
@@ -350,10 +351,10 @@ class _EntryDetailsState extends State<EntryDetails>
         entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
     final oldKeys = _fieldKeys == null
         ? <KdbxKey, GlobalKey<_EntryFieldState>>{}
-        : Map.fromEntries(_fieldKeys.map((e) => MapEntry(e.item2, e.item1)));
+        : Map.fromEntries(_fieldKeys!.map((e) => MapEntry(e.item2, e.item1)));
     _fieldKeys = commonFields.fields
         .where((f) => f.showByDefault || entry.getString(f.key) != null)
-        .map((f) => Tuple3(
+        .map((f) => Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>(
             oldKeys[f.key] ??
                 GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'),
             f.key,
@@ -400,7 +401,7 @@ class _EntryDetailsState extends State<EntryDetails>
     final entry = widget.entry.entry;
     final formatUtils = Provider.of<FormatUtils>(context);
     final theme = Theme.of(context);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       child: Padding(
@@ -421,7 +422,8 @@ class _EntryDetailsState extends State<EntryDetails>
                     fallback: (context) => IconSelectorFormField(
                       initialValue: SelectedIcon.fromObject(entry),
                       onSaved: (icon) {
-                        icon.when(predefined: (predefined) {
+                        // TODO is it possible for icon to be null here?!
+                        icon?.when(predefined: (predefined) {
                           entry.customIcon = null;
                           entry.icon.set(predefined);
                         }, custom: (custom) {
@@ -440,7 +442,7 @@ class _EntryDetailsState extends State<EntryDetails>
                         const SizedBox(height: 16),
                         EntryMetaInfo(
                           label: loc.entryInfoFile,
-                          value: entry.file.body.meta.databaseName.get(),
+                          value: entry.file!.body.meta.databaseName.get(),
                         ),
                         EntryMetaInfo(
                           label: loc.entryInfoGroup,
@@ -454,20 +456,20 @@ class _EntryDetailsState extends State<EntryDetails>
                                     .push(GroupListFlat.route(
                               {vm.entry.parent},
                               groupListMode: GroupListMode.singleSelect,
-                              rootGroup: vm.entry.file.body.rootGroup,
+                              rootGroup: vm.entry.file!.body.rootGroup,
                             ));
                             final newGroup = newGroupSelection?.first;
                             if (newGroup != null) {
                               final oldGroup = vm.entry.parent;
-                              file.move(vm.entry, newGroup);
+                              file!.move(vm.entry, newGroup);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(loc
-                                      .movedEntryToGroup(newGroup.name.get())),
+                                      .movedEntryToGroup(newGroup.name.get()!)),
                                   action: SnackBarAction(
                                       label: loc.undoButtonLabel,
                                       onPressed: () {
-                                        file.move(vm.entry, oldGroup);
+                                        file.move(vm.entry, oldGroup!);
                                       }),
                                 ),
                               );
@@ -477,7 +479,7 @@ class _EntryDetailsState extends State<EntryDetails>
                         EntryMetaInfo(
                           label: loc.entryInfoLastModified,
                           value: formatUtils.formatDateFull(
-                              vm.entry.times.lastModificationTime.get()),
+                              vm.entry.times.lastModificationTime.get()!),
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -486,7 +488,7 @@ class _EntryDetailsState extends State<EntryDetails>
                 ],
               ),
               const SizedBox(height: 32),
-              ..._fieldKeys
+              ..._fieldKeys!
                   .map(
                     (f) => EntryField(
                       fieldType: commonFields.isTotp(f.item2)
@@ -560,7 +562,7 @@ class _EntryDetailsState extends State<EntryDetails>
                                     Text(e.key.key,
                                         style: theme.textTheme.subtitle1),
                                     const SizedBox(height: 2),
-                                    Text(loc.sizeBytes(e.value.value.length),
+                                    Text(loc.sizeBytes(e.value.value!.length),
                                         style: theme.textTheme.caption),
                                   ],
                                 ),
@@ -613,7 +615,7 @@ class _EntryDetailsState extends State<EntryDetails>
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
-          content: loc.entryAttachmentSizeWarning,
+          content: loc!.entryAttachmentSizeWarning,
         ),
       )) {
         analytics.events.trackAttachmentAdd(
@@ -636,17 +638,14 @@ class _EntryDetailsState extends State<EntryDetails>
     );
   }
 
-  Future<OtpAuth> _askForTotpSecret(BuildContext context) async {
+  Future<OtpAuth?> _askForTotpSecret(BuildContext context) async {
     final _cleanOtpCodeCode = (String totpCode) async {
       try {
-        if (totpCode == null) {
-          return null;
-        }
         if (totpCode.startsWith('otpauth://')) {
           // NON-NLS
           return OtpAuth.fromUri(Uri.parse(totpCode));
         }
-        final cleaned = totpCode?.replaceAll(' ', ''); //?.toUpperCase();
+        final cleaned = totpCode.replaceAll(' ', ''); //?.toUpperCase();
         final value = base32.decode(cleaned);
         _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');
         return OtpAuth(secret: value);
@@ -688,15 +687,18 @@ class _EntryDetailsState extends State<EntryDetails>
       title: 'Time Based Authentication',
       helperText: 'Please enter time based key.',
     ).show(context);
+    if (totpCode == null) {
+      return null;
+    }
     return _cleanOtpCodeCode(totpCode);
   }
 }
 
 class AttachmentBottomSheet extends StatelessWidget {
   const AttachmentBottomSheet({
-    Key key,
-    @required this.entry,
-    @required this.attachment,
+    Key? key,
+    required this.entry,
+    required this.attachment,
   })  : assert(entry != null),
         assert(attachment != null),
         super(key: key);
@@ -717,7 +719,7 @@ class AttachmentBottomSheet extends StatelessWidget {
             analytics.events.trackAttachmentAction('open');
             Navigator.of(context).pop();
             final f = await PathUtils().saveToTempDirectory(
-                attachment.value.value,
+                attachment.value.value!,
                 dirPrefix: 'openbinary',
                 fileName: attachment.key.key);
             _logger.fine('Opening ${f.path}');
@@ -733,18 +735,18 @@ class AttachmentBottomSheet extends StatelessWidget {
               analytics.events.trackAttachmentAction('share');
               final mimeType = lookupMimeType(
                 attachment.key.key,
-                headerBytes: attachment.value.value.length >
+                headerBytes: attachment.value.value!.length >
                         defaultMagicNumbersMaxLength
-                    ? Uint8List.sublistView(
-                        attachment.value.value, 0, defaultMagicNumbersMaxLength)
+                    ? Uint8List.sublistView(attachment.value.value!, 0,
+                        defaultMagicNumbersMaxLength)
                     : null,
-              );
+              )!;
               _logger.fine('Opening attachment with mimeType $mimeType');
 
               final tempDir = await getTemporaryDirectory();
               final f =
                   await File('${tempDir.path}/${attachment.key.key}').create();
-              await f.writeAsBytes(attachment.value.value);
+              await f.writeAsBytes(attachment.value.value!);
 
               try {
                 await Share.shareFiles([f.path],
@@ -769,7 +771,7 @@ class AttachmentBottomSheet extends StatelessWidget {
                   fileName: attachment.key.key,
                   writer: (file) async {
                     _logger.fine('Opening ${file.path}');
-                    await file.writeAsBytes(attachment.value.value);
+                    await file.writeAsBytes(attachment.value.value!);
                   });
             },
           ),
@@ -796,15 +798,15 @@ class AttachmentBottomSheet extends StatelessWidget {
 
 class EntryMetaInfo extends StatelessWidget {
   const EntryMetaInfo({
-    Key key,
+    Key? key,
     this.label,
     this.value,
     this.onTap,
   }) : super(key: key);
 
-  final String label;
-  final String value;
-  final VoidCallback onTap;
+  final String? label;
+  final String? value;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -828,11 +830,11 @@ class EntryMetaInfo extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(label, style: theme.textTheme.caption),
+                  Text(label!, style: theme.textTheme.caption),
                   Text(
-                    value,
-                    style: theme.textTheme.bodyText1
-                        .copyWith(color: theme.textTheme.caption.color),
+                    value!,
+                    style: theme.textTheme.bodyText1!
+                        .copyWith(color: theme.textTheme.caption!.color),
                     maxLines: 2,
                   ),
                 ],
@@ -846,7 +848,7 @@ class EntryMetaInfo extends StatelessWidget {
 }
 
 class AddFieldButton extends StatefulWidget {
-  const AddFieldButton({Key key, @required this.onAddField}) : super(key: key);
+  const AddFieldButton({Key? key, required this.onAddField}) : super(key: key);
 
   final void Function(KdbxKey key) onAddField;
 
@@ -857,13 +859,13 @@ class AddFieldButton extends StatefulWidget {
 class _AddFieldButtonState extends State<AddFieldButton> {
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return LinkButton(
       icon: const Icon(Icons.add_circle_outline),
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
         final overlay =
-            Overlay.of(context).context.findRenderObject() as RenderBox;
+            Overlay.of(context)!.context.findRenderObject() as RenderBox;
         final position = RelativeRect.fromRect(
           Rect.fromPoints(
             rb.localToGlobal(Offset.zero, ancestor: overlay),
@@ -904,7 +906,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
   }
 
   Future<void> _selectCustomKey() async {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     final key = await SimplePromptDialog(
       title: loc.entryCustomFieldTitle,
       labelText: loc.entryCustomFieldInputLabel,
@@ -917,12 +919,12 @@ class _AddFieldButtonState extends State<AddFieldButton> {
 
 class EntryField extends StatefulWidget {
   const EntryField({
-    Key key,
-    @required this.fieldType,
-    @required this.entry,
-    @required this.fieldKey,
+    Key? key,
+    required this.fieldType,
+    required this.entry,
+    required this.fieldKey,
     this.commonField,
-    @required this.onChangedMetadata,
+    required this.onChangedMetadata,
   })  : assert(entry != null),
         assert(fieldKey != null),
         assert(onChangedMetadata != null),
@@ -931,7 +933,7 @@ class EntryField extends StatefulWidget {
   final FieldType fieldType;
   final KdbxEntry entry;
   final KdbxKey fieldKey;
-  final CommonField commonField;
+  final CommonField? commonField;
   final VoidCallback onChangedMetadata;
 
   @override
@@ -960,14 +962,14 @@ class _EntryFieldState extends State<EntryField>
     with StreamSubscriberMixin, TaskStateMixin
     implements FieldDelegate {
   final GlobalKey _formFieldKey = GlobalKey();
-  TextEditingController _controller;
+  TextEditingController? _controller;
   bool _isValueObscured = false;
   final FocusNode _focusNode = FocusNode();
-  CommonFields _commonFields;
+  late CommonFields _commonFields;
 
-  StringValue get _fieldValue => widget.entry.getString(widget.fieldKey);
+  StringValue? get _fieldValue => widget.entry.getString(widget.fieldKey);
 
-  set _fieldValue(StringValue value) {
+  set _fieldValue(StringValue? value) {
     widget.entry.setString(widget.fieldKey, value);
   }
 
@@ -975,10 +977,10 @@ class _EntryFieldState extends State<EntryField>
       ? widget.commonField?.protect == true
       : _fieldValue is ProtectedValue;
 
-  String get _valueCurrent =>
+  String? get _valueCurrent =>
       (_isValueObscured
           ? widget.entry.getString(widget.fieldKey)?.getText()
-          : _controller.text) ??
+          : _controller!.text) ??
       _fieldValue?.getText();
 
   final GlobalKey<HighlightWidgetState> _highlightWidgetKey =
@@ -1023,7 +1025,7 @@ class _EntryFieldState extends State<EntryField>
         'Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
     if (!_focusNode.hasFocus) {
       setState(() {
-        _fieldValue = ProtectedValue.fromString(_controller.text);
+        _fieldValue = ProtectedValue.fromString(_controller!.text);
         _isValueObscured = true;
         _logger.finer('${widget.fieldKey} _isProtected= $_isValueObscured');
       });
@@ -1033,7 +1035,7 @@ class _EntryFieldState extends State<EntryField>
   @override
   Widget build(BuildContext context) {
     _logger.finer('building ${widget.fieldKey} ($_isValueObscured)');
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return Dismissible(
       key: ValueKey(widget.fieldKey),
       background: Container(
@@ -1059,7 +1061,7 @@ class _EntryFieldState extends State<EntryField>
         childOnHighlight: Text(loc.doneCopiedField,
             style: Theme.of(context)
                 .textTheme
-                .bodyText2
+                .bodyText2!
                 .copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -1173,8 +1175,8 @@ class _EntryFieldState extends State<EntryField>
                 await bloc.createMailbox(entryUuid: widget.entry.uuid.uuid);
             setState(() {
               _isValueObscured = false;
-              _controller.text = address;
-              _fieldValue = PlainValue(_controller.text);
+              _controller!.text = address!;
+              _fieldValue = PlainValue(_controller!.text);
               copyValue();
             });
           });
@@ -1184,7 +1186,7 @@ class _EntryFieldState extends State<EntryField>
   }
 
   List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return <PopupMenuEntry<EntryAction>>[
       PopupMenuItem(
         value: EntryAction.copy,
@@ -1239,9 +1241,9 @@ class _EntryFieldState extends State<EntryField>
   @override
   Future<void> openUrl() async {
     context.events.trackEntryAction(EntryActionType.openUrl);
-    final url = _valueCurrent;
+    final url = _valueCurrent!;
     final loc = AppLocalizations.of(context);
-    String openError;
+    String? openError;
     try {
       var parsed = Uri.parse(url);
       if (!parsed.hasScheme) {
@@ -1250,16 +1252,16 @@ class _EntryFieldState extends State<EntryField>
       _logger.finer('Opening url $url ($parsed)');
       if (await DialogUtils.openUrl(parsed.toString())) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(loc.launchedUrl(url))));
+            .showSnackBar(SnackBar(content: Text(loc!.launchedUrl(url))));
       } else {
-        openError = loc.unableToLaunchUrlNoHandler;
+        openError = loc!.unableToLaunchUrlNoHandler;
       }
     } catch (e, stackTrace) {
       openError = '$e';
       _logger.severe('Unable to open url, $url', e, stackTrace);
     }
     if (openError != null) {
-      await DialogUtils.showErrorDialog(context, loc.unableToLaunchUrlTitle,
+      await DialogUtils.showErrorDialog(context, loc!.unableToLaunchUrlTitle,
           loc.unableToLaunchUrlDescription(url, openError));
     }
   }
@@ -1269,10 +1271,11 @@ class _EntryFieldState extends State<EntryField>
 
   Future<void> _generatePassword() async {
     context.events.trackEntryAction(EntryActionType.generatePassword);
-    final appData =
-        await Provider.of<AppDataBloc>(context, listen: false).store.load();
+    final appData = await (Provider.of<AppDataBloc>(context, listen: false)
+        .store
+        .load() as FutureOr<AppData>);
     final characterSets = CharacterSet.characterSetFromIds(
-        appData.passwordGeneratorCharacterSets);
+        appData.passwordGeneratorCharacterSets!);
     if (characterSets.isEmpty) {
       characterSets.addAll([CharacterSet.alphaNumeric, CharacterSet.numeric]);
     }
@@ -1298,17 +1301,17 @@ class _EntryFieldState extends State<EntryField>
   void _generatedPassword(String password) {
     setState(() {
       _isValueObscured = false;
-      _controller.text = password;
-      _fieldValue = ProtectedValue.fromString(_controller.text);
-      _controller.selection =
-          TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      _controller!.text = password;
+      _fieldValue = ProtectedValue.fromString(_controller!.text);
+      _controller!.selection =
+          TextSelection(baseOffset: 0, extentOffset: _controller!.text.length);
       _focusNode.requestFocus();
     });
     copyValue();
   }
 
   Future<bool> copyValue() async {
-    _highlightWidgetKey.currentState.triggerHighlight();
+    _highlightWidgetKey.currentState!.triggerHighlight();
     Provider.of<Analytics>(context, listen: false)
         .events
         .trackCopyField(key: widget.fieldKey.key);
@@ -1325,11 +1328,11 @@ class _EntryFieldState extends State<EntryField>
     return ObscuredEntryFieldEditor(
       onPressed: () {
         setState(() {
-          _controller.text = _valueCurrent ?? '';
-          _controller.selection = TextSelection(
-              baseOffset: 0, extentOffset: _controller.text?.length ?? 0);
+          _controller!.text = _valueCurrent ?? '';
+          _controller!.selection = TextSelection(
+              baseOffset: 0, extentOffset: _controller!.text?.length ?? 0);
           _isValueObscured = false;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
             _focusNode.requestFocus();
             _logger.finer('requesting focus.');
           });
@@ -1346,9 +1349,14 @@ class _EntryFieldState extends State<EntryField>
   Widget _buildStringEntryFieldEditor() {
     return StringEntryFieldEditor(
       onSaved: (value) {
-        final newValue =
-            _isProtected ? ProtectedValue.fromString(value) : PlainValue(value);
-        _fieldValue = newValue;
+        if (value == null) {
+          _fieldValue = null;
+        } else {
+          final newValue = _isProtected
+              ? ProtectedValue.fromString(value)
+              : PlainValue(value);
+          _fieldValue = newValue;
+        }
       },
       fieldKey: widget.fieldKey,
       commonField: widget.commonField,
@@ -1363,12 +1371,12 @@ class _EntryFieldState extends State<EntryField>
   void dispose() {
     _logger
         .fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
-    _controller.dispose();
+    _controller!.dispose();
     _focusNode.dispose();
     super.dispose();
   }
 
-  List<PopupMenuEntry<EntryAction>> _buildMenuEntriesAuthPassCloud(
+  List<PopupMenuEntry<EntryAction>>? _buildMenuEntriesAuthPassCloud(
       BuildContext context) {
     final authPassCloud = context.read<AuthPassCloudBloc>();
     if (authPassCloud?.featureFlags?.authpassCloud != true) {
@@ -1377,7 +1385,7 @@ class _EntryFieldState extends State<EntryField>
     if (authPassCloud.tokenStatus != TokenStatus.confirmed) {
       return null;
     }
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return [
       PopupMenuItem(
           value: EntryAction.generateEmail,
@@ -1391,11 +1399,11 @@ class _EntryFieldState extends State<EntryField>
 }
 
 class _OtpEntryFieldState extends _EntryFieldState {
-  Timer _timer;
+  Timer? _timer;
 
   String _currentOtp = '';
 
-  String _errorMessage;
+  String? _errorMessage;
 
   /// elapsed seconds since the last period change.
   int _elapsed = 0;
@@ -1407,7 +1415,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
   String get _valueCurrent =>
       widget.entry.getString(widget.fieldKey)?.getText() ?? '';
 
-  String _addBase32Padding(String base32data) {
+  String? _addBase32Padding(String? base32data) {
     if (base32data == null) {
       return null;
     }
@@ -1433,7 +1441,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
       final data = Uri.splitQueryString(value);
       try {
         return OtpAuth(
-          secret: base32.decode(_addBase32Padding(data['key'])),
+          secret: base32.decode(_addBase32Padding(data['key'])!),
           period: data['step']?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
           digits: data['size']?.toInt() ?? OtpAuth.DEFAULT_DIGITS,
         );
@@ -1517,7 +1525,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
   @override
   Future<bool> copyValue() async {
     _logger.finer('Copying OTP value.');
-    _highlightWidgetKey.currentState.triggerHighlight();
+    _highlightWidgetKey.currentState!.triggerHighlight();
     Provider.of<Analytics>(context, listen: false)
         .events
         .trackCopyField(key: widget.fieldKey.key);
@@ -1566,14 +1574,14 @@ class _OtpEntryFieldState extends _EntryFieldState {
 
 class ObscuredEntryFieldEditor extends StatelessWidget {
   const ObscuredEntryFieldEditor({
-    Key key,
-    @required this.onPressed,
-    @required this.onShowPressed,
-    @required this.commonField,
-    @required this.fieldKey,
+    Key? key,
+    required this.onPressed,
+    required this.onShowPressed,
+    required this.commonField,
+    required this.fieldKey,
   }) : super(key: key);
 
-  final CommonField commonField;
+  final CommonField? commonField;
   final KdbxKey fieldKey;
   final VoidCallback onPressed;
   final VoidCallback onShowPressed;
@@ -1589,7 +1597,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
         InputDecorator(
           decoration: InputDecoration(
             prefixIcon:
-                commonField?.icon == null ? null : Icon(commonField.icon),
+                commonField?.icon == null ? null : Icon(commonField!.icon),
             labelText: commonField?.displayName ?? fieldKey.key,
             filled: true,
             labelStyle: TextStyle(color: color.withOpacity(0.2)),
@@ -1647,21 +1655,21 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
 
 class StringEntryFieldEditor extends StatelessWidget {
   const StringEntryFieldEditor({
-    Key key,
-    @required this.onSaved,
-    @required this.controller,
-    @required this.formFieldKey,
-    @required this.focusNode,
-    @required this.commonField,
-    @required this.fieldKey,
-    @required this.delegate,
+    Key? key,
+    required this.onSaved,
+    required this.controller,
+    required this.formFieldKey,
+    required this.focusNode,
+    required this.commonField,
+    required this.fieldKey,
+    required this.delegate,
   }) : super(key: key);
 
   final Key formFieldKey;
   final FocusNode focusNode;
-  final CommonField commonField;
+  final CommonField? commonField;
   final KdbxKey fieldKey;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final FormFieldSetter<String> onSaved;
   final FieldDelegate delegate;
 
@@ -1677,7 +1685,8 @@ class StringEntryFieldEditor extends StatelessWidget {
         focusNode: focusNode,
         decoration: InputDecoration(
           filled: true,
-          prefixIcon: commonField?.icon == null ? null : Icon(commonField.icon),
+          prefixIcon:
+              commonField?.icon == null ? null : Icon(commonField!.icon),
           labelText: commonField?.displayName ?? fieldKey.key,
         ),
         keyboardType: commonField?.keyboardType,
@@ -1689,19 +1698,19 @@ class StringEntryFieldEditor extends StatelessWidget {
         onSaved: onSaved,
       ),
       ValueListenableBuilder<TextEditingValue>(
-        valueListenable: controller,
+        valueListenable: controller!,
         builder: (context, value, child) {
           if (fieldKey == commonFields.password.key &&
-              controller.text.isEmpty) {
+              controller!.text.isEmpty) {
             return IconButton(
-                tooltip: loc.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
+                tooltip: loc!.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
                 icon: const Icon(Icons.refresh),
                 onPressed: delegate.generatePassword,
                 color: color);
           }
-          if (fieldKey == commonFields.url.key && controller.text.isNotEmpty) {
+          if (fieldKey == commonFields.url.key && controller!.text.isNotEmpty) {
             return IconButton(
-                tooltip: loc.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
+                tooltip: loc!.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
                 icon: const Icon(Icons.open_in_new),
                 onPressed: delegate.openUrl,
                 color: color);
@@ -1714,11 +1723,11 @@ class StringEntryFieldEditor extends StatelessWidget {
 }
 
 class HighlightWidget extends StatefulWidget {
-  const HighlightWidget({Key key, this.child, this.childOnHighlight})
+  const HighlightWidget({Key? key, this.child, this.childOnHighlight})
       : super(key: key);
 
-  final Widget child;
-  final Widget childOnHighlight;
+  final Widget? child;
+  final Widget? childOnHighlight;
 
   @override
   HighlightWidgetState createState() => HighlightWidgetState();
@@ -1726,10 +1735,10 @@ class HighlightWidget extends StatefulWidget {
 
 class HighlightWidgetState extends State<HighlightWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
-  Animation<Decoration> _decorationAnimation;
-  Animation<double> _opacity;
+  Animation<Decoration>? _decorationAnimation;
+  late Animation<double> _opacity;
 
   @override
   void initState() {
@@ -1759,7 +1768,7 @@ class HighlightWidgetState extends State<HighlightWidget>
   @override
   Widget build(BuildContext context) {
     return _decorationAnimation == null
-        ? widget.child
+        ? widget.child!
         /* Stack(children: [
             widget.child,
             Positioned.fill(
@@ -1777,14 +1786,14 @@ class HighlightWidgetState extends State<HighlightWidget>
         : Stack(
             clipBehavior: Clip.none,
             children: [
-              widget.child,
+              widget.child!,
               Positioned.fill(
                 top: -4,
                 bottom: -4,
                 child: FadeTransition(
                   opacity: _opacity,
                   child: DecoratedBoxTransition(
-                      decoration: _decorationAnimation,
+                      decoration: _decorationAnimation!,
                       child: Center(child: widget.childOnHighlight)),
                 ),
               ),

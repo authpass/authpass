@@ -21,7 +21,7 @@ import 'package:provider/provider.dart';
 final _logger = Logger('manage_file');
 
 class ManageFileScreen extends StatefulWidget {
-  const ManageFileScreen({Key key, @required this.fileSource})
+  const ManageFileScreen({Key? key, required this.fileSource})
       : assert(fileSource != null),
         super(key: key);
 
@@ -40,7 +40,7 @@ class ManageFileScreen extends StatefulWidget {
 
 class _ManageFileScreenState extends State<ManageFileScreen>
     with StreamSubscriberMixin {
-  FileSource _currentFileSource;
+  FileSource? _currentFileSource;
 
   @override
   void didChangeDependencies() {
@@ -68,10 +68,10 @@ class _ManageFileScreenState extends State<ManageFileScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentFileSource.displayName),
+        title: Text(_currentFileSource!.displayName),
       ),
       body: ManageFile(
-        fileSource: _currentFileSource,
+        fileSource: _currentFileSource!,
         onFileSourceChanged: (fileSource) => setState(() {
           _currentFileSource = fileSource;
         }),
@@ -82,9 +82,9 @@ class _ManageFileScreenState extends State<ManageFileScreen>
 
 class ManageFile extends StatefulWidget {
   const ManageFile({
-    Key key,
-    @required this.fileSource,
-    @required this.onFileSourceChanged,
+    Key? key,
+    required this.fileSource,
+    required this.onFileSourceChanged,
   })  : assert(fileSource != null),
         assert(onFileSourceChanged != null),
         super(key: key);
@@ -97,8 +97,8 @@ class ManageFile extends StatefulWidget {
 }
 
 class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
-  KdbxBloc _kdbxBloc;
-  KdbxOpenedFile _file;
+  late KdbxBloc _kdbxBloc;
+  KdbxOpenedFile? _file;
 
   @override
   void initState() {
@@ -130,8 +130,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _logger.finest('Is rebuilding with color ${_file.openedFile.color}');
-    final databaseName = _file.kdbxFile.body.meta.databaseName.get();
+    _logger.finest('Is rebuilding with color ${_file!.openedFile.color}');
+    final databaseName = _file!.kdbxFile.body.meta.databaseName.get()!;
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     return ProgressOverlay(
@@ -158,28 +158,28 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       return;
                     }
                     setState(() {
-                      _file.kdbxFile.body.meta.databaseName.set(newName);
+                      _file!.kdbxFile.body.meta.databaseName.set(newName);
                     });
                     await asyncRunTask((progress) async {
                       await Future<int>.delayed(
                           const Duration(milliseconds: 100));
                       await _kdbxBloc.saveAs(
-                        _file,
-                        _file.fileSource.copyWithDatabaseName(newName),
+                        _file!,
+                        _file!.fileSource.copyWithDatabaseName(newName),
                       );
-                    }, label: loc.saving);
+                    }, label: loc!.saving);
                   },
                 ),
                 ListTile(
                   title: const Text('Path'),
-                  subtitle: Text(_file.fileSource.displayPath),
+                  subtitle: Text(_file!.fileSource.displayPath!),
                   trailing: SaveFileAsDialogButton(
-                    file: _file,
+                    file: _file!,
                     onSave: (fileSave) {
                       asyncRunTask((progress) async {
                         final f = await fileSave;
                         widget.onFileSourceChanged(f.fileSource);
-                      }, label: loc.saving);
+                      }, label: loc!.saving);
                     },
                     includeLocal: true,
                   ),
@@ -189,28 +189,28 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   subtitle:
                       const Text('Select a color to distinguish beween files.'),
                   trailing: CircleColor(
-                      color: _file.openedFile.color, circleSize: 24),
+                      color: _file!.openedFile.color, circleSize: 24),
                   onTap: () async {
                     final newColor = await ColorPickerDialog(
-                      initialColor: _file.openedFile.color,
+                      initialColor: _file!.openedFile.color,
                     ).show(context);
                     _logger.fine('Selected color $newColor');
                     _file = await _kdbxBloc.updateOpenedFile(
-                        _file, (b) => b.colorCode = newColor?.value);
+                        _file!, (b) => b.colorCode = newColor?.value);
                     setState(() {});
                   },
                 ),
                 ListTile(
                   title: const Text('Kdbx File Version'),
-                  subtitle: Text('${_file.kdbxFile.header.version} '
-                      '(${_debugKdfType(_file.kdbxFile)})'),
-                  trailing: _file.kdbxFile.header.version < KdbxVersion.V4
+                  subtitle: Text('${_file!.kdbxFile.header.version} '
+                      '(${_debugKdfType(_file!.kdbxFile)})'),
+                  trailing: _file!.kdbxFile.header.version < KdbxVersion.V4
                       ? IconButton(
                           icon: const Icon(Icons.upgrade),
                           tooltip: 'Upgrade to ${KdbxVersion.V4}',
                           onPressed: asyncTaskCallback((progress) async {
-                            _file.kdbxFile.upgrade(KdbxVersion.V4.major);
-                            await _kdbxBloc.saveFile(_file.kdbxFile);
+                            _file!.kdbxFile.upgrade(KdbxVersion.V4.major);
+                            await _kdbxBloc.saveFile(_file!.kdbxFile);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text(
@@ -230,7 +230,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           ..attachToLogger(Logger.root);
                         var lastStatus = ReloadStatus.error;
                         try {
-                          await for (final status in _kdbxBloc.reload(_file)) {
+                          await for (final status in _kdbxBloc.reload(_file!)) {
                             lastStatus = status;
                             progress.progressLabel = 'Status: $status';
                           }
@@ -252,7 +252,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     ),
                     TextButton(
                       onPressed: () async {
-                        await _kdbxBloc.close(_file.kdbxFile);
+                        await _kdbxBloc.close(_file!.kdbxFile);
                         Navigator.of(context).pop();
                       },
                       child: const Text('Close/Lock'),
@@ -266,12 +266,12 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       TextButton(
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(
-                              text: _file.kdbxFile.body
+                              text: _file!.kdbxFile.body
                                   .toXml()
                                   .toXmlString(pretty: true)));
                         },
                         child: Text(
-                            'DEBUG: Copy XML (${_file.kdbxFile.dirtyObjects?.length} dirty)'),
+                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects?.length} dirty)'),
                       ),
                     ],
                   ),
@@ -314,16 +314,16 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 
 class CircleColor extends StatelessWidget {
   const CircleColor({
-    Key key,
+    Key? key,
     this.color,
     this.elevation,
     this.circleSize,
   }) : super(key: key);
 
   static const double _kColorElevation = 4.0;
-  final Color color;
-  final double elevation;
-  final double circleSize;
+  final Color? color;
+  final double? elevation;
+  final double? circleSize;
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +331,7 @@ class CircleColor extends StatelessWidget {
       elevation: elevation ?? _kColorElevation,
       shape: const CircleBorder(),
       child: CircleAvatar(
-        radius: circleSize / 2,
+        radius: circleSize! / 2,
         backgroundColor: color,
         child: null,
       ),
@@ -340,11 +340,11 @@ class CircleColor extends StatelessWidget {
 }
 
 class ColorPickerDialog extends StatefulWidget {
-  const ColorPickerDialog({Key key, this.initialColor}) : super(key: key);
+  const ColorPickerDialog({Key? key, this.initialColor}) : super(key: key);
 
-  final Color initialColor;
+  final Color? initialColor;
 
-  Future<Color> show(BuildContext context) =>
+  Future<Color?> show(BuildContext context) =>
       showDialog<Color>(context: context, builder: (context) => this);
 
   @override
@@ -352,7 +352,7 @@ class ColorPickerDialog extends StatefulWidget {
 }
 
 class _ColorPickerDialogState extends State<ColorPickerDialog> {
-  Color _selectedColor;
+  Color? _selectedColor;
 
   @override
   void initState() {
@@ -369,9 +369,12 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   }
 
   void _init() {
-    _selectedColor = AuthPassTheme.defaultFileColors.firstWhere(
-        (color) => color.value == widget.initialColor?.value,
-        orElse: () => widget.initialColor);
+    try {
+      _selectedColor = AuthPassTheme.defaultFileColors
+          .firstWhere((color) => color.value == widget.initialColor?.value);
+    } on StateError catch (e) {
+      _selectedColor = widget.initialColor;
+    }
   }
 
   @override
@@ -385,7 +388,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             BlockPicker(
-              availableColors: AuthPassTheme.defaultFileColors,
+              availableColors: AuthPassTheme.defaultFileColors as List<Color>,
               pickerColor: _selectedColor ?? Colors.white,
               onColorChanged: (color) {
                 setState(() {
@@ -393,7 +396,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
                 });
               },
             ),
-            RadioListTile<Color>(
+            RadioListTile<Color?>(
               value: null,
               groupValue: _selectedColor,
               onChanged: (value) {

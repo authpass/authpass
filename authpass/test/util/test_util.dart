@@ -40,7 +40,7 @@ class CloudStorageHelperMock implements CloudStorageHelperBase {
 //  final Env env;
 
   File get _file => TestUtil.filePath('test/_cloudStorageHelper.json');
-  Map<String, String> __storage;
+  Map<String, String>? __storage;
   Future<Map<String, String>> _storage() async =>
       __storage ??= await (() async {
         final _storage = <String, String>{};
@@ -56,7 +56,7 @@ class CloudStorageHelperMock implements CloudStorageHelperBase {
       })();
 
   @override
-  Future<String> loadCredentials(String cloudStorageId) async {
+  Future<String?> loadCredentials(String cloudStorageId) async {
     return (await _storage())[cloudStorageId];
   }
 
@@ -69,14 +69,14 @@ class CloudStorageHelperMock implements CloudStorageHelperBase {
   }
 
   @override
-  final pathUtil = TestPathUtil();
+  final PathUtil pathUtil = TestPathUtil();
 }
 
 class TestPathUtil extends PathUtil {
-  Directory _tempDirector;
+  Directory? _tempDirector;
 
   @override
-  Future<Directory> getTemporaryDirectory({String subNamespace}) async {
+  Future<Directory> getTemporaryDirectory({String? subNamespace}) async {
     return _tempDirector ??= await Directory.systemTemp.createTemp();
   }
 }
@@ -84,10 +84,10 @@ class TestPathUtil extends PathUtil {
 class EnvSecretsFake extends Fake implements EnvSecrets {
   EnvSecretsFake(this.microsoftClientId);
   EnvSecretsFake.fromJson(Map<String, Object> map)
-      : microsoftClientId = map['microsoftClientId'] as String;
+      : microsoftClientId = map['microsoftClientId'] as String?;
 
   @override
-  final String microsoftClientId;
+  final String? microsoftClientId;
 }
 
 class TestEnv extends Env {

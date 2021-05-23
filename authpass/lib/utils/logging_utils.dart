@@ -16,7 +16,7 @@ class LoggingUtils {
 
   static final _instance = LoggingUtils._();
 
-  AsyncInitializingLogHandler<RotatingFileAppender> _rotatingFileLoggerCached;
+  AsyncInitializingLogHandler<RotatingFileAppender>? _rotatingFileLoggerCached;
   AsyncInitializingLogHandler<RotatingFileAppender> get _rotatingFileLogger =>
       _rotatingFileLoggerCached ??=
           AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {

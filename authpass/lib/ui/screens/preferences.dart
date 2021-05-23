@@ -28,7 +28,7 @@ class PreferencesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).preferenceTitle),
+        title: Text(AppLocalizations.of(context)!.preferenceTitle),
         actions: [PreferencesOverflowMenuAction()],
       ),
       body: Scrollbar(
@@ -40,9 +40,9 @@ class PreferencesScreen extends StatelessWidget {
 
 class LocaleInfo {
   LocaleInfo(@NonNls this.locale, @NonNls this.nativeName, this.translatedName);
-  final String locale;
+  final String? locale;
   final String nativeName;
-  final String translatedName;
+  final String? translatedName;
 }
 
 class PreferencesBody extends StatefulWidget {
@@ -52,13 +52,13 @@ class PreferencesBody extends StatefulWidget {
 
 class _PreferencesBodyState extends State<PreferencesBody>
     with StreamSubscriberMixin {
-  KdbxBloc _kdbxBloc;
+  KdbxBloc? _kdbxBloc;
 
-  AutofillServiceStatus _autofillStatus;
-  AutofillPreferences _autofillPrefs;
+  AutofillServiceStatus? _autofillStatus;
+  AutofillPreferences? _autofillPrefs;
 
-  AppDataBloc _appDataBloc;
-  AppData _appData;
+  late AppDataBloc _appDataBloc;
+  AppData? _appData;
   Analytics get _analytics => context.read<Analytics>();
 
   @override
@@ -99,7 +99,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
     if (_appData == null) {
       return const Text('loading'); // NON-NLS
     }
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     final env = Provider.of<Env>(context);
     final commonFields = context.watch<CommonFields>();
     final localeInfo = [
@@ -151,7 +151,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   secondary: const Icon(FontAwesomeIcons.bug),
                   title: Text(loc.enableAutofillDebug),
                   subtitle: Text(loc.enableAutofillDebugSubtitle),
-                  value: _autofillPrefs.enableDebug,
+                  value: _autofillPrefs!.enableDebug,
                   onChanged: (val) async {
                     _logger.fine('Setting debug to $val');
                     await AutofillService()
@@ -166,7 +166,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 SwitchListTile(
                   secondary: const Icon(Icons.camera_alt),
                   title: Text(loc.preferenceAllowScreenshots),
-                  value: !_appData.secureWindowOrDefault,
+                  value: !_appData!.secureWindowOrDefault,
                   onChanged: (value) {
                     _appDataBloc.update(
                         (builder, data) => builder.secureWindow = !value);
@@ -203,7 +203,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             _analytics.events
                 .trackPreferences(setting: 'themeVisualDensity', to: '$value');
           },
-          value: _appData.themeVisualDensity,
+          value: _appData!.themeVisualDensity,
           minValue: -4,
           maxValue: 4,
           steps: 16,
@@ -217,7 +217,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             _analytics.events
                 .trackPreferences(setting: 'themeFontSizeFactor', to: '$value');
           },
-          value: _appData.themeFontSizeFactor,
+          value: _appData!.themeFontSizeFactor,
           minValue: 0.5,
           maxValue: 2,
           valueForNull: 1,
@@ -229,7 +229,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 SwitchListTile(
                     title: Text(loc.diacOptIn),
                     subtitle: Text(loc.diacOptInSubtitle),
-                    value: _appData.diacOptIn == true,
+                    value: _appData!.diacOptIn == true,
                     onChanged: (value) {
                       _appDataBloc
                           .update((builder, data) => builder.diacOptIn = value);
@@ -238,13 +238,13 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ListTile(
           leading: const FaIcon(FontAwesomeIcons.language),
           title: Text(loc.preferenceLanguage),
-          trailing: Text(locales[_appData.localeOverride].nativeName),
+          trailing: Text(locales[_appData!.localeOverride]!.nativeName),
           onTap: () async {
             final result = await showDialog<LocaleInfo>(
                 context: context,
                 builder: (_) => SelectLanguageDialog(
                       locales: localeInfo,
-                      localeOverride: _appData.localeOverride,
+                      localeOverride: _appData!.localeOverride,
                     ));
             if (result != null) {
               await _appDataBloc.update(
@@ -256,7 +256,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         CheckboxListTile(
           secondary: const FaIcon(FontAwesomeIcons.download),
-          value: _appData.fetchWebsiteIconsOrDefault,
+          value: _appData!.fetchWebsiteIconsOrDefault,
           title: Text(loc.preferenceDynamicLoadIcons),
           subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
               commonFields.url.displayName)),
@@ -276,24 +276,24 @@ class _PreferencesBodyState extends State<PreferencesBody>
 }
 
 class SelectLanguageDialog extends StatelessWidget {
-  const SelectLanguageDialog({Key key, this.locales, this.localeOverride})
+  const SelectLanguageDialog({Key? key, this.locales, this.localeOverride})
       : super(key: key);
 
-  final List<LocaleInfo> locales;
-  final String localeOverride;
+  final List<LocaleInfo>? locales;
+  final String? localeOverride;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return SimpleDialog(
       title: Text(loc.preferenceSelectLanguage),
-      children: locales
-          .map((LocaleInfo e) => RadioListTile<String>(
+      children: locales!
+          .map((LocaleInfo e) => RadioListTile<String?>(
                 title: Text(e.nativeName),
                 subtitle: e.translatedName
                     ?.takeIf((n) => n != e.nativeName)
-                    ?.let((name) => Text(e.translatedName)),
-                secondary: e.locale?.let((locale) => Text(locale)),
+                    ?.let((name) => Text(e.translatedName!)),
+                secondary: e.locale?.let((locale) => Text(locale!)),
                 value: e.locale,
                 groupValue: localeOverride,
                 onChanged: (value) {
@@ -307,12 +307,12 @@ class SelectLanguageDialog extends StatelessWidget {
 
 class ValueSelectorTile extends StatelessWidget {
   const ValueSelectorTile({
-    Key key,
-    @required this.value,
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.steps,
-    @required this.onChanged,
+    Key? key,
+    required this.value,
+    required this.minValue,
+    required this.maxValue,
+    required this.steps,
+    required this.onChanged,
     this.icon,
     this.title,
     this.valueForNull = 0,
@@ -322,20 +322,20 @@ class ValueSelectorTile extends StatelessWidget {
         assert(valueForNull != null),
         super(key: key);
 
-  final Widget icon;
-  final Widget title;
-  final double value;
+  final Widget? icon;
+  final Widget? title;
+  final double? value;
   final double valueForNull;
   final double minValue;
   final double maxValue;
   final int steps;
-  final void Function(double value) onChanged;
+  final void Function(double? value) onChanged;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final density = theme.visualDensity;
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -343,17 +343,17 @@ class ValueSelectorTile extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              icon,
+              icon!,
               SizedBox(width: 32 + density.horizontal * 2),
               Expanded(
                 child: DefaultTextStyle(
-                  style: theme.textTheme.subtitle1,
-                  child: title,
+                  style: theme.textTheme.subtitle1!,
+                  child: title!,
                 ),
               ),
               Text(value == null
                   ? loc.preferenceDefault
-                  : value.toStringAsFixed(2)),
+                  : value!.toStringAsFixed(2)),
             ],
           ),
           Row(
@@ -401,12 +401,12 @@ class ValueSelectorTile extends StatelessWidget {
 
 class SliderSelector extends StatefulWidget {
   const SliderSelector({
-    Key key,
-    @required this.initialValue,
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.steps,
-    @required this.onChanged,
+    Key? key,
+    required this.initialValue,
+    required this.minValue,
+    required this.maxValue,
+    required this.steps,
+    required this.onChanged,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -424,7 +424,7 @@ class SliderSelector extends StatefulWidget {
 }
 
 class _SliderSelectorState extends State<SliderSelector> {
-  double _value;
+  late double _value;
 
   @override
   void initState() {
@@ -458,17 +458,17 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
         final loc = AppLocalizations.of(context);
 
         return [
-          if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready) ...[
+          if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready!) ...[
             PopupMenuItem(
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
+                    SnackBar(content: Text(loc!.clearQuickUnlockSuccess)));
                 await SelectFileScreen.navigate(context);
               },
               child: ListTile(
                 leading: const Icon(FontAwesomeIcons.bug),
-                title: Text(loc.clearQuickUnlock),
+                title: Text(loc!.clearQuickUnlock),
                 subtitle: Text(loc.clearQuickUnlockSubtitle),
               ),
             ),
@@ -482,7 +482,7 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
               },
               child: ListTile(
                 leading: const Icon(FontAwesomeIcons.signOutAlt),
-                title: Text(loc.lockAllFiles),
+                title: Text(loc!.lockAllFiles),
               ),
             ),
           ],

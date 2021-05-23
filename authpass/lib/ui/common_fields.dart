@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,8 +9,8 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 
 class CommonField {
   CommonField({
-    @required this.key,
-    @required this.displayName,
+    required this.key,
+    required this.displayName,
     this.includeInSearch = false,
     this.protect = false,
     this.keyboardType,
@@ -24,14 +25,14 @@ class CommonField {
   final String displayName;
   final bool includeInSearch;
   final bool protect;
-  final TextInputType keyboardType;
+  final TextInputType? keyboardType;
   final bool autocorrect;
   final bool enableSuggestions;
   final TextCapitalization textCapitalization;
   final IconData icon;
   final bool showByDefault;
 
-  String stringValue(KdbxEntry entry) => entry.getString(key)?.getText();
+  String? stringValue(KdbxEntry entry) => entry.getString(key)?.getText();
 
   @override
   bool operator ==(Object other) =>
@@ -121,8 +122,8 @@ class CommonFields {
   bool isTotp(KdbxKey key) =>
       [otpAuth, otpAuthCompat1, otpAuthCompat2].map((e) => e.key).contains(key);
 
-  CommonField operator [](KdbxKey key) =>
-      fields.firstWhere((f) => f.key == key, orElse: () => null);
+  CommonField? operator [](KdbxKey key) =>
+      fields.firstWhereOrNull((f) => f.key == key);
 
   CommonField _fieldByKeyString(@NonNls String key) =>
       _fieldByKey(KdbxKey(key));

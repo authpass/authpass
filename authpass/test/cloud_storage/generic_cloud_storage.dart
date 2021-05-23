@@ -12,12 +12,12 @@ import 'package:test/test.dart';
 final _logger = Logger('generic_cloud_storage');
 
 void simpleCloudStorageTestSuite({
-  @required CloudStorageProvider Function() providerCb,
-  Future<CloudStorageEntity> Function(CloudStorageProvider provider)
+  required CloudStorageProvider? Function() providerCb,
+  Future<CloudStorageEntity?>? Function(CloudStorageProvider? provider)?
       selectParent,
 }) {
-  String uuid;
-  CloudStorageProvider provider;
+  late String uuid;
+  CloudStorageProvider? provider;
 
   final saveString1 = utf8.encode('Lorem Ipsum') as Uint8List;
   final saveString2 = utf8.encode('Lorem Ipsum New Content') as Uint8List;
@@ -35,9 +35,9 @@ void simpleCloudStorageTestSuite({
 
   selectParent ??= (provider) => null;
   test('create and update', () async {
-    final parent = await selectParent(provider);
+    final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
-    final fileSource = await provider.createEntity(
+    final fileSource = await provider!.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
 
     final content1 = await fileSource.content().last;
@@ -61,9 +61,9 @@ void simpleCloudStorageTestSuite({
   });
 
   test('create, load and conflict', () async {
-    final parent = await selectParent(provider);
+    final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
-    final fileSource = await provider.createEntity(
+    final fileSource = await provider!.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
 
     final content1 = await fileSource.content().last;
@@ -83,15 +83,15 @@ void simpleCloudStorageTestSuite({
   });
 
   test('create, conflict', () async {
-    final parent = await selectParent(provider);
+    final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
-    final fileSource = await provider.createEntity(
+    final fileSource = await provider!.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
     final content1 = fileSource.cached;
     await fileSource.contentWrite(saveString2);
     expect(() async {
       // ignore: invalid_use_of_protected_member
-      await fileSource.write(saveString3, content1.metadata);
+      await fileSource.write(saveString3, content1!.metadata);
     }, throwsA(isA<StorageConflictException>()));
   });
 }

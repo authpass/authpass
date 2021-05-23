@@ -19,7 +19,7 @@ Future<void> main() async {
   final targetPath = path.join(dir.path, OUTPUT_FILE);
   print('Updating $targetPath..');
   final platforms = ['windows', 'linux', 'macos'];
-  final output = <String, String>{
+  final output = <String, String?>{
     'FLUTTER_URL': FLUTTER_URL,
   };
   for (final platform in platforms) {
@@ -33,8 +33,8 @@ Future<void> main() async {
     final releases = parseReleases(response.body);
     final release = releases.firstWhere(
         (release) => release.version == FLUTTER_VERSION,
-        orElse: () =>
-            throw StateError('No such version found $FLUTTER_VERSION}'));
+        orElse: (() =>
+            throw StateError('No such version found $FLUTTER_VERSION}')) as Release Function()?);
     output['FLUTTER_${platform.toUpperCase()}_VERSION'] = FLUTTER_VERSION;
     output['FLUTTER_${platform.toUpperCase()}_ARCHIVE'] = release.archive;
     output['FLUTTER_${platform.toUpperCase()}_SHA256'] = release.sha256;
@@ -64,16 +64,16 @@ class Release {
   });
 
   factory Release.fromJson(Map<String, dynamic> map) => Release(
-        hash: map['hash'] as String,
-        channel: map['channel'] as String,
-        version: map['version'] as String,
-        archive: map['archive'] as String,
-        sha256: map['sha256'] as String,
+        hash: map['hash'] as String?,
+        channel: map['channel'] as String?,
+        version: map['version'] as String?,
+        archive: map['archive'] as String?,
+        sha256: map['sha256'] as String?,
       );
 
-  final String hash;
-  final String channel;
-  final String version;
-  final String archive;
-  final String sha256;
+  final String? hash;
+  final String? channel;
+  final String? version;
+  final String? archive;
+  final String? sha256;
 }

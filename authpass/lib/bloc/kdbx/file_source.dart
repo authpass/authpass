@@ -20,25 +20,25 @@ enum FileSourceIcon {
 
 abstract class FileSource {
   FileSource({
-    @required this.databaseName,
-    @required this.uuid,
-    FileContent initialCachedContent,
+    required this.databaseName,
+    required this.uuid,
+    FileContent? initialCachedContent,
   }) : _cached = initialCachedContent;
 
-  FileContent _cached;
+  FileContent? _cached;
 
   @protected
   @visibleForTesting
-  FileContent get cached => _cached;
+  FileContent? get cached => _cached;
 
   /// the last read or written content.
-  FileContent get lastContent => cached;
+  FileContent? get lastContent => cached;
 
   final String uuid;
 
   /// If known should return the name of the database, null otherwise.
   @protected
-  final String databaseName;
+  final String? databaseName;
 
   /// Returns the database name, or if it is not know the bare file name.
   String get displayName => databaseName ?? displayNameFromPath;
@@ -50,14 +50,14 @@ abstract class FileSource {
   String get displayNameFromPath;
 
   /// Exact path to the file source.
-  String get displayPath;
+  String? get displayPath;
 
   /// whether this file source supports saving of changes.
   bool get supportsWrite;
 
   /// The metadata which was fetched on the last call to [content].
   @protected
-  Map<String, dynamic> get previousMetadata => _cached.metadata;
+  Map<String, dynamic>? get previousMetadata => _cached!.metadata;
 
   String get typeDebug => runtimeType.toString();
 
@@ -70,15 +70,15 @@ abstract class FileSource {
   /// call to [load] which returned [FileContent.metadata], this will be passe
   /// into [previousMetadata]
   @protected
-  Future<Map<String, dynamic>> write(
-      Uint8List bytes, Map<String, dynamic> previousMetadata);
+  Future<Map<String, dynamic>?> write(
+      Uint8List bytes, Map<String, dynamic>? previousMetadata);
 
   Future<void> contentPreCache() async => await content().last;
 
   Stream<FileContent> content() async* {
     if (_cached != null) {
       //  memory cache is perfectly fine.
-      yield _cached;
+      yield _cached!;
     }
     await for (final content in load()) {
       yield content;
@@ -113,7 +113,7 @@ abstract class FileSource {
   int get hashCode => uuid.hashCode;
 
   @protected
-  Map<String, String> toDebugMap() => {
+  Map<String, String?> toDebugMap() => {
         'type': runtimeType.toString(),
         'uuid': uuid,
         'databaseName': databaseName,
@@ -133,37 +133,37 @@ abstract class FileSource {
 }
 
 class FileSourceUrl extends FileSource {
-  FileSourceUrl(this.url, {String databaseName, @required String uuid})
+  FileSourceUrl(this.url, {String? databaseName, required String uuid})
       : super(databaseName: databaseName, uuid: uuid);
 
   static const _webCorsProxy = 'https://cors-anywhere.herokuapp.com/';
 
-  final Uri url;
+  final Uri? url;
 
-  Uri get _url =>
+  Uri? get _url =>
       AuthPassPlatform.isWeb && !url.toString().contains(_webCorsProxy)
           ? Uri.parse('$_webCorsProxy$url')
           : url;
 
   @override
   Stream<FileContent> load() async* {
-    final response = await http.readBytes(_url);
+    final response = await http.readBytes(_url!);
     yield FileContent(response);
   }
 
   @override
   String get displayPath => Uri(
-        scheme: url.scheme,
-        host: url.host,
-        path: url.path,
+        scheme: url!.scheme,
+        host: url!.host,
+        path: url!.path,
       ).toString(); //url.replace(queryParameters: <String, dynamic>{}, fragment: '').toString();
 
   @override
-  String get displayNameFromPath => path.basenameWithoutExtension(url.path);
+  String get displayNameFromPath => path.basenameWithoutExtension(url!.path);
 
   @override
   Future<Map<String, dynamic>> write(
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     throw UnsupportedError('Cannot write to urls.');
   }
 

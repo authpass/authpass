@@ -5,7 +5,7 @@ Future<usage.Analytics> analyticsCreate(
   String trackingId,
   String applicationName,
   String applicationVersion, {
-  String userAgent,
+  String? userAgent,
 }) async {
   final docsDir = await PathUtils().getAppDataDirectory();
   return usage.AnalyticsIO(

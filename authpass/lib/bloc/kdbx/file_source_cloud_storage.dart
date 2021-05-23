@@ -15,25 +15,25 @@ final _logger = Logger('file_source_cloud_storage');
 
 class FileContentCached {
   FileContentCached({
-    @required this.metadata,
-    @required this.cacheDate,
-    @required this.cacheSize,
+    required this.metadata,
+    required this.cacheDate,
+    required this.cacheSize,
   }) : assert(cacheDate.isUtc);
   factory FileContentCached.fromJson(Map<String, Object> json) =>
       FileContentCached(
-        metadata: json['metadata'] as Map<String, Object>,
+        metadata: json['metadata'] as Map<String, Object>?,
         cacheDate: DateTime.fromMillisecondsSinceEpoch(
           json['cacheDate'] as int,
           isUtc: true,
         ),
-        cacheSize: json['cacheSize'] as int,
+        cacheSize: json['cacheSize'] as int?,
       );
 
-  final Map<String, dynamic> metadata;
+  final Map<String, dynamic>? metadata;
   final DateTime cacheDate;
-  final int cacheSize;
+  final int? cacheSize;
 
-  Map<String, Object> toJson() => {
+  Map<String, Object?> toJson() => {
         'metadata': metadata,
         'cacheDate': cacheDate.millisecond,
         'cacheSize': cacheSize,
@@ -45,33 +45,33 @@ class FileContentCached {
 
 class FileSourceCloudStorage extends FileSource {
   FileSourceCloudStorage({
-    @required this.provider,
-    @required this.fileInfo,
-    String databaseName,
-    @required String uuid,
-    FileContent initialCachedContent,
+    required this.provider,
+    required this.fileInfo,
+    String? databaseName,
+    required String uuid,
+    FileContent? initialCachedContent,
   }) : super(
             databaseName: databaseName,
             uuid: uuid,
             initialCachedContent: initialCachedContent);
 
-  static Directory _cacheDir;
+  static Directory? _cacheDir;
 
-  Future<Directory> _getCacheDir() => provider.pathUtil
+  Future<Directory> _getCacheDir() => provider!.pathUtil
       .getTemporaryDirectory(subNamespace: 'cloud_storage_cache');
 
-  final CloudStorageProvider provider;
+  final CloudStorageProvider? provider;
 
-  final Map<String, String> fileInfo;
-
-  @override
-  String get typeDebug => '$runtimeType:${provider.id}';
+  final Map<String, String?> fileInfo;
 
   @override
-  String get displayNameFromPath => provider.displayNameFromPath(fileInfo);
+  String get typeDebug => '$runtimeType:${provider!.id}';
 
   @override
-  String get displayPath => provider.displayPath(fileInfo);
+  String get displayNameFromPath => provider!.displayNameFromPath(fileInfo);
+
+  @override
+  String? get displayPath => provider!.displayPath(fileInfo);
 
   File _cacheMetadataFile(String cacheDirPath) =>
       File(path.join(cacheDirPath, '$uuid.kdbx.json'));
@@ -82,8 +82,8 @@ class FileSourceCloudStorage extends FileSource {
   Stream<FileContent> load() async* {
     // first try to load from cache.
     _cacheDir ??= await _getCacheDir();
-    final metadataFile = _cacheMetadataFile(_cacheDir.path);
-    final kdbxFile = _cacheKdbxFile(_cacheDir.path);
+    final metadataFile = _cacheMetadataFile(_cacheDir!.path);
+    final kdbxFile = _cacheKdbxFile(_cacheDir!.path);
     try {
       if (metadataFile.existsSync()) {
         final cacheInfo = FileContentCached.fromJson(json
@@ -101,7 +101,7 @@ class FileSourceCloudStorage extends FileSource {
 
     // after cache got loaded, download new version.
     _logger.finer('loading ${toString()}');
-    final freshContent = await provider.loadFile(fileInfo);
+    final freshContent = await provider!.loadFile(fileInfo);
     yield freshContent;
     unawaited(_writeCache(freshContent));
   }
@@ -110,8 +110,8 @@ class FileSourceCloudStorage extends FileSource {
     assert(freshContent.source == FileContentSource.origin);
     try {
       _cacheDir ??= await _getCacheDir();
-      final metadataFile = _cacheMetadataFile(_cacheDir.path);
-      final kdbxFile = _cacheKdbxFile(_cacheDir.path);
+      final metadataFile = _cacheMetadataFile(_cacheDir!.path);
+      final kdbxFile = _cacheKdbxFile(_cacheDir!.path);
       final cacheInfo = FileContentCached(
         metadata: freshContent.metadata,
         cacheDate: clock.now().toUtc(),
@@ -132,14 +132,14 @@ class FileSourceCloudStorage extends FileSource {
 
   @override
   Future<Map<String, dynamic>> write(
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
-    final metadata = await provider.saveFile(fileInfo, bytes, previousMetadata);
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+    final metadata = await provider!.saveFile(fileInfo, bytes, previousMetadata);
     await _writeCache(FileContent(bytes, metadata));
     return metadata;
   }
 
   @override
-  FileSourceIcon get displayIcon => provider.displayIcon;
+  FileSourceIcon get displayIcon => provider!.displayIcon;
 
   @override
   FileSource copyWithDatabaseName(String databaseName) =>

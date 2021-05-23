@@ -18,10 +18,10 @@ class FileListResponse {
       _$FileListResponseFromJson(json);
   Map<String, dynamic> toJson() => _$FileListResponseToJson(this);
 
-  final List<FileMetadata> entries;
-  final String cursor;
+  final List<FileMetadata>? entries;
+  final String? cursor;
   @JsonKey(name: 'has_more')
-  final bool hasMore;
+  final bool? hasMore;
 }
 
 @JsonSerializable(nullable: false)
@@ -36,9 +36,9 @@ class FileSearchResponse {
 
   Map<String, dynamic> toJson() => _$FileSearchResponseToJson(this);
 
-  final List<FileSearchMatch> matches;
+  final List<FileSearchMatch>? matches;
   @JsonKey(name: 'has_more')
-  final bool hasMore;
+  final bool? hasMore;
 
   @override
   String toString() {
@@ -58,7 +58,7 @@ class FileSearchMatch {
   Map<String, dynamic> toJson() => _$FileSearchMatchToJson(this);
 
   @JsonKey(name: 'metadata')
-  final FileMetadataV2 metadata;
+  final FileMetadataV2? metadata;
 
   @override
   String toString() {
@@ -77,7 +77,7 @@ class FileMetadataV2 {
 
   Map<String, dynamic> toJson() => _$FileMetadataV2ToJson(this);
 
-  final FileMetadata metadata;
+  final FileMetadata? metadata;
 }
 
 @JsonSerializable(nullable: false)
@@ -95,18 +95,18 @@ class FileMetadata {
 
   Map<String, dynamic> toJson() => _$FileMetadataToJson(this);
 
-  final String id;
+  final String? id;
 
   /// one of: 'folder' or 'file' or 'deleted'
   @JsonKey(name: '.tag')
-  final String tag;
+  final String? tag;
   CloudStorageEntityType get tagType => tag == 'folder'
       ? CloudStorageEntityType.directory
       : CloudStorageEntityType.file;
-  final String name;
+  final String? name;
   @JsonKey(name: 'path_display')
-  final String pathDisplay;
-  final String rev;
+  final String? pathDisplay;
+  final String? rev;
 
   @override
   String toString() {

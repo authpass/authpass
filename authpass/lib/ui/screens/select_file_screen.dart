@@ -50,7 +50,7 @@ import '../../theme.dart';
 final _logger = Logger('authpass.select_file_screen');
 
 class SelectFileScreen extends StatelessWidget {
-  const SelectFileScreen({Key key, this.skipQuickUnlock = false})
+  const SelectFileScreen({Key? key, this.skipQuickUnlock = false})
       : assert(skipQuickUnlock != null),
         super(key: key);
 
@@ -70,7 +70,7 @@ class SelectFileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cloudBloc = CloudStorageBloc(Provider.of<Env>(context), PathUtils());
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.selectKeepassFile),
@@ -125,10 +125,10 @@ class SelectFileScreen extends StatelessWidget {
 }
 
 class ProgressOverlay extends StatelessWidget {
-  const ProgressOverlay({Key key, @required this.child, this.task})
+  const ProgressOverlay({Key? key, required this.child, this.task})
       : super(key: key);
 
-  final FutureTask task;
+  final FutureTask? task;
   final Widget child;
 
   bool get _hasProgress => task != null;
@@ -156,7 +156,7 @@ class ProgressOverlay extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(32),
                         child: ValueListenableBuilder<FutureTask>(
-                          valueListenable: task,
+                          valueListenable: task!,
                           builder: (context, value, child) {
                             _logger.fine('Generating progress dialog'
                                 ' with label ${value?.progressLabel}');
@@ -168,7 +168,7 @@ class ProgressOverlay extends StatelessWidget {
                                     ? null
                                     : [
                                         const SizedBox(height: 16),
-                                        Text(value.progressLabel),
+                                        Text(value.progressLabel!),
                                       ]),
                               ],
                             );
@@ -191,7 +191,7 @@ class ProgressOverlay extends StatelessWidget {
 
 class SelectFileWidget extends StatefulWidget {
   const SelectFileWidget({
-    Key key,
+    Key? key,
     this.skipQuickUnlock = false,
   }) : super(key: key);
 
@@ -214,7 +214,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     super.didChangeDependencies();
     _logger.finer('didChangeDependencies ${widget.skipQuickUnlock}');
     if (!widget.skipQuickUnlock) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         _checkQuickUnlock();
       });
     }
@@ -288,13 +288,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //            });
 //          });
         }
-      }, label: AppLocalizations.of(context).quickUnlockingFiles);
+      }, label: AppLocalizations.of(context)!.quickUnlockingFiles);
 
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return ProgressOverlay(
       task: task,
@@ -313,7 +313,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                         'Secret Service to store credentials for cloud storage.\n'
                         'Please run the following command:',
                         textAlign: TextAlign.center,
-                        style: theme.textTheme.caption.copyWith(
+                        style: theme.textTheme.caption!.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.errorColor,
                         ),
@@ -366,7 +366,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       } else {
                         final file = await openFile();
                         if (file != null) {
-                          String macOsBookmark;
+                          String? macOsBookmark;
                           if (AuthPassPlatform.isMacOS) {
                             macOsBookmark = await SecureBookmarks()
                                 .bookmark(File(file.path));
@@ -507,11 +507,11 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   void _loadAndGoToCredentials(FileSource source) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     asyncRunTask((progress) {
       return source.content().last.then((value) {
         return Navigator.of(context).push(CredentialsScreen.route(source));
-      }).catchError((dynamic error, StackTrace stackTrace) {
+      }).catchError((Object error, StackTrace stackTrace) {
         _logger.fine('Error while trying to load file source $source');
         DialogUtils.showErrorDialog(context, 'Error while opening file.',
             'Unable to open $source.\n$error');
@@ -524,15 +524,15 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 
 class OpenFileBottomSheet extends StatelessWidget {
   const OpenFileBottomSheet({
-    Key key,
-    @required this.openFilePickerWritable,
+    Key? key,
+    required this.openFilePickerWritable,
   }) : super(key: key);
 
   final Future<void> Function() openFilePickerWritable;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.only(
         top: 16,
@@ -579,24 +579,24 @@ class OpenFileBottomSheet extends StatelessWidget {
 
 class OpenedFileTile extends StatelessWidget {
   const OpenedFileTile({
-    Key key,
-    @required this.openedFile,
+    Key? key,
+    required this.openedFile,
     this.onPressed,
     this.onLongPressed,
-    @required this.color,
+    required this.color,
   }) : super(key: key);
 
   final FileSource openedFile;
-  final VoidCallback onPressed;
-  final VoidCallback onLongPressed;
-  final Color color;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPressed;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subtitleStyle = TextStyle(
         color: ListTileTheme.of(context).textColor ??
-            theme.textTheme.caption.color);
+            theme.textTheme.caption!.color);
     return InkWell(
       onTap: onPressed,
       onLongPress: onLongPressed,
@@ -639,17 +639,17 @@ class OpenedFileTile extends StatelessWidget {
 
 class SelectFileAction extends StatelessWidget {
   const SelectFileAction({
-    Key key,
+    Key? key,
     this.icon,
     this.label,
     this.onPressed,
     this.backgroundColor,
   }) : super(key: key);
 
-  final IconData icon;
-  final String label;
-  final Color backgroundColor;
-  final VoidCallback onPressed;
+  final IconData? icon;
+  final String? label;
+  final Color? backgroundColor;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -672,21 +672,21 @@ class SelectFileAction extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: DefaultTextStyle(
-              style: theme.primaryTextTheme.bodyText2,
+              style: theme.primaryTextTheme.bodyText2!,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(
                     icon,
-                    color:
-                        theme.primaryTextTheme.bodyText2.color.withOpacity(0.8),
+                    color: theme.primaryTextTheme.bodyText2!.color!
+                        .withOpacity(0.8),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    label,
+                    label!,
                     textAlign: TextAlign.center,
-                    style: theme.primaryTextTheme.bodyText2
+                    style: theme.primaryTextTheme.bodyText2!
                         .copyWith(letterSpacing: 0.9),
                     strutStyle: const StrutStyle(leading: 0.2),
 //                    style: TextStyle(fontWeight: FontWeight.bold),
@@ -708,11 +708,11 @@ class SelectUrlDialog extends StatefulWidget {
 
 class _SelectUrlDialogState extends State<SelectUrlDialog> {
   final _formKey = GlobalKey<FormState>();
-  Uri _enteredUrl;
+  Uri? _enteredUrl;
 
-  String _parseUrl(String urlString) {
+  String? _parseUrl(String? urlString) {
     try {
-      final uri = Uri.parse(urlString);
+      final uri = Uri.parse(urlString!);
       if (!uri.scheme.startsWith('http')) {
         _logger.fine(
             'User entered url with invalid schema ${FormatUtils.anonymizeUrl(urlString)}');
@@ -722,7 +722,8 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
       return null;
     } on FormatException catch (e) {
       _logger.fine(
-          'User entered invalid url ${FormatUtils.anonymizeUrl(urlString)}', e);
+          'User entered invalid url ${FormatUtils.anonymizeUrl(urlString!)}',
+          e);
       return 'Please enter a valid url.';
     }
   }
@@ -754,8 +755,8 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
         ),
         TextButton(
           onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
               Navigator.of(context).pop(
                   FileSourceUrl(_enteredUrl, uuid: AppDataBloc.createUuid()));
             } else {
@@ -770,7 +771,7 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
 }
 
 class CredentialsScreen extends StatefulWidget {
-  const CredentialsScreen({Key key, this.kdbxFilePath}) : super(key: key);
+  const CredentialsScreen({Key? key, this.kdbxFilePath}) : super(key: key);
 
   static Route<void> route(FileSource kdbxFilePath) => MaterialPageRoute<void>(
         settings: const RouteSettings(name: '/credentials'),
@@ -779,7 +780,7 @@ class CredentialsScreen extends StatefulWidget {
         ),
       );
 
-  final FileSource kdbxFilePath;
+  final FileSource? kdbxFilePath;
 
   @override
   _CredentialsScreenState createState() => _CredentialsScreenState();
@@ -788,7 +789,7 @@ class CredentialsScreen extends StatefulWidget {
 abstract class KeyFile {
   Future<Uint8List> readAsBytes();
 
-  String get displayName;
+  String? get displayName;
 }
 
 class KeyFileFile implements KeyFile {
@@ -806,7 +807,7 @@ class KeyFileFile implements KeyFile {
 }
 
 class KeyFileInfo implements KeyFile {
-  KeyFileInfo({@required this.fileInfo, @required this.bytes});
+  KeyFileInfo({required this.fileInfo, required this.bytes});
 
   final FileInfo fileInfo;
   final Uint8List bytes;
@@ -815,28 +816,28 @@ class KeyFileInfo implements KeyFile {
   Future<Uint8List> readAsBytes() async => bytes;
 
   @override
-  String get displayName => fileInfo.fileName;
+  String? get displayName => fileInfo.fileName;
 }
 
 class _CredentialsScreenState extends State<CredentialsScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _invalidPassword;
+  String? _invalidPassword;
 
   final _controller = TextEditingController();
-  Future<void> _loadingFile;
+  Future<void>? _loadingFile;
 
-  KdbxBloc _kdbxBloc;
-  bool _biometricQuickUnlockSupported = false;
-  bool _biometricQuickUnlockActivated;
+  late KdbxBloc _kdbxBloc;
+  bool? _biometricQuickUnlockSupported = false;
+  bool? _biometricQuickUnlockActivated;
 
-  KeyFile _keyFile;
+  KeyFile? _keyFile;
 
   @override
   void initState() {
     super.initState();
     unawaited((() async {
       _logger.finest('Precaching...');
-      await widget.kdbxFilePath.contentPreCache();
+      await widget.kdbxFilePath!.contentPreCache();
     })());
   }
 
@@ -846,7 +847,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     _kdbxBloc = Provider.of<KdbxBloc>(context);
     _kdbxBloc.quickUnlockStorage
         .supportsBiometricKeyStore()
-        .then((bool biometricQuickUnlock) => setState(() {
+        .then((bool? biometricQuickUnlock) => setState(() {
               _biometricQuickUnlockSupported = biometricQuickUnlock;
               _biometricQuickUnlockActivated ??= true;
             }));
@@ -855,7 +856,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.credentialsAppBarTitle),
@@ -872,10 +873,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(loc.credentialLabel),
-                    Text(widget.kdbxFilePath.displayName,
+                    Text(widget.kdbxFilePath!.displayName,
                         style: theme.textTheme.headline4),
                     Text(
-                      widget.kdbxFilePath.displayPath,
+                      widget.kdbxFilePath!.displayPath!,
                       style: theme.textTheme.caption,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -916,7 +917,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       : FontAwesomeIcons.edit),
                   label: Text(_keyFile == null
                       ? loc.useKeyFile
-                      : path.basename(_keyFile.displayName)),
+                      : path.basename(_keyFile!.displayName!)),
                   onPressed: () async {
                     _invalidPassword = null;
                     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
@@ -949,7 +950,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   },
                 ),
               ),
-              ...(_biometricQuickUnlockSupported
+              ...(_biometricQuickUnlockSupported!
                   ? [
                       Container(
                         child: CheckboxListTile(
@@ -988,7 +989,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   }
 
   String _fileExtension() {
-    final filePath = widget.kdbxFilePath.displayPath;
+    final filePath = widget.kdbxFilePath!.displayPath;
     if (filePath == null) {
       return '';
     }
@@ -996,18 +997,18 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   }
 
   Future<void> _tryUnlock() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       final deps = Provider.of<Deps>(context, listen: false);
       final loc = AppLocalizations.of(context);
       final analytics = deps.analytics;
       final kdbxBloc = deps.kdbxBloc;
       final pw = _controller.text;
-      final keyFileContents = await _keyFile?.readAsBytes();
+      final keyFileContents = (await _keyFile?.readAsBytes())!;
       final stopWatch = Stopwatch();
       try {
         stopWatch.start();
         final openFileStream = kdbxBloc.openFile(
-          widget.kdbxFilePath,
+          widget.kdbxFilePath!,
           Credentials.composite(
               pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
@@ -1020,16 +1021,16 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         final fileResult = openIt.current;
         analytics.trackTiming(
           'tryUnlockFile',
-          fileResult.unlockStopwatch.elapsedMilliseconds,
+          fileResult.unlockStopwatch!.elapsedMilliseconds,
           category: 'unlock',
-          label: 'successfully unlocked (${fileResult.fileContent.source})',
+          label: 'successfully unlocked (${fileResult.fileContent!.source})',
         );
         analytics.events.trackTryUnlock(
           action: TryUnlockResult.success,
           ext: _fileExtension(),
-          source: widget.kdbxFilePath.typeDebug,
+          source: widget.kdbxFilePath!.typeDebug,
         );
-        final fileSource = fileResult.kdbxOpenedFile.fileSource;
+        final fileSource = fileResult.kdbxOpenedFile!.fileSource;
         unawaited(kdbxBloc.continueLoadInBackground(openIt,
             debugName: '${fileSource.displayName}', fileSource: fileSource));
         await Navigator.of(context)
@@ -1045,22 +1046,22 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         analytics.events.trackTryUnlock(
           action: TryUnlockResult.invalidCredential,
           ext: _fileExtension(),
-          source: widget.kdbxFilePath.typeDebug,
+          source: widget.kdbxFilePath!.typeDebug,
         );
         setState(() {
           _invalidPassword = pw;
-          _formKey.currentState.validate();
+          _formKey.currentState!.validate();
         });
       } on FileAlreadyOpenException catch (e, stackTrace) {
         _logger.fine('File already open.', e, stackTrace);
         await _handleOpenError(
           analytics: analytics,
           result: TryUnlockResult.alreadyOpen,
-          errorTitle: loc.errorOpenFileAlreadyOpenTitle,
+          errorTitle: loc!.errorOpenFileAlreadyOpenTitle,
           errorBody: loc.errorOpenFileAlreadyOpenBody(
-            e.newFile.body.meta.databaseName.get(),
-            e.openFileSource.displayPath,
-            e.newFileSource.displayPath,
+            e.newFile.body.meta.databaseName.get()!,
+            e.openFileSource.displayPath!,
+            e.newFileSource.displayPath!,
           ),
           stopWatch: stopWatch,
         );
@@ -1069,7 +1070,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         await _handleOpenError(
           analytics: analytics,
           result: TryUnlockResult.failure,
-          errorTitle: loc.errorUnlockFileTitle,
+          errorTitle: loc!.errorUnlockFileTitle,
           errorBody: loc.errorUnlockFileBody(e),
           stopWatch: stopWatch,
         );
@@ -1087,11 +1088,11 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   }
 
   Future<void> _handleOpenError({
-    @required Analytics analytics,
-    @required TryUnlockResult result,
-    @required String errorTitle,
-    @required String errorBody,
-    @required Stopwatch stopWatch,
+    required Analytics analytics,
+    required TryUnlockResult result,
+    required String errorTitle,
+    required String errorBody,
+    required Stopwatch stopWatch,
   }) async {
     analytics.trackTiming(
       'tryUnlockFile',
@@ -1102,7 +1103,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     analytics.events.trackTryUnlock(
       action: TryUnlockResult.alreadyOpen,
       ext: _fileExtension(),
-      source: widget.kdbxFilePath.typeDebug,
+      source: widget.kdbxFilePath!.typeDebug,
     );
     await DialogUtils.showErrorDialog(
       context,

@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 
 class LinkButton extends StatelessWidget {
   const LinkButton(
-      {Key key,
-      @required this.child,
+      {Key? key,
+      required this.child,
       this.onPressed,
       this.icon,
       this.padding,
@@ -12,10 +12,10 @@ class LinkButton extends StatelessWidget {
       : super(key: key);
 
   final Widget child;
-  final VoidCallback onPressed;
-  final Icon icon;
-  final EdgeInsetsGeometry padding;
-  final MaterialTapTargetSize materialTapTargetSize;
+  final VoidCallback? onPressed;
+  final Icon? icon;
+  final EdgeInsetsGeometry? padding;
+  final MaterialTapTargetSize? materialTapTargetSize;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class LinkButton extends StatelessWidget {
           )
         : TextButton.icon(
             onPressed: onPressed,
-            icon: icon,
+            icon: icon!,
             label: child,
             style: TextButton.styleFrom(
               primary: theme.primaryColor,

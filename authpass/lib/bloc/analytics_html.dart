@@ -4,7 +4,7 @@ Future<usage.Analytics> analyticsCreate(
   String trackingId,
   String applicationName,
   String applicationVersion, {
-  String userAgent,
+  String? userAgent,
 }) async {
   return usage.AnalyticsHtml(
     trackingId,

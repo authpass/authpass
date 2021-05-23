@@ -6,6 +6,7 @@ import 'package:authpass/utils/platform.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:clock/clock.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:enough_mail/enough_mail.dart' as enough;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +27,8 @@ final _logger = Logger('authpass_cloud_bloc');
 @JsonSerializable(nullable: false)
 class _StoredToken {
   _StoredToken({
-    @required this.authToken,
-    @required this.isConfirmed,
+    required this.authToken,
+    required this.isConfirmed,
   })  : assert(authToken != null),
         assert(isConfirmed != null);
   factory _StoredToken.fromJson(Map<String, dynamic> json) =>
@@ -45,7 +46,7 @@ enum TokenStatus {
 }
 
 class AuthPassCloudBloc with ChangeNotifier {
-  AuthPassCloudBloc({@required this.env, @required this.featureFlags})
+  AuthPassCloudBloc({required this.env, required this.featureFlags})
       : assert(env != null),
         assert(featureFlags != null) {
     _logger.fine('Creating AuthPassCloudBloc with $featureFlags');
@@ -54,13 +55,13 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   final Env env;
   final FeatureFlags featureFlags;
-  HttpRequestSender _requestSender;
-  AuthPassCloudClient _client;
-  _StoredToken _storedToken;
+  HttpRequestSender? _requestSender;
+  AuthPassCloudClient? _client;
+  _StoredToken? _storedToken;
   final _tokenLock = Lock();
 
-  final _cloudStatus = LazyBehaviorSubject<CloudStatus>(null);
-  ValueStream<CloudStatus> get cloudStatus => _cloudStatus.stream(() async {
+  final _cloudStatus = LazyBehaviorSubject<CloudStatus?>(null);
+  ValueStream<CloudStatus?> get cloudStatus => _cloudStatus.stream(() async {
         if (tokenStatus != TokenStatus.confirmed) {
           return null;
         }
@@ -85,7 +86,7 @@ class AuthPassCloudBloc with ChangeNotifier {
   final _messageListFetch = JoinRun<EmailMessageList>();
 
   Future<void> _init() async {
-    if (!featureFlags.authpassCloud) {
+    if (!featureFlags.authpassCloud!) {
       return;
     }
     await _loadToken();
@@ -93,7 +94,7 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   TokenStatus get tokenStatus => _storedToken?.isConfirmed == null
       ? TokenStatus.none
-      : _storedToken.isConfirmed
+      : _storedToken!.isConfirmed
           ? TokenStatus.confirmed
           : TokenStatus.created;
 
@@ -104,7 +105,7 @@ class AuthPassCloudBloc with ChangeNotifier {
     );
   }
 
-  Future<void> _saveToken(_StoredToken token) async {
+  Future<void> _saveToken(_StoredToken? token) async {
     await _tokenLock.synchronized(() async {
       _storedToken = token;
       final f = await _getStorageFile();
@@ -117,7 +118,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       await f.write(json.encode(token.toJson()));
       if (_client != null) {
         SecuritySchemes.authToken.setForClient(
-            _client, SecuritySchemeHttpData(bearerToken: token.authToken));
+            _client!, SecuritySchemeHttpData(bearerToken: token.authToken));
       }
       notifyListeners();
       if (token.isConfirmed) {
@@ -126,7 +127,7 @@ class AuthPassCloudBloc with ChangeNotifier {
     });
   }
 
-  Future<_StoredToken> _loadToken() async {
+  Future<_StoredToken?> _loadToken() async {
     return _storedToken ??= await _tokenLock.synchronized(() async {
       if (_storedToken != null) {
         return _storedToken;
@@ -142,8 +143,8 @@ class AuthPassCloudBloc with ChangeNotifier {
             _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
         // TODO: The following should only matter for old stored tokens,
         //       this can probably be removed in the next version.
-        ArgumentError.checkNotNull(_storedToken.authToken);
-        ArgumentError.checkNotNull(_storedToken.isConfirmed);
+        ArgumentError.checkNotNull(_storedToken!.authToken);
+        ArgumentError.checkNotNull(_storedToken!.isConfirmed);
       } on AuthException catch (e, stackTrace) {
         _storedToken = null;
         _logger.warning(
@@ -173,8 +174,8 @@ class AuthPassCloudBloc with ChangeNotifier {
               '${ai.shortString} / ${AuthPassPlatform.operatingSystem} '
               '(${AuthPassPlatform.operatingSystem})',
               http.Client()));
-      final baseUri = Uri.parse(featureFlags.authpassCloudUri);
-      final client = AuthPassCloudClient(baseUri, _requestSender);
+      final baseUri = Uri.parse(featureFlags.authpassCloudUri!);
+      final client = AuthPassCloudClient(baseUri, _requestSender!);
       final token = await _loadToken();
       if (token != null) {
         SecuritySchemes.authToken.setForClient(
@@ -201,14 +202,14 @@ class AuthPassCloudBloc with ChangeNotifier {
     final response = await client.emailStatusGet().requireSuccess();
     if (response.status == EmailStatusGetResponseBody200Status.confirmed) {
       await _saveToken(
-        _StoredToken(authToken: _storedToken.authToken, isConfirmed: true),
+        _StoredToken(authToken: _storedToken!.authToken, isConfirmed: true),
       );
       return true;
     }
     return false;
   }
 
-  Future<String> createMailbox(
+  Future<String?> createMailbox(
       {String label = '', String entryUuid = ''}) async {
     final client = await _getClient();
     final ret = await client
@@ -231,7 +232,7 @@ class AuthPassCloudBloc with ChangeNotifier {
     unawaited(_dirtyAll());
   }
 
-  Future<void> updateMailbox(Mailbox mailbox, {bool isDisabled}) async {
+  Future<void> updateMailbox(Mailbox mailbox, {bool? isDisabled}) async {
     final client = await _getClient();
     await client
         .mailboxUpdate(MailboxUpdateSchema(isDisabled: isDisabled),
@@ -240,7 +241,7 @@ class AuthPassCloudBloc with ChangeNotifier {
     unawaited(_dirtyAll());
   }
 
-  Future<EmailMessageList> loadMessageListMore({bool reload = false}) async {
+  Future<EmailMessageList>? loadMessageListMore({bool reload = false}) async {
     return _messageListFetch.joinRun(() async {
       final client = await _getClient();
       final lastMessages =
@@ -258,7 +259,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       );
       _messageList.add(list);
       return list;
-    });
+    })!;
   }
 
   Future<void> _dirtyAll({
@@ -320,45 +321,45 @@ class AuthPassCloudBloc with ChangeNotifier {
     await _saveToken(null);
   }
 
-  Future<Mailbox> findMailboxByUuid(ApiUuid uuid) async {
-    final list = await mailboxList.load();
-    return list.mailboxes
-        .firstWhere((element) => uuid == element.id, orElse: () => null);
+  Future<Mailbox?> findMailboxByUuid(ApiUuid uuid) async {
+    final list = await (mailboxList.load() as FutureOr<MailboxList>);
+    return list.mailboxes!
+        .firstWhereOrNull((element) => uuid == element.id);
   }
 }
 
 class EmailMessageList {
   const EmailMessageList({
-    @required this.messages,
-    @required this.hasMore,
-    @required this.nextPageToken,
+    required this.messages,
+    required this.hasMore,
+    required this.nextPageToken,
   })  : assert(messages != null),
         assert(hasMore != null);
   const EmailMessageList.empty()
       : this(messages: const [], hasMore: true, nextPageToken: null);
   final List<EmailMessage> messages;
   final bool hasMore;
-  final String nextPageToken;
+  final String? nextPageToken;
 }
 
 class MailboxList {
-  const MailboxList({@required this.mailboxes});
+  const MailboxList({required this.mailboxes});
   static const empty = MailboxList(mailboxes: null);
-  final List<Mailbox> mailboxes;
+  final List<Mailbox>? mailboxes;
 }
 
 class JoinRun<T> with ChangeNotifier {
   bool get isRunning => _currentRun != null;
 
-  Future<T> _currentRun;
-  Future<T> joinRun(Future<T> Function() callback) async {
+  Future<T>? _currentRun;
+  Future<T>? joinRun(Future<T> Function() callback) async {
     if (_currentRun != null) {
-      return _currentRun;
+      return _currentRun!;
     }
     try {
       _currentRun = callback();
       notifyListeners();
-      return await _currentRun;
+      return await _currentRun!;
     } finally {
       _currentRun = null;
       notifyListeners();
@@ -367,7 +368,7 @@ class JoinRun<T> with ChangeNotifier {
 }
 
 class CloudStatus {
-  CloudStatus({@required this.lastFetched, @required this.messagesUnread})
+  CloudStatus({required this.lastFetched, required this.messagesUnread})
       : assert(lastFetched != null),
         assert(messagesUnread != null);
   final DateTime lastFetched;
@@ -382,15 +383,15 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   final LazyBehaviorSubject<T> _stream;
   final ValueStream<T> _valueStream;
 
-  Future<T> load() async => _stream.load();
+  Future<T?> load() async => _stream.load();
 
-  Future<T> reload() async => await _stream.reload();
+  Future<T?> reload() async => await _stream.reload();
 
   @override
   Object get error => _valueStream.error;
 
   @override
-  Object get errorOrNull => _valueStream.errorOrNull;
+  Object? get errorOrNull => _valueStream.errorOrNull;
 
   @override
   bool get hasError => _valueStream.hasError;
@@ -399,13 +400,13 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   bool get hasValue => _valueStream.hasValue;
 
   @override
-  StackTrace get stackTrace => _valueStream.stackTrace;
+  StackTrace? get stackTrace => _valueStream.stackTrace;
 
   @override
   T get value => _valueStream.value;
 
   @override
-  T get valueOrNull => _valueStream.valueOrNull;
+  T? get valueOrNull => _valueStream.valueOrNull;
 }
 
 class LazyBehaviorSubject<T> {
@@ -413,7 +414,7 @@ class LazyBehaviorSubject<T> {
 
   final _subject = BehaviorSubject<T>();
   final _joinRun = JoinRun<T>();
-  Future<T> Function() _loadData;
+  Future<T> Function()? _loadData;
 
   bool _dirty = true;
 
@@ -425,12 +426,12 @@ class LazyBehaviorSubject<T> {
     return ReloadableValueStream(this);
   }
 
-  Future<T> reload() async {
+  Future<T?> reload() async {
     dirty();
     return await load();
   }
 
-  Future<T> load() async {
+  Future<T?> load() async {
     if (_loadData == null) {
       _logger.warning(
           'calling reload on $runtimeType before anyone getting a stream.');
@@ -441,7 +442,7 @@ class LazyBehaviorSubject<T> {
         return _subject.value;
       }
       try {
-        final data = await _loadData();
+        final data = await _loadData!();
         _subject.add(data);
         return data;
       } catch (error, stackTrace) {

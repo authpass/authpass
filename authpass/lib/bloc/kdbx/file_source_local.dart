@@ -20,11 +20,11 @@ final _logger = Logger('file_source_local');
 class FileSourceLocal extends FileSource {
   FileSourceLocal(
     this.file, {
-    String databaseName,
-    @required String uuid,
+    String? databaseName,
+    required String uuid,
     this.macOsSecureBookmark,
     this.filePickerIdentifier,
-    FileContent initialCachedContent,
+    FileContent? initialCachedContent,
   }) : super(
           databaseName: databaseName,
           uuid: uuid,
@@ -34,21 +34,21 @@ class FileSourceLocal extends FileSource {
   final File file;
 
   /// on macos a secure bookmark is required, if we are in a sandbox.
-  final String macOsSecureBookmark;
+  final String? macOsSecureBookmark;
 
   /// stores the complete json [FileInfo] from [FilePickerWritable]
   /// for backward compatibility might also only contains [FileInfo.identifier]
-  final String filePickerIdentifier;
+  final String? filePickerIdentifier;
 
-  FileInfo _filePickerInfo;
+  FileInfo? _filePickerInfo;
 
-  FileInfo get filePickerInfo {
+  FileInfo? get filePickerInfo {
     if (_filePickerInfo != null) {
       return _filePickerInfo;
     }
-    if (filePickerIdentifier != null && filePickerIdentifier.startsWith('{')) {
+    if (filePickerIdentifier != null && filePickerIdentifier!.startsWith('{')) {
       return _filePickerInfo = FileInfo.fromJson(
-          json.decode(filePickerIdentifier) as Map<String, dynamic>);
+          json.decode(filePickerIdentifier!) as Map<String, dynamic>);
     }
     return null;
   }
@@ -76,7 +76,7 @@ class FileSourceLocal extends FileSource {
     if ((AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) &&
         filePickerIdentifier != null) {
       final oldFileInfo = filePickerInfo;
-      final identifier = oldFileInfo?.identifier ?? filePickerIdentifier;
+      final identifier = oldFileInfo?.identifier ?? filePickerIdentifier!;
       return await FilePickerWritable().readFile(
           identifier: identifier,
           reader: (fileInfo, file) async {
@@ -89,7 +89,7 @@ class FileSourceLocal extends FileSource {
           });
     } else if (AuthPassPlatform.isMacOS && macOsSecureBookmark != null) {
       final resolved =
-          await SecureBookmarks().resolveBookmark(macOsSecureBookmark);
+          await SecureBookmarks().resolveBookmark(macOsSecureBookmark!);
       _logger.finer('Reading from secure  bookmark. ($resolved)');
       if (resolved != file) {
         _logger
@@ -139,8 +139,8 @@ class FileSourceLocal extends FileSource {
       filePickerInfo?.fileName ?? path.basenameWithoutExtension(displayPath);
 
   @override
-  Future<Map<String, dynamic>> write(
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+  Future<Map<String, dynamic>?> write(
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     if (filePickerIdentifier != null) {
       _logger.finer('Writing into file with file picker.');
       final identifier = filePickerInfo?.identifier ?? filePickerIdentifier;
@@ -148,7 +148,7 @@ class FileSourceLocal extends FileSource {
           (f) async {
         await f.writeAsBytes(bytes, flush: true);
         final fileInfo =
-            await FilePickerWritable().writeFileWithIdentifier(identifier, f);
+            await FilePickerWritable().writeFileWithIdentifier(identifier!, f);
         if (fileInfo.identifier != identifier) {
           _logger.severe('Panic, fileIdentifier changed. must no happen.');
         }
@@ -200,7 +200,7 @@ class FileSourceLocal extends FileSource {
       );
 
   @override
-  Map<String, String> toDebugMap() => {
+  Map<String, String?> toDebugMap() => {
         ...super.toDebugMap(),
         'filePickerIdentifier': filePickerIdentifier,
         'local':

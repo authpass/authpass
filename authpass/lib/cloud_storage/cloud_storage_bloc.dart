@@ -6,6 +6,7 @@ import 'package:authpass/cloud_storage/onedrive/onedrive_provider.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 /// manages available cloud storages.
 /// BloC is definitely the wrong name here...
@@ -29,6 +30,6 @@ class CloudStorageBloc {
   final CloudStorageHelper _helper;
   final Set<CloudStorageProvider> availableCloudStorage;
 
-  CloudStorageProvider providerById(String id) =>
-      availableCloudStorage.firstWhere((p) => p.id == id, orElse: () => null);
+  CloudStorageProvider? providerById(String? id) =>
+      availableCloudStorage.firstWhereOrNull((p) => p.id == id);
 }

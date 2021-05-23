@@ -20,11 +20,11 @@ import 'package:provider/provider.dart';
 class AppBarMenu {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
       BuildContext context, OpenedKdbxFiles openedKdbxFiles,
-      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
+      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
           secondaryBuilder}) {
     final openedFiles = openedKdbxFiles.values;
     final analytics = Provider.of<Analytics>(context, listen: false);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return [
       PopupMenuItem(
         value: () {
@@ -64,7 +64,7 @@ class AppBarMenu {
                         color: file.openedFile.color),
                     title: Text(file.fileSource.displayName),
                     subtitle: Text(
-                      file.fileSource.displayPath,
+                      file.fileSource.displayPath!,
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       maxLines: 1,
@@ -131,8 +131,8 @@ class AppBarMenu {
 
   static PopupMenuButton createOverflowMenuButton(
     BuildContext context, {
-    List<PopupMenuItem<VoidCallback>> Function(BuildContext context) builder,
-    List<PopupMenuItem<VoidCallback>> Function(BuildContext context)
+    List<PopupMenuItem<VoidCallback>> Function(BuildContext context)? builder,
+    List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
         secondaryBuilder,
   }) {
     final openedFiles = Provider.of<OpenedKdbxFiles>(context);

@@ -13,9 +13,9 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart' show Color;
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
 
 part 'app_data.g.dart';
@@ -40,7 +40,7 @@ class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
   @override
   Object serialize(Serializers serializers, T object,
       {FullType specifiedType = FullType.unspecified}) {
-    return object?.toString();
+    return object.toString();
   }
 
   @override
@@ -62,40 +62,35 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   static const SOURCE_CLOUD_STORAGE_DATA = 'data';
 
   /// unique id to identify this open file across sessions.
-  @nullable
-  String get uuid;
+  String? get uuid;
 
   @BuiltValueField(compare: false)
-  DateTime get lastOpenedAt;
+  DateTime? get lastOpenedAt;
 
-  OpenedFilesSourceType get sourceType;
+  OpenedFilesSourceType? get sourceType;
 
-  String get sourcePath;
+  String? get sourcePath;
 
-  String get name;
+  String? get name;
 
   /// when the user to choose to store password behind biometric keystore
   /// we generate a (more or less) random name to store it into.
-  @nullable
-  String get biometricStoreName;
+  String? get biometricStoreName;
 
-  @nullable
-  String get macOsSecureBookmark;
+  String? get macOsSecureBookmark;
 
   /// stores the identifier as returned by [FilePickerWritable]
-  @nullable
-  String get filePickerIdentifier;
+  String? get filePickerIdentifier;
 
-  @nullable
-  int get colorCode;
+  int? get colorCode;
 
-  Color get color => colorCode == null ? null : Color(colorCode);
+  Color? get color => colorCode == null ? null : Color(colorCode!);
 
   bool isSameFileAs(OpenedFile other) =>
       other.sourceType == sourceType && other.sourcePath == sourcePath;
 
-  static OpenedFile fromFileSource(FileSource fileSource, String dbName,
-          [void Function(OpenedFileBuilder b) customize]) =>
+  static OpenedFile fromFileSource(FileSource fileSource, String? dbName,
+          [void Function(OpenedFileBuilder b)? customize]) =>
       OpenedFile(
         (b) {
           b.lastOpenedAt = clock.now().toUtc();
@@ -116,7 +111,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
             b
               ..sourceType = OpenedFilesSourceType.CloudStorage
               ..sourcePath = json.encode({
-                SOURCE_CLOUD_STORAGE_ID: fileSource.provider.id,
+                SOURCE_CLOUD_STORAGE_ID: fileSource.provider!.id,
                 SOURCE_CLOUD_STORAGE_DATA: fileSource.fileInfo,
               })
               ..name = dbName;
@@ -134,7 +129,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
     switch (sourceType) {
       case OpenedFilesSourceType.Local:
         return FileSourceLocal(
-          File(sourcePath),
+          File(sourcePath!),
           macOsSecureBookmark: macOsSecureBookmark,
           filePickerIdentifier: filePickerIdentifier,
           uuid: uuid ?? AppDataBloc.createUuid(),
@@ -142,13 +137,13 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         );
       case OpenedFilesSourceType.Url:
         return FileSourceUrl(
-          Uri.parse(sourcePath),
+          Uri.parse(sourcePath!),
           uuid: uuid ?? AppDataBloc.createUuid(),
           databaseName: name,
         );
       case OpenedFilesSourceType.CloudStorage:
-        final sourceInfo = json.decode(sourcePath) as Map<String, dynamic>;
-        final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String;
+        final sourceInfo = json.decode(sourcePath!) as Map<String, dynamic>;
+        final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String?;
         final provider = cloudStorageBloc.providerById(storageId);
         if (provider == null) {
           throw StateError('Invalid cloud storage provider id $storageId');
@@ -167,69 +162,57 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 enum AppDataTheme { dark, light }
 
 abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
-  factory AppData([void Function(AppDataBuilder b) updates]) = _$AppData;
+  factory AppData([void Function(AppDataBuilder b)? updates]) = _$AppData;
 
   AppData._();
 
   static Serializer<AppData> get serializer => _$appDataSerializer;
 
-  BuiltList<OpenedFile> get previousFiles;
+  BuiltList<OpenedFile>? get previousFiles;
 
-  @nullable
-  int get passwordGeneratorLength;
+  int? get passwordGeneratorLength;
 
-  BuiltSet<String> get passwordGeneratorCharacterSets;
+  BuiltSet<String>? get passwordGeneratorCharacterSets;
 
-  @nullable
-  String get manualUserType;
+  String? get manualUserType;
 
-  @nullable
-  DateTime get firstLaunchedAt;
+  DateTime? get firstLaunchedAt;
 
   /// Theme of the app, either light or dark (null means system default)
-  @nullable
-  AppDataTheme get theme;
+  AppDataTheme? get theme;
 
   ///UUid's of local Files whose warnings were dismissed
-  @nullable
-  BuiltList<String> get dismissedBackupLocalFiles;
+  BuiltList<String>? get dismissedBackupLocalFiles;
 
-  @nullable
-  double get themeVisualDensity;
+  double? get themeVisualDensity;
 
-  @nullable
-  double get themeFontSizeFactor;
+  double? get themeFontSizeFactor;
 
-  @nullable
-  bool get diacOptIn;
+  bool? get diacOptIn;
 
   /// remember which build id was used, so we might be
   /// able to show a changelog in the future..
-  @nullable
-  int get lastBuildId;
+  int? get lastBuildId;
 
   /// Android only: disable screenshots, etc. (FLAG_SECURE)
-  @nullable
-  bool get secureWindow;
+  bool? get secureWindow;
   bool get secureWindowOrDefault => secureWindow ?? false;
 
   /// allows overriding system locale to a specific language.
-  @nullable
-  String get localeOverride;
+  String? get localeOverride;
 
   /// whether to fetch icons for password entries with websites from
   /// the internet, instead of showing kdbx icons.
   /// (right now: off by default).
-  @nullable
-  bool get fetchWebsiteIcons;
+  bool? get fetchWebsiteIcons;
   bool get fetchWebsiteIconsOrDefault => fetchWebsiteIcons ?? false;
 
   @override
   Map<String, dynamic> toJson() =>
       serializers.serialize(this) as Map<String, dynamic>;
 
-  OpenedFile recentFileByUuid(String uuid) {
-    return previousFiles.firstWhere((f) => f.uuid == uuid, orElse: () => null);
+  OpenedFile? recentFileByUuid(String uuid) {
+    return previousFiles!.firstWhereOrNull((f) => f.uuid == uuid);
   }
 }
 
@@ -251,8 +234,8 @@ class AppDataBloc {
 
   final Env env;
 
-  final store = SimpleJsonPersistence.getForTypeSync(
-    (json) => serializers.deserializeWith(AppData.serializer, json),
+  final store = SimpleJsonPersistence.getForTypeWithDefault(
+    (json) => serializers.deserializeWith(AppData.serializer, json)!,
     defaultCreator: () =>
         AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
     storeBackend: createStoreBackend(
@@ -275,10 +258,10 @@ class AppDataBloc {
 
   ///
   /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.
-  Future<OpenedFile> openedFile(FileSource file,
-          {@required String name,
-          OpenedFile oldFile,
-          Color defaultColor}) async =>
+  Future<OpenedFile?> openedFile(FileSource file,
+          {required String? name,
+          OpenedFile? oldFile,
+          Color? defaultColor}) async =>
       await update((b, data) {
         final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
         final colorCode =
@@ -292,23 +275,23 @@ class AppDataBloc {
         return openedFile;
       });
 
-  Future<T> update<T>(
+  Future<T?> update<T>(
       T Function(AppDataBuilder builder, AppData data) updater) async {
     final appData = await store.load();
-    T ret;
+    T? ret;
     final newAppData = appData.rebuild((b) => ret = updater(b, appData));
     await store.save(newAppData);
     return ret;
   }
 
-  Future<AppDataTheme> updateNextTheme() async {
+  Future<AppDataTheme?> updateNextTheme() async {
     final updated = await update((builder, data) {
       final nextTheme = data.theme == null
           ? AppDataTheme.light
           : data.theme == AppDataTheme.light
               ? AppDataTheme.dark
               : null;
-      return builder.theme = nextTheme;
+      return (builder.theme = nextTheme)!;
     });
     return updated;
   }

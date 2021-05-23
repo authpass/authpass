@@ -19,12 +19,12 @@ class LockedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     final kdbxBloc = context.watch<KdbxBloc>();
 
     if (!kdbxBloc.hasQuickUnlockOpen()) {
       _logger.fine('hasQuickUnlock: false');
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         SelectFileScreen.navigate(context);
       });
     }

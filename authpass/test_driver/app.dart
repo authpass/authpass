@@ -12,7 +12,7 @@ Future<void> main() async {
     switch (message) {
       case 'nextTheme':
         final appDataBloc =
-            AuthPassApp.currentNavigatorKey.currentContext.read<AppDataBloc>();
+            AuthPassApp.currentNavigatorKey!.currentContext!.read<AppDataBloc>();
         return (await appDataBloc.updateNextTheme()).toString();
     }
     return 'unknown';

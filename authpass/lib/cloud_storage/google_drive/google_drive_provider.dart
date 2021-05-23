@@ -19,7 +19,7 @@ final _logger = Logger('authpass.google_drive_bloc');
 class GoogleDriveProvider
     extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
   GoogleDriveProvider(
-      {@required this.env, @required CloudStorageHelperBase helper})
+      {required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   final Env env;
@@ -27,7 +27,7 @@ class GoogleDriveProvider
   static const _scopes = [DriveApi.driveScope];
 
   ClientId get _clientId =>
-      ClientId(env.secrets.googleClientId, env.secrets.googleClientSecret);
+      ClientId(env.secrets!.googleClientId!, env.secrets!.googleClientSecret);
 
   @override
   Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow<
@@ -35,8 +35,12 @@ class GoogleDriveProvider
       UF extends UserAuthenticationPromptData<TF>>(prompt) async {
 //    assert(prompt is PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>);
 //    final oAuthPrompt = prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>;
-    final client = await clientViaUserConsentManual(_clientId, _scopes,
-        (uri) => oAuthTokenPrompt(prompt as PromptUserForCode, uri));
+    final client = await clientViaUserConsentManual(
+      _clientId,
+      _scopes,
+      (uri) => oAuthTokenPrompt(prompt as PromptUserForCode, uri)
+          .then((value) => value!),
+    );
     client.credentialUpdates.listen(_credentialsChanged);
     _credentialsChanged(client.credentials);
     _logger.finer('Finished user consent.');
@@ -80,9 +84,9 @@ class GoogleDriveProvider
     final map = json.decode(jsonString) as Map<String, dynamic>;
     return nonNls(AccessCredentials(
       _accessTokenFromJson(map['accessToken'] as Map<String, dynamic>),
-      map['refreshToken'] as String,
+      map['refreshToken'] as String?,
       (map['scopes'] as List).cast<String>(),
-      idToken: map['idToken'] as String,
+      idToken: map['idToken'] as String?,
     ));
   }
 
@@ -102,12 +106,12 @@ class GoogleDriveProvider
       q: search.toQuery(),
     );
     _logger.fine(
-        'Got file results (incomplete:${files.incompleteSearch}): ${files.files.map((f) => '${f.id}: ${f.name} (${f.mimeType})')}');
+        'Got file results (incomplete:${files.incompleteSearch}): ${files.files!.map((f) => '${f.id}: ${f.name} (${f.mimeType})')}');
     return SearchResponse(
       (srb) => srb
         ..hasMore = files.nextPageToken != null
         ..results.addAll(
-          files.files.map(
+          files.files!.map(
             (f) => CloudStorageEntity(
               (b) => b
                 ..id = f.id
@@ -123,7 +127,7 @@ class GoogleDriveProvider
   }
 
   @override
-  Future<SearchResponse> list({CloudStorageEntity parent}) {
+  Future<SearchResponse> list({CloudStorageEntity? parent}) {
     return _search(parent == null
         ? const SearchQueryTerm(SearchQueryValueLiteral('root'), QOperator.in_,
             SearchQueryField('parents'))
@@ -141,7 +145,7 @@ class GoogleDriveProvider
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final dynamic response = await driveApi.files
-        .get(file.id, downloadOptions: DownloadOptions.fullMedia);
+        .get(file.id!, downloadOptions: DownloadOptions.fullMedia);
     final media = response as Media;
     final bytes = BytesBuilder(copy: false);
     // ignore: prefer_foreach
@@ -153,10 +157,10 @@ class GoogleDriveProvider
 
   @override
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
-    final updatedFile = await driveApi.files.update(null, file.id,
+    final updatedFile = await driveApi.files.update(File(), file.id!,
         uploadMedia: Media(byteStream, bytes.lengthInBytes));
     _logger.fine('Successfully saved file ${updatedFile.name}');
     return <String, dynamic>{};
@@ -169,7 +173,7 @@ class GoogleDriveProvider
     final metadata = File();
     metadata.name = saveAs.fileName;
     if (saveAs.parent != null) {
-      metadata.parents = [saveAs.parent?.id];
+      metadata.parents = [saveAs.parent!.id!];
     }
     final byteStream = ByteStream.fromBytes(bytes);
     _logger
@@ -216,7 +220,7 @@ class SearchQueryField implements SearchQueryAtom {
 class SearchQueryValueLiteral implements SearchQueryAtom {
   const SearchQueryValueLiteral(@NonNls this.value);
 
-  final Object value;
+  final Object? value;
 
   String _quoteValues(dynamic value) {
     if (value is String) {

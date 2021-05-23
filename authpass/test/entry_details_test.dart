@@ -21,9 +21,9 @@ void _createFields(KdbxEntry entry, Map<String, String> fields) {
 @isTest
 void _testTotp(
   String description, {
-  @required Map<String, String> fields,
-  @required String expectCode,
-  String totpFieldName,
+  required Map<String, String> fields,
+  required String expectCode,
+  String? totpFieldName,
 }) {
   totpFieldName ??=
       fields.containsKey('TOTP Secret') ? 'TOTP Secret' : fields.keys.first;
@@ -49,7 +49,7 @@ void _testTotp(
             child: EntryField(
                 fieldType: FieldType.otp,
                 entry: entry,
-                fieldKey: KdbxKey(totpFieldName),
+                fieldKey: KdbxKey(totpFieldName!),
                 onChangedMetadata: () {}),
           ),
         ),

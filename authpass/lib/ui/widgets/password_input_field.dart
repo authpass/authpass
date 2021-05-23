@@ -7,8 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 /// a suffix icon to change it to make it visible.
 class PasswordInputField extends StatefulWidget {
   const PasswordInputField({
-    Key key,
-    @required this.labelText,
+    Key? key,
+    required this.labelText,
     this.autofocus = true,
     this.focusNode,
     this.validator,
@@ -19,15 +19,15 @@ class PasswordInputField extends StatefulWidget {
     this.autovalidateMode,
   }) : super(key: key);
 
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final bool autofocus;
   final String labelText;
-  final FormFieldValidator<String> validator;
-  final VoidCallback onEditingComplete;
-  final ValueChanged<String> onFieldSubmitted;
-  final ValueChanged<String> onChanged;
-  final TextEditingController controller;
-  final AutovalidateMode autovalidateMode;
+  final FormFieldValidator<String>? validator;
+  final VoidCallback? onEditingComplete;
+  final ValueChanged<String>? onFieldSubmitted;
+  final ValueChanged<String>? onChanged;
+  final TextEditingController? controller;
+  final AutovalidateMode? autovalidateMode;
 
   @override
   _PasswordInputFieldState createState() => _PasswordInputFieldState();
@@ -46,7 +46,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return TextFormField(
       autofocus: widget.autofocus,
       focusNode: widget.focusNode,

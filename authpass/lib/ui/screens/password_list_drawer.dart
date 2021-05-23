@@ -10,12 +10,12 @@ import 'package:provider/provider.dart';
 
 class PasswordListDrawer extends StatefulWidget {
   const PasswordListDrawer({
-    Key key,
-    @required this.initialSelection,
-    @required this.selectionChanged,
+    Key? key,
+    required this.initialSelection,
+    required this.selectionChanged,
   }) : super(key: key);
 
-  final Set<KdbxGroup> initialSelection;
+  final Set<KdbxGroup?> initialSelection;
   final void Function(Set<KdbxGroup> selection) selectionChanged;
 
   @override

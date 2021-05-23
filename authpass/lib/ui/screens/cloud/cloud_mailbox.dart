@@ -61,7 +61,7 @@ class CloudMailboxTabScreen extends StatefulWidget {
 
 class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
@@ -71,12 +71,12 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
       vsync: this,
       initialIndex: 1,
     );
-    _tabController.addListener(_tabChanged);
+    _tabController!.addListener(_tabChanged);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController!.dispose();
     super.dispose();
   }
 
@@ -110,7 +110,7 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
           CloudMailList(bloc: bloc),
         ],
       ),
-      floatingActionButton: _tabController.index == 0
+      floatingActionButton: _tabController!.index == 0
           ? FloatingActionButton.extended(
               onPressed: () async {
                 final result = await (const SimplePromptDialog(
@@ -130,7 +130,7 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
 }
 
 class CloudMailboxList extends StatelessWidget {
-  const CloudMailboxList({Key key, @required this.bloc}) : super(key: key);
+  const CloudMailboxList({Key? key, required this.bloc}) : super(key: key);
 
   final AuthPassCloudBloc bloc;
 
@@ -148,7 +148,7 @@ class CloudMailboxList extends StatelessWidget {
           stream: (context) => bloc.mailboxList,
           retry: () async => await bloc.mailboxList.reload(),
           builder: (context, mailboxList) {
-            final data = mailboxList.mailboxes;
+            final data = mailboxList.mailboxes!;
             if (data.isEmpty) {
               return const Center(
                 child: Text('You do not have any mailboxes yet.'),
@@ -245,12 +245,12 @@ class CloudMailboxList extends StatelessWidget {
         final label = entry.label;
         if (label != null) {
           return MailboxViewModel(
-            PredefinedIcons.iconFor(entry.icon.get()),
+            PredefinedIcons.iconFor(entry.icon.get()!),
             'Entry: $label',
           );
         }
         return MailboxViewModel(
-          PredefinedIcons.iconFor(entry.icon.get()),
+          PredefinedIcons.iconFor(entry.icon.get()!),
           'Unknown Entry: ${mailbox.entryUuid}',
         );
       }
@@ -272,7 +272,7 @@ class MailboxViewModel {
 }
 
 class CloudMailList extends StatelessWidget {
-  const CloudMailList({Key key, @required this.bloc}) : super(key: key);
+  const CloudMailList({Key? key, required this.bloc}) : super(key: key);
 
   final AuthPassCloudBloc bloc;
 
@@ -317,10 +317,10 @@ class CloudMailList extends StatelessWidget {
 }
 
 class MailListTile extends StatelessWidget {
-  const MailListTile({Key key, this.message, this.onTap}) : super(key: key);
+  const MailListTile({Key? key, this.message, this.onTap}) : super(key: key);
 
-  final EmailMessage message;
-  final VoidCallback onTap;
+  final EmailMessage? message;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +340,7 @@ class MailListTile extends StatelessWidget {
               height: 40,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: message.isRead
+              child: message!.isRead
                   ? Icon(
                       FontAwesomeIcons.envelopeOpen,
                       color: ThemeUtil.iconColor(theme, null),
@@ -356,10 +356,10 @@ class MailListTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text(message.subject, style: theme.textTheme.subtitle1),
+                  Text(message!.subject, style: theme.textTheme.subtitle1),
                   const SizedBox(height: 4),
                   Text(
-                    '${message.sender}',
+                    '${message!.sender}',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
@@ -367,11 +367,11 @@ class MailListTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${formatUtil.formatDateFull(message.createdAt)}',
+                    '${formatUtil.formatDateFull(message!.createdAt)}',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
-                    style: theme.textTheme.caption
+                    style: theme.textTheme.caption!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],

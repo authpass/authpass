@@ -11,7 +11,7 @@ part 'onedrive_models.g.dart';
 @JsonSerializable(nullable: false)
 class ListChildrenResponse {
   ListChildrenResponse({
-    @required this.value,
+    required this.value,
   });
   factory ListChildrenResponse.fromJson(Map<String, dynamic> json) =>
       _$ListChildrenResponseFromJson(json);
@@ -23,11 +23,11 @@ class ListChildrenResponse {
 @JsonSerializable(nullable: false)
 class OneDriveItem {
   OneDriveItem({
-    @required this.id,
-    @required this.cTag,
-    @required this.eTag,
-    @required this.name,
-    @required this.parentReference,
+    required this.id,
+    required this.cTag,
+    required this.eTag,
+    required this.name,
+    required this.parentReference,
     this.folder,
     this.file,
   });
@@ -35,21 +35,21 @@ class OneDriveItem {
       _$OneDriveItemFromJson(json);
   Map<String, dynamic> toJson() => _$OneDriveItemToJson(this);
 
-  final String id;
+  final String? id;
 
   /// the "content" tag, only changes with content
-  final String cTag;
+  final String? cTag;
 
   /// etag changes with metadata+content.
-  final String eTag;
-  final String name;
+  final String? eTag;
+  final String? name;
 
   final OneDriveItemParent parentReference;
 
   @JsonKey(nullable: true)
-  final OneDriveFolder folder;
+  final OneDriveFolder? folder;
   @JsonKey(nullable: true)
-  final OneDriveFile file;
+  final OneDriveFile? file;
 
   CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
         (b) => b
@@ -73,7 +73,7 @@ class OneDriveItemParent {
       _$OneDriveItemParentFromJson(json);
   Map<String, dynamic> toJson() => _$OneDriveItemParentToJson(this);
 
-  final String path;
+  final String? path;
 }
 
 @JsonSerializable(nullable: false)
@@ -85,7 +85,7 @@ class OneDriveFolder {
       _$OneDriveFolderFromJson(json);
   Map<String, dynamic> toJson() => _$OneDriveFolderToJson(this);
 
-  final int childCount;
+  final int? childCount;
 }
 
 @JsonSerializable(nullable: false)
@@ -97,5 +97,5 @@ class OneDriveFile {
       _$OneDriveFileFromJson(json);
   Map<String, dynamic> toJson() => _$OneDriveFileToJson(this);
 
-  final String mimeType;
+  final String? mimeType;
 }

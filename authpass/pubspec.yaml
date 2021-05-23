@@ -4,7 +4,7 @@ publish_to: none
 version: 1.7.12+151
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -19,7 +19,7 @@ dependencies:
     git:
       url: https://github.com/hpoul/flutter_utils.git
       path: packages/simple_form_field_validator
-      ref: 05ca3bddea2fda0d94e672839a53c68f367be3bc
+      ref: 4158191244681ac259a7bb060ef0b8a98db502d2
   logging: ^1.0.0
   logging_appenders: ^1.0.0
   diac_client:
@@ -168,6 +168,7 @@ dependencies:
       url: https://github.com/authpass/winsparkle_flutter.git
       ref: 1e124a5056709c00ec05f2c1e3bd8c2084fe962b
   share: ^2.0.1
+  collection: ^1.15.0-nullsafety.4
   
 dev_dependencies:
   flutter_test:

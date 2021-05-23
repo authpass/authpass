@@ -14,30 +14,20 @@ part of 'cloud_storage_provider.dart';
 
 class _$CloudStorageEntity extends CloudStorageEntity {
   @override
-  final String id;
+  final String? id;
   @override
-  final CloudStorageEntityType type;
+  final CloudStorageEntityType? type;
   @override
-  final String name;
+  final String? name;
   @override
-  final String path;
+  final String? path;
 
   factory _$CloudStorageEntity(
-          [void Function(CloudStorageEntityBuilder) updates]) =>
+          [void Function(CloudStorageEntityBuilder)? updates]) =>
       (new CloudStorageEntityBuilder()..update(updates)).build();
 
   _$CloudStorageEntity._({this.id, this.type, this.name, this.path})
-      : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('CloudStorageEntity', 'id');
-    }
-    if (type == null) {
-      throw new BuiltValueNullFieldError('CloudStorageEntity', 'type');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('CloudStorageEntity', 'name');
-    }
-  }
+      : super._();
 
   @override
   CloudStorageEntity rebuild(
@@ -77,32 +67,33 @@ class _$CloudStorageEntity extends CloudStorageEntity {
 
 class CloudStorageEntityBuilder
     implements Builder<CloudStorageEntity, CloudStorageEntityBuilder> {
-  _$CloudStorageEntity _$v;
+  _$CloudStorageEntity? _$v;
 
-  String _id;
-  String get id => _$this._id;
-  set id(String id) => _$this._id = id;
+  String? _id;
+  String? get id => _$this._id;
+  set id(String? id) => _$this._id = id;
 
-  CloudStorageEntityType _type;
-  CloudStorageEntityType get type => _$this._type;
-  set type(CloudStorageEntityType type) => _$this._type = type;
+  CloudStorageEntityType? _type;
+  CloudStorageEntityType? get type => _$this._type;
+  set type(CloudStorageEntityType? type) => _$this._type = type;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  String _path;
-  String get path => _$this._path;
-  set path(String path) => _$this._path = path;
+  String? _path;
+  String? get path => _$this._path;
+  set path(String? path) => _$this._path = path;
 
   CloudStorageEntityBuilder();
 
   CloudStorageEntityBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _type = _$v.type;
-      _name = _$v.name;
-      _path = _$v.path;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _type = $v.type;
+      _name = $v.name;
+      _path = $v.path;
       _$v = null;
     }
     return this;
@@ -110,14 +101,12 @@ class CloudStorageEntityBuilder
 
   @override
   void replace(CloudStorageEntity other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$CloudStorageEntity;
   }
 
   @override
-  void update(void Function(CloudStorageEntityBuilder) updates) {
+  void update(void Function(CloudStorageEntityBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -132,21 +121,14 @@ class CloudStorageEntityBuilder
 
 class _$SearchResponse extends SearchResponse {
   @override
-  final BuiltList<CloudStorageEntity> results;
+  final BuiltList<CloudStorageEntity?>? results;
   @override
-  final bool hasMore;
+  final bool? hasMore;
 
-  factory _$SearchResponse([void Function(SearchResponseBuilder) updates]) =>
+  factory _$SearchResponse([void Function(SearchResponseBuilder)? updates]) =>
       (new SearchResponseBuilder()..update(updates)).build();
 
-  _$SearchResponse._({this.results, this.hasMore}) : super._() {
-    if (results == null) {
-      throw new BuiltValueNullFieldError('SearchResponse', 'results');
-    }
-    if (hasMore == null) {
-      throw new BuiltValueNullFieldError('SearchResponse', 'hasMore');
-    }
-  }
+  _$SearchResponse._({this.results, this.hasMore}) : super._();
 
   @override
   SearchResponse rebuild(void Function(SearchResponseBuilder) updates) =>
@@ -180,24 +162,25 @@ class _$SearchResponse extends SearchResponse {
 
 class SearchResponseBuilder
     implements Builder<SearchResponse, SearchResponseBuilder> {
-  _$SearchResponse _$v;
+  _$SearchResponse? _$v;
 
-  ListBuilder<CloudStorageEntity> _results;
-  ListBuilder<CloudStorageEntity> get results =>
-      _$this._results ??= new ListBuilder<CloudStorageEntity>();
-  set results(ListBuilder<CloudStorageEntity> results) =>
+  ListBuilder<CloudStorageEntity?>? _results;
+  ListBuilder<CloudStorageEntity?> get results =>
+      _$this._results ??= new ListBuilder<CloudStorageEntity?>();
+  set results(ListBuilder<CloudStorageEntity?>? results) =>
       _$this._results = results;
 
-  bool _hasMore;
-  bool get hasMore => _$this._hasMore;
-  set hasMore(bool hasMore) => _$this._hasMore = hasMore;
+  bool? _hasMore;
+  bool? get hasMore => _$this._hasMore;
+  set hasMore(bool? hasMore) => _$this._hasMore = hasMore;
 
   SearchResponseBuilder();
 
   SearchResponseBuilder get _$this {
-    if (_$v != null) {
-      _results = _$v.results?.toBuilder();
-      _hasMore = _$v.hasMore;
+    final $v = _$v;
+    if ($v != null) {
+      _results = $v.results?.toBuilder();
+      _hasMore = $v.hasMore;
       _$v = null;
     }
     return this;
@@ -205,14 +188,12 @@ class SearchResponseBuilder
 
   @override
   void replace(SearchResponse other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SearchResponse;
   }
 
   @override
-  void update(void Function(SearchResponseBuilder) updates) {
+  void update(void Function(SearchResponseBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -221,12 +202,12 @@ class SearchResponseBuilder
     _$SearchResponse _$result;
     try {
       _$result = _$v ??
-          new _$SearchResponse._(results: results.build(), hasMore: hasMore);
+          new _$SearchResponse._(results: _results?.build(), hasMore: hasMore);
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'results';
-        results.build();
+        _results?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'SearchResponse', _$failedField, e.toString());

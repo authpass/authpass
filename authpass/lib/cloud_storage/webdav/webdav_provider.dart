@@ -23,13 +23,13 @@ final _logger = Logger('authpass.webdav_provider');
 
 class WebDavClient extends NegotiateAuthClient {
   WebDavClient(this.credentials)
-      : super(credentials.username, credentials.password);
+      : super(credentials.username!, credentials.password!);
 
   UserNamePasswordCredentials credentials;
 }
 
 class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
-  WebDavProvider({@required CloudStorageHelperBase helper})
+  WebDavProvider({required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   static const METHOD_HEAD = 'HEAD'; // NON-NLS
@@ -53,7 +53,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   @override
-  Future<WebDavClient> clientFromAuthenticationFlow<
+  Future<WebDavClient?> clientFromAuthenticationFlow<
       TF extends UserAuthenticationPromptResult,
       UF extends UserAuthenticationPromptData<TF>>(prompt) async {
     assert(prompt is PromptUserForCode<UrlUsernamePasswordResult,
@@ -84,16 +84,16 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   WebDavClient clientWithStoredCredentials(String stored) {
     final credentials = UserNamePasswordCredentials.fromJson(
         json.decode(stored) as Map<String, dynamic>);
-    if (credentials != null) {
-      return WebDavClient(credentials);
-    }
-    return null;
+    // if (credentials != null) {
+    return WebDavClient(credentials);
+    // }
+    // return null;
   }
 
   @override
   Future<FileSource> createEntity(
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
-    final client = await requireAuthenticatedClient();
+    final WebDavClient client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, saveAs.parent).resolve(saveAs.fileName);
     _logger.finer('Saving to $uri');
     final request = Request(METHOD_PUT, uri);
@@ -118,8 +118,8 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     );
   }
 
-  Future<String> _refetchEtagFromHead(Uri uri) async {
-    final client = await requireAuthenticatedClient();
+  Future<String?> _refetchEtagFromHead(Uri uri) async {
+    final WebDavClient client = await requireAuthenticatedClient();
     _logger.info('No etag on PUT, fetch HEAD.');
     final headResponse = await client.send(Request(METHOD_HEAD, uri));
     await _expectSuccessResponse(headResponse);
@@ -136,19 +136,19 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   @override
   String get displayName => 'WebDAV'; // NON-NLS
 
-  Uri _uriForEntity(WebDavClient client, CloudStorageEntity entity) {
+  Uri _uriForEntity(WebDavClient client, CloudStorageEntity? entity) {
     final uri = Uri.parse(client.credentials.baseUrl);
     if (entity != null) {
       if (entity.type == CloudStorageEntityType.directory) {
-        return uri.resolve(entity.id + Nls.SLASH);
+        return uri.resolve(entity.id! + Nls.SLASH);
       }
-      return uri.resolve(entity.id);
+      return uri.resolve(entity.id!);
     }
     return uri;
   }
 
   Future<SearchResponse> propFind(
-      WebDavClient client, CloudStorageEntity parent) async {
+      WebDavClient client, CloudStorageEntity? parent) async {
     final parentUri = _uriForEntity(client, parent);
     final request = Request(METHOD_PROPFIND, parentUri);
     request.headers['Depth'] = '1'; // NON-NLS
@@ -185,7 +185,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
             return null;
           }
 
-          final cse = _toCloudStorageEntity(client, href, type);
+          final cse = _toCloudStorageEntity(client, href!, type);
           final uri = _uriForEntity(client, cse);
           if (uri == parentUri) {
             return null;
@@ -222,14 +222,14 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   @override
-  Future<SearchResponse> list({CloudStorageEntity parent}) async {
-    final client = await requireAuthenticatedClient();
+  Future<SearchResponse> list({CloudStorageEntity? parent}) async {
+    final WebDavClient client = await requireAuthenticatedClient();
     return propFind(client, parent);
   }
 
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
-    final client = await requireAuthenticatedClient();
+    final WebDavClient client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
     final response = await client.get(uri);
     final metadata =
@@ -241,8 +241,8 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 
   @override
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
-    final client = await requireAuthenticatedClient();
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+    final WebDavClient client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
     final request = Request(METHOD_PUT, uri);
     if (previousMetadata == null) {
@@ -253,7 +253,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
       if (metadata.etag != null) {
         // remove weak (W/) prefix from etag
         request.headers[HttpHeaders.ifMatchHeader] =
-            metadata.etag?.replaceFirst('W/', ''); // NON-NLS
+            metadata.etag!.replaceFirst('W/', ''); // NON-NLS
       } else {
         _logger.severe('No etag set for content. Overwriting blindly!');
       }
@@ -291,7 +291,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 //      }
       _logger.severe('Error during call to webdav endpoint. '
           '${response.statusCode} ${response.reasonPhrase} (${response.headers})');
-      _logger.severe('webdav request to: ${response.request.url}');
+      _logger.severe('webdav request to: ${response.request!.url}');
       throw StorageException.unknown(
         'Error during request. (${response.statusCode} ${response.reasonPhrase})',
         errorBody: [response.headers.toString(), body].join('\n'),

@@ -35,56 +35,77 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
   final String wireName = 'OpenedFile';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, OpenedFile object,
+  Iterable<Object?> serialize(Serializers serializers, OpenedFile object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'lastOpenedAt',
-      serializers.serialize(object.lastOpenedAt,
-          specifiedType: const FullType(DateTime)),
-      'sourceType',
-      serializers.serialize(object.sourceType,
-          specifiedType: const FullType(OpenedFilesSourceType)),
-      'sourcePath',
-      serializers.serialize(object.sourcePath,
-          specifiedType: const FullType(String)),
-      'name',
-      serializers.serialize(object.name, specifiedType: const FullType(String)),
-    ];
-    if (object.uuid != null) {
+    final result = <Object?>[];
+    Object? value;
+    value = object.uuid;
+    if (value != null) {
       result
         ..add('uuid')
-        ..add(serializers.serialize(object.uuid,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.biometricStoreName != null) {
+    value = object.lastOpenedAt;
+    if (value != null) {
+      result
+        ..add('lastOpenedAt')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
+    }
+    value = object.sourceType;
+    if (value != null) {
+      result
+        ..add('sourceType')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(OpenedFilesSourceType)));
+    }
+    value = object.sourcePath;
+    if (value != null) {
+      result
+        ..add('sourcePath')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.name;
+    if (value != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.biometricStoreName;
+    if (value != null) {
       result
         ..add('biometricStoreName')
-        ..add(serializers.serialize(object.biometricStoreName,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.macOsSecureBookmark != null) {
+    value = object.macOsSecureBookmark;
+    if (value != null) {
       result
         ..add('macOsSecureBookmark')
-        ..add(serializers.serialize(object.macOsSecureBookmark,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.filePickerIdentifier != null) {
+    value = object.filePickerIdentifier;
+    if (value != null) {
       result
         ..add('filePickerIdentifier')
-        ..add(serializers.serialize(object.filePickerIdentifier,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.colorCode != null) {
+    value = object.colorCode;
+    if (value != null) {
       result
         ..add('colorCode')
-        ..add(serializers.serialize(object.colorCode,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
 
   @override
-  OpenedFile deserialize(Serializers serializers, Iterable<Object> serialized,
+  OpenedFile deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new OpenedFileBuilder();
 
@@ -92,7 +113,7 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'uuid':
           result.uuid = serializers.deserialize(value,
@@ -145,96 +166,114 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
   final String wireName = 'AppData';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, AppData object,
+  Iterable<Object?> serialize(Serializers serializers, AppData object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'previousFiles',
-      serializers.serialize(object.previousFiles,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(OpenedFile)])),
-      'passwordGeneratorCharacterSets',
-      serializers.serialize(object.passwordGeneratorCharacterSets,
-          specifiedType:
-              const FullType(BuiltSet, const [const FullType(String)])),
-    ];
-    if (object.passwordGeneratorLength != null) {
+    final result = <Object?>[];
+    Object? value;
+    value = object.previousFiles;
+    if (value != null) {
+      result
+        ..add('previousFiles')
+        ..add(serializers.serialize(value,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(OpenedFile)])));
+    }
+    value = object.passwordGeneratorLength;
+    if (value != null) {
       result
         ..add('passwordGeneratorLength')
-        ..add(serializers.serialize(object.passwordGeneratorLength,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.manualUserType != null) {
+    value = object.passwordGeneratorCharacterSets;
+    if (value != null) {
+      result
+        ..add('passwordGeneratorCharacterSets')
+        ..add(serializers.serialize(value,
+            specifiedType:
+                const FullType(BuiltSet, const [const FullType(String)])));
+    }
+    value = object.manualUserType;
+    if (value != null) {
       result
         ..add('manualUserType')
-        ..add(serializers.serialize(object.manualUserType,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.firstLaunchedAt != null) {
+    value = object.firstLaunchedAt;
+    if (value != null) {
       result
         ..add('firstLaunchedAt')
-        ..add(serializers.serialize(object.firstLaunchedAt,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
-    if (object.theme != null) {
+    value = object.theme;
+    if (value != null) {
       result
         ..add('theme')
-        ..add(serializers.serialize(object.theme,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(AppDataTheme)));
     }
-    if (object.dismissedBackupLocalFiles != null) {
+    value = object.dismissedBackupLocalFiles;
+    if (value != null) {
       result
         ..add('dismissedBackupLocalFiles')
-        ..add(serializers.serialize(object.dismissedBackupLocalFiles,
+        ..add(serializers.serialize(value,
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
     }
-    if (object.themeVisualDensity != null) {
+    value = object.themeVisualDensity;
+    if (value != null) {
       result
         ..add('themeVisualDensity')
-        ..add(serializers.serialize(object.themeVisualDensity,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    if (object.themeFontSizeFactor != null) {
+    value = object.themeFontSizeFactor;
+    if (value != null) {
       result
         ..add('themeFontSizeFactor')
-        ..add(serializers.serialize(object.themeFontSizeFactor,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    if (object.diacOptIn != null) {
+    value = object.diacOptIn;
+    if (value != null) {
       result
         ..add('diacOptIn')
-        ..add(serializers.serialize(object.diacOptIn,
-            specifiedType: const FullType(bool)));
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
-    if (object.lastBuildId != null) {
+    value = object.lastBuildId;
+    if (value != null) {
       result
         ..add('lastBuildId')
-        ..add(serializers.serialize(object.lastBuildId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.secureWindow != null) {
+    value = object.secureWindow;
+    if (value != null) {
       result
         ..add('secureWindow')
-        ..add(serializers.serialize(object.secureWindow,
-            specifiedType: const FullType(bool)));
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
-    if (object.localeOverride != null) {
+    value = object.localeOverride;
+    if (value != null) {
       result
         ..add('localeOverride')
-        ..add(serializers.serialize(object.localeOverride,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.fetchWebsiteIcons != null) {
+    value = object.fetchWebsiteIcons;
+    if (value != null) {
       result
         ..add('fetchWebsiteIcons')
-        ..add(serializers.serialize(object.fetchWebsiteIcons,
-            specifiedType: const FullType(bool)));
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
     return result;
   }
 
   @override
-  AppData deserialize(Serializers serializers, Iterable<Object> serialized,
+  AppData deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AppDataBuilder();
 
@@ -242,12 +281,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'previousFiles':
           result.previousFiles.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(OpenedFile)]))
+                      BuiltList, const [const FullType(OpenedFile)]))!
               as BuiltList<Object>);
           break;
         case 'passwordGeneratorLength':
@@ -258,7 +297,7 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
           result.passwordGeneratorCharacterSets.replace(serializers.deserialize(
                   value,
                   specifiedType:
-                      const FullType(BuiltSet, const [const FullType(String)]))
+                      const FullType(BuiltSet, const [const FullType(String)]))!
               as BuiltSet<Object>);
           break;
         case 'manualUserType':
@@ -276,8 +315,8 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'dismissedBackupLocalFiles':
           result.dismissedBackupLocalFiles.replace(serializers.deserialize(
                   value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(String)]))
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(String)]))!
               as BuiltList<Object>);
           break;
         case 'themeVisualDensity':
@@ -317,25 +356,25 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
 
 class _$OpenedFile extends OpenedFile {
   @override
-  final String uuid;
+  final String? uuid;
   @override
-  final DateTime lastOpenedAt;
+  final DateTime? lastOpenedAt;
   @override
-  final OpenedFilesSourceType sourceType;
+  final OpenedFilesSourceType? sourceType;
   @override
-  final String sourcePath;
+  final String? sourcePath;
   @override
-  final String name;
+  final String? name;
   @override
-  final String biometricStoreName;
+  final String? biometricStoreName;
   @override
-  final String macOsSecureBookmark;
+  final String? macOsSecureBookmark;
   @override
-  final String filePickerIdentifier;
+  final String? filePickerIdentifier;
   @override
-  final int colorCode;
+  final int? colorCode;
 
-  factory _$OpenedFile([void Function(OpenedFileBuilder) updates]) =>
+  factory _$OpenedFile([void Function(OpenedFileBuilder)? updates]) =>
       (new OpenedFileBuilder()..update(updates)).build();
 
   _$OpenedFile._(
@@ -348,20 +387,7 @@ class _$OpenedFile extends OpenedFile {
       this.macOsSecureBookmark,
       this.filePickerIdentifier,
       this.colorCode})
-      : super._() {
-    if (lastOpenedAt == null) {
-      throw new BuiltValueNullFieldError('OpenedFile', 'lastOpenedAt');
-    }
-    if (sourceType == null) {
-      throw new BuiltValueNullFieldError('OpenedFile', 'sourceType');
-    }
-    if (sourcePath == null) {
-      throw new BuiltValueNullFieldError('OpenedFile', 'sourcePath');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('OpenedFile', 'name');
-    }
-  }
+      : super._();
 
   @override
   OpenedFile rebuild(void Function(OpenedFileBuilder) updates) =>
@@ -417,62 +443,63 @@ class _$OpenedFile extends OpenedFile {
 }
 
 class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
-  _$OpenedFile _$v;
+  _$OpenedFile? _$v;
 
-  String _uuid;
-  String get uuid => _$this._uuid;
-  set uuid(String uuid) => _$this._uuid = uuid;
+  String? _uuid;
+  String? get uuid => _$this._uuid;
+  set uuid(String? uuid) => _$this._uuid = uuid;
 
-  DateTime _lastOpenedAt;
-  DateTime get lastOpenedAt => _$this._lastOpenedAt;
-  set lastOpenedAt(DateTime lastOpenedAt) =>
+  DateTime? _lastOpenedAt;
+  DateTime? get lastOpenedAt => _$this._lastOpenedAt;
+  set lastOpenedAt(DateTime? lastOpenedAt) =>
       _$this._lastOpenedAt = lastOpenedAt;
 
-  OpenedFilesSourceType _sourceType;
-  OpenedFilesSourceType get sourceType => _$this._sourceType;
-  set sourceType(OpenedFilesSourceType sourceType) =>
+  OpenedFilesSourceType? _sourceType;
+  OpenedFilesSourceType? get sourceType => _$this._sourceType;
+  set sourceType(OpenedFilesSourceType? sourceType) =>
       _$this._sourceType = sourceType;
 
-  String _sourcePath;
-  String get sourcePath => _$this._sourcePath;
-  set sourcePath(String sourcePath) => _$this._sourcePath = sourcePath;
+  String? _sourcePath;
+  String? get sourcePath => _$this._sourcePath;
+  set sourcePath(String? sourcePath) => _$this._sourcePath = sourcePath;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  String _biometricStoreName;
-  String get biometricStoreName => _$this._biometricStoreName;
-  set biometricStoreName(String biometricStoreName) =>
+  String? _biometricStoreName;
+  String? get biometricStoreName => _$this._biometricStoreName;
+  set biometricStoreName(String? biometricStoreName) =>
       _$this._biometricStoreName = biometricStoreName;
 
-  String _macOsSecureBookmark;
-  String get macOsSecureBookmark => _$this._macOsSecureBookmark;
-  set macOsSecureBookmark(String macOsSecureBookmark) =>
+  String? _macOsSecureBookmark;
+  String? get macOsSecureBookmark => _$this._macOsSecureBookmark;
+  set macOsSecureBookmark(String? macOsSecureBookmark) =>
       _$this._macOsSecureBookmark = macOsSecureBookmark;
 
-  String _filePickerIdentifier;
-  String get filePickerIdentifier => _$this._filePickerIdentifier;
-  set filePickerIdentifier(String filePickerIdentifier) =>
+  String? _filePickerIdentifier;
+  String? get filePickerIdentifier => _$this._filePickerIdentifier;
+  set filePickerIdentifier(String? filePickerIdentifier) =>
       _$this._filePickerIdentifier = filePickerIdentifier;
 
-  int _colorCode;
-  int get colorCode => _$this._colorCode;
-  set colorCode(int colorCode) => _$this._colorCode = colorCode;
+  int? _colorCode;
+  int? get colorCode => _$this._colorCode;
+  set colorCode(int? colorCode) => _$this._colorCode = colorCode;
 
   OpenedFileBuilder();
 
   OpenedFileBuilder get _$this {
-    if (_$v != null) {
-      _uuid = _$v.uuid;
-      _lastOpenedAt = _$v.lastOpenedAt;
-      _sourceType = _$v.sourceType;
-      _sourcePath = _$v.sourcePath;
-      _name = _$v.name;
-      _biometricStoreName = _$v.biometricStoreName;
-      _macOsSecureBookmark = _$v.macOsSecureBookmark;
-      _filePickerIdentifier = _$v.filePickerIdentifier;
-      _colorCode = _$v.colorCode;
+    final $v = _$v;
+    if ($v != null) {
+      _uuid = $v.uuid;
+      _lastOpenedAt = $v.lastOpenedAt;
+      _sourceType = $v.sourceType;
+      _sourcePath = $v.sourcePath;
+      _name = $v.name;
+      _biometricStoreName = $v.biometricStoreName;
+      _macOsSecureBookmark = $v.macOsSecureBookmark;
+      _filePickerIdentifier = $v.filePickerIdentifier;
+      _colorCode = $v.colorCode;
       _$v = null;
     }
     return this;
@@ -480,14 +507,12 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
 
   @override
   void replace(OpenedFile other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$OpenedFile;
   }
 
   @override
-  void update(void Function(OpenedFileBuilder) updates) {
+  void update(void Function(OpenedFileBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -511,35 +536,35 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
 
 class _$AppData extends AppData {
   @override
-  final BuiltList<OpenedFile> previousFiles;
+  final BuiltList<OpenedFile>? previousFiles;
   @override
-  final int passwordGeneratorLength;
+  final int? passwordGeneratorLength;
   @override
-  final BuiltSet<String> passwordGeneratorCharacterSets;
+  final BuiltSet<String>? passwordGeneratorCharacterSets;
   @override
-  final String manualUserType;
+  final String? manualUserType;
   @override
-  final DateTime firstLaunchedAt;
+  final DateTime? firstLaunchedAt;
   @override
-  final AppDataTheme theme;
+  final AppDataTheme? theme;
   @override
-  final BuiltList<String> dismissedBackupLocalFiles;
+  final BuiltList<String>? dismissedBackupLocalFiles;
   @override
-  final double themeVisualDensity;
+  final double? themeVisualDensity;
   @override
-  final double themeFontSizeFactor;
+  final double? themeFontSizeFactor;
   @override
-  final bool diacOptIn;
+  final bool? diacOptIn;
   @override
-  final int lastBuildId;
+  final int? lastBuildId;
   @override
-  final bool secureWindow;
+  final bool? secureWindow;
   @override
-  final String localeOverride;
+  final String? localeOverride;
   @override
-  final bool fetchWebsiteIcons;
+  final bool? fetchWebsiteIcons;
 
-  factory _$AppData([void Function(AppDataBuilder) updates]) =>
+  factory _$AppData([void Function(AppDataBuilder)? updates]) =>
       (new AppDataBuilder()..update(updates)).build();
 
   _$AppData._(
@@ -557,15 +582,7 @@ class _$AppData extends AppData {
       this.secureWindow,
       this.localeOverride,
       this.fetchWebsiteIcons})
-      : super._() {
-    if (previousFiles == null) {
-      throw new BuiltValueNullFieldError('AppData', 'previousFiles');
-    }
-    if (passwordGeneratorCharacterSets == null) {
-      throw new BuiltValueNullFieldError(
-          'AppData', 'passwordGeneratorCharacterSets');
-    }
-  }
+      : super._();
 
   @override
   AppData rebuild(void Function(AppDataBuilder) updates) =>
@@ -654,98 +671,99 @@ class _$AppData extends AppData {
 }
 
 class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
-  _$AppData _$v;
+  _$AppData? _$v;
 
-  ListBuilder<OpenedFile> _previousFiles;
+  ListBuilder<OpenedFile>? _previousFiles;
   ListBuilder<OpenedFile> get previousFiles =>
       _$this._previousFiles ??= new ListBuilder<OpenedFile>();
-  set previousFiles(ListBuilder<OpenedFile> previousFiles) =>
+  set previousFiles(ListBuilder<OpenedFile>? previousFiles) =>
       _$this._previousFiles = previousFiles;
 
-  int _passwordGeneratorLength;
-  int get passwordGeneratorLength => _$this._passwordGeneratorLength;
-  set passwordGeneratorLength(int passwordGeneratorLength) =>
+  int? _passwordGeneratorLength;
+  int? get passwordGeneratorLength => _$this._passwordGeneratorLength;
+  set passwordGeneratorLength(int? passwordGeneratorLength) =>
       _$this._passwordGeneratorLength = passwordGeneratorLength;
 
-  SetBuilder<String> _passwordGeneratorCharacterSets;
+  SetBuilder<String>? _passwordGeneratorCharacterSets;
   SetBuilder<String> get passwordGeneratorCharacterSets =>
       _$this._passwordGeneratorCharacterSets ??= new SetBuilder<String>();
   set passwordGeneratorCharacterSets(
-          SetBuilder<String> passwordGeneratorCharacterSets) =>
+          SetBuilder<String>? passwordGeneratorCharacterSets) =>
       _$this._passwordGeneratorCharacterSets = passwordGeneratorCharacterSets;
 
-  String _manualUserType;
-  String get manualUserType => _$this._manualUserType;
-  set manualUserType(String manualUserType) =>
+  String? _manualUserType;
+  String? get manualUserType => _$this._manualUserType;
+  set manualUserType(String? manualUserType) =>
       _$this._manualUserType = manualUserType;
 
-  DateTime _firstLaunchedAt;
-  DateTime get firstLaunchedAt => _$this._firstLaunchedAt;
-  set firstLaunchedAt(DateTime firstLaunchedAt) =>
+  DateTime? _firstLaunchedAt;
+  DateTime? get firstLaunchedAt => _$this._firstLaunchedAt;
+  set firstLaunchedAt(DateTime? firstLaunchedAt) =>
       _$this._firstLaunchedAt = firstLaunchedAt;
 
-  AppDataTheme _theme;
-  AppDataTheme get theme => _$this._theme;
-  set theme(AppDataTheme theme) => _$this._theme = theme;
+  AppDataTheme? _theme;
+  AppDataTheme? get theme => _$this._theme;
+  set theme(AppDataTheme? theme) => _$this._theme = theme;
 
-  ListBuilder<String> _dismissedBackupLocalFiles;
+  ListBuilder<String>? _dismissedBackupLocalFiles;
   ListBuilder<String> get dismissedBackupLocalFiles =>
       _$this._dismissedBackupLocalFiles ??= new ListBuilder<String>();
   set dismissedBackupLocalFiles(
-          ListBuilder<String> dismissedBackupLocalFiles) =>
+          ListBuilder<String>? dismissedBackupLocalFiles) =>
       _$this._dismissedBackupLocalFiles = dismissedBackupLocalFiles;
 
-  double _themeVisualDensity;
-  double get themeVisualDensity => _$this._themeVisualDensity;
-  set themeVisualDensity(double themeVisualDensity) =>
+  double? _themeVisualDensity;
+  double? get themeVisualDensity => _$this._themeVisualDensity;
+  set themeVisualDensity(double? themeVisualDensity) =>
       _$this._themeVisualDensity = themeVisualDensity;
 
-  double _themeFontSizeFactor;
-  double get themeFontSizeFactor => _$this._themeFontSizeFactor;
-  set themeFontSizeFactor(double themeFontSizeFactor) =>
+  double? _themeFontSizeFactor;
+  double? get themeFontSizeFactor => _$this._themeFontSizeFactor;
+  set themeFontSizeFactor(double? themeFontSizeFactor) =>
       _$this._themeFontSizeFactor = themeFontSizeFactor;
 
-  bool _diacOptIn;
-  bool get diacOptIn => _$this._diacOptIn;
-  set diacOptIn(bool diacOptIn) => _$this._diacOptIn = diacOptIn;
+  bool? _diacOptIn;
+  bool? get diacOptIn => _$this._diacOptIn;
+  set diacOptIn(bool? diacOptIn) => _$this._diacOptIn = diacOptIn;
 
-  int _lastBuildId;
-  int get lastBuildId => _$this._lastBuildId;
-  set lastBuildId(int lastBuildId) => _$this._lastBuildId = lastBuildId;
+  int? _lastBuildId;
+  int? get lastBuildId => _$this._lastBuildId;
+  set lastBuildId(int? lastBuildId) => _$this._lastBuildId = lastBuildId;
 
-  bool _secureWindow;
-  bool get secureWindow => _$this._secureWindow;
-  set secureWindow(bool secureWindow) => _$this._secureWindow = secureWindow;
+  bool? _secureWindow;
+  bool? get secureWindow => _$this._secureWindow;
+  set secureWindow(bool? secureWindow) => _$this._secureWindow = secureWindow;
 
-  String _localeOverride;
-  String get localeOverride => _$this._localeOverride;
-  set localeOverride(String localeOverride) =>
+  String? _localeOverride;
+  String? get localeOverride => _$this._localeOverride;
+  set localeOverride(String? localeOverride) =>
       _$this._localeOverride = localeOverride;
 
-  bool _fetchWebsiteIcons;
-  bool get fetchWebsiteIcons => _$this._fetchWebsiteIcons;
-  set fetchWebsiteIcons(bool fetchWebsiteIcons) =>
+  bool? _fetchWebsiteIcons;
+  bool? get fetchWebsiteIcons => _$this._fetchWebsiteIcons;
+  set fetchWebsiteIcons(bool? fetchWebsiteIcons) =>
       _$this._fetchWebsiteIcons = fetchWebsiteIcons;
 
   AppDataBuilder();
 
   AppDataBuilder get _$this {
-    if (_$v != null) {
-      _previousFiles = _$v.previousFiles?.toBuilder();
-      _passwordGeneratorLength = _$v.passwordGeneratorLength;
+    final $v = _$v;
+    if ($v != null) {
+      _previousFiles = $v.previousFiles?.toBuilder();
+      _passwordGeneratorLength = $v.passwordGeneratorLength;
       _passwordGeneratorCharacterSets =
-          _$v.passwordGeneratorCharacterSets?.toBuilder();
-      _manualUserType = _$v.manualUserType;
-      _firstLaunchedAt = _$v.firstLaunchedAt;
-      _theme = _$v.theme;
-      _dismissedBackupLocalFiles = _$v.dismissedBackupLocalFiles?.toBuilder();
-      _themeVisualDensity = _$v.themeVisualDensity;
-      _themeFontSizeFactor = _$v.themeFontSizeFactor;
-      _diacOptIn = _$v.diacOptIn;
-      _lastBuildId = _$v.lastBuildId;
-      _secureWindow = _$v.secureWindow;
-      _localeOverride = _$v.localeOverride;
-      _fetchWebsiteIcons = _$v.fetchWebsiteIcons;
+          $v.passwordGeneratorCharacterSets?.toBuilder();
+      _manualUserType = $v.manualUserType;
+      _firstLaunchedAt = $v.firstLaunchedAt;
+      _theme = $v.theme;
+      _dismissedBackupLocalFiles = $v.dismissedBackupLocalFiles?.toBuilder();
+      _themeVisualDensity = $v.themeVisualDensity;
+      _themeFontSizeFactor = $v.themeFontSizeFactor;
+      _diacOptIn = $v.diacOptIn;
+      _lastBuildId = $v.lastBuildId;
+      _secureWindow = $v.secureWindow;
+      _localeOverride = $v.localeOverride;
+      _fetchWebsiteIcons = $v.fetchWebsiteIcons;
       _$v = null;
     }
     return this;
@@ -753,14 +771,12 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
 
   @override
   void replace(AppData other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AppData;
   }
 
   @override
-  void update(void Function(AppDataBuilder) updates) {
+  void update(void Function(AppDataBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -770,10 +786,10 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
     try {
       _$result = _$v ??
           new _$AppData._(
-              previousFiles: previousFiles.build(),
+              previousFiles: _previousFiles?.build(),
               passwordGeneratorLength: passwordGeneratorLength,
               passwordGeneratorCharacterSets:
-                  passwordGeneratorCharacterSets.build(),
+                  _passwordGeneratorCharacterSets?.build(),
               manualUserType: manualUserType,
               firstLaunchedAt: firstLaunchedAt,
               theme: theme,
@@ -786,13 +802,13 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               localeOverride: localeOverride,
               fetchWebsiteIcons: fetchWebsiteIcons);
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'previousFiles';
-        previousFiles.build();
+        _previousFiles?.build();
 
         _$failedField = 'passwordGeneratorCharacterSets';
-        passwordGeneratorCharacterSets.build();
+        _passwordGeneratorCharacterSets?.build();
 
         _$failedField = 'dismissedBackupLocalFiles';
         _dismissedBackupLocalFiles?.build();

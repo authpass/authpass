@@ -7,7 +7,7 @@ import 'package:flutter_cache_manager/src/storage/cache_object.dart';
 import 'package:meta/meta.dart';
 
 class AuthPassCacheManager extends CacheManager {
-  factory AuthPassCacheManager({PathUtils pathUtils}) {
+  factory AuthPassCacheManager({required PathUtils pathUtils}) {
     final key = getKey(pathUtils);
     final config = Config(
       getKey(pathUtils),
@@ -22,7 +22,7 @@ class AuthPassCacheManager extends CacheManager {
     return cacheManager;
   }
 
-  AuthPassCacheManager._({@required this.pathUtils, Config config})
+  AuthPassCacheManager._({required this.pathUtils, required Config config})
       : key = getKey(pathUtils),
         super(config);
 

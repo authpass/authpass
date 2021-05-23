@@ -14,11 +14,11 @@ part of 'dropbox_models.dart';
 
 FileListResponse _$FileListResponseFromJson(Map<String, dynamic> json) {
   return FileListResponse(
-    entries: (json['entries'] as List)
-        .map((e) => FileMetadata.fromJson(e as Map<String, dynamic>))
+    entries: (json['entries'] as List<dynamic>?)
+        ?.map((e) => FileMetadata.fromJson(e as Map<String, dynamic>))
         .toList(),
-    cursor: json['cursor'] as String,
-    hasMore: json['has_more'] as bool,
+    cursor: json['cursor'] as String?,
+    hasMore: json['has_more'] as bool?,
   );
 }
 
@@ -31,10 +31,10 @@ Map<String, dynamic> _$FileListResponseToJson(FileListResponse instance) =>
 
 FileSearchResponse _$FileSearchResponseFromJson(Map<String, dynamic> json) {
   return FileSearchResponse(
-    matches: (json['matches'] as List)
-        .map((e) => FileSearchMatch.fromJson(e as Map<String, dynamic>))
+    matches: (json['matches'] as List<dynamic>?)
+        ?.map((e) => FileSearchMatch.fromJson(e as Map<String, dynamic>))
         .toList(),
-    hasMore: json['has_more'] as bool,
+    hasMore: json['has_more'] as bool?,
   );
 }
 
@@ -46,7 +46,9 @@ Map<String, dynamic> _$FileSearchResponseToJson(FileSearchResponse instance) =>
 
 FileSearchMatch _$FileSearchMatchFromJson(Map<String, dynamic> json) {
   return FileSearchMatch(
-    metadata: FileMetadataV2.fromJson(json['metadata'] as Map<String, dynamic>),
+    metadata: json['metadata'] == null
+        ? null
+        : FileMetadataV2.fromJson(json['metadata'] as Map<String, dynamic>),
   );
 }
 
@@ -57,7 +59,9 @@ Map<String, dynamic> _$FileSearchMatchToJson(FileSearchMatch instance) =>
 
 FileMetadataV2 _$FileMetadataV2FromJson(Map<String, dynamic> json) {
   return FileMetadataV2(
-    metadata: FileMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
+    metadata: json['metadata'] == null
+        ? null
+        : FileMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
   );
 }
 
@@ -68,11 +72,11 @@ Map<String, dynamic> _$FileMetadataV2ToJson(FileMetadataV2 instance) =>
 
 FileMetadata _$FileMetadataFromJson(Map<String, dynamic> json) {
   return FileMetadata(
-    id: json['id'] as String,
-    tag: json['.tag'] as String,
-    name: json['name'] as String,
-    pathDisplay: json['path_display'] as String,
-    rev: json['rev'] as String,
+    id: json['id'] as String?,
+    tag: json['.tag'] as String?,
+    name: json['name'] as String?,
+    pathDisplay: json['path_display'] as String?,
+    rev: json['rev'] as String?,
   );
 }
 

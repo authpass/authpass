@@ -3,16 +3,16 @@ import 'package:flutter/widgets.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
-    Key key,
+    Key? key,
     this.child,
     this.onPressed,
     this.icon,
     this.large = true,
   }) : super(key: key);
 
-  final Widget child;
-  final VoidCallback onPressed;
-  final Widget icon;
+  final Widget? child;
+  final VoidCallback? onPressed;
+  final Widget? icon;
   final bool large;
 
   @override
@@ -23,9 +23,9 @@ class PrimaryButton extends StatelessWidget {
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              icon,
+              icon!,
               const SizedBox(width: 8.0),
-              child,
+              child!,
             ],
           );
     return Theme(

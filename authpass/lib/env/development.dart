@@ -10,5 +10,5 @@ class Development extends EnvAppBase {
   String get storageNamespace => '${super.storageNamespace ?? ''}development';
 
   @override
-  EnvSecrets get secrets => EnvSecrets.nullSecrets;
+  EnvSecrets? get secrets => EnvSecrets.nullSecrets;
 }

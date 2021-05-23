@@ -23,5 +23,5 @@ class AuthPassPlatform {
   static String get operatingSystemVersion =>
       kIsWeb ? 'web' : Platform.operatingSystemVersion;
 
-  static String get localeName => kIsWeb ? null : Platform.localeName;
+  static String? get localeName => kIsWeb ? null : Platform.localeName;
 }

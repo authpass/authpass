@@ -8,15 +8,15 @@ import 'package:provider/provider.dart';
 
 class SaveFileAsDialogButton extends StatelessWidget {
   const SaveFileAsDialogButton({
-    @required this.file,
+    required this.file,
     this.child,
     this.onSave,
     this.includeLocal = false,
   }) : assert(file != null);
 
   final KdbxOpenedFile file;
-  final Widget child;
-  final OnSave onSave;
+  final Widget? child;
+  final OnSave? onSave;
   final bool includeLocal;
 
   void _showBottomModal(BuildContext context) {
@@ -48,7 +48,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
     return [
       if (includeLocal)
         SaveFileAs(
-          title: loc.saveAs,
+          title: loc!.saveAs,
           file: file,
           onSave: (fileFuture) {
             Navigator.of(context).pop();
@@ -59,7 +59,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
         ),
       ...cloudStorageBloc.availableCloudStorage.map(
         (cs) => SaveFileAs(
-          title: loc.saveAs,
+          title: loc!.saveAs,
           file: file,
           onSave: (saveFuture) {
             Navigator.of(context).pop();
@@ -76,7 +76,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
     if (child != null) {
       return TextButton(
         onPressed: () => _showBottomModal(context),
-        child: child,
+        child: child!,
       );
     }
     return IconButton(

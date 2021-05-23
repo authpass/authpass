@@ -21,11 +21,11 @@ abstract class EnvAppBase extends Env {
   static const _ENV_STORAGE_NAMESPACE = 'AUTHPASS_STORAGE_NAMESPACE';
 
   @override
-  EnvSecrets get secrets;
+  EnvSecrets? get secrets;
 
 //  String get oauthRedirectUri => 'authpass://oauth/code';
   @override
-  String get oauthRedirectUri => oauthRedirectUriSupported
+  String? get oauthRedirectUri => oauthRedirectUriSupported
       // for clients not supporting https:// handling, it will redirect
       // to authpass://
       ? 'https://links.authpass.app/app/oauth/code'
@@ -37,7 +37,7 @@ abstract class EnvAppBase extends Env {
       AuthPassPlatform.isMacOS;
 
   @override
-  String get storageNamespaceFromEnvironment =>
+  String? get storageNamespaceFromEnvironment =>
       AuthPassPlatform.environment[_ENV_STORAGE_NAMESPACE];
 
   Future<void> start() async {
@@ -56,7 +56,7 @@ abstract class EnvAppBase extends Env {
       ..packageName = pi?.packageName ?? _DEFAULT_PACKAGE_NAME);
   }
 
-  Future<PackageInfo> _getPackageInfo() async {
+  Future<PackageInfo?> _getPackageInfo() async {
     try {
       // linux and windows don't support this right now.
       if (AuthPassPlatform.isWeb ||

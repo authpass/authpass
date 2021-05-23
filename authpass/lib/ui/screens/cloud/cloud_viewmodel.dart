@@ -9,9 +9,9 @@ part 'cloud_viewmodel.freezed.dart';
 @freezed
 abstract class EmailViewModel with _$EmailViewModel {
   const factory EmailViewModel({
-    @nullable EmailMessage emailMessage,
-    @nullable MimeMessage mimeMessage,
-    @nullable Mailbox mailbox,
-    @nullable KdbxEntry kdbxEntry,
+    @nullable EmailMessage? emailMessage,
+    @nullable MimeMessage? mimeMessage,
+    @nullable Mailbox? mailbox,
+    @nullable KdbxEntry? kdbxEntry,
   }) = _EmailViewModel;
 }

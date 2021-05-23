@@ -6,16 +6,16 @@ enum StorageExceptionType {
 
 class StorageException implements Exception {
   StorageException._(this.type, this.details, {this.errorBody});
-  factory StorageException.conflict(String details, {String errorBody}) =
+  factory StorageException.conflict(String details, {String? errorBody}) =
       StorageConflictException;
-  factory StorageException.unknown(String details, {String errorBody}) =
+  factory StorageException.unknown(String details, {String? errorBody}) =
       StorageUnknownException;
   factory StorageException.authentication(String details) =
       AuthenticationException;
 
   final StorageExceptionType type;
   final String details;
-  final String errorBody;
+  final String? errorBody;
 
   @override
   String toString() {
@@ -24,7 +24,7 @@ class StorageException implements Exception {
 }
 
 class StorageConflictException extends StorageException {
-  StorageConflictException(String details, {String errorBody})
+  StorageConflictException(String details, {String? errorBody})
       : super._(StorageExceptionType.conflict, details, errorBody: errorBody);
 }
 
@@ -34,6 +34,6 @@ class AuthenticationException extends StorageException {
 }
 
 class StorageUnknownException extends StorageException {
-  StorageUnknownException(String details, {String errorBody})
+  StorageUnknownException(String details, {String? errorBody})
       : super._(StorageExceptionType.unknown, details, errorBody: errorBody);
 }

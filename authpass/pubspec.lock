@@ -282,7 +282,7 @@ packages:
     source: hosted
     version: "4.0.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -1119,8 +1119,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/simple_form_field_validator"
-      ref: "05ca3bddea2fda0d94e672839a53c68f367be3bc"
-      resolved-ref: "05ca3bddea2fda0d94e672839a53c68f367be3bc"
+      ref: "4158191244681ac259a7bb060ef0b8a98db502d2"
+      resolved-ref: "4158191244681ac259a7bb060ef0b8a98db502d2"
       url: "https://github.com/hpoul/flutter_utils.git"
     source: git
     version: "1.0.0"

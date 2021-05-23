@@ -19,7 +19,7 @@ Future<void> initWinSparkle(Env env) async {
 
     final appInfo = await env.getAppInfo();
     final companyName = 'CodeUX.design'.toNativeUtf16();
-    final name = appInfo.appName.toNativeUtf16();
+    final name = appInfo.appName!.toNativeUtf16();
     final appVersion = appInfo.versionLabel.toNativeUtf16();
     freePointers.addAll([companyName, name, appVersion]);
 //    final

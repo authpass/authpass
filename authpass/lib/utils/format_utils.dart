@@ -6,7 +6,7 @@ final _logger = Logger('format_utils');
 
 class FormatUtils {
   FormatUtils({
-    @required String locale,
+    required String locale,
   }) : _dateFormatFull = DateFormat.yMd(locale).add_Hms() {
     _logger.finer('Initialized with locale $locale');
   }

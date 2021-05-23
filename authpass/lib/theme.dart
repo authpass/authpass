@@ -108,7 +108,7 @@ Typography _getTypography() {
 final macOsVersionPattern = RegExp(r'Darwin (\d+)\.(\d+)');
 
 bool _isDarwinVersion(
-    {@required int minimumMajor, @required int minimumMinor}) {
+    {required int minimumMajor, required int minimumMinor}) {
   assert(minimumMajor != null);
   assert(minimumMinor != null);
   final match =
@@ -118,8 +118,8 @@ bool _isDarwinVersion(
         'Unable to parse mac os version ${AuthPassPlatform.operatingSystemVersion}');
     return false;
   }
-  final major = int.parse(match.group(1));
-  final minor = int.parse(match.group(2));
+  final major = int.parse(match.group(1)!);
+  final minor = int.parse(match.group(2)!);
   print('Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
   _logger.finest(
       'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
@@ -138,8 +138,8 @@ ThemeData createDarkTheme() {
   final colorScheme = ColorScheme.dark(
     primary: AuthPassTheme.primaryColor,
     onPrimary: Colors.white,
-    secondary: AuthPassTheme.primarySwatch[300],
-    secondaryVariant: AuthPassTheme.primarySwatch[500],
+    secondary: AuthPassTheme.primarySwatch[300]!,
+    secondaryVariant: AuthPassTheme.primarySwatch[500]!,
   );
   return _customize(ThemeData(
     typography: _getTypography(),

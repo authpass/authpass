@@ -8,7 +8,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
 
 class GroupEditScreen extends StatefulWidget {
-  const GroupEditScreen({Key key, this.group}) : super(key: key);
+  const GroupEditScreen({Key? key, this.group}) : super(key: key);
 
   static MaterialPageRoute<void> route(KdbxGroup group) =>
       MaterialPageRoute<void>(
@@ -16,7 +16,7 @@ class GroupEditScreen extends StatefulWidget {
         builder: (_) => GroupEditScreen(group: group),
       );
 
-  final KdbxGroup group;
+  final KdbxGroup? group;
 
   @override
   _GroupEditScreenState createState() => _GroupEditScreenState();
@@ -31,10 +31,10 @@ class _GroupEditScreenState extends State<GroupEditScreen>
   final formKey = GlobalKey<FormState>();
 
   @override
-  KdbxFile get file => widget.group.file;
+  KdbxFile? get file => widget.group!.file;
 
   @override
-  Changeable get kdbxObject => widget.group;
+  Changeable? get kdbxObject => widget.group;
 
   @override
   Widget build(BuildContext context) {
@@ -64,35 +64,35 @@ class _GroupEditScreenState extends State<GroupEditScreen>
 }
 
 class GroupEdit extends StatefulWidget {
-  const GroupEdit({Key key, this.group, this.formKey}) : super(key: key);
+  const GroupEdit({Key? key, this.group, this.formKey}) : super(key: key);
 
-  final KdbxGroup group;
-  final GlobalKey<FormState> formKey;
+  final KdbxGroup? group;
+  final GlobalKey<FormState>? formKey;
 
   @override
   _GroupEditState createState() => _GroupEditState();
 }
 
 class _GroupEditState extends State<GroupEdit> {
-  Iterable<String> _breadcrumbNames() =>
-      widget.group.breadcrumbs.map((e) => e.name.get());
+  Iterable<String?> _breadcrumbNames() =>
+      widget.group!.breadcrumbs.map((e) => e.name.get());
 
   final _nameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.group.name.get();
+    _nameController.text = widget.group!.name.get()!;
     _nameController.selection =
         TextSelection(baseOffset: 0, extentOffset: _nameController.text.length);
   }
 
   void _saveIcon(SelectedIcon icon) {
     icon.when(predefined: (predefined) {
-      widget.group.customIcon = null;
-      widget.group.icon.set(predefined);
+      widget.group!.customIcon = null;
+      widget.group!.icon.set(predefined);
     }, custom: (custom) {
-      widget.group.customIcon = custom;
+      widget.group!.customIcon = custom;
     });
   }
 
@@ -107,28 +107,32 @@ class _GroupEditState extends State<GroupEdit> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconSelectorFormField(
-              initialValue: SelectedIcon.fromObject(widget.group),
-              onSaved: _saveIcon,
+              initialValue: SelectedIcon.fromObject(widget.group!),
+              onSaved: (icon) {
+                if (icon != null) {
+                  _saveIcon(icon);
+                }
+              },
               onChanged: _saveIcon,
-              kdbxFile: widget.group.file,
+              kdbxFile: widget.group!.file,
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
               label: 'Group:',
               value: _breadcrumbNames().join(' » '),
-              onTap: widget.group.parent == null
+              onTap: widget.group!.parent == null
                   ? null
                   : () async {
                       // TODO
-                      final file = widget.group.file;
+                      final file = widget.group!.file!;
                       final newGroupList = await Navigator.of(context).push(
-                          GroupListFlat.route({widget.group.parent},
+                          GroupListFlat.route({widget.group!.parent},
                               groupListMode: GroupListMode.singleSelect,
                               rootGroup: file.body.rootGroup));
                       final newGroup = newGroupList?.first;
                       if (newGroup != null) {
-                        final oldGroup = widget.group.parent;
-                        file.move(widget.group, newGroup);
+                        final oldGroup = widget.group!.parent;
+                        file.move(widget.group!, newGroup);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content:
@@ -136,7 +140,7 @@ class _GroupEditState extends State<GroupEdit> {
                             action: SnackBarAction(
                                 label: 'Undo',
                                 onPressed: () {
-                                  file.move(widget.group, oldGroup);
+                                  file.move(widget.group!, oldGroup!);
                                 }),
                           ),
                         );
@@ -158,10 +162,10 @@ class _GroupEditState extends State<GroupEdit> {
 //    onSaved: onSaved,
               autofocus: true,
               onSaved: (value) {
-                widget.group.name.set(value);
+                widget.group!.name.set(value);
               },
               onChanged: (value) {
-                widget.group.name.set(value);
+                widget.group!.name.set(value);
               },
             ),
           ],

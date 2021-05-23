@@ -14,7 +14,7 @@ part of 'onedrive_models.dart';
 
 ListChildrenResponse _$ListChildrenResponseFromJson(Map<String, dynamic> json) {
   return ListChildrenResponse(
-    value: (json['value'] as List)
+    value: (json['value'] as List<dynamic>)
         .map((e) => OneDriveItem.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
@@ -28,10 +28,10 @@ Map<String, dynamic> _$ListChildrenResponseToJson(
 
 OneDriveItem _$OneDriveItemFromJson(Map<String, dynamic> json) {
   return OneDriveItem(
-    id: json['id'] as String,
-    cTag: json['cTag'] as String,
-    eTag: json['eTag'] as String,
-    name: json['name'] as String,
+    id: json['id'] as String?,
+    cTag: json['cTag'] as String?,
+    eTag: json['eTag'] as String?,
+    name: json['name'] as String?,
     parentReference: OneDriveItemParent.fromJson(
         json['parentReference'] as Map<String, dynamic>),
     folder: json['folder'] == null
@@ -56,7 +56,7 @@ Map<String, dynamic> _$OneDriveItemToJson(OneDriveItem instance) =>
 
 OneDriveItemParent _$OneDriveItemParentFromJson(Map<String, dynamic> json) {
   return OneDriveItemParent(
-    path: json['path'] as String,
+    path: json['path'] as String?,
   );
 }
 
@@ -67,7 +67,7 @@ Map<String, dynamic> _$OneDriveItemParentToJson(OneDriveItemParent instance) =>
 
 OneDriveFolder _$OneDriveFolderFromJson(Map<String, dynamic> json) {
   return OneDriveFolder(
-    childCount: json['childCount'] as int,
+    childCount: json['childCount'] as int?,
   );
 }
 
@@ -78,7 +78,7 @@ Map<String, dynamic> _$OneDriveFolderToJson(OneDriveFolder instance) =>
 
 OneDriveFile _$OneDriveFileFromJson(Map<String, dynamic> json) {
   return OneDriveFile(
-    mimeType: json['mimeType'] as String,
+    mimeType: json['mimeType'] as String?,
   );
 }
 

@@ -13,7 +13,7 @@ class CloudStorageHelper implements CloudStorageHelperBase {
   final Env env;
   @override
   final PathUtil pathUtil;
-  BiometricStorageFile _storageFile;
+  BiometricStorageFile? _storageFile;
 
   Future<BiometricStorageFile> _getStorageFile() async =>
       _storageFile ??= await BiometricStorage().getStorage(
@@ -36,8 +36,8 @@ class CloudStorageHelper implements CloudStorageHelperBase {
   }
 
   @override
-  Future<String> loadCredentials(String cloudStorageId) async {
-    return (await _readDataMap())[cloudStorageId] as String;
+  Future<String?> loadCredentials(String cloudStorageId) async {
+    return (await _readDataMap())[cloudStorageId] as String?;
   }
 
   @override

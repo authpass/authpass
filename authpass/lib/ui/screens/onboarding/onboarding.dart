@@ -35,9 +35,9 @@ class OnboardingScreen extends StatelessWidget {
 }
 
 class ExpandToFitScreen extends StatelessWidget {
-  const ExpandToFitScreen({Key key, this.child}) : super(key: key);
+  const ExpandToFitScreen({Key? key, this.child}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +58,12 @@ class ExpandToFitScreen extends StatelessWidget {
 
 class OnboardingContent extends StatelessWidget {
   const OnboardingContent({
-    Key key,
-    @required this.loc,
-    @required this.theme,
+    Key? key,
+    required this.loc,
+    required this.theme,
   }) : super(key: key);
 
-  final AppLocalizations loc;
+  final AppLocalizations? loc;
   final ThemeData theme;
 
   @override
@@ -78,7 +78,7 @@ class OnboardingContent extends StatelessWidget {
       if (mq.size.height < 600) {
         imageScaleFactor *= 0.5;
         onboardingHeadlineStyle =
-            onboardingHeadlineStyle.apply(fontSizeFactor: 0.5);
+            onboardingHeadlineStyle!.apply(fontSizeFactor: 0.5);
       }
     }
     return Column(
@@ -98,23 +98,23 @@ class OnboardingContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          loc.onboardingHeadline,
+          loc!.onboardingHeadline,
           textAlign: TextAlign.center,
           style: onboardingHeadlineStyle,
         ),
         const SizedBox(height: 16),
         const Expanded(child: SizedBox()),
         Text(
-          loc.onboardingQuestion,
+          loc!.onboardingQuestion,
           textAlign: TextAlign.center,
           style:
-              theme.textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),
+              theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         // Expanded(child: const SizedBox(height: 32)),
         OnboardingButton(
           image: Image.asset('assets/images/safe-filled-v2.webp'),
-          labelText: loc.onboardingYesOpenPasswords,
+          labelText: loc!.onboardingYesOpenPasswords,
           onPressed: () {
             SelectFileScreen.navigate(context);
             context.read<Analytics>().events.trackOnboardingExisting();
@@ -124,7 +124,7 @@ class OnboardingContent extends StatelessWidget {
         Container(
           child: OnboardingButton(
             image: Image.asset('assets/images/safe-empty-v2.webp'),
-            labelText: loc.onboardingNoCreate,
+            labelText: loc!.onboardingNoCreate,
             onPressed: () {
               Navigator.of(context).push(CreateFile.route());
               context.read<Analytics>().events.trackOnboardingNew();
@@ -140,10 +140,10 @@ class OnboardingContent extends StatelessWidget {
 
 class OnboardingButton extends StatelessWidget {
   const OnboardingButton({
-    Key key,
-    @required this.image,
-    @required this.labelText,
-    @required this.onPressed,
+    Key? key,
+    required this.image,
+    required this.labelText,
+    required this.onPressed,
   }) : super(key: key);
 
   final Image image;
@@ -156,7 +156,7 @@ class OnboardingButton extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     _logger.fine('with: ${mq.size.width}');
-    var textStyle = theme.primaryTextTheme.bodyText1.apply(
+    var textStyle = theme.primaryTextTheme.bodyText1!.apply(
       fontSizeFactor: 1.5,
       shadows: const [
         Shadow(

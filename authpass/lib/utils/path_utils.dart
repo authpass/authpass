@@ -21,12 +21,12 @@ class PathUtils implements PathUtil {
 
   final Map<String, Directory> directoryCache = {};
 
-  static String _cacheKey(String type, String subNamespace) {
+  static String _cacheKey(String type, String? subNamespace) {
     return '$type$subNamespace';
   }
 
   @override
-  Future<Directory> getTemporaryDirectory({String subNamespace}) async {
+  Future<Directory> getTemporaryDirectory({String? subNamespace}) async {
     return directoryCache[_cacheKey('temp', subNamespace)] ??= _namespaced(
       await path_provider.getTemporaryDirectory(),
       subNamespace: subNamespace,
@@ -35,7 +35,7 @@ class PathUtils implements PathUtil {
 
   /// Document directory for "internal" kdbx files which should be accessible
   /// by the user. - this directory is NOT namespaced during development.
-  Future<Directory> getAppDocDirectory({@required bool ensureCreated}) async {
+  Future<Directory> getAppDocDirectory({required bool ensureCreated}) async {
     assert(ensureCreated != null);
     final dir = await path_provider.getApplicationDocumentsDirectory();
     if (ensureCreated) {
@@ -60,17 +60,17 @@ class PathUtils implements PathUtil {
     return _namespaced(await _getDesktopDirectory());
   }
 
-  Directory _namespaced(Directory base, {String subNamespace}) {
+  Directory _namespaced(Directory base, {String? subNamespace}) {
     final namespace = Env.value?.storageNamespace;
     if (namespace == null && subNamespace == null) {
       return base;
     }
     return Directory(
-        path.joinAll([base.path, namespace, subNamespace].whereNotNull()))
+        path.joinAll([base.path, namespace, subNamespace].whereNotNull() as Iterable<String>))
       ..create(recursive: true);
   }
 
-  String get namespace => Env.value?.storageNamespace;
+  String? get namespace => Env.value?.storageNamespace;
 
   Future<Directory> getLogDirectory() async {
     return Directory(
@@ -80,14 +80,14 @@ class PathUtils implements PathUtil {
   Future<Directory> _getDesktopDirectory() async {
     // https://stackoverflow.com/a/32937974/109219
     final userHome = AuthPassPlatform.environment['HOME'] ??
-        Platform.environment['USERPROFILE'];
+        Platform.environment['USERPROFILE']!;
     final dataDir = Directory(path.join(userHome, '.authpass', 'data'));
     await dataDir.create(recursive: true);
     return dataDir;
   }
 
   Future<File> saveToTempDirectory(Uint8List bytes,
-      {@required String dirPrefix, @required String fileName}) async {
+      {required String dirPrefix, required String fileName}) async {
     assert(fileName != null);
     final tempDirectory = await getTemporaryDirectory();
     final dir = await tempDirectory.createTemp();

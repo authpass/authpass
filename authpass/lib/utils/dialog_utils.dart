@@ -21,11 +21,11 @@ final _logger = Logger('authpass.dialog_utils');
 class DialogUtils {
   static Future<dynamic> showSimpleAlertDialog(
     BuildContext context,
-    String title,
-    String content, {
-    List<Widget> moreActions,
+    String? title,
+    String? content, {
+    List<Widget>? moreActions,
     String routeName = '/dialog/alert/',
-    @NonNls @required String routeAppend,
+    @NonNls required String routeAppend,
   }) {
     final materialLoc = MaterialLocalizations.of(context);
     return showDialog<dynamic>(
@@ -34,7 +34,7 @@ class DialogUtils {
         builder: (context) {
           return AlertDialog(
             title: title == null ? null : Text(title),
-            content: Text(content),
+            content: Text(content!),
             actions: <Widget>[
               ...?moreActions,
               TextButton(
@@ -50,9 +50,9 @@ class DialogUtils {
 
   static Future<dynamic> showErrorDialog(
     BuildContext context,
-    String title,
-    String content, {
-    @NonNls String routeAppend,
+    String? title,
+    String? content, {
+    @NonNls String? routeAppend,
   }) {
     final loc = AppLocalizations.of(context);
     return showSimpleAlertDialog(
@@ -70,7 +70,7 @@ class DialogUtils {
                     errorDescription: 'title: $title\ncontent: $content',
                   );
                 },
-                child: Text(loc.dialogSendErrorReport),
+                child: Text(loc!.dialogSendErrorReport),
               ),
             ],
     );
@@ -81,8 +81,8 @@ class DialogUtils {
   }
 
   static Future<bool> showConfirmDialog({
-    @required BuildContext context,
-    @required ConfirmDialogParams params,
+    required BuildContext context,
+    required ConfirmDialogParams params,
   }) async {
     return (await showDialog<bool>(
           context: context,
@@ -122,21 +122,21 @@ class DialogUtils {
 }
 
 class LogViewerDialog extends StatelessWidget {
-  const LogViewerDialog({Key key, this.title, this.log}) : super(key: key);
+  const LogViewerDialog({Key? key, this.title, this.log}) : super(key: key);
 
-  final String title;
-  final StringBufferWrapper log;
+  final String? title;
+  final StringBufferWrapper? log;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: title == null ? null : Text(title),
+      title: title == null ? null : Text(title!),
       insetPadding: const EdgeInsets.all(4),
       contentPadding: const EdgeInsets.all(4),
       content: Scrollbar(
         child: SingleChildScrollView(
           child: AnimatedBuilder(
-              animation: log,
+              animation: log!,
               builder: (context, snapshot) {
                 return Text(
                   log.toString(),
@@ -182,34 +182,34 @@ extension BuildContextError on BuildContext {
 class ConfirmDialogParams {
   ConfirmDialogParams({
     this.title,
-    @required this.content,
+    required this.content,
     this.positiveButtonText = 'Ok',
     this.negativeButtonText = 'Cancel',
   });
 
-  final String title;
+  final String? title;
   final String content;
   final String positiveButtonText;
   final String negativeButtonText;
 }
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({Key key, this.params}) : super(key: key);
-  final ConfirmDialogParams params;
+  const ConfirmDialog({Key? key, this.params}) : super(key: key);
+  final ConfirmDialogParams? params;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: params.title != null ? Text(params.title) : null,
-      content: Text(params.content),
+      title: params!.title != null ? Text(params!.title!) : null,
+      content: Text(params!.content),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text(params.negativeButtonText),
+          child: Text(params!.negativeButtonText),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(params.positiveButtonText),
+          child: Text(params!.positiveButtonText),
         ),
       ],
     );
@@ -219,7 +219,7 @@ class ConfirmDialog extends StatelessWidget {
 mixin DialogMixin<T> on Widget {
   String get name;
 
-  Future<T> show(BuildContext context) => showDialog<T>(
+  Future<T?> show(BuildContext context) => showDialog<T>(
         context: context,
         routeSettings: RouteSettings(name: name),
         builder: (context) => this,
@@ -229,16 +229,16 @@ mixin DialogMixin<T> on Widget {
 class SimpleAuthCodePromptDialog extends StatefulWidget
     with DialogMixin<String> {
   const SimpleAuthCodePromptDialog({
-    Key key,
+    Key? key,
     this.title,
     this.labelText,
     this.helperText,
     this.initialValue = '',
   }) : super(key: key);
 
-  final String title;
-  final String labelText;
-  final String helperText;
+  final String? title;
+  final String? labelText;
+  final String? helperText;
   final String initialValue;
 
   @override
@@ -251,7 +251,7 @@ class SimpleAuthCodePromptDialog extends StatefulWidget
 
 class _SimpleAuthCodePromptDialogState
     extends State<SimpleAuthCodePromptDialog> {
-  FilePickerState _fps;
+  FilePickerState? _fps;
 
   @override
   void didChangeDependencies() {
@@ -294,19 +294,19 @@ class _SimpleAuthCodePromptDialogState
 
 class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
   const SimplePromptDialog({
-    Key key,
+    Key? key,
     this.title,
     this.labelText,
     this.initialValue = '',
     this.helperText,
   }) : super(key: key);
-  final String title;
-  final String labelText;
-  final String helperText;
+  final String? title;
+  final String? labelText;
+  final String? helperText;
   final String initialValue;
 
   @Deprecated('Use [dialog.show] instead.')
-  static Future<String> showPrompt(
+  static Future<String?> showPrompt(
           BuildContext context, SimplePromptDialog dialog) =>
       dialog.show(context);
 
@@ -319,29 +319,29 @@ class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
 
 class _SimplePromptDialogState extends State<SimplePromptDialog>
     with WidgetsBindingObserver {
-  TextEditingController _controller;
-  AppLifecycleState _previousState;
-  String _previousClipboard;
+  TextEditingController? _controller;
+  AppLifecycleState? _previousState;
+  String? _previousClipboard;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialValue);
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     _readClipboard();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
   Future<void> _readClipboard({bool setIfChanged = false}) async {
     final text = await _getClipboardText();
     if (setIfChanged && text != _previousClipboard && text != null) {
-      _controller.text = text;
-      _controller.selection =
+      _controller!.text = text;
+      _controller!.selection =
           TextSelection(baseOffset: 0, extentOffset: text.length);
     }
     _previousClipboard = text;
@@ -360,7 +360,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: widget.title == null ? null : Text(widget.title),
+      title: widget.title == null ? null : Text(widget.title!),
       content: Container(
         constraints: const BoxConstraints(minWidth: 400.0),
         child: Row(
@@ -369,7 +369,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
               tooltip: 'Paste from clipboard',
               icon: const Icon(FontAwesomeIcons.paste),
               onPressed: () async {
-                _controller.text = await _getClipboardText() ?? '';
+                _controller!.text = await _getClipboardText() ?? '';
               },
             ),
             Expanded(
@@ -384,7 +384,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
                 ),
                 autofocus: true,
                 onEditingComplete: () {
-                  Navigator.of(context).pop(_controller.text);
+                  Navigator.of(context).pop(_controller!.text);
                 },
               ),
             ),
@@ -400,7 +400,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(_controller.text);
+            Navigator.of(context).pop(_controller!.text);
           },
           child: const Text('Ok'),
         ),
@@ -409,6 +409,6 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
   }
 }
 
-Future<String> _getClipboardText() async {
+Future<String?> _getClipboardText() async {
   return (await Clipboard.getData('text/plain'))?.text;
 }

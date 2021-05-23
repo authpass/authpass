@@ -14,9 +14,9 @@ typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
 class RetryFutureBuilder<T> extends StatefulWidget {
   const RetryFutureBuilder({
-    Key key,
-    @required this.produceFuture,
-    @required this.builder,
+    Key? key,
+    required this.produceFuture,
+    required this.builder,
     this.scaffoldBuilder = defaultScaffoldBuilder,
   }) : super(key: key);
 
@@ -32,8 +32,8 @@ class RetryFutureBuilder<T> extends StatefulWidget {
   _RetryFutureBuilderState createState() => _RetryFutureBuilderState<T>();
 }
 
-class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
-  Future<T> _future;
+class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T?>> {
+  Future<T?>? _future;
 
   @override
   void didChangeDependencies() {
@@ -42,7 +42,7 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
   }
 
   @override
-  void didUpdateWidget(RetryFutureBuilder<T> oldWidget) {
+  void didUpdateWidget(RetryFutureBuilder<T?> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.produceFuture != widget.produceFuture) {
       _future = widget.produceFuture(context);
@@ -51,7 +51,7 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
+    return FutureBuilder<T?>(
       future: _future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -94,7 +94,7 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
 
 class RetryStreamBuilder<T> extends StatefulWidget {
   const RetryStreamBuilder({
-    Key key,
+    Key? key,
     this.stream,
     this.retry,
     this.builder,
@@ -102,37 +102,37 @@ class RetryStreamBuilder<T> extends StatefulWidget {
     this.initialValue,
   }) : super(key: key);
 
-  final StreamProducer<T> stream;
-  final T initialValue;
-  final DataWidgetBuilder<T> builder;
-  final Future<void> Function() retry;
+  final StreamProducer<T>? stream;
+  final T? initialValue;
+  final DataWidgetBuilder<T>? builder;
+  final Future<void>? Function()? retry;
   final ScaffoldBuilder<T> scaffoldBuilder;
 
   @override
   _RetryStreamBuilderState createState() => _RetryStreamBuilderState<T>();
 }
 
-class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
-  Stream<T> _stream;
+class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T?>> {
+  Stream<T?>? _stream;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _stream = widget.stream(context);
+    _stream = widget.stream!(context);
   }
 
   @override
   Widget build(BuildContext context) {
     final valueStream =
-        _stream is ValueStream<T> ? _stream as ValueStream<T> : null;
-    return StreamBuilder<T>(
+        _stream is ValueStream<T> ? _stream as ValueStream<T?>? : null;
+    return StreamBuilder<T?>(
         stream: _stream,
         initialData: valueStream?.value ?? widget.initialValue,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return widget.scaffoldBuilder(
               context,
-              widget.builder(context, snapshot.data),
+              widget.builder!(context, snapshot.data),
               snapshot,
             );
           }
@@ -148,9 +148,9 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
                     onPressed: () {
                       setState(() {
                         if (widget.retry != null) {
-                          widget.retry();
+                          widget.retry!();
                         } else {
-                          _stream = widget.stream(context);
+                          _stream = widget.stream!(context);
                         }
                       });
                     },

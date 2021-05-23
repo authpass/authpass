@@ -9,13 +9,13 @@ part '_base.freezed.dart';
 enum EnvType { production, development }
 
 abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
-  factory AppInfo([void Function(AppInfoBuilder b) updates]) = _$AppInfo;
+  factory AppInfo([void Function(AppInfoBuilder b)? updates]) = _$AppInfo;
   AppInfo._();
 
-  String get appName;
-  String get version;
-  int get buildNumber;
-  String get packageName;
+  String? get appName;
+  String? get version;
+  int? get buildNumber;
+  String? get packageName;
 
   String get versionLabel => '$version+$buildNumber'; // NON-NLS
 
@@ -25,14 +25,14 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
 @freezed
 abstract class EnvSecrets with _$EnvSecrets {
   const factory EnvSecrets({
-    @required @nullable String analyticsAmplitudeApiKey,
-    @required @nullable String analyticsGoogleAnalyticsId,
-    @required @nullable String googleClientId,
-    @required @nullable String googleClientSecret,
-    @required @nullable String dropboxKey,
-    @required @nullable String dropboxSecret,
-    @required @nullable String microsoftClientId,
-    @required @nullable String microsoftClientSecret,
+    @nullable required String? analyticsAmplitudeApiKey,
+    @nullable required String? analyticsGoogleAnalyticsId,
+    @nullable required String? googleClientId,
+    @nullable required String? googleClientSecret,
+    @nullable required String? dropboxKey,
+    @nullable required String? dropboxSecret,
+    @nullable required String? microsoftClientId,
+    @nullable required String? microsoftClientSecret,
   }) = _EnvSecrets;
 
   static const nullSecrets = EnvSecrets(
@@ -49,12 +49,12 @@ abstract class EnvSecrets with _$EnvSecrets {
 
 abstract class FeatureFlags
     implements Built<FeatureFlags, FeatureFlagsBuilder> {
-  factory FeatureFlags([void Function(FeatureFlagsBuilder b) updates]) =
+  factory FeatureFlags([void Function(FeatureFlagsBuilder b)? updates]) =
       _$FeatureFlags;
   FeatureFlags._();
 
-  bool get authpassCloud;
-  String get authpassCloudUri;
+  bool? get authpassCloud;
+  String? get authpassCloudUri;
 }
 
 abstract class Env {
@@ -67,10 +67,10 @@ abstract class Env {
   static const AuthPassCloud = 'AuthPass Cloud'; // NON-NLS
   static const KeePassExtension = 'kdbx'; // NON-NLS
 
-  static Env value;
+  static Env? value;
 
   final EnvType type;
-  EnvSecrets get secrets;
+  EnvSecrets? get secrets;
 
   String get diacEndpoint => 'https://cloud.authpass.app/diac'; // NON-NLS
 
@@ -79,7 +79,7 @@ abstract class Env {
   /// whether diac is disabled by default, and only enabled through opt-in.
   bool get diacDefaultDisabled => false;
 
-  String get oauthRedirectUri;
+  String? get oauthRedirectUri;
   bool get oauthRedirectUriSupported;
 
   bool get isDebug => type == EnvType.development;
@@ -89,7 +89,7 @@ abstract class Env {
   /// Allows having a "namespace" for different environments.
   /// e.g. for mac os to have a different configuration for
   /// debug build vs. production/app store build.
-  String get storageNamespace => storageNamespaceFromEnvironment;
+  String? get storageNamespace => storageNamespaceFromEnvironment;
 
   /// allow disabling of "onboarding".
   bool get featureOnboarding => true;
@@ -105,7 +105,7 @@ abstract class Env {
   bool get featureCloudStorageWebDav => true;
 
   @protected
-  String get storageNamespaceFromEnvironment;
+  String? get storageNamespaceFromEnvironment;
 
   final FeatureFlags featureFlags = FeatureFlags(
     (b) => b

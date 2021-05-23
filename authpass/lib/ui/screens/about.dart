@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class AuthPassAboutDialog extends StatelessWidget {
-  const AuthPassAboutDialog({Key key, this.env}) : super(key: key);
+  const AuthPassAboutDialog({Key? key, this.env}) : super(key: key);
 
-  final Env env;
+  final Env? env;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class AuthPassAboutDialog extends StatelessWidget {
     final logFiles = loggingUtil.rotatingFileLoggerFiles;
     final loc = AppLocalizations.of(context);
     return FutureBuilder<AppInfo>(
-        future: env.getAppInfo(),
+        future: env!.getAppInfo(),
         builder: (context, snapshot) {
           final appInfo = snapshot.data;
           return AboutDialog(
@@ -43,7 +43,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            applicationName: loc.aboutAppName,
+            applicationName: loc!.aboutAppName,
             applicationVersion: appInfo?.versionLabel,
             applicationLegalese: '© by Herbert Poul, 2019-2020', // NON-NLS
             children: <Widget>[
@@ -83,7 +83,7 @@ class AuthPassAboutDialog extends StatelessWidget {
 
   static PopupMenuItem<VoidCallback> createAboutMenuItem(BuildContext context) {
     final analytics = Provider.of<Analytics>(context, listen: false);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return PopupMenuItem<VoidCallback>(
       value: () {
         analytics.events.trackActionPressed(action: 'about');
@@ -98,10 +98,10 @@ class AuthPassAboutDialog extends StatelessWidget {
 }
 
 class UrlLink extends StatelessWidget {
-  const UrlLink({Key key, this.caption, @NonNls this.url}) : super(key: key);
+  const UrlLink({Key? key, this.caption, @NonNls this.url}) : super(key: key);
 
-  final String caption;
-  final String url;
+  final String? caption;
+  final String? url;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +111,7 @@ class UrlLink extends StatelessWidget {
           border: Border(bottom: Divider.createBorderSide(context))),
       child: InkWell(
         onTap: () {
-          DialogUtils.openUrl(url);
+          DialogUtils.openUrl(url!);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -119,14 +119,14 @@ class UrlLink extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                caption,
+                caption!,
                 style: theme.textTheme.caption,
               ),
               const SizedBox(height: 4),
               Text(
-                url,
+                url!,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyText2
+                style: theme.textTheme.bodyText2!
                     .apply(color: theme.primaryColor, fontSizeFactor: 0.95)
                     .copyWith(fontWeight: FontWeight.bold),
               ),

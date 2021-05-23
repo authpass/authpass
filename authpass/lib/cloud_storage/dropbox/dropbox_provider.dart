@@ -24,7 +24,7 @@ const _METADATA_KEY_DROPBOX_DATA = 'dropbox.file_metadata';
 const _HEADER_DOWNLOAD_METADATA = 'Dropbox-API-Result';
 
 class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
-  DropboxProvider({@required this.env, @required CloudStorageHelperBase helper})
+  DropboxProvider({required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
 
   static const _oauthEndpoint =
@@ -69,26 +69,26 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final credentials = oauth2.Credentials.fromJson(stored);
     return oauth2.Client(
       credentials,
-      identifier: env.secrets.dropboxKey,
-      secret: env.secrets.dropboxSecret,
+      identifier: env.secrets!.dropboxKey,
+      secret: env.secrets!.dropboxSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
   }
 
   @override
-  Future<oauth2.Client> clientFromAuthenticationFlow<
+  Future<oauth2.Client?> clientFromAuthenticationFlow<
       TF extends UserAuthenticationPromptResult,
       UF extends UserAuthenticationPromptData<TF>>(prompt) async {
     final grant = oauth2.AuthorizationCodeGrant(
-      env.secrets.dropboxKey,
+      env.secrets!.dropboxKey!,
       Uri.parse(_oauthEndpoint),
       Uri.parse(_oauthToken),
-      secret: env.secrets.dropboxSecret,
+      secret: env.secrets!.dropboxSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
 //    final authUrl = grant.getAuthorizationUrl(null);
     final authUrl = grant.getAuthorizationUrl(
-        env.oauthRedirectUri != null ? Uri.parse(env.oauthRedirectUri) : null);
+        env.oauthRedirectUri != null ? Uri.parse(env.oauthRedirectUri!) : null);
     final params = Map<String, String>.from(
         authUrl.queryParameters); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
@@ -135,8 +135,8 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     return SearchResponse(
       (srb) => srb
         ..results.addAll(
-          jsonResponse.matches.map((responseEntity) {
-            final metadata = responseEntity.metadata.metadata;
+          jsonResponse.matches!.map((responseEntity) {
+            final metadata = responseEntity.metadata!.metadata!;
             return metadata.toCloudStorageEntity();
           }),
         )
@@ -145,7 +145,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   }
 
   @override
-  Future<SearchResponse> list({CloudStorageEntity parent}) async {
+  Future<SearchResponse> list({CloudStorageEntity? parent}) async {
     final listUri = Uri.parse('https://api.dropboxapi.com/2/files/list_folder');
     final client = await requireAuthenticatedClient();
     final response = await client.post(
@@ -171,7 +171,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     return SearchResponse(
       (srb) => srb
         ..results.addAll(
-          jsonResponse.entries.map((metadata) {
+          jsonResponse.entries!.map((metadata) {
             return metadata.toCloudStorageEntity();
           }),
         )
@@ -199,7 +199,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     if (response.statusCode ~/ 100 != 2) {
       _logger.warning('Got error code ${response.statusCode}');
       final contentType =
-          ContentType.parse(response.headers[HttpHeaders.contentTypeHeader]);
+          ContentType.parse(response.headers[HttpHeaders.contentTypeHeader]!);
       if (contentType.subType == ContentType.json.subType) {
         final jsonBody = json.decode(response.body) as Map<String, dynamic>;
         if (jsonBody['error_summary'] != null) {
@@ -227,12 +227,12 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   @override
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic> previousMetadata) async {
+      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     return await _upload(file.id, bytes, previousMetadata: previousMetadata);
   }
 
-  Future<Map<String, dynamic>> _upload(String path, Uint8List bytes,
-      {Map<String, dynamic> previousMetadata, bool update = true}) async {
+  Future<Map<String, dynamic>> _upload(String? path, Uint8List bytes,
+      {Map<String, dynamic>? previousMetadata, bool update = true}) async {
     dynamic mode;
     if (update) {
       mode = 'overwrite';
@@ -290,9 +290,10 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   @override
   Future<FileSource> createEntity(
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
-    final filePath = saveAs.parent == null
+    final parent = saveAs.parent;
+    final filePath = parent == null
         ? '/${saveAs.fileName}'
-        : path.join(saveAs.parent?.id, saveAs.fileName);
+        : path.join(parent.id ?? '', saveAs.fileName);
     final metadataJson = await _upload(filePath, bytes, update: false);
     final metadata = FileMetadata.fromJson(metadataJson);
     return toFileSource(

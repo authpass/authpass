@@ -31,6 +31,7 @@ import 'package:autofill_service/autofill_service.dart';
 import 'package:badges/badges.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:collection/collection.dart' show IterableExtension;
 import 'package:diac_client/diac_client.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
@@ -52,25 +53,25 @@ class EntryViewModel implements Comparable<EntryViewModel> {
   EntryViewModel(this.entry, this.kdbxBloc)
       : label = entry.label,
         _labelComparable = entry.label?.toLowerCase() ?? '',
-        groupNames = _createGroupNames(entry.parent),
+        groupNames = _createGroupNames(entry.parent!),
         fileColor = kdbxBloc.fileForKdbxFile(entry.file).openedFile.color;
 
   static const websiteKey = KdbxKeyCommon.URL;
 
   final KdbxBloc kdbxBloc;
   final KdbxEntry entry;
-  String _website;
+  String? _website;
 
-  String get website => _website ??= _normalizeUrl();
-  final String label;
+  String? get website => _website ??= _normalizeUrl();
+  final String? label;
   final String _labelComparable;
-  final List<String> groupNames;
-  final Color fileColor;
+  final List<String?> groupNames;
+  final Color? fileColor;
 
-  static List<String> _createGroupNames(KdbxGroup group) =>
+  static List<String?> _createGroupNames(KdbxGroup group) =>
       group.breadcrumbs.map((e) => e.name.get()).toList();
 
-  String _normalizeUrl() {
+  String? _normalizeUrl() {
     final url = entry.getString(websiteKey)?.getText()?.trim();
     if (url == null || url.isEmpty) {
       return null;
@@ -114,7 +115,7 @@ typedef OnEntrySelected = void Function(
 
 class PasswordList extends StatelessWidget {
   const PasswordList(
-      {Key key, @required this.onEntrySelected, this.selectedEntry})
+      {Key? key, required this.onEntrySelected, this.selectedEntry})
       : super(key: key);
 
   static const routeSettings = RouteSettings(name: '/passwordList');
@@ -134,7 +135,7 @@ class PasswordList extends StatelessWidget {
         builder: (context) => phonePasswordList(context),
       );
 
-  final KdbxEntry selectedEntry;
+  final KdbxEntry? selectedEntry;
   final OnEntrySelected onEntrySelected;
 
   @override
@@ -145,7 +146,7 @@ class PasswordList extends StatelessWidget {
         kdbxBloc.openedFilesKdbx.map((file) => file.dirtyObjectsChanged);
     if (streams.isEmpty) {
       Provider.of<Analytics>(context).events.trackPasswordListEmpty();
-      final loc = AppLocalizations.of(context);
+      final loc = AppLocalizations.of(context)!;
       return Container(
         color: Colors.white,
         alignment: Alignment.center,
@@ -181,11 +182,11 @@ enum EntrySelectionType {
 
 class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
-    Key key,
-    @required this.kdbxBloc,
-    @required this.openedKdbxFiles,
-    @required
-        void Function(KdbxEntry entry, EntrySelectionType type) onEntrySelected,
+    Key? key,
+    required this.kdbxBloc,
+    required this.openedKdbxFiles,
+    required void Function(KdbxEntry entry, EntrySelectionType type)
+        onEntrySelected,
     this.selectedEntry,
   })  : _onEntrySelected = onEntrySelected,
         super(key: key);
@@ -194,10 +195,10 @@ class PasswordListContent extends StatefulWidget {
   final List<KdbxFile> openedKdbxFiles;
 
   bool get isAutofillSelector =>
-      WidgetsBinding.instance.window.defaultRouteName == '/autofill';
+      WidgetsBinding.instance!.window.defaultRouteName == '/autofill';
   final void Function(KdbxEntry entry, EntrySelectionType type)
       _onEntrySelected;
-  final KdbxEntry selectedEntry;
+  final KdbxEntry? selectedEntry;
 
   void onEntrySelected(
       BuildContext context, KdbxEntry entry, EntrySelectionType type) {
@@ -254,7 +255,7 @@ class PasswordListFilterIsolateRunner {
                   true)
               .isEmpty &&
           entry.groupNames
-              .where((string) => string.toLowerCase().contains(term))
+              .where((string) => string!.toLowerCase().contains(term))
               .isEmpty) {
         return false;
       }
@@ -266,16 +267,16 @@ class PasswordListFilterIsolateRunner {
 class GroupFilterEntry {
   const GroupFilterEntry({this.group, this.isRecursive});
 
-  final KdbxGroup group;
-  final bool isRecursive;
+  final KdbxGroup? group;
+  final bool? isRecursive;
 }
 
 class GroupFilter {
   const GroupFilter({
     this.groups = const [],
-    @required this.showRecycleBin,
-    @required this.showActive,
-    @required this.name,
+    required this.showRecycleBin,
+    required this.showActive,
+    required this.name,
   })  : assert(showRecycleBin != null),
         assert(showActive != null),
         assert(name != null),
@@ -300,19 +301,20 @@ class GroupFilter {
   Iterable<KdbxEntry> getEntries(List<KdbxFile> files) {
     if (groups.isNotEmpty) {
       return groups.expand((groupSelected) {
-        final groups = groupSelected.isRecursive
-            ? groupSelected.group.getAllGroups()
+        final groups = groupSelected.isRecursive!
+            ? groupSelected.group!.getAllGroups()
             : [groupSelected.group];
         if (showRecycleBin && showActive) {
-          return groups.expand((g) => g.entries);
+          return groups.expand((g) => g!.entries);
         } else if (showActive) {
           return groups
-              .where((g) => g == groupSelected.group || g.file.recycleBin != g)
-              .expand((g) => g.entries);
+              .where(
+                  (g) => g == groupSelected.group || g!.file!.recycleBin != g)
+              .expand((g) => g!.entries);
         } else if (showRecycleBin) {
           return groups
-              .where((g) => g.file.recycleBin == g)
-              .expand((g) => g.entries);
+              .where((g) => g!.file!.recycleBin == g)
+              .expand((g) => g!.entries);
         } else {
           throw StateError('Impossible. (showRecycleBin: $showRecycleBin,'
               'showActive: $showActive)');
@@ -339,8 +341,8 @@ class GroupFilter {
 
 class _PasswordListContentState extends State<PasswordListContent>
     with StreamSubscriberMixin, WidgetsBindingObserver, FutureTaskStateMixin {
-  List<EntryViewModel> _filteredEntries;
-  String _filterQuery;
+  List<EntryViewModel>? _filteredEntries;
+  String? _filterQuery;
   final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
   bool _speedDialOpen = false;
@@ -349,7 +351,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   GroupFilter get _groupFilter => _groupFilterNotifier.value;
 
-  StreamSubscription<AppData> _appDataStream;
+  late StreamSubscription<AppData?> _appDataStream;
 
 //  List<EntryViewModel> get _allEntries => _groupFilter == null
 //      ? widget.entries
@@ -357,10 +359,10 @@ class _PasswordListContentState extends State<PasswordListContent>
 //          .getAllEntries()
 //          .map((e) => EntryViewModel(e, widget.kdbxBloc))
 //          .toList();
-  List<EntryViewModel> _allEntries;
+  List<EntryViewModel>? _allEntries;
 
   /// on android while requesting autofill.
-  AutofillMetadata _autofillMetadata;
+  AutofillMetadata? _autofillMetadata;
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
@@ -371,7 +373,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 //    _isolateRunner.then((runner) => runner.run(PasswordListFilterIsolateRunner.init, widget.entries)).then((result) {
 //      _logger.finer('Initializd filter isolate $result');
 //    });
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     _updateAllEntries();
     _groupFilterNotifier.addListener(_updateAllEntries);
     _updateAutofillMetadata();
@@ -385,10 +387,10 @@ class _PasswordListContentState extends State<PasswordListContent>
         .listen(_updateDismissedFiles);
   }
 
-  void _updateDismissedFiles(AppData data) {
+  void _updateDismissedFiles(AppData? data) {
     _dismissedLocalFilesReady = true;
     setState(() {
-      _dismissedLocalFiles = data.dismissedBackupLocalFiles;
+      _dismissedLocalFiles = data!.dismissedBackupLocalFiles;
     });
   }
 
@@ -402,7 +404,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           _autofillMetadata = value;
         });
         final val = value?.searchTerm?.let((term) {
-              _filterTextEditingController.text = term;
+              _filterTextEditingController.text = term!;
               _filterTextEditingController.selection =
                   TextSelection(baseOffset: 0, extentOffset: term.length);
               return _updateFilterQuery(term);
@@ -432,7 +434,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 //        .sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
     _allEntries = allEntries.toList(growable: false);
     watch.stop();
-    _logger.finer('Rebuilding PasswordList. (${_allEntries.length} entries)'
+    _logger.finer('Rebuilding PasswordList. (${_allEntries!.length} entries)'
         ' ${watch.elapsedMilliseconds}ms');
     setState(() {});
   }
@@ -474,7 +476,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             _filteredEntries = _allEntries;
           }
           _selectAllFilter();
-          WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
             _filterFocusNode.requestFocus();
           });
         });
@@ -496,7 +498,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   bool _isFocusInForeignTextField() {
     final widget =
-        WidgetsBinding.instance.focusManager.primaryFocus?.context?.widget;
+        WidgetsBinding.instance!.focusManager.primaryFocus?.context?.widget;
     if (widget == null) {
       return false;
     }
@@ -510,7 +512,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   void _selectNextEntry(int next) {
-    final entries = _filteredEntries ?? _allEntries;
+    final entries = _filteredEntries ?? _allEntries!;
     if (entries.isEmpty) {
       return;
     }
@@ -533,7 +535,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     _logger.info('Disposing isolate runner.');
 //    _isolateRunner.then<void>((runner) => runner.close());
     _filterFocusNode.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     _groupFilterNotifier.removeListener(_updateAllEntries);
     _groupFilterNotifier.dispose();
     _appDataStream.cancel();
@@ -545,7 +547,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
         element.key.supportsWrite &&
         element.value.kdbxFile.dirtyObjects.isNotEmpty);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return AppBar(
       title: const Text('AuthPass'), // NON-NLS
       actions: <Widget>[
@@ -645,17 +647,17 @@ class _PasswordListContentState extends State<PasswordListContent>
                 _filteredEntries = _allEntries;
               });
             }),
-        StreamBuilder<CloudStatus>(
+        StreamBuilder<CloudStatus?>(
           stream: context.watch<AuthPassCloudBloc>().cloudStatus,
           initialData: null,
           builder: (context, cloudStatusSnapshot) => Badge(
             badgeContent: cloudStatusSnapshot.hasData &&
-                    cloudStatusSnapshot.data.messagesUnread > 0
-                ? Text('x${cloudStatusSnapshot.data.messagesUnread}',
+                    cloudStatusSnapshot.data!.messagesUnread > 0
+                ? Text('x${cloudStatusSnapshot.data!.messagesUnread}',
                     style: const TextStyle(color: Colors.white))
                 : null,
             showBadge: cloudStatusSnapshot.hasData &&
-                cloudStatusSnapshot.data.messagesUnread > 0,
+                cloudStatusSnapshot.data!.messagesUnread > 0,
             badgeColor: Theme.of(context).primaryColorDark,
             position: BadgePosition.topEnd(top: 0, end: 3),
             child: PopupMenuButton<VoidCallback>(
@@ -740,7 +742,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   AppBar _buildFilterAppBar(BuildContext context) {
     final theme = filterAppBarTheme(context);
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return AppBar(
       backgroundColor: theme.primaryColor,
       iconTheme: theme.primaryIconTheme,
@@ -777,7 +779,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   int _updateFilterQuery(String newQuery) {
     final entries =
-        PasswordListFilterIsolateRunner.filterEntries(_allEntries, newQuery);
+        PasswordListFilterIsolateRunner.filterEntries(_allEntries!, newQuery);
     if (!mounted) {
       _logger.severe('No longer mounted after updating filter query.', null,
           StackTrace.current);
@@ -786,12 +788,12 @@ class _PasswordListContentState extends State<PasswordListContent>
     setState(() {
       _filterQuery = newQuery;
       _filteredEntries = entries;
-      if (_filteredEntries.isNotEmpty &&
+      if (_filteredEntries!.isNotEmpty &&
           (widget.selectedEntry == null ||
-              !_filteredEntries
+              !_filteredEntries!
                   .map((e) => e.entry)
                   .contains(widget.selectedEntry))) {
-        widget.onEntrySelected(context, _filteredEntries.first.entry,
+        widget.onEntrySelected(context, _filteredEntries!.first.entry,
             EntrySelectionType.passiveHighlight);
 //                  // TODO this looks a bit like a workaround. But on MacOS we lose focus when
 //                  //      we show another password entry.
@@ -803,11 +805,11 @@ class _PasswordListContentState extends State<PasswordListContent>
     return entries.length;
   }
 
-  List<Widget> _buildGroupFilterPrefix() {
+  List<Widget>? _buildGroupFilterPrefix() {
     if (_groupFilter == GroupFilter.DEFAULT_GROUP_FILTER) {
       return null;
     }
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return [
       MaterialBanner(
         backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
@@ -824,16 +826,16 @@ class _PasswordListContentState extends State<PasswordListContent>
     ];
   }
 
-  List<Widget> _buildAutofillListPrefix() {
+  List<Widget>? _buildAutofillListPrefix() {
     if (!widget.isAutofillSelector) {
       _logger.info(
-          'not autofill: ${WidgetsBinding.instance.window.defaultRouteName}');
+          'not autofill: ${WidgetsBinding.instance!.window.defaultRouteName}');
       return null;
     }
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     final info = _autofillMetadata?.let((metadata) {
-      final searchTerm = metadata.searchTerm;
+      final searchTerm = metadata!.searchTerm;
       if (searchTerm != null && searchTerm == _filterQuery) {
         return [
           TextSpan(text: Nls.NL + loc.autofillFilterPrefix + Nls.SP),
@@ -863,11 +865,10 @@ class _PasswordListContentState extends State<PasswordListContent>
     ];
   }
 
-  List<Widget> _buildListPrefix() {
+  List<Widget>? _buildListPrefix() {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
-    final unsupportedWrite = kdbxBloc.openedFilesWithSources.firstWhere(
+    final unsupportedWrite = kdbxBloc.openedFilesWithSources.firstOrNullWhere(
       (f) => f.value.dirtyObjects.isNotEmpty && !f.key.supportsWrite,
-      orElse: () => null,
     );
     if (unsupportedWrite == null) {
       return null;
@@ -875,10 +876,10 @@ class _PasswordListContentState extends State<PasswordListContent>
     return [UnsupportedWrite(source: unsupportedWrite.key)];
   }
 
-  BuiltList<String> _dismissedLocalFiles;
+  BuiltList<String>? _dismissedLocalFiles;
   bool _dismissedLocalFilesReady = false;
 
-  List<Widget> _buildBackupWarningBanners() {
+  List<Widget>? _buildBackupWarningBanners() {
     final kdbxBloc = context.watch<KdbxBloc>();
     final loc = AppLocalizations.of(context);
     final localFiles =
@@ -899,9 +900,9 @@ class _PasswordListContentState extends State<PasswordListContent>
       analytics.events.trackBackupBanner(BackupBannerAction.shown);
       return [
         BackupBanner(
-          loc.backupWarningMessage(file.key.displayName),
+          loc!.backupWarningMessage(file.key.displayName),
           backupWidget: SaveFileAsDialogButton(
-            file: kdbxBloc.fileForFileSource(file.key),
+            file: kdbxBloc.fileForFileSource(file.key)!,
             onSave: (saveFuture) {
               asyncRunTask((progress) async {
                 analytics.events.trackBackupBanner(BackupBannerAction.saved);
@@ -957,7 +958,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       ),
       body: ProgressOverlay(
         task: task,
-        child: _allEntries.isEmpty
+        child: _allEntries!.isEmpty
             ? NoPasswordsEmptyView(
                 listPrefix: listPrefix,
                 onPrimaryButtonPressed: () {
@@ -971,7 +972,7 @@ class _PasswordListContentState extends State<PasswordListContent>
               )
             : Scrollbar(
                 child: ListView.builder(
-                  itemCount: entries.length + (listPrefix != null ? 1 : 0),
+                  itemCount: entries!.length + (listPrefix != null ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (listPrefix != null) {
                       if (index == 0) {
@@ -1002,13 +1003,13 @@ class _PasswordListContentState extends State<PasswordListContent>
                 ),
               ),
       ),
-      floatingActionButton: _allEntries.isEmpty ||
+      floatingActionButton: _allEntries!.isEmpty ||
               _filterQuery != null ||
               _autofillMetadata != null
           ? null
           : kdbxBloc.openedFiles.length == 1 || _groupFilter.groups.length == 1
               ? FloatingActionButton(
-                  tooltip: loc.addNewPassword,
+                  tooltip: loc!.addNewPassword,
                   onPressed: () {
                     final group = _groupFilter.groups.isEmpty
                         ? null
@@ -1023,7 +1024,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                   child: const Icon(Icons.add),
                 )
               : SpeedDial(
-                  tooltip: _speedDialOpen ? '' : loc.addNewPassword,
+                  tooltip: _speedDialOpen ? '' : loc!.addNewPassword,
                   onOpen: () => setState(() => _speedDialOpen = true),
                   onClose: () => setState(() => _speedDialOpen = false),
                   overlayColor: theme.brightness == Brightness.dark
@@ -1037,7 +1038,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                             labelBackgroundColor: Theme.of(context).cardColor,
                             backgroundColor: file.openedFile.colorCode == null
                                 ? null
-                                : Color(file.openedFile.colorCode),
+                                : Color(file.openedFile.colorCode!),
                             onTap: () {
                               final entry =
                                   kdbxBloc.createEntry(file: file.kdbxFile);
@@ -1071,8 +1072,8 @@ class _PasswordListContentState extends State<PasswordListContent>
     _filterTextEditingController.text = '';
   }
 
-  List<PopupMenuItem<VoidCallback>> _buildAuthPassCloudMenuItems(
-      BuildContext context, CloudStatus cloudStatus) {
+  List<PopupMenuItem<VoidCallback>>? _buildAuthPassCloudMenuItems(
+      BuildContext context, CloudStatus? cloudStatus) {
     final bloc = context.read<AuthPassCloudBloc>();
     if (bloc?.featureFlags?.authpassCloud != true) {
       return null;
@@ -1093,7 +1094,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                           style: TextStyle(
                               color: Theme.of(context)
                                   .primaryTextTheme
-                                  .bodyText1
+                                  .bodyText1!
                                   .color),
                         )
                       : null,
@@ -1124,24 +1125,24 @@ class _PasswordListContentState extends State<PasswordListContent>
 
 class PasswordEntryListTileWrapper extends StatelessWidget {
   const PasswordEntryListTileWrapper({
-    Key key,
-    @required this.entry,
-    @required this.selectedEntry,
-    @required this.fileColor,
-    @required String filterQuery,
-    @required this.onEntrySelected,
+    Key? key,
+    required this.entry,
+    required this.selectedEntry,
+    required this.fileColor,
+    required String? filterQuery,
+    required this.onEntrySelected,
   })  : _filterQuery = filterQuery,
         super(key: key);
 
   final EntryViewModel entry;
-  final KdbxEntry selectedEntry;
-  final Color fileColor;
-  final String _filterQuery;
+  final KdbxEntry? selectedEntry;
+  final Color? fileColor;
+  final String? _filterQuery;
   final OnEntrySelected onEntrySelected;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     final commonFields = Provider.of<CommonFields>(context);
     return Semantics(
       customSemanticsActions: {
@@ -1195,7 +1196,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
                     ? null
                     : BoxDecoration(
                         border: Border(
-                            left: BorderSide(color: fileColor, width: 4))))
+                            left: BorderSide(color: fileColor!, width: 4))))
                 : BoxDecoration(
                     color: Theme.of(context).selectedRowColor,
                     border: Border(
@@ -1203,7 +1204,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
                           color: Theme.of(context).primaryColor, width: 4),
                       left: fileColor == null
                           ? BorderSide.none
-                          : BorderSide(color: fileColor, width: 4),
+                          : BorderSide(color: fileColor!, width: 4),
                     ),
                   ),
             child: PasswordEntryTile(
@@ -1225,7 +1226,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       BuildContext context, CommonFields commonFields, AppLocalizations loc,
       {String action = 'swipe'}) async {
     await Clipboard.setData(ClipboardData(
-        text: entry.entry.getString(commonFields.userName.key).getText()));
+        text: entry.entry.getString(commonFields.userName.key)!.getText()));
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(loc.doneCopiedUsername)));
     context.read<Analytics>().events.trackSwipeCopyUsername();
@@ -1235,7 +1236,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       BuildContext context, CommonFields commonFields, AppLocalizations loc,
       {String action = 'swipe'}) async {
     await Clipboard.setData(ClipboardData(
-        text: entry.entry.getString(commonFields.password.key).getText()));
+        text: entry.entry.getString(commonFields.password.key)!.getText()));
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(loc.doneCopiedPassword)));
     context.read<Analytics>().events.trackSwipeCopyPassword();
@@ -1244,17 +1245,17 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
 
 class NoPasswordsEmptyView extends StatelessWidget {
   const NoPasswordsEmptyView({
-    Key key,
+    Key? key,
     this.onPrimaryButtonPressed,
     this.listPrefix,
   }) : super(key: key);
 
-  final List<Widget> listPrefix;
-  final VoidCallback onPrimaryButtonPressed;
+  final List<Widget>? listPrefix;
+  final VoidCallback? onPrimaryButtonPressed;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
@@ -1293,9 +1294,9 @@ class NoPasswordsEmptyView extends StatelessWidget {
 }
 
 class UnsupportedWrite extends StatelessWidget {
-  const UnsupportedWrite({Key key, this.source}) : super(key: key);
+  const UnsupportedWrite({Key? key, this.source}) : super(key: key);
 
-  final FileSource source;
+  final FileSource? source;
 
   @override
   Widget build(BuildContext context) {
@@ -1313,10 +1314,10 @@ class UnsupportedWrite extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    Text('You have changes in "${source.displayName}", which '
+                    Text('You have changes in "${source!.displayName}", which '
                         'does not support writing of changes.'),
                     const SizedBox(height: 4),
-                    Text(source.displayPath, style: theme.textTheme.caption),
+                    Text(source!.displayPath!, style: theme.textTheme.caption),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -1347,19 +1348,19 @@ class UnsupportedWrite extends StatelessWidget {
 
 class PasswordEntryTile extends StatelessWidget {
   const PasswordEntryTile({
-    Key key,
-    @required this.vm,
-    @required this.isSelected,
-    @required this.filterQuery,
+    Key? key,
+    required this.vm,
+    required this.isSelected,
+    required this.filterQuery,
     this.onTap,
   }) : super(key: key);
 
   final EntryViewModel vm;
   final bool isSelected;
-  final String filterQuery;
-  final VoidCallback onTap;
+  final String? filterQuery;
+  final VoidCallback? onTap;
 
-  Widget _defaultIcon(Color fgColor, ThemeData theme, double size) =>
+  Widget _defaultIcon(Color? fgColor, ThemeData theme, double size) =>
       EntryIcon.defaultIcon(vm, fgColor, theme, size);
 
   @override
@@ -1373,7 +1374,7 @@ class PasswordEntryTile extends StatelessWidget {
             : theme.primaryColorDark
         : null;
     final iconTheme = IconTheme.of(context);
-    final size = iconTheme.size * 1.5;
+    final size = iconTheme.size! * 1.5;
     final loc = AppLocalizations.of(context);
     _logger
         .info('devicePixelRatio: ${MediaQuery.of(context).devicePixelRatio}');
@@ -1401,28 +1402,28 @@ class PasswordEntryTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   DefaultTextStyle(
-                    style: theme.textTheme.subtitle1.copyWith(
+                    style: theme.textTheme.subtitle1!.copyWith(
                         fontWeight: FontWeight.normal, color: fgColor),
                     child: Text.rich(
                       _highlightFilterQuery(vm.label?.nullIfBlank()) ??
-                          TextSpan(text: loc.noTitle),
+                          TextSpan(text: loc!.noTitle),
 //                      style: theme.textTheme.subtitle1.copyWith(fontWeight: null),
                     ),
                   ),
                   const SizedBox(height: 2),
                   DefaultTextStyle(
-                    style: theme.textTheme.bodyText1.copyWith(
+                    style: theme.textTheme.bodyText1!.copyWith(
                         fontSize: 13,
-                        color: fgColor ?? theme.textTheme.caption.color),
+                        color: fgColor ?? theme.textTheme.caption!.color),
                     child: Text.rich(
                       _highlightFilterQuery(
                             commonFields.userName
                                 .stringValue(vm.entry)
                                 ?.nullIfBlank(),
                           ) ??
-                          TextSpan(text: loc.noUsername),
-                      style: theme.textTheme.bodyText1.copyWith(
-                          fontSize: 12, color: theme.textTheme.caption.color),
+                          TextSpan(text: loc!.noUsername),
+                      style: theme.textTheme.bodyText1!.copyWith(
+                          fontSize: 12, color: theme.textTheme.caption!.color),
                     ),
                   ),
                   ...?vm.groupNames.length < 2
@@ -1435,7 +1436,7 @@ class PasswordEntryTile extends StatelessWidget {
                             maxLines: 1,
                             textAlign: TextAlign.right,
                             style:
-                                theme.textTheme.caption.copyWith(fontSize: 10),
+                                theme.textTheme.caption!.copyWith(fontSize: 10),
                           ),
                         ],
                 ],
@@ -1447,15 +1448,15 @@ class PasswordEntryTile extends StatelessWidget {
     );
   }
 
-  InlineSpan _highlightFilterQuery(String text) {
+  InlineSpan? _highlightFilterQuery(String? text) {
     if (text == null) {
       return null;
     }
-    if (filterQuery == null || filterQuery.isEmpty) {
+    if (filterQuery == null || filterQuery!.isEmpty) {
       return TextSpan(text: text);
     }
     final lcText = text.toLowerCase();
-    final lcFilterTerms = filterQuery.toLowerCase().split(' ');
+    final lcFilterTerms = filterQuery!.toLowerCase().split(' ');
     final filterRegexp =
         RegExp(lcFilterTerms.map((e) => RegExp.escape(e)).join('|'));
     var previousMatchEnd = 0;
@@ -1477,10 +1478,10 @@ class PasswordEntryTile extends StatelessWidget {
 
 class EntryIcon extends StatelessWidget {
   const EntryIcon({
-    Key key,
-    @required this.vm,
-    @required this.fallback,
-    @required this.size,
+    Key? key,
+    required this.vm,
+    required this.fallback,
+    required this.size,
   })  : assert(vm != null),
         assert(fallback != null),
         assert(size != null),
@@ -1519,18 +1520,18 @@ class EntryIcon extends StatelessWidget {
 
   static Widget defaultIcon(
     EntryViewModel vm,
-    Color fgColor,
+    Color? fgColor,
     ThemeData theme,
     double size,
   ) {
     return vm.entry.customIcon?.let((customIcon) => Image.memory(
-              customIcon.data,
+              customIcon!.data!,
               width: size,
               height: size,
               fit: BoxFit.contain,
             )) ??
         Icon(
-          PredefinedIcons.iconFor(vm.entry.icon.get()),
+          PredefinedIcons.iconFor(vm.entry.icon.get()!),
           color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
           size: size,
         );
@@ -1538,10 +1539,10 @@ class EntryIcon extends StatelessWidget {
 }
 
 extension on AutofillMetadata {
-  String get searchTerm =>
+  String? get searchTerm =>
       webDomains
-          ?.where((element) => element.domain.isNotEmpty)
-          ?.firstOrNull
+          .where((element) => element.domain.isNotEmpty)
+          .firstOrNull
           ?.domain ??
       packageNames
           .where((element) => element != 'android' // NON-NLS
