@@ -103,7 +103,7 @@ class QuickUnlockStorage {
 
   Future<void> updateQuickUnlockFile(
       Map<FileSource, Credentials> fileCredentials) async {
-    if (!(await (supportsBiometricKeyStore() as FutureOr<bool>))) {
+    if (!(await supportsBiometricKeyStore())) {
       _logger.severe(
           'updateQuickUnlockFile must not be called when biometric store is not supported.');
       return;
@@ -641,11 +641,11 @@ class KdbxBloc {
       FileContent fileContent) async {
     final oldSource = oldFile.fileSource;
     final databaseName = oldFile.kdbxFile.body.meta.databaseName.get();
-    final newOpenedFile = await (appDataBloc.openedFile(
+    final newOpenedFile = await appDataBloc.openedFile(
       output,
       name: databaseName,
       oldFile: oldFile.openedFile,
-    ) as FutureOr<OpenedFile>);
+    );
     final newFile = KdbxOpenedFile(
       fileSource: output,
       openedFile: newOpenedFile,

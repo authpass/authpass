@@ -1271,9 +1271,8 @@ class _EntryFieldState extends State<EntryField>
 
   Future<void> _generatePassword() async {
     context.events.trackEntryAction(EntryActionType.generatePassword);
-    final appData = await (Provider.of<AppDataBloc>(context, listen: false)
-        .store
-        .load() as FutureOr<AppData>);
+    final appData =
+        await Provider.of<AppDataBloc>(context, listen: false).store.load();
     final characterSets = CharacterSet.characterSetFromIds(
         appData.passwordGeneratorCharacterSets!);
     if (characterSets.isEmpty) {
