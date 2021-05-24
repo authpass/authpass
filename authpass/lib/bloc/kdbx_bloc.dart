@@ -363,11 +363,11 @@ class KdbxBloc {
       }
     }
 
-    final openedFile = await (appDataBloc.openedFile(
+    final openedFile = await appDataBloc.openedFile(
       file,
       name: kdbxFile.body.meta.databaseName.get(),
       defaultColor: _defaultNextColor(),
-    ) as FutureOr<OpenedFile>);
+    );
     final kdbxOpenedFile = KdbxOpenedFile(
       fileSource: file,
       openedFile: openedFile,

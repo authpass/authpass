@@ -149,7 +149,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           throw StateError('Invalid cloud storage provider id $storageId');
         }
         return provider.toFileSource(
-          (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map).cast<String, String>(),
+          (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
+              .cast<String, String?>(),
           uuid: uuid ?? UuidUtil.createUuid(),
           databaseName: name,
           initialCachedContent: null,
@@ -260,7 +261,7 @@ class AppDataBloc {
 
   ///
   /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.
-  Future<OpenedFile?> openedFile(FileSource file,
+  Future<OpenedFile> openedFile(FileSource file,
           {required String? name,
           OpenedFile? oldFile,
           Color? defaultColor}) async =>
@@ -277,10 +278,10 @@ class AppDataBloc {
         return openedFile;
       });
 
-  Future<T?> update<T>(
+  Future<T> update<T>(
       T Function(AppDataBuilder builder, AppData data) updater) async {
     final appData = await store.load();
-    T? ret;
+    late T ret;
     final newAppData = appData.rebuild((b) => ret = updater(b, appData));
     await store.save(newAppData);
     return ret;

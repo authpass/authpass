@@ -13,7 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
@@ -60,26 +59,37 @@ class AuthPassCloudBloc with ChangeNotifier {
   _StoredToken? _storedToken;
   final _tokenLock = Lock();
 
-  final _cloudStatus = LazyBehaviorSubject<CloudStatus?>(null);
-  ValueStream<CloudStatus?> get cloudStatus => _cloudStatus.stream(() async {
-        if (tokenStatus != TokenStatus.confirmed) {
-          return null;
-        }
-        final c = await _getClient();
-        final s = await c.statusGet().requireSuccess();
-        return CloudStatus(
-          lastFetched: clock.now().toUtc(),
-          messagesUnread: s.mail.messagesUnread,
-        );
-      });
+  late final _cloudStatus = LazyBehaviorSubject<CloudStatus?>(() async {
+    if (tokenStatus != TokenStatus.confirmed) {
+      return null;
+    }
+    final c = await _getClient();
+    final s = await c.statusGet().requireSuccess();
+    return CloudStatus(
+      lastFetched: clock.now().toUtc(),
+      messagesUnread: s.mail.messagesUnread,
+    );
+  });
+  ValueStream<CloudStatus?> get cloudStatus => _cloudStatus.streamReloadable();
+  // ValueStream<CloudStatus?> get cloudStatus => _cloudStatus.stream(() async {
+  //       if (tokenStatus != TokenStatus.confirmed) {
+  //         return null;
+  //       }
+  //       final c = await _getClient();
+  //       final s = await c.statusGet().requireSuccess();
+  //       return CloudStatus(
+  //         lastFetched: clock.now().toUtc(),
+  //         messagesUnread: s.mail.messagesUnread,
+  //       );
+  //     });
 
-  final _mailboxList = LazyBehaviorSubject<MailboxList>(null);
+  late final _mailboxList = LazyBehaviorSubject<MailboxList>(() async {
+    final client = await _getClient();
+    final mailboxResponse = await client.mailboxGet().requireSuccess();
+    return MailboxList(mailboxes: mailboxResponse.data);
+  });
   ReloadableValueStream<MailboxList> get mailboxList =>
-      _mailboxList.stream(() async {
-        final client = await _getClient();
-        final mailboxResponse = await client.mailboxGet().requireSuccess();
-        return MailboxList(mailboxes: mailboxResponse.data);
-      });
+      _mailboxList.streamReloadable();
 
   final _messageList = BehaviorSubject.seeded(const EmailMessageList.empty());
   ValueStream<EmailMessageList> get messageList => _messageList.stream;
@@ -322,9 +332,8 @@ class AuthPassCloudBloc with ChangeNotifier {
   }
 
   Future<Mailbox?> findMailboxByUuid(ApiUuid uuid) async {
-    final list = await (mailboxList.load() as FutureOr<MailboxList>);
-    return list.mailboxes!
-        .firstWhereOrNull((element) => uuid == element.id);
+    final list = await mailboxList.load();
+    return list.mailboxes!.firstWhereOrNull((element) => uuid == element.id);
   }
 }
 
@@ -352,7 +361,7 @@ class JoinRun<T> with ChangeNotifier {
   bool get isRunning => _currentRun != null;
 
   Future<T>? _currentRun;
-  Future<T>? joinRun(Future<T> Function() callback) async {
+  Future<T> joinRun(Future<T> Function() callback) async {
     if (_currentRun != null) {
       return _currentRun!;
     }
@@ -383,7 +392,7 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   final LazyBehaviorSubject<T> _stream;
   final ValueStream<T> _valueStream;
 
-  Future<T?> load() async => _stream.load();
+  Future<T> load() async => _stream.load();
 
   Future<T?> reload() async => await _stream.reload();
 
@@ -414,16 +423,22 @@ class LazyBehaviorSubject<T> {
 
   final _subject = BehaviorSubject<T>();
   final _joinRun = JoinRun<T>();
-  Future<T> Function()? _loadData;
+  Future<T> Function() _loadData;
 
   bool _dirty = true;
 
-  ReloadableValueStream<T> stream(Future<T> Function() loadData) {
-    _loadData = loadData;
+  ReloadableValueStream<T> streamReloadable() {
     if (_dirty) {
       load();
     }
+    // TODO do we really need to return a new stream each time?
     return ReloadableValueStream(this);
+  }
+
+  @deprecated
+  ReloadableValueStream<T> stream(Future<T> Function() loadData) {
+    _loadData = loadData;
+    return streamReloadable();
   }
 
   Future<T?> reload() async {
@@ -431,11 +446,13 @@ class LazyBehaviorSubject<T> {
     return await load();
   }
 
-  Future<T?> load() async {
+  Future<T> load() async {
     if (_loadData == null) {
-      _logger.warning(
+      // _logger.warning(
+      //     'calling reload on $runtimeType before anyone getting a stream.');
+      // return null;
+      throw StateError(
           'calling reload on $runtimeType before anyone getting a stream.');
-      return null;
     }
     return await _joinRun.joinRun(() async {
       if (!_dirty) {
