@@ -162,7 +162,7 @@ class AuthPassApp extends StatefulWidget {
 }
 
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
-  Deps? _deps;
+  late final Deps _deps = widget.deps;
   AppData? _appData;
   FilePickerState? _filePickerState;
 
@@ -170,11 +170,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   void initState() {
     super.initState();
     final _navigatorKey = widget.navigatorKey;
-    _deps = widget.deps;
     PathUtils.runAppFinished.complete(true);
-    _appData = _deps!.appDataBloc.store.cachedValue;
+    _appData = _deps.appDataBloc.store.cachedValue;
     handleSubscription(
-        _deps!.appDataBloc.store.onValueChangedAndLoad.listen((appData) {
+        _deps.appDataBloc.store.onValueChangedAndLoad.listen((appData) {
       if (_appData != appData) {
         setState(() {
           _appData = appData;
@@ -240,18 +239,18 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           dispose: (context, diac) => diac.dispose(),
         ),
         Provider<FilePickerState?>.value(value: _filePickerState),
-        Provider<Env>.value(value: _deps!.env),
-        Provider<Deps?>.value(value: _deps),
-        Provider<Analytics>.value(value: _deps!.analytics),
-        Provider<CloudStorageBloc>.value(value: _deps!.cloudStorageBloc),
-        Provider<AppDataBloc>.value(value: _deps!.appDataBloc),
+        Provider<Env>.value(value: _deps.env),
+        Provider<Deps>.value(value: _deps),
+        Provider<Analytics>.value(value: _deps.analytics),
+        Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
+        Provider<AppDataBloc>.value(value: _deps.appDataBloc),
         Provider<AuthPassCacheManager>(
           create: (context) => AuthPassCacheManager(pathUtils: PathUtils()),
           dispose: (context, obj) => obj.store.dispose(),
         ),
         StreamProvider<AppData>(
-          create: (context) => _deps!.appDataBloc.store.onValueChangedAndLoad,
-          initialData: _deps!.appDataBloc.store.cachedValue ?? AppData(),
+          create: (context) => _deps.appDataBloc.store.onValueChangedAndLoad,
+          initialData: _deps.appDataBloc.store.cachedValue ?? AppData(),
         ),
         ProxyProvider2<AppData, Env, FeatureFlags>(
           update: (_, appData, env, __) {
@@ -262,16 +261,17 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             return env.featureFlags;
           },
         ),
-        ListenableProxyProvider<FeatureFlags, AuthPassCloudBloc?>(
-          create: (_) => null,
+        ListenableProxyProvider<FeatureFlags, AuthPassCloudBloc>(
+          create: (_) => AuthPassCloudBlocDummy(),
           update: (_, featureFlags, previous) {
-            if (featureFlags == null ||
-                previous?.featureFlags == featureFlags) {
+            if (previous != null &&
+                previous is! AuthPassCloudBlocDummy &&
+                previous.featureFlags == featureFlags) {
               return previous;
             }
 //            previous?.dispose();
             return AuthPassCloudBloc(
-              env: _deps!.env,
+              env: _deps.env,
               featureFlags: featureFlags,
             );
           },
@@ -283,21 +283,21 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           lazy: false,
         ),
         StreamProvider<KdbxBloc>(
-          create: (context) => _deps!.kdbxBloc.openedFilesChanged
-              .map((_) => _deps!.kdbxBloc)
+          create: (context) => _deps.kdbxBloc.openedFilesChanged
+              .map((_) => _deps.kdbxBloc)
               .doOnData((data) {
             _logger.info('KdbxBloc updated.');
           }),
           updateShouldNotify: (a, b) => true,
-          initialData: _deps!.kdbxBloc,
+          initialData: _deps.kdbxBloc,
         ),
         StreamProvider<OpenedKdbxFiles>.value(
-          value: _deps!.kdbxBloc.openedFilesChanged,
-          initialData: _deps!.kdbxBloc.openedFilesChanged.value,
+          value: _deps.kdbxBloc.openedFilesChanged,
+          initialData: _deps.kdbxBloc.openedFilesChanged.value,
         )
       ],
       child: MaterialApp(
-        navigatorObservers: [AnalyticsNavigatorObserver(_deps!.analytics)],
+        navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
         title: 'AuthPass',
         navigatorKey: widget.navigatorKey,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -311,7 +311,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 //        themeMode: ThemeMode.light,
         builder: (context, child) {
           final mq = MediaQuery.of(context);
-          _deps!.analytics.updateSizes(
+          _deps.analytics.updateSizes(
             viewportSizeWidth: mq.size.width,
             viewportSizeHeight: mq.size.height,
             displaySizeWidth:
@@ -346,13 +346,13 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         },
         onGenerateInitialRoutes: (initialRoute) {
           _logger.fine('initialRoute: $initialRoute');
-          _deps!.analytics.trackScreen(initialRoute);
-          _deps!.analytics.events.trackLaunch(
+          _deps.analytics.trackScreen(initialRoute);
+          _deps.analytics.events.trackLaunch(
               systemBrightness:
                   WidgetsBinding.instance!.window.platformBrightness);
           if (startupStopwatch.isRunning) {
             startupStopwatch.stop();
-            _deps!.analytics.trackTiming(
+            _deps.analytics.trackTiming(
               'startup',
               startupStopwatch.elapsedMilliseconds,
               category: 'startup',
@@ -407,7 +407,6 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       case AppDataTheme.dark:
         return ThemeMode.dark;
     }
-    throw StateError('Invalid theme $theme');
   }
 
   ThemeData _customizeTheme(ThemeData theme, AppData? appData) {
@@ -432,16 +431,16 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 
   DiacBloc _createDiacBloc() {
     final disableOnlineMessages =
-        _deps!.env.diacDefaultDisabled && _appData!.diacOptIn != true;
+        _deps.env.diacDefaultDisabled && _appData!.diacOptIn != true;
     _logger.finest('_createDiacBloc: $disableOnlineMessages = '
-        '${_deps!.env.diacDefaultDisabled} && ${_appData!.diacOptIn}');
+        '${_deps.env.diacDefaultDisabled} && ${_appData!.diacOptIn}');
     return DiacBloc(
       opts: DiacOpts(
-          endpointUrl: _deps!.env.diacEndpoint,
+          endpointUrl: _deps.env.diacEndpoint,
           disableConfigFetch: disableOnlineMessages,
           // always reload after a new start.
           refetchIntervalCold: Duration.zero,
-          initialConfig: !disableOnlineMessages || _deps!.env.diacHidden
+          initialConfig: !disableOnlineMessages || _deps.env.diacHidden
               ? null
               : DiacConfig(
                   updatedAt: DateTime(2020, 5, 18),
@@ -470,11 +469,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                   ],
                 ),
           packageInfo: () async =>
-              (await _deps!.env.getAppInfo()).toDiacPackageInfo()),
+              (await _deps.env.getAppInfo()).toDiacPackageInfo()),
       contextBuilder: () async => {
         'env': <String, Object>{
-          'isDebug': _deps!.env.isDebug,
-          'isGoogleStore': (await _deps!.env.getAppInfo()).packageName ==
+          'isDebug': _deps.env.isDebug,
+          'isGoogleStore': (await _deps.env.getAppInfo()).packageName ==
                   'design.codeux.authpass' &&
               AuthPassPlatform.isAndroid,
           'isIOS': AuthPassPlatform.isIOS,
@@ -487,11 +486,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       },
       customActions: {
         'launchReview': (event) async {
-          _deps!.analytics.trackGenericEvent('review', 'reviewLaunch');
+          _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
           return await FlutterStoreListing().launchStoreListing();
         },
         'requestReview': (event) async {
-          _deps!.analytics.trackGenericEvent('review', 'reviewRequest');
+          _deps.analytics.trackGenericEvent('review', 'reviewRequest');
           return await FlutterStoreListing()
               .launchRequestReview(onlyNative: true);
         },
@@ -500,7 +499,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
           unawaited(widget.navigatorKey!.currentState?.push<void>(route));
-          await _deps!.appDataBloc
+          await _deps.appDataBloc
               .update((builder, data) => builder.diacOptIn = true);
           return true;
         },
@@ -515,7 +514,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         }
       },
     )..events.listen((event) {
-        _deps!.analytics.trackGenericEvent(
+        _deps.analytics.trackGenericEvent(
           'diac',
           event is DiacEventWithAction
               ? '${event.type.toStringBare()}:${event.action?.key}'

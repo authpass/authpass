@@ -51,8 +51,7 @@ final _logger = Logger('authpass.select_file_screen');
 
 class SelectFileScreen extends StatelessWidget {
   const SelectFileScreen({Key? key, this.skipQuickUnlock = false})
-      : assert(skipQuickUnlock != null),
-        super(key: key);
+      : super(key: key);
 
   static Route<Object> route({bool skipQuickUnlock = false}) =>
       MaterialPageRoute(
@@ -131,18 +130,17 @@ class ProgressOverlay extends StatelessWidget {
   final FutureTask? task;
   final Widget child;
 
-  bool get _hasProgress => task != null;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final _task = task;
 
     return Stack(
       children: <Widget>[
         child,
         Positioned.fill(
           child: AnimatedCrossFade(
-            firstChild: !_hasProgress
+            firstChild: _task == null
                 ? Container()
                 : Container(
                     color: Colors.black12,
@@ -156,10 +154,10 @@ class ProgressOverlay extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(32),
                         child: ValueListenableBuilder<FutureTask>(
-                          valueListenable: task!,
+                          valueListenable: _task,
                           builder: (context, value, child) {
                             _logger.fine('Generating progress dialog'
-                                ' with label ${value?.progressLabel}');
+                                ' with label ${value.progressLabel}');
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -178,7 +176,7 @@ class ProgressOverlay extends StatelessWidget {
                     ),
                   ),
             secondChild: Container(),
-            crossFadeState: _hasProgress
+            crossFadeState: task != null
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
             duration: const Duration(milliseconds: 200),
@@ -423,9 +421,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       ),
                       ...ListTile.divideTiles(
                         context: context,
-                        tiles: appData?.previousFiles?.reversed
-                                ?.take(5)
-                                ?.takeIfNotEmpty()
+                        tiles: appData.previousFiles?.reversed
+                                .take(5)
+                                .takeIfNotEmpty()
                                 ?.map(
                                   (f) => OpenedFileTile(
                                     openedFile:
@@ -1003,7 +1001,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       final analytics = deps.analytics;
       final kdbxBloc = deps.kdbxBloc;
       final pw = _controller.text;
-      final keyFileContents = (await _keyFile?.readAsBytes())!;
+      final keyFileContents = await _keyFile?.readAsBytes();
       final stopWatch = Stopwatch();
       try {
         stopWatch.start();

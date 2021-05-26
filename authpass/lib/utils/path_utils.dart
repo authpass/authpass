@@ -66,7 +66,7 @@ class PathUtils implements PathUtil {
       return base;
     }
     return Directory(
-        path.joinAll([base.path, namespace, subNamespace].whereNotNull() as Iterable<String>))
+        path.joinAll([base.path, namespace, subNamespace].whereNotNull()))
       ..create(recursive: true);
   }
 

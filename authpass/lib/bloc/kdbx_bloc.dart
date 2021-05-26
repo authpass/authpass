@@ -405,8 +405,8 @@ class KdbxBloc {
   /// writes all opened files into secure storage.
   Future<void> _updateQuickUnlockStore() async {
     final openedFiles = _openedFiles.value;
-    await quickUnlockStorage.updateQuickUnlockFile(Map.fromEntries(
-        _openedFilesQuickUnlock.map((fileSource) {
+    await quickUnlockStorage.updateQuickUnlockFile(
+        Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
       final openedFile = openedFiles[fileSource];
       if (openedFile == null) {
         _logger.warning(
@@ -414,8 +414,7 @@ class KdbxBloc {
         return null;
       }
       return MapEntry(fileSource, openedFile.kdbxFile.credentials);
-    }).where((entry) => entry != null)
-            as Iterable<MapEntry<FileSource, Credentials>>));
+    }).whereNotNull()));
   }
 
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);

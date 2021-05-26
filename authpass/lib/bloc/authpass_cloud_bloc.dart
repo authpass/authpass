@@ -44,10 +44,13 @@ enum TokenStatus {
   confirmed,
 }
 
+class AuthPassCloudBlocDummy implements AuthPassCloudBloc {
+  @override
+  dynamic noSuchMethod(Invocation invocation) {}
+}
+
 class AuthPassCloudBloc with ChangeNotifier {
-  AuthPassCloudBloc({required this.env, required this.featureFlags})
-      : assert(env != null),
-        assert(featureFlags != null) {
+  AuthPassCloudBloc({required this.env, required this.featureFlags}) {
     _logger.fine('Creating AuthPassCloudBloc with $featureFlags');
     _init();
   }
