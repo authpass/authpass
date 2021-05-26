@@ -44,7 +44,7 @@ enum TokenStatus {
   confirmed,
 }
 
-class AuthPassCloudBlocDummy implements AuthPassCloudBloc {
+class AuthPassCloudBlocDummy with ChangeNotifier implements AuthPassCloudBloc {
   @override
   dynamic noSuchMethod(Invocation invocation) {}
 }
