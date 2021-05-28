@@ -615,7 +615,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PROVISIONING_PROFILE_SPECIFIER = "AuthPass Mac Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "Mac App Store AuthPass Distribution Profile";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
