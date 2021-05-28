@@ -279,7 +279,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         }
       }
       throw StorageException.unknown(
-          info['error_summary'].toString() ?? info.toString());
+          info['error_summary']?.toString() ?? info.toString());
     }
     final metadataJson = json.decode(response.body) as Map<String, dynamic>;
     final metadata = FileMetadata.fromJson(metadataJson);

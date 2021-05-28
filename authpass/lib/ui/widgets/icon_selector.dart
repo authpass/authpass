@@ -269,8 +269,8 @@ abstract class SelectedIcon with _$SelectedIcon {
       _SelectedIconCustom;
 
   factory SelectedIcon.fromObject(KdbxObject object) =>
-      (object.customIcon?.let((custom) => SelectedIcon.custom(custom!)) ??
-      object.icon.get()?.let((icon) => SelectedIcon.predefined(icon!)))!;
+      (object.customIcon?.let((custom) => SelectedIcon.custom(custom)) ??
+          object.icon.get()?.let((icon) => SelectedIcon.predefined(icon)))!;
 }
 
 class IconSelectorFormField extends StatelessWidget {

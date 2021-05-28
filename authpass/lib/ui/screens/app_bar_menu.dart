@@ -48,7 +48,7 @@ class AppBarMenu {
           title: Text(loc.menuItemPreferences),
         ),
       ),
-      ...?(openedFiles?.isNotEmpty != true
+      ...?(openedFiles.isNotEmpty != true
           ? null
           : (<PopupMenuEntry<VoidCallback>>[const PopupMenuDivider()])
               .followedBy(

@@ -65,7 +65,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
               'uuid ${emailMessage.mailboxEntryUuid}');
         }
         final entry =
-            mailbox?.entryUuid?.let((uuid) => kdbxBloc.findEntryByUuid(uuid));
+            mailbox?.entryUuid.let((uuid) => kdbxBloc.findEntryByUuid(uuid));
         final vm2 = vm.copyWith(mailbox: mailbox, kdbxEntry: entry);
         yield vm2;
         yield vm2.copyWith(
@@ -199,7 +199,7 @@ class EmailRead extends StatelessWidget {
       'Date': formatUtil.formatDateFull(
           vm.mimeMessage?.decodeHeaderDateValue('date') ??
               vm.emailMessage!.createdAt),
-      'Mailbox': vm.kdbxEntry?.label ?? vm.mailbox?.label?.takeUnlessBlank(),
+      'Mailbox': vm.kdbxEntry?.label ?? vm.mailbox?.label.takeUnlessBlank(),
 //          'To': message.decodeHeaderValue('to'),
     };
     final textSpans = headers.entries
@@ -215,7 +215,7 @@ class EmailRead extends StatelessWidget {
         .toList()
           ..removeLast();
     final entryVm = vm.kdbxEntry
-        ?.let((entry) => EntryViewModel(entry!, context.watch<KdbxBloc>()));
+        ?.let((entry) => EntryViewModel(entry, context.watch<KdbxBloc>()));
     const iconSize = 56.0;
     final theme = Theme.of(context);
     final fallbackIcon = (BuildContext context) => Icon(

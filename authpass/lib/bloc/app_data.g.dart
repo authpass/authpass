@@ -168,16 +168,13 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
   @override
   Iterable<Object?> serialize(Serializers serializers, AppData object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object?>[];
+    final result = <Object?>[
+      'previousFiles',
+      serializers.serialize(object.previousFiles,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(OpenedFile)])),
+    ];
     Object? value;
-    value = object.previousFiles;
-    if (value != null) {
-      result
-        ..add('previousFiles')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(OpenedFile)])));
-    }
     value = object.passwordGeneratorLength;
     if (value != null) {
       result
@@ -536,7 +533,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
 
 class _$AppData extends AppData {
   @override
-  final BuiltList<OpenedFile>? previousFiles;
+  final BuiltList<OpenedFile> previousFiles;
   @override
   final int? passwordGeneratorLength;
   @override
@@ -568,7 +565,7 @@ class _$AppData extends AppData {
       (new AppDataBuilder()..update(updates)).build();
 
   _$AppData._(
-      {this.previousFiles,
+      {required this.previousFiles,
       this.passwordGeneratorLength,
       this.passwordGeneratorCharacterSets,
       this.manualUserType,
@@ -582,7 +579,10 @@ class _$AppData extends AppData {
       this.secureWindow,
       this.localeOverride,
       this.fetchWebsiteIcons})
-      : super._();
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        previousFiles, 'AppData', 'previousFiles');
+  }
 
   @override
   AppData rebuild(void Function(AppDataBuilder) updates) =>
@@ -749,7 +749,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   AppDataBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _previousFiles = $v.previousFiles?.toBuilder();
+      _previousFiles = $v.previousFiles.toBuilder();
       _passwordGeneratorLength = $v.passwordGeneratorLength;
       _passwordGeneratorCharacterSets =
           $v.passwordGeneratorCharacterSets?.toBuilder();
@@ -786,7 +786,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
     try {
       _$result = _$v ??
           new _$AppData._(
-              previousFiles: _previousFiles?.build(),
+              previousFiles: previousFiles.build(),
               passwordGeneratorLength: passwordGeneratorLength,
               passwordGeneratorCharacterSets:
                   _passwordGeneratorCharacterSets?.build(),
@@ -805,7 +805,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       late String _$failedField;
       try {
         _$failedField = 'previousFiles';
-        _previousFiles?.build();
+        previousFiles.build();
 
         _$failedField = 'passwordGeneratorCharacterSets';
         _passwordGeneratorCharacterSets?.build();

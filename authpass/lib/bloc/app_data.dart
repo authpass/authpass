@@ -171,7 +171,7 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
 
   static Serializer<AppData> get serializer => _$appDataSerializer;
 
-  BuiltList<OpenedFile>? get previousFiles;
+  BuiltList<OpenedFile> get previousFiles;
 
   int? get passwordGeneratorLength;
 
@@ -215,7 +215,7 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
       serializers.serialize(this) as Map<String, dynamic>;
 
   OpenedFile? recentFileByUuid(String uuid) {
-    return previousFiles!.firstWhereOrNull((f) => f.uuid == uuid);
+    return previousFiles.firstWhereOrNull((f) => f.uuid == uuid);
   }
 }
 

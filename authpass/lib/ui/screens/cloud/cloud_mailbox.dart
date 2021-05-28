@@ -238,7 +238,7 @@ class CloudMailboxList extends StatelessWidget {
 
   MailboxViewModel _labelFor(KdbxBloc kdbxBloc, CommonFields commonFields,
       FormatUtils formatUtils, Mailbox mailbox) {
-    if (mailbox.entryUuid?.isNotEmpty == true) {
+    if (mailbox.entryUuid.isNotEmpty) {
       final entry = kdbxBloc.findEntryByUuid(mailbox.entryUuid);
 
       if (entry != null) {

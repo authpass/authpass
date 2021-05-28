@@ -98,7 +98,7 @@ Future<void> startApp(Env env) async {
       env: env,
       deps: deps,
       navigatorKey: navigatorKey,
-      isFirstRun: appData.previousFiles!.isEmpty,
+      isFirstRun: appData.previousFiles.isEmpty,
     ));
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
@@ -276,7 +276,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             );
           },
           dispose: (_, prev) {
-            prev!.dispose();
+            prev.dispose();
           },
           // eagerly create bloc so everything is loaded once we
           // get into the context menu
@@ -567,8 +567,6 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
 
   void _sendScreenView(Route? route) {
     final screenName = _screenNameFor(route);
-    if (screenName != null) {
-      analytics.trackScreen(screenName);
-    }
+    analytics.trackScreen(screenName);
   }
 }

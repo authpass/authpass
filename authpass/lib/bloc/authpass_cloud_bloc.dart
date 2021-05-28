@@ -272,7 +272,7 @@ class AuthPassCloudBloc with ChangeNotifier {
       );
       _messageList.add(list);
       return list;
-    })!;
+    });
   }
 
   Future<void> _dirtyAll({
@@ -462,7 +462,7 @@ class LazyBehaviorSubject<T> {
         return _subject.value;
       }
       try {
-        final data = await _loadData!();
+        final data = await _loadData();
         _subject.add(data);
         return data;
       } catch (error, stackTrace) {
