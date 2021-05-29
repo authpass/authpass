@@ -3,14 +3,13 @@ PODS:
     - Flutter
   - autofill_service (0.0.1):
     - Flutter
-  - barcode_scan (0.0.1):
+  - barcode_scan2 (0.0.1):
     - Flutter
     - MTBBarcodeScanner
+    - SwiftProtobuf
   - biometric_storage (0.0.1):
     - Flutter
   - device_info (0.0.1):
-    - Flutter
-  - esys_flutter_share (0.0.1):
     - Flutter
   - file_picker_writable (0.0.1):
     - Flutter
@@ -29,9 +28,12 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - share (0.0.1):
+    - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
+  - SwiftProtobuf (1.17.0)
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
@@ -44,10 +46,9 @@ PODS:
 DEPENDENCIES:
   - argon2_ffi (from `.symlinks/plugins/argon2_ffi/ios`)
   - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
-  - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
+  - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
-  - esys_flutter_share (from `.symlinks/plugins/esys_flutter_share/ios`)
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
@@ -55,6 +56,7 @@ DEPENDENCIES:
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
@@ -65,20 +67,19 @@ SPEC REPOS:
   trunk:
     - FMDB
     - MTBBarcodeScanner
+    - SwiftProtobuf
 
 EXTERNAL SOURCES:
   argon2_ffi:
     :path: ".symlinks/plugins/argon2_ffi/ios"
   autofill_service:
     :path: ".symlinks/plugins/autofill_service/ios"
-  barcode_scan:
-    :path: ".symlinks/plugins/barcode_scan/ios"
+  barcode_scan2:
+    :path: ".symlinks/plugins/barcode_scan2/ios"
   biometric_storage:
     :path: ".symlinks/plugins/biometric_storage/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
-  esys_flutter_share:
-    :path: ".symlinks/plugins/esys_flutter_share/ios"
   file_picker_writable:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
@@ -93,6 +94,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
@@ -107,24 +110,25 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
-  barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
+  barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
-  esys_flutter_share: 403498dab005b36ce1f8d7aff377e81f0621b0b4
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_email_sender: f787522d0e82f50e5766c1213dbffff22fdcf009
+  flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_store_listing: 8a8514f63b41943433de5d684204ebf1edcbbfe4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  SwiftProtobuf: 9c85136c6ba74b0a1b84279dbf0f6db8efb714e0
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
-  wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
-  webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
+  wakelock: b0843b2479edbf6504d8d262c2959446f35373aa
+  webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
 
 PODFILE CHECKSUM: ed908e41b68d4abb9397f601ad4c25beeffb919f
 
