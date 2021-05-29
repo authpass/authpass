@@ -21,6 +21,7 @@ import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/diac_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
+import 'package:authpass/utils/file_picker_writable_noop.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -164,12 +165,13 @@ class AuthPassApp extends StatefulWidget {
 class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   late final Deps _deps = widget.deps;
   AppData? _appData;
-  FilePickerState? _filePickerState;
+  late final FilePickerState _filePickerState = _initFilePickerState();
+
+  GlobalKey<NavigatorState>? get _navigatorKey => widget.navigatorKey;
 
   @override
   void initState() {
     super.initState();
-    final _navigatorKey = widget.navigatorKey;
     PathUtils.runAppFinished.complete(true);
     _appData = _deps.appDataBloc.store.cachedValue;
     handleSubscription(
@@ -190,17 +192,19 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     if (AuthPassPlatform.isWindows) {
       initWinSparkle(widget.env);
     }
+  }
 
+  FilePickerState _initFilePickerState() {
     // file picker writable currently has only ios, android, macos support.
     if (AuthPassPlatform.isIOS ||
         AuthPassPlatform.isAndroid ||
         AuthPassPlatform.isMacOS) {
-      _filePickerState = FilePickerWritable().init()
+      return FilePickerWritable().init()
         ..registerFileOpenHandler((fileInfo, file) async {
           _logger.fine('got a new fileInfo: $fileInfo');
           final openRoute = () async {
             var i = 0;
-            while (_navigatorKey!.currentState == null) {
+            while (_navigatorKey?.currentState == null) {
               _logger.finest('No navigator yet. waiting. $i');
               await Future<void>.delayed(const Duration(milliseconds: 100));
               if (i++ > 100) {
@@ -208,7 +212,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                 return;
               }
             }
-            await _navigatorKey.currentState!
+            await _navigatorKey!.currentState!
                 .push(CredentialsScreen.route(FileSourceLocal(
               file,
               uuid: AppDataBloc.createUuid(),
@@ -224,6 +228,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           Analytics.trackError('FilePickerWritable: $errorEvent', false);
           return true;
         });
+    } else {
+      return FilePickerStateNoop();
     }
   }
 
@@ -238,7 +244,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           create: (context) => _createDiacBloc(),
           dispose: (context, diac) => diac.dispose(),
         ),
-        Provider<FilePickerState?>.value(value: _filePickerState),
+        Provider<FilePickerState>.value(value: _filePickerState),
         Provider<Env>.value(value: _deps.env),
         Provider<Deps>.value(value: _deps),
         Provider<Analytics>.value(value: _deps.analytics),
