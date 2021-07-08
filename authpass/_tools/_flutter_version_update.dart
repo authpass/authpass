@@ -10,8 +10,9 @@ import 'package:path/path.dart' as path;
 // const FLUTTER_VERSION = '1.22.0-1.0.pre';
 // const FLUTTER_VERSION = '1.23.0-18.0.pre';
 // const FLUTTER_VERSION = '2.1.0-12.1.pre';
-const FLUTTER_VERSION = '2.3.0-12.1.pre';
-const FLUTTER_URL = 'https://storage.googleapis.com/flutter_infra/releases/';
+const FLUTTER_VERSION = '2.4.0-0.0.pre';
+const FLUTTER_URL =
+    'https://storage.googleapis.com/flutter_infra_release/releases';
 const OUTPUT_FILE = '_flutter_version.sh';
 
 Future<void> main() async {
@@ -23,9 +24,11 @@ Future<void> main() async {
     'FLUTTER_URL': FLUTTER_URL,
   };
   for (final platform in platforms) {
-    final response =
-        await get(Uri.parse('https://storage.googleapis.com/flutter_infra/'
-            'releases/releases_$platform.json'));
+    // final url = 'https://storage.googleapis.com/flutter_infra/'
+    //     'releases/releases_$platform.json';
+    final url = 'https://storage.googleapis.com/flutter_infra_release/'
+        'releases/releases_$platform.json';
+    final response = await get(Uri.parse(url));
     if (response.statusCode != 200) {
       throw StateError(
           'Unsuccessful fetching release json. ${response.statusCode} - ${response.body}');
@@ -33,8 +36,8 @@ Future<void> main() async {
     final releases = parseReleases(response.body);
     final release = releases.firstWhere(
         (release) => release.version == FLUTTER_VERSION,
-        orElse: (() =>
-            throw StateError('No such version found $FLUTTER_VERSION}')) as Release Function()?);
+        orElse: (() => throw StateError(
+            'No such version found $FLUTTER_VERSION at $url')));
     output['FLUTTER_${platform.toUpperCase()}_VERSION'] = FLUTTER_VERSION;
     output['FLUTTER_${platform.toUpperCase()}_ARCHIVE'] = release.archive;
     output['FLUTTER_${platform.toUpperCase()}_SHA256'] = release.sha256;
