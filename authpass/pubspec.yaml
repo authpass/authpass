@@ -186,6 +186,7 @@ dev_dependencies:
   analytics_event_gen: ^1.1.0
   freezed: ^0.14.1+3
   plugin_platform_interface: ^2.0.0
+  msix: ^2.1.3
 
 dependency_overrides:
 #  analytics_event_gen:
@@ -268,3 +269,19 @@ flutter:
         - asset: assets/fonts/jetbrains/JetBrainsMono-Regular.ttf
         - asset: assets/fonts/jetbrains/JetBrainsMono-Bold.ttf
           weight: 700
+msix_config:
+  display_name: AuthPass
+  publisher_display_name: CodeUX.design
+  identity_name: CodeUX.design.AuthPass
+  msix_version: 1.7.12.151
+#  certificate_path: C:\<PathToCertificate>\<MyCertificate.pfx>
+#  certificate_password: 1234 (require if using .pfx certificate)
+  publisher: CN=9A3091A5-8ED6-447B-8681-7F59FF7FE2BE
+  logo_path: ../snap/gui/authpass.png
+  start_menu_icon_path: ../snap/gui/authpass.png
+  tile_icon_path: ../snap/gui/authpass.png
+#  vs_generated_images_folder_path: C:\<PathToFolder>\icons
+  icons_background_color: transparent
+  architecture: x64
+  capabilities: 'internetClient'
+  store: true
