@@ -12,7 +12,7 @@ import 'package:path/path.dart' as path;
 // const FLUTTER_VERSION = '2.1.0-12.1.pre';
 const FLUTTER_VERSION = '2.4.0-0.0.pre';
 const FLUTTER_URL =
-    'https://storage.googleapis.com/flutter_infra_release/releases';
+    'https://storage.googleapis.com/flutter_infra_release/releases/';
 const OUTPUT_FILE = '_flutter_version.sh';
 
 Future<void> main() async {
