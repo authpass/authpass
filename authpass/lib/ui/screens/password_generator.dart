@@ -106,11 +106,11 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     super.didChangeDependencies();
     final appData = Provider.of<AppData>(context);
     _passwordLength = appData.passwordGeneratorLength ?? _passwordLength;
-    if (appData.passwordGeneratorCharacterSets!.isNotEmpty) {
+    if (appData.passwordGeneratorCharacterSets.isNotEmpty) {
       _selectedCharacterSet
         ..clear()
         ..addAll(CharacterSet.characterSetFromIds(
-            appData.passwordGeneratorCharacterSets!));
+            appData.passwordGeneratorCharacterSets));
     }
     _characterSets = characterSets(AppLocalizations.of(context)!);
     _generatePassword();

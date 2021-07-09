@@ -62,16 +62,16 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   static const SOURCE_CLOUD_STORAGE_DATA = 'data';
 
   /// unique id to identify this open file across sessions.
-  String? get uuid;
+  String get uuid;
 
   @BuiltValueField(compare: false)
   DateTime? get lastOpenedAt;
 
-  OpenedFilesSourceType? get sourceType;
+  OpenedFilesSourceType get sourceType;
 
-  String? get sourcePath;
+  String get sourcePath;
 
-  String? get name;
+  String get name;
 
   /// when the user to choose to store password behind biometric keystore
   /// we generate a (more or less) random name to store it into.
@@ -129,20 +129,20 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
     switch (sourceType) {
       case OpenedFilesSourceType.Local:
         return FileSourceLocal(
-          File(sourcePath!),
+          File(sourcePath),
           macOsSecureBookmark: macOsSecureBookmark,
           filePickerIdentifier: filePickerIdentifier,
-          uuid: uuid ?? AppDataBloc.createUuid(),
+          uuid: uuid,
           databaseName: name,
         );
       case OpenedFilesSourceType.Url:
         return FileSourceUrl(
-          Uri.parse(sourcePath!),
-          uuid: uuid ?? AppDataBloc.createUuid(),
+          Uri.parse(sourcePath),
+          uuid: uuid,
           databaseName: name,
         );
       case OpenedFilesSourceType.CloudStorage:
-        final sourceInfo = json.decode(sourcePath!) as Map<String, dynamic>;
+        final sourceInfo = json.decode(sourcePath) as Map<String, dynamic>;
         final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String?;
         final provider = cloudStorageBloc.providerById(storageId);
         if (provider == null) {
@@ -151,7 +151,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         return provider.toFileSource(
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
               .cast<String, String?>(),
-          uuid: uuid ?? UuidUtil.createUuid(),
+          uuid: uuid,
           databaseName: name,
           initialCachedContent: null,
         );
@@ -175,7 +175,7 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
 
   int? get passwordGeneratorLength;
 
-  BuiltSet<String>? get passwordGeneratorCharacterSets;
+  BuiltSet<String> get passwordGeneratorCharacterSets;
 
   String? get manualUserType;
 

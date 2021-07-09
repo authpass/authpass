@@ -1265,7 +1265,7 @@ class _EntryFieldState extends State<EntryField>
     final appData =
         await Provider.of<AppDataBloc>(context, listen: false).store.load();
     final characterSets = CharacterSet.characterSetFromIds(
-        appData.passwordGeneratorCharacterSets!);
+        appData.passwordGeneratorCharacterSets);
     if (characterSets.isEmpty) {
       characterSets.addAll([CharacterSet.alphaNumeric, CharacterSet.numeric]);
     }
