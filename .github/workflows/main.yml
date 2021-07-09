@@ -49,11 +49,11 @@ jobs:
     - name: debug android directory
       run: echo "${ANDROID_SDK_ROOT} , ${ANDROID_HOME}" , Running in ${{ github.ref }}
     - uses: actions/setup-ruby@v1
-      if: ${{ startsWith(matrix.flavor, 'playstoredev') }}
+      if: ${{ startsWith(matrix.flavor, 'playstore') }}
       with:
         ruby-version: '2.6'
     - run: gem install bundler
-      if: ${{ startsWith(matrix.flavor, 'playstoredev') }}
+      if: ${{ startsWith(matrix.flavor, 'playstore') }}
     - name: install ndk
 #      run: 'yes | sdkmanager "ndk;21.0.6113669"'
       run: echo "y" | sudo ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
