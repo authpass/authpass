@@ -3,12 +3,6 @@
 part of 'onedrive_models.dart';
 
 // **************************************************************************
-// AnalyticsEventGenerator
-// **************************************************************************
-
-// ignore_for_file: unnecessary_statements
-
-// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
@@ -86,9 +80,3 @@ Map<String, dynamic> _$OneDriveFileToJson(OneDriveFile instance) =>
     <String, dynamic>{
       'mimeType': instance.mimeType,
     };
-
-// **************************************************************************
-// StaticTextGenerator
-// **************************************************************************
-
-// ignore_for_file: implicit_dynamic_parameter,strong_mode_implicit_dynamic_parameter,strong_mode_implicit_dynamic_variable,non_constant_identifier_names,unused_element

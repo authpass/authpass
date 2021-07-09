@@ -3,12 +3,6 @@
 part of 'dropbox_models.dart';
 
 // **************************************************************************
-// AnalyticsEventGenerator
-// **************************************************************************
-
-// ignore_for_file: unnecessary_statements
-
-// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
@@ -88,9 +82,3 @@ Map<String, dynamic> _$FileMetadataToJson(FileMetadata instance) =>
       'path_display': instance.pathDisplay,
       'rev': instance.rev,
     };
-
-// **************************************************************************
-// StaticTextGenerator
-// **************************************************************************
-
-// ignore_for_file: implicit_dynamic_parameter,strong_mode_implicit_dynamic_parameter,strong_mode_implicit_dynamic_variable,non_constant_identifier_names,unused_element

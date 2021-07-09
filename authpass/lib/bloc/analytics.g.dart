@@ -17,7 +17,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackLaunch({required Brightness systemBrightness}) =>
       trackEvent('launch', <String, dynamic>{
-        'systemBrightness': systemBrightness?.toString()?.substring(11)
+        'systemBrightness': systemBrightness?.toString().substring(11)
       });
   @override
   void _trackInit(
@@ -62,8 +62,8 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
       trackEvent('openFile2',
           <String, dynamic>{'generator': generator, 'version': version});
   @override
-  void trackSelectEntry({EntrySelectionType? type}) => trackEvent('selectEntry',
-      <String, dynamic>{'type': type?.toString()?.substring(19)});
+  void trackSelectEntry({EntrySelectionType? type}) => trackEvent(
+      'selectEntry', <String, dynamic>{'type': type.toString().substring(19)});
   @override
   void trackCopyField({required String key}) =>
       trackEvent('copyField', <String, dynamic>{'key': key});
@@ -104,7 +104,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackAttachmentAdd(AttachmentAddType action, String ext, int value,
           {String category = 'attachmentAdd'}) =>
       trackEvent('attachmentAdd', <String, dynamic>{
-        'action': action?.toString()?.substring(18),
+        'action': action?.toString().substring(18),
         'ext': ext,
         'value': value,
         'category': category
@@ -113,7 +113,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackCloudAuth(CloudAuthAction action,
           {String label = 'auth', String category = 'cloud'}) =>
       trackEvent('cloudAuth', <String, dynamic>{
-        'action': action?.toString()?.substring(16),
+        'action': action?.toString().substring(16),
         'label': label,
         'category': category
       });
@@ -121,7 +121,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackGroupDelete(GroupDeleteResult result,
           {String category = 'group'}) =>
       trackEvent('groupDelete', <String, dynamic>{
-        'result': result?.toString()?.substring(18),
+        'result': result?.toString().substring(18),
         'category': category
       });
   @override
@@ -156,7 +156,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           required String source,
           String category = 'tryUnlock'}) =>
       trackEvent('tryUnlock', <String, dynamic>{
-        'action': action?.toString()?.substring(16),
+        'action': action?.toString().substring(16),
         'ext': ext,
         'source': source,
         'category': category
@@ -174,17 +174,11 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackEntryAction(EntryActionType label, {String action = 'entry'}) =>
       trackEvent('entryAction', <String, dynamic>{
-        'label': label?.toString()?.substring(16),
+        'label': label?.toString().substring(16),
         'action': action
       });
   @override
   void trackBackupBanner(BackupBannerAction action) => trackEvent(
       'backupBanner',
-      <String, dynamic>{'action': action?.toString()?.substring(19)});
+      <String, dynamic>{'action': action?.toString().substring(19)});
 }
-
-// **************************************************************************
-// StaticTextGenerator
-// **************************************************************************
-
-// ignore_for_file: implicit_dynamic_parameter,strong_mode_implicit_dynamic_parameter,strong_mode_implicit_dynamic_variable,non_constant_identifier_names,unused_element

@@ -7,7 +7,7 @@ import 'package:kdbx/kdbx.dart';
 part 'cloud_viewmodel.freezed.dart';
 
 @freezed
-abstract class EmailViewModel with _$EmailViewModel {
+class EmailViewModel with _$EmailViewModel {
   const factory EmailViewModel({
     @nullable EmailMessage? emailMessage,
     @nullable MimeMessage? mimeMessage,

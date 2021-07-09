@@ -3,7 +3,7 @@ import 'package:authpass/main.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 final _logger = Logger('env');
 

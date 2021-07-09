@@ -261,7 +261,7 @@ class IconSelectorCustomIcon extends StatelessWidget {
 }
 
 @freezed
-abstract class SelectedIcon with _$SelectedIcon {
+class SelectedIcon with _$SelectedIcon {
   const factory SelectedIcon.predefined(KdbxIcon icon) =
       _SelectedIconPredefined;
 
