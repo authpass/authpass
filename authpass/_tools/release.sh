@@ -120,7 +120,7 @@ case "${flavor}" in
           echo "fastlane failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
         fi
     ;;
-    android)
+    android | playstore)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
         cd android
         bundle install

@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        flavor: ['playstoredev', 'samsungapps', 'sideload', 'huawei', 'amazon']
+        flavor: ['playstore', 'playstoredev', 'samsungapps', 'sideload', 'huawei', 'amazon']
         shouldRelease:
           - ${{ contains(github.ref, 'stable') || startsWith(github.ref, 'refs/heads/v') }}
         isMaster:
@@ -27,6 +27,8 @@ jobs:
             flavor: huawei
           - shouldRelease: false
             flavor: samsungapps
+          - shouldRelease: false
+            flavor: playstore
 
 
       fail-fast: true
