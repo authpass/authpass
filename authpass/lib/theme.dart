@@ -107,10 +107,7 @@ Typography _getTypography() {
 
 final macOsVersionPattern = RegExp(r'Darwin (\d+)\.(\d+)');
 
-bool _isDarwinVersion(
-    {required int minimumMajor, required int minimumMinor}) {
-  assert(minimumMajor != null);
-  assert(minimumMinor != null);
+bool _isDarwinVersion({required int minimumMajor, required int minimumMinor}) {
   final match =
       macOsVersionPattern.firstMatch(AuthPassPlatform.operatingSystemVersion);
   if (match == null) {

@@ -41,7 +41,7 @@ class GroupViewModel {
 class GroupList extends StatelessWidget {
   const GroupList({Key? key, this.parent}) : super(key: key);
 
-  static Route<KdbxGroup> route(KdbxGroup parent) => MaterialPageRoute(
+  static Route<KdbxGroup> route(KdbxGroup? parent) => MaterialPageRoute(
         settings:
             RouteSettings(name: '/groupList${parent == null ? '' : 'Child'}'),
         builder: (context) => GroupList(
@@ -77,7 +77,7 @@ class GroupList extends StatelessWidget {
       body: StreamBuilder<ChangeEvent<KdbxNode>>(
           stream: parent?.changes,
           builder: (context, snapshot) {
-            _logger.finer('snapshot: $snapshot ${parent?.groups?.length}');
+            _logger.finer('snapshot: $snapshot ${parent?.groups.length}');
             final rootGroups = _createViewModel(kdbxBloc);
             return ListView.builder(
               itemCount: rootGroups.length,
@@ -264,8 +264,7 @@ class GroupListFlat extends StatelessWidget {
 
 class GroupListBuilder extends StatelessWidget {
   const GroupListBuilder({Key? key, this.rootGroup, required this.builder})
-      : assert(builder != null),
-        super(key: key);
+      : super(key: key);
 
   /// if defined only groups within this group will be shown,
   /// otherwise all groups in all files are shown.
@@ -364,9 +363,7 @@ class GroupListFlatContent extends StatefulWidget {
     this.groups,
     required this.initialSelection,
     required this.groupListMode,
-  })  : assert(initialSelection != null),
-        assert(groupListMode != null),
-        super(key: key);
+  }) : super(key: key);
 
   final Set<KdbxGroup?> initialSelection;
   final List<_GroupViewModel>? groups;
@@ -762,10 +759,7 @@ class GroupListTile extends StatelessWidget {
     required this.groupListMode,
     required this.onChanged,
     this.onLongPress,
-  })  : assert(group != null),
-        assert(onChanged != null),
-//        assert(isSelected != null),
-        super(key: key);
+  }) : super(key: key);
 
   static const _levelIndent = 16.0;
 
@@ -805,9 +799,9 @@ class GroupListTile extends StatelessWidget {
                 child: DecoratedBox(
                     decoration: BoxDecoration(
                         color: ThemeUtil.iconColor(theme, group.color)))),
-            ...?_buildSelectWidget(),
+            ..._buildSelectWidget(),
             group.group.customIcon?.let((customIcon) => Image.memory(
-                      customIcon!.data!,
+                      customIcon.data,
                       width: 24,
                       height: 24,
                       fit: BoxFit.contain,
@@ -858,6 +852,6 @@ class GroupListTile extends StatelessWidget {
       case GroupListMode.manage:
         return [const SizedBox(width: 16)];
     }
-    throw StateError('Invalid groupListMode $groupListMode');
+    // throw StateError('Invalid groupListMode $groupListMode');
   }
 }

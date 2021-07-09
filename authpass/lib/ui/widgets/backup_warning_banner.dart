@@ -6,7 +6,7 @@ class BackupBanner extends StatelessWidget {
     required this.backupWidget,
     required this.dismissText,
     this.onDismiss,
-  }) : assert(backupWidget != null);
+  });
 
   final String bannerText;
 

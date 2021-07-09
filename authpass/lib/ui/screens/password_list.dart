@@ -210,7 +210,7 @@ class PasswordListContent extends StatefulWidget {
         AutofillService().resultWithDataset(
             label: entry.label, username: username, password: password);
         // not sure if this actually works.
-        context?.read<Analytics>()?.events?.trackAutofillSelect();
+        context.read<Analytics>().events.trackAutofillSelect();
         return;
       }
     }
@@ -251,7 +251,7 @@ class PasswordListFilterIsolateRunner {
                       .getString(field)
                       ?.getText()
                       ?.toLowerCase()
-                      ?.contains(term) ==
+                      .contains(term) ==
                   true)
               .isEmpty &&
           entry.groupNames
@@ -277,10 +277,7 @@ class GroupFilter {
     required this.showRecycleBin,
     required this.showActive,
     required this.name,
-  })  : assert(showRecycleBin != null),
-        assert(showActive != null),
-        assert(name != null),
-        assert(groups != null);
+  });
 
   static const DEFAULT_GROUP_FILTER = GroupFilter(
       showRecycleBin: false, showActive: true, name: 'Hide Deleted Entries');
@@ -404,13 +401,13 @@ class _PasswordListContentState extends State<PasswordListContent>
           _autofillMetadata = value;
         });
         final val = value?.searchTerm?.let((term) {
-              _filterTextEditingController.text = term!;
+              _filterTextEditingController.text = term;
               _filterTextEditingController.selection =
                   TextSelection(baseOffset: 0, extentOffset: term.length);
               return _updateFilterQuery(term);
             }) ??
             0;
-        context?.read<Analytics>()?.events?.trackAutofillFilter(
+        context.read<Analytics>().events.trackAutofillFilter(
               filter: '${value?.searchTerm?.isNotEmpty}',
               value: val,
             );
@@ -835,7 +832,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final loc = AppLocalizations.of(context)!;
 
     final info = _autofillMetadata?.let((metadata) {
-      final searchTerm = metadata!.searchTerm;
+      final searchTerm = metadata.searchTerm;
       if (searchTerm != null && searchTerm == _filterQuery) {
         return [
           TextSpan(text: Nls.NL + loc.autofillFilterPrefix + Nls.SP),
@@ -972,17 +969,20 @@ class _PasswordListContentState extends State<PasswordListContent>
               )
             : Scrollbar(
                 child: ListView.builder(
-                  itemCount: entries!.length + (listPrefix != null ? 1 : 0),
+                  itemCount: entries!.length + 1,
                   itemBuilder: (context, index) {
-                    if (listPrefix != null) {
-                      if (index == 0) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: listPrefix,
-                        );
+                    // handle [listPrefix]
+                    if (index == 0) {
+                      if (listPrefix.isEmpty) {
+                        return const SizedBox();
                       }
-                      index--;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: listPrefix,
+                      );
                     }
+                    index--;
+
                     final entry = entries[index];
 
                     final openedFile =
@@ -1075,7 +1075,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   List<PopupMenuItem<VoidCallback>>? _buildAuthPassCloudMenuItems(
       BuildContext context, CloudStatus? cloudStatus) {
     final bloc = context.read<AuthPassCloudBloc>();
-    if (bloc?.featureFlags?.authpassCloud != true) {
+    if (bloc.featureFlags.authpassCloud != true) {
       return null;
     }
     if (bloc.tokenStatus == TokenStatus.confirmed) {
@@ -1482,10 +1482,7 @@ class EntryIcon extends StatelessWidget {
     required this.vm,
     required this.fallback,
     required this.size,
-  })  : assert(vm != null),
-        assert(fallback != null),
-        assert(size != null),
-        super(key: key);
+  }) : super(key: key);
 
   final EntryViewModel vm;
   final double size;
@@ -1525,7 +1522,7 @@ class EntryIcon extends StatelessWidget {
     double size,
   ) {
     return vm.entry.customIcon?.let((customIcon) => Image.memory(
-              customIcon!.data!,
+              customIcon.data,
               width: size,
               height: size,
               fit: BoxFit.contain,

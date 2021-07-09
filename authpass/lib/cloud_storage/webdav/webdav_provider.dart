@@ -9,12 +9,9 @@ import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_models.dart';
 import 'package:authpass/utils/format_utils.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:xml/xml.dart' as xml;
@@ -93,7 +90,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   @override
   Future<FileSource> createEntity(
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
-    final WebDavClient client = await requireAuthenticatedClient();
+    final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, saveAs.parent).resolve(saveAs.fileName);
     _logger.finer('Saving to $uri');
     final request = Request(METHOD_PUT, uri);
@@ -119,7 +116,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   }
 
   Future<String?> _refetchEtagFromHead(Uri uri) async {
-    final WebDavClient client = await requireAuthenticatedClient();
+    final client = await requireAuthenticatedClient();
     _logger.info('No etag on PUT, fetch HEAD.');
     final headResponse = await client.send(Request(METHOD_HEAD, uri));
     await _expectSuccessResponse(headResponse);
@@ -223,13 +220,13 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
 
   @override
   Future<SearchResponse> list({CloudStorageEntity? parent}) async {
-    final WebDavClient client = await requireAuthenticatedClient();
+    final client = await requireAuthenticatedClient();
     return propFind(client, parent);
   }
 
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
-    final WebDavClient client = await requireAuthenticatedClient();
+    final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
     final response = await client.get(uri);
     final metadata =
@@ -242,7 +239,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   @override
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
-    final WebDavClient client = await requireAuthenticatedClient();
+    final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
     final request = Request(METHOD_PUT, uri);
     if (previousMetadata == null) {

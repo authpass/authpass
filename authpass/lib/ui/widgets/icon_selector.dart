@@ -320,7 +320,7 @@ class IconSelectorFormField extends StatelessWidget {
                       color: theme.primaryColor,
                     ),
                     custom: (custom) => Image.memory(
-                      custom.custom.data!,
+                      custom.custom.data,
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.contain,

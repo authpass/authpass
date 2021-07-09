@@ -6,6 +6,7 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -22,8 +23,7 @@ final _logger = Logger('manage_file');
 
 class ManageFileScreen extends StatefulWidget {
   const ManageFileScreen({Key? key, required this.fileSource})
-      : assert(fileSource != null),
-        super(key: key);
+      : super(key: key);
 
   final FileSource fileSource;
 
@@ -85,9 +85,7 @@ class ManageFile extends StatefulWidget {
     Key? key,
     required this.fileSource,
     required this.onFileSourceChanged,
-  })  : assert(fileSource != null),
-        assert(onFileSourceChanged != null),
-        super(key: key);
+  }) : super(key: key);
 
   final FileSource fileSource;
   final void Function(FileSource newFileSource) onFileSourceChanged;
@@ -271,7 +269,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                                   .toXmlString(pretty: true)));
                         },
                         child: Text(
-                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects?.length} dirty)'),
+                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects.length} dirty)'),
                       ),
                     ],
                   ),
@@ -369,12 +367,9 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   }
 
   void _init() {
-    try {
-      _selectedColor = AuthPassTheme.defaultFileColors
-          .firstWhere((color) => color.value == widget.initialColor?.value);
-    } on StateError catch (e) {
-      _selectedColor = widget.initialColor;
-    }
+    _selectedColor = AuthPassTheme.defaultFileColors.firstWhereOrNull(
+            (color) => color.value == widget.initialColor?.value) ??
+        widget.initialColor;
   }
 
   @override
@@ -388,7 +383,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             BlockPicker(
-              availableColors: AuthPassTheme.defaultFileColors as List<Color>,
+              availableColors: AuthPassTheme.defaultFileColors,
               pickerColor: _selectedColor ?? Colors.white,
               onColorChanged: (color) {
                 setState(() {

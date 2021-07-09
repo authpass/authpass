@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 
 /// Workaround for centered icons. see https://github.com/flutter/flutter/issues/24054#issuecomment-439167235
 class CenteredIcon extends StatelessWidget {

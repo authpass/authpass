@@ -173,9 +173,7 @@ class EmailRead extends StatelessWidget {
     required this.bloc,
     required this.vm,
     this.forcePlainText,
-  })  : assert(bloc != null),
-        assert(vm != null),
-        super(key: key);
+  }) : super(key: key);
   final AuthPassCloudBloc bloc;
   final EmailViewModel vm;
   final bool? forcePlainText;

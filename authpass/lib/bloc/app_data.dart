@@ -94,7 +94,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
       OpenedFile(
         (b) {
           b.lastOpenedAt = clock.now().toUtc();
-          b.uuid = fileSource.uuid ?? AppDataBloc.createUuid();
+          b.uuid = fileSource.uuid;
           if (fileSource is FileSourceLocal) {
             b
               ..sourceType = OpenedFilesSourceType.Local

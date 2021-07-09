@@ -6,7 +6,6 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:authpass/utils/platform.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
 
@@ -36,7 +35,6 @@ class PathUtils implements PathUtil {
   /// Document directory for "internal" kdbx files which should be accessible
   /// by the user. - this directory is NOT namespaced during development.
   Future<Directory> getAppDocDirectory({required bool ensureCreated}) async {
-    assert(ensureCreated != null);
     final dir = await path_provider.getApplicationDocumentsDirectory();
     if (ensureCreated) {
       return await dir.create(recursive: true);
@@ -86,9 +84,11 @@ class PathUtils implements PathUtil {
     return dataDir;
   }
 
-  Future<File> saveToTempDirectory(Uint8List bytes,
-      {required String dirPrefix, required String fileName}) async {
-    assert(fileName != null);
+  Future<File> saveToTempDirectory(
+    Uint8List bytes, {
+    required String dirPrefix,
+    required String fileName,
+  }) async {
     final tempDirectory = await getTemporaryDirectory();
     final dir = await tempDirectory.createTemp();
     final f = File(path.join(dir.path, fileName));

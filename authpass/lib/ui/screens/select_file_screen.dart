@@ -421,7 +421,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       ),
                       ...ListTile.divideTiles(
                         context: context,
-                        tiles: appData.previousFiles?.reversed
+                        tiles: appData.previousFiles.reversed
                                 .take(5)
                                 .takeIfNotEmpty()
                                 ?.map(

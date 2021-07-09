@@ -11,7 +11,6 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_models.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:path/path.dart' as path;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';

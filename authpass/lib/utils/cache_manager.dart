@@ -4,7 +4,6 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cache_manager/src/storage/cache_object.dart';
-import 'package:meta/meta.dart';
 
 class AuthPassCacheManager extends CacheManager {
   factory AuthPassCacheManager({required PathUtils pathUtils}) {

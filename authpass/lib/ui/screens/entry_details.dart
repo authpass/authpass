@@ -278,11 +278,11 @@ class _EntryDetailsState extends State<EntryDetails>
         final context = FocusManager.instance.primaryFocus?.context;
         if (context != null) {
           _logger.fine('context: $context');
-          if (context?.widget is EditableText) {
+          if (context.widget is EditableText) {
             final ctrl = (context.widget as EditableText).controller;
             if (!ctrl.selection.isCollapsed && ctrl.selection.isNormalized) {
               final data = ctrl.selection.textInside(ctrl.text);
-              if (data != null && data.isNotEmpty) {
+              if (data.isNotEmpty) {
                 Clipboard.setData(ClipboardData(text: data));
                 if (mounted) {
                   final loc = AppLocalizations.of(context)!;
@@ -320,7 +320,7 @@ class _EntryDetailsState extends State<EntryDetails>
   _EntryFieldState? _fieldStateFor(CommonField commonField) => _fieldKeys!
       .firstWhereOrNull((f) => f.item2 == commonField.key)
       ?.item1
-      ?.currentState;
+      .currentState;
 
   Future<void> _copyField(CommonField commonField) async {
     final field = _fieldStateFor(commonField);
@@ -532,46 +532,43 @@ class _EntryDetailsState extends State<EntryDetails>
                 },
               ),
               const Divider(),
-              ...?entry.binaryEntries.isEmpty
-                  ? []
-                  : entry.binaryEntries.map((e) {
-                      return InkWell(
-                        onTap: () async {
-                          await showModalBottomSheet<void>(
-                              context: context,
-                              builder: (context) => AttachmentBottomSheet(
-                                    entry: entry,
-                                    attachment: e,
-                                  ));
-                        },
-                        child: Container(
-                          constraints: const BoxConstraints(minWidth: 500),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 8,
-                          ),
-                          child: Row(
+              ...entry.binaryEntries.map((e) {
+                return InkWell(
+                  onTap: () async {
+                    await showModalBottomSheet<void>(
+                        context: context,
+                        builder: (context) => AttachmentBottomSheet(
+                              entry: entry,
+                              attachment: e,
+                            ));
+                  },
+                  child: Container(
+                    constraints: const BoxConstraints(minWidth: 500),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 8,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        const Icon(Icons.attach_file),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              const Icon(Icons.attach_file),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text(e.key.key,
-                                        style: theme.textTheme.subtitle1),
-                                    const SizedBox(height: 2),
-                                    Text(loc.sizeBytes(e.value.value!.length),
-                                        style: theme.textTheme.caption),
-                                  ],
-                                ),
-                              ),
+                              Text(e.key.key, style: theme.textTheme.subtitle1),
+                              const SizedBox(height: 2),
+                              Text(loc.sizeBytes(e.value.value!.length),
+                                  style: theme.textTheme.caption),
                             ],
                           ),
                         ),
-                      );
-                    }),
+                      ],
+                    ),
+                  ),
+                );
+              }),
               LinkButton(
                 icon: const Icon(Icons.attach_file),
                 onPressed: _attachFile,
@@ -699,9 +696,7 @@ class AttachmentBottomSheet extends StatelessWidget {
     Key? key,
     required this.entry,
     required this.attachment,
-  })  : assert(entry != null),
-        assert(attachment != null),
-        super(key: key);
+  }) : super(key: key);
 
   final KdbxEntry entry;
   final MapEntry<KdbxKey, KdbxBinary> attachment;
@@ -925,10 +920,7 @@ class EntryField extends StatefulWidget {
     required this.fieldKey,
     this.commonField,
     required this.onChangedMetadata,
-  })  : assert(entry != null),
-        assert(fieldKey != null),
-        assert(onChangedMetadata != null),
-        super(key: key);
+  }) : super(key: key);
 
   final FieldType fieldType;
   final KdbxEntry entry;
@@ -962,7 +954,7 @@ class _EntryFieldState extends State<EntryField>
     with StreamSubscriberMixin, TaskStateMixin
     implements FieldDelegate {
   final GlobalKey _formFieldKey = GlobalKey();
-  TextEditingController? _controller;
+  late TextEditingController _controller;
   bool _isValueObscured = false;
   final FocusNode _focusNode = FocusNode();
   late CommonFields _commonFields;
@@ -980,7 +972,7 @@ class _EntryFieldState extends State<EntryField>
   String? get _valueCurrent =>
       (_isValueObscured
           ? widget.entry.getString(widget.fieldKey)?.getText()
-          : _controller!.text) ??
+          : _controller.text) ??
       _fieldValue?.getText();
 
   final GlobalKey<HighlightWidgetState> _highlightWidgetKey =
@@ -1025,7 +1017,7 @@ class _EntryFieldState extends State<EntryField>
         'Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
     if (!_focusNode.hasFocus) {
       setState(() {
-        _fieldValue = ProtectedValue.fromString(_controller!.text);
+        _fieldValue = ProtectedValue.fromString(_controller.text);
         _isValueObscured = true;
         _logger.finer('${widget.fieldKey} _isProtected= $_isValueObscured');
       });
@@ -1124,7 +1116,6 @@ class _EntryFieldState extends State<EntryField>
       case EntryAction.copyRawData:
         // only used by [_OtpEntryFieldState]
         throw UnsupportedError('Field does not support this action.');
-        break;
       case EntryAction.rename:
         final key = await SimplePromptDialog(
           title: 'Renaming field',
@@ -1175,8 +1166,8 @@ class _EntryFieldState extends State<EntryField>
                 await bloc.createMailbox(entryUuid: widget.entry.uuid.uuid);
             setState(() {
               _isValueObscured = false;
-              _controller!.text = address!;
-              _fieldValue = PlainValue(_controller!.text);
+              _controller.text = address!;
+              _fieldValue = PlainValue(_controller.text);
               copyValue();
             });
           });
@@ -1300,10 +1291,10 @@ class _EntryFieldState extends State<EntryField>
   void _generatedPassword(String password) {
     setState(() {
       _isValueObscured = false;
-      _controller!.text = password;
-      _fieldValue = ProtectedValue.fromString(_controller!.text);
-      _controller!.selection =
-          TextSelection(baseOffset: 0, extentOffset: _controller!.text.length);
+      _controller.text = password;
+      _fieldValue = ProtectedValue.fromString(_controller.text);
+      _controller.selection =
+          TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       _focusNode.requestFocus();
     });
     copyValue();
@@ -1327,9 +1318,9 @@ class _EntryFieldState extends State<EntryField>
     return ObscuredEntryFieldEditor(
       onPressed: () {
         setState(() {
-          _controller!.text = _valueCurrent ?? '';
-          _controller!.selection = TextSelection(
-              baseOffset: 0, extentOffset: _controller!.text?.length ?? 0);
+          _controller.text = _valueCurrent ?? '';
+          _controller.selection = TextSelection(
+              baseOffset: 0, extentOffset: _controller.text.length);
           _isValueObscured = false;
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             _focusNode.requestFocus();
@@ -1370,7 +1361,7 @@ class _EntryFieldState extends State<EntryField>
   void dispose() {
     _logger
         .fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
-    _controller!.dispose();
+    _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -1378,7 +1369,7 @@ class _EntryFieldState extends State<EntryField>
   List<PopupMenuEntry<EntryAction>>? _buildMenuEntriesAuthPassCloud(
       BuildContext context) {
     final authPassCloud = context.read<AuthPassCloudBloc>();
-    if (authPassCloud?.featureFlags?.authpassCloud != true) {
+    if (authPassCloud.featureFlags.authpassCloud != true) {
       return null;
     }
     if (authPassCloud.tokenStatus != TokenStatus.confirmed) {
@@ -1528,7 +1519,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
     Provider.of<Analytics>(context, listen: false)
         .events
         .trackCopyField(key: widget.fieldKey.key);
-    await Clipboard.setData(ClipboardData(text: _currentOtp ?? ''));
+    await Clipboard.setData(ClipboardData(text: _currentOtp));
     return true;
   }
 

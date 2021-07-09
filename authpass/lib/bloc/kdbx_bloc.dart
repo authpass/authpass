@@ -32,7 +32,7 @@ final _logger = Logger('kdbx_bloc');
 class FileExistsException extends KdbxException {
   FileExistsException({
     required this.path,
-  }) : assert(path != null);
+  });
 
   final String path;
 
@@ -170,9 +170,7 @@ class KdbxOpenedFile {
     required this.openedFile,
     required this.kdbxFile,
     required this.kdbxFileContent,
-  })  : assert(fileSource != null),
-        assert(openedFile != null),
-        assert(kdbxFile != null);
+  });
 
   final FileSource fileSource;
   final OpenedFile openedFile;
@@ -546,7 +544,6 @@ class KdbxBloc {
     required String databaseName,
     bool openAfterCreate = false,
   }) async {
-    assert(password != null);
     analytics.events.trackCreateFile();
     assert(!(databaseName.endsWith('.kdbx')));
     final credentials = Credentials(ProtectedValue.fromString(password));

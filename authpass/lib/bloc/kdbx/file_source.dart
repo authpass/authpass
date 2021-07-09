@@ -103,7 +103,6 @@ abstract class FileSource {
   @override
   bool operator ==(dynamic other) {
     if (other is FileSource) {
-      assert(uuid != null);
       return other.uuid == uuid;
     }
     return super == other;

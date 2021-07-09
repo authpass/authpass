@@ -39,7 +39,7 @@ void main() {
         } else {
           throw StateError('wrong prompt type.');
         }
-        return null;
+        return;
       });
       expect(result, true);
     });

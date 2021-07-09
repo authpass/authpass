@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:base32/base32.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:meta/meta.dart';
 import 'package:otp/otp.dart';
 
 /// losely based on format from
@@ -15,10 +14,7 @@ class OtpAuth {
     this.digits = DEFAULT_DIGITS,
     this.period = DEFAULT_PERIOD,
     this.label = '',
-  })  : assert(secret != null),
-        assert(algorithm != null),
-        assert(digits != null),
-        assert(period != null);
+  });
 
   factory OtpAuth.fromUri(Uri uri) {
     final p = uri.queryParameters;
@@ -51,9 +47,8 @@ class OtpAuth {
     Algorithm.SHA512: 'SHA512',
   };
 
-  static Algorithm? algorithmForString(String? key) => algorithms.entries
-      .firstWhereOrNull((entry) => entry.value == key)
-      ?.key;
+  static Algorithm? algorithmForString(String? key) =>
+      algorithms.entries.firstWhereOrNull((entry) => entry.value == key)?.key;
 
   final String label;
   final Algorithm algorithm;

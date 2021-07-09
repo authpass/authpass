@@ -29,14 +29,11 @@ String? getPlatformLocale() {
   var locale = AuthPassPlatform.localeName;
   if (locale == null) return null;
 
-  if (locale != null) {
-    // Convert `en_US.UTF-8` to `en_US`.
-    final index = locale.indexOf('.');
-    if (index != -1) locale = locale.substring(0, index);
+  final index = locale.indexOf('.');
+  if (index != -1) locale = locale.substring(0, index);
 
-    // Convert `en_US` to `en-us`.
-    locale = locale.replaceAll('_', '-').toLowerCase();
-  }
+  // Convert `en_US` to `en-us`.
+  locale = locale.replaceAll('_', '-').toLowerCase();
 
   return locale;
 }

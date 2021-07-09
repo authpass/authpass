@@ -55,9 +55,7 @@ class AuthPassCloudAuth extends StatelessWidget {
 }
 
 class _EnterEmailAddress extends StatefulWidget {
-  const _EnterEmailAddress({Key? key, required this.bloc})
-      : assert(bloc != null),
-        super(key: key);
+  const _EnterEmailAddress({Key? key, required this.bloc}) : super(key: key);
   final AuthPassCloudBloc bloc;
 
   @override
@@ -98,8 +96,9 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             textInputAction: TextInputAction.send,
             onEditingComplete: () {},
             validator: SValidator.notEmpty(
-                    msg: 'Please enter a valid email address.') +
-                SValidator.email(msg: 'Please enter a valid email address.') as String? Function(String?)?,
+                        msg: 'Please enter a valid email address.') +
+                    SValidator.email(msg: 'Please enter a valid email address.')
+                as String? Function(String?)?,
           ),
           ElevatedButton(
             onPressed: _submitCallback(),
@@ -122,9 +121,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
 }
 
 class _ConfirmEmailAddress extends StatefulWidget {
-  const _ConfirmEmailAddress({Key? key, required this.bloc})
-      : assert(bloc != null),
-        super(key: key);
+  const _ConfirmEmailAddress({Key? key, required this.bloc}) : super(key: key);
 
   final AuthPassCloudBloc bloc;
 
@@ -173,8 +170,10 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
                   'please check your spam folder. Otherwise you can try \n'
                   'to request a new confirmation link.',
                   textAlign: TextAlign.center,
-                  style:
-                      Theme.of(context).textTheme.caption!.copyWith(height: 1.4),
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(height: 1.4),
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(

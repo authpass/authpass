@@ -146,7 +146,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
               databaseName: _databaseName.text,
               openAfterCreate: true,
             );
-            assert(created != null);
+            _logger.finest('Created file $created');
             await Navigator.of(context)
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (e, stackTrace) {
@@ -195,7 +195,7 @@ class _PasswordStrengthDisplayState
   void forEachTween(visitor) {
     _scoreTween = visitor(
             _scoreTween,
-            widget.strength?.score?.let((val) => val! + 1) ?? 0.0,
+            widget.strength?.score?.let((val) => val + 1) ?? 0.0,
             (dynamic value) => Tween<double>(begin: value as double?))
         as Tween<double?>?;
     _colorTween = visitor(
@@ -213,7 +213,7 @@ class _PasswordStrengthDisplayState
     final _strength = widget.strength;
     // final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final feedback = _strength?.feedback?.warning?.takeUnlessBlank() ??
+    final feedback = _strength?.feedback.warning.takeUnlessBlank() ??
         // _strength?.feedback?.suggestions?.firstOrNull ??
         ''; // NON-NLS
 

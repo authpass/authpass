@@ -254,7 +254,7 @@ class CloudMailboxList extends StatelessWidget {
           'Unknown Entry: ${mailbox.entryUuid}',
         );
       }
-    } else if (mailbox.label?.isNotEmpty == true) {
+    } else if (mailbox.label.isNotEmpty == true) {
       return MailboxViewModel(FontAwesomeIcons.boxOpen, mailbox.label);
     }
     return MailboxViewModel(

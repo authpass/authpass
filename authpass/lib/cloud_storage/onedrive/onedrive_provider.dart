@@ -11,7 +11,6 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/uuid_util.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 
 final _logger = Logger('onedrive_provider');
@@ -156,8 +155,6 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     String? cTag,
     required Uint8List bytes,
   }) async {
-    assert(locationId != null);
-    assert(bytes != null);
     final uri = fileName == null
         ? _uri(['items', locationId, 'createUploadSession'])
         : _uri(['items', '$locationId:', '$fileName:', 'createUploadSession']);

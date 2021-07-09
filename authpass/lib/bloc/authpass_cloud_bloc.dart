@@ -28,8 +28,7 @@ class _StoredToken {
   _StoredToken({
     required this.authToken,
     required this.isConfirmed,
-  })  : assert(authToken != null),
-        assert(isConfirmed != null);
+  });
   factory _StoredToken.fromJson(Map<String, dynamic> json) =>
       _$_StoredTokenFromJson(json);
   Map<String, dynamic> toJson() => _$_StoredTokenToJson(this);
@@ -345,8 +344,7 @@ class EmailMessageList {
     required this.messages,
     required this.hasMore,
     required this.nextPageToken,
-  })  : assert(messages != null),
-        assert(hasMore != null);
+  });
   const EmailMessageList.empty()
       : this(messages: const [], hasMore: true, nextPageToken: null);
   final List<EmailMessage> messages;
@@ -380,9 +378,7 @@ class JoinRun<T> with ChangeNotifier {
 }
 
 class CloudStatus {
-  CloudStatus({required this.lastFetched, required this.messagesUnread})
-      : assert(lastFetched != null),
-        assert(messagesUnread != null);
+  CloudStatus({required this.lastFetched, required this.messagesUnread});
   final DateTime lastFetched;
   final int messagesUnread;
 }
@@ -450,13 +446,6 @@ class LazyBehaviorSubject<T> {
   }
 
   Future<T> load() async {
-    if (_loadData == null) {
-      // _logger.warning(
-      //     'calling reload on $runtimeType before anyone getting a stream.');
-      // return null;
-      throw StateError(
-          'calling reload on $runtimeType before anyone getting a stream.');
-    }
     return await _joinRun.joinRun(() async {
       if (!_dirty) {
         return _subject.value;

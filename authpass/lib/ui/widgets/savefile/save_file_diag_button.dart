@@ -12,7 +12,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
     this.child,
     this.onSave,
     this.includeLocal = false,
-  }) : assert(file != null);
+  });
 
   final KdbxOpenedFile file;
   final Widget? child;

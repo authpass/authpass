@@ -56,8 +56,7 @@ class GeneratePassword extends StatefulWidget {
     this.doneButtonIcon,
     required this.doneButtonLabel,
     this.doneButtonOnPressed,
-  })  : assert(doneButtonLabel != null),
-        super(key: key);
+  }) : super(key: key);
 
   final Icon? doneButtonIcon;
   final String doneButtonLabel;
@@ -234,7 +233,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                     textAlign: TextAlign.right,
                     onChanged: (value) {
                       int.tryParse(value)?.let((number) {
-                        if (number! > passwordLengthMax &&
+                        if (number > passwordLengthMax &&
                             number <= passwordLengthCustomMax) {
                           setState(() {
                             _passwordLength = number;
@@ -281,8 +280,7 @@ class SimpleGridWidget extends StatelessWidget {
     Key? key,
     this.columns = 2,
     required this.children,
-  })  : assert(children != null),
-        super(key: key);
+  }) : super(key: key);
 
   final int columns;
   final List<Widget> children;

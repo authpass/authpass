@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 
 final _logger = Logger('format_utils');
 

@@ -293,7 +293,7 @@ class SelectLanguageDialog extends StatelessWidget {
                 subtitle: e.translatedName
                     ?.takeIf((n) => n != e.nativeName)
                     ?.let((name) => Text(e.translatedName!)),
-                secondary: e.locale?.let((locale) => Text(locale!)),
+                secondary: e.locale?.let((locale) => Text(locale)),
                 value: e.locale,
                 groupValue: localeOverride,
                 onChanged: (value) {
@@ -316,11 +316,7 @@ class ValueSelectorTile extends StatelessWidget {
     this.icon,
     this.title,
     this.valueForNull = 0,
-  })  : assert(minValue != null),
-        assert(maxValue != null),
-        assert(steps != null),
-        assert(valueForNull != null),
-        super(key: key);
+  }) : super(key: key);
 
   final Widget? icon;
   final Widget? title;
@@ -388,7 +384,6 @@ class ValueSelectorTile extends StatelessWidget {
   }
 
   void _updateValue(int stepDirection) {
-    assert(stepDirection != null);
     final v = value ?? valueForNull;
     final valueStep = (maxValue - minValue) / steps;
     final newValue =
@@ -407,11 +402,7 @@ class SliderSelector extends StatefulWidget {
     required this.maxValue,
     required this.steps,
     required this.onChanged,
-  })  : assert(initialValue != null),
-        assert(minValue != null),
-        assert(maxValue != null),
-        assert(steps != null),
-        super(key: key);
+  }) : super(key: key);
 
   final double initialValue;
   final double minValue;
@@ -458,7 +449,8 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
         final loc = AppLocalizations.of(context);
 
         return [
-          if (kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready!) ...[
+          if (kdbxBloc
+              .quickUnlockStorage.supportsBiometricKeystoreAlready!) ...[
             PopupMenuItem(
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);

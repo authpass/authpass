@@ -7,7 +7,6 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:clock/clock.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 
@@ -133,7 +132,8 @@ class FileSourceCloudStorage extends FileSource {
   @override
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
-    final metadata = await provider!.saveFile(fileInfo, bytes, previousMetadata);
+    final metadata =
+        await provider!.saveFile(fileInfo, bytes, previousMetadata);
     await _writeCache(FileContent(bytes, metadata));
     return metadata;
   }

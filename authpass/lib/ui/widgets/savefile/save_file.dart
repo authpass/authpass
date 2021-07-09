@@ -30,10 +30,7 @@ class SaveFileAs extends StatefulWidget {
     this.cs,
     required this.onSave,
     this.subtitle,
-  })  : assert(title != null),
-        assert(file != null),
-        assert(onSave != null),
-        assert((icon != null && subtitle != null) || cs != null);
+  }) : assert((icon != null && subtitle != null) || cs != null);
 
   final OnSave onSave;
   final KdbxOpenedFile file;
@@ -81,8 +78,8 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
         } else {
           final result = await _saveAsCloudStorage(widget.cs!);
           if (result != null) {
-            widget
-                .onSave(kdbxBloc!.saveAsNewFile(widget.file, result, widget.cs!));
+            widget.onSave(
+                kdbxBloc!.saveAsNewFile(widget.file, result, widget.cs!));
           }
         }
       },

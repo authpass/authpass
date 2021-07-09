@@ -10,7 +10,6 @@ import 'package:authpass/utils/uuid_util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:pedantic/pedantic.dart';

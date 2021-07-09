@@ -18,6 +18,6 @@ extension FileSourceIconUi on FileSourceIcon {
       case FileSourceIcon.externalLink:
         return FontAwesomeIcons.externalLinkAlt;
     }
-    throw StateError('Invalid icon: $this');
+    // throw StateError('Invalid icon: $this');
   }
 }
