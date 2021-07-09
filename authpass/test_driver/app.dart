@@ -11,8 +11,8 @@ Future<void> main() async {
   enableFlutterDriverExtension(handler: (message) async {
     switch (message) {
       case 'nextTheme':
-        final appDataBloc =
-            AuthPassApp.currentNavigatorKey!.currentContext!.read<AppDataBloc>();
+        final appDataBloc = AuthPassApp.currentNavigatorKey!.currentContext!
+            .read<AppDataBloc>();
         return (await appDataBloc.updateNextTheme()).toString();
     }
     return 'unknown';

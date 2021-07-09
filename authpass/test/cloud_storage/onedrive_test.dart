@@ -30,8 +30,8 @@ void main() {
         providerCb: () => provider,
         selectParent: (provider) async {
           final response = await provider!.list();
-          final parent =
-              response.results!.firstWhere((e) => e!.path!.contains('Documents'));
+          final parent = response.results!
+              .firstWhere((e) => e!.path!.contains('Documents'));
           return parent;
         });
   }, skip: skip);
