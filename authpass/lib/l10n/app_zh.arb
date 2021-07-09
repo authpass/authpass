@@ -84,15 +84,15 @@
     "@quickUnlockingFiles": {
         "context": "select file screen"
     },
-    "selectKeepassFileLabel": "请打开或者新建一个密码箱（格式为.kdbx）",
+    "selectKeepassFileLabel": "你的密码库在哪儿呢？（后缀名为.kdbx）",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
     },
-    "createNewFile": "新建密码箱",
+    "createNewFile": "新建一个",
     "@createNewFile": {
         "description": "button on select file screen to create a new password database."
     },
-    "openLocalFile": "打开\n现有密码箱",
+    "openLocalFile": "本地\n文件",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
     },
@@ -123,7 +123,7 @@
     },
     "labelLastOpenFiles": "上次打开的密码库:",
     "@labelLastOpenFiles": {},
-    "noFilesHaveBeenOpenYet": "这里还空着呢，赶快创建一个！",
+    "noFilesHaveBeenOpenYet": "看什么看，这里还空着呢！",
     "@noFilesHaveBeenOpenYet": {},
     "preferenceSelectLanguage": "选择界面语言",
     "@preferenceSelectLanguage": {},
@@ -153,7 +153,7 @@
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "设置",
     "@preferenceTitle": {},
-    "aboutAppName": "誓约",
+    "aboutAppName": "Authpass-誓约",
     "@aboutAppName": {},
     "aboutLinkFeedback": "我们欢迎反馈意见！",
     "@aboutLinkFeedback": {},
@@ -209,11 +209,11 @@
     "@menuItemCheckForUpdates": {},
     "menuItemSupport": "向开发组求助（使用电邮）",
     "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "通过电子邮件发送日志，或者请求帮助。",
+    "menuItemSupportSubtitle": "发送日志/请求帮助（通过电邮）",
     "@menuItemSupportSubtitle": {},
     "menuItemHelp": "寻求帮助",
     "@menuItemHelp": {},
-    "menuItemHelpSubtitle": "显示用户文档",
+    "menuItemHelpSubtitle": "打开浏览器查阅用户文档",
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "关于本应用",
     "@menuItemAbout": {},
@@ -225,7 +225,7 @@
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
     },
-    "generatorPassword": "密码",
+    "generatorPassword": "新鲜出炉的随机密码~",
     "@generatorPassword": {
         "description": "Label for generated password"
     },
@@ -382,7 +382,7 @@
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
     },
-    "internalFileSubtitle": "之前使用 誓约 创建的密码库",
+    "internalFileSubtitle": "之前使用本应用创建的密码库",
     "@internalFileSubtitle": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
@@ -407,12 +407,12 @@
         "description": "Label for the file/database being opened",
         "context": "credential screen"
     },
-    "masterPasswordInputLabel": "请填入主密码",
+    "masterPasswordInputLabel": "用主密码保护你的密码库",
     "@masterPasswordInputLabel": {
         "description": "",
         "context": "credential screen"
     },
-    "masterPasswordEmptyValidator": "请在这里填入主密码",
+    "masterPasswordEmptyValidator": "欢迎回来！在这里输入主密码",
     "@masterPasswordEmptyValidator": {
         "description": "",
         "context": "credential screen"
@@ -479,7 +479,7 @@
         "description": "action button in error dialogs to send email to support with log file.",
         "context": "error dialog"
     },
-    "groupFilterDescription": "选择要显示的分组 (递归)",
+    "groupFilterDescription": "选择要显示的分组",
     "@groupFilterDescription": {
         "description": "Description shown in the group list for filtering (e.g. app drawer)",
         "context": "group filter"
@@ -568,7 +568,7 @@
     "@enableAutofillDebug": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
-    "enableAutofillDebugSubtitle": "显示每个输入字段的调试信息叠加层",
+    "enableAutofillDebugSubtitle": "为每个输入字段显示调试信息叠加层",
     "@enableAutofillDebugSubtitle": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
@@ -576,11 +576,11 @@
     "@createPasswordDatabase": {
         "description": ""
     },
-    "nameNewPasswordDatabase": "您新密码库的名称",
+    "nameNewPasswordDatabase": "这是你崭新的密码库！给它起个好名字",
     "@nameNewPasswordDatabase": {
         "description": "creating new kdbx file, prompt"
     },
-    "validatorNameMissing": "请为您的新密码库起一个名字。",
+    "validatorNameMissing": "为您的新密码库起一个名字：",
     "@validatorNameMissing": {
         "description": "Error message when no password database name is given."
     },
@@ -596,7 +596,7 @@
     "@masterPasswordMissingCreate": {
         "description": "Text displayed when master password is empty while creating new password database"
     },
-    "createDatabaseAction": "创建数据库",
+    "createDatabaseAction": "创建密码库",
     "@createDatabaseAction": {
         "description": "Label for button to create new database"
     },
@@ -621,7 +621,7 @@
     "@preferenceDynamicLoadIcons": {
         "description": "preferences: dynamically load website icons"
     },
-    "preferenceDynamicLoadIconsSubtitle": "会向 {urlFieldName} 发送http请求来获取网页图标",
+    "preferenceDynamicLoadIconsSubtitle": "将会向/ {urlFieldName} /发送未加密的http请求来获取网页图标",
     "@preferenceDynamicLoadIconsSubtitle": {
         "description": "preferences: dynamically load website icons help text.",
         "placeholders": {
@@ -739,19 +739,19 @@
     "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingHeadline": "和我立下誓约，让我保护你的密码吧！",
+    "onboardingHeadline": "签订誓约，\n守护密码！",
     "@onboardingHeadline": {
         "description": ""
     },
-    "onboardingQuestion": "请问您之前有用过基于Keepass的密码管理器吗？",
+    "onboardingQuestion": "您之前用过是用Keepass格式的密码管理器吗",
     "@onboardingQuestion": {
         "description": ""
     },
-    "onboardingYesOpenPasswords": "是的，打开我的密码数据库！",
+    "onboardingYesOpenPasswords": "是的，打开我以前的密码库！",
     "@onboardingYesOpenPasswords": {
         "description": ""
     },
-    "onboardingNoCreate": "从来没有！让我从头开始吧！",
+    "onboardingNoCreate": "咱们还是从零开始吧！",
     "@onboardingNoCreate": {
         "description": ""
     },

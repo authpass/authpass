@@ -1,0 +1,137 @@
+{
+    "@@locale": "si",
+    "fieldUserName": "පරිශීලක",
+    "@fieldUserName": {},
+    "fieldPassword": "මුරපදය",
+    "@fieldPassword": {},
+    "fieldWebsite": "වියමන අඩවිය",
+    "@fieldWebsite": {},
+    "english": "ඉංග්‍රීසි",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "ජර්මානු",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "රුසියානු",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "ප්‍රංශ",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "ඉන්දුනීසියානු",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "italian": "ඉතාලි",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "සරල චීන",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "සාම්ප්‍රදායික චීන",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "තෝරන්න",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
+    "openFile": "ගොනුව විවෘත කරන්න",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "preferenceSelectLanguage": "භාෂාව තෝරන්න",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "භාෂාව",
+    "@preferenceLanguage": {},
+    "preferenceTheme": "තේමාව",
+    "@preferenceTheme": {},
+    "preferenceThemeDark": "අඳුරු",
+    "@preferenceThemeDark": {},
+    "generatorPassword": "මුරපදය",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "doneButtonLabel": "අවසන්",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "searchHint": "සොයන්න",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "සොයන්න",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
+    "autofillFilterPrefix": "පෙරහන:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "swipeCopyPassword": "මුරපදය පිටපත්",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "පරිශීලක නාමය පිටපත්",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "loadingFile": "ගොනුව පූරණය වෙමින්…",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "masterPasswordInputLabel": "මුරපදය",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "වලංගු නොවන මුරපදයකි",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "යතුරු ගොනුව භාවිතා කරන්න",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "close": "වසන්න",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "නව මුරපදයක් එකතු කරන්න",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
+    "errorOpenFileAlreadyOpenTitle": "ගොනුව දැනටමත් විවෘතයි",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "groupListAppBarTitle": "සමූහ",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "closePasswordFiles": "මුරපද ගොනු වසන්න",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "entryInfoFile": "ගොනුව:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "සමූහය:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "saving": "සුරකිමින්",
+    "@saving": {
+        "description": "Saving text"
+    }
+}

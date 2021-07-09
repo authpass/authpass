@@ -72,6 +72,10 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "selectItem": "選取",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - 選取 KeePass 格式檔",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -309,6 +313,10 @@
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
+    "filterButtonLabel": "篩選群組",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
     "clear": "清除篩選條件",
     "@clear": {
         "description": "Remove existing group filter from password list"
@@ -423,6 +431,14 @@
     "@saveMasterPasswordBiometric": {
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
+    },
+    "close": "關閉",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "新增密碼",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
     },
     "errorOpenFileAlreadyOpenTitle": "這個檔案早已開啟了",
     "@errorOpenFileAlreadyOpenTitle": {
@@ -763,6 +779,18 @@
     "saving": "儲存中",
     "@saving": {
         "description": "Saving text"
+    },
+    "increaseValue": "增加",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "減少",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "重新設定",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
     "unexpectedError": "不明錯誤：{error}",
     "@unexpectedError": {
