@@ -60,6 +60,8 @@ One day I have to automate this...
     * https://appgallery.huawei.com/#/app/C101955193
   * [Amazon Appstore](https://developer.amazon.com/apps-and-games/console/apps/list.html)
     * https://www.amazon.com/CodeUX-design-AuthPass-Password-Manageer/dp/B088X48S61
+  * [Microsoft Store](https://partner.microsoft.com/en-us/dashboard/windows/overview)
+    * https://www.microsoft.com/store/apps/9P5N6ZNPSFBN
   * Linux PPA - use [authpass/authpass-deb](https://github.com/authpass/authpass-deb)
     ```shell
     docker-compose run bionic ./update.sh focal

@@ -1,8 +1,8 @@
-# 1.7.12 - unreleased
+# 1.8.0 - 2021-07-09
 
+* Upgrade to Flutter 2.4 / Migrate all code to nnbd to improve stability.
 * Support for v2 keyfiles https://forum.authpass.app/t/issuues-with-keyfile/84/4
 * Enable Keyboard shortcuts for Android app. (Should allow shortcuts on android).
-* Upgrade to Flutter 2.12 / Migrate all code to Nullsafety.
 
 # 1.7.11 - 2021-02-21
 
