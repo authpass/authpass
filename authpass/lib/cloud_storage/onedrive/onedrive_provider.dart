@@ -83,9 +83,8 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   @override
   String get displayName => 'One Drive';
 
-  Uri _uri(List<String?> subPath) {
-    return _baseUri.replace(
-        pathSegments: _baseUri.pathSegments + (subPath as List<String>));
+  Uri _uri(List<String> subPath) {
+    return _baseUri.replace(pathSegments: _baseUri.pathSegments + subPath);
   }
 
   void _assertSuccessResponse(Response response) {
@@ -139,7 +138,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     final driveItem = await _upload(
-      locationId: file.id!,
+      locationId: file.id,
       cTag: previousMetadata![_METADATA_CTAG] as String?,
       bytes: bytes,
     );
@@ -205,7 +204,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   Future<FileSource> createEntity(
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
     final driveItem = await _upload(
-      locationId: saveAs.parent!.id!,
+      locationId: saveAs.parent!.id,
       fileName: saveAs.fileName,
       bytes: bytes,
     );

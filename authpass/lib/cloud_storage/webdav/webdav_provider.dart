@@ -137,9 +137,9 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final uri = Uri.parse(client.credentials.baseUrl);
     if (entity != null) {
       if (entity.type == CloudStorageEntityType.directory) {
-        return uri.resolve(entity.id! + Nls.SLASH);
+        return uri.resolve(entity.id + Nls.SLASH);
       }
-      return uri.resolve(entity.id!);
+      return uri.resolve(entity.id);
     }
     return uri;
   }

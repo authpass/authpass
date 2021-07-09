@@ -145,7 +145,7 @@ class GoogleDriveProvider
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final dynamic response = await driveApi.files
-        .get(file.id!, downloadOptions: DownloadOptions.fullMedia);
+        .get(file.id, downloadOptions: DownloadOptions.fullMedia);
     final media = response as Media;
     final bytes = BytesBuilder(copy: false);
     // ignore: prefer_foreach
@@ -160,7 +160,7 @@ class GoogleDriveProvider
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
-    final updatedFile = await driveApi.files.update(File(), file.id!,
+    final updatedFile = await driveApi.files.update(File(), file.id,
         uploadMedia: Media(byteStream, bytes.lengthInBytes));
     _logger.fine('Successfully saved file ${updatedFile.name}');
     return <String, dynamic>{};
@@ -173,7 +173,7 @@ class GoogleDriveProvider
     final metadata = File();
     metadata.name = saveAs.fileName;
     if (saveAs.parent != null) {
-      metadata.parents = [saveAs.parent!.id!];
+      metadata.parents = [saveAs.parent!.id];
     }
     final byteStream = ByteStream.fromBytes(bytes);
     _logger

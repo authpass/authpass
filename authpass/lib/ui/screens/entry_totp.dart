@@ -17,7 +17,7 @@ class OtpFieldEntryEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Stream<int>.periodic(const Duration(seconds: 1)),
+      stream: Stream<void>.periodic(const Duration(seconds: 1)),
       builder: (context, snapshot) {
         return InputDecorator(
           decoration: InputDecoration(

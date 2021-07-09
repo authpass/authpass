@@ -54,12 +54,12 @@ abstract class CloudStorageEntity
   CloudStorageEntity._();
 
   // TODO: make this non-nullable
-  String? get id;
+  String get id;
   CloudStorageEntityType? get type;
   String? get name;
   String? get path;
 
-  String get pathOrBaseName => path ?? name ?? id ?? 'null';
+  String get pathOrBaseName => path ?? name ?? id;
 
   static CloudStorageEntity fromSimpleFileInfo(Map<String, String?> fileInfo) {
     return nonNls(CloudStorageEntity(

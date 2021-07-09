@@ -14,7 +14,7 @@ part of 'cloud_storage_provider.dart';
 
 class _$CloudStorageEntity extends CloudStorageEntity {
   @override
-  final String? id;
+  final String id;
   @override
   final CloudStorageEntityType? type;
   @override
@@ -26,8 +26,10 @@ class _$CloudStorageEntity extends CloudStorageEntity {
           [void Function(CloudStorageEntityBuilder)? updates]) =>
       (new CloudStorageEntityBuilder()..update(updates)).build();
 
-  _$CloudStorageEntity._({this.id, this.type, this.name, this.path})
-      : super._();
+  _$CloudStorageEntity._({required this.id, this.type, this.name, this.path})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(id, 'CloudStorageEntity', 'id');
+  }
 
   @override
   CloudStorageEntity rebuild(
@@ -113,7 +115,12 @@ class CloudStorageEntityBuilder
   @override
   _$CloudStorageEntity build() {
     final _$result = _$v ??
-        new _$CloudStorageEntity._(id: id, type: type, name: name, path: path);
+        new _$CloudStorageEntity._(
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'CloudStorageEntity', 'id'),
+            type: type,
+            name: name,
+            path: path);
     replace(_$result);
     return _$result;
   }

@@ -1,3 +1,4 @@
+@Tags(['webdav'])
 import 'dart:io';
 
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';

@@ -18,7 +18,7 @@ _tools/flutter_run.sh pub get
 _tools/flutter_run.sh pub global activate coverage
 
 fail=false
-_tools/flutter_run.sh test --coverage || fail=true
+_tools/flutter_run.sh test --coverage --exclude-tags=webdav || fail=true
 echo "fail=$fail"
 
 bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info

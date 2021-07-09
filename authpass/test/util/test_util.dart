@@ -30,7 +30,7 @@ class TestUtil {
         secretsFile.existsSync() ? await secretsFile.readAsString() : '{}';
 
     return TestEnv(EnvSecretsFake.fromJson(
-        json.decode(secretJson) as Map<String, Object>));
+        json.decode(secretJson) as Map<String, dynamic>));
   }
 }
 
@@ -83,7 +83,7 @@ class TestPathUtil extends PathUtil {
 
 class EnvSecretsFake extends Fake implements EnvSecrets {
   EnvSecretsFake(this.microsoftClientId);
-  EnvSecretsFake.fromJson(Map<String, Object> map)
+  EnvSecretsFake.fromJson(Map<String, dynamic> map)
       : microsoftClientId = map['microsoftClientId'] as String?;
 
   @override
