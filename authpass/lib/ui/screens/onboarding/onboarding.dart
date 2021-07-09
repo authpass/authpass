@@ -121,15 +121,13 @@ class OnboardingContent extends StatelessWidget {
           },
         ),
         const SizedBox(height: 16),
-        Container(
-          child: OnboardingButton(
-            image: Image.asset('assets/images/safe-empty-v2.webp'),
-            labelText: loc!.onboardingNoCreate,
-            onPressed: () {
-              Navigator.of(context).push(CreateFile.route());
-              context.read<Analytics>().events.trackOnboardingNew();
-            },
-          ),
+        OnboardingButton(
+          image: Image.asset('assets/images/safe-empty-v2.webp'),
+          labelText: loc!.onboardingNoCreate,
+          onPressed: () {
+            Navigator.of(context).push(CreateFile.route());
+            context.read<Analytics>().events.trackOnboardingNew();
+          },
         ),
         const Expanded(child: SizedBox()),
         const SizedBox(height: 32),

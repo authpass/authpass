@@ -59,7 +59,7 @@ abstract class CloudStorageEntity
   String? get name;
   String? get path;
 
-  String? get pathOrBaseName => path ?? name;
+  String get pathOrBaseName => path ?? name ?? id ?? 'null';
 
   static CloudStorageEntity fromSimpleFileInfo(Map<String, String?> fileInfo) {
     return nonNls(CloudStorageEntity(
@@ -177,9 +177,9 @@ abstract class CloudStorageProvider {
   }
 
   String displayNameFromPath(Map<String, String?> fileInfo) =>
-      path.basename(displayPath(fileInfo)!);
+      path.basename(displayPath(fileInfo));
 
-  String? displayPath(Map<String, String?> fileInfo) =>
+  String displayPath(Map<String, String?> fileInfo) =>
       CloudStorageEntity.fromSimpleFileInfo(fileInfo).pathOrBaseName;
 
   FileSource toFileSource(

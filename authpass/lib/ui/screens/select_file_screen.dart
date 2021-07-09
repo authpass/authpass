@@ -458,7 +458,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   Future<void> _openIosAndAndroidLocalFilePicker() async {
-    final openFilePickerWritable = () async {
+    Future<void> openFilePickerWritable() async {
       await FilePickerWritable().openFile((fileInfo, file) async {
         await Navigator.of(context).push(CredentialsScreen.route(
           FileSourceLocal(
@@ -469,7 +469,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
           ),
         ));
       });
-    };
+    }
 
     final kdbxFiles = await _containsKdbxFiles(
         await PathUtils().getAppDocDirectory(ensureCreated: false));
@@ -619,7 +619,7 @@ class OpenedFileTile extends StatelessWidget {
                     style: const TextStyle(color: AuthPassTheme.linkColor),
                   ),
                   Text(
-                    '${openedFile.displayPath}',
+                    openedFile.displayPath,
                     style: subtitleStyle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -874,7 +874,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                     Text(widget.kdbxFilePath!.displayName,
                         style: theme.textTheme.headline4),
                     Text(
-                      widget.kdbxFilePath!.displayPath!,
+                      widget.kdbxFilePath!.displayPath,
                       style: theme.textTheme.caption,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -950,18 +950,16 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
               ),
               ...(_biometricQuickUnlockSupported!
                   ? [
-                      Container(
-                        child: CheckboxListTile(
-                          value: _biometricQuickUnlockActivated,
-                          dense: true,
-                          title: Text(
-                            loc.saveMasterPasswordBiometric,
-                            textAlign: TextAlign.right,
-                          ),
-                          onChanged: (value) => setState(() {
-                            _biometricQuickUnlockActivated = value;
-                          }),
+                      CheckboxListTile(
+                        value: _biometricQuickUnlockActivated,
+                        dense: true,
+                        title: Text(
+                          loc.saveMasterPasswordBiometric,
+                          textAlign: TextAlign.right,
                         ),
+                        onChanged: (value) => setState(() {
+                          _biometricQuickUnlockActivated = value;
+                        }),
                       ),
                     ]
                   : []),
@@ -988,9 +986,6 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
 
   String _fileExtension() {
     final filePath = widget.kdbxFilePath!.displayPath;
-    if (filePath == null) {
-      return '';
-    }
     return path.extension(filePath);
   }
 
@@ -1030,7 +1025,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         );
         final fileSource = fileResult.kdbxOpenedFile!.fileSource;
         unawaited(kdbxBloc.continueLoadInBackground(openIt,
-            debugName: '${fileSource.displayName}', fileSource: fileSource));
+            debugName: fileSource.displayName, fileSource: fileSource));
         await Navigator.of(context)
             .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
       } on KdbxInvalidKeyException catch (e, stackTrace) {
@@ -1058,8 +1053,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           errorTitle: loc!.errorOpenFileAlreadyOpenTitle,
           errorBody: loc.errorOpenFileAlreadyOpenBody(
             e.newFile.body.meta.databaseName.get()!,
-            e.openFileSource.displayPath!,
-            e.newFileSource.displayPath!,
+            e.openFileSource.displayPath,
+            e.newFileSource.displayPath,
           ),
           stopWatch: stopWatch,
         );

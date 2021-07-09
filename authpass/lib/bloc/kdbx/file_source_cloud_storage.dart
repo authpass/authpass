@@ -70,7 +70,7 @@ class FileSourceCloudStorage extends FileSource {
   String get displayNameFromPath => provider!.displayNameFromPath(fileInfo);
 
   @override
-  String? get displayPath => provider!.displayPath(fileInfo);
+  String get displayPath => provider!.displayPath(fileInfo);
 
   File _cacheMetadataFile(String cacheDirPath) =>
       File(path.join(cacheDirPath, '$uuid.kdbx.json'));

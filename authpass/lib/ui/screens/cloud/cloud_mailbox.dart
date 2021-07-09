@@ -317,9 +317,10 @@ class CloudMailList extends StatelessWidget {
 }
 
 class MailListTile extends StatelessWidget {
-  const MailListTile({Key? key, this.message, this.onTap}) : super(key: key);
+  const MailListTile({Key? key, required this.message, this.onTap})
+      : super(key: key);
 
-  final EmailMessage? message;
+  final EmailMessage message;
   final VoidCallback? onTap;
 
   @override
@@ -340,7 +341,7 @@ class MailListTile extends StatelessWidget {
               height: 40,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: message!.isRead
+              child: message.isRead
                   ? Icon(
                       FontAwesomeIcons.envelopeOpen,
                       color: ThemeUtil.iconColor(theme, null),
@@ -356,10 +357,10 @@ class MailListTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text(message!.subject, style: theme.textTheme.subtitle1),
+                  Text(message.subject, style: theme.textTheme.subtitle1),
                   const SizedBox(height: 4),
                   Text(
-                    '${message!.sender}',
+                    message.sender,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
@@ -367,7 +368,7 @@ class MailListTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${formatUtil.formatDateFull(message!.createdAt)}',
+                    formatUtil.formatDateFull(message.createdAt),
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,

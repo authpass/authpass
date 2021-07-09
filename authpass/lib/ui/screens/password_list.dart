@@ -810,7 +810,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     return [
       MaterialBanner(
         backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
-        content: Text('${_groupFilter.name}'),
+        content: Text(_groupFilter.name),
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -1317,7 +1317,7 @@ class UnsupportedWrite extends StatelessWidget {
                     Text('You have changes in "${source!.displayName}", which '
                         'does not support writing of changes.'),
                     const SizedBox(height: 4),
-                    Text(source!.displayPath!, style: theme.textTheme.caption),
+                    Text(source!.displayPath, style: theme.textTheme.caption),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[

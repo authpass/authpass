@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
+// ignore_for_file: avoid_print
+
 /// Called by integration test to capture images.
 Future screenshot(final FlutterDriver? driver, Config config, String name,
     {Duration timeout = const Duration(seconds: 30),

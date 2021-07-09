@@ -636,7 +636,7 @@ class _EntryDetailsState extends State<EntryDetails>
   }
 
   Future<OtpAuth?> _askForTotpSecret(BuildContext context) async {
-    final _cleanOtpCodeCode = (String totpCode) async {
+    Future<OtpAuth?> _cleanOtpCodeCode(String totpCode) async {
       try {
         if (totpCode.startsWith('otpauth://')) {
           // NON-NLS
@@ -656,7 +656,7 @@ class _EntryDetailsState extends State<EntryDetails>
         );
         return await _askForTotpSecret(context);
       }
-    };
+    }
 
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       try {
@@ -930,6 +930,7 @@ class EntryField extends StatefulWidget {
 
   @override
   _EntryFieldState createState() =>
+      // ignore: no_logic_in_create_state
       fieldType == FieldType.otp ? _OtpEntryFieldState() : _EntryFieldState();
 }
 
@@ -1425,7 +1426,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
       // Our own format :-) (And also used by KeeWeb)
       return OtpAuth.fromUri(Uri.parse(value));
     }
-    if (value.contains('key\=')) {
+    if (value.contains('key=')) {
       _logger.finer('value contains "key=": $value');
       // KeeOTP format:key={base32Key}&size=12&step=33&type=Totp&counter=3
       final data = Uri.splitQueryString(value);
@@ -1524,13 +1525,13 @@ class _OtpEntryFieldState extends _EntryFieldState {
   }
 
   @override
-  Widget _buildEntryFieldEditor() => _errorMessage != null
-      ? Text('$_errorMessage')
-      : OtpFieldEntryEditor(
-          period: _period,
-          elapsed: _elapsed,
-          otpCode: _currentOtp,
-        );
+  Widget _buildEntryFieldEditor() =>
+      _errorMessage?.let((it) => Text(it)) ??
+      OtpFieldEntryEditor(
+        period: _period,
+        elapsed: _elapsed,
+        otpCode: _currentOtp,
+      );
 
   @override
   Future<void> _handleMenuEntrySelected(EntryAction entryAction) async {

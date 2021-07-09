@@ -64,7 +64,7 @@ class AppBarMenu {
                         color: file.openedFile.color),
                     title: Text(file.fileSource.displayName),
                     subtitle: Text(
-                      file.fileSource.displayPath!,
+                      file.fileSource.displayPath,
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       maxLines: 1,

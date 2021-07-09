@@ -116,6 +116,7 @@ Future<void> startApp(Env env) async {
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone,
         ZoneSpecification? specification, Map? zoneValues) {
+      // ignore: avoid_print
       print('Forking zone.'); // NON-NLS
       return parent.fork(zone, specification, zoneValues);
     },
@@ -156,6 +157,7 @@ class AuthPassApp extends StatefulWidget {
   static GlobalKey<NavigatorState>? currentNavigatorKey;
 
   @override
+  // ignore: no_logic_in_create_state
   _AuthPassAppState createState() {
     currentNavigatorKey = navigatorKey;
     return _AuthPassAppState();
@@ -202,7 +204,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       return FilePickerWritable().init()
         ..registerFileOpenHandler((fileInfo, file) async {
           _logger.fine('got a new fileInfo: $fileInfo');
-          final openRoute = () async {
+          Future<void> openRoute() async {
             var i = 0;
             while (_navigatorKey?.currentState == null) {
               _logger.finest('No navigator yet. waiting. $i');
@@ -219,7 +221,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               filePickerIdentifier: fileInfo.toJsonString(),
               initialCachedContent: FileContent(await file.readAsBytes()),
             )));
-          };
+          }
+
           await openRoute();
           return true;
         })

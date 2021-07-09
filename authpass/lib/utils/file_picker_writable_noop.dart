@@ -6,7 +6,7 @@ class FilePickerStateNoop implements FilePickerState {
   void registerErrorEventHandler(ErrorEventHandler errorEventHandler) {}
 
   @override
-  @deprecated
+  @Deprecated('use [registerFileOpenHandler] instead.')
   void registerFileInfoHandler(FileInfoHandler fileInfoHandler) {}
 
   @override
@@ -19,7 +19,7 @@ class FilePickerStateNoop implements FilePickerState {
   void removeErrorEventHandler(ErrorEventHandler errorEventHandler) {}
 
   @override
-  @deprecated
+  @Deprecated('use [removeFileOpenHandler] instead.')
   bool removeFileInfoHandler(FileInfoHandler fileInfoHandler) => false;
 
   @override

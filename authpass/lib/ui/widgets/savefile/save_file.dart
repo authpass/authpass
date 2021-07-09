@@ -89,11 +89,11 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   Future<FileSource?> _selectLocalFileSource() async {
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
-          '${path.basenameWithoutExtension(widget.file.fileSource.displayPath!)}.kdbx',
+          '${path.basenameWithoutExtension(widget.file.fileSource.displayPath)}.kdbx',
           (tempFile) async {
         return await FilePickerWritable().openFileForCreate(
           fileName:
-              '${path.basenameWithoutExtension(widget.file.fileSource.displayPath!)}.kdbx',
+              '${path.basenameWithoutExtension(widget.file.fileSource.displayPath)}.kdbx',
           writer: (file) async {
             _logger.fine('Writing placeholder into $file');
             await file.writeAsString('<placeholder>');
@@ -114,7 +114,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       );
     }
     final pathFile = await getSavePath(
-      suggestedName: path.basename(widget.file.fileSource.displayPath!),
+      suggestedName: path.basename(widget.file.fileSource.displayPath),
       confirmButtonText: 'Save',
     );
     if (pathFile == null) {
@@ -143,7 +143,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
         await Navigator.of(context).push(CloudStorageSelector.route(
       cs,
       CloudStorageBrowserConfig(
-          defaultFileName: path.basename(widget.file.fileSource.displayPath!),
+          defaultFileName: path.basename(widget.file.fileSource.displayPath),
           isSave: true),
     ));
     _logger.fine('done. $createFileInfo');

@@ -459,7 +459,7 @@ class KdbxBloc {
               await open.moveNext();
               filesOpened++;
               unawaited(continueLoadInBackground(open,
-                  debugName: '$fileLabel', fileSource: file.key));
+                  debugName: fileLabel, fileSource: file.key));
             } catch (e, stackTrace) {
               _logger.severe(
                   'Panic, error while trying to open file from '

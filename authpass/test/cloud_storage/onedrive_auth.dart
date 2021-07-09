@@ -8,6 +8,8 @@ import '../util/test_util.dart';
 
 // small utility for `onedrive_test.dart`.
 
+// ignore_for_file: avoid_print
+
 Future<void> main() async {
   PrintAppender.setupLogging();
 

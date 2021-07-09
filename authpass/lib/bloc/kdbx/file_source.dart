@@ -50,7 +50,7 @@ abstract class FileSource {
   String get displayNameFromPath;
 
   /// Exact path to the file source.
-  String? get displayPath;
+  String get displayPath;
 
   /// whether this file source supports saving of changes.
   bool get supportsWrite;

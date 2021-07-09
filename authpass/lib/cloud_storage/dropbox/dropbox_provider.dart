@@ -189,7 +189,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final client = await requireAuthenticatedClient();
     final downloadUrl =
         Uri.parse('https://content.dropboxapi.com/2/files/download');
-    final apiArg = json.encode(<String, String>{'path': '${file.id}'});
+    final apiArg = json.encode(<String, String>{'path': file.id!});
     _logger.finer('Downloading file with id ${file.id}');
     final response = await client.post(downloadUrl,
         headers: nonNls({'Dropbox-API-Arg': apiArg}));

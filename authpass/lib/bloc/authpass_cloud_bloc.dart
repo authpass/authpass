@@ -422,7 +422,7 @@ class LazyBehaviorSubject<T> {
 
   final _subject = BehaviorSubject<T>();
   final _joinRun = JoinRun<T>();
-  Future<T> Function() _loadData;
+  final Future<T> Function() _loadData;
 
   bool _dirty = true;
 
@@ -432,12 +432,6 @@ class LazyBehaviorSubject<T> {
     }
     // TODO do we really need to return a new stream each time?
     return ReloadableValueStream(this);
-  }
-
-  @deprecated
-  ReloadableValueStream<T> stream(Future<T> Function() loadData) {
-    _loadData = loadData;
-    return streamReloadable();
   }
 
   Future<T?> reload() async {

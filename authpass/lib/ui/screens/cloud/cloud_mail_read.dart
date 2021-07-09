@@ -86,7 +86,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('${widget.emailMessage.subject}'),
+            title: Text(widget.emailMessage.subject),
             actions: <Widget>[
               if (hasText && hasHtml) ...[
                 IconButton(
@@ -216,7 +216,7 @@ class EmailRead extends StatelessWidget {
         ?.let((entry) => EntryViewModel(entry, context.watch<KdbxBloc>()));
     const iconSize = 56.0;
     final theme = Theme.of(context);
-    final fallbackIcon = (BuildContext context) => Icon(
+    Icon fallbackIcon(BuildContext context) => Icon(
           Icons.email,
           color: theme.iconColor(null),
           size: iconSize,

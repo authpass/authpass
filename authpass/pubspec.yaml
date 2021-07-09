@@ -187,6 +187,7 @@ dev_dependencies:
   freezed: ^0.14.1+3
   plugin_platform_interface: ^2.0.0
   msix: ^2.1.3
+  flutter_lints: ^1.0.4
 
 dependency_overrides:
 #  analytics_event_gen:

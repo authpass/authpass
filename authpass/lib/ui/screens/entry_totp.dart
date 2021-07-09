@@ -31,7 +31,7 @@ class OtpFieldEntryEditor extends StatelessWidget {
             ),
           ),
           child: Text(
-            '$otpCode',
+            otpCode,
             textAlign: TextAlign.center,
           ),
         );

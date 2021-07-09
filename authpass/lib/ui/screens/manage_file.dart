@@ -170,7 +170,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                 ),
                 ListTile(
                   title: const Text('Path'),
-                  subtitle: Text(_file!.fileSource.displayPath!),
+                  subtitle: Text(_file!.fileSource.displayPath),
                   trailing: SaveFileAsDialogButton(
                     file: _file!,
                     onSave: (fileSave) {

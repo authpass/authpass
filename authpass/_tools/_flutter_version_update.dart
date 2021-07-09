@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:path/path.dart' as path;
 
+// ignore_for_file: avoid_print
+
 // const FLUTTER_VERSION = '1.22.0-1.0.pre';
 // const FLUTTER_VERSION = '1.23.0-18.0.pre';
 // const FLUTTER_VERSION = '2.1.0-12.1.pre';

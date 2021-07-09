@@ -49,6 +49,7 @@ class LoggingUtils {
         'Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
 
     Isolate.current.addOnExitListener(RawReceivePort((dynamic val) {
+      // ignore: avoid_print
       print('exiting isolate $isolateDebug');
     }).sendPort);
 

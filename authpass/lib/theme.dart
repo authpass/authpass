@@ -99,7 +99,7 @@ Typography _getTypography() {
       white: Typography.whiteCupertino.apply(fontFamily: 'Inter'),
     );
   } else {
-    print(
+    _logger.info(
         'using default theme $defaultTargetPlatform -- ${AuthPassPlatform.operatingSystemVersion}');
     return Typography.material2018(platform: defaultTargetPlatform);
   }
@@ -117,7 +117,8 @@ bool _isDarwinVersion({required int minimumMajor, required int minimumMinor}) {
   }
   final major = int.parse(match.group(1)!);
   final minor = int.parse(match.group(2)!);
-  print('Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
+  _logger.info(
+      'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
   _logger.finest(
       'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
   return major > minimumMajor ||
