@@ -408,14 +408,12 @@ packages:
     source: hosted
     version: "2.0.0"
   expressions:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "."
-      ref: "rxdart-0.27"
-      resolved-ref: "133a821c08d4025ea9d5ca5d7539a123eb672f72"
-      url: "https://github.com/authpass/expressions.git"
-    source: git
-    version: "0.2.2+1"
+      name: expressions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.3"
   fake_async:
     dependency: transitive
     description:
@@ -671,7 +669,7 @@ packages:
       name: googleapis
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   googleapis_auth:
     dependency: "direct main"
     description:

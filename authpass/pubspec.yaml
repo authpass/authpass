@@ -113,7 +113,7 @@ dependencies:
   http_auth: ^1.0.0
 
   # google drive
-  googleapis: ^2.0.0
+  googleapis: ^3.0.0
   googleapis_auth: ^1.0.0
 
   # dropbox
@@ -201,10 +201,10 @@ dependency_overrides:
 #    path: /Users/herbert/dev/openapi_dart/packages/openapi_base
 #  flutter_async_utils:
 #    path: /Users/herbert/dev/flutter_async_utils
-  expressions:
-    git:
-      url: https://github.com/authpass/expressions.git
-      ref: rxdart-0.27
+#  expressions:
+#    git:
+#      url: https://github.com/authpass/expressions.git
+#      ref: rxdart-0.27
 #  path_provider: ^2.0.1
   # The following two are required since flutter 1.21
   # but blocked by e.g flutter_cache_manager
