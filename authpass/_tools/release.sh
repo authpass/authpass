@@ -53,7 +53,7 @@ if test -z "$buildnumber" ; then
     case "${flavor}" in
     windows | msix)
       git diff
-      git checkout -- authpass/pubspec.lock
+      git checkout -- pubspec.lock
       ;;
     esac
     buildnumber=`./git-buildnumber.sh generate`
