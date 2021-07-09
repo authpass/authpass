@@ -48,6 +48,14 @@ if test -z "$buildnumber" ; then
     echo "DEBUG"
     git diff-index HEAD
     echo "diff-index: $?"
+    # workaround if for some reason pubspec.lock changes on windows
+    # https://github.com/dart-lang/pub/issues/3012
+    case "${flavor}" in
+    windows | msix)
+      git diff
+      git checkout -- authpass/pubspec.lock
+      ;;
+    esac
     buildnumber=`./git-buildnumber.sh generate`
 else
 	echo "WARNING: forcing buildnumber $buildnumber"
