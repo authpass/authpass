@@ -48,12 +48,12 @@ const RESOURCES = {
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "eaed33dc9678381a55cb5c13edaf241d",
 "assets/packages/wakelock_web/assets/no_sleep.js": "7748a45cd593f33280669b29c2c8919a",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"main.dart.js": "babd7622157802488d1cc1121282a486",
+"main.dart.js": "4bef71cf2a324e76b5ff2ff6d672aa8b",
 "version.json": "4782c8e619d02998979c47db59b23dac",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"index.html": "318aef30d1f6eddeed1f8a2dc36ae79a",
-"/": "318aef30d1f6eddeed1f8a2dc36ae79a",
+"index.html": "ba6b0f24a16b29cb40df14ef671e5d5f",
+"/": "ba6b0f24a16b29cb40df14ef671e5d5f",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1"
 };
 
