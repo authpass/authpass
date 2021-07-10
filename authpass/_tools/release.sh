@@ -157,6 +157,11 @@ case "${flavor}" in
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
     ;;
+    msix)
+        version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
+        $FLT build -v windows -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor}
+        $FLT pub run msix:create --v ${version}.0
+    ;;
     *)
         echo "Unsupported command ${flavor}"
     ;;
