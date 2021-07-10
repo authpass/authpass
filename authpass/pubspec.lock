@@ -1179,11 +1179,9 @@ packages:
   simple_form_field_validator:
     dependency: "direct main"
     description:
-      path: "packages/simple_form_field_validator"
-      ref: "4158191244681ac259a7bb060ef0b8a98db502d2"
-      resolved-ref: "4158191244681ac259a7bb060ef0b8a98db502d2"
-      url: "https://github.com/hpoul/flutter_utils.git"
-    source: git
+      name: simple_form_field_validator
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.0"
   simple_json_persistence:
     dependency: "direct main"

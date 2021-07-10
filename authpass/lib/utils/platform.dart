@@ -14,6 +14,8 @@ class AuthPassPlatform {
   static bool get isWeb => kIsWeb;
   static bool get isLinux => !kIsWeb && Platform.isLinux;
   static bool get isWindows => !kIsWeb && Platform.isWindows;
+  static late final bool isWindowsWinAutoUpdate = isWindows &&
+      const bool.fromEnvironment('AUTHPASS_WIN_AUTOUPDATE', defaultValue: true);
   static bool get isMacOS => !kIsWeb && Platform.isMacOS;
   static bool get isIOS => !kIsWeb && Platform.isIOS;
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;

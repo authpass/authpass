@@ -87,7 +87,7 @@ class AppBarMenu {
       ),
       if (secondaryBuilder != null) ...secondaryBuilder(context),
       const PopupMenuDivider(),
-      ...?!AuthPassPlatform.isWindows
+      ...?!AuthPassPlatform.isWindowsWinAutoUpdate
           ? null
           : [
               PopupMenuItem(

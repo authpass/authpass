@@ -159,8 +159,25 @@ case "${flavor}" in
     ;;
     msix)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
-        $FLT build -v windows -t lib/env/production.dart --release --dart-define=AUTHPASS_VERSION=$version --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor}
-        $FLT pub run msix:create --v ${version}.0
+        $FLT build -v windows -t lib/env/production.dart --release \
+            --dart-define=AUTHPASS_VERSION=$version \
+            --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber \
+            --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor} \
+            --dart-define=AUTHPASS_WIN_AUTOUPDATE=false
+        $FLT pub run msix:create --v "${version}.0"
+
+        outputdir="build/windows/runner/Release"
+
+        outputfilename="authpass-${version}_${buildnumber}.msix"
+        outputpath="${outputdir}/${outputfilename}"
+        cp "${outputdir}/authpass.msix" "${outputpath}"
+
+        #echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
+        #echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
+        #tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/release/bundle
+        echo "::set-output name=appversion::${version}"
+        echo "::set-output name=outputfilename::${outputfilename}"
+        echo "::set-output name=outputpath::${outputpath}"
     ;;
     *)
         echo "Unsupported command ${flavor}"

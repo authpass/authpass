@@ -127,17 +127,19 @@ Future<void> startApp(Env env) async {
 /// a supported platform (iOS for macOS, Android for Linux and Windows).
 /// Otherwise, do nothing.
 void _setTargetPlatformForDesktop() {
-  TargetPlatform? targetPlatform;
-  /*if (AuthPassPlatform.isMacOS) {
-    targetPlatform = TargetPlatform.iOS;
-  } else */
-  if (AuthPassPlatform.isLinux || AuthPassPlatform.isWindows) {
-    targetPlatform = TargetPlatform.android;
-  }
-  _logger.info('targetPlatform: $targetPlatform');
-  if (targetPlatform != null) {
-    debugDefaultTargetPlatformOverride = targetPlatform;
-  }
+  // this is no longer needed.
+
+  // TargetPlatform? targetPlatform;
+  // /*if (AuthPassPlatform.isMacOS) {
+  //   targetPlatform = TargetPlatform.iOS;
+  // } else */
+  // if (AuthPassPlatform.isLinux || AuthPassPlatform.isWindows) {
+  //   targetPlatform = TargetPlatform.android;
+  // }
+  // _logger.info('targetPlatform: $targetPlatform');
+  // if (targetPlatform != null) {
+  //   debugDefaultTargetPlatformOverride = targetPlatform;
+  // }
 }
 
 class AuthPassApp extends StatefulWidget {
@@ -192,7 +194,12 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       }
     }));
     if (AuthPassPlatform.isWindows) {
-      initWinSparkle(widget.env);
+      if (AuthPassPlatform.isWindowsWinAutoUpdate) {
+        _logger.info('Initializing winsparkle.');
+        initWinSparkle(widget.env);
+      } else {
+        _logger.info('Disabled winsparkle.');
+      }
     }
   }
 
