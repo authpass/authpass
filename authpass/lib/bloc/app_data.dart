@@ -294,7 +294,7 @@ class AppDataBloc {
           : data.theme == AppDataTheme.light
               ? AppDataTheme.dark
               : null;
-      return (builder.theme = nextTheme)!;
+      return builder.theme = nextTheme;
     });
     return updated;
   }
