@@ -19,6 +19,8 @@ import 'package:url_launcher/url_launcher.dart';
 final _logger = Logger('authpass.dialog_utils');
 
 class DialogUtils {
+  static bool _errorDialogShown = false;
+
   static Future<dynamic> showSimpleAlertDialog(
     BuildContext context,
     String? title,
@@ -53,27 +55,38 @@ class DialogUtils {
     String? title,
     String? content, {
     @NonNls String? routeAppend,
-  }) {
+  }) async {
+    if (_errorDialogShown) {
+      _logger.warning(
+          'We already show an error dialog. do NOT show another one right away.'
+          '\ntitle $title\ncontent:$content');
+      return;
+    }
     final loc = AppLocalizations.of(context);
-    return showSimpleAlertDialog(
-      context,
-      title,
-      content,
-      routeAppend: 'error${routeAppend?.prepend('/') ?? ''}',
-      moreActions: !sendLogsSupported()
-          ? null
-          : [
-              TextButton(
-                onPressed: () {
-                  sendLogs(
-                    context,
-                    errorDescription: 'title: $title\ncontent: $content',
-                  );
-                },
-                child: Text(loc!.dialogSendErrorReport),
-              ),
-            ],
-    );
+    try {
+      _errorDialogShown = true;
+      return await showSimpleAlertDialog(
+        context,
+        title,
+        content,
+        routeAppend: 'error${routeAppend?.prepend('/') ?? ''}',
+        moreActions: !sendLogsSupported()
+            ? null
+            : [
+                TextButton(
+                  onPressed: () {
+                    sendLogs(
+                      context,
+                      errorDescription: 'title: $title\ncontent: $content',
+                    );
+                  },
+                  child: Text(loc!.dialogSendErrorReport),
+                ),
+              ],
+      );
+    } finally {
+      _errorDialogShown = false;
+    }
   }
 
   static Future<bool> openUrl(@NonNls String url) async {

@@ -95,16 +95,16 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T?>> {
 class RetryStreamBuilder<T> extends StatefulWidget {
   const RetryStreamBuilder({
     Key? key,
-    this.stream,
+    required this.stream,
     this.retry,
-    this.builder,
+    required this.builder,
     this.scaffoldBuilder = RetryFutureBuilder.defaultScaffoldBuilder,
     this.initialValue,
   }) : super(key: key);
 
-  final StreamProducer<T>? stream;
+  final StreamProducer<T> stream;
   final T? initialValue;
-  final DataWidgetBuilder<T>? builder;
+  final DataWidgetBuilder<T> builder;
   final Future<void>? Function()? retry;
   final ScaffoldBuilder<T> scaffoldBuilder;
 
@@ -112,27 +112,27 @@ class RetryStreamBuilder<T> extends StatefulWidget {
   _RetryStreamBuilderState createState() => _RetryStreamBuilderState<T>();
 }
 
-class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T?>> {
-  Stream<T?>? _stream;
+class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
+  Stream<T>? _stream;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _stream = widget.stream!(context);
+    _stream = widget.stream(context);
   }
 
   @override
   Widget build(BuildContext context) {
     final valueStream =
-        _stream is ValueStream<T> ? _stream as ValueStream<T?>? : null;
-    return StreamBuilder<T?>(
+        _stream is ValueStream<T> ? _stream as ValueStream<T>? : null;
+    return StreamBuilder<T>(
         stream: _stream,
-        initialData: valueStream?.value ?? widget.initialValue,
+        initialData: valueStream?.valueOrNull ?? widget.initialValue,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return widget.scaffoldBuilder(
               context,
-              widget.builder!(context, snapshot.data),
+              widget.builder(context, snapshot.requireData),
               snapshot,
             );
           }
@@ -150,7 +150,7 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T?>> {
                         if (widget.retry != null) {
                           widget.retry!();
                         } else {
-                          _stream = widget.stream!(context);
+                          _stream = widget.stream(context);
                         }
                       });
                     },

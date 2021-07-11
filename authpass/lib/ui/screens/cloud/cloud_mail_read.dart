@@ -14,8 +14,8 @@ import 'package:enough_mail/enough_mail.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:open_file/open_file.dart';
@@ -48,7 +48,7 @@ class EmailReadScreen extends StatefulWidget {
 }
 
 class _EmailReadScreenState extends State<EmailReadScreen> {
-  bool _forcePlainText = false;
+  bool _forcePlainText = true;
   bool _forwarded = false;
 
   @override
@@ -77,8 +77,10 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
         var hasHtml = false;
         var hasText = false;
         if (snapshot.hasData) {
-          hasHtml = snapshot.data!.mimeMessage?.decodeTextHtmlPart() != null;
-          hasText = snapshot.data!.mimeMessage?.decodeTextPlainPart() != null;
+          hasHtml =
+              snapshot.requireData.mimeMessage?.decodeTextHtmlPart() != null;
+          hasText =
+              snapshot.requireData.mimeMessage?.decodeTextPlainPart() != null;
         }
         final attachments = snapshot.data?.mimeMessage
                 ?.findContentInfo(disposition: ContentDisposition.attachment) ??
@@ -172,11 +174,11 @@ class EmailRead extends StatelessWidget {
     Key? key,
     required this.bloc,
     required this.vm,
-    this.forcePlainText,
+    this.forcePlainText = false,
   }) : super(key: key);
   final AuthPassCloudBloc bloc;
   final EmailViewModel vm;
-  final bool? forcePlainText;
+  final bool forcePlainText;
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +188,7 @@ class EmailRead extends StatelessWidget {
         );
     final formatUtil = context.watch<FormatUtils>();
     final htmlData = vm.mimeMessage?.decodeTextHtmlPart();
+    final textData = vm.mimeMessage?.decodeTextPlainPart();
     final headers = {
       'Subject': vm.mimeMessage?.decodeHeaderValue('subject') ??
           vm.emailMessage!.subject,
@@ -257,19 +260,34 @@ class EmailRead extends StatelessWidget {
               ? const Center(child: CircularProgressIndicator())
               : Scrollbar(
                   child: SingleChildScrollView(
-                    child: htmlData != null && !forcePlainText!
-                        ? Html(
-                            data: htmlData,
-                            onLinkTap: (link, context, attributes, element) {
-                              DialogUtils.openUrl(link!);
-                            },
+                    child: htmlData != null &&
+                            (!forcePlainText || textData == null)
+                        ? Theme(
+                            data: authPassLightTheme,
+                            child: DecoratedBox(
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
+                              child: HtmlWidget(
+                                htmlData,
+                                onTapUrl: (link) {
+                                  DialogUtils.openUrl(link);
+                                },
+                              ),
+                            ),
                           )
+                        // ? Html(
+                        //     data: htmlData,
+                        //     onLinkTap: (link, context, attributes, element) {
+                        //       DialogUtils.openUrl(link!);
+                        //     },
+                        //   )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: SelectableLinkify(
 //                    child: Linkify(
-                              text: (vm.mimeMessage?.decodeTextPlainPart() ??
-                                      vm.mimeMessage?.decodeContentText())!
+                              text: (textData ??
+                                      vm.mimeMessage?.decodeContentText() ??
+                                      'No data')
                                   .replaceAll('\r', ''),
                               maxLines: null,
                               options: const LinkifyOptions(
