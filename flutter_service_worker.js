@@ -5,7 +5,7 @@ const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
-"assets/NOTICES": "6bea7faec44feaba424ec1347a373c12",
+"assets/NOTICES": "f42351e5959f8450a37b79b812b1c5fc",
 "assets/FontManifest.json": "cfe1f8324c9d6a412c5f90fa55c1a0d8",
 "assets/AssetManifest.json": "024ab6cc6344984f8d6cb9fd737e7d45",
 "assets/assets/images/safe-filled-v2.webp": "b363d92ca6a9fb930a1b0085918dfe6b",
@@ -48,12 +48,12 @@ const RESOURCES = {
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "eaed33dc9678381a55cb5c13edaf241d",
 "assets/packages/wakelock_web/assets/no_sleep.js": "7748a45cd593f33280669b29c2c8919a",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"main.dart.js": "4bef71cf2a324e76b5ff2ff6d672aa8b",
-"version.json": "4782c8e619d02998979c47db59b23dac",
+"main.dart.js": "62c891cce519fa2302f457ea64c2556b",
+"version.json": "6551b97138e5a1ab568393cc4cf286f8",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"index.html": "56c4bac0e828a5c937556ab6d59ae081",
-"/": "56c4bac0e828a5c937556ab6d59ae081",
+"index.html": "3ffdcf0b59335386caa0e0a0b01a61a4",
+"/": "3ffdcf0b59335386caa0e0a0b01a61a4",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1"
 };
 
