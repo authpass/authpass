@@ -1,3 +1,8 @@
+# 1.8.1 - 2021-07-13
+
+* Fixed bug when reading cloud email.
+* Fixed bug with cloud storage ui.
+
 # 1.8.0 - 2021-07-09
 
 * Upgrade to Flutter 2.4 / Migrate all code to nnbd to improve stability.

@@ -111,7 +111,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
             b
               ..sourceType = OpenedFilesSourceType.CloudStorage
               ..sourcePath = json.encode({
-                SOURCE_CLOUD_STORAGE_ID: fileSource.provider!.id,
+                SOURCE_CLOUD_STORAGE_ID: fileSource.provider.id,
                 SOURCE_CLOUD_STORAGE_DATA: fileSource.fileInfo,
               })
               ..name = dbName;

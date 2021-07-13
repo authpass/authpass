@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:authpass/bloc/kdbx/file_content.dart';
+import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/utils/uuid_util.dart';
@@ -11,12 +13,12 @@ import 'package:test/test.dart';
 final _logger = Logger('generic_cloud_storage');
 
 void simpleCloudStorageTestSuite({
-  required CloudStorageProvider? Function() providerCb,
+  required CloudStorageProvider Function() providerCb,
   Future<CloudStorageEntity?>? Function(CloudStorageProvider? provider)?
       selectParent,
 }) {
   late String uuid;
-  CloudStorageProvider? provider;
+  late CloudStorageProvider provider;
 
   final saveString1 = utf8.encode('Lorem Ipsum') as Uint8List;
   final saveString2 = utf8.encode('Lorem Ipsum New Content') as Uint8List;
@@ -36,7 +38,7 @@ void simpleCloudStorageTestSuite({
   test('create and update', () async {
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
-    final fileSource = await provider!.createEntity(
+    final fileSource = await provider.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
 
     final content1 = await fileSource.content().last;
@@ -62,7 +64,7 @@ void simpleCloudStorageTestSuite({
   test('create, load and conflict', () async {
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
-    final fileSource = await provider!.createEntity(
+    final fileSource = await provider.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
 
     final content1 = await fileSource.content().last;
@@ -84,7 +86,7 @@ void simpleCloudStorageTestSuite({
   test('create, conflict', () async {
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
-    final fileSource = await provider!.createEntity(
+    final fileSource = await provider.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
     final content1 = fileSource.cached;
     await fileSource.contentWrite(saveString2);
@@ -92,5 +94,24 @@ void simpleCloudStorageTestSuite({
       // ignore: invalid_use_of_protected_member
       await fileSource.write(saveString3, content1!.metadata);
     }, throwsA(isA<StorageConflictException>()));
+  });
+
+  test('create, load from cache', () async {
+    final parent = await selectParent!(provider);
+    final fileName = 'authpass_test_$uuid.txt';
+    final fileSource = await provider.createEntity(
+        CloudStorageSelectorSaveResult(parent, fileName), saveString1);
+    if (fileSource is FileSourceCloudStorage) {
+      final fileInfo = fileSource.fileInfo;
+      {
+        final loadedFile = provider.toFileSource(fileInfo,
+            uuid: fileSource.uuid, initialCachedContent: null);
+        await loadedFile.content().last;
+      }
+      final loadedFile = provider.toFileSource(fileInfo,
+          uuid: fileSource.uuid, initialCachedContent: null);
+      expect(await loadedFile.content().map((event) => event.source).toList(),
+          [FileContentSource.cache, FileContentSource.origin]);
+    }
   });
 }

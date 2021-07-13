@@ -96,9 +96,8 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             textInputAction: TextInputAction.send,
             onEditingComplete: () {},
             validator: SValidator.notEmpty(
-                        msg: 'Please enter a valid email address.') +
-                    SValidator.email(msg: 'Please enter a valid email address.')
-                as String? Function(String?)?,
+                    msg: 'Please enter a valid email address.') +
+                SValidator.email(msg: 'Please enter a valid email address.'),
           ),
           ElevatedButton(
             onPressed: _submitCallback(),

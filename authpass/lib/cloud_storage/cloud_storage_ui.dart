@@ -16,10 +16,11 @@ import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 final _logger = Logger('authpass.google_drive_ui');
 
 class CloudStorageSelector extends StatefulWidget {
-  const CloudStorageSelector({Key? key, this.provider, this.browserConfig})
+  const CloudStorageSelector(
+      {Key? key, required this.provider, this.browserConfig})
       : super(key: key);
 
-  final CloudStorageProvider? provider;
+  final CloudStorageProvider provider;
   final CloudStorageSelectorConfig? browserConfig;
 
   @override
@@ -43,9 +44,9 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   @override
   void initState() {
     super.initState();
-    widget.provider!.loadSavedAuth().then((val) => setState(() {}));
+    widget.provider.loadSavedAuth().then((val) => setState(() {}));
     if (widget.browserConfig is CloudStorageBrowserConfig ||
-        !(widget.provider!.supportSearch)) {
+        !(widget.provider.supportSearch)) {
       _isSearch = false;
     } else {
       _isSearch = true;
@@ -57,20 +58,20 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
     final config = widget.browserConfig;
     return Scaffold(
       appBar: AppBar(
-        title: Text('CloudStorage - ${widget.provider!.displayName}'),
-        actions: widget.provider!.isAuthenticated != true
+        title: Text('CloudStorage - ${widget.provider.displayName}'),
+        actions: widget.provider.isAuthenticated != true
             ? null
             : <Widget>[
                 IconButton(
                   onPressed: () {
-                    widget.provider!.logout();
+                    widget.provider.logout();
                     setState(() {});
                   },
                   icon: const Icon(FontAwesomeIcons.signOutAlt),
                 ),
               ],
       ),
-      body: widget.provider!.isAuthenticated != true
+      body: widget.provider.isAuthenticated != true
           ? Center(
               child: CloudStorageAuthentication(
                   provider: widget.provider, onSuccess: () => setState(() {})))
@@ -176,9 +177,10 @@ class CloudStorageAuthentication extends StatelessWidget {
 }
 
 class CloudStorageSearch extends StatefulWidget {
-  const CloudStorageSearch({Key? key, this.provider}) : super(key: key);
+  const CloudStorageSearch({Key? key, required this.provider})
+      : super(key: key);
 
-  final CloudStorageProvider? provider;
+  final CloudStorageProvider provider;
 
   @override
   _CloudStorageSearchState createState() => _CloudStorageSearchState();
@@ -249,7 +251,7 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
   Future<void> _search() => asyncRunTask(
         () async {
           final results =
-              await widget.provider!.search(name: _searchController.text);
+              await widget.provider.search(name: _searchController.text);
           _logger.fine('Got results:');
           for (final result in results.results!) {
             _logger.fine('${result!.name} (${result.id}');
@@ -313,7 +315,7 @@ class CloudStorageBrowser extends StatefulWidget {
     required this.provider,
     required this.config,
   }) : super(key: key);
-  final CloudStorageProvider? provider;
+  final CloudStorageProvider provider;
   final CloudStorageBrowserConfig config;
 
   @override
@@ -331,13 +333,13 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
   @override
   void initState() {
     super.initState();
-    _fileNameController.text = widget.config.defaultFileName!;
+    _fileNameController.text = widget.config.defaultFileName ?? '';
     _listFolder();
   }
 
   Future<void> _listFolder() async {
     await asyncRunTask((progress) async {
-      final response = await widget.provider!.list(parent: _folder);
+      final response = await widget.provider.list(parent: _folder);
       setState(() {
         _response = response.rebuild((b) => b.results
           ..where((c) => c!.type != CloudStorageEntityType.unknown)
@@ -496,9 +498,8 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
               ),
               autocorrect: false,
               validator: SValidator.notEmpty(msg: 'Please enter a Url') +
-                      SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
-                          'Please enter a valid url with http:// or https://')
-                  as String? Function(String?)?,
+                  SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
+                      'Please enter a valid url with http:// or https://'),
             ),
             TextFormField(
               controller: _username,

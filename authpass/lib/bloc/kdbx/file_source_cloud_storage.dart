@@ -18,9 +18,9 @@ class FileContentCached {
     required this.cacheDate,
     required this.cacheSize,
   }) : assert(cacheDate.isUtc);
-  factory FileContentCached.fromJson(Map<String, Object> json) =>
+  factory FileContentCached.fromJson(Map<String, dynamic> json) =>
       FileContentCached(
-        metadata: json['metadata'] as Map<String, Object>?,
+        metadata: json['metadata'] as Map<String, dynamic>?,
         cacheDate: DateTime.fromMillisecondsSinceEpoch(
           json['cacheDate'] as int,
           isUtc: true,
@@ -56,21 +56,21 @@ class FileSourceCloudStorage extends FileSource {
 
   static Directory? _cacheDir;
 
-  Future<Directory> _getCacheDir() => provider!.pathUtil
+  Future<Directory> _getCacheDir() => provider.pathUtil
       .getTemporaryDirectory(subNamespace: 'cloud_storage_cache');
 
-  final CloudStorageProvider? provider;
+  final CloudStorageProvider provider;
 
   final Map<String, String?> fileInfo;
 
   @override
-  String get typeDebug => '$runtimeType:${provider!.id}';
+  String get typeDebug => '$runtimeType:${provider.id}';
 
   @override
-  String get displayNameFromPath => provider!.displayNameFromPath(fileInfo);
+  String get displayNameFromPath => provider.displayNameFromPath(fileInfo);
 
   @override
-  String get displayPath => provider!.displayPath(fileInfo);
+  String get displayPath => provider.displayPath(fileInfo);
 
   File _cacheMetadataFile(String cacheDirPath) =>
       File(path.join(cacheDirPath, '$uuid.kdbx.json'));
@@ -86,7 +86,7 @@ class FileSourceCloudStorage extends FileSource {
     try {
       if (metadataFile.existsSync()) {
         final cacheInfo = FileContentCached.fromJson(json
-            .decode(await metadataFile.readAsString()) as Map<String, Object>);
+            .decode(await metadataFile.readAsString()) as Map<String, dynamic>);
         final content = await kdbxFile.readAsBytes();
         if (content.length != cacheInfo.cacheSize) {
           throw StateError('Cached size does not match size in '
@@ -100,7 +100,7 @@ class FileSourceCloudStorage extends FileSource {
 
     // after cache got loaded, download new version.
     _logger.finer('loading ${toString()}');
-    final freshContent = await provider!.loadFile(fileInfo);
+    final freshContent = await provider.loadFile(fileInfo);
     yield freshContent;
     unawaited(_writeCache(freshContent));
   }
@@ -132,14 +132,13 @@ class FileSourceCloudStorage extends FileSource {
   @override
   Future<Map<String, dynamic>> write(
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
-    final metadata =
-        await provider!.saveFile(fileInfo, bytes, previousMetadata);
+    final metadata = await provider.saveFile(fileInfo, bytes, previousMetadata);
     await _writeCache(FileContent(bytes, metadata));
     return metadata;
   }
 
   @override
-  FileSourceIcon get displayIcon => provider!.displayIcon;
+  FileSourceIcon get displayIcon => provider.displayIcon;
 
   @override
   FileSource copyWithDatabaseName(String databaseName) =>
