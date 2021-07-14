@@ -76,7 +76,9 @@ class AuthPassAboutDialog extends StatelessWidget {
                         listItemCrossAxisAlignment:
                             MarkdownListItemCrossAxisAlignment.start,
                         onTapLink: (text, url, title) {
-                          DialogUtils.openUrl(url!);
+                          if (url != null) {
+                            DialogUtils.openUrl(url);
+                          }
                         },
                       );
                     }
