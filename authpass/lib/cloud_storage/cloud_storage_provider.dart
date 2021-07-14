@@ -255,7 +255,7 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   Future<RESULT?> promptUser<RESULT extends UserAuthenticationPromptResult,
           U extends UserAuthenticationPromptData<RESULT>>(
       PromptUserForCode<RESULT, U> prompt, U promptData) {
-    final completer = Completer<RESULT>();
+    final completer = Completer<RESULT?>();
     prompt(UserAuthenticationPrompt(promptData, (result) {
       completer.complete(result);
     })).then((_) {
