@@ -6,6 +6,8 @@ import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -47,6 +49,30 @@ class AuthPassAboutDialog extends StatelessWidget {
             applicationVersion: appInfo?.versionLabel,
             applicationLegalese: '© by Herbert Poul, 2019-2021', // NON-NLS
             children: <Widget>[
+              const SizedBox(height: 32),
+              FutureBuilder(
+                  future: http.read(Uri.parse(
+                      'https://raw.githubusercontent.com/authpass/authpass/master/CONTRIBUTORS.md')),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return MarkdownBody(
+                        data: snapshot.data!,
+                        imageBuilder: (uri, title, alt) {
+                          return const SizedBox.shrink(); // Remove images
+                        },
+                        listItemCrossAxisAlignment:
+                            MarkdownListItemCrossAxisAlignment.start,
+                        onTapLink: (text, url, title) {
+                          DialogUtils.openUrl(url!);
+                        },
+                      );
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
               const SizedBox(height: 32),
               UrlLink(
                 caption: loc.aboutLinkFeedback,

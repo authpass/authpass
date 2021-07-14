@@ -173,7 +173,9 @@ dependencies:
       ref: 1e124a5056709c00ec05f2c1e3bd8c2084fe962b
   share: ^2.0.1
   collection: ^1.15.0-nullsafety.4
-  
+
+  flutter_markdown: ^0.6.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
