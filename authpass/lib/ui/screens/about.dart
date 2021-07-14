@@ -4,10 +4,10 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -50,14 +50,26 @@ class AuthPassAboutDialog extends StatelessWidget {
             applicationLegalese: '© by Herbert Poul, 2019-2021', // NON-NLS
             children: <Widget>[
               const SizedBox(height: 32),
+              UrlLink(
+                caption: loc.aboutLinkFeedback,
+                url: 'mailto:hello@authpass.app',
+              ),
+              UrlLink(
+                caption: loc.aboutLinkVisitWebsite,
+                url: 'https://authpass.app/',
+              ),
+              UrlLink(
+                caption: loc.aboutLinkGitHub,
+                url: 'https://github.com/authpass/authpass/',
+              ),
+              const SizedBox(height: 32),
               FutureBuilder(
-                  future: http.read(Uri.parse(
-                      'https://raw.githubusercontent.com/authpass/authpass/master/CONTRIBUTORS.md')),
+                  future: rootBundle.loadString('assets/CONTRIBUTORS.md'),
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (snapshot.hasData) {
                       return MarkdownBody(
-                        data: snapshot.data!,
+                        data: snapshot.requireData,
                         imageBuilder: (uri, title, alt) {
                           return const SizedBox.shrink(); // Remove images
                         },
@@ -73,19 +85,6 @@ class AuthPassAboutDialog extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }),
-              const SizedBox(height: 32),
-              UrlLink(
-                caption: loc.aboutLinkFeedback,
-                url: 'mailto:hello@authpass.app',
-              ),
-              UrlLink(
-                caption: loc.aboutLinkVisitWebsite,
-                url: 'https://authpass.app/',
-              ),
-              UrlLink(
-                caption: loc.aboutLinkGitHub,
-                url: 'https://github.com/authpass/authpass/',
-              ),
               const SizedBox(height: 32),
               Text(
                 loc.aboutLogFile(logFiles.isEmpty
