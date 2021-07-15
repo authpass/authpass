@@ -157,6 +157,41 @@ case "${flavor}" in
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
     ;;
+    windowsportable)
+        version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
+        $FLT build -v windows -t lib/env/production.dart --release \
+          --dart-define=AUTHPASS_VERSION=$version \
+          --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber \
+          --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor} \
+          --dart-define=AUTHPASS_PORTABLE=true \
+          --dart-define=AUTHPASS_WIN_AUTOUPDATE=false
+
+        _tools/windows/create_release.sh
+
+        reldir="build/_authpass/windows/release/authpass"
+        portdir="build/_authpass/windows/release/portable"
+        zipfilename="AuthPass-portable-${version}_${buildnumber}.zip"
+        zipfile="build/_authpass/windows/release/${zipfilename}"
+
+        mkdir -p "${portdir}"
+        cp -r "${reldir}" "${portdir}/App"
+
+        echo "App\\AuthPass.exe" > "${portdir}/AuthPass.bat"
+        echo "${version}_${buildnumber}" > "${portdir}/version.txt"
+
+        pushd ${portdir}
+        7z a "../${zipfilename}" -r ./*
+        popd
+
+        outputfilename="${zipfilename}"
+        outputpath="${zipfile}"
+        #echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
+        #echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
+        #tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/release/bundle
+        echo "::set-output name=appversion::${version}"
+        echo "::set-output name=outputfilename::${outputfilename}"
+        echo "::set-output name=outputpath::${outputpath}"
+    ;;
     msix)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
         $FLT build -v windows -t lib/env/production.dart --release \

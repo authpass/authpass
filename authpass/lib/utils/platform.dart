@@ -16,6 +16,14 @@ class AuthPassPlatform {
   static bool get isWindows => !kIsWeb && Platform.isWindows;
   static late final bool isWindowsWinAutoUpdate = isWindows &&
       const bool.fromEnvironment('AUTHPASS_WIN_AUTOUPDATE', defaultValue: true);
+
+  /// Whether this is a "portable" build -
+  /// ie. no files will be written outside the application directory.
+  /// (application directory is in this case the
+  /// parent directory of the executable)
+  static bool get isPortable =>
+      !kIsWeb &&
+      const bool.fromEnvironment('AUTHPASS_PORTABLE', defaultValue: false);
   static bool get isMacOS => !kIsWeb && Platform.isMacOS;
   static bool get isIOS => !kIsWeb && Platform.isIOS;
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;

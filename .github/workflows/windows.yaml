@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        flavor: ['windows', 'msix']
+        flavor: ['windows', 'msix', 'windowsportable']
         os: [windows-2019]
         vs: [2019]
 
