@@ -276,8 +276,8 @@ class _EntryDetailsState extends State<EntryDetails>
 
   static Result? _strength;
 
-  static void _set_strength(Result? strength) {
-    _strength = strength;
+  static void _set_strength(Result? result) {
+    _strength = result;
   }
 
   void _initShortcutListener(
