@@ -20,6 +20,7 @@ import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/ui/widgets/password_strength_display.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
@@ -51,6 +52,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
+import 'package:zxcvbn/zxcvbn.dart';
 
 final _logger = Logger('entry_details');
 
@@ -268,6 +270,14 @@ class EntryDetails extends StatefulWidget {
 class _EntryDetailsState extends State<EntryDetails>
     with StreamSubscriberMixin {
   List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>>? _fieldKeys;
+
+  static final _zxcvbn = Zxcvbn();
+
+  static Result? _strength;
+
+  static void _set_strength(Result? result) {
+    _strength = result;
+  }
 
   void _initShortcutListener(
       KeyboardShortcutEvents events, CommonFields commonFields) {
@@ -504,6 +514,7 @@ class _EntryDetailsState extends State<EntryDetails>
                     ),
                   )
                   .expand((el) => [el, const SizedBox(height: 8)]),
+              PasswordStrengthDisplay(strength: _strength),
               AddFieldButton(
                 onAddField: (key) async {
                   final cf = commonFields[key];
@@ -1006,6 +1017,27 @@ class _EntryFieldState extends State<EntryField>
           _generatePassword();
         }
       }));
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant EntryField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _commonFields = Provider.of<CommonFields>(context);
+    if (widget.fieldKey == _commonFields.password.key) {
+      final value = widget.entry.getString(_commonFields.password.key);
+      final userInput = widget.entry.getString(_commonFields.userName.key)
+          .toString().split('/');
+
+      setState(() {
+        if (value.toString().isEmpty) {
+          _EntryDetailsState._set_strength(null);
+        } else {
+          _EntryDetailsState._set_strength(
+              _EntryDetailsState._zxcvbn.evaluate(
+                  value.toString(), userInputs: userInput));
+        }
+      });
     }
   }
 
