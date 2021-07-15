@@ -39,6 +39,7 @@ dependencies:
   built_value: ^8.0.6
   simple_json_persistence: ^2.0.0-nullsafety.4
   provider: ^5.0.0
+  flutter_hooks: ^0.18.0
   http: ^0.13.0
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.1.0

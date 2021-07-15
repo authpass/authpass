@@ -1,6 +1,7 @@
 # 1.8.2 - unreleased
 
 * Add `CONTRIBUTORS.md` to about dialog. #237 (@ATofighi)
+* Fixed potential crash in Preferences screen.
 
 # 1.8.1 - 2021-07-13
 

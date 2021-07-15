@@ -11,6 +11,7 @@ import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -440,17 +441,19 @@ class _SliderSelectorState extends State<SliderSelector> {
   }
 }
 
-class PreferencesOverflowMenuAction extends StatelessWidget {
+class PreferencesOverflowMenuAction extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final kdbxBloc = context.read<KdbxBloc>();
+    final supportsBiometricKeystore = useFuture(
+        kdbxBloc.quickUnlockStorage.supportsBiometricKeyStore(),
+        initialData:
+            kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready);
     return PopupMenuButton<VoidCallback>(
       itemBuilder: (context) {
-        final kdbxBloc = context.read<KdbxBloc>();
-        final loc = AppLocalizations.of(context);
-
         return [
-          if (kdbxBloc
-              .quickUnlockStorage.supportsBiometricKeystoreAlready!) ...[
+          if (supportsBiometricKeystore.data == true) ...[
             PopupMenuItem(
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);

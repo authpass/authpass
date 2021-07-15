@@ -74,9 +74,9 @@ class QuickUnlockStorage {
     required this.analytics,
   });
 
-  CloudStorageBloc cloudStorageBloc;
-  Env env;
-  Analytics analytics;
+  final CloudStorageBloc cloudStorageBloc;
+  final Env env;
+  final Analytics analytics;
   bool? _supported;
 
   /// should only be used if used in non interactive callbacks.
