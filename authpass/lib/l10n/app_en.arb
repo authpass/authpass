@@ -173,6 +173,8 @@
   "aboutLinkGitHub": "And Open Source Project",
   "@aboutLinkGitHub": {},
   "aboutLogFile": "Log File: {logFilePath}",
+  "aboutLinkContributors": "Show Contributors",
+  "@aboutLinkContributors": {},
   "@aboutLogFile": {
     "placeholders": {
       "logFilePath": {

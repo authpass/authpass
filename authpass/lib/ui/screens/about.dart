@@ -11,6 +11,9 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
+const _contributorsUrl =
+    'https://raw.githubusercontent.com/authpass/authpass/master/CONTRIBUTORS.md';
+
 class AuthPassAboutDialog extends StatelessWidget {
   const AuthPassAboutDialog({Key? key, this.env}) : super(key: key);
 
@@ -50,32 +53,6 @@ class AuthPassAboutDialog extends StatelessWidget {
             applicationLegalese: '© by Herbert Poul, 2019-2021', // NON-NLS
             children: <Widget>[
               const SizedBox(height: 32),
-              FutureBuilder(
-                  future: http.read(Uri.parse(
-                      'https://raw.githubusercontent.com/authpass/authpass/master/CONTRIBUTORS.md')),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.hasData) {
-                      return MarkdownBody(
-                        data: snapshot.data!,
-                        imageBuilder: (uri, title, alt) {
-                          return const SizedBox.shrink(); // Remove images
-                        },
-                        listItemCrossAxisAlignment:
-                            MarkdownListItemCrossAxisAlignment.start,
-                        onTapLink: (text, url, title) {
-                          if (url != null) {
-                            DialogUtils.openUrl(url);
-                          }
-                        },
-                      );
-                    }
-
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-              const SizedBox(height: 32),
               UrlLink(
                 caption: loc.aboutLinkFeedback,
                 url: 'mailto:hello@authpass.app',
@@ -88,6 +65,36 @@ class AuthPassAboutDialog extends StatelessWidget {
                 caption: loc.aboutLinkGitHub,
                 url: 'https://github.com/authpass/authpass/',
               ),
+              const SizedBox(height: 32),
+              FutureBuilder(
+                  future: http.read(Uri.parse(_contributorsUrl)),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return MarkdownBody(
+                        data: snapshot.requireData,
+                        imageBuilder: (uri, title, alt) {
+                          return const SizedBox.shrink(); // Remove images
+                        },
+                        listItemCrossAxisAlignment:
+                            MarkdownListItemCrossAxisAlignment.start,
+                        onTapLink: (text, url, title) {
+                          if (url != null) {
+                            DialogUtils.openUrl(url);
+                          }
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return UrlLink(
+                        caption: loc.aboutLinkContributors,
+                        url: _contributorsUrl,
+                      );
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
               const SizedBox(height: 32),
               Text(
                 loc.aboutLogFile(logFiles.isEmpty
@@ -126,10 +133,11 @@ class AuthPassAboutDialog extends StatelessWidget {
 }
 
 class UrlLink extends StatelessWidget {
-  const UrlLink({Key? key, this.caption, @NonNls this.url}) : super(key: key);
+  const UrlLink({Key? key, required this.caption, @NonNls required this.url})
+      : super(key: key);
 
-  final String? caption;
-  final String? url;
+  final String caption;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +147,7 @@ class UrlLink extends StatelessWidget {
           border: Border(bottom: Divider.createBorderSide(context))),
       child: InkWell(
         onTap: () {
-          DialogUtils.openUrl(url!);
+          DialogUtils.openUrl(url);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -147,12 +155,12 @@ class UrlLink extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                caption!,
+                caption,
                 style: theme.textTheme.caption,
               ),
               const SizedBox(height: 4),
               Text(
-                url!,
+                url,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyText2!
                     .apply(color: theme.primaryColor, fontSizeFactor: 0.95)
