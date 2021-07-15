@@ -176,7 +176,7 @@ class _IconSelectorState extends State<IconSelector> {
       await DialogUtils.showSimpleAlertDialog(
         context,
         null,
-        loc!.notPngError,
+        loc.notPngError,
         routeAppend: 'customIconPngError',
       );
       return;
@@ -185,7 +185,7 @@ class _IconSelectorState extends State<IconSelector> {
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
-          content: loc!.iconPngSizeWarning,
+          content: loc.iconPngSizeWarning,
         ),
       )) {
         return;

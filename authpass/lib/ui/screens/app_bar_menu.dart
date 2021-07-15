@@ -24,7 +24,7 @@ class AppBarMenu {
           secondaryBuilder}) {
     final openedFiles = openedKdbxFiles.values;
     final analytics = Provider.of<Analytics>(context, listen: false);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return [
       PopupMenuItem(
         value: () {

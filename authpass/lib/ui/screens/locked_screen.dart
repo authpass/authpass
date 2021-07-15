@@ -19,7 +19,7 @@ class LockedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     final kdbxBloc = context.watch<KdbxBloc>();
 
     if (!kdbxBloc.hasQuickUnlockOpen()) {

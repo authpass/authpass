@@ -46,7 +46,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return TextFormField(
       autofocus: widget.autofocus,
       focusNode: widget.focusNode,

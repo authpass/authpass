@@ -403,7 +403,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
     final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
         element.key.supportsWrite &&
         element.value.kdbxFile.dirtyObjects.isNotEmpty);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -558,7 +558,7 @@ class GroupListFlatList extends StatelessWidget {
                         onPressed: () => Navigator.of(context).pop('create'),
                         child: ListTile(
                           leading: const Icon(Icons.create_new_folder),
-                          title: Text(loc!.createSubgroup),
+                          title: Text(loc.createSubgroup),
                         ),
                       ),
                     ],
@@ -566,7 +566,7 @@ class GroupListFlatList extends StatelessWidget {
                       onPressed: () => Navigator.of(context).pop('edit'),
                       child: ListTile(
                         leading: const Icon(FontAwesomeIcons.edit),
-                        title: Text(loc!.editAction),
+                        title: Text(loc.editAction),
                       ),
                     ),
                     if (!group.isRoot && !group.inRecycleBin) ...[
@@ -584,7 +584,7 @@ class GroupListFlatList extends StatelessWidget {
               if (action == 'create') {
                 _logger.fine('Creating folder.');
                 final newGroup = group.file.kdbxFile.createGroup(
-                    parent: group.group, name: loc!.initialNewGroupName);
+                    parent: group.group, name: loc.initialNewGroupName);
                 await Navigator.of(context)
                     .push(GroupEditScreen.route(newGroup));
                 analytics.events.trackGroupCreate();
@@ -596,7 +596,7 @@ class GroupListFlatList extends StatelessWidget {
                       .trackGroupDelete(GroupDeleteResult.hasSubgroups);
                   await DialogUtils.showSimpleAlertDialog(
                     context,
-                    loc!.deleteGroupErrorTitle,
+                    loc.deleteGroupErrorTitle,
                     loc.deleteGroupErrorBodyContainsGroup,
                     routeAppend: 'deleteGroupError',
                   );
@@ -606,7 +606,7 @@ class GroupListFlatList extends StatelessWidget {
                       .trackGroupDelete(GroupDeleteResult.hasEntries);
                   await DialogUtils.showSimpleAlertDialog(
                     context,
-                    loc!.deleteGroupErrorTitle,
+                    loc.deleteGroupErrorTitle,
                     loc.deleteGroupErrorBodyContainsEntries,
                     routeAppend: 'deleteGroupError',
                   );
@@ -617,7 +617,7 @@ class GroupListFlatList extends StatelessWidget {
                 analytics.events.trackGroupDelete(GroupDeleteResult.deleted);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(loc!.successfullyDeletedGroup),
+                    content: Text(loc.successfullyDeletedGroup),
                     action: SnackBarAction(
                       label: loc.undoButtonLabel,
                       onPressed: () {

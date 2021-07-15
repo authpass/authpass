@@ -69,7 +69,7 @@ class SelectFileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cloudBloc = CloudStorageBloc(Provider.of<Env>(context), PathUtils());
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.selectKeepassFile),
@@ -286,13 +286,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //            });
 //          });
         }
-      }, label: AppLocalizations.of(context)!.quickUnlockingFiles);
+      }, label: AppLocalizations.of(context).quickUnlockingFiles);
 
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return ProgressOverlay(
       task: task,
@@ -505,7 +505,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   void _loadAndGoToCredentials(FileSource source) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     asyncRunTask((progress) {
       return source.content().last.then((value) {
         return Navigator.of(context).push(CredentialsScreen.route(source));
@@ -530,7 +530,7 @@ class OpenFileBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.only(
         top: 16,
@@ -854,7 +854,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.credentialsAppBarTitle),
@@ -1050,7 +1050,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         await _handleOpenError(
           analytics: analytics,
           result: TryUnlockResult.alreadyOpen,
-          errorTitle: loc!.errorOpenFileAlreadyOpenTitle,
+          errorTitle: loc.errorOpenFileAlreadyOpenTitle,
           errorBody: loc.errorOpenFileAlreadyOpenBody(
             e.newFile.body.meta.databaseName.get()!,
             e.openFileSource.displayPath,
@@ -1063,7 +1063,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         await _handleOpenError(
           analytics: analytics,
           result: TryUnlockResult.failure,
-          errorTitle: loc!.errorUnlockFileTitle,
+          errorTitle: loc.errorUnlockFileTitle,
           errorBody: loc.errorUnlockFileBody(e),
           stopWatch: stopWatch,
         );

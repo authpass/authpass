@@ -48,7 +48,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
     return [
       if (includeLocal)
         SaveFileAs(
-          title: loc!.saveAs,
+          title: loc.saveAs,
           file: file,
           onSave: (fileFuture) {
             Navigator.of(context).pop();
@@ -59,7 +59,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
         ),
       ...cloudStorageBloc.availableCloudStorage.map(
         (cs) => SaveFileAs(
-          title: loc!.saveAs,
+          title: loc.saveAs,
           file: file,
           onSave: (saveFuture) {
             Navigator.of(context).pop();

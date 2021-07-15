@@ -80,7 +80,7 @@ class DialogUtils {
                       errorDescription: 'title: $title\ncontent: $content',
                     );
                   },
-                  child: Text(loc!.dialogSendErrorReport),
+                  child: Text(loc.dialogSendErrorReport),
                 ),
               ],
       );

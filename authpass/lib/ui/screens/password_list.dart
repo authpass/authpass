@@ -146,7 +146,7 @@ class PasswordList extends StatelessWidget {
         kdbxBloc.openedFilesKdbx.map((file) => file.dirtyObjectsChanged);
     if (streams.isEmpty) {
       Provider.of<Analytics>(context).events.trackPasswordListEmpty();
-      final loc = AppLocalizations.of(context)!;
+      final loc = AppLocalizations.of(context);
       return Container(
         color: Colors.white,
         alignment: Alignment.center,
@@ -544,7 +544,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
         element.key.supportsWrite &&
         element.value.kdbxFile.dirtyObjects.isNotEmpty);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return AppBar(
       title: const Text('AuthPass'), // NON-NLS
       actions: <Widget>[
@@ -739,7 +739,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   AppBar _buildFilterAppBar(BuildContext context) {
     final theme = filterAppBarTheme(context);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return AppBar(
       backgroundColor: theme.primaryColor,
       iconTheme: theme.primaryIconTheme,
@@ -806,7 +806,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (_groupFilter == GroupFilter.DEFAULT_GROUP_FILTER) {
       return null;
     }
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return [
       MaterialBanner(
         backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
@@ -829,7 +829,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           'not autofill: ${WidgetsBinding.instance!.window.defaultRouteName}');
       return null;
     }
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
 
     final info = _autofillMetadata?.let((metadata) {
       final searchTerm = metadata.searchTerm;
@@ -897,7 +897,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       analytics.events.trackBackupBanner(BackupBannerAction.shown);
       return [
         BackupBanner(
-          loc!.backupWarningMessage(file.key.displayName),
+          loc.backupWarningMessage(file.key.displayName),
           backupWidget: SaveFileAsDialogButton(
             file: kdbxBloc.fileForFileSource(file.key)!,
             onSave: (saveFuture) {
@@ -1009,7 +1009,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           ? null
           : kdbxBloc.openedFiles.length == 1 || _groupFilter.groups.length == 1
               ? FloatingActionButton(
-                  tooltip: loc!.addNewPassword,
+                  tooltip: loc.addNewPassword,
                   onPressed: () {
                     final group = _groupFilter.groups.isEmpty
                         ? null
@@ -1024,7 +1024,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                   child: const Icon(Icons.add),
                 )
               : SpeedDial(
-                  tooltip: _speedDialOpen ? '' : loc!.addNewPassword,
+                  tooltip: _speedDialOpen ? '' : loc.addNewPassword,
                   onOpen: () => setState(() => _speedDialOpen = true),
                   onClose: () => setState(() => _speedDialOpen = false),
                   overlayColor: theme.brightness == Brightness.dark
@@ -1142,7 +1142,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     final commonFields = Provider.of<CommonFields>(context);
     return Semantics(
       customSemanticsActions: {
@@ -1255,7 +1255,7 @@ class NoPasswordsEmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
@@ -1406,7 +1406,7 @@ class PasswordEntryTile extends StatelessWidget {
                         fontWeight: FontWeight.normal, color: fgColor),
                     child: Text.rich(
                       _highlightFilterQuery(vm.label?.nullIfBlank()) ??
-                          TextSpan(text: loc!.noTitle),
+                          TextSpan(text: loc.noTitle),
 //                      style: theme.textTheme.subtitle1.copyWith(fontWeight: null),
                     ),
                   ),
@@ -1421,7 +1421,7 @@ class PasswordEntryTile extends StatelessWidget {
                                 .stringValue(vm.entry)
                                 ?.nullIfBlank(),
                           ) ??
-                          TextSpan(text: loc!.noUsername),
+                          TextSpan(text: loc.noUsername),
                       style: theme.textTheme.bodyText1!.copyWith(
                           fontSize: 12, color: theme.textTheme.caption!.color),
                     ),

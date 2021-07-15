@@ -129,7 +129,7 @@ Future<void> startApp(Env env) async {
     navigatorKey.currentState?.overlay?.context.let((context) {
       String? message = 'Unexpected error: $error'; // NON-NLS
       try {
-        message = AppLocalizations.of(context)?.unexpectedError('$error');
+        message = AppLocalizations.of(context).unexpectedError('$error');
       } catch (e, stackTrace) {
         _logger.fine('Error while localizing error message', e, stackTrace);
       }
@@ -359,7 +359,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             devicePixelRatio: WidgetsBinding.instance!.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
-          final localizations = AppLocalizations.of(context)!;
+          final localizations = AppLocalizations.of(context);
           final Widget ret = MultiProvider(
             providers: [
               Provider.value(value: FormatUtils(locale: locale.toString())),

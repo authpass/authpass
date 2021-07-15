@@ -43,13 +43,13 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
     super.didChangeDependencies();
     final loc = AppLocalizations.of(context);
     if (_databaseName.text.isEmpty) {
-      _databaseName.text = loc!.databaseCreateDefaultName;
+      _databaseName.text = loc.databaseCreateDefaultName;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +151,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (e, stackTrace) {
             _logger.warning('Showing file exists error dialog.', e, stackTrace);
-            final loc = AppLocalizations.of(context)!;
+            final loc = AppLocalizations.of(context);
             await DialogUtils.showSimpleAlertDialog(
               context,
               loc.databaseExistsError,

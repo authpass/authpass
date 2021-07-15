@@ -91,7 +91,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(vm.label?.takeUnlessBlank() ?? loc!.noTitle),
+        title: Text(vm.label?.takeUnlessBlank() ?? loc.noTitle),
         actions: <Widget>[
           ...?!isDirty
               ? null
@@ -285,7 +285,7 @@ class _EntryDetailsState extends State<EntryDetails>
               if (data.isNotEmpty) {
                 Clipboard.setData(ClipboardData(text: data));
                 if (mounted) {
-                  final loc = AppLocalizations.of(context)!;
+                  final loc = AppLocalizations.of(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(loc.copiedToClipboard)));
                 }
@@ -401,7 +401,7 @@ class _EntryDetailsState extends State<EntryDetails>
     final entry = widget.entry.entry;
     final formatUtils = Provider.of<FormatUtils>(context);
     final theme = Theme.of(context);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       child: Padding(
@@ -612,7 +612,7 @@ class _EntryDetailsState extends State<EntryDetails>
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
-          content: loc!.entryAttachmentSizeWarning,
+          content: loc.entryAttachmentSizeWarning,
         ),
       )) {
         analytics.events.trackAttachmentAdd(
@@ -854,7 +854,7 @@ class AddFieldButton extends StatefulWidget {
 class _AddFieldButtonState extends State<AddFieldButton> {
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return LinkButton(
       icon: const Icon(Icons.add_circle_outline),
       onPressed: () async {
@@ -901,7 +901,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
   }
 
   Future<void> _selectCustomKey() async {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     final key = await SimplePromptDialog(
       title: loc.entryCustomFieldTitle,
       labelText: loc.entryCustomFieldInputLabel,
@@ -1028,7 +1028,7 @@ class _EntryFieldState extends State<EntryField>
   @override
   Widget build(BuildContext context) {
     _logger.finer('building ${widget.fieldKey} ($_isValueObscured)');
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Dismissible(
       key: ValueKey(widget.fieldKey),
       background: Container(
@@ -1178,7 +1178,7 @@ class _EntryFieldState extends State<EntryField>
   }
 
   List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return <PopupMenuEntry<EntryAction>>[
       PopupMenuItem(
         value: EntryAction.copy,
@@ -1244,16 +1244,16 @@ class _EntryFieldState extends State<EntryField>
       _logger.finer('Opening url $url ($parsed)');
       if (await DialogUtils.openUrl(parsed.toString())) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(loc!.launchedUrl(url))));
+            .showSnackBar(SnackBar(content: Text(loc.launchedUrl(url))));
       } else {
-        openError = loc!.unableToLaunchUrlNoHandler;
+        openError = loc.unableToLaunchUrlNoHandler;
       }
     } catch (e, stackTrace) {
       openError = '$e';
       _logger.severe('Unable to open url, $url', e, stackTrace);
     }
     if (openError != null) {
-      await DialogUtils.showErrorDialog(context, loc!.unableToLaunchUrlTitle,
+      await DialogUtils.showErrorDialog(context, loc.unableToLaunchUrlTitle,
           loc.unableToLaunchUrlDescription(url, openError));
     }
   }
@@ -1376,7 +1376,7 @@ class _EntryFieldState extends State<EntryField>
     if (authPassCloud.tokenStatus != TokenStatus.confirmed) {
       return null;
     }
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return [
       PopupMenuItem(
           value: EntryAction.generateEmail,
@@ -1694,14 +1694,14 @@ class StringEntryFieldEditor extends StatelessWidget {
           if (fieldKey == commonFields.password.key &&
               controller!.text.isEmpty) {
             return IconButton(
-                tooltip: loc!.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
+                tooltip: loc.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
                 icon: const Icon(Icons.refresh),
                 onPressed: delegate.generatePassword,
                 color: color);
           }
           if (fieldKey == commonFields.url.key && controller!.text.isNotEmpty) {
             return IconButton(
-                tooltip: loc!.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
+                tooltip: loc.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
                 icon: const Icon(Icons.open_in_new),
                 onPressed: delegate.openUrl,
                 color: color);

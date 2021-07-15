@@ -28,7 +28,7 @@ class PreferencesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.preferenceTitle),
+        title: Text(AppLocalizations.of(context).preferenceTitle),
         actions: [PreferencesOverflowMenuAction()],
       ),
       body: Scrollbar(
@@ -99,7 +99,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
     if (_appData == null) {
       return const Text('loading'); // NON-NLS
     }
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
     final commonFields = context.watch<CommonFields>();
     final localeInfo = [
@@ -284,7 +284,7 @@ class SelectLanguageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return SimpleDialog(
       title: Text(loc.preferenceSelectLanguage),
       children: locales!
@@ -331,7 +331,7 @@ class ValueSelectorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final density = theme.visualDensity;
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -455,12 +455,12 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(loc!.clearQuickUnlockSuccess)));
+                    SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
                 await SelectFileScreen.navigate(context);
               },
               child: ListTile(
                 leading: const Icon(FontAwesomeIcons.bug),
-                title: Text(loc!.clearQuickUnlock),
+                title: Text(loc.clearQuickUnlock),
                 subtitle: Text(loc.clearQuickUnlockSubtitle),
               ),
             ),
@@ -474,7 +474,7 @@ class PreferencesOverflowMenuAction extends StatelessWidget {
               },
               child: ListTile(
                 leading: const Icon(FontAwesomeIcons.signOutAlt),
-                title: Text(loc!.lockAllFiles),
+                title: Text(loc.lockAllFiles),
               ),
             ),
           ],

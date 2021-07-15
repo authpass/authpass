@@ -45,7 +45,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            applicationName: loc!.aboutAppName,
+            applicationName: loc.aboutAppName,
             applicationVersion: appInfo?.versionLabel,
             applicationLegalese: '© by Herbert Poul, 2019-2021', // NON-NLS
             children: <Widget>[
@@ -110,7 +110,7 @@ class AuthPassAboutDialog extends StatelessWidget {
 
   static PopupMenuItem<VoidCallback> createAboutMenuItem(BuildContext context) {
     final analytics = Provider.of<Analytics>(context, listen: false);
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return PopupMenuItem<VoidCallback>(
       value: () {
         analytics.events.trackActionPressed(action: 'about');

@@ -34,7 +34,7 @@ class PasswordGeneratorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -112,7 +112,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
         ..addAll(CharacterSet.characterSetFromIds(
             appData.passwordGeneratorCharacterSets));
     }
-    _characterSets = characterSets(AppLocalizations.of(context)!);
+    _characterSets = characterSets(AppLocalizations.of(context));
     _generatePassword();
   }
 
@@ -126,7 +126,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),

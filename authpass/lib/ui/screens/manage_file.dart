@@ -165,7 +165,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         _file!,
                         _file!.fileSource.copyWithDatabaseName(newName),
                       );
-                    }, label: loc!.saving);
+                    }, label: loc.saving);
                   },
                 ),
                 ListTile(
@@ -177,7 +177,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       asyncRunTask((progress) async {
                         final f = await fileSave;
                         widget.onFileSourceChanged(f.fileSource);
-                      }, label: loc!.saving);
+                      }, label: loc.saving);
                     },
                     includeLocal: true,
                   ),
