@@ -191,6 +191,13 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
     }
+    value = object.dismissedAutofillSuggestion;
+    if (value != null) {
+      result
+        ..add('dismissedAutofillSuggestion')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.themeVisualDensity;
     if (value != null) {
       result
@@ -288,6 +295,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
+          break;
+        case 'dismissedAutofillSuggestion':
+          result.dismissedAutofillSuggestion = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'themeVisualDensity':
           result.themeVisualDensity = serializers.deserialize(value,
@@ -531,6 +542,8 @@ class _$AppData extends AppData {
   @override
   final BuiltList<String>? dismissedBackupLocalFiles;
   @override
+  final bool? dismissedAutofillSuggestion;
+  @override
   final double? themeVisualDensity;
   @override
   final double? themeFontSizeFactor;
@@ -556,6 +569,7 @@ class _$AppData extends AppData {
       this.firstLaunchedAt,
       this.theme,
       this.dismissedBackupLocalFiles,
+      this.dismissedAutofillSuggestion,
       this.themeVisualDensity,
       this.themeFontSizeFactor,
       this.diacOptIn,
@@ -589,6 +603,7 @@ class _$AppData extends AppData {
         firstLaunchedAt == other.firstLaunchedAt &&
         theme == other.theme &&
         dismissedBackupLocalFiles == other.dismissedBackupLocalFiles &&
+        dismissedAutofillSuggestion == other.dismissedAutofillSuggestion &&
         themeVisualDensity == other.themeVisualDensity &&
         themeFontSizeFactor == other.themeFontSizeFactor &&
         diacOptIn == other.diacOptIn &&
@@ -614,17 +629,19 @@ class _$AppData extends AppData {
                                                 $jc(
                                                     $jc(
                                                         $jc(
-                                                            0,
-                                                            previousFiles
+                                                            $jc(
+                                                                0,
+                                                                previousFiles
+                                                                    .hashCode),
+                                                            passwordGeneratorLength
                                                                 .hashCode),
-                                                        passwordGeneratorLength
+                                                        passwordGeneratorCharacterSets
                                                             .hashCode),
-                                                    passwordGeneratorCharacterSets
-                                                        .hashCode),
-                                                manualUserType.hashCode),
-                                            firstLaunchedAt.hashCode),
-                                        theme.hashCode),
-                                    dismissedBackupLocalFiles.hashCode),
+                                                    manualUserType.hashCode),
+                                                firstLaunchedAt.hashCode),
+                                            theme.hashCode),
+                                        dismissedBackupLocalFiles.hashCode),
+                                    dismissedAutofillSuggestion.hashCode),
                                 themeVisualDensity.hashCode),
                             themeFontSizeFactor.hashCode),
                         diacOptIn.hashCode),
@@ -645,6 +662,7 @@ class _$AppData extends AppData {
           ..add('firstLaunchedAt', firstLaunchedAt)
           ..add('theme', theme)
           ..add('dismissedBackupLocalFiles', dismissedBackupLocalFiles)
+          ..add('dismissedAutofillSuggestion', dismissedAutofillSuggestion)
           ..add('themeVisualDensity', themeVisualDensity)
           ..add('themeFontSizeFactor', themeFontSizeFactor)
           ..add('diacOptIn', diacOptIn)
@@ -698,6 +716,11 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
           ListBuilder<String>? dismissedBackupLocalFiles) =>
       _$this._dismissedBackupLocalFiles = dismissedBackupLocalFiles;
 
+  bool? _dismissedAutofillSuggestion;
+  bool? get dismissedAutofillSuggestion => _$this._dismissedAutofillSuggestion;
+  set dismissedAutofillSuggestion(bool? dismissedAutofillSuggestion) =>
+      _$this._dismissedAutofillSuggestion = dismissedAutofillSuggestion;
+
   double? _themeVisualDensity;
   double? get themeVisualDensity => _$this._themeVisualDensity;
   set themeVisualDensity(double? themeVisualDensity) =>
@@ -743,6 +766,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _firstLaunchedAt = $v.firstLaunchedAt;
       _theme = $v.theme;
       _dismissedBackupLocalFiles = $v.dismissedBackupLocalFiles?.toBuilder();
+      _dismissedAutofillSuggestion = $v.dismissedAutofillSuggestion;
       _themeVisualDensity = $v.themeVisualDensity;
       _themeFontSizeFactor = $v.themeFontSizeFactor;
       _diacOptIn = $v.diacOptIn;
@@ -780,6 +804,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               firstLaunchedAt: firstLaunchedAt,
               theme: theme,
               dismissedBackupLocalFiles: _dismissedBackupLocalFiles?.build(),
+              dismissedAutofillSuggestion: dismissedAutofillSuggestion,
               themeVisualDensity: themeVisualDensity,
               themeFontSizeFactor: themeFontSizeFactor,
               diacOptIn: diacOptIn,
