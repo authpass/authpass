@@ -55,6 +55,25 @@ void main() => throw Exception('Run some env/*.dart');
 
 final startupStopwatch = Stopwatch();
 
+Map<String, String> debugInfo() {
+  String handle(String Function() info) {
+    try {
+      return info();
+    } catch (e, stackTrace) {
+      _logger.fine('error fetching info. ', e, stackTrace);
+      return 'throws: $e';
+    }
+  }
+
+  return {
+    'script': handle(() => Platform.script.toFilePath()),
+    'executable': handle(() => Platform.executable),
+    'resolvedExecutable': handle(() => Platform.resolvedExecutable),
+    'executableArguments':
+        handle(() => Platform.executableArguments.toString()),
+  };
+}
+
 Future<void> startApp(Env env) async {
   startupStopwatch
     ..start()
@@ -71,6 +90,9 @@ Future<void> startApp(Env env) async {
   _setTargetPlatformForDesktop();
   _logger.info('Initialized logger. '
       '(${AuthPassPlatform.operatingSystem}, ${AuthPassPlatform.operatingSystemVersion}) ${startupStopwatch.elapsedMilliseconds}');
+  if (!AuthPassPlatform.isWeb) {
+    _logger.info('${debugInfo()}');
+  }
 
   FlutterError.onError = (errorDetails) {
     _logger.shout(
