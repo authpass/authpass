@@ -37,9 +37,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
-// TODO: Remove the following two lines once path provider endorses the linux plugin
-import 'package:path_provider_linux/path_provider_linux.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -78,11 +75,7 @@ Future<void> startApp(Env env) async {
   startupStopwatch
     ..start()
     ..reset();
-  // TODO: Remove the following four lines once path provider endorses the linux plugin
-  if (AuthPassPlatform.isLinux) {
-    WidgetsFlutterBinding.ensureInitialized();
-    PathProviderPlatform.instance = PathProviderLinux();
-  }
+
   StoreBackend.defaultBaseDirectoryBuilder =
       () async => (await PathUtils().getAppDataDirectory()).path;
 

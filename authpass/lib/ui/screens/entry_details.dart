@@ -47,7 +47,6 @@ import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -738,7 +737,7 @@ class AttachmentBottomSheet extends StatelessWidget {
               )!;
               _logger.fine('Opening attachment with mimeType $mimeType');
 
-              final tempDir = await getTemporaryDirectory();
+              final tempDir = await PathUtils().getTemporaryDirectory();
               final f =
                   await File('${tempDir.path}/${attachment.key.key}').create();
               await f.writeAsBytes(attachment.value.value!);

@@ -11,7 +11,6 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:pedantic/pedantic.dart';
 
 final _logger = Logger('file_source_local');
@@ -164,7 +163,7 @@ class FileSourceLocal extends FileSource {
     if (baseName.length > 30) {
       baseName = baseName.substring(0, 30);
     }
-    final tempDirBase = await getTemporaryDirectory();
+    final tempDirBase = await PathUtils().getTemporaryDirectory();
     final tempDir =
         Directory(path.join(tempDirBase.path, UuidUtil.createUuid()));
     await tempDir.create(recursive: true);
