@@ -11,7 +11,7 @@ AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdb
 * Android: [Google Play Store](https://play.google.com/store/apps/details?id=design.codeux.authpass) or [F-Droid](https://f-droid.org/packages/design.codeux.authpass.fdroid/)
 * iOS: [App Store](https://apps.apple.com/app/authpass-password-manager/id1479297675?ls=1&at=11l8ru)
 * Linux Desktop: [Check out our blog post for installation instructions](https://authpass.app/articles/linux-desktop-release-authpass-1.6.3/)
-* Windows Desktop: [Windows Install Guide](https://authpass.app/docs/install/windows-installation/) - [![AuthPass-setup-stable.exe](https://data.authpass.app/data/artifact.download/AuthPass-setup-stable.exe/shield)](https://data.authpass.app/data/artifact.download/AuthPass-setup-stable.exe)
+* Windows Desktop: [Microsoft Store](https://www.microsoft.com/store/apps/9P5N6ZNPSFBN?cid=readme) or [Windows Install Guide](https://authpass.app/docs/install/windows-installation/)
 
 ![Mac OS, iOS and Android Screenshot](_docs/authpass-platform-composition.png)
 
