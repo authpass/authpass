@@ -219,10 +219,14 @@
   "@menuItemOpenAnotherFile": {},
   "menuItemCheckForUpdates": "Check for updates",
   "@menuItemCheckForUpdates": {},
-  "menuItemSupport": "Email Support",
+  "menuItemSupport": "Send logs",
   "@menuItemSupport": {},
-  "menuItemSupportSubtitle": "Send logs by email/ask for help.",
+  "menuItemSupportSubtitle": "Send logs by email",
   "@menuItemSupportSubtitle": {},
+  "menuItemForum": "Support Forum",
+  "@menuItemForum": {},
+  "menuItemForumSubtitle": "Report Problems and get help",
+  "@menuItemForumSubtitle": {},
   "menuItemHelp": "Help",
   "@menuItemHelp": {},
   "menuItemHelpSubtitle": "Show documentation",
@@ -491,10 +495,14 @@
   "@dialogContinue": {
     "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
   },
-  "dialogSendErrorReport": "Send Error Report/Help",
+  "dialogSendErrorReport": "Send Error Report",
   "@dialogSendErrorReport": {
     "description": "action button in error dialogs to send email to support with log file.",
     "context": "error dialog"
+  },
+  "dialogReportErrorForum": "Report Error in Forum/Help",
+  "@dialogReportErrorForum": {
+    "description": "action button in error dialog to open forum and create new topic."
   },
   "groupFilterDescription": "Select which Groups to show (recursively)",
   "@groupFilterDescription": {

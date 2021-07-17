@@ -86,6 +86,23 @@ abstract class Env {
 
   String get name => runtimeType.toString();
 
+  String get forumUrl => 'https://forum.authpass.app/';
+
+  String forumUrlNewTopic({
+    String title = '',
+    String body = '',
+    int category = 5,
+    List<String> tags = const <String>[],
+  }) =>
+      Uri.parse('${forumUrl}new-topic').replace(
+        queryParameters: <String, String>{
+          'title': title,
+          'body': body,
+          'category_id': category.toString(),
+          'tags': tags.join(','),
+        },
+      ).toString();
+
   /// Allows having a "namespace" for different environments.
   /// e.g. for mac os to have a different configuration for
   /// debug build vs. production/app store build.

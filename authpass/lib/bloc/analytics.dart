@@ -4,7 +4,7 @@ import 'package:authpass/bloc/analytics_io.dart'
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/platform.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -210,11 +210,11 @@ Future<String> deviceInfo() async {
   // get information about the current device.
   if (AuthPassPlatform.isAndroid) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-    return androidInfo.model;
+    return androidInfo.model ?? 'unknown';
   }
   if (AuthPassPlatform.isIOS) {
     final iosInfo = await DeviceInfoPlugin().iosInfo;
-    return iosInfo.utsname.machine;
+    return iosInfo.utsname.machine ?? 'unknown';
   }
   return 'unknown ${AuthPassPlatform.operatingSystemVersion}'
       ' (${AuthPassPlatform.operatingSystem})';

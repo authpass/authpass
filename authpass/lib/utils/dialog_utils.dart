@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/logging_utils.dart';
@@ -70,19 +71,43 @@ class DialogUtils {
         title,
         content,
         routeAppend: 'error${routeAppend?.prepend('/') ?? ''}',
-        moreActions: !sendLogsSupported()
-            ? null
-            : [
-                TextButton(
-                  onPressed: () {
-                    sendLogs(
-                      context,
-                      errorDescription: 'title: $title\ncontent: $content',
-                    );
-                  },
-                  child: Text(loc.dialogSendErrorReport),
-                ),
-              ],
+        moreActions: [
+          if (sendLogsSupported()) ...[
+            TextButton(
+              onPressed: () {
+                sendLogs(
+                  context,
+                  errorDescription: 'title: $title\ncontent: $content',
+                );
+              },
+              child: Text(loc.dialogSendErrorReport),
+            ),
+          ],
+          TextButton(
+            onPressed: () async {
+              context
+                  .read<Analytics>()
+                  .events
+                  .trackActionPressed(action: 'reportToForum');
+              final env = context.read<Env>();
+              final forumUrl = context.read<Env>().forumUrlNewTopic(
+                title: 'Error Dialog: ${title ?? content}',
+                body: '\n\n\n'
+                    'title:$title\n'
+                    'content: $content\n'
+                    'OS: ${AuthPassPlatform.operatingSystem}\n'
+                    'OS Version: ${AuthPassPlatform.operatingSystemVersion}\n'
+                    'App Info: ${await env.getAppInfo()}\n'
+                    'Device: ${await LoggingUtils.getDebugDeviceInfo()}',
+                category: 11,
+                tags: ['fromapp'],
+              );
+              _logger.finer('Opening forum url (${forumUrl.length}) $forumUrl');
+              await DialogUtils.openUrl(forumUrl);
+            },
+            child: Text(loc.dialogReportErrorForum),
+          ),
+        ],
       );
     } finally {
       _errorDialogShown = false;

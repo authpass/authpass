@@ -3,6 +3,8 @@ PODS:
     - FlutterMacOS
   - biometric_storage (0.0.1):
     - FlutterMacOS
+  - device_info_plus_macos (0.0.1):
+    - FlutterMacOS
   - file_picker_writable (0.0.1):
     - FlutterMacOS
   - file_selector_macos (0.0.1):
@@ -28,6 +30,7 @@ PODS:
 DEPENDENCIES:
   - argon2_ffi (from `Flutter/ephemeral/.symlinks/plugins/argon2_ffi/macos`)
   - biometric_storage (from `Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos`)
+  - device_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos`)
   - file_picker_writable (from `Flutter/ephemeral/.symlinks/plugins/file_picker_writable/macos`)
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -47,6 +50,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/argon2_ffi/macos
   biometric_storage:
     :path: Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos
+  device_info_plus_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos
   file_picker_writable:
     :path: Flutter/ephemeral/.symlinks/plugins/file_picker_writable/macos
   file_selector_macos:
@@ -69,6 +74,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   argon2_ffi: ea9adefd65ac7236d1af897150c27f4c7db90d12
   biometric_storage: 43caa6e7ef00e8e19c074216e7e1786dacda9e76
+  device_info_plus_macos: 1ad388a1ef433505c4038e7dd9605aadd1e2e9c7
   file_picker_writable: 91694d55c22f8430d4be119f0afb49755e65cd0c
   file_selector_macos: ff6dc948d4ddd34e8602a1f60b7d0b4cc6051a47
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424

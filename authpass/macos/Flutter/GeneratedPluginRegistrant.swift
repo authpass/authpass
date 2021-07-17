@@ -7,6 +7,7 @@ import Foundation
 
 import argon2_ffi
 import biometric_storage
+import device_info_plus_macos
 import file_picker_writable
 import file_selector_macos
 import macos_secure_bookmarks
@@ -19,6 +20,7 @@ import wakelock_macos
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   Argon2FfiPlugin.register(with: registry.registrar(forPlugin: "Argon2FfiPlugin"))
   BiometricStorageMacOSPlugin.register(with: registry.registrar(forPlugin: "BiometricStorageMacOSPlugin"))
+  DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
   FilePickerWritablePlugin.register(with: registry.registrar(forPlugin: "FilePickerWritablePlugin"))
   FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
   SecureBookmarksPlugin.register(with: registry.registrar(forPlugin: "SecureBookmarksPlugin"))

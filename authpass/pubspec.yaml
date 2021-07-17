@@ -60,7 +60,7 @@ dependencies:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info: ^2.0.0
+  device_info_plus: ^2.1.0
   path_provider: ^2.0.1
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
