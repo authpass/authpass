@@ -4,6 +4,7 @@
 * Fixed potential crash in Preferences screen.
 * Fixed broken 'manage groups'.
 * Add links to forum, report error to forum https://forum.authpass.app/
+* WebDAV: Improve file not found error message.
 
 # 1.8.1 - 2021-07-13
 

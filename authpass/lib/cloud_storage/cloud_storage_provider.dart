@@ -29,6 +29,15 @@ class LoadFileException implements Exception {
   }
 }
 
+class LoadFileNotFoundException extends LoadFileException {
+  LoadFileNotFoundException(String message) : super(message);
+
+  @override
+  String toString() {
+    return 'LoadFileNotFoundException{message: $message}';
+  }
+}
+
 enum CloudStorageEntityType {
   directory,
   file,

@@ -229,6 +229,14 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final client = await requireAuthenticatedClient();
     final uri = _uriForEntity(client, file);
     final response = await client.get(uri);
+    if (response.statusCode == HttpStatus.notFound) {
+      throw LoadFileNotFoundException(
+          'File was not found on webdav server. $uri');
+    }
+    if (response.statusCode ~/ 100 != 2) {
+      throw LoadFileException('Error while loading file from webdav server. '
+          'Unexpected error code ${response.statusCode}');
+    }
     final metadata =
         WebDavFileMetadata(etag: response.headers[HttpHeaders.etagHeader]);
     _logger.finer(
