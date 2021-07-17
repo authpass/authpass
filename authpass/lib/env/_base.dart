@@ -94,14 +94,16 @@ abstract class Env {
     int category = 5,
     List<String> tags = const <String>[],
   }) =>
-      Uri.parse('${forumUrl}new-topic').replace(
-        queryParameters: <String, String>{
-          'title': title,
-          'body': body,
-          'category_id': category.toString(),
-          'tags': tags.join(','),
-        },
-      ).toString();
+      Uri.parse('${forumUrl}new-topic')
+          .replace(
+            queryParameters: <String, String>{
+              'title': title,
+              'body': body,
+              'category_id': category.toString(),
+              'tags': tags.join(','),
+            }..removeWhere((key, value) => value.isEmpty),
+          )
+          .toString();
 
   /// Allows having a "namespace" for different environments.
   /// e.g. for mac os to have a different configuration for
