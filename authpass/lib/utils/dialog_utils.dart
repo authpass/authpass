@@ -95,9 +95,9 @@ class DialogUtils {
                 body: '\n\n\n'
                     'title:$title\n'
                     'content: $content\n'
-                    'OS: ${AuthPassPlatform.operatingSystem}\n'
-                    'OS Version: ${AuthPassPlatform.operatingSystemVersion}\n'
-                    'App Info: ${await env.getAppInfo()}\n'
+                    'OS: ${AuthPassPlatform.operatingSystem} '
+                    '${AuthPassPlatform.operatingSystemVersion}\n'
+                    'App Info: ${(await env.getAppInfo()).longString}\n'
                     'Device: ${await LoggingUtils.getDebugDeviceInfo()}',
                 category: 11,
                 tags: ['fromapp'],

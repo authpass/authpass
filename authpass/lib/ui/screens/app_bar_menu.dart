@@ -123,7 +123,11 @@ class AppBarMenu {
         onTap: () async {
           analytics.events.trackActionPressed(action: 'forum');
           final url = deps.env.forumUrlNewTopic(
-            body: '\n\n\n${await LoggingUtils.getDebugDeviceInfo()}',
+            body: '\n\n\n'
+                'OS: ${AuthPassPlatform.operatingSystem} '
+                '${AuthPassPlatform.operatingSystemVersion}\n'
+                'App: ${(await deps.env.getAppInfo()).longString}\n'
+                '${await LoggingUtils.getDebugDeviceInfo()}',
             tags: ['fromapp'],
           );
           _logger.finer('opening url (${url.length}): $url');

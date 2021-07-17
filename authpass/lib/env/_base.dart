@@ -20,6 +20,8 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   String get versionLabel => '$version+$buildNumber'; // NON-NLS
 
   String get shortString => '$appName ($versionLabel)'; // NON-NLS
+
+  String get longString => '$shortString [$packageName]}'; // NON-NLS
 }
 
 @freezed
