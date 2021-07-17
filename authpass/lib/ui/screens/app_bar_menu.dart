@@ -17,9 +17,8 @@ import 'package:authpass/utils/winsparkle_init_noop.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 
 late final _logger = Logger('app_bar_menu');
 
