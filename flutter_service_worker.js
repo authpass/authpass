@@ -30,12 +30,12 @@ const RESOURCES = {
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "eaed33dc9678381a55cb5c13edaf241d",
 "assets/packages/wakelock_web/assets/no_sleep.js": "7748a45cd593f33280669b29c2c8919a",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"main.dart.js": "7524512a65a4b30dd2aaecfca30ebeeb",
+"main.dart.js": "06f253fb9f975836cd562176617a702a",
 "version.json": "6469954cd951024dc2bedbc3c5fb499d",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
-"index.html": "c44c5de4afd71b7c25c1eb38941a73a5",
-"/": "c44c5de4afd71b7c25c1eb38941a73a5",
+"index.html": "c0e224831e1ddc5ff8ef2f439aceb182",
+"/": "c0e224831e1ddc5ff8ef2f439aceb182",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1"
 };
 
