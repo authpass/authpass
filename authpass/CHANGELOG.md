@@ -5,6 +5,7 @@
 * Fixed broken 'manage groups'.
 * Add links to forum, report error to forum https://forum.authpass.app/
 * WebDAV: Improve file not found error message.
+* Fix bug when changing database name.
 
 # 1.8.1 - 2021-07-13
 
