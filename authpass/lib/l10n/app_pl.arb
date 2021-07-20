@@ -341,11 +341,6 @@
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
     },
-    "dialogSendErrorReport": "Wyślij raport o błędach / Pomoc",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
-    },
     "groupFilterSelectAll": "Zaznacz wszystko",
     "@groupFilterSelectAll": {
         "context": "group filter"

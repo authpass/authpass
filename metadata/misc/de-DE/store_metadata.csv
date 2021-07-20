@@ -34,7 +34,7 @@ Werde Teil der Community und besuche unseren <a href=""https://authpass.app/go/d
 ","Google Play Store description","4000",""
 "playstore_title","AuthPass - KeePass kompatibler Passwort Manager","Google Play Title","50",""
 "playstore_short_description","Sichere Aufbewahrung aller Passwörter und Benutzerkonten über alle Geräten.","Short description in play store.","80",""
-"apple-appstore-title","AuthPass - Passwort Manager","","30",""
+"apple-appstore-title","AuthPass – Passwort Manager","","30",""
 "apple-appstore-subtitle","Sicher, Effizient, Privat.","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","Einfache und sichere Verwaltung all Deiner Passwörter und Konten!
 
@@ -71,3 +71,52 @@ Werde Teil der Community und besuche unseren discord channel unter https://authp
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","Kennwortmanager,Kennwörter,Verwalten,Keystore,Keysafe,Keepass,Kdbx,webdav,icloud,nextcloud,onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 
+"microsoft-store-windows","Verschlüsselte, sichere Speicherung all deiner Passwörter und Benutzerkonten!
+
+AuthPass ist ein Passwortmanager mit Unterstützung für das bewährte KeePass (kdbx 3. AND kdbx 4.x 🎉) Format. Speichern Sie Ihre Passwörter, synchronisiere sie auf all deine Geräten und finde sie einfach, wann immer Sie sich bei einem Dienst anmelden müssen.
+
+🗄 Alle deine Passwörter und geheimen Daten an einem Ort.
+🧬 Generiere sichere zufällige Passwörter für jedes deiner Konten.
+🔍 Behalte den Überblick über deine Konten im Internet.
+🖥 App für Mac, iPhone, iPad, Android Handys und Tablets, Linux und Windows.
+📂 Mehrere Passwortdateien gleichzeitig öffnen (Z.B.: Eines für Arbeit, eines für persönliche - oder sogar deine Passwortdateien mit Kollegen zu teilen)
+🤓 Open Source verfügbar auf https://github. om/authpass/authpass/
+🔦 Dark Theme 😎
+
+
+=== UNTERDEINER KONTROLLE ===
+AuthPass speichert alle Passwörter im offenen Keepass Format, genau dort wo du möchtest. Deine Passwörter werden nicht an unsere Server gesendet. Aber AuthPass unterstützt die Speicherung nach:
+
+✅ Native Google Drive Integration
+✅ Native Dropbox Integration
+✅ Native WebDAV Unterstützung die in Ihrer eigenen NextCloud oder OwnCloud (oder ähnlich) gespeichert werden kann
+✅ Native Microsoft OneDrive Integration
+
+=== FULL FEATURED, KEINE WERBUNG, KEINE SUBSCRIPTION, IMMER GRATIS ===
+Als Open Source Projekt gibt es keine künstlichen Feature-Einschränkungen, keine Werbung und keine Zahlungsaufforderungen.
+
+Unterstützung ist allerdings willkommen 😅 (Immer auf der Suche nach Entwicklern, Übersetzern, Dokumentationsschreibern, UI Designer, etc. :) ), Besuche unseren Discord Channel: https://authpass. pp/go/discord oder das forum https://forum.authpass.app/
+
+=== AKTIVE WEITERENTWICKLUNG 🛠️ ===
+AuthPass ist ein OpenSource-Projekt, das weiterhin aktiv Weiterentwickelt wird. Wir freuen uns über jedes Feedback in unserem forum https://forum.authpass.app oder im Issue-Tracker unter https://github.com/authpass/authpass/issues/
+","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
+"microsoft-store-windows-short-descriptoin","Sicheres verwahren Sie Ihre Passwörter und Konten auf allen Plattformen und Geräten. Kostenloser und Open Source Passwort-Manager mit Unterstützung für kdbx Passwort-Dateien.","short description for windows store 
+A shorter, catchy description that may be used in the top of your product’s Store listing
+Recommended length: 270 characters or fewer
+","1000",""
+"microsoft-store-windows-features","* Sicheres speichern all deiner Passwörter
+* Open Source
+* Unterstützung für Standard-KeePass Dateien (kdbx)
+* Synchronisieren Sie Ihre Geräte mit Cloud-Speicherdiensten.","Short summaries of your product's key features
+Displayed as bulleted list
+Up to 20 app features
+(max 200 characters each)","",""
+"microsoft-store-windows-search-terms","* Passwortmanager
+* authpass
+* kdbx
+* keepass
+* Passwortgenerator","search terms for the microsoft store
+
+Up to 7 search terms
+40 character limit for each search term
+No more than 21 separate words across all search terms","",""

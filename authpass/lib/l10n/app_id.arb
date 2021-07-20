@@ -203,10 +203,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Cek pembaruan",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Dukungan Email",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "Mengirim log melalui email / minta bantuan",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "Bantuan",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Tampilkan dokumentasi",
@@ -457,11 +453,6 @@
     "dialogContinue": "Lanjutkan",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "Kirimkan Laporan Kesalahan / Bantuan",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "Pilih grup yang akan ditampilkan (rekursif)",
     "@groupFilterDescription": {

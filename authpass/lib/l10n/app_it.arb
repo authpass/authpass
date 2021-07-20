@@ -203,10 +203,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Verifica aggiornamenti",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Assistenza Email",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "Invia i log via email/chiedi aiuto.",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "Aiuto",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Visualizza la documentazione",
@@ -457,11 +453,6 @@
     "dialogContinue": "Continua",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "Segnala Errori/Aiuto",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "Seleziona quali Gruppi mostrare (e relativi sottogruppi)",
     "@groupFilterDescription": {

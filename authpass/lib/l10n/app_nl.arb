@@ -1,106 +1,106 @@
 {
-    "@@locale": "zh",
-    "fieldUserName": "用户",
+    "@@locale": "nl",
+    "fieldUserName": "Gebruiker",
     "@fieldUserName": {},
-    "fieldPassword": "密码",
+    "fieldPassword": "Wachtwoord",
     "@fieldPassword": {},
-    "fieldWebsite": "目标网站",
+    "fieldWebsite": "Website",
     "@fieldWebsite": {},
-    "fieldTitle": "标题",
+    "fieldTitle": "Titel",
     "@fieldTitle": {},
-    "fieldTotp": "双重认证 (TOTP)",
+    "fieldTotp": "Eenmalig wachtwoord (Tijd gebaseerd)",
     "@fieldTotp": {
         "description": "Label for fields of TOTP (Time based one time passwords)"
     },
-    "english": "English",
+    "english": "Engels",
     "@english": {
         "description": "language switcher subtitle"
     },
-    "german": "德语",
+    "german": "Duits",
     "@german": {
         "description": "language switcher subtitle"
     },
-    "russian": "俄语",
+    "russian": "Russisch",
     "@russian": {
         "description": "language switcher subtitle"
     },
-    "ukrainian": "乌克兰语",
+    "ukrainian": "Oekraïens",
     "@ukrainian": {
         "description": "language switcher subtitle"
     },
-    "lithuanian": "立陶宛语",
+    "lithuanian": "Litouws",
     "@lithuanian": {
         "description": "language switcher subtitle"
     },
-    "french": "法语",
+    "french": "Frans",
     "@french": {
         "description": "language switcher subtitle"
     },
-    "spanish": "西班牙语",
+    "spanish": "Spaans",
     "@spanish": {
         "description": "language switcher subtitle"
     },
-    "indonesian": "印度尼西亚语",
+    "indonesian": "Indonesisch",
     "@indonesian": {
         "description": "language switcher subtitle"
     },
-    "turkish": "土耳其语",
+    "turkish": "Turks",
     "@turkish": {
         "description": "Language switcher subtitle"
     },
-    "hebrew": "希伯来语",
+    "hebrew": "Hebreeuws",
     "@hebrew": {
         "description": "Language switcher subtitle"
     },
-    "italian": "意大利语",
+    "italian": "Italiaans",
     "@italian": {
         "description": "Language switcher subtitle"
     },
-    "chineseSimplified": "简体中文",
+    "chineseSimplified": "Chinees, vereenvoudigd",
     "@chineseSimplified": {
         "description": "Language switcher subtitle"
     },
-    "chineseTraditional": "繁体中文",
+    "chineseTraditional": "Chinees, traditioneel",
     "@chineseTraditional": {
         "description": "Language switcher subtitle"
     },
-    "portugueseBrazilian": "葡萄牙文（巴西）",
+    "portugueseBrazilian": "Portugees, Braziliaans",
     "@portugueseBrazilian": {
         "description": "Language switcher subtitle"
     },
-    "slovak": "斯洛伐克语",
+    "slovak": "Slowaaks",
     "@slovak": {
         "description": "Language switcher subtitle"
     },
-    "selectItem": "选择...",
+    "selectItem": "Selecteer",
     "@selectItem": {
         "description": "semantic label for checkboxes to select item."
     },
-    "selectKeepassFile": "契约 - 打开密码箱",
+    "selectKeepassFile": "AuthPass - Selecteer KeePass Bestand",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "快速解锁文件",
+    "quickUnlockingFiles": "Bestanden snel ontgrendelen",
     "@quickUnlockingFiles": {
         "context": "select file screen"
     },
-    "selectKeepassFileLabel": "你的密码库在哪儿呢？（后缀名为.kdbx）",
+    "selectKeepassFileLabel": "Selecteer een KeePass (.kdbx) bestand.",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
     },
-    "createNewFile": "新建一个",
+    "createNewFile": "Maak nieuw bestand",
     "@createNewFile": {
         "description": "button on select file screen to create a new password database."
     },
-    "openLocalFile": "本地\n文件",
+    "openLocalFile": "Open\nlokaal bestand",
     "@openLocalFile": {
         "context": "select file screen, big button open local file."
     },
-    "openFile": "打开文件",
+    "openFile": "Open bestand",
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
     },
-    "loadFrom": "从 {cloudStorageName} 导入",
+    "loadFrom": "Laad van {cloudStorageName}",
     "@loadFrom": {
         "placeholders": {
             "cloudStorageName": {
@@ -109,59 +109,59 @@
             }
         }
     },
-    "loadFromUrl": "从链接下载",
+    "loadFromUrl": "Download vanaf URL",
     "@loadFromUrl": {
         "description": "deprecated"
     },
-    "loadFromRemoteUrl": "从链接打开 kdbx密码箱",
+    "loadFromRemoteUrl": "Open kdbx vanaf URL",
     "@loadFromRemoteUrl": {
         "description": "Overflow menu option to load KeePass file from URL."
     },
-    "createNewKeepass": "初来乍到？创建你的第一个密码库吧！",
+    "createNewKeepass": "Nieuw bij KeePass?\nNieuw wachtwoord database aanmaken",
     "@createNewKeepass": {
         "description": "deprecated"
     },
-    "labelLastOpenFiles": "上次打开的密码库:",
+    "labelLastOpenFiles": "Laatste geopende bestanden:",
     "@labelLastOpenFiles": {},
-    "noFilesHaveBeenOpenYet": "看什么看，这里还空着呢！",
+    "noFilesHaveBeenOpenYet": "Nog geen bestanden geopend.",
     "@noFilesHaveBeenOpenYet": {},
-    "preferenceSelectLanguage": "选择界面语言",
+    "preferenceSelectLanguage": "Selecteer Taal",
     "@preferenceSelectLanguage": {},
-    "preferenceLanguage": "界面语言",
+    "preferenceLanguage": "Taal",
     "@preferenceLanguage": {},
-    "preferenceTextScaleFactor": "字体大小",
+    "preferenceTextScaleFactor": "Tekst schaalfactor",
     "@preferenceTextScaleFactor": {},
-    "preferenceVisualDensity": "图标密度",
+    "preferenceVisualDensity": "Visuele dichtheid",
     "@preferenceVisualDensity": {},
-    "preferenceTheme": "应用程序主题",
+    "preferenceTheme": "Thema",
     "@preferenceTheme": {},
-    "preferenceThemeLight": "亮",
+    "preferenceThemeLight": "Licht",
     "@preferenceThemeLight": {},
-    "preferenceThemeDark": "暗",
+    "preferenceThemeDark": "Donker",
     "@preferenceThemeDark": {},
-    "preferenceSystemDefault": "跟随系统",
+    "preferenceSystemDefault": "Systeem standaard",
     "@preferenceSystemDefault": {},
-    "preferenceDefault": "默认",
+    "preferenceDefault": "Standaard",
     "@preferenceDefault": {},
-    "lockAllFiles": "锁定所有数据库",
+    "lockAllFiles": "Vergrendel alle geopende bestanden",
     "@lockAllFiles": {},
-    "preferenceAllowScreenshots": "允许对本应用截屏",
+    "preferenceAllowScreenshots": "Schermafbeeldingen in de App toestaan",
     "@preferenceAllowScreenshots": {},
-    "preferenceEnableAutoFill": "启用密码自动填充",
+    "preferenceEnableAutoFill": "Automatisch aanvullen inschakelen",
     "@preferenceEnableAutoFill": {},
-    "preferenceAutoFillDescription": "仅支持安卓 8.0 (Oreo) 或更高版本。",
+    "preferenceAutoFillDescription": "Alleen ondersteund op Android Oreo (8.0) of later.",
     "@preferenceAutoFillDescription": {},
-    "preferenceTitle": "设置",
+    "preferenceTitle": "Voorkeuren",
     "@preferenceTitle": {},
-    "aboutAppName": "Authpass-契约",
+    "aboutAppName": "AuthPass",
     "@aboutAppName": {},
-    "aboutLinkFeedback": "我们欢迎反馈意见！",
+    "aboutLinkFeedback": "Wij verwelkomen elke vorm van feedback!",
     "@aboutLinkFeedback": {},
-    "aboutLinkVisitWebsite": "别忘了参观一下我们的网站",
+    "aboutLinkVisitWebsite": "Kijk ook op onze website",
     "@aboutLinkVisitWebsite": {},
-    "aboutLinkGitHub": "本项目是自由开源软件！",
+    "aboutLinkGitHub": "En Open Source Project",
     "@aboutLinkGitHub": {},
-    "aboutLogFile": "日志文件： {logFilePath}",
+    "aboutLogFile": "Logbestand: {logFilePath}",
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -170,11 +170,11 @@
             }
         }
     },
-    "unableToLaunchUrlTitle": "无法打开链接",
+    "unableToLaunchUrlTitle": "Kan URL niet openen",
     "@unableToLaunchUrlTitle": {
         "description": ""
     },
-    "unableToLaunchUrlDescription": "打开链接 {url} 失败：{openError}",
+    "unableToLaunchUrlDescription": "Kan {url} niet open: {openError}",
     "@unableToLaunchUrlDescription": {
         "description": "",
         "placeholders": {
@@ -186,11 +186,11 @@
             }
         }
     },
-    "unableToLaunchUrlNoHandler": "找不到可以打开这个链接的应用程序",
+    "unableToLaunchUrlNoHandler": "Geen toepassing beschikbaar voor URL.",
     "@unableToLaunchUrlNoHandler": {
         "description": ""
     },
-    "launchedUrl": "你打开的链接是：{url}",
+    "launchedUrl": "Geopende URL: {url}",
     "@launchedUrl": {
         "description": "snackbar confirmation after opening a url externally",
         "placeholders": {
@@ -199,76 +199,76 @@
             }
         }
     },
-    "menuItemGeneratePassword": "生成安全密码",
+    "menuItemGeneratePassword": "Wachtwoord genereren",
     "@menuItemGeneratePassword": {},
-    "menuItemPreferences": "偏好设置",
+    "menuItemPreferences": "Voorkeuren",
     "@menuItemPreferences": {},
-    "menuItemOpenAnotherFile": "打开另一个数据库",
+    "menuItemOpenAnotherFile": "Open een ander bestand",
     "@menuItemOpenAnotherFile": {},
-    "menuItemCheckForUpdates": "检查更新",
+    "menuItemCheckForUpdates": "Controleer op updates",
     "@menuItemCheckForUpdates": {},
-    "menuItemHelp": "寻求帮助",
+    "menuItemHelp": "Help",
     "@menuItemHelp": {},
-    "menuItemHelpSubtitle": "在浏览器查阅用户文档",
+    "menuItemHelpSubtitle": "Documentatie weergeven",
     "@menuItemHelpSubtitle": {},
-    "menuItemAbout": "关于本应用",
+    "menuItemAbout": "Over",
     "@menuItemAbout": {},
-    "actionOpenUrl": "打开链接",
+    "actionOpenUrl": "Open URL",
     "@actionOpenUrl": {
         "description": "tooltip for button to open URL/Website of an entry."
     },
-    "passwordPlainText": "显示密码",
+    "passwordPlainText": "Wachtwoord tonen",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
     },
-    "generatorPassword": "新鲜出炉的随机密码~",
+    "generatorPassword": "Wachtwoord",
     "@generatorPassword": {
         "description": "Label for generated password"
     },
-    "generatePassword": "生成随机密码",
+    "generatePassword": "Wachtwoord genereren",
     "@generatePassword": {
         "description": "screen title for password generator"
     },
-    "doneButtonLabel": "完成",
+    "doneButtonLabel": "Voltooid",
     "@doneButtonLabel": {
         "description": "generic button label for 'Done' action."
     },
-    "useAsDefault": "用作默认密码",
+    "useAsDefault": "Gebruik als standaard",
     "@useAsDefault": {
         "description": "Button Label for Password generator settings: use as defaults",
         "context": "Password generator"
     },
-    "characterSetLowerCase": "小写 (a-z)",
+    "characterSetLowerCase": "Kleine letters (a-z)",
     "@characterSetLowerCase": {
         "context": "Password generator"
     },
-    "characterSetUpperCase": "大写(A-Z)",
+    "characterSetUpperCase": "Hoofdletters (A-Z)",
     "@characterSetUpperCase": {
         "context": "Password generator"
     },
-    "characterSetNumeric": "数字 (0-9)",
+    "characterSetNumeric": "Numeriek (0-9)",
     "@characterSetNumeric": {
         "context": "Password generator"
     },
-    "characterSetUmlauts": "拉丁语系排序 (ä)",
+    "characterSetUmlauts": "Umlauts (ä)",
     "@characterSetUmlauts": {
         "context": "Password generator"
     },
-    "characterSetSpecial": "特殊字符 (@%+)",
+    "characterSetSpecial": "Speciaal (@%+)",
     "@characterSetSpecial": {
         "context": "Password generator"
     },
-    "length": "长度",
+    "length": "Lengte",
     "@length": {
         "description": "Length of password",
         "context": "Password generator"
     },
-    "customLength": "自定义密码长度",
+    "customLength": "Aangepaste lengte",
     "@customLength": {
         "description": "Label for custom length field",
         "context": "Password generator"
     },
-    "customLengthHelperText": "仅当需要长度多于 > {customMinLength} 位的密码时使用，必须是整数",
+    "customLengthHelperText": "Alleen gebruikt voor lengte > {customMinLength}",
     "@customLengthHelperText": {
         "description": "Help text for custom length field",
         "context": "Password generator",
@@ -278,7 +278,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, =1 {一个文件已保存: {files}} other {{numFiles} 个已保存的文件: {files}}}",
+    "savedFiles": "{numFiles, plural, one {} =1 {Eén bestand opgeslagen: {files}} other {{numFiles} bestanden opgeslagen: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",
@@ -293,155 +293,155 @@
             }
         }
     },
-    "manageGroups": "分组管理",
+    "manageGroups": "Groepen beheren",
     "@manageGroups": {
         "description": ""
     },
-    "lockFiles": "锁定文件",
+    "lockFiles": "Bestanden vergrendelen",
     "@lockFiles": {
         "description": "Close all files and return to start screen."
     },
-    "searchHint": "吾将上下而求索...",
+    "searchHint": "Zoeken",
     "@searchHint": {
         "description": "Placeholder in the password list search box"
     },
-    "searchButtonLabel": "吾将上下而求索...",
+    "searchButtonLabel": "Zoeken",
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
-    "filterButtonLabel": "按组筛选",
+    "filterButtonLabel": "Filteren op groepen",
     "@filterButtonLabel": {
         "description": "tooltip/semantic label for filter app bar icon."
     },
-    "clear": "清空",
+    "clear": "Leegmaken",
     "@clear": {
         "description": "Remove existing group filter from password list"
     },
-    "autofillFilterPrefix": "筛选：",
+    "autofillFilterPrefix": "Filter:",
     "@autofillFilterPrefix": {
         "description": "Label displayed for android auto fill"
     },
-    "autofillPrompt": "选择用于自动填充的密码条目。",
+    "autofillPrompt": "Selecteer wachtwoord invoer voor Automatisch aanvullen.",
     "@autofillPrompt": {
         "description": ""
     },
-    "copiedToClipboard": "成功复制到剪贴板",
+    "copiedToClipboard": "Gekopieerd naar klembord.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
     },
-    "noTitle": "(无标题)",
+    "noTitle": "(geen titel)",
     "@noTitle": {
         "description": "Text to display in place of a title, when password entry has no name assigned."
     },
-    "noUsername": "(空空如也)",
+    "noUsername": "(geen gebruikersnaam)",
     "@noUsername": {
         "description": "Text to display in place of a user name in the password list if none is defined."
     },
-    "filterCustomize": "自定义 …",
+    "filterCustomize": "Aanpassen …",
     "@filterCustomize": {
         "description": "Customize filter in password list"
     },
-    "swipeCopyPassword": "复制密码",
+    "swipeCopyPassword": "Wachtwoord kopiëren",
     "@swipeCopyPassword": {
         "description": "swipe action in password list to copy password"
     },
-    "swipeCopyUsername": "复制登录帐号",
+    "swipeCopyUsername": "Gebruikersnaam kopiëren",
     "@swipeCopyUsername": {
         "description": "swipe action in password list to copy username"
     },
-    "doneCopiedPassword": "密码已复制到剪贴板。",
+    "doneCopiedPassword": "Wachtwoord gekopieerd naar klembord.",
     "@doneCopiedPassword": {
         "description": "snackbar confirmation that password was copied."
     },
-    "doneCopiedUsername": "登录帐号已复制到剪贴板。",
+    "doneCopiedUsername": "Gebruikersnaam gekopieerd naar klembord.",
     "@doneCopiedUsername": {
         "description": "snackbar confirmation that username was copied."
     },
-    "doneCopiedField": "复制成功！",
+    "doneCopiedField": "Gekopieerd.",
     "@doneCopiedField": {
         "description": ""
     },
-    "emptyPasswordVaultPlaceholder": "好了！已经没什么好怕的了！\n那么，我们来准备保护你的第一个密码吧！",
+    "emptyPasswordVaultPlaceholder": "Je hebt nog geen wachtwoord in je database.",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
     },
-    "emptyPasswordVaultButtonLabel": "好！我们出发吧！",
+    "emptyPasswordVaultButtonLabel": "Maak je eerste wachtwoord aan",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
     },
-    "loadingFile": "召唤真理之匙...",
+    "loadingFile": "Bestand laden …",
     "@loadingFile": {
         "description": "credential screen while unlocking file."
     },
-    "internalFile": "内部文件",
+    "internalFile": "Intern bestand",
     "@internalFile": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
     },
-    "internalFileSubtitle": "之前使用本应用创建的密码库",
+    "internalFileSubtitle": "Database eerder aangemaakt met AuthPass",
     "@internalFileSubtitle": {
         "description": "Choose a file previously created in AuthPass app sandbox",
         "context": "open file picker: internal file vs. file picker"
     },
-    "filePicker": "文件选择器",
+    "filePicker": "Bestandskiezer",
     "@filePicker": {
         "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
     },
-    "filePickerSubtitle": "从设备存储打开文件。",
+    "filePickerSubtitle": "Open bestand op het apparaat.",
     "@filePickerSubtitle": {
         "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
     },
-    "credentialsAppBarTitle": "解锁密码",
+    "credentialsAppBarTitle": "Aanmeldgegevens",
     "@credentialsAppBarTitle": {
         "description": "Credential screen to enter master password when opening kdbx file.",
         "context": "credential screen"
     },
-    "credentialLabel": "输入这个数据库的解锁密码",
+    "credentialLabel": "Vul het wachtwoord in voor:",
     "@credentialLabel": {
         "description": "Label for the file/database being opened",
         "context": "credential screen"
     },
-    "masterPasswordInputLabel": "用主密码保护你的密码库",
+    "masterPasswordInputLabel": "Wachtwoord",
     "@masterPasswordInputLabel": {
         "description": "",
         "context": "credential screen"
     },
-    "masterPasswordEmptyValidator": "欢迎回来！在这里输入主密码",
+    "masterPasswordEmptyValidator": "Voer je wachtwoord in.",
     "@masterPasswordEmptyValidator": {
         "description": "",
         "context": "credential screen"
     },
-    "masterPasswordIncorrectValidator": "密码不对哦~",
+    "masterPasswordIncorrectValidator": "Ongeldig wachtwoord",
     "@masterPasswordIncorrectValidator": {
         "description": "",
         "context": "credential screen"
     },
-    "useKeyFile": "使用密钥文件",
+    "useKeyFile": "Gebruik sleutelbestand",
     "@useKeyFile": {
         "description": "label for a key file in combination with mater password",
         "context": "credential screen"
     },
-    "saveMasterPasswordBiometric": "使用生物识别保存密码？",
+    "saveMasterPasswordBiometric": "Wachtwoord opslaan met biometrische sleutelopslag?",
     "@saveMasterPasswordBiometric": {
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
     },
-    "close": "关闭",
+    "close": "Sluiten",
     "@close": {
         "description": "Tooltip/semantic label for close button"
     },
-    "addNewPassword": "添加新密码",
+    "addNewPassword": "Voeg nieuw wachtwoord toe",
     "@addNewPassword": {
         "description": "Tooltip for adding new password button (floating action button)"
     },
-    "errorOpenFileAlreadyOpenTitle": "文件已经打开",
+    "errorOpenFileAlreadyOpenTitle": "Bestand al geopend",
     "@errorOpenFileAlreadyOpenTitle": {
         "description": "Trying to open a database from a second file source which is already open.",
         "context": "credential screen"
     },
-    "errorOpenFileAlreadyOpenBody": "所选数据库 {databaseName} 已经从 {openFileSource} 打开(试图从 {newFileSource} 打开)",
+    "errorOpenFileAlreadyOpenBody": "De geselecteerde database {databaseName} is al geopend vanuit {openFileSource} (Geprobeerd om te openen vanuit {newFileSource})",
     "@errorOpenFileAlreadyOpenBody": {
         "description": "Trying to open a database from a second file source which is already open.",
         "context": "credential screen",
@@ -451,12 +451,12 @@
             "newFileSource": {}
         }
     },
-    "errorUnlockFileTitle": "无法打开文件",
+    "errorUnlockFileTitle": "Kan bestand niet openen",
     "@errorUnlockFileTitle": {
         "description": "generic error when opening a file (dialog title)",
         "context": "credential screen"
     },
-    "errorUnlockFileBody": "尝试打开文件时发生未知错误。 {error}",
+    "errorUnlockFileBody": "Onbekende fout bij het openen van bestand. {error}",
     "@errorUnlockFileBody": {
         "description": "generic error when opening a file (description)",
         "context": "credential screen",
@@ -466,136 +466,136 @@
             }
         }
     },
-    "dialogContinue": "下一步",
+    "dialogContinue": "Doorgaan",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
     },
-    "groupFilterDescription": "选择要显示的分组",
+    "groupFilterDescription": "Selecteer de groepen om te tonen (recursief)",
     "@groupFilterDescription": {
         "description": "Description shown in the group list for filtering (e.g. app drawer)",
         "context": "group filter"
     },
-    "groupFilterSelectAll": "全选",
+    "groupFilterSelectAll": "Alles selecteren",
     "@groupFilterSelectAll": {
         "context": "group filter"
     },
-    "groupFilterDeselectAll": "取消全选",
+    "groupFilterDeselectAll": "Alles deselecteren",
     "@groupFilterDeselectAll": {
         "context": "group filter"
     },
-    "createSubgroup": "创建下级分组",
+    "createSubgroup": "Subgroep aanmaken",
     "@createSubgroup": {
         "description": "menu action: create nested group inside another group"
     },
-    "editAction": "编辑",
+    "editAction": "Bewerken",
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
     },
-    "deleteAction": "删除",
+    "deleteAction": "Verwijderen",
     "@deleteAction": {
         "description": "menu action: delete item (e.g. delete a group)"
     },
-    "successfullyDeletedGroup": "已删除分组。",
+    "successfullyDeletedGroup": "Verwijderde groep.",
     "@successfullyDeletedGroup": {
         "description": "snackbar after deleting a group."
     },
-    "undoButtonLabel": "撤消",
+    "undoButtonLabel": "Herstel",
     "@undoButtonLabel": {
         "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
     },
-    "saveButtonLabel": "保存",
+    "saveButtonLabel": "Opslaan",
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
-    "initialNewGroupName": "新建分组",
+    "initialNewGroupName": "Nieuwe groep",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
     },
-    "deleteGroupErrorTitle": "删除失败！",
+    "deleteGroupErrorTitle": "Kan groep niet verwijderen",
     "@deleteGroupErrorTitle": {
         "description": "Title of error dialog when group could not be deleted."
     },
-    "deleteGroupErrorBodyContainsGroup": "此分组中还包含分组！目前您只能删除空群组。",
+    "deleteGroupErrorBodyContainsGroup": "Deze groep bevat nog andere groepen. Je kunt op dit moment alleen lege groepen verwijderen.",
     "@deleteGroupErrorBodyContainsGroup": {
         "description": "Body of error dialog when a group can't be deleted because it is not empty."
     },
-    "deleteGroupErrorBodyContainsEntries": "这个分组里面还有密码！目前你只能删除空分组",
+    "deleteGroupErrorBodyContainsEntries": "Deze groep bevat nog steeds wachtwoordvermeldingen. Je kunt op dit moment alleen lege groepen verwijderen.",
     "@deleteGroupErrorBodyContainsEntries": {
         "description": "Body of error dialog when a group can't be deleted because it is not empty."
     },
-    "groupListAppBarTitle": "分组",
+    "groupListAppBarTitle": "Groepen",
     "@groupListAppBarTitle": {
         "description": "title in the app bar for the groups list"
     },
-    "groupListFilterAppbarTitle": "按分组筛选",
+    "groupListFilterAppbarTitle": "Filteren op groepen",
     "@groupListFilterAppbarTitle": {
         "description": "title in the app bar for group lists when displayed for filtering password list"
     },
-    "clearQuickUnlock": "清除生物识别记录（如指纹）",
+    "clearQuickUnlock": "Biometrische opslag wissen",
     "@clearQuickUnlock": {
         "description": ""
     },
-    "clearQuickUnlockSubtitle": "删除已保存的主密码",
+    "clearQuickUnlockSubtitle": "Verwijder opgeslagen hoofdwachtwoorden",
     "@clearQuickUnlockSubtitle": {
         "description": ""
     },
-    "unlock": "解锁",
+    "unlock": "Bestanden ontgrendelen",
     "@unlock": {
         "description": ""
     },
-    "closePasswordFiles": "关闭密码文件",
+    "closePasswordFiles": "sluit wachtwoordbestanden",
     "@closePasswordFiles": {
         "description": "delete quick unlock (passwords stored in biometric storage)"
     },
-    "clearQuickUnlockSuccess": "已从生物识别记录删除保存的主密码。",
+    "clearQuickUnlockSuccess": "Hoofdwachtwoorden verwijderd uit biometrische opslag.",
     "@clearQuickUnlockSuccess": {
         "description": ""
     },
-    "diacOptIn": "想在本应用内收到我们的新闻和问卷调查吗？",
+    "diacOptIn": "Meld je aan voor In-App Nieuws, Enquêtes.",
     "@diacOptIn": {},
-    "diacOptInSubtitle": "会定时连接网络获取新闻和问卷。",
+    "diacOptInSubtitle": "Zal af en toe een netwerkverzoek verzenden om nieuws op te halen.",
     "@diacOptInSubtitle": {},
-    "enableAutofillDebug": "启用自动填充的调试模式",
+    "enableAutofillDebug": "Automatisch aanvullen: Debug inschakelen",
     "@enableAutofillDebug": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
-    "enableAutofillDebugSubtitle": "为每个输入字段显示调试信息叠加层",
+    "enableAutofillDebugSubtitle": "Toont informatie overlays voor elk invoerveld",
     "@enableAutofillDebugSubtitle": {
         "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
     },
-    "createPasswordDatabase": "新建密码库",
+    "createPasswordDatabase": "Maak wachtwoord database",
     "@createPasswordDatabase": {
         "description": ""
     },
-    "nameNewPasswordDatabase": "这是你崭新的密码库！给它起个好名字",
+    "nameNewPasswordDatabase": "Naam van je nieuwe database",
     "@nameNewPasswordDatabase": {
         "description": "creating new kdbx file, prompt"
     },
-    "validatorNameMissing": "为您的新密码库起一个名字：",
+    "validatorNameMissing": "Voer een naam in voor de nieuwe database.",
     "@validatorNameMissing": {
         "description": "Error message when no password database name is given."
     },
-    "masterPasswordHelpText": "设置一个安全的主密码。请务必牢记。",
+    "masterPasswordHelpText": "Selecteer een veilig hoofdwachtwoord. Zorg ervoor dat je het onthoudt.",
     "@masterPasswordHelpText": {
         "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
     },
-    "inputMasterPasswordText": "主密码",
+    "inputMasterPasswordText": "Hoofdwachtwoord",
     "@inputMasterPasswordText": {
         "description": "Creating new file: input field for master password"
     },
-    "masterPasswordMissingCreate": "请务必输入一个既安全又好记的密码~",
+    "masterPasswordMissingCreate": "Voer een veilig, te onthouden wachtwoord in.",
     "@masterPasswordMissingCreate": {
         "description": "Text displayed when master password is empty while creating new password database"
     },
-    "createDatabaseAction": "创建密码库",
+    "createDatabaseAction": "Maak Database",
     "@createDatabaseAction": {
         "description": "Label for button to create new database"
     },
-    "databaseExistsError": "已经有同名的文件了呀~",
+    "databaseExistsError": "Bestand bestaat",
     "@databaseExistsError": {
         "description": "dialog title for error message when creating a new database with a name which already exists."
     },
-    "databaseExistsErrorDescription": "创建失败了！这个位置已经有了同名的文件了，请换一个名字吧。\n出错位置：{filePath}",
+    "databaseExistsErrorDescription": "Fout bij het maken van database {filePath}. Bestand bestaat al. Kies een andere naam.",
     "@databaseExistsErrorDescription": {
         "description": "dialog body for error message when creating a new database with a name which already exists.",
         "placeholders": {
@@ -604,15 +604,15 @@
             }
         }
     },
-    "databaseCreateDefaultName": "我的密码",
+    "databaseCreateDefaultName": "PersoonlijkeWachtwoorden",
     "@databaseCreateDefaultName": {
         "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
     },
-    "preferenceDynamicLoadIcons": "联网加载图标",
+    "preferenceDynamicLoadIcons": "Pictogrammen dynamisch laden",
     "@preferenceDynamicLoadIcons": {
         "description": "preferences: dynamically load website icons"
     },
-    "preferenceDynamicLoadIconsSubtitle": "将会向/ {urlFieldName} /发送未加密的http请求来获取网页图标",
+    "preferenceDynamicLoadIconsSubtitle": "Zal http verzoeken indienen met de waarde in het {urlFieldName} veld om de website-iconen te laden.",
     "@preferenceDynamicLoadIconsSubtitle": {
         "description": "preferences: dynamically load website icons help text.",
         "placeholders": {
@@ -621,7 +621,7 @@
             }
         }
     },
-    "passwordScore": "强度： {score} / 4",
+    "passwordScore": "Sterkte: {score} van 4",
     "@passwordScore": {
         "description": "choosing a master password - calculated password strength.",
         "placeholders": {
@@ -631,19 +631,19 @@
             }
         }
     },
-    "entryInfoFile": "文件：",
+    "entryInfoFile": "Bestand:",
     "@entryInfoFile": {
         "description": ""
     },
-    "entryInfoGroup": "分组:",
+    "entryInfoGroup": "Groep:",
     "@entryInfoGroup": {
         "description": ""
     },
-    "entryInfoLastModified": "最后修改时间：",
+    "entryInfoLastModified": "Laatst gewijzigd:",
     "@entryInfoLastModified": {
         "description": ""
     },
-    "movedEntryToGroup": "移动条目到 {groupName}",
+    "movedEntryToGroup": "Invoer verplaatst naar {groupName}",
     "@movedEntryToGroup": {
         "description": "",
         "placeholders": {
@@ -652,7 +652,7 @@
             }
         }
     },
-    "sizeBytes": "{count} 字节",
+    "sizeBytes": "{count} bytes",
     "@sizeBytes": {
         "description": "",
         "placeholders": {
@@ -662,99 +662,99 @@
             }
         }
     },
-    "entryAddAttachment": "添加附件",
+    "entryAddAttachment": "Bijlage toevoegen",
     "@entryAddAttachment": {
         "description": ""
     },
-    "entryAttachmentSizeWarning": "附件可以是任何文件，该文件将与密码文件结合。这个功能是为了方便携带与密码相关的文件，但这会大大增加打开/保存密码所需的时间。",
+    "entryAttachmentSizeWarning": "Bijgevoegde bestanden worden toegevoegd in het wachtwoordbestand. Dit kan de tijd die nodig is om wachtwoorden te openen/opslaan, aanzienlijk verhogen.",
     "@entryAttachmentSizeWarning": {
         "description": ""
     },
-    "iconPngSizeWarning": "自定义图标将合并入密码数据库。这会增加打开/保存密码所需的时间。",
+    "iconPngSizeWarning": "Aangepaste pictogrammen worden toegevoegd het wachtwoordbestand. Dit kan de tijd die nodig is voor het openen/opslaan van wachtwoorden aanzienlijk verhogen.",
     "@iconPngSizeWarning": {
         "description": "Warning shown when user selects a large png file as custom icon."
     },
-    "notPngError": "只支持PNG (.png) 格式",
+    "notPngError": "Het gekozen bestand is geen PNG.",
     "@notPngError": {
         "description": "Error when user selects an unsupported file as custom icon."
     },
-    "entryAddField": "添加项目",
+    "entryAddField": "Veld toevoegen",
     "@entryAddField": {
         "description": ""
     },
-    "entryCustomField": "自定义字段",
+    "entryCustomField": "Aangepast veld",
     "@entryCustomField": {
         "description": ""
     },
-    "entryCustomFieldTitle": "添加新自定义字段",
+    "entryCustomFieldTitle": "Toevoegen van nieuw aangepast veld",
     "@entryCustomFieldTitle": {
         "description": ""
     },
-    "entryCustomFieldInputLabel": "输入字段名称",
+    "entryCustomFieldInputLabel": "Voer een naam in voor het veld",
     "@entryCustomFieldInputLabel": {
         "description": ""
     },
-    "swipeCopyField": "复制项目",
+    "swipeCopyField": "Veld kopiëren",
     "@swipeCopyField": {
         "description": ""
     },
-    "fieldRename": "重命名",
+    "fieldRename": "Hernoem",
     "@fieldRename": {
         "description": ""
     },
-    "fieldGeneratePassword": "生成随机安全密码…",
+    "fieldGeneratePassword": "Wachtwoord genereren …",
     "@fieldGeneratePassword": {
         "description": ""
     },
-    "fieldProtect": "锁定",
+    "fieldProtect": "Bescherm waarde",
     "@fieldProtect": {
         "description": ""
     },
-    "fieldUnprotect": "取消锁定",
+    "fieldUnprotect": "Waarde niet beschermen",
     "@fieldUnprotect": {
         "description": ""
     },
-    "fieldPresent": "显示QR码",
+    "fieldPresent": "Tonen",
     "@fieldPresent": {
         "description": ""
     },
-    "fieldGenerateEmail": "生成电子邮箱地址",
+    "fieldGenerateEmail": "Genereer E-mail",
     "@fieldGenerateEmail": {
         "description": ""
     },
-    "onboardingBackToOnboarding": "时间回溯",
+    "onboardingBackToOnboarding": "Rondleiding",
     "@onboardingBackToOnboarding": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingBackToOnboardingSubtitle": "我想再一次签订契约\n ~ ( >ω･)～☆",
+    "onboardingBackToOnboardingSubtitle": "Herhaal de eerste keer tour 😅",
     "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingHeadline": "签订契约，\n守护密码！",
+    "onboardingHeadline": "Laten we je wachtwoorden veilig maken!",
     "@onboardingHeadline": {
         "description": ""
     },
-    "onboardingQuestion": "请问您先前签订过契约吗？\n（或者说，拥有.kdbx文件吗？）",
+    "onboardingQuestion": "Heb je al eerder een wachtwoordmanager gebruikt?",
     "@onboardingQuestion": {
         "description": ""
     },
-    "onboardingYesOpenPasswords": "再续前缘：\n提供kdbx文件",
+    "onboardingYesOpenPasswords": "Ja, open mijn wachtwoorden",
     "@onboardingYesOpenPasswords": {
         "description": ""
     },
-    "onboardingNoCreate": "咱们还是从零开始吧！",
+    "onboardingNoCreate": "Ik ben allemaal nieuw! Help me op gang.",
     "@onboardingNoCreate": {
         "description": ""
     },
-    "backupButton": "保存到云端",
+    "backupButton": "OPSLAAN NAAR CLOUD",
     "@backupButton": {
         "description": "Button that is displayed in backup warnings"
     },
-    "dismissBackupButton": "这次不要",
+    "dismissBackupButton": "AFWIJZEN",
     "@dismissBackupButton": {
         "description": "Button that is displayed in backup warnings to dismiss the warning"
     },
-    "backupWarningMessage": "{databasename} 密码库中的密码没有上传到云端！",
+    "backupWarningMessage": "Je wachtwoorden in {databasename} worden alleen lokaal opgeslagen!",
     "@backupWarningMessage": {
         "description": "Warning message that is displayed in backup warnings",
         "placeholders": {
@@ -763,27 +763,27 @@
             }
         }
     },
-    "saveAs": "保存到...",
+    "saveAs": "Opslaan in...",
     "@saveAs": {
         "description": "Save as text"
     },
-    "saving": "正在保存...",
+    "saving": "Opslaan",
     "@saving": {
         "description": "Saving text"
     },
-    "increaseValue": "增加",
+    "increaseValue": "Toename",
     "@increaseValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
-    "decreaseValue": "减少",
+    "decreaseValue": "Verminderen",
     "@decreaseValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
-    "resetValue": "重置",
+    "resetValue": "Reset",
     "@resetValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
-    "unexpectedError": "意外错误: {error}",
+    "unexpectedError": "Onverwachte fout: {error}",
     "@unexpectedError": {
         "placeholders": {
             "error": {

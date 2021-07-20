@@ -110,10 +110,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Перевірити наявність оновлень",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Підтримка по електронній пошті",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "Надіслати журнали електронною поштою та запитом про допомогу.",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "Допомога",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Показати документацію",
@@ -326,11 +322,6 @@
     "dialogContinue": "Продовжити",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "Надіслати звіт про помилку/запит про допомогу",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "Виберіть, які групи показувати (рекурсивно)",
     "@groupFilterDescription": {
