@@ -72,6 +72,10 @@
   "@slovak": {
     "description": "Language switcher subtitle"
   },
+  "dutch": "Dutch",
+  "@dutch": {
+    "description": "Language switcher subtitle"
+  },
   "selectItem": "Select",
   "@selectItem": {
     "description": "semantic label for checkboxes to select item."
