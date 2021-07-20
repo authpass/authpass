@@ -106,10 +106,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Tikrinti, ar nėra atnaujinimų",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Pagalba el. paštu",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "Siųsti log failus/klausti pagalbos.",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "Pagalba",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Rodyti dokumentaciją",
@@ -322,11 +318,6 @@
     "dialogContinue": "Tęsti",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "Siųsti klaidos ataskaitą/pagalba",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "Pasirinkite kokias grupes rodyti (rekursyviai)",
     "@groupFilterDescription": {

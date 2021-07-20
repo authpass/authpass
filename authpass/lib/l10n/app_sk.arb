@@ -199,10 +199,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Skontrolovať aktualizácie",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Email Podpora",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "Poslať log súbor emailom/poprosiť o pomoc.",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "Pomoc",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Zobraziť dokumentáciu",
@@ -453,11 +449,6 @@
     "dialogContinue": "Pokračovať",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "Odoslať správu o chybe/pomoc",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "Vyberte, ktoré skupiny sa majú zobrazovať (rekurzívne)",
     "@groupFilterDescription": {
