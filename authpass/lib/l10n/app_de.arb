@@ -72,6 +72,10 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "Niederländisch",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
     "selectItem": "Auswählen",
     "@selectItem": {
         "description": "semantic label for checkboxes to select item."
@@ -162,6 +166,8 @@
     "aboutLinkGitHub": "Und Open Source Projekt",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "Log-Datei: {logFilePath}",
+    "aboutLinkContributors": "Mitwirkende anzeigen",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -207,6 +213,14 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Nach Updates suchen",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Protokolle senden",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Protokolle per E-Mail senden",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Support Forum",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "Melde Probleme und erhalte Hilfe",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "Hilfe",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Dokumentation anzeigen",
@@ -469,6 +483,15 @@
     "dialogContinue": "Weiter",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Fehlerbericht senden",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "Fehler im Forum melden/Hilfe",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
     },
     "groupFilterDescription": "Wähle Gruppen die (rekursiv) angezeigt werden sollen",
     "@groupFilterDescription": {
