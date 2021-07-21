@@ -70,7 +70,7 @@ dependencies:
     path: ../deps/autofill_service
 
   flutter_colorpicker: ^0.5.0
-  flutter_speed_dial: ^3.0.5
+  flutter_speed_dial: ^4.1.0
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.1
 
