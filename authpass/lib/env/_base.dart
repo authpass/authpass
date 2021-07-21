@@ -1,3 +1,4 @@
+import 'package:authpass/utils/constants.dart';
 import 'package:built_value/built_value.dart' hide nullable;
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,10 +13,10 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   factory AppInfo([void Function(AppInfoBuilder b)? updates]) = _$AppInfo;
   AppInfo._();
 
-  String? get appName;
-  String? get version;
-  int? get buildNumber;
-  String? get packageName;
+  String get appName;
+  String get version;
+  int get buildNumber;
+  String get packageName;
 
   String get versionLabel => '$version+$buildNumber'; // NON-NLS
 
@@ -88,7 +89,7 @@ abstract class Env {
 
   String get name => runtimeType.toString();
 
-  String get forumUrl => 'https://forum.authpass.app/';
+  String get forumUrl => UrlConstants.forumUrl;
 
   String forumUrlNewTopic({
     String title = '',

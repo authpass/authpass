@@ -58,8 +58,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 
   static Serializer<OpenedFile> get serializer => _$openedFileSerializer;
 
-  static const SOURCE_CLOUD_STORAGE_ID = 'storageId';
-  static const SOURCE_CLOUD_STORAGE_DATA = 'data';
+  static const SOURCE_CLOUD_STORAGE_ID = 'storageId'; // NON-NLS
+  static const SOURCE_CLOUD_STORAGE_DATA = 'data'; // NON-NLS
 
   /// unique id to identify this open file across sessions.
   String get uuid;
@@ -170,6 +170,8 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   AppData._();
 
   static Serializer<AppData> get serializer => _$appDataSerializer;
+
+  static const manualUserTypeAdmin = 'admin'; // NON-NLS
 
   BuiltList<OpenedFile> get previousFiles;
 

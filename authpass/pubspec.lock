@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.2"
+  analyzer_plugin:
+    dependency: transitive
+    description:
+      name: analyzer_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   another_flushbar:
     dependency: "direct main"
     description:
@@ -1321,6 +1328,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  string_literal_finder:
+    dependency: "direct dev"
+    description:
+      name: string_literal_finder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+5"
   string_literal_finder_annotations:
     dependency: "direct main"
     description:

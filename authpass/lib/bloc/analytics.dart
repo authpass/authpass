@@ -3,6 +3,7 @@ import 'package:authpass/bloc/analytics_io.dart'
     if (dart.library.html) 'package:authpass/bloc/analytics_html.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -18,12 +19,18 @@ part 'analytics_ua.dart';
 
 final _logger = Logger('analytics');
 
+/// user agent
+const _sessionParamUa = 'ua'; // NON-NLS
+/// application id
+const _sessionParamAid = 'aid'; // NON-NLS
+const _propertyMappingPlatform = 'platform'; // NON-NLS
+
 class Analytics {
   Analytics({required this.env}) {
     _init();
   }
 
-  static void trackError(String description, bool fatal) {
+  static void trackError(@NonNls String description, bool fatal) {
     _errorGa?.sendException(description, fatal: fatal);
   }
 
@@ -37,7 +44,7 @@ class Analytics {
   /// global analytics tracker we use for error reporting.
   static usage.Analytics? _errorGa;
   static const _gaPropertyMapping = <String, String>{
-    'platform': 'cd1', // NON-NLS
+    _propertyMappingPlatform: 'cd1', // NON-NLS
     'userType': 'cd2', // NON-NLS
     'device': 'cd3', // NON-NLS
     'systemBrightness': 'cd4', // NON-NLS
@@ -74,26 +81,26 @@ class Analytics {
           'Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
           'UserAgent: $userAgent');
 
-      _dbg = '(ga)';
+      _dbg = '(ga)'; // NON-NLS
       _ga = await analyticsCreate(
         env.secrets!.analyticsGoogleAnalyticsId!,
-        info.appName!,
-        '${info.version}+${info.buildNumber}',
+        info.appName,
+        [info.version, CharConstants.plus, info.buildNumber].join(),
         userAgent: userAgent,
       );
 //      _ga.onSend.listen((event) {
 //        _logger.finer('analytics send: $event');
 //      });
-      _ga!.setSessionValue('ua', userAgent);
+      _ga!.setSessionValue(_sessionParamUa, userAgent);
       _errorGa = _ga;
-      _ga!.setSessionValue(
-          _gaPropertyMapping['platform']!, AuthPassPlatform.operatingSystem);
+      _ga!.setSessionValue(_gaPropertyMapping[_propertyMappingPlatform]!,
+          AuthPassPlatform.operatingSystem);
       // set application id to package name.
-      _ga!.setSessionValue('aid', info.packageName);
+      _ga!.setSessionValue(_sessionParamAid, info.packageName);
     } else {
       _logger.info('No analytics Id defined. Not tracking anything.');
       _errorGa = _ga = usage.AnalyticsMock();
-      _dbg = '(noop)';
+      _dbg = '(noop)'; // NON-NLS
     }
 
     for (final cb in _gaQ) {
@@ -102,7 +109,7 @@ class Analytics {
     _gaQ.clear();
 
     _logger.finest('$_dbg Registering analytics tracker. ${_ga!.clientId}');
-    events.registerTracker((event, params) {
+    events.registerTracker(nonNls((event, params) {
       final eventParams = <String, String?>{};
       int? value;
       String? category = 'track';
@@ -134,7 +141,7 @@ class Analytics {
         value: value,
         parameters: eventParams,
       );
-    });
+    }));
   }
 
   void trackScreen(@NonNls String screenName) {
@@ -144,8 +151,13 @@ class Analytics {
     });
   }
 
-  void trackGenericEvent(String category, String action,
-          {String? label, int? value, Map<String, String>? parameters}) =>
+  void trackGenericEvent(
+    @NonNls String category,
+    @NonNls String action, {
+    @NonNls String? label,
+    int? value,
+    @NonNls Map<String, String>? parameters,
+  }) =>
       _sendEvent(
         category,
         action,
@@ -187,14 +199,14 @@ class Analytics {
     double? displaySizeHeight,
     double? devicePixelRatio,
   }) {
-    _requireGa((ga) {
+    _requireGa(nonNls((ga) {
       ga!.setSessionValue(
           'vp', '${viewportSizeWidth!.round()}x${viewportSizeHeight!.round()}');
       final sr = [displaySizeWidth, displaySizeHeight]
           .map((e) => (e! / devicePixelRatio!).round())
           .join('x');
       ga.setSessionValue('sr', sr);
-    });
+    }));
   }
 
   void _requireGa(void Function(usage.Analytics? ga) callback) {
@@ -206,18 +218,23 @@ class Analytics {
   }
 }
 
+const _unknown = 'unknown'; // NON-NLS
+
 Future<String> deviceInfo() async {
   // get information about the current device.
   if (AuthPassPlatform.isAndroid) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-    return androidInfo.model ?? 'unknown';
+    return androidInfo.model ?? _unknown;
   }
   if (AuthPassPlatform.isIOS) {
     final iosInfo = await DeviceInfoPlugin().iosInfo;
-    return iosInfo.utsname.machine ?? 'unknown';
+    return iosInfo.utsname.machine ?? _unknown;
   }
-  return 'unknown ${AuthPassPlatform.operatingSystemVersion}'
-      ' (${AuthPassPlatform.operatingSystem})';
+  return [
+    _unknown,
+    AuthPassPlatform.operatingSystemVersion,
+    AuthPassPlatform.operatingSystem
+  ].join(CharConstants.space);
 }
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
@@ -234,15 +251,15 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   });
 
   void trackOnboardingNew({
-    String category = 'onboarding',
-    String action = 'click',
-    String label = 'onboardingNewbie',
+    @NonNls String category = 'onboarding', // NON-NLS
+    @NonNls String action = 'click', // NON-NLS
+    @NonNls String label = 'onboardingNewbie', // NON-NLS
   });
 
   void trackOnboardingExisting({
-    String category = 'onboarding',
-    String action = 'click',
-    String label = 'onboardingExisting',
+    @NonNls String category = 'onboarding', // NON-NLS
+    @NonNls String action = 'click', // NON-NLS
+    @NonNls String label = 'onboardingExisting', // NON-NLS
   });
 
   void trackActionPressed({@NonNls required String action});
