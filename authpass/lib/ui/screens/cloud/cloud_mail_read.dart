@@ -214,7 +214,7 @@ class EmailRead extends StatelessWidget {
               const TextSpan(text: '\n'),
             ])
         .toList()
-          ..removeLast();
+      ..removeLast();
     final entryVm = vm.kdbxEntry
         ?.let((entry) => EntryViewModel(entry, context.watch<KdbxBloc>()));
     const iconSize = 56.0;
