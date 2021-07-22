@@ -55,6 +55,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 _discoveryapis_commons
 async
 cli_util
+shelf_static
 
 Copyright 2015, the Dart project authors. 
 
@@ -5603,6 +5604,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 cached_network_image
+cached_network_image_platform_interface
+cached_network_image_web
 
 
 The MIT License (MIT)
@@ -5973,7 +5976,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --------------------------------------------------------------------------------
 collection
 mime
-shelf_static
 source_map_stack_trace
 stream_channel
 typed_data
