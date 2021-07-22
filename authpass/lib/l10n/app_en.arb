@@ -376,6 +376,14 @@
   "@swipeCopyUsername": {
     "description": "swipe action in password list to copy username"
   },
+  "copyUsernameNotExists": "Entry has no username defined.",
+  "@copyUsernameNotExists": {
+    "description": "Error message when trying to copy username from an entry which has none."
+  },
+  "copyPasswordNotExists": "Entry has no password defined.",
+  "@copyPasswordNotExists": {
+    "description": "Error message when trying to copy password from an entry which has none."
+  },
   "doneCopiedPassword": "Copied password to clipboard.",
   "@doneCopiedPassword": {
     "description": "snackbar confirmation that password was copied."

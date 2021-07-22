@@ -450,3 +450,11 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
 Future<String?> _getClipboardText() async {
   return (await Clipboard.getData('text/plain'))?.text;
 }
+
+extension BuildContextSnackBar on BuildContext {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
+      String message) {
+    return ScaffoldMessenger.of(this)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+}

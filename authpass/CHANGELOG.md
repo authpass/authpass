@@ -1,5 +1,7 @@
 # 1.8.3 - unreleased
 
+* Fixed null exception when copying username/password from entry which has none defined.
+
 # 1.8.2 - 2021-07-22
 
 * Add `CONTRIBUTORS.md` to about dialog. #237 (@ATofighi)
