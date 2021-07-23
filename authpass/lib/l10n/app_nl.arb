@@ -1,0 +1,794 @@
+{
+    "@@locale": "nl",
+    "fieldUserName": "Gebruiker",
+    "@fieldUserName": {},
+    "fieldPassword": "Wachtwoord",
+    "@fieldPassword": {},
+    "fieldWebsite": "Website",
+    "@fieldWebsite": {},
+    "fieldTitle": "Titel",
+    "@fieldTitle": {},
+    "fieldTotp": "Eenmalig wachtwoord (Tijd gebaseerd)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
+    "english": "Engels",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "Duits",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Russisch",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Oekraïens",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Litouws",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Frans",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Spaans",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "Indonesisch",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "Turks",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Hebreeuws",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "Italiaans",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Chinees, vereenvoudigd",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "Chinees, traditioneel",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Portugees, Braziliaans",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "Slowaaks",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Selecteer",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
+    "selectKeepassFile": "AuthPass - Selecteer KeePass Bestand",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "quickUnlockingFiles": "Bestanden snel ontgrendelen",
+    "@quickUnlockingFiles": {
+        "context": "select file screen"
+    },
+    "selectKeepassFileLabel": "Selecteer een KeePass (.kdbx) bestand.",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "createNewFile": "Maak nieuw bestand",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
+    },
+    "openLocalFile": "Open\nlokaal bestand",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "openFile": "Open bestand",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFrom": "Laad van {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromUrl": "Download vanaf URL",
+    "@loadFromUrl": {
+        "description": "deprecated"
+    },
+    "loadFromRemoteUrl": "Open kdbx vanaf URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
+    "createNewKeepass": "Nieuw bij KeePass?\nNieuw wachtwoord database aanmaken",
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
+    "labelLastOpenFiles": "Laatste geopende bestanden:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Nog geen bestanden geopend.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Selecteer Taal",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Taal",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Tekst schaalfactor",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Visuele dichtheid",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Thema",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Licht",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Donker",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Systeem standaard",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Standaard",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Vergrendel alle geopende bestanden",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Schermafbeeldingen in de App toestaan",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Automatisch aanvullen inschakelen",
+    "@preferenceEnableAutoFill": {},
+    "preferenceAutoFillDescription": "Alleen ondersteund op Android Oreo (8.0) of later.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Voorkeuren",
+    "@preferenceTitle": {},
+    "aboutAppName": "AuthPass",
+    "@aboutAppName": {},
+    "aboutLinkFeedback": "Wij verwelkomen elke vorm van feedback!",
+    "@aboutLinkFeedback": {},
+    "aboutLinkVisitWebsite": "Kijk ook op onze website",
+    "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "En Open Source Project",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "Logbestand: {logFilePath}",
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "unableToLaunchUrlTitle": "Kan URL niet openen",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "unableToLaunchUrlDescription": "Kan {url} niet open: {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Geen toepassing beschikbaar voor URL.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "Geopende URL: {url}",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
+    },
+    "menuItemGeneratePassword": "Wachtwoord genereren",
+    "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Voorkeuren",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Open een ander bestand",
+    "@menuItemOpenAnotherFile": {},
+    "menuItemCheckForUpdates": "Controleer op updates",
+    "@menuItemCheckForUpdates": {},
+    "menuItemHelp": "Help",
+    "@menuItemHelp": {},
+    "menuItemHelpSubtitle": "Documentatie weergeven",
+    "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "Over",
+    "@menuItemAbout": {},
+    "actionOpenUrl": "Open URL",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
+    "passwordPlainText": "Wachtwoord tonen",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Wachtwoord",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Wachtwoord genereren",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Voltooid",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "Gebruik als standaard",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Kleine letters (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Hoofdletters (A-Z)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Numeriek (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Umlauts (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Speciaal (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Lengte",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Aangepaste lengte",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Alleen gebruikt voor lengte > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural, one {} =1 {Eén bestand opgeslagen: {files}} other {{numFiles} bestanden opgeslagen: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "Groepen beheren",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Bestanden vergrendelen",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Zoeken",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "Zoeken",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
+    "filterButtonLabel": "Filteren op groepen",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
+    "clear": "Leegmaken",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Filter:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Selecteer wachtwoord invoer voor Automatisch aanvullen.",
+    "@autofillPrompt": {
+        "description": ""
+    },
+    "copiedToClipboard": "Gekopieerd naar klembord.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(geen titel)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(geen gebruikersnaam)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Aanpassen …",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Wachtwoord kopiëren",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Gebruikersnaam kopiëren",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "doneCopiedPassword": "Wachtwoord gekopieerd naar klembord.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Gebruikersnaam gekopieerd naar klembord.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "doneCopiedField": "Gekopieerd.",
+    "@doneCopiedField": {
+        "description": ""
+    },
+    "emptyPasswordVaultPlaceholder": "Je hebt nog geen wachtwoord in je database.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Maak je eerste wachtwoord aan",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loadingFile": "Bestand laden …",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "Intern bestand",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Database eerder aangemaakt met AuthPass",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Bestandskiezer",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Open bestand op het apparaat.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Aanmeldgegevens",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Vul het wachtwoord in voor:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Wachtwoord",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Voer je wachtwoord in.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Ongeldig wachtwoord",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Gebruik sleutelbestand",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Wachtwoord opslaan met biometrische sleutelopslag?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "close": "Sluiten",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Voeg nieuw wachtwoord toe",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
+    "errorOpenFileAlreadyOpenTitle": "Bestand al geopend",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "De geselecteerde database {databaseName} is al geopend vanuit {openFileSource} (Geprobeerd om te openen vanuit {newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
+    "errorUnlockFileTitle": "Kan bestand niet openen",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Onbekende fout bij het openen van bestand. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Doorgaan",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "groupFilterDescription": "Selecteer de groepen om te tonen (recursief)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Alles selecteren",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Alles deselecteren",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Subgroep aanmaken",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Bewerken",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "deleteAction": "Verwijderen",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "successfullyDeletedGroup": "Verwijderde groep.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Herstel",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Opslaan",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "initialNewGroupName": "Nieuwe groep",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Kan groep niet verwijderen",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Deze groep bevat nog andere groepen. Je kunt op dit moment alleen lege groepen verwijderen.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Deze groep bevat nog steeds wachtwoordvermeldingen. Je kunt op dit moment alleen lege groepen verwijderen.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Groepen",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Filteren op groepen",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlock": "Biometrische opslag wissen",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
+    "clearQuickUnlockSubtitle": "Verwijder opgeslagen hoofdwachtwoorden",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "unlock": "Bestanden ontgrendelen",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "sluit wachtwoordbestanden",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "Hoofdwachtwoorden verwijderd uit biometrische opslag.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "Meld je aan voor In-App Nieuws, Enquêtes.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Zal af en toe een netwerkverzoek verzenden om nieuws op te halen.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "Automatisch aanvullen: Debug inschakelen",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Toont informatie overlays voor elk invoerveld",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Maak wachtwoord database",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Naam van je nieuwe database",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "Voer een naam in voor de nieuwe database.",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "Selecteer een veilig hoofdwachtwoord. Zorg ervoor dat je het onthoudt.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Hoofdwachtwoord",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "Voer een veilig, te onthouden wachtwoord in.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "Maak Database",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
+    "databaseExistsError": "Bestand bestaat",
+    "@databaseExistsError": {
+        "description": "dialog title for error message when creating a new database with a name which already exists."
+    },
+    "databaseExistsErrorDescription": "Fout bij het maken van database {filePath}. Bestand bestaat al. Kies een andere naam.",
+    "@databaseExistsErrorDescription": {
+        "description": "dialog body for error message when creating a new database with a name which already exists.",
+        "placeholders": {
+            "filePath": {
+                "description": "file path which already existed."
+            }
+        }
+    },
+    "databaseCreateDefaultName": "PersoonlijkeWachtwoorden",
+    "@databaseCreateDefaultName": {
+        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+    },
+    "preferenceDynamicLoadIcons": "Pictogrammen dynamisch laden",
+    "@preferenceDynamicLoadIcons": {
+        "description": "preferences: dynamically load website icons"
+    },
+    "preferenceDynamicLoadIconsSubtitle": "Zal http verzoeken indienen met de waarde in het {urlFieldName} veld om de website-iconen te laden.",
+    "@preferenceDynamicLoadIconsSubtitle": {
+        "description": "preferences: dynamically load website icons help text.",
+        "placeholders": {
+            "urlFieldName": {
+                "example": "Website"
+            }
+        }
+    },
+    "passwordScore": "Sterkte: {score} van 4",
+    "@passwordScore": {
+        "description": "choosing a master password - calculated password strength.",
+        "placeholders": {
+            "score": {
+                "description": "integer of the score.",
+                "example": "3"
+            }
+        }
+    },
+    "entryInfoFile": "Bestand:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "Groep:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "Laatst gewijzigd:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "movedEntryToGroup": "Invoer verplaatst naar {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
+    "sizeBytes": "{count} bytes",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
+    "entryAddAttachment": "Bijlage toevoegen",
+    "@entryAddAttachment": {
+        "description": ""
+    },
+    "entryAttachmentSizeWarning": "Bijgevoegde bestanden worden toegevoegd in het wachtwoordbestand. Dit kan de tijd die nodig is om wachtwoorden te openen/opslaan, aanzienlijk verhogen.",
+    "@entryAttachmentSizeWarning": {
+        "description": ""
+    },
+    "iconPngSizeWarning": "Aangepaste pictogrammen worden toegevoegd het wachtwoordbestand. Dit kan de tijd die nodig is voor het openen/opslaan van wachtwoorden aanzienlijk verhogen.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "Het gekozen bestand is geen PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
+    },
+    "entryAddField": "Veld toevoegen",
+    "@entryAddField": {
+        "description": ""
+    },
+    "entryCustomField": "Aangepast veld",
+    "@entryCustomField": {
+        "description": ""
+    },
+    "entryCustomFieldTitle": "Toevoegen van nieuw aangepast veld",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
+    "entryCustomFieldInputLabel": "Voer een naam in voor het veld",
+    "@entryCustomFieldInputLabel": {
+        "description": ""
+    },
+    "swipeCopyField": "Veld kopiëren",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "Hernoem",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldGeneratePassword": "Wachtwoord genereren …",
+    "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "Bescherm waarde",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "Waarde niet beschermen",
+    "@fieldUnprotect": {
+        "description": ""
+    },
+    "fieldPresent": "Tonen",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Genereer E-mail",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "Rondleiding",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "Herhaal de eerste keer tour 😅",
+    "@onboardingBackToOnboardingSubtitle": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingHeadline": "Laten we je wachtwoorden veilig maken!",
+    "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingQuestion": "Heb je al eerder een wachtwoordmanager gebruikt?",
+    "@onboardingQuestion": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Ja, open mijn wachtwoorden",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "onboardingNoCreate": "Ik ben allemaal nieuw! Help me op gang.",
+    "@onboardingNoCreate": {
+        "description": ""
+    },
+    "backupButton": "OPSLAAN NAAR CLOUD",
+    "@backupButton": {
+        "description": "Button that is displayed in backup warnings"
+    },
+    "dismissBackupButton": "AFWIJZEN",
+    "@dismissBackupButton": {
+        "description": "Button that is displayed in backup warnings to dismiss the warning"
+    },
+    "backupWarningMessage": "Je wachtwoorden in {databasename} worden alleen lokaal opgeslagen!",
+    "@backupWarningMessage": {
+        "description": "Warning message that is displayed in backup warnings",
+        "placeholders": {
+            "databasename": {
+                "example": "PasswordDatabase"
+            }
+        }
+    },
+    "saveAs": "Opslaan in...",
+    "@saveAs": {
+        "description": "Save as text"
+    },
+    "saving": "Opslaan",
+    "@saving": {
+        "description": "Saving text"
+    },
+    "increaseValue": "Toename",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "Verminderen",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "Reset",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "unexpectedError": "Onverwachte fout: {error}",
+    "@unexpectedError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    }
+}

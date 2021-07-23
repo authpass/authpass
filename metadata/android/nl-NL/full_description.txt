@@ -1,0 +1,16 @@
+<p>Houd eenvoudig en veilig al je wachtwoorden bij!</p>
+
+<p>AuthPass is een lokale wachtwoordbeheerder met ondersteuning voor het populaire en bewezen Keepass (kdbx) formaat. 
+Sla uw wachtwoorden op, deel ze op al uw apparaten en vind ze gemakkelijk wanneer u wilt inloggen.</p>
+
+<ul>
+<li>Alle wachtwoorden op één plaats.<li>
+<li>Genereer veilige en willekeurige wachtwoorden voor elke gebruikersnaam.</li>
+<li>Snelle ontgrendeling beveiligd met biometrische vergrendeling (alleen Android op dit moment)</li>
+<li>Bijhouden van je gebruikersnamen op het internet.</li>
+<li>App beschikbaar voor Mac, iOS, Android, Linux en Windows.</li>
+<li>Open Source beschikbaar op https://github. om/authpass/authpass/</li>
+<li>Bijdrages zijn welkom en aangemoedigd ;-) (Altijd zoeken we naar ontwikkelaars, vertalers, documentatieschrijvers, UI ontwerpers, etc. :) ), kom in ons discord kanaal.</li>
+</ul>
+
+<p>Neem deel aan ons discord kanaal op https://authpass. pp/go/discord - In geval van problemen, Feedback, etc. of gewoon om rond te hangen.</p>

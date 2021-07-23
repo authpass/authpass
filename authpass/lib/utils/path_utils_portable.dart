@@ -13,6 +13,21 @@ class PathUtilsPortable extends PathUtilsDefault {
 
   Directory _getDataDirectory() {
     try {
+      for (final arg in Platform.executableArguments) {
+        if (arg.startsWith('--data=')) {
+          final path = arg.split('=')[1];
+          _logger.finer('Use data path: $path');
+          final directory = Directory(path);
+          directory.createSync(recursive: true);
+          _logger.finer('Absolute Path: ${directory.absolute.path}');
+          return directory;
+        }
+      }
+    } catch (e, stackTrace) {
+      _logger.warning(
+          'Unable to get data directory from arguments.', e, stackTrace);
+    }
+    try {
       final directory = _getAppBaseDirectory();
       final base = Directory(path.join(directory.path, 'Data'));
       base.createSync(recursive: true);
@@ -27,14 +42,16 @@ class PathUtilsPortable extends PathUtilsDefault {
   }
 
   Directory _getAppBaseDirectory() {
+    // We assume we are 2 levels deep for portable apps. Like:
+    // AuthPassPortable/App/AuthPass/AuthPass.exe
     try {
-      return File(Platform.resolvedExecutable).parent.parent;
+      return File(Platform.resolvedExecutable).parent.parent.parent;
     } catch (e, stackTrace) {
       _logger.warning('Unable to resolve Data directory through executable.', e,
           stackTrace);
     }
     try {
-      return File(Platform.script.toFilePath()).parent.parent;
+      return File(Platform.script.toFilePath()).parent.parent.parent;
     } catch (e, stackTrace) {
       _logger.warning('Unable to resolve Data directory through executable.', e,
           stackTrace);

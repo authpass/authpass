@@ -207,10 +207,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "檢查更新",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Email 支援",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "寄出記錄檔以尋求協助",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "說明",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "開啟說明文件",
@@ -473,11 +469,6 @@
     "dialogContinue": "繼續",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "求助/傳送錯誤報告",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "選擇要顯示的群組（包含子群組）",
     "@groupFilterDescription": {

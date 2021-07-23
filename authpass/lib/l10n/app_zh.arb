@@ -76,7 +76,7 @@
     "@selectItem": {
         "description": "semantic label for checkboxes to select item."
     },
-    "selectKeepassFile": "誓约 - 打开密码箱",
+    "selectKeepassFile": "契约 - 打开密码箱",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
@@ -153,7 +153,7 @@
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "设置",
     "@preferenceTitle": {},
-    "aboutAppName": "Authpass-誓约",
+    "aboutAppName": "Authpass-契约",
     "@aboutAppName": {},
     "aboutLinkFeedback": "我们欢迎反馈意见！",
     "@aboutLinkFeedback": {},
@@ -207,13 +207,9 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "检查更新",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "向开发组求助（使用电邮）",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "发送日志/请求帮助（通过电邮）",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "寻求帮助",
     "@menuItemHelp": {},
-    "menuItemHelpSubtitle": "打开浏览器查阅用户文档",
+    "menuItemHelpSubtitle": "在浏览器查阅用户文档",
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "关于本应用",
     "@menuItemAbout": {},
@@ -365,11 +361,11 @@
     "@doneCopiedField": {
         "description": ""
     },
-    "emptyPasswordVaultPlaceholder": "感谢您的信任！现在这里空空如也，准备好开始保护你的第一个密码了吗？",
+    "emptyPasswordVaultPlaceholder": "好了！已经没什么好怕的了！\n那么，我们来准备保护你的第一个密码吧！",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
     },
-    "emptyPasswordVaultButtonLabel": "是的！开始添加第一个密码！",
+    "emptyPasswordVaultButtonLabel": "好！我们出发吧！",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
     },
@@ -473,11 +469,6 @@
     "dialogContinue": "下一步",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "发送错误报告/帮助",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "选择要显示的分组",
     "@groupFilterDescription": {
@@ -735,19 +726,19 @@
     "@onboardingBackToOnboarding": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingBackToOnboardingSubtitle": "我想再一次立下誓约 ~ ( >ω･)～☆",
+    "onboardingBackToOnboardingSubtitle": "我想再一次签订契约\n ~ ( >ω･)～☆",
     "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingHeadline": "签订誓约，\n守护密码！",
+    "onboardingHeadline": "签订契约，\n守护密码！",
     "@onboardingHeadline": {
         "description": ""
     },
-    "onboardingQuestion": "您之前用过是用Keepass格式的密码管理器吗",
+    "onboardingQuestion": "请问您先前签订过契约吗？\n（或者说，拥有.kdbx文件吗？）",
     "@onboardingQuestion": {
         "description": ""
     },
-    "onboardingYesOpenPasswords": "是的，打开我以前的密码库！",
+    "onboardingYesOpenPasswords": "再续前缘：\n提供kdbx文件",
     "@onboardingYesOpenPasswords": {
         "description": ""
     },

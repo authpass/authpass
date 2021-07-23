@@ -1,0 +1,8 @@
+* Add `CONTRIBUTORS.md` to about dialog. #237 (@ATofighi)
+* Fixed potential crash in Preferences screen.
+* Fixed broken 'manage groups'.
+* Add links to forum, report error to forum https://forum.authpass.app/
+* WebDAV: Improve file not found error message.
+* Fix bug when changing database name.
+* Added Dutch translations.
+

@@ -23,6 +23,7 @@ import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/cache_manager.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/platform.dart';
@@ -1278,20 +1279,26 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
   Future<void> _copyUsername(
       BuildContext context, CommonFields commonFields, AppLocalizations loc,
       {String action = 'swipe'}) async {
-    await Clipboard.setData(ClipboardData(
-        text: entry.entry.getString(commonFields.userName.key)!.getText()));
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(loc.doneCopiedUsername)));
+    final stringValue = entry.entry.getString(commonFields.userName.key);
+    if (stringValue == null || stringValue.isNullOrEmpty()) {
+      context.showSnackBar(loc.copyUsernameNotExists);
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: stringValue.getText()));
+    context.showSnackBar(loc.doneCopiedUsername);
     context.read<Analytics>().events.trackSwipeCopyUsername();
   }
 
   Future<void> _copyPassword(
       BuildContext context, CommonFields commonFields, AppLocalizations loc,
       {String action = 'swipe'}) async {
-    await Clipboard.setData(ClipboardData(
-        text: entry.entry.getString(commonFields.password.key)!.getText()));
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(loc.doneCopiedPassword)));
+    final stringValue = entry.entry.getString(commonFields.password.key);
+    if (stringValue == null || stringValue.isNullOrEmpty()) {
+      context.showSnackBar(loc.copyPasswordNotExists);
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: stringValue.getText()));
+    context.showSnackBar(loc.doneCopiedPassword);
     context.read<Analytics>().events.trackSwipeCopyPassword();
   }
 }

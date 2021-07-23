@@ -1,5 +1,6 @@
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
@@ -7,7 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 final _logger = Logger('env');
 
-const _DEFAULT_APP_NAME = 'AuthPass';
+const _DEFAULT_APP_NAME = AppConstants.authPass;
 const _DEFAULT_VERSION =
     String.fromEnvironment('AUTHPASS_VERSION', defaultValue: '1.0.0');
 const _DEFAULT_BUILD_NUMBER =

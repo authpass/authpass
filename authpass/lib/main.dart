@@ -18,6 +18,7 @@ import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/onboarding/onboarding.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/cache_manager.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/diac_utils.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
@@ -41,6 +42,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('main');
 
@@ -58,17 +60,17 @@ Map<String, String> debugInfo() {
       return info();
     } catch (e, stackTrace) {
       _logger.fine('error fetching info. ', e, stackTrace);
-      return 'throws: $e';
+      return 'throws: $e'; // NON-NLS
     }
   }
 
-  return {
+  return nonNls({
     'script': handle(() => Platform.script.toFilePath()),
     'executable': handle(() => Platform.executable),
     'resolvedExecutable': handle(() => Platform.resolvedExecutable),
     'executableArguments':
         handle(() => Platform.executableArguments.toString()),
-  };
+  });
 }
 
 Future<void> startApp(Env env) async {
@@ -122,7 +124,8 @@ Future<void> startApp(Env env) async {
     navigatorKey.currentState?.overlay?.context.let((context) {
       String? message = 'Unexpected error: $error'; // NON-NLS
       try {
-        message = AppLocalizations.of(context).unexpectedError('$error');
+        message =
+            AppLocalizations.of(context).unexpectedError(error.toString());
       } catch (e, stackTrace) {
         _logger.fine('Error while localizing error message', e, stackTrace);
       }
@@ -285,7 +288,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         ),
         ProxyProvider2<AppData, Env, FeatureFlags>(
           update: (_, appData, env, __) {
-            if (appData.manualUserType == 'admin') {
+            if (appData.manualUserType == AppData.manualUserTypeAdmin) {
               return (env.featureFlags.toBuilder()..authpassCloud = true)
                   .build();
             }
@@ -329,11 +332,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
       ],
       child: MaterialApp(
         navigatorObservers: [AnalyticsNavigatorObserver(_deps.analytics)],
-        title: 'AuthPass',
+        title: AppConstants.authPass,
         navigatorKey: widget.navigatorKey,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales:
-            const [Locale('en')] + AppLocalizations.supportedLocales,
+        supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
         theme: _customizeTheme(authPassLightTheme, _appData),
         darkTheme: _customizeTheme(authPassDarkTheme, _appData),
@@ -390,9 +392,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               label: widget.isFirstRun ? 'startup firstRun' : 'startup run',
             );
           }
-          if (initialRoute.startsWith('/openFile')) {
+          if (initialRoute.startsWith(AppConstants.routeOpenFile)) {
             final uri = Uri.parse(initialRoute);
-            final file = uri.queryParameters['file']!;
+            final file =
+                uri.queryParameters[AppConstants.routeOpenFileParamFile]!;
             _logger.finer('uri: $uri /// file: $file');
             return [
 //              MaterialPageRoute<void>(
@@ -410,7 +413,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         // this is actually never used. But i still have to define it,
         // because of https://github.com/flutter/flutter/blob/f64f6e2b6bf5802f23d6a0e3896541b213be490a/packages/flutter/lib/src/widgets/app.dart#L226-L243
         // (defining a navigatorKey requires defining a `routes`)
-        routes: {'/open': (context) => const SelectFileScreen()},
+        routes: {
+          AppConstants.routeOpen: (context) => const SelectFileScreen(),
+        },
 //        home: const SelectFileScreen(),
       ),
     );
@@ -421,7 +426,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     if (localeString == null) {
       return null;
     }
-    final parts = localeString.split('_');
+    final parts = localeString.split(CharConstants.underScore);
     if (parts.length == 1) {
       return Locale(parts[0]);
     }
@@ -475,7 +480,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               ? null
               : DiacConfig(
                   updatedAt: DateTime(2020, 5, 18),
-                  messages: [
+                  messages: nonNls([
                     DiacMessage(
                       uuid: 'e7373fa7-a793-4ed5-a2d1-d0a037ad778a',
                       body:
@@ -497,11 +502,11 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                         ),
                       ],
                     ),
-                  ],
+                  ]),
                 ),
           packageInfo: () async =>
               (await _deps.env.getAppInfo()).toDiacPackageInfo()),
-      contextBuilder: () async => {
+      contextBuilder: () async => nonNls({
         'env': <String, Object>{
           'isDebug': _deps.env.isDebug,
           'isGoogleStore': (await _deps.env.getAppInfo()).packageName ==
@@ -514,8 +519,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         'appData': {
           'manualUserType': _appData?.manualUserType,
         },
-      },
-      customActions: {
+      }),
+      // TODO: This should probably be translated. Although right now all
+      //       messages are english anyway..
+      customActions: nonNls({
         'launchReview': (event) async {
           _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
           return await FlutterStoreListing().launchStoreListing();
@@ -543,7 +550,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           await widget.navigatorKey!.currentState?.push<void>(route);
           return true;
         }
-      },
+      }),
     )..events.listen((event) {
         _deps.analytics.trackGenericEvent(
           'diac',
@@ -593,7 +600,7 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
           StackTrace.current);
       return true;
     })());
-    return '${route?.runtimeType}';
+    return (route?.runtimeType).toString(); // NON-NLS
   }
 
   void _sendScreenView(Route? route) {

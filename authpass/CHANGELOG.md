@@ -1,7 +1,16 @@
-# 1.8.2 - unreleased
+# 1.8.3 - unreleased
+
+* Fixed null exception when copying username/password from entry which has none defined.
+
+# 1.8.2 - 2021-07-22
 
 * Add `CONTRIBUTORS.md` to about dialog. #237 (@ATofighi)
 * Fixed potential crash in Preferences screen.
+* Fixed broken 'manage groups'.
+* Add links to forum, report error to forum https://forum.authpass.app/
+* WebDAV: Improve file not found error message.
+* Fix bug when changing database name.
+* Added Dutch translations.
 
 # 1.8.1 - 2021-07-13
 

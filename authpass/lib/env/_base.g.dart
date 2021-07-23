@@ -8,19 +8,30 @@ part of '_base.dart';
 
 class _$AppInfo extends AppInfo {
   @override
-  final String? appName;
+  final String appName;
   @override
-  final String? version;
+  final String version;
   @override
-  final int? buildNumber;
+  final int buildNumber;
   @override
-  final String? packageName;
+  final String packageName;
 
   factory _$AppInfo([void Function(AppInfoBuilder)? updates]) =>
       (new AppInfoBuilder()..update(updates)).build();
 
-  _$AppInfo._({this.appName, this.version, this.buildNumber, this.packageName})
-      : super._();
+  _$AppInfo._(
+      {required this.appName,
+      required this.version,
+      required this.buildNumber,
+      required this.packageName})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(appName, 'AppInfo', 'appName');
+    BuiltValueNullFieldError.checkNotNull(version, 'AppInfo', 'version');
+    BuiltValueNullFieldError.checkNotNull(
+        buildNumber, 'AppInfo', 'buildNumber');
+    BuiltValueNullFieldError.checkNotNull(
+        packageName, 'AppInfo', 'packageName');
+  }
 
   @override
   AppInfo rebuild(void Function(AppInfoBuilder) updates) =>
@@ -106,10 +117,14 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
   _$AppInfo build() {
     final _$result = _$v ??
         new _$AppInfo._(
-            appName: appName,
-            version: version,
-            buildNumber: buildNumber,
-            packageName: packageName);
+            appName: BuiltValueNullFieldError.checkNotNull(
+                appName, 'AppInfo', 'appName'),
+            version: BuiltValueNullFieldError.checkNotNull(
+                version, 'AppInfo', 'version'),
+            buildNumber: BuiltValueNullFieldError.checkNotNull(
+                buildNumber, 'AppInfo', 'buildNumber'),
+            packageName: BuiltValueNullFieldError.checkNotNull(
+                packageName, 'AppInfo', 'packageName'));
     replace(_$result);
     return _$result;
   }

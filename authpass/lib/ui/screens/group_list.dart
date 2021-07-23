@@ -4,6 +4,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/group_edit.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/error_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
@@ -252,7 +253,6 @@ class GroupListFlat extends StatelessWidget {
     return GroupListBuilder(
         rootGroup: rootGroup,
         builder: (context, groups) {
-          _logger.info('Rebuilding flat group list.');
           return GroupListFlatContent(
             groups: groups,
             initialSelection: initialSelection ?? {},
@@ -327,22 +327,25 @@ class GroupFilter {
   final List<_GroupViewModel> groups;
   final Map<KdbxGroup, _GroupViewModel> vmByGroup;
   final Set<_GroupViewModel> groupFilter;
-  final Set<_GroupViewModel?> groupFilterRecursive;
+  final Set<_GroupViewModel> groupFilterRecursive;
+
+  _GroupViewModel _vmByGroup(KdbxGroup group) =>
+      vmByGroup[group] ?? throws(StateError('no view model for group $group'));
 
   void add(_GroupViewModel group) {
     groupFilter.add(group);
     groupFilterRecursive.addAll(group.group
         .getAllGroups()
-        .map((e) => vmByGroup[e])
-        .where((group) => !group!.inRecycleBin));
+        .map((e) => _vmByGroup(e))
+        .where((group) => !group.inRecycleBin));
   }
 
   void addAll(Iterable<_GroupViewModel> groups) {
     groupFilter.addAll(groups);
     groupFilterRecursive.addAll(groups
         .expand((element) => element.group.getAllGroups())
-        .map((e) => vmByGroup[e])
-        .where((group) => !group!.inRecycleBin));
+        .map((e) => _vmByGroup(e))
+        .where((group) => !group.inRecycleBin));
   }
 
   void remove(_GroupViewModel group) {
@@ -374,7 +377,7 @@ class GroupListFlatContent extends StatefulWidget {
 }
 
 class _GroupListFlatContentState extends State<GroupListFlatContent> {
-  GroupFilter? _groupFilter;
+  late GroupFilter _groupFilter;
 
   @override
   void initState() {
@@ -393,7 +396,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   void _initSelection() {
     _groupFilter = GroupFilter(
         groups: widget.groups!, groupFilter: {}, groupFilterRecursive: {});
-    _groupFilter!.addAll(widget.groups!
+    _groupFilter.addAll(widget.groups!
         .where((element) => widget.initialSelection.contains(element.group)));
   }
 
@@ -473,14 +476,14 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
           switch (widget.groupListMode) {
             case GroupListMode.multiSelectForFilter:
               if (value) {
-                _groupFilter!.add(group);
+                _groupFilter.add(group);
               } else {
-                _groupFilter!.remove(group);
+                _groupFilter.remove(group);
               }
               break;
             case GroupListMode.singleSelect:
-              _groupFilter!.clear();
-              _groupFilter!.add(group);
+              _groupFilter.clear();
+              _groupFilter.add(group);
               _popResult();
               break;
             case GroupListMode.manage:
@@ -493,9 +496,9 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
         onChangedAll: (bool selected) {
           setState(() {
             if (selected) {
-              _groupFilter!.addAll(widget.groups!.map((e) => e));
+              _groupFilter.addAll(widget.groups!.map((e) => e));
             } else {
-              _groupFilter!.clear();
+              _groupFilter.clear();
             }
           });
         },
@@ -505,7 +508,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
 
   void _popResult() {
     Navigator.of(context)
-        .pop(_groupFilter!.groupFilter.map((e) => e.group).toSet());
+        .pop(_groupFilter.groupFilter.map((e) => e.group).toSet());
   }
 }
 

@@ -199,10 +199,6 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "לבדוק עדכונים",
     "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "שליחת דוא״ל לתמיכה",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "שליחת יומנים בדוא״ל/בקשת עזרה.",
-    "@menuItemSupportSubtitle": {},
     "menuItemHelp": "עזרה",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "הצגת תיעוד",
@@ -453,11 +449,6 @@
     "dialogContinue": "להמשיך",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "לשלוח דוח שגיאה/עזרה",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
     },
     "groupFilterDescription": "נא לבחור אילו קבוצות תוצגנה (רקורסיבית)",
     "@groupFilterDescription": {

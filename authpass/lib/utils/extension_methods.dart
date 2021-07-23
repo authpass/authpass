@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:kdbx/kdbx.dart';
 
 extension StringExt on String? {
   String? takeUnlessBlank() => nullIfBlank();
@@ -10,7 +11,13 @@ extension StringExt on String? {
     return this;
   }
 
+  bool isNullOrEmpty() => this?.isEmpty ?? true;
+
   String prepend(String prefix) => '$prefix$this';
+}
+
+extension StringValueExt on StringValue {
+  bool isNullOrEmpty() => getText().isNullOrEmpty();
 }
 
 extension StringToInt on String {

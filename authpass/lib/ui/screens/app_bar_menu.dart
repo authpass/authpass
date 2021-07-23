@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/ui/screens/about.dart';
@@ -9,19 +10,24 @@ import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/winsparkle_init_noop.dart'
     if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+
+late final _logger = Logger('app_bar_menu');
 
 class AppBarMenu {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
       BuildContext context, OpenedKdbxFiles openedKdbxFiles,
       {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
           secondaryBuilder}) {
+    final deps = context.read<Deps>();
     final openedFiles = openedKdbxFiles.values;
     final analytics = Provider.of<Analytics>(context, listen: false);
     final loc = AppLocalizations.of(context);
@@ -113,6 +119,26 @@ class AppBarMenu {
           ),
         )
       ],
+      PopupMenuItem(
+        onTap: () async {
+          analytics.events.trackActionPressed(action: 'forum');
+          final url = deps.env.forumUrlNewTopic(
+            body: '\n\n\n'
+                'OS: ${AuthPassPlatform.operatingSystem} '
+                '${AuthPassPlatform.operatingSystemVersion}\n'
+                'App: ${(await deps.env.getAppInfo()).longString}\n'
+                '${await LoggingUtils.getDebugDeviceInfo()}',
+            tags: ['fromapp'],
+          );
+          _logger.finer('opening url (${url.length}): $url');
+          await DialogUtils.openUrl(url);
+        },
+        child: ListTile(
+          leading: const Icon(Icons.support),
+          title: Text(loc.menuItemForum),
+          subtitle: Text(loc.menuItemForumSubtitle),
+        ),
+      ),
       PopupMenuItem(
         value: () async {
           analytics.events.trackActionPressed(action: 'help');

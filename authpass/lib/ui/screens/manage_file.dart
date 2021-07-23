@@ -159,7 +159,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       _file!.kdbxFile.body.meta.databaseName.set(newName);
                     });
                     await asyncRunTask((progress) async {
-                      await Future<int>.delayed(
+                      await Future<void>.delayed(
                           const Duration(milliseconds: 100));
                       await _kdbxBloc.saveAs(
                         _file!,

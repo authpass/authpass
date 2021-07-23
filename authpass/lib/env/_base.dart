@@ -1,3 +1,4 @@
+import 'package:authpass/utils/constants.dart';
 import 'package:built_value/built_value.dart' hide nullable;
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,14 +13,16 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
   factory AppInfo([void Function(AppInfoBuilder b)? updates]) = _$AppInfo;
   AppInfo._();
 
-  String? get appName;
-  String? get version;
-  int? get buildNumber;
-  String? get packageName;
+  String get appName;
+  String get version;
+  int get buildNumber;
+  String get packageName;
 
   String get versionLabel => '$version+$buildNumber'; // NON-NLS
 
   String get shortString => '$appName ($versionLabel)'; // NON-NLS
+
+  String get longString => '$shortString [$packageName]}'; // NON-NLS
 }
 
 @freezed
@@ -85,6 +88,25 @@ abstract class Env {
   bool get isDebug => type == EnvType.development;
 
   String get name => runtimeType.toString();
+
+  String get forumUrl => UrlConstants.forumUrl;
+
+  String forumUrlNewTopic({
+    String title = '',
+    String body = '',
+    int category = 5,
+    List<String> tags = const <String>[],
+  }) =>
+      Uri.parse('${forumUrl}new-topic')
+          .replace(
+            queryParameters: <String, String>{
+              'title': title,
+              'body': body,
+              'category_id': category.toString(),
+              'tags': tags.join(','),
+            }..removeWhere((key, value) => value.isEmpty),
+          )
+          .toString();
 
   /// Allows having a "namespace" for different environments.
   /// e.g. for mac os to have a different configuration for
