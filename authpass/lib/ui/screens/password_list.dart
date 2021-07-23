@@ -386,10 +386,10 @@ class _PasswordListContentState extends State<PasswordListContent>
     _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
         .store
         .onValueChangedAndLoad
-        .listen(_updateDismissedFiles);
+        .listen(_updateDismissedBanners);
   }
 
-  void _updateDismissedFiles(AppData? data) {
+  void _updateDismissedBanners(AppData? data) {
     _dismissedLocalFilesReady = true;
     setState(() {
       _dismissedLocalFiles = data!.dismissedBackupLocalFiles;
