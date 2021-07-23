@@ -944,8 +944,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         _autofillStatus != AutofillServiceStatus.disabled) {
       return null;
     }
-    if (_dismissedAutofillSuggestion != null &&
-        _dismissedAutofillSuggestion == true) {
+    if (_dismissedAutofillSuggestion == true) {
       return null;
     }
     final loc = AppLocalizations.of(context);
