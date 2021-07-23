@@ -962,12 +962,9 @@ class _PasswordListContentState extends State<PasswordListContent>
             child: Text(loc.dismissAutofillSuggestionBannerButton),
           ),
           TextButton(
-            onPressed: () {
-              _autofill.requestSetAutofillService().then((result) {
-                _autofill.status().then((value) {
-                  _autofillStatus = value;
-                });
-              });
+            onPressed: () async {
+              await _autofill.requestSetAutofillService();
+              await _updateAutofillPrefs();
             },
             child: Text(loc.enableAutofillSuggestionBannerButton),
           ),
