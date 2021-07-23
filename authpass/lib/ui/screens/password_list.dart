@@ -26,6 +26,7 @@ import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -364,6 +365,9 @@ class _PasswordListContentState extends State<PasswordListContent>
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
+  AutofillServiceStatus? _autofillStatus;
+  bool? _dismissedAutofillSuggestion;
+
   @override
   void initState() {
     super.initState();
@@ -374,6 +378,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     WidgetsBinding.instance!.addObserver(this);
     _updateAllEntries();
     _groupFilterNotifier.addListener(_updateAllEntries);
+    _updateAutofillPrefs();
     _updateAutofillMetadata();
     _subscribetoAppData();
   }
@@ -382,14 +387,23 @@ class _PasswordListContentState extends State<PasswordListContent>
     _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
         .store
         .onValueChangedAndLoad
-        .listen(_updateDismissedFiles);
+        .listen(_updateDismissedBanners);
   }
 
-  void _updateDismissedFiles(AppData? data) {
+  void _updateDismissedBanners(AppData? data) {
     _dismissedLocalFilesReady = true;
     setState(() {
       _dismissedLocalFiles = data!.dismissedBackupLocalFiles;
+      _dismissedAutofillSuggestion = data.dismissedAutofillSuggestion;
     });
+  }
+
+  Future<void> _updateAutofillPrefs() async {
+    if (AuthPassPlatform.isWeb) {
+      return;
+    }
+    _autofillStatus = await AutofillService().status();
+    setState(() {});
   }
 
   void _updateAutofillMetadata() {
@@ -895,7 +909,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (localFiles3.isNotEmpty && _dismissedLocalFilesReady) {
       final file = localFiles3.first;
       final analytics = context.watch<Analytics>();
-      analytics.events.trackBackupBanner(BackupBannerAction.shown);
+      analytics.events.trackBackupBanner(BannerAction.shown);
       return [
         BackupBanner(
           loc.backupWarningMessage(file.key.displayName),
@@ -903,7 +917,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             file: kdbxBloc.fileForFileSource(file.key)!,
             onSave: (saveFuture) {
               asyncRunTask((progress) async {
-                analytics.events.trackBackupBanner(BackupBannerAction.saved);
+                analytics.events.trackBackupBanner(BannerAction.saved);
                 await saveFuture;
               }, label: loc.saving);
             },
@@ -911,7 +925,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           ),
           dismissText: loc.dismissBackupButton,
           onDismiss: () {
-            analytics.events.trackBackupBanner(BackupBannerAction.dismissed);
+            analytics.events.trackBackupBanner(BannerAction.dismissed);
             context.read<AppDataBloc>().update((builder, data) =>
                 builder.dismissedBackupLocalFiles =
                     data.dismissedBackupLocalFiles?.toBuilder() ??
@@ -924,11 +938,50 @@ class _PasswordListContentState extends State<PasswordListContent>
     return null;
   }
 
+  List<Widget>? _buildAutofillSuggestBanners() {
+    if (_autofillStatus == null ||
+        _autofillStatus != AutofillServiceStatus.disabled) {
+      return null;
+    }
+    if (_dismissedAutofillSuggestion == true) {
+      return null;
+    }
+    final loc = AppLocalizations.of(context);
+    final analytics = context.watch<Analytics>();
+    return [
+      MaterialBanner(
+        content: Text(loc.enableAutofillSuggestionBanner),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await context.read<AppDataBloc>().update((builder, data) {
+                builder.dismissedAutofillSuggestion = true;
+              });
+              analytics.events.trackAutofillBanner(BannerAction.dismissed);
+            },
+            child: Text(loc.dismissAutofillSuggestionBannerButton),
+          ),
+          TextButton(
+            onPressed: () async {
+              await AutofillService().requestSetAutofillService();
+              await _updateAutofillPrefs();
+              analytics.events.trackAutofillBanner(BannerAction.saved);
+            },
+            child: Text(loc.enableAutofillSuggestionBannerButton),
+          ),
+        ],
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
-      ...?_buildBackupWarningBanners(),
+      ...?[
+        _buildBackupWarningBanners,
+        _buildAutofillSuggestBanners,
+      ].map((e) => e()).whereNotNull().firstOrNull,
       ...?_buildGroupFilterPrefix(),
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),

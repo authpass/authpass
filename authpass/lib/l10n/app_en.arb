@@ -164,6 +164,19 @@
   "@preferenceAllowScreenshots": {},
   "preferenceEnableAutoFill": "Enable autofill",
   "@preferenceEnableAutoFill": {},
+  "enableAutofillSuggestionBanner": "You can you can fill field of other application by enabling autofill!",
+  "@enableAutofillSuggestionBanner": {
+    "description": "This text will shown as a banner on top of password list"
+  },
+  "dismissAutofillSuggestionBannerButton" : "DISMISS",
+  "@dismissAutofillSuggestionBannerButton" : {
+    "description" : "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+  },
+  "enableAutofillSuggestionBannerButton" : "ENABLE!",
+  "@enableAutofillSuggestionBannerButton" : {
+    "description" : "Button that is displayed in autofill suggestion warnings to enable autofill"
+  },
+
   "preferenceAutoFillDescription": "Only supported on Android Oreo (8.0) or later.",
   "@preferenceAutoFillDescription": {},
   "preferenceTitle": "Preferences",

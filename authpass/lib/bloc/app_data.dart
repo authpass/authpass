@@ -189,6 +189,8 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   ///UUid's of local Files whose warnings were dismissed
   BuiltList<String>? get dismissedBackupLocalFiles;
 
+  bool? get dismissedAutofillSuggestion;
+
   double? get themeVisualDensity;
 
   double? get themeFontSizeFactor;
