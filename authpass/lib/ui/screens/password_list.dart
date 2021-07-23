@@ -908,7 +908,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (localFiles3.isNotEmpty && _dismissedLocalFilesReady) {
       final file = localFiles3.first;
       final analytics = context.watch<Analytics>();
-      analytics.events.trackBackupBanner(BackupBannerAction.shown);
+      analytics.events.trackBackupBanner(BannerAction.shown);
       return [
         BackupBanner(
           loc.backupWarningMessage(file.key.displayName),
@@ -916,7 +916,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             file: kdbxBloc.fileForFileSource(file.key)!,
             onSave: (saveFuture) {
               asyncRunTask((progress) async {
-                analytics.events.trackBackupBanner(BackupBannerAction.saved);
+                analytics.events.trackBackupBanner(BannerAction.saved);
                 await saveFuture;
               }, label: loc.saving);
             },
@@ -924,7 +924,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           ),
           dismissText: loc.dismissBackupButton,
           onDismiss: () {
-            analytics.events.trackBackupBanner(BackupBannerAction.dismissed);
+            analytics.events.trackBackupBanner(BannerAction.dismissed);
             context.read<AppDataBloc>().update((builder, data) =>
                 builder.dismissedBackupLocalFiles =
                     data.dismissedBackupLocalFiles?.toBuilder() ??
@@ -946,15 +946,17 @@ class _PasswordListContentState extends State<PasswordListContent>
       return null;
     }
     final loc = AppLocalizations.of(context);
+    final analytics = context.watch<Analytics>();
     return [
       MaterialBanner(
         content: Text(loc.enableAutofillSuggestionBanner),
         actions: [
           TextButton(
-            onPressed: () {
-              context.read<AppDataBloc>().update((builder, data) {
+            onPressed: () async {
+              await context.read<AppDataBloc>().update((builder, data) {
                 builder.dismissedAutofillSuggestion = true;
               });
+              analytics.events.trackAutofillBanner(BannerAction.dismissed);
             },
             child: Text(loc.dismissAutofillSuggestionBannerButton),
           ),
@@ -962,6 +964,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             onPressed: () async {
               await AutofillService().requestSetAutofillService();
               await _updateAutofillPrefs();
+              analytics.events.trackAutofillBanner(BannerAction.saved);
             },
             child: Text(loc.enableAutofillSuggestionBannerButton),
           ),
@@ -974,8 +977,10 @@ class _PasswordListContentState extends State<PasswordListContent>
   Widget build(BuildContext context) {
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
-      ...?_buildBackupWarningBanners(),
-      ...?_buildAutofillSuggestBanners(),
+      ...?[
+        _buildBackupWarningBanners,
+        _buildAutofillSuggestBanners,
+      ].map((e) => e()).whereNotNull().firstOrNull,
       ...?_buildGroupFilterPrefix(),
       ...?_buildAutofillListPrefix(),
       ...?_buildListPrefix(),

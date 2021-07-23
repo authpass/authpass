@@ -102,10 +102,11 @@ class Analytics {
     _gaQ.clear();
 
     _logger.finest('$_dbg Registering analytics tracker. ${_ga!.clientId}');
-    events.registerTracker((event, params) {
+    events.registerTracker((final action, params) {
       final eventParams = <String, String?>{};
       int? value;
-      String? category = 'track';
+      String? category;
+      String? actionOverride;
 
       final labelParams = <String>[];
       for (final entry in params.entries) {
@@ -116,7 +117,7 @@ class Analytics {
         } else if (entry.key == 'category' && entry.value is String) {
           category = entry.value as String?;
         } else if (entry.key == 'action' && entry.value is String) {
-          event = entry.value as String;
+          actionOverride = entry.value as String;
         } else if (customKey == null) {
           labelParams.add('${entry.key}=${entry.value}');
         } else {
@@ -125,11 +126,15 @@ class Analytics {
       }
       labelParams.sort();
 
+      if (actionOverride != null) {
+        category = actionOverride;
+      }
+
       final label = labelParams.join(',');
 //      _amplitude?.logEvent(name: event, properties: params);
       _sendEvent(
-        category,
-        event,
+        category ?? 'track',
+        actionOverride ?? action,
         label: label,
         value: value,
         parameters: eventParams,
@@ -336,10 +341,12 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackEntryAction(EntryActionType label, {String action = 'entry'});
 
-  void trackBackupBanner(BackupBannerAction action);
+  void trackBackupBanner(BannerAction action);
+
+  void trackAutofillBanner(BannerAction action);
 }
 
-enum BackupBannerAction {
+enum BannerAction {
   shown,
   dismissed,
   saved,
