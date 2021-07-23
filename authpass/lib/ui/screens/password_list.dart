@@ -364,7 +364,6 @@ class _PasswordListContentState extends State<PasswordListContent>
 
 //  final _isolateRunner = IsolateRunner.spawn();
 
-  late AutofillService _autofill;
   AutofillServiceStatus? _autofillStatus;
   bool? _dismissedAutofillSuggestion;
 
@@ -402,8 +401,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (AuthPassPlatform.isWeb) {
       return;
     }
-    _autofill = AutofillService();
-    _autofillStatus = await _autofill.status();
+    _autofillStatus = await AutofillService().status();
     setState(() {});
   }
 
@@ -962,7 +960,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           ),
           TextButton(
             onPressed: () async {
-              await _autofill.requestSetAutofillService();
+              await AutofillService().requestSetAutofillService();
               await _updateAutofillPrefs();
             },
             child: Text(loc.enableAutofillSuggestionBannerButton),
