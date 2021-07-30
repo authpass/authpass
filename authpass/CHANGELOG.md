@@ -1,4 +1,4 @@
-# 1.8.3 - unreleased
+# 1.9.0 - unreleased
 
 * Fixed null exception when copying username/password from entry which has none defined.
 * Fixes #188 - Show banner to users to suggest activating autofill (@ATofighi)
