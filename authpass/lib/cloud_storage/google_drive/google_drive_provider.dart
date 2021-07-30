@@ -5,7 +5,9 @@ import 'dart:typed_data';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/google_drive/google_drive_models.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -15,6 +17,8 @@ import 'package:meta/meta.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
+
+const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 
 class GoogleDriveProvider
     extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
@@ -144,6 +148,11 @@ class GoogleDriveProvider
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
+    final metadata = (await driveApi.files.get(
+      file.id,
+      downloadOptions: DownloadOptions.metadata,
+      $fields: GoogleDriveMetadata.fields,
+    )) as File;
     final dynamic response = await driveApi.files
         .get(file.id, downloadOptions: DownloadOptions.fullMedia);
     final media = response as Media;
@@ -152,7 +161,10 @@ class GoogleDriveProvider
     await for (final chunk in media.stream) {
       bytes.add(chunk);
     }
-    return FileContent(bytes.toBytes());
+    return FileContent(
+      bytes.toBytes(),
+      _metadataForFile(metadata),
+    );
   }
 
   @override
@@ -160,10 +172,25 @@ class GoogleDriveProvider
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
+    if (previousMetadata != null) {
+      final compareMetadata = GoogleDriveMetadata.fromJson(
+          previousMetadata[_METADATA_KEY_GOOGLE_DRIVE_DATA]
+              as Map<String, dynamic>);
+      final remoteMetadata = (await driveApi.files.get(file.id,
+          downloadOptions: DownloadOptions.metadata,
+          $fields: GoogleDriveMetadata.fields)) as File;
+      if (compareMetadata.version != remoteMetadata.version) {
+        final remote = GoogleDriveMetadata.fromMetadata(remoteMetadata);
+        throw StorageException.conflict(
+            'Version differs from last loaded version. '
+            'Local: ${compareMetadata.toJson()} Remote: ${remote.toJson()}');
+      }
+    }
     final updatedFile = await driveApi.files.update(File(), file.id,
-        uploadMedia: Media(byteStream, bytes.lengthInBytes));
+        uploadMedia: Media(byteStream, bytes.lengthInBytes),
+        $fields: GoogleDriveMetadata.fields);
     _logger.fine('Successfully saved file ${updatedFile.name}');
-    return <String, dynamic>{};
+    return _metadataForFile(updatedFile);
   }
 
   @override
@@ -179,17 +206,25 @@ class GoogleDriveProvider
     _logger
         .fine('Creating google drive entity. bytes.length: ${bytes.length} / '
             'lengthInBytes: ${bytes.lengthInBytes}');
-    final newFile = await driveApi.files
-        .create(metadata, uploadMedia: Media(byteStream, bytes.lengthInBytes));
+    final newFile = await driveApi.files.create(
+      metadata,
+      uploadMedia: Media(byteStream, bytes.lengthInBytes),
+      $fields: GoogleDriveMetadata.fields,
+    );
     return toFileSource(
       CloudStorageEntity((b) => b
         ..id = newFile.id
         ..name = newFile.name
         ..type = CloudStorageEntityType.file).toSimpleFileInfo(),
       uuid: AppDataBloc.createUuid(),
-      initialCachedContent: FileContent(bytes),
+      initialCachedContent: FileContent(bytes, _metadataForFile(newFile)),
     );
   }
+
+  Map<String, dynamic> _metadataForFile(File metadata) => <String, dynamic>{
+        _METADATA_KEY_GOOGLE_DRIVE_DATA:
+            GoogleDriveMetadata.fromMetadata(metadata).toJson(),
+      };
 }
 
 abstract class SearchQueryAtom {
