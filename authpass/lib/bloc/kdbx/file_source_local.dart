@@ -8,10 +8,13 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/uuid_util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
+
+part 'file_source_local.g.dart';
 
 final _logger = Logger('file_source_local');
 
@@ -67,7 +70,27 @@ class FileSourceLocal extends FileSource {
 
   @override
   Stream<FileContent> load() async* {
-    yield await _accessFile((f) async => FileContent(await f.readAsBytes()));
+    yield await _accessFile((f) async {
+      final lastModified = f.lastModifiedSync();
+      final fileSize = f.lengthSync();
+      final bytes = await f.readAsBytes();
+      if (bytes.lengthInBytes != fileSize) {
+        throw StateError('length in filesystem different from read bytes. '
+            'filesystem Size: $fileSize, read: ${bytes.lengthInBytes}');
+      }
+      final newLastModified = f.lastModifiedSync();
+      if (lastModified != newLastModified) {
+        throw StateError('File changed while reading file. '
+            'old: $lastModified / new: $newLastModified');
+      }
+      return FileContent(
+        bytes,
+        FileSourceLocalMetadata(
+          lastModifiedAt: lastModified,
+          length: fileSize,
+        ).toJson(),
+      );
+    });
   }
 
   Future<T> _accessFile<T>(Future<T> Function(File file) cb) async {
@@ -204,4 +227,18 @@ class FileSourceLocal extends FileSource {
         'local':
             macOsSecureBookmark != null ? 'macOsSecureBookmark' : 'internal',
       };
+}
+
+@JsonSerializable()
+class FileSourceLocalMetadata {
+  FileSourceLocalMetadata({
+    required this.lastModifiedAt,
+    required this.length,
+  });
+  factory FileSourceLocalMetadata.fromJson(Map<String, dynamic> json) =>
+      _$FileSourceLocalMetadataFromJson(json);
+  Map<String, dynamic> toJson() => _$FileSourceLocalMetadataToJson(this);
+
+  final DateTime lastModifiedAt;
+  final int length;
 }
