@@ -128,6 +128,46 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackGroupCreate({String category = 'group'}) =>
       trackEvent('groupCreate', <String, dynamic>{'category': category});
   @override
+  void trackPermanentlyDeleteEntry(
+          {String category = 'entry',
+          String action = 'perm-delete',
+          String label = 'confirm'}) =>
+      trackEvent('permanentlyDeleteEntry', <String, dynamic>{
+        'category': category,
+        'action': action,
+        'label': label
+      });
+  @override
+  void trackPermanentlyDeleteEntryCancel(
+          {String category = 'entry',
+          String action = 'perm-delete',
+          String label = 'cancel'}) =>
+      trackEvent('permanentlyDeleteEntryCancel', <String, dynamic>{
+        'category': category,
+        'action': action,
+        'label': label
+      });
+  @override
+  void trackPermanentlyDeleteGroup(
+          {String category = 'group',
+          String action = 'perm-delete',
+          String label = 'confirm'}) =>
+      trackEvent('permanentlyDeleteGroup', <String, dynamic>{
+        'category': category,
+        'action': action,
+        'label': label
+      });
+  @override
+  void trackPermanentlyDeleteGroupCancel(
+          {String category = 'group',
+          String action = 'perm-delete',
+          String label = 'cancel'}) =>
+      trackEvent('permanentlyDeleteGroupCancel', <String, dynamic>{
+        'category': category,
+        'action': action,
+        'label': label
+      });
+  @override
   void _trackPreferences(
           {required String action, required String to, String? category}) =>
       trackEvent('preferences',

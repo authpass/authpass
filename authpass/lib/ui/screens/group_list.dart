@@ -9,6 +9,7 @@ import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -177,6 +178,7 @@ class _GroupViewModel {
     this.file,
     this.group,
     this.level, {
+    required this.isRecycleBin,
     required this.inRecycleBin,
   });
 
@@ -184,7 +186,9 @@ class _GroupViewModel {
   final KdbxOpenedFile file;
   final KdbxGroup group;
   final int level;
+  final bool isRecycleBin;
   final bool inRecycleBin;
+  bool get isOrInRecycleBin => isRecycleBin || inRecycleBin;
 
   bool get isRoot => group.parent == null;
 
@@ -302,15 +306,34 @@ class GroupListBuilder extends StatelessWidget {
               kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
           .toList();
     } else {
-      inRecycleBin |= group.file!.recycleBin == group;
+      final isRecycleBin = group.file!.recycleBin == group;
+      final groups = group.groups
+          .map((g) => _createViewModel(
+                kdbxBloc,
+                file,
+                g,
+                depth + 1,
+                inRecycleBin: inRecycleBin || isRecycleBin,
+              ))
+          .sorted((aVm, bVm) {
+        final a = aVm.first;
+        final b = bVm.first;
+        // Move recycle bin to the bottom.
+        if (a.isRecycleBin != b.isRecycleBin) {
+          return a.isRecycleBin ? 1 : -1;
+        }
+        return compareAsciiLowerCaseNatural(a.name, b.name);
+      }).flattened;
       return [
-        _GroupViewModel(kdbxBloc, file, group, depth,
-            inRecycleBin: inRecycleBin),
-        ...group.groups
-//            // for now simply hide all trash groups.
-//            .where((element) => element.file.recycleBin != element)
-            .expand((g) => _createViewModel(kdbxBloc, file, g, depth + 1,
-                inRecycleBin: inRecycleBin)),
+        _GroupViewModel(
+          kdbxBloc,
+          file,
+          group,
+          depth,
+          isRecycleBin: isRecycleBin,
+          inRecycleBin: inRecycleBin,
+        ),
+        ...groups,
       ];
     }
   }
@@ -337,7 +360,7 @@ class GroupFilter {
     groupFilterRecursive.addAll(group.group
         .getAllGroups()
         .map((e) => _vmByGroup(e))
-        .where((group) => !group.inRecycleBin));
+        .where((group) => !group.isOrInRecycleBin));
   }
 
   void addAll(Iterable<_GroupViewModel> groups) {
@@ -345,7 +368,7 @@ class GroupFilter {
     groupFilterRecursive.addAll(groups
         .expand((element) => element.group.getAllGroups())
         .map((e) => _vmByGroup(e))
-        .where((group) => !group.inRecycleBin));
+        .where((group) => !group.isOrInRecycleBin));
   }
 
   void remove(_GroupViewModel group) {
@@ -512,6 +535,13 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   }
 }
 
+enum GroupAction {
+  create,
+  edit,
+  delete,
+  deletePermanently,
+}
+
 class GroupListFlatList extends StatelessWidget {
   const GroupListFlatList({
     Key? key,
@@ -551,14 +581,15 @@ class GroupListFlatList extends StatelessWidget {
             },
             onLongPress: () async {
               final analytics = context.read<Analytics>();
-              final action = await showDialog<String>(
+              final action = await showDialog<GroupAction>(
                 context: context,
                 builder: (context) => SimpleDialog(
                   title: Text(group.name),
                   children: <Widget>[
-                    if (!group.inRecycleBin) ...[
+                    if (!group.isOrInRecycleBin) ...[
                       SimpleDialogOption(
-                        onPressed: () => Navigator.of(context).pop('create'),
+                        onPressed: () =>
+                            Navigator.of(context).pop(GroupAction.create),
                         child: ListTile(
                           leading: const Icon(Icons.create_new_folder),
                           title: Text(loc.createSubgroup),
@@ -566,76 +597,108 @@ class GroupListFlatList extends StatelessWidget {
                       ),
                     ],
                     SimpleDialogOption(
-                      onPressed: () => Navigator.of(context).pop('edit'),
+                      onPressed: () =>
+                          Navigator.of(context).pop(GroupAction.edit),
                       child: ListTile(
                         leading: const Icon(FontAwesomeIcons.edit),
                         title: Text(loc.editAction),
                       ),
                     ),
-                    if (!group.isRoot && !group.inRecycleBin) ...[
+                    if (!group.isRoot &&
+                        !group.isRecycleBin &&
+                        !group.inRecycleBin) ...[
                       SimpleDialogOption(
-                        onPressed: () => Navigator.of(context).pop('delete'),
+                        onPressed: () =>
+                            Navigator.of(context).pop(GroupAction.delete),
                         child: ListTile(
                           leading: const Icon(Icons.delete),
                           title: Text(loc.deleteAction),
                         ),
                       ),
                     ],
+                    if (group.inRecycleBin) ...[
+                      SimpleDialogOption(
+                          onPressed: () => Navigator.of(context)
+                              .pop(GroupAction.deletePermanently),
+                          child: ListTile(
+                            leading: const Icon(Icons.delete_forever),
+                            title: Text(loc.deletePermanentlyAction),
+                          ))
+                    ],
                   ],
                 ),
               );
-              if (action == 'create') {
-                _logger.fine('Creating folder.');
-                final newGroup = group.file.kdbxFile.createGroup(
-                    parent: group.group, name: loc.initialNewGroupName);
-                await Navigator.of(context)
-                    .push(GroupEditScreen.route(newGroup));
-                analytics.events.trackGroupCreate();
-              } else if (action == 'delete') {
-                _logger.fine('We should delete ${group.name}');
-                // for now only allow deleting of empty groups.
-                if (group.group.groups.isNotEmpty) {
-                  analytics.events
-                      .trackGroupDelete(GroupDeleteResult.hasSubgroups);
-                  await DialogUtils.showSimpleAlertDialog(
-                    context,
-                    loc.deleteGroupErrorTitle,
-                    loc.deleteGroupErrorBodyContainsGroup,
-                    routeAppend: 'deleteGroupError',
-                  );
-                  return;
-                } else if (group.group.entries.isNotEmpty) {
-                  analytics.events
-                      .trackGroupDelete(GroupDeleteResult.hasEntries);
-                  await DialogUtils.showSimpleAlertDialog(
-                    context,
-                    loc.deleteGroupErrorTitle,
-                    loc.deleteGroupErrorBodyContainsEntries,
-                    routeAppend: 'deleteGroupError',
-                  );
-                  return;
-                }
-                final oldParent = group.group.parent;
-                group.file.kdbxFile.deleteGroup(group.group);
-                analytics.events.trackGroupDelete(GroupDeleteResult.deleted);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(loc.successfullyDeletedGroup),
-                    action: SnackBarAction(
-                      label: loc.undoButtonLabel,
-                      onPressed: () {
-                        oldParent!.file!.move(group.group, oldParent);
-                        analytics.events
-                            .trackGroupDelete(GroupDeleteResult.undo);
-                      },
+              if (action == null) {
+                return;
+              }
+              switch (action) {
+                case GroupAction.create:
+                  _logger.fine('Creating folder.');
+                  final newGroup = group.file.kdbxFile.createGroup(
+                      parent: group.group, name: loc.initialNewGroupName);
+                  await Navigator.of(context)
+                      .push(GroupEditScreen.route(newGroup));
+                  analytics.events.trackGroupCreate();
+                  break;
+                case GroupAction.delete:
+                  _logger.fine('We should delete ${group.name}');
+                  // for now only allow deleting of empty groups.
+                  if (group.group.groups.isNotEmpty) {
+                    analytics.events
+                        .trackGroupDelete(GroupDeleteResult.hasSubgroups);
+                    await DialogUtils.showSimpleAlertDialog(
+                      context,
+                      loc.deleteGroupErrorTitle,
+                      loc.deleteGroupErrorBodyContainsGroup,
+                      routeAppend: 'deleteGroupError',
+                    );
+                  } else if (group.group.entries.isNotEmpty) {
+                    analytics.events
+                        .trackGroupDelete(GroupDeleteResult.hasEntries);
+                    await DialogUtils.showSimpleAlertDialog(
+                      context,
+                      loc.deleteGroupErrorTitle,
+                      loc.deleteGroupErrorBodyContainsEntries,
+                      routeAppend: 'deleteGroupError',
+                    );
+                    return;
+                  }
+                  final oldParent = group.group.parent;
+                  group.file.kdbxFile.deleteGroup(group.group);
+                  analytics.events.trackGroupDelete(GroupDeleteResult.deleted);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(loc.successfullyDeletedGroup),
+                      action: SnackBarAction(
+                        label: loc.undoButtonLabel,
+                        onPressed: () {
+                          oldParent!.file!.move(group.group, oldParent);
+                          analytics.events
+                              .trackGroupDelete(GroupDeleteResult.undo);
+                        },
+                      ),
                     ),
-                  ),
-                );
-              } else if (action == 'edit') {
-                await Navigator.of(context)
-                    .push(GroupEditScreen.route(group.group));
-              } else if (action != null) {
-                throw StateError('Invalid action $action');
+                  );
+                  break;
+                case GroupAction.edit:
+                  await Navigator.of(context)
+                      .push(GroupEditScreen.route(group.group));
+                  break;
+                case GroupAction.deletePermanently:
+                  final result = await DialogUtils.showConfirmDialog(
+                    context: context,
+                    params: ConfirmDialogParams(
+                      content: loc.permanentlyDeleteEntryConfirm(group.name),
+                    ),
+                  );
+                  if (!result) {
+                    analytics.events.trackPermanentlyDeleteGroupCancel();
+                    return;
+                  }
+                  group.group.file!.deletePermanently(group.group);
+                  analytics.events.trackPermanentlyDeleteGroup();
+                  context.showSnackBar(loc.permanentlyDeletedEntrySnackBar);
+                  break;
               }
             },
           );

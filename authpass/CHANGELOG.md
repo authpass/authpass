@@ -3,6 +3,7 @@
 * Fixed null exception when copying username/password from entry which has none defined.
 * Fixes #188 - Show banner to users to suggest activating autofill (@ATofighi)
 * KDBX: Fix merging of files with incoming deleted objects.
+* Add support for permanently deleting groups and password entries. #99
 
 # 1.8.2 - 2021-07-22
 

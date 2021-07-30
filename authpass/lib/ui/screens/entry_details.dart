@@ -21,6 +21,7 @@ import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -81,6 +82,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
   Changeable get kdbxObject => widget.entry;
   @override
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final entryDetailsKey = GlobalKey<_EntryDetailsState>();
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +90,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     final vm = EntryViewModel(widget.entry, context.watch<KdbxBloc>());
     final entry = widget.entry;
     final loc = AppLocalizations.of(context);
+    final analytics = context.watch<Analytics>();
     return Scaffold(
       appBar: AppBar(
         title: Text(vm.label?.takeUnlessBlank() ?? loc.noTitle),
@@ -103,24 +106,74 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
           AppBarMenu.createOverflowMenuButton(
             context,
             builder: (context) => [
-              PopupMenuItem(
-                value: () {
-                  final oldGroup = entry.parent;
-                  entry.file!.deleteEntry(entry);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Deleted entry.'),
-                    action: SnackBarAction(
-                        label: 'Undo',
-                        onPressed: () {
-                          entry.file!.move(entry, oldGroup!);
-                        }),
-                  ));
-                },
-                child: const ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text('Delete'),
+              if (entry.isInRecycleBin()) ...[
+                PopupMenuItem(
+                  value: () async {
+                    final e = entry;
+                    final result = await DialogUtils.showConfirmDialog(
+                      context: context,
+                      params: ConfirmDialogParams(
+                        content: loc.permanentlyDeleteEntryConfirm(
+                            e.label ?? CharConstants.empty),
+                      ),
+                    );
+                    if (!result) {
+                      analytics.events.trackPermanentlyDeleteEntryCancel();
+                      return;
+                    }
+                    entry.file!.deletePermanently(entry);
+                    analytics.events.trackPermanentlyDeleteEntry();
+                    context.showSnackBar(loc.permanentlyDeletedEntrySnackBar);
+                  },
+                  child: ListTile(
+                    leading: const Icon(Icons.delete_forever),
+                    title: Text(loc.deletePermanentlyAction),
+                  ),
                 ),
-              ),
+                PopupMenuItem(
+                  value: () async {
+                    final previousParent = entry.previousParentGroup
+                        .get()
+                        ?.let((that) => entry.file!.findGroupByUuid(that));
+                    final entryDetails = entryDetailsKey.currentState;
+                    if (entryDetails == null) {
+                      return;
+                    }
+                    await entryDetails._showMoveToGroup(
+                      loc,
+                      vm.entry,
+                      toGroup: previousParent == null ||
+                              previousParent.isInRecycleBin() ||
+                              previousParent == entry.file!.recycleBin
+                          ? null
+                          : previousParent,
+                    );
+                  },
+                  child: ListTile(
+                    leading: const Icon(Icons.restore_from_trash),
+                    title: Text(loc.restoreFromRecycleBinAction),
+                  ),
+                ),
+              ] else ...[
+                PopupMenuItem(
+                  value: () {
+                    final oldGroup = entry.parent;
+                    entry.file!.deleteEntry(entry);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(loc.deletedEntry),
+                      action: SnackBarAction(
+                          label: loc.undoButtonLabel,
+                          onPressed: () {
+                            entry.file!.move(entry, oldGroup!);
+                          }),
+                    ));
+                  },
+                  child: ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: Text(loc.deleteAction),
+                  ),
+                ),
+              ],
               ...?!env.isDebug
                   ? null
                   : [
@@ -165,6 +218,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
             }
           },
           child: EntryDetails(
+            key: entryDetailsKey,
             entry: vm,
             onSavedPressed: !isDirty && !entry.isDirty ? null : saveCallback,
           ),
@@ -447,32 +501,7 @@ class _EntryDetailsState extends State<EntryDetails>
                           label: loc.entryInfoGroup,
                           value: vm.groupNames.join(' » '), // NON-NLS
                           onTap: () async {
-                            // TODO
-                            final file = vm.entry.file;
-                            final newGroupSelection =
-                                await Navigator.of(context)
-//                                .push(GroupListFlat.route(file.body.rootGroup));
-                                    .push(GroupListFlat.route(
-                              {vm.entry.parent},
-                              groupListMode: GroupListMode.singleSelect,
-                              rootGroup: vm.entry.file!.body.rootGroup,
-                            ));
-                            final newGroup = newGroupSelection?.first;
-                            if (newGroup != null) {
-                              final oldGroup = vm.entry.parent;
-                              file!.move(vm.entry, newGroup);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(loc
-                                      .movedEntryToGroup(newGroup.name.get()!)),
-                                  action: SnackBarAction(
-                                      label: loc.undoButtonLabel,
-                                      onPressed: () {
-                                        file.move(vm.entry, oldGroup!);
-                                      }),
-                                ),
-                              );
-                            }
+                            await _showMoveToGroup(loc, vm.entry);
                           },
                         ),
                         EntryMetaInfo(
@@ -584,6 +613,33 @@ class _EntryDetailsState extends State<EntryDetails>
         ),
       ),
     );
+  }
+
+  Future<KdbxGroup?> _showMoveToGroup(AppLocalizations loc, KdbxEntry entry,
+      {final KdbxGroup? toGroup}) async {
+    final file = entry.file;
+    final newGroup = toGroup ??
+        (await Navigator.of(context).push(GroupListFlat.route(
+          {entry.parent},
+          groupListMode: GroupListMode.singleSelect,
+          rootGroup: entry.file!.body.rootGroup,
+        )))
+            ?.firstOrNull;
+    if (newGroup != null) {
+      final oldGroup = entry.parent;
+      file!.move(entry, newGroup);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.movedEntryToGroup(newGroup.name.get()!)),
+          action: SnackBarAction(
+              label: loc.undoButtonLabel,
+              onPressed: () {
+                file.move(entry, oldGroup!);
+              }),
+        ),
+      );
+    }
+    return newGroup;
   }
 
   Future<void> _attachFile() async {

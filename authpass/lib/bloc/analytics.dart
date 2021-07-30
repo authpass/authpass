@@ -317,6 +317,27 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
   void trackGroupCreate({String category = 'group'});
 
+  void trackPermanentlyDeleteEntry({
+    String category = 'entry',
+    String action = 'perm-delete',
+    String label = 'confirm',
+  });
+  void trackPermanentlyDeleteEntryCancel({
+    String category = 'entry',
+    String action = 'perm-delete',
+    String label = 'cancel',
+  });
+  void trackPermanentlyDeleteGroup({
+    String category = 'group',
+    String action = 'perm-delete',
+    String label = 'confirm',
+  });
+  void trackPermanentlyDeleteGroupCancel({
+    String category = 'group',
+    String action = 'perm-delete',
+    String label = 'cancel',
+  });
+
   void trackPreferences({
     required String setting,
     required String to,

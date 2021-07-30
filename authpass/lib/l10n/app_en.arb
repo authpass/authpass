@@ -550,9 +550,21 @@
   "@editAction": {
     "description": "menu action: edit item (e.g. delete a group)"
   },
+  "deletePermanentlyAction": "Delete Permanently",
+  "@deletePermanentlyAction": {
+    "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
+  },
+  "restoreFromRecycleBinAction": "Restore",
+  "@restoreFromRecycleBinAction": {
+    "description": "menu action: restore an entry/group which was moved into the recycle bin."
+  },
   "deleteAction": "Delete",
   "@deleteAction": {
     "description": "menu action: delete item (e.g. delete a group)"
+  },
+  "deletedEntry": "Deleted entry.",
+  "@deletedEntry": {
+    "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
   },
   "successfullyDeletedGroup": "Deleted group.",
   "@successfullyDeletedGroup": {
@@ -565,6 +577,17 @@
   "saveButtonLabel": "Save",
   "@saveButtonLabel": {
     "description": "save file, for example button displayed in entry details"
+  },
+  "permanentlyDeleteEntryConfirm": "This will permanently delete the password entry {title}. This can not be undone. Do you want to continue?",
+  "@permanentlyDeleteEntryConfirm": {
+    "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
+    "placeholders":{
+      "title": {}
+    }
+  },
+  "permanentlyDeletedEntrySnackBar": "Permanently deleted entry.",
+  "@permanentlyDeletedEntrySnackBar": {
+    "description": "snackbar confirming that the entry was deleted."
   },
   "initialNewGroupName": "New Group",
   "@initialNewGroupName": {
