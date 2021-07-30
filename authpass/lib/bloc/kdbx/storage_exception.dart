@@ -4,7 +4,7 @@ enum StorageExceptionType {
   authentication,
 }
 
-class StorageException implements Exception {
+abstract class StorageException implements Exception {
   StorageException._(this.type, this.details, {this.errorBody});
   factory StorageException.conflict(String details, {String? errorBody}) =
       StorageConflictException;

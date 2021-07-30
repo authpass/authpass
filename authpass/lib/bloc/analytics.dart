@@ -296,6 +296,11 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackQuickUnlock({int? value});
 
   void trackSave({required String type, int? value});
+  void trackSaveConflict({
+    required String type,
+    int? value,
+    required bool success,
+  });
   void trackSaveCount({required String? generator, required int value});
 
   void trackDrawerOpen();

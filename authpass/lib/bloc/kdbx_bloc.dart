@@ -9,6 +9,7 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
+import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_argon2_ffi.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
@@ -214,6 +215,10 @@ class OpenFileResult {
   final Stopwatch? loadStopwatch;
 }
 
+abstract class KdbxBlocDelegate {
+  void conflictMerged(KdbxFile file, MergeContext merge);
+}
+
 class KdbxBloc {
   KdbxBloc({
     required this.env,
@@ -239,6 +244,7 @@ class KdbxBloc {
   final CloudStorageBloc cloudStorageBloc;
   final QuickUnlockStorage quickUnlockStorage;
   final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
+  KdbxBlocDelegate? delegate;
 
   final _openedFiles =
       BehaviorSubject<OpenedKdbxFiles>.seeded(OpenedKdbxFiles({}));
@@ -611,11 +617,44 @@ class KdbxBloc {
       {FileSource? toFileSource}) async {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
     final bytes = await _saveFileToBytes(file);
-    final ret = await fileSource.contentWrite(bytes);
-    analytics.events.trackSave(type: fileSource.typeDebug, value: bytes.length);
-    analytics.trackTiming('saveFileSize', bytes.length,
-        category: 'fileSize', label: 'save');
-    return ret;
+    try {
+      final ret = await fileSource.contentWrite(bytes, metadata: null);
+      analytics.events
+          .trackSave(type: fileSource.typeDebug, value: bytes.length);
+      analytics.trackTiming('saveFileSize', bytes.length,
+          category: 'fileSize', label: 'save');
+      return ret;
+    } on StorageConflictException catch (e, stackTrace) {
+      _logger.fine(
+          'Got conflict while writing file. Trying to merge.', e, stackTrace);
+      final content = await fileSource.content(updateCache: false).last;
+      final remoteFile =
+          await kdbxFormat.read(content.content, file.credentials);
+      final mergeResult = file.merge(remoteFile);
+      _logger.fine('mergeResult: $mergeResult');
+      try {
+        final ret =
+            await fileSource.contentWrite(bytes, metadata: content.metadata);
+        delegate?.conflictMerged(file, mergeResult);
+        analytics.events.trackSaveConflict(
+          type: fileSource.typeDebug,
+          value: mergeResult.totalChanges(),
+          success: true,
+        );
+        analytics.events
+            .trackSave(type: fileSource.typeDebug, value: bytes.length);
+        analytics.trackTiming('saveFileSize', bytes.length,
+            category: 'fileSize', label: 'save');
+        return ret;
+      } catch (e) {
+        analytics.events.trackSaveConflict(
+          type: fileSource.typeDebug,
+          value: mergeResult.totalChanges(),
+          success: false,
+        );
+        rethrow;
+      }
+    }
   }
 
   KdbxOpenedFile fileForKdbxFile(KdbxFile? file) =>

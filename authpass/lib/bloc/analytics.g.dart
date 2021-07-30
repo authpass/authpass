@@ -91,6 +91,11 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackSave({required String type, int? value}) =>
       trackEvent('save', <String, dynamic>{'type': type, 'value': value});
   @override
+  void trackSaveConflict(
+          {required String type, int? value, required bool success}) =>
+      trackEvent('saveConflict',
+          <String, dynamic>{'type': type, 'value': value, 'success': success});
+  @override
   void trackSaveCount({required String? generator, required int value}) =>
       trackEvent('saveCount',
           <String, dynamic>{'generator': generator, 'value': value});

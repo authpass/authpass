@@ -37,6 +37,7 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
@@ -111,6 +112,7 @@ Future<void> startApp(Env env) async {
   await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
     final deps = Deps(env: env);
+    deps.kdbxBloc.delegate = KdbxBlocDelegateHandler(navigatorKey);
     final appData = await deps.appDataBloc.store.load();
     runApp(AuthPassApp(
       env: env,
@@ -139,6 +141,27 @@ Future<void> startApp(Env env) async {
       return parent.fork(zone, specification, zoneValues);
     },
   ));
+}
+
+class KdbxBlocDelegateHandler extends KdbxBlocDelegate {
+  KdbxBlocDelegateHandler(this.navigatorKey);
+
+  GlobalKey<NavigatorState> navigatorKey;
+
+  @override
+  void conflictMerged(KdbxFile file, MergeContext merge) {
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      return;
+    }
+    DialogUtils.showSimpleAlertDialog(
+      context,
+      'Successfully merged file',
+      'Conflict detected while saving ${file.body.rootGroup.name}, '
+          'it was merged successfully with the remote file: $merge',
+      routeAppend: 'merged',
+    );
+  }
 }
 
 /// If the current platform is desktop, override the default platform to

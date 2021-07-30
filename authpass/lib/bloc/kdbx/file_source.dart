@@ -75,22 +75,25 @@ abstract class FileSource {
 
   Future<void> contentPreCache() async => await content().last;
 
-  Stream<FileContent> content() async* {
+  Stream<FileContent> content({bool updateCache = true}) async* {
     if (_cached != null) {
       //  memory cache is perfectly fine.
       yield _cached!;
     }
     await for (final content in load()) {
       yield content;
-      _cached = FileContent(
-          content.content, content.metadata, FileContentSource.memoryCache);
+      if (updateCache) {
+        _cached = FileContent(
+            content.content, content.metadata, FileContentSource.memoryCache);
+      }
     }
   }
 
-  Future<FileContent> contentWrite(Uint8List bytes) async {
+  Future<FileContent> contentWrite(Uint8List bytes,
+      {required Map<String, dynamic>? metadata}) async {
     _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
     try {
-      final newMetadata = await write(bytes, _cached?.metadata);
+      final newMetadata = await write(bytes, metadata ?? _cached?.metadata);
       return _cached =
           FileContent(bytes, newMetadata, FileContentSource.memoryCache);
     } catch (e, stackTrace) {

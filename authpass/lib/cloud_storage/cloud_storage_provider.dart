@@ -44,17 +44,6 @@ enum CloudStorageEntityType {
   unknown,
 }
 
-/// thrown when during writing to a file source a conflict is detected.
-class FileSourceConflictException implements Exception {
-  FileSourceConflictException(this.message);
-  final String message;
-
-  @override
-  String toString() {
-    return 'FileSourceConflictException{message: $message}'; // NON-NLS
-  }
-}
-
 abstract class CloudStorageEntity
     implements Built<CloudStorageEntity, CloudStorageEntityBuilder> {
   factory CloudStorageEntity(

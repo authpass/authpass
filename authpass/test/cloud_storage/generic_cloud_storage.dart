@@ -47,9 +47,9 @@ void simpleCloudStorageTestSuite({
     // add a bit of delay, otherwise we get some weird conflicts.
     try {
       await Future<void>.delayed(const Duration(milliseconds: 500));
-      await fileSource.contentWrite(saveString2);
+      await fileSource.contentWrite(saveString2, metadata: null);
       await Future<void>.delayed(const Duration(milliseconds: 500));
-      await fileSource.contentWrite(saveString3);
+      await fileSource.contentWrite(saveString3, metadata: null);
     } on StorageConflictException catch (e, stackTrace) {
       _logger.severe('storage conflict', e, stackTrace);
       await for (final c in fileSource.content()) {
@@ -73,7 +73,7 @@ void simpleCloudStorageTestSuite({
     _logger.info('content metadata: ${content1.metadata}');
 
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    await fileSource.contentWrite(saveString2);
+    await fileSource.contentWrite(saveString2, metadata: null);
 
     expect(() async {
       // ignore: invalid_use_of_protected_member
@@ -89,7 +89,7 @@ void simpleCloudStorageTestSuite({
     final fileSource = await provider.createEntity(
         CloudStorageSelectorSaveResult(parent, fileName), saveString1);
     final content1 = fileSource.cached;
-    await fileSource.contentWrite(saveString2);
+    await fileSource.contentWrite(saveString2, metadata: null);
     expect(() async {
       // ignore: invalid_use_of_protected_member
       await fileSource.write(saveString3, content1!.metadata);
