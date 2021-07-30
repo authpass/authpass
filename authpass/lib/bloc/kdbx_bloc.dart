@@ -216,7 +216,7 @@ class OpenFileResult {
 }
 
 abstract class KdbxBlocDelegate {
-  void conflictMerged(KdbxFile file, MergeContext merge);
+  void conflictMerged(FileSource fileSource, KdbxFile file, MergeContext merge);
 }
 
 class KdbxBloc {
@@ -616,8 +616,8 @@ class KdbxBloc {
   Future<FileContent> saveFile(KdbxFile file,
       {FileSource? toFileSource}) async {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
-    final bytes = await _saveFileToBytes(file);
     try {
+      final bytes = await _saveFileToBytes(file);
       final ret = await fileSource.contentWrite(bytes, metadata: null);
       analytics.events
           .trackSave(type: fileSource.typeDebug, value: bytes.length);
@@ -631,11 +631,12 @@ class KdbxBloc {
       final remoteFile =
           await kdbxFormat.read(content.content, file.credentials);
       final mergeResult = file.merge(remoteFile);
+      final bytes = await _saveFileToBytes(file);
       _logger.fine('mergeResult: $mergeResult');
       try {
         final ret =
             await fileSource.contentWrite(bytes, metadata: content.metadata);
-        delegate?.conflictMerged(file, mergeResult);
+        delegate?.conflictMerged(fileSource, file, mergeResult);
         analytics.events.trackSaveConflict(
           type: fileSource.typeDebug,
           value: mergeResult.totalChanges(),

@@ -269,13 +269,10 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       @NonNls
       final info = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == HttpStatus.conflict) {
-        @NonNls
-        final dynamic error = info['error'];
-        if (error is Map<String, dynamic>) {
-          if (error['conflict'] != null) {
-            throw StorageException.conflict(info['error_summary'].toString());
-          }
-        }
+        // @NonNls
+        // final dynamic error = info['error'];
+        throw StorageException.conflict(
+            info[nonNls('error_summary')].toString());
       }
       throw StorageException.unknown(
           info['error_summary']?.toString() ?? info.toString());
@@ -283,7 +280,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final metadataJson = json.decode(response.body) as Map<String, dynamic>;
     final metadata = FileMetadata.fromJson(metadataJson);
     _logger.fine('new rev: ${metadata.rev}');
-    return metadataJson;
+    return <String, dynamic>{_METADATA_KEY_DROPBOX_DATA: metadataJson};
   }
 
   @override

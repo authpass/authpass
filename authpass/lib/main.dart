@@ -8,6 +8,7 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
+import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
@@ -59,8 +60,8 @@ Map<String, String> debugInfo() {
   String handle(String Function() info) {
     try {
       return info();
-    } catch (e, stackTrace) {
-      _logger.fine('error fetching info. ', e, stackTrace);
+    } catch (e) {
+      _logger.fine('error fetching info. ', e);
       return 'throws: $e'; // NON-NLS
     }
   }
@@ -149,7 +150,8 @@ class KdbxBlocDelegateHandler extends KdbxBlocDelegate {
   GlobalKey<NavigatorState> navigatorKey;
 
   @override
-  void conflictMerged(KdbxFile file, MergeContext merge) {
+  void conflictMerged(
+      FileSource fileSource, KdbxFile file, MergeContext merge) {
     final context = navigatorKey.currentContext;
     if (context == null) {
       return;
@@ -157,8 +159,9 @@ class KdbxBlocDelegateHandler extends KdbxBlocDelegate {
     DialogUtils.showSimpleAlertDialog(
       context,
       'Successfully merged file',
-      'Conflict detected while saving ${file.body.rootGroup.name}, '
-          'it was merged successfully with the remote file: $merge',
+      'Conflict detected while saving ${fileSource.displayName}, '
+          'it was merged successfully with the remote file: '
+          '\n\n${merge.debugSummary()}',
       routeAppend: 'merged',
     );
   }

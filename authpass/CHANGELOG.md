@@ -5,6 +5,7 @@
 * KDBX: Fix merging of files with incoming deleted objects.
 * Add support for permanently deleting groups and password entries. #99
 * When a conflict is detected during save, automatically merge files #80
+* Dropbox: Fixed conflict detection.
 
 # 1.8.2 - 2021-07-22
 
