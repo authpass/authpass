@@ -13,7 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
-final _logger = Logger('authpass.google_drive_ui');
+final _logger = Logger('authpass.cloud_storage_ui');
 
 class CloudStorageSelector extends StatefulWidget {
   const CloudStorageSelector(
