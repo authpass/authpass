@@ -1,7 +1,10 @@
 # Contributing to AuthPass
 
 We appreciate any kind of contributions to AuthPass 😅️ 
-[Check out the article on helping support AuthPass on our website.](https://authpass.app/docs/support-authpass-get-involved/)
+
+
+* [Visit the forum which lists many ways for contributing](https://forum.authpass.app/c/contributors/contribute/13): https://forum.authpass.app/c/contributors/contribute/13
+* [Check out the article on helping support AuthPass on our website.](https://authpass.app/docs/support-authpass-get-involved/)
 
 If you want to contribute documentation or code, never hesitate to [get in contact](https://authpass.app/docs/about-authpass-password-manager/#getting-in-touch).
 

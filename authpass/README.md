@@ -34,13 +34,8 @@ One day I have to automate this...
 * run `appcast.generate.sh` to generate windows appcast update.
 * create tag called `v1.2.3` and `fdroid-v1.2.3`
 * data.authpass.app
-  * update `public_html/authpass-data/data/artifacts/.stable.map.txt` (used for website links and `download-artifact` urls).
-    ```
-    AuthPass-setup-stable.exe AuthPass-setup-1.7.6_1513.exe
-    authpass-linux-stable.tar.gz authpass-linux-1.7.6_1513.tar.gz
-    authpass_stable_amd64.snap authpass_1.7.6_1513_amd64.snap
-    authpass-linux-latest.tar.gz authpass-linux-1.7.6_1513.tar.gz
-    ```
+  * update `public_html/authpass-data/data/artifacts/stable.txt`
+  * run `~/public_html/authpass-data/data/update_stable.sh`
   * update `public_html/authpass-data/data/fdroid-version.txt`
 * Create GitHub Release
   * Create draft with v1.7.7

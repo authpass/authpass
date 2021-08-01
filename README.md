@@ -1,5 +1,5 @@
-[![Crowdin](https://badges.crowdin.net/e/df2e0329a54542fef35ab5412a893d23/localized.svg)](https://authpass.crowdin.com/authpass)
-[<img align="right" src="https://img.shields.io/badge/join%20us%20on%20our%20chat-discord-green">](https://authpass.app/go/discord)
+[![Contribute](https://img.shields.io/badge/contribute-now-green?logo=discourse&style=for-the-badge)](https://forum.authpass.app/c/contributors/contribute/13) [![Contribute](https://img.shields.io/discourse/topics?label=Forum%20Discussions&logo=discourse&server=https%3A%2F%2Fforum.authpass.app&style=for-the-badge)](https://forum.authpass.app/)
+[<img align="right" src="https://badges.crowdin.net/e/df2e0329a54542fef35ab5412a893d23/localized.svg">](https://authpass.crowdin.com/authpass)
 
 [![AuthPass.app](_docs/logo-header.png)](https://authpass.app)
 
@@ -17,7 +17,7 @@ AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdb
 
 ## Contribute to AuthPass
 
-See also https://authpass.app/docs/support-authpass-get-involved/
+[Need ideas how to contribute? Visit the forum for many different ways to contribute.](https://forum.authpass.app/c/contributors/contribute/13) [![Contribute](https://img.shields.io/badge/contribute-now-green?logo=discourse)](https://forum.authpass.app/c/contributors/contribute/13)
 
 If you like AuthPass, and want to contribute. First, spread the word ;-) Writing reviews, vote or
 share AuthPass on twitter, reddit, etc.
