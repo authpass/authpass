@@ -1,4 +1,4 @@
-# 1.9.0 - unreleased
+# 1.9.0 - 2021-08-02
 
 * Fixed null exception when copying username/password from entry which has none defined.
 * Fixes #188 - Show banner to users to suggest activating autofill (@ATofighi)
