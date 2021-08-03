@@ -993,7 +993,7 @@ packages:
       name: openapi_base
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1+2"
+    version: "1.0.1+4"
   otp:
     dependency: "direct main"
     description:
@@ -1149,7 +1149,7 @@ packages:
     source: hosted
     version: "2.0.1"
   pointycastle:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: pointycastle
       url: "https://pub.dartlang.org"

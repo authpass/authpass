@@ -207,8 +207,6 @@ dependency_overrides:
 #  petitparser: '>=3.0.0 <4.0.0'
   kdbx:
     path: ../deps/kdbx.dart
-  # TODO: remove override once it is released, it just breaks flutter web builds.
-  pointycastle: ">=3.2.0-rc0 <4.0.0"
 #  openapi_base:
 #    path: /Users/herbert/dev/openapi_dart/packages/openapi_base
 #  flutter_async_utils:

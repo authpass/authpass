@@ -135,7 +135,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
       fileToken: file.id,
       versionToken: versionToken,
     );
-    throw FileContent(fileContent, metadata.toJsonSimple());
+    return FileContent(fileContent, metadata.toJsonSimple());
   }
 
   @override

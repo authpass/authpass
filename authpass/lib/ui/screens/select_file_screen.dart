@@ -613,7 +613,7 @@ class OpenedFileTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
 //        crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Icon(
+            FaIcon(
               openedFile.displayIcon.iconData,
               color: ThemeUtil.iconColor(theme, color),
             ),
