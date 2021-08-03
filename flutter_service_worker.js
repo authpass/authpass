@@ -31,11 +31,11 @@ const RESOURCES = {
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
 "assets/NOTICES": "53415de37054b079e7fb66448d7f58e5",
 "assets/AssetManifest.json": "05ef4c56d28a77c551e5382fa9d79c64",
-"index.html": "129f5a916901e35e3ee47f711ecc74db",
-"/": "129f5a916901e35e3ee47f711ecc74db",
+"index.html": "269f5c0f1c5db07523c7cde1ea53f89e",
+"/": "269f5c0f1c5db07523c7cde1ea53f89e",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"main.dart.js": "c04c520205558f9bee3f249a71f66993",
-"version.json": "38f94374cbfabe13d65be5dc36d4e500",
+"main.dart.js": "8f912c1406dbffd5001f68c85d7123c3",
+"version.json": "fa899bc85dbb30b526cbfbc29a36e223",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a"
 };
 
