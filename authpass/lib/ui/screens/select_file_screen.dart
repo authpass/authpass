@@ -769,7 +769,8 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
 }
 
 class CredentialsScreen extends StatefulWidget {
-  const CredentialsScreen({Key? key, this.kdbxFilePath}) : super(key: key);
+  const CredentialsScreen({Key? key, required this.kdbxFilePath})
+      : super(key: key);
 
   static Route<void> route(FileSource kdbxFilePath) => MaterialPageRoute<void>(
         settings: const RouteSettings(name: '/credentials'),
@@ -778,7 +779,7 @@ class CredentialsScreen extends StatefulWidget {
         ),
       );
 
-  final FileSource? kdbxFilePath;
+  final FileSource kdbxFilePath;
 
   @override
   _CredentialsScreenState createState() => _CredentialsScreenState();
@@ -835,7 +836,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     super.initState();
     unawaited((() async {
       _logger.finest('Precaching...');
-      await widget.kdbxFilePath!.contentPreCache();
+      await widget.kdbxFilePath.contentPreCache();
     })());
   }
 
@@ -871,10 +872,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(loc.credentialLabel),
-                    Text(widget.kdbxFilePath!.displayName,
+                    Text(widget.kdbxFilePath.displayName,
                         style: theme.textTheme.headline4),
                     Text(
-                      widget.kdbxFilePath!.displayPath,
+                      widget.kdbxFilePath.displayPath,
                       style: theme.textTheme.caption,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -985,7 +986,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   }
 
   String _fileExtension() {
-    final filePath = widget.kdbxFilePath!.displayPath;
+    final filePath = widget.kdbxFilePath.displayPath;
     return path.extension(filePath);
   }
 
@@ -1001,7 +1002,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       try {
         stopWatch.start();
         final openFileStream = kdbxBloc.openFile(
-          widget.kdbxFilePath!,
+          widget.kdbxFilePath,
           Credentials.composite(
               pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
@@ -1021,7 +1022,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         analytics.events.trackTryUnlock(
           action: TryUnlockResult.success,
           ext: _fileExtension(),
-          source: widget.kdbxFilePath!.typeDebug,
+          source: widget.kdbxFilePath.typeDebug,
         );
         final fileSource = fileResult.kdbxOpenedFile!.fileSource;
         unawaited(kdbxBloc.continueLoadInBackground(openIt,
@@ -1039,7 +1040,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         analytics.events.trackTryUnlock(
           action: TryUnlockResult.invalidCredential,
           ext: _fileExtension(),
-          source: widget.kdbxFilePath!.typeDebug,
+          source: widget.kdbxFilePath.typeDebug,
         );
         setState(() {
           _invalidPassword = pw;
@@ -1056,6 +1057,17 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
             e.openFileSource.displayPath,
             e.newFileSource.displayPath,
           ),
+          stopWatch: stopWatch,
+        );
+      } on KdbxInvalidFileStructure catch (e, stackTrace) {
+        _logger.fine('Invalid file structore for file ${widget.kdbxFilePath}',
+            e, stackTrace);
+        await _handleOpenError(
+          analytics: analytics,
+          result: TryUnlockResult.invalidFileStructure,
+          errorTitle: loc.errorOpenFileInvalidFileStructureTitle,
+          errorBody: loc.errorOpenFileInvalidFileStructureBody(
+              widget.kdbxFilePath.displayName),
           stopWatch: stopWatch,
         );
       } catch (e, stackTrace) {
@@ -1096,7 +1108,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     analytics.events.trackTryUnlock(
       action: TryUnlockResult.alreadyOpen,
       ext: _fileExtension(),
-      source: widget.kdbxFilePath!.typeDebug,
+      source: widget.kdbxFilePath.typeDebug,
     );
     await DialogUtils.showErrorDialog(
       context,

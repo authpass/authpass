@@ -80,7 +80,6 @@
   "@selectItem": {
     "description": "semantic label for checkboxes to select item."
   },
-
   "selectKeepassFile": "AuthPass - Select KeePass File",
   "@selectKeepassFile": {
     "context": "appbar title - select file screen"
@@ -89,7 +88,6 @@
   "@quickUnlockingFiles": {
     "context": "select file screen"
   },
-
   "selectKeepassFileLabel": "Please select a KeePass (.kdbx) file.",
   "@selectKeepassFileLabel": {
     "context": "select file screen, used as label."
@@ -98,17 +96,14 @@
   "@createNewFile": {
     "description": "button on select file screen to create a new password database."
   },
-
   "openLocalFile": "Open\nLocal File",
   "@openLocalFile": {
     "context": "select file screen, big button open local file."
   },
-
   "openFile": "Open File",
   "@openFile": {
     "description": "Displayed as placeholder in password list when no file is open."
   },
-
   "loadFrom": "Load from {cloudStorageName}",
   "@loadFrom": {
     "placeholders": {
@@ -126,24 +121,18 @@
   "@loadFromRemoteUrl": {
     "description": "Overflow menu option to load KeePass file from URL."
   },
-
   "createNewKeepass": "New to KeePass?\nCreate New Password Database",
   "@createNewKeepass": {
     "description": "deprecated"
   },
-
   "labelLastOpenFiles": "Last opened files:",
   "@labelLastOpenFiles": {},
-
   "noFilesHaveBeenOpenYet": "No files have been opened yet.",
   "@noFilesHaveBeenOpenYet": {},
-
   "preferenceSelectLanguage": "Select Language",
   "@preferenceSelectLanguage": {},
-
   "preferenceLanguage": "Language",
   "@preferenceLanguage": {},
-
   "preferenceTextScaleFactor": "Text Scale Factor",
   "@preferenceTextScaleFactor": {},
   "preferenceVisualDensity": "Visual Density",
@@ -168,15 +157,14 @@
   "@enableAutofillSuggestionBanner": {
     "description": "This text will shown as a banner on top of password list"
   },
-  "dismissAutofillSuggestionBannerButton" : "DISMISS",
-  "@dismissAutofillSuggestionBannerButton" : {
-    "description" : "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+  "dismissAutofillSuggestionBannerButton": "DISMISS",
+  "@dismissAutofillSuggestionBannerButton": {
+    "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
   },
-  "enableAutofillSuggestionBannerButton" : "ENABLE!",
-  "@enableAutofillSuggestionBannerButton" : {
-    "description" : "Button that is displayed in autofill suggestion warnings to enable autofill"
+  "enableAutofillSuggestionBannerButton": "ENABLE!",
+  "@enableAutofillSuggestionBannerButton": {
+    "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
   },
-
   "preferenceAutoFillDescription": "Only supported on Android Oreo (8.0) or later.",
   "@preferenceAutoFillDescription": {},
   "preferenceTitle": "Preferences",
@@ -208,7 +196,9 @@
   "@unableToLaunchUrlDescription": {
     "description": "",
     "placeholders": {
-      "url": {"description": "URL which we tried to open."},
+      "url": {
+        "description": "URL which we tried to open."
+      },
       "openError": {
         "description": "Information about the error"
       }
@@ -227,7 +217,6 @@
       }
     }
   },
-
   "menuItemGeneratePassword": "Generate Password",
   "@menuItemGeneratePassword": {},
   "menuItemPreferences": "Preferences",
@@ -254,12 +243,10 @@
   "@actionOpenUrl": {
     "description": "tooltip for button to open URL/Website of an entry."
   },
-
   "passwordPlainText": "Reveal password",
   "@passwordPlainText": {
     "description": "Master password input: show password as plain text during input. (shown as tooltip)"
   },
-
   "generatorPassword": "Password",
   "@generatorPassword": {
     "description": "Label for generated password"
@@ -313,7 +300,6 @@
     "context": "Password generator",
     "placeholders": {
       "customMinLength": {
-
         "example": "40"
       }
     }
@@ -484,6 +470,17 @@
   "@addNewPassword": {
     "description": "Tooltip for adding new password button (floating action button)"
   },
+  "errorOpenFileInvalidFileStructureTitle": "Tried to open invalid file type",
+  "@errorOpenFileInvalidFileStructureTitle": {
+    "description": "Title of error dialog when trying to open an invalid/unsupported file type"
+  },
+  "errorOpenFileInvalidFileStructureBody": "The file ({fileName}) does not appear to be a valid KDBX file. Please either choose a valid KDBX file or create a new password database.",
+  "@errorOpenFileInvalidFileStructureBody": {
+    "description": "Body of error dialog when trying to open an invalid/unsupported file type",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "errorOpenFileAlreadyOpenTitle": "File already open",
   "@errorOpenFileAlreadyOpenTitle": {
     "description": "Trying to open a database from a second file source which is already open.",
@@ -499,7 +496,6 @@
       "newFileSource": {}
     }
   },
-
   "errorUnlockFileTitle": "Unable to open File",
   "@errorUnlockFileTitle": {
     "description": "generic error when opening a file (dialog title)",
@@ -515,7 +511,6 @@
       }
     }
   },
-
   "dialogContinue": "Continue",
   "@dialogContinue": {
     "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
@@ -581,7 +576,7 @@
   "permanentlyDeleteEntryConfirm": "This will permanently delete the password entry {title}. This can not be undone. Do you want to continue?",
   "@permanentlyDeleteEntryConfirm": {
     "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
-    "placeholders":{
+    "placeholders": {
       "title": {}
     }
   },
@@ -830,13 +825,13 @@
   "@onboardingNoCreate": {
     "description": ""
   },
-  "backupButton" : "SAVE TO CLOUD",
+  "backupButton": "SAVE TO CLOUD",
   "@backupButton": {
-    "description" : "Button that is displayed in backup warnings"
+    "description": "Button that is displayed in backup warnings"
   },
-  "dismissBackupButton" : "DISMISS",
-  "@dismissBackupButton" : {
-    "description" : "Button that is displayed in backup warnings to dismiss the warning"
+  "dismissBackupButton": "DISMISS",
+  "@dismissBackupButton": {
+    "description": "Button that is displayed in backup warnings to dismiss the warning"
   },
   "backupWarningMessage": "Your passwords in {databasename} are only saved locally!",
   "@backupWarningMessage": {
@@ -847,13 +842,13 @@
       }
     }
   },
-  "saveAs" : "Save In...",
-  "@saveAs" : {
-    "description" : "Save as text"
+  "saveAs": "Save In...",
+  "@saveAs": {
+    "description": "Save as text"
   },
-  "saving" : "Saving",
-  "@saving" : {
-    "description" : "Saving text"
+  "saving": "Saving",
+  "@saving": {
+    "description": "Saving text"
   },
   "increaseValue": "Increase",
   "@increaseValue": {

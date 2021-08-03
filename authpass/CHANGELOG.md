@@ -1,3 +1,7 @@
+# 1.9.1 - unreleased
+
+* Properly handle invalid file types when opening.
+
 # 1.9.0 - 2021-08-02
 
 * Fixed null exception when copying username/password from entry which has none defined.

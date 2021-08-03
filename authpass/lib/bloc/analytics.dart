@@ -406,6 +406,7 @@ enum TryUnlockResult {
   invalidCredential,
   alreadyOpen,
   failure,
+  invalidFileStructure,
 }
 
 extension TryUnlockResultExt on TryUnlockResult {
