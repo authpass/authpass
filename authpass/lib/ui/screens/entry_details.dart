@@ -1084,11 +1084,14 @@ class _EntryFieldState extends State<EntryField>
   Widget build(BuildContext context) {
     _logger.finer('building ${widget.fieldKey} ($_isValueObscured)');
     final loc = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return Dismissible(
       key: ValueKey(widget.fieldKey),
       background: Container(
         alignment: Alignment.centerLeft,
-        color: Colors.lightBlueAccent,
+        color: theme.brightness == Brightness.light
+            ? Colors.lightBlueAccent
+            : Colors.blueAccent,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1107,9 +1110,7 @@ class _EntryFieldState extends State<EntryField>
       child: HighlightWidget(
         key: _highlightWidgetKey,
         childOnHighlight: Text(loc.doneCopiedField,
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2!
+            style: theme.textTheme.bodyText2!
                 .copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

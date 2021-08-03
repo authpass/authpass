@@ -1,6 +1,7 @@
 # 1.9.1 - unreleased
 
 * Properly handle invalid file types when opening.
+* Fix background color in dark theme when swiping over password #210
 
 # 1.9.0 - 2021-08-02
 

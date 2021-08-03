@@ -1204,6 +1204,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final commonFields = Provider.of<CommonFields>(context);
+    final theme = Theme.of(context);
     return Semantics(
       customSemanticsActions: {
         CustomSemanticsAction(label: loc.swipeCopyPassword): () =>
@@ -1216,7 +1217,9 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
         resizeDuration: null,
         background: Container(
           alignment: Alignment.centerLeft,
-          color: Colors.lightBlueAccent,
+          color: theme.brightness == Brightness.light
+              ? Colors.lightBlueAccent
+              : Colors.blueAccent,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1229,7 +1232,9 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
         ),
         secondaryBackground: Container(
           alignment: Alignment.centerRight,
-          color: Colors.limeAccent,
+          color: theme.brightness == Brightness.light
+              ? Colors.limeAccent
+              : Colors.brown,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
