@@ -148,7 +148,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         if (provider == null) {
           throw StateError('Invalid cloud storage provider id $storageId');
         }
-        return provider.toFileSource(
+        return provider.toFileSourceFromFileInfo(
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
               .cast<String, String?>(),
           uuid: uuid,

@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
 class AuthPassCloudAuthScreen extends StatelessWidget {
-  static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
+  static MaterialPageRoute<bool?> route() => MaterialPageRoute<bool?>(
         settings: const RouteSettings(name: '/auth_pass_cloud_auth/'),
         builder: (_) => AuthPassCloudAuthScreen(),
       );
@@ -46,7 +46,7 @@ class AuthPassCloudAuth extends StatelessWidget {
         return _ConfirmEmailAddress(bloc: bloc);
       case TokenStatus.confirmed:
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         });
         break;
     }

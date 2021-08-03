@@ -1,3 +1,4 @@
+import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_helper.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
@@ -14,6 +15,7 @@ class CloudStorageBloc {
   CloudStorageBloc(this.env, PathUtil pathUtil)
       : _helper = CloudStorageHelper(env, pathUtil),
         availableCloudStorage = {} {
+    availableCloudStorage.add(AuthPassCloudProvider(helper: _helper));
     if (env.featureCloudStorageProprietary) {
       availableCloudStorage.addAll({
         DropboxProvider(env: env, helper: _helper),

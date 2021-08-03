@@ -19,6 +19,7 @@ import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/screens/onboarding/onboarding.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -68,7 +69,7 @@ class SelectFileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cloudBloc = CloudStorageBloc(Provider.of<Env>(context), PathUtils());
+    final cloudBloc = context.watch<Deps>().cloudStorageBloc;
     final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -589,6 +590,14 @@ class OpenedFileTile extends StatelessWidget {
   final VoidCallback? onLongPressed;
   final Color? color;
 
+  String get _displayPath {
+    try {
+      return openedFile.displayPath;
+    } catch (e) {
+      return CharConstants.empty;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -619,7 +628,7 @@ class OpenedFileTile extends StatelessWidget {
                     style: const TextStyle(color: AuthPassTheme.linkColor),
                   ),
                   Text(
-                    openedFile.displayPath,
+                    _displayPath,
                     style: subtitleStyle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

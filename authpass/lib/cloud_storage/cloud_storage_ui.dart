@@ -1,7 +1,9 @@
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
+import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -162,6 +164,11 @@ class CloudStorageAuthentication extends StatelessWidget {
             UrlUsernamePasswordPromptData>) {
           final result = await UrlUsernamePasswordDialog().show(context);
           prompt.result(result);
+        } else if (prompt is UserAuthenticationPrompt<
+            DummyUserAuthenticationPromptResult, AuthPassCloudAuthPromptData>) {
+          final result = await Navigator.of(context, rootNavigator: true)
+              .push(AuthPassCloudAuthScreen.route());
+          prompt.result(DummyUserAuthenticationPromptResult(result ?? false));
         } else {
           throw StateError('Unsupported prompt: $prompt');
         }

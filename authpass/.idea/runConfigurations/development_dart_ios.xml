@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="development.dart ios" type="FlutterRunConfigurationType" factoryName="Flutter" singleton="false">
+    <option name="additionalArgs" value="-t lib/env/development.dart" />
     <option name="filePath" value="$PROJECT_DIR$/lib/env/development.dart" />
     <method v="2" />
   </configuration>

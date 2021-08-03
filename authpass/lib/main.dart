@@ -11,6 +11,7 @@ import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/env/fdroid.dart';
@@ -30,6 +31,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/winsparkle_init_noop.dart'
     if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
+import 'package:collection/collection.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
@@ -324,16 +326,23 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         ListenableProxyProvider<FeatureFlags, AuthPassCloudBloc>(
           create: (_) => AuthPassCloudBlocDummy(),
           update: (_, featureFlags, previous) {
+            _logger.info('creating AuthPassCloudBloc.');
             if (previous != null &&
                 previous is! AuthPassCloudBlocDummy &&
                 previous.featureFlags == featureFlags) {
               return previous;
             }
 //            previous?.dispose();
-            return AuthPassCloudBloc(
+            final bloc = AuthPassCloudBloc(
               env: _deps.env,
               featureFlags: featureFlags,
             );
+
+            _deps.cloudStorageBloc.availableCloudStorage
+                .whereType<AuthPassCloudProvider>()
+                .firstOrNull
+                ?.let((that) => that.authPassCloudBloc = bloc);
+            return bloc;
           },
           dispose: (_, prev) {
             prev.dispose();

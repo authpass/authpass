@@ -215,7 +215,7 @@ class GoogleDriveProvider
       CloudStorageEntity((b) => b
         ..id = newFile.id
         ..name = newFile.name
-        ..type = CloudStorageEntityType.file).toSimpleFileInfo(),
+        ..type = CloudStorageEntityType.file),
       uuid: AppDataBloc.createUuid(),
       initialCachedContent: FileContent(bytes, _metadataForFile(newFile)),
     );

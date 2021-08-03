@@ -89,6 +89,7 @@ abstract class SearchResponse
 enum PromptType {
   oauthTokenFlow,
   urlUsernamePassword,
+  authPassCloudAuth,
 }
 
 abstract class UserAuthenticationPromptResult {}
@@ -180,7 +181,7 @@ abstract class CloudStorageProvider {
   String displayPath(Map<String, String?> fileInfo) =>
       CloudStorageEntity.fromSimpleFileInfo(fileInfo).pathOrBaseName;
 
-  FileSource toFileSource(
+  FileSource toFileSourceFromFileInfo(
     Map<String, String?> fileInfo, {
     required String uuid,
     required FileContent? initialCachedContent,
@@ -189,6 +190,20 @@ abstract class CloudStorageProvider {
       FileSourceCloudStorage(
         provider: this,
         fileInfo: fileInfo,
+        uuid: uuid,
+        databaseName: databaseName,
+        initialCachedContent: initialCachedContent,
+      );
+
+  FileSource toFileSource(
+    CloudStorageEntity entity, {
+    required String uuid,
+    required FileContent? initialCachedContent,
+    String? databaseName,
+  }) =>
+      FileSourceCloudStorage(
+        provider: this,
+        fileInfo: entity.toSimpleFileInfo(),
         uuid: uuid,
         databaseName: databaseName,
         initialCachedContent: initialCachedContent,

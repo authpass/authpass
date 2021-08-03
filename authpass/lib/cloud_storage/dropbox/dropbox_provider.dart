@@ -293,7 +293,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final metadataJson = await _upload(filePath, bytes, update: false);
     final metadata = FileMetadata.fromJson(metadataJson);
     return toFileSource(
-      metadata.toCloudStorageEntity().toSimpleFileInfo(),
+      metadata.toCloudStorageEntity(),
       uuid: AppDataBloc.createUuid(),
       initialCachedContent: FileContent(bytes, metadataJson),
     );

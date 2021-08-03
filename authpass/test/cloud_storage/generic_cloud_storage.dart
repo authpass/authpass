@@ -104,11 +104,11 @@ void simpleCloudStorageTestSuite({
     if (fileSource is FileSourceCloudStorage) {
       final fileInfo = fileSource.fileInfo;
       {
-        final loadedFile = provider.toFileSource(fileInfo,
+        final loadedFile = provider.toFileSourceFromFileInfo(fileInfo,
             uuid: fileSource.uuid, initialCachedContent: null);
         await loadedFile.content().last;
       }
-      final loadedFile = provider.toFileSource(fileInfo,
+      final loadedFile = provider.toFileSourceFromFileInfo(fileInfo,
           uuid: fileSource.uuid, initialCachedContent: null);
       expect(await loadedFile.content().map((event) => event.source).toList(),
           [FileContentSource.cache, FileContentSource.origin]);

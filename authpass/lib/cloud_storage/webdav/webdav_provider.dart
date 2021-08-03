@@ -109,7 +109,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
         client,
         uri.path,
         CloudStorageEntityType.file,
-      ).toSimpleFileInfo(),
+      ),
       uuid: AppDataBloc.createUuid(),
       initialCachedContent: FileContent(bytes, newMetadata.toJson()),
     );

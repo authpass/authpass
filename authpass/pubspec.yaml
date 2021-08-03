@@ -107,6 +107,7 @@ dependencies:
   recase: ^4.0.0
   # collection utilities:
   flinq: ^2.0.2
+  supercharged: ^2.0.0
 
   string_literal_finder_annotations: ^1.0.0
 
@@ -259,6 +260,9 @@ flutter:
         - asset: assets/fonts/jetbrains/JetBrainsMono-Regular.ttf
         - asset: assets/fonts/jetbrains/JetBrainsMono-Bold.ttf
           weight: 700
+    - family: AuthPassIcons
+      fonts:
+       - asset: assets/fonts/AuthPassIcons.ttf
 msix_config:
   display_name: AuthPass
   publisher_display_name: CodeUX.design

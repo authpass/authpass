@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/utils/authpassicons.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -17,6 +18,8 @@ extension FileSourceIconUi on FileSourceIcon {
         return FontAwesomeIcons.hdd;
       case FileSourceIcon.externalLink:
         return FontAwesomeIcons.externalLinkAlt;
+      case FileSourceIcon.authPass:
+        return AuthPassIcons.AuthPassLogo;
     }
     // throw StateError('Invalid icon: $this');
   }

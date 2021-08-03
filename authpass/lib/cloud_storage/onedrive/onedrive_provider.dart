@@ -209,7 +209,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       bytes: bytes,
     );
     return toFileSource(
-      driveItem.toCloudStorageEntity().toSimpleFileInfo(),
+      driveItem.toCloudStorageEntity(),
       uuid: UuidUtil.createUuid(),
       initialCachedContent: FileContent(bytes, <String, dynamic>{
         _METADATA_ETAG: driveItem.eTag,

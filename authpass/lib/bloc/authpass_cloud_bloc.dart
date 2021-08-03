@@ -48,6 +48,17 @@ class AuthPassCloudBlocDummy with ChangeNotifier implements AuthPassCloudBloc {
   dynamic noSuchMethod(Invocation invocation) {}
 }
 
+/// mixin for classes which need a [AuthPassCloudClient]
+abstract class AuthPassCloudClientConsumer {
+  @protected
+  AuthPassCloudBloc getAuthPassCloudBloc();
+
+  @protected
+  Future<AuthPassCloudClient> getClient() async {
+    return await getAuthPassCloudBloc()._getClient();
+  }
+}
+
 class AuthPassCloudBloc with ChangeNotifier {
   AuthPassCloudBloc({required this.env, required this.featureFlags}) {
     _logger.fine('Creating AuthPassCloudBloc with $featureFlags');
