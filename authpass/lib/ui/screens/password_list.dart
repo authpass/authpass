@@ -758,8 +758,14 @@ class _PasswordListContentState extends State<PasswordListContent>
     return AppBar(
       backgroundColor: theme.primaryColor,
       iconTheme: theme.primaryIconTheme,
-      textTheme: theme.primaryTextTheme,
-      brightness: theme.primaryColorBrightness,
+      toolbarTextStyle: theme.primaryTextTheme.bodyText2,
+      titleTextStyle: theme.primaryTextTheme.headline6,
+      // old deprecated value:
+      // textTheme: theme.primaryTextTheme,
+      // brightness: theme.primaryColorBrightness,
+      systemOverlayStyle: theme.primaryColorBrightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
