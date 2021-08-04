@@ -2,6 +2,7 @@
 
 * Properly handle invalid file types when opening.
 * Fix background color in dark theme when swiping over password #210
+* BETA: experimental support for custom authpass cloud file cloud backend. #29
 
 # 1.9.0 - 2021-08-02
 
