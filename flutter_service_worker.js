@@ -32,10 +32,10 @@ const RESOURCES = {
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
 "assets/NOTICES": "3280d12636d3987f2f646ae5a216e152",
 "assets/AssetManifest.json": "bd6d3296050772c529d4030ed8d3b7cb",
-"index.html": "19f2159978e67a2620155aa251479cea",
-"/": "19f2159978e67a2620155aa251479cea",
+"index.html": "80ba70ff1f75a54896360b22e98118b1",
+"/": "80ba70ff1f75a54896360b22e98118b1",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"main.dart.js": "53476becd98251a513173145e2a6bc36",
+"main.dart.js": "aae3bb829c3bb3de34b48b6ee32aae16",
 "version.json": "fa899bc85dbb30b526cbfbc29a36e223",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a"
 };
