@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('theme');
 
 class AuthPassTheme {
+  @NonNls
   static const monoFontFamily = 'JetBrainsMono';
 //  static const Color linkColor = Colors.blueAccent;
   static const int _primaryColorValue = 0xFF626bc6;
@@ -87,16 +89,16 @@ Typography _getTypography() {
       !_isDarwinVersion(minimumMajor: 19, minimumMinor: 0)) {
     if (!_addedInterLicense) {
       LicenseRegistry.addLicense(() async* {
-        final license =
-            await rootBundle.loadString('assets/fonts/Inter-LICENSE.txt');
-        yield LicenseEntryWithLineBreaks(['fonts_inter'], license);
+        final license = await rootBundle
+            .loadString(nonNls('assets/fonts/Inter-LICENSE.txt'));
+        yield LicenseEntryWithLineBreaks([nonNls('fonts_inter')], license);
       });
       _addedInterLicense = true;
     }
     return Typography.material2018(
       platform: defaultTargetPlatform,
-      black: Typography.blackCupertino.apply(fontFamily: 'Inter'),
-      white: Typography.whiteCupertino.apply(fontFamily: 'Inter'),
+      black: Typography.blackCupertino.apply(fontFamily: nonNls('Inter')),
+      white: Typography.whiteCupertino.apply(fontFamily: nonNls('Inter')),
     );
   } else {
     _logger.info(

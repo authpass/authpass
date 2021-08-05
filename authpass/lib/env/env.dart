@@ -5,26 +5,32 @@ import 'package:authpass/utils/platform.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('env');
 
 const _DEFAULT_APP_NAME = AppConstants.authPass;
+@NonNls
 const _DEFAULT_VERSION =
     String.fromEnvironment('AUTHPASS_VERSION', defaultValue: '1.0.0');
+@NonNls
 const _DEFAULT_BUILD_NUMBER =
     int.fromEnvironment('AUTHPASS_BUILD_NUMBER', defaultValue: 1);
+@NonNls
 const _DEFAULT_PACKAGE_NAME = String.fromEnvironment('AUTHPASS_PACKAGE_NAME',
     defaultValue: 'design.codeux.authpass.dev');
 
 abstract class EnvAppBase extends Env {
   EnvAppBase(EnvType type) : super(type);
 
+  @NonNls
   static const _ENV_STORAGE_NAMESPACE = 'AUTHPASS_STORAGE_NAMESPACE';
 
   @override
   EnvSecrets? get secrets;
 
 //  String get oauthRedirectUri => 'authpass://oauth/code';
+  @NonNls
   @override
   String? get oauthRedirectUri => oauthRedirectUriSupported
       // for clients not supporting https:// handling, it will redirect
@@ -52,7 +58,7 @@ abstract class EnvAppBase extends Env {
       ..appName = pi?.appName ?? _DEFAULT_APP_NAME
       ..version = pi?.version ?? _DEFAULT_VERSION
       ..buildNumber =
-          int.tryParse(pi?.buildNumber ?? '$_DEFAULT_BUILD_NUMBER') ??
+          int.tryParse(pi?.buildNumber ?? _DEFAULT_BUILD_NUMBER.toString()) ??
               _DEFAULT_BUILD_NUMBER
       ..packageName = pi?.packageName ?? _DEFAULT_PACKAGE_NAME);
   }

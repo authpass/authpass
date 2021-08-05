@@ -3,13 +3,20 @@ import 'dart:async';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
+
+const _authPassCloudUrlInfo =
+    'https://authpass.app/docs/authpass-cloud/'; // NON-NLS
+const _authPassCloudUrlInfoOpen =
+    '$_authPassCloudUrlInfo?utm_source=app&utm_campaign=cloud_login'; // NON-NLS
 
 class AuthPassCloudAuthScreen extends StatelessWidget {
   static MaterialPageRoute<bool?> route() => MaterialPageRoute<bool?>(
@@ -21,7 +28,7 @@ class AuthPassCloudAuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AuthPass Cloud'),
+        title: const Text(AppConstants.authPassCloud),
       ),
       body: Center(
         child: Container(
@@ -69,6 +76,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Form(
       key: _form,
       child: Column(
@@ -77,19 +85,21 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
         children: <Widget>[
           LinkButton(
             onPressed: () async {
-              await DialogUtils.openUrl(
-                  'https://authpass.app/docs/authpass-cloud/?utm_source=app&utm_campaign=cloud_login');
+              await DialogUtils.openUrl(_authPassCloudUrlInfoOpen);
             },
-            child: const Text(
-              'AuthPass Cloud\n'
-              'For details visit https://authpass.app/docs/authpass-cloud/',
+            child: Text(
+              [
+                AppConstants.authPassCloud,
+                CharConstants.newLine,
+                loc.forDetailsVisitUrl(_authPassCloudUrlInfo)
+              ].join(),
               textAlign: TextAlign.center,
             ),
           ),
           TextFormField(
             controller: _email,
-            decoration: const InputDecoration(
-              labelText: 'Enter email address to register or sign in.',
+            decoration: InputDecoration(
+              labelText: loc.authPassCloudAuthEmailInputLabel,
               hintMaxLines: 2,
             ),
             autofocus: true,
@@ -97,14 +107,14 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.send,
             onEditingComplete: () {},
-            validator: SValidator.notEmpty(
-                    msg: 'Please enter a valid email address.') +
-                SValidator.email(msg: 'Please enter a valid email address.'),
+            validator:
+                SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
+                    SValidator.email(msg: loc.authPassCloudAuthEmailInvalid),
           ),
           const SizedBox(height: 8),
           ElevatedButton(
             onPressed: _submitCallback(),
-            child: const Text('Confirm Address'),
+            child: Text(loc.authPassCloudAuthConfirmEmailButtonLabel),
           ),
         ],
       ),
@@ -162,23 +172,26 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context);
     return Column(
       children: <Widget>[
-        const Text('Please check your emails to confirm your email address.'),
+        Text(loc.authPassCloudAuthConfirmEmail),
         const SizedBox(height: 32),
         Text(
-          'Keep this screen open until you visited the link you received by email.',
+          loc.authPassCloudAuthConfirmEmailExplain,
           style: theme.textTheme.caption,
         ),
         ...?_showResendButton
             ? [
                 const SizedBox(height: 32),
-                Text(
-                  'If you have not received an email,\n'
-                  'please check your spam folder. Otherwise you can try \n'
-                  'to request a new confirmation link.',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.caption!.copyWith(height: 1.4),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 320),
+                  child: Text(
+                    loc.authPassCloudAuthResendExplain,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.caption!.copyWith(height: 1.4),
+                    maxLines: 5,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
@@ -189,7 +202,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
                         .trackCloudAuth(CloudAuthAction.authResend);
                     widget.bloc.clearToken();
                   },
-                  child: const Text('Request a new confirmation link'),
+                  child: Text(loc.authPassCloudAuthResendButtonLabel),
                 ),
               ]
             : null,

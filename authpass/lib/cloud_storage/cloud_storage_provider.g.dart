@@ -122,14 +122,18 @@ class CloudStorageEntityBuilder
 
 class _$SearchResponse extends SearchResponse {
   @override
-  final BuiltList<CloudStorageEntity?>? results;
+  final BuiltList<CloudStorageEntity?> results;
   @override
-  final bool? hasMore;
+  final bool hasMore;
 
   factory _$SearchResponse([void Function(SearchResponseBuilder)? updates]) =>
       (new SearchResponseBuilder()..update(updates)).build();
 
-  _$SearchResponse._({this.results, this.hasMore}) : super._();
+  _$SearchResponse._({required this.results, required this.hasMore})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(results, 'SearchResponse', 'results');
+    BuiltValueNullFieldError.checkNotNull(hasMore, 'SearchResponse', 'hasMore');
+  }
 
   @override
   SearchResponse rebuild(void Function(SearchResponseBuilder) updates) =>
@@ -180,7 +184,7 @@ class SearchResponseBuilder
   SearchResponseBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _results = $v.results?.toBuilder();
+      _results = $v.results.toBuilder();
       _hasMore = $v.hasMore;
       _$v = null;
     }
@@ -203,12 +207,15 @@ class SearchResponseBuilder
     _$SearchResponse _$result;
     try {
       _$result = _$v ??
-          new _$SearchResponse._(results: _results?.build(), hasMore: hasMore);
+          new _$SearchResponse._(
+              results: results.build(),
+              hasMore: BuiltValueNullFieldError.checkNotNull(
+                  hasMore, 'SearchResponse', 'hasMore'));
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'results';
-        _results?.build();
+        results.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'SearchResponse', _$failedField, e.toString());

@@ -20,6 +20,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('cloud_mail_read');
 
@@ -112,7 +113,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                                 snapshot.data!.mimeMessage!.getPart(a.fetchId)!;
                             final f = await PathUtils().saveToTempDirectory(
                                 part.decodeContentBinary()!,
-                                dirPrefix: 'openbinary',
+                                dirPrefix: nonNls('openbinary'),
                                 fileName: a.fileName!);
                             _logger.fine('Opening ${f.path}');
                             final result = await OpenFile.open(f.path);

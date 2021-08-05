@@ -18,6 +18,7 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 
 final _logger = Logger('authpass.google_drive_bloc');
 
+@NonNls
 const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 
 class GoogleDriveProvider

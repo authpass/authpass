@@ -160,12 +160,12 @@ class KdbxBlocDelegateHandler extends KdbxBlocDelegate {
     if (context == null) {
       return;
     }
+    final loc = AppLocalizations.of(context);
     DialogUtils.showSimpleAlertDialog(
       context,
-      'Successfully merged file',
-      'Conflict detected while saving ${fileSource.displayName}, '
-          'it was merged successfully with the remote file: '
-          '\n\n${merge.debugSummary()}',
+      loc.mergeSuccessDialogTitle,
+      loc.mergeSuccessDialogMessage(
+          fileSource.displayName, merge.debugSummary()),
       routeAppend: 'merged',
     );
   }

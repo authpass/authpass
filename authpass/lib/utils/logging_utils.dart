@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'package:path/path.dart' as path;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('logging_utils');
 
@@ -24,7 +25,7 @@ class LoggingUtils {
           AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
         await PathUtils.waitForRunAppFinished;
         final logsDir = await PathUtils().getLogDirectory();
-        final appLogFile = File(path.join(logsDir.path, 'app.log.txt'));
+        final appLogFile = File(path.join(logsDir.path, nonNls('app.log.txt')));
         await appLogFile.parent.create(recursive: true);
         _logger.fine('Logging into $appLogFile');
         return RotatingFileAppender(
@@ -52,7 +53,7 @@ class LoggingUtils {
 
     Isolate.current.addOnExitListener(RawReceivePort((dynamic val) {
       // ignore: avoid_print
-      print('exiting isolate $isolateDebug');
+      print(nonNls('exiting isolate $isolateDebug'));
     }).sendPort);
 
     final exitPort = ReceivePort();
@@ -62,9 +63,11 @@ class LoggingUtils {
     }, onDone: () {
       _logger.info('Done $isolateDebug');
     });
-    Isolate.current.addOnExitListener(exitPort.sendPort, response: 'exit');
+    Isolate.current
+        .addOnExitListener(exitPort.sendPort, response: nonNls('exit'));
   }
 
+  @NonNls
   static Future<Map<String, dynamic>> getDebugDeviceInfo() async {
     final di = DeviceInfoPlugin();
     if (AuthPassPlatform.isWeb) {
@@ -92,6 +95,7 @@ class LoggingUtils {
 }
 
 extension on AndroidDeviceInfo {
+  @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
         'board': board,
         'device': device,
@@ -103,6 +107,7 @@ extension on AndroidDeviceInfo {
 }
 
 extension on IosDeviceInfo {
+  @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
         'localizedModel': localizedModel,
         'mode': model,
@@ -111,12 +116,14 @@ extension on IosDeviceInfo {
 }
 
 extension on WebBrowserInfo {
+  @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
         'userAgent': userAgent,
       };
 }
 
 extension on LinuxDeviceInfo {
+  @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
         'name': name,
         'version': version,
@@ -124,12 +131,14 @@ extension on LinuxDeviceInfo {
 }
 
 extension on WindowsDeviceInfo {
+  @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
         'systemMemoryInMegabytes': systemMemoryInMegabytes,
       };
 }
 
 extension on MacOsDeviceInfo {
+  @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
         'arch': arch,
         'model': model,

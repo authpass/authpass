@@ -1,5 +1,6 @@
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 // TODO: remove the following when migrating to nnbd
 //       (info: 'nullable' is deprecated and shouldn't be used. Has no effect.)
@@ -40,6 +41,7 @@ class FileSearchResponse {
   @JsonKey(name: 'has_more')
   final bool? hasMore;
 
+  @NonNls
   @override
   String toString() {
     return 'FileSearchResponse{matches: $matches, hasMore: $hasMore}';
@@ -60,6 +62,7 @@ class FileSearchMatch {
   @JsonKey(name: 'metadata')
   final FileMetadataV2? metadata;
 
+  @NonNls
   @override
   String toString() {
     return 'FileSearchMatch{metadata: $metadata}';
@@ -100,6 +103,8 @@ class FileMetadata {
   /// one of: 'folder' or 'file' or 'deleted'
   @JsonKey(name: '.tag')
   final String? tag;
+
+  @NonNls
   CloudStorageEntityType get tagType => tag == 'folder'
       ? CloudStorageEntityType.directory
       : CloudStorageEntityType.file;
@@ -108,6 +113,7 @@ class FileMetadata {
   final String? pathDisplay;
   final String? rev;
 
+  @NonNls
   @override
   String toString() {
     return 'FileMetadata{id: $id, name: $name, pathDisplay: $pathDisplay}';

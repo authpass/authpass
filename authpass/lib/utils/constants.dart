@@ -16,6 +16,11 @@ class CharConstants {
 
   static const space = ' '; // NON-NLS
   static const curlyOpen = '{'; // NON-NLS
+
+  static const chevronRight = ' » '; // NON-NLS
+
+  static const slash = '/'; // NON-NLS
+  static var newLine = '\n'; // NON-NLS
 }
 
 class UrlConstants {

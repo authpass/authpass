@@ -10,6 +10,7 @@ import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_models.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:logging/logging.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:path/path.dart' as path;
@@ -17,9 +18,11 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 
 final _logger = Logger('authpass.dropbox_provider');
 
+@NonNls
 const _METADATA_KEY_DROPBOX_DATA = 'dropbox.file_metadata';
 
 /// header name used by dropbox to return metadata during file download.
+@NonNls
 const _HEADER_DOWNLOAD_METADATA = 'Dropbox-API-Result';
 
 class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
@@ -30,6 +33,14 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       'https://www.dropbox.com/oauth2/authorize'; // NON-NLS
   static const _oauthToken =
       'https://api.dropboxapi.com/oauth2/token'; // NON-NLS
+  static const _dropboxApiUrlSearch =
+      'https://api.dropboxapi.com/2/files/search_v2'; // NON-NLS
+  static const _dropboxApiUrlList =
+      'https://api.dropboxapi.com/2/files/list_folder'; // NON-NLS
+  static const _dropboxApiUrlDownload =
+      'https://content.dropboxapi.com/2/files/download'; // NON-NLS
+  static const _dropboxApiUrlUpload =
+      'https://content.dropboxapi.com/2/files/upload'; // NON-NLS
 
   Env env;
 
@@ -112,7 +123,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   @override
   Future<SearchResponse> search({String name = Env.KeePassExtension}) async {
-    final searchUri = Uri.parse('https://api.dropboxapi.com/2/files/search_v2');
+    final searchUri = Uri.parse(_dropboxApiUrlSearch);
     final client = await requireAuthenticatedClient();
     final response = await client.post(
       searchUri,
@@ -145,16 +156,16 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   @override
   Future<SearchResponse> list({CloudStorageEntity? parent}) async {
-    final listUri = Uri.parse('https://api.dropboxapi.com/2/files/list_folder');
+    final listUri = Uri.parse(_dropboxApiUrlList);
     final client = await requireAuthenticatedClient();
     final response = await client.post(
       listUri,
       headers: {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
       },
-      body: json.encode(<String, String>{
+      body: json.encode(nonNls(<String, String>{
         'path': parent?.id ?? '',
-      }),
+      })),
     );
     _logger.fine('request: ${response.request}');
     if (response.statusCode >= 300 || response.statusCode < 200) {
@@ -178,18 +189,21 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     );
   }
 
+  @NonNls
   @override
   String get displayName => 'Dropbox';
 
   @override
   FileSourceIcon get displayIcon => FileSourceIcon.dropbox;
 
+  static const _apiArgPath = 'path'; // NON-NLS
+  static const _apiResponseErrorSummary = 'error_summary'; // NON-NLS
+
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final client = await requireAuthenticatedClient();
-    final downloadUrl =
-        Uri.parse('https://content.dropboxapi.com/2/files/download');
-    final apiArg = json.encode(<String, String>{'path': file.id});
+    final downloadUrl = Uri.parse(_dropboxApiUrlDownload);
+    final apiArg = json.encode(<String, String>{_apiArgPath: file.id});
     _logger.finer('Downloading file with id ${file.id}');
     final response = await client.post(downloadUrl,
         headers: nonNls({'Dropbox-API-Arg': apiArg}));
@@ -201,9 +215,9 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
           ContentType.parse(response.headers[HttpHeaders.contentTypeHeader]!);
       if (contentType.subType == ContentType.json.subType) {
         final jsonBody = json.decode(response.body) as Map<String, dynamic>;
-        if (jsonBody['error_summary'] != null) {
-          // NON-NLS
-          throw LoadFileException(jsonBody['error_summary'].toString());
+        if (jsonBody[_apiResponseErrorSummary] != null) {
+          throw LoadFileException(
+              jsonBody[_apiResponseErrorSummary].toString());
         }
         _logger.severe('got a json response?! ${response.body}');
         _logger.info('Got content type: $contentType');
@@ -230,11 +244,14 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     return await _upload(file.id, bytes, previousMetadata: previousMetadata);
   }
 
+  static const _apiModeOverwrite = 'overwrite'; // NON-NLS
+  static const _apiModeAdd = 'add'; // NON-NLS
+
   Future<Map<String, dynamic>> _upload(String? path, Uint8List bytes,
       {Map<String, dynamic>? previousMetadata, bool update = true}) async {
     dynamic mode;
     if (update) {
-      mode = 'overwrite';
+      mode = _apiModeOverwrite;
       if (previousMetadata != null &&
           previousMetadata[_METADATA_KEY_DROPBOX_DATA] != null) {
         final fileMetadata = FileMetadata.fromJson(
@@ -247,10 +264,9 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         _logger.fine('Updating rev ${fileMetadata.rev}');
       }
     } else {
-      mode = 'add';
+      mode = _apiModeAdd;
     }
-    final uploadUrl =
-        Uri.parse('https://content.dropboxapi.com/2/files/upload');
+    final uploadUrl = Uri.parse(_dropboxApiUrlUpload);
     final apiArg = json.encode(nonNls(<String, dynamic>{
       'path': path,
       'mode': mode,
@@ -288,7 +304,7 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
     final parent = saveAs.parent;
     final filePath = parent == null
-        ? '/${saveAs.fileName}'
+        ? [CharConstants.slash, saveAs.fileName].join()
         : path.join(parent.id, saveAs.fileName);
     final metadataJson = await _upload(filePath, bytes, update: false);
     final metadata = FileMetadata.fromJson(metadataJson);

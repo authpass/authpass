@@ -1,4 +1,5 @@
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 // TODO: remove the following when migrating to nnbd
@@ -59,7 +60,7 @@ class OneDriveItem {
               : file != null
                   ? CloudStorageEntityType.file
                   : CloudStorageEntityType.unknown)
-          ..path = '${parentReference.path}/$name',
+          ..path = [parentReference.path, CharConstants.slash, name].join(),
       );
 }
 

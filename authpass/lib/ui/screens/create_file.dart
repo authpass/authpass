@@ -4,6 +4,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                       const SizedBox(width: 16),
                       Text(target.provider.displayName),
                       ...?target.parent?.let((it) => [
-                            const Text(' » '),
+                            const Text(CharConstants.chevronRight),
                             Text(it.pathOrBaseName),
                           ]),
                     ],

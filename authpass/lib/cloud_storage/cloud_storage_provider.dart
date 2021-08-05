@@ -83,8 +83,8 @@ abstract class SearchResponse
       _$SearchResponse;
   SearchResponse._();
 
-  BuiltList<CloudStorageEntity?>? get results;
-  bool? get hasMore;
+  BuiltList<CloudStorageEntity?> get results;
+  bool get hasMore;
 }
 
 enum PromptType {

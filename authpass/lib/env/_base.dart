@@ -3,6 +3,7 @@ import 'package:built_value/built_value.dart' hide nullable;
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part '_base.g.dart';
 part '_base.freezed.dart';
@@ -94,12 +95,12 @@ abstract class Env {
   String get forumUrl => UrlConstants.forumUrl;
 
   String forumUrlNewTopic({
-    String title = '',
-    String body = '',
+    String title = CharConstants.empty,
+    String body = CharConstants.empty,
     int category = 5,
     List<String> tags = const <String>[],
   }) =>
-      Uri.parse('${forumUrl}new-topic')
+      nonNls(Uri.parse('${forumUrl}new-topic')
           .replace(
             queryParameters: <String, String>{
               'title': title,
@@ -108,7 +109,7 @@ abstract class Env {
               'tags': tags.join(','),
             }..removeWhere((key, value) => value.isEmpty),
           )
-          .toString();
+          .toString());
 
   /// Allows having a "namespace" for different environments.
   /// e.g. for mac os to have a different configuration for

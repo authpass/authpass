@@ -9,6 +9,7 @@ import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,6 +19,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('authpass.cloud_storage_ui');
 
@@ -64,9 +66,10 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   Widget build(BuildContext context) {
     final config = widget.browserConfig;
     final analytics = context.watch<Analytics>();
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('CloudStorage - ${widget.provider.displayName}'),
+        title: Text(loc.cloudStorageAppBarTitle(widget.provider.displayName)),
         actions: widget.provider.isAuthenticated != true
             ? null
             : <Widget>[
@@ -122,6 +125,7 @@ class CloudStorageAuthentication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
@@ -132,11 +136,12 @@ class CloudStorageAuthentication extends StatelessWidget {
             onPressed: () async {
               await _startLoginFlow(context);
             },
-            child: Text('Login to ${provider!.displayName}'),
+            child:
+                Text(loc.cloudStorageLogInActionLabel(provider!.displayName)),
           ),
           const SizedBox(height: 16),
           Text(
-            'You will be redirected to authenticate AuthPass to access your data.',
+            loc.cloudStorageLogInCaption,
             style: Theme.of(context).textTheme.caption,
             textAlign: TextAlign.center,
           ),
@@ -145,8 +150,8 @@ class CloudStorageAuthentication extends StatelessWidget {
             onPressed: () async {
               await _startLoginFlow(context, forceNoOpenUrl: true);
             },
-            child: const Text(
-              'Enter code',
+            child: Text(
+              loc.cloudStorageLogInCode,
               textScaleFactor: 0.75,
             ),
           ),
@@ -157,6 +162,7 @@ class CloudStorageAuthentication extends StatelessWidget {
 
   Future<void> _startLoginFlow(BuildContext context,
       {bool forceNoOpenUrl = false}) async {
+    final loc = AppLocalizations.of(context);
     try {
       final auth = await provider!.startAuth((final prompt) async {
         if (prompt is UserAuthenticationPrompt<OAuthTokenResult,
@@ -170,7 +176,7 @@ class CloudStorageAuthentication extends StatelessWidget {
               await DialogUtils.showSimpleAlertDialog(
                 context,
                 null,
-                'Unable to launch url. Please visit $uri',
+                loc.launchUrlError(uri),
                 routeAppend: 'cloudStorageAuthError',
               );
               prompt.result(null);
@@ -178,8 +184,8 @@ class CloudStorageAuthentication extends StatelessWidget {
             }
           }
           final code = await SimpleAuthCodePromptDialog(
-            title: '${provider!.displayName} Authentication',
-            labelText: 'Authentication Code',
+            title: loc.cloudStorageAuthCodeDialogTitle(provider!.displayName),
+            labelText: loc.cloudStorageAuthCodeLabel,
           ).show(context);
           prompt.result(OAuthTokenResult(code));
         } else if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult,
@@ -199,8 +205,8 @@ class CloudStorageAuthentication extends StatelessWidget {
       onSuccess!();
     } catch (e, stackTrace) {
       _logger.severe('Error while authenticating.', e, stackTrace);
-      await DialogUtils.showErrorDialog(context, 'Error while authenticating',
-          'Error while trying to authenticate to ${provider!.displayName}. $e');
+      await DialogUtils.showErrorDialog(context, loc.cloudStorageAuthErrorTitle,
+          loc.cloudStorageAuthErrorMessage(provider!.displayName, e));
     }
   }
 }
@@ -228,6 +234,8 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final searchResponse = _searchResponse;
     return LayoutBuilder(
       builder: (context, constraints) => ConstrainedBox(
         constraints: constraints.copyWith(maxWidth: 320),
@@ -240,8 +248,8 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Search Query',
+                      decoration: InputDecoration(
+                        labelText: loc.cloudStorageSearchBoxLabel,
                       ),
                       controller: _searchController,
                       onEditingComplete: _search,
@@ -255,11 +263,11 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
             ),
             task != null
                 ? const CircularProgressIndicator()
-                : _searchResponse == null
+                : searchResponse == null
                     ? Container()
                     : Expanded(
                         child: SearchResultListView(
-                          response: _searchResponse,
+                          response: searchResponse,
                           onTap: (entity) {
                             final source = FileSourceCloudStorage(
                               provider: widget.provider,
@@ -282,7 +290,7 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
           final results =
               await widget.provider.search(name: _searchController.text);
           _logger.fine('Got results:');
-          for (final result in results.results!) {
+          for (final result in results.results) {
             _logger.fine('${result!.name} (${result.id}');
           }
           setState(() {
@@ -299,18 +307,19 @@ class SearchResultListView extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  final SearchResponse? response;
+  final SearchResponse response;
   final void Function(CloudStorageEntity entity) onTap;
 
   @override
   Widget build(BuildContext context) {
-    final length = response!.results!.length;
+    final loc = AppLocalizations.of(context);
+    final length = response.results.length;
     return ListView.builder(
       itemBuilder: (context, itemId) {
         if (itemId >= length) {
-          return ListTile(title: Text('$length Items in this folder.'));
+          return ListTile(title: Text(loc.cloudStorageItemsInFolder(length)));
         }
-        final entity = response!.results![itemId]!;
+        final entity = response.results[itemId]!;
         return ListTile(
           leading: Icon(entity.type == CloudStorageEntityType.file
               ? FontAwesomeIcons.file
@@ -364,7 +373,8 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
   @override
   void initState() {
     super.initState();
-    _fileNameController.text = widget.config.defaultFileName ?? '';
+    _fileNameController.text =
+        widget.config.defaultFileName ?? CharConstants.empty;
   }
 
   @override
@@ -397,6 +407,8 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final response = _response;
     return Column(
       children: <Widget>[
         SingleChildScrollView(
@@ -411,10 +423,10 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                   _listFolder();
                 },
                 icon: const Icon(FontAwesomeIcons.folderOpen),
-                label: const Text('/'),
+                label: const Text(CharConstants.slash),
               ),
               ..._folderBreadcrumbs.expand((f) => [
-                    const Text('  >  '),
+                    const Text(CharConstants.chevronRight),
                     TextButton.icon(
                       icon: const Icon(FontAwesomeIcons.folderOpen),
                       label: Text(f.name!),
@@ -432,9 +444,9 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
         Expanded(
           child: ProgressOverlay(
             task: task,
-            child: task == null && _response != null
+            child: task == null && response != null
                 ? SearchResultListView(
-                    response: _response,
+                    response: response,
                     onTap: (item) {
                       _logger.fine('Tapped on $item');
                       if (item.type == CloudStorageEntityType.directory) {
@@ -481,7 +493,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                                 CloudStorageSelectorSaveResult(
                                     _folder, _fileNameController.text));
                           },
-                          child: const Text('Save'),
+                          child: Text(loc.saveButtonLabel),
                         )
                       ],
                     ),
@@ -520,8 +532,10 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
-      title: const Text('WebDAV Settings'),
+      title: Text(loc.webDavSettings),
       scrollable: true,
       content: Form(
         key: _formKey,
@@ -531,28 +545,28 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
             TextFormField(
               controller: _url,
               keyboardType: TextInputType.url,
-              decoration: const InputDecoration(
-                labelText: 'Url',
-                helperText: 'Base Url to your WebDAV service.',
-                hintText: 'https://my.nextcloud.com/webdav',
+              decoration: InputDecoration(
+                labelText: loc.webDavUrlLabel,
+                helperText: loc.webDavUrlHelperText,
+                hintText: nonNls('https://my.nextcloud.com/webdav'),
               ),
               autocorrect: false,
-              validator: SValidator.notEmpty(msg: 'Please enter a Url') +
+              validator: SValidator.notEmpty(msg: loc.webDavUrlValidatorError) +
                   SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
-                      'Please enter a valid url with http:// or https://'),
+                      loc.webDavUrlValidatorInvalidUrlError),
             ),
             TextFormField(
               controller: _username,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Username',
+              decoration: InputDecoration(
+                labelText: loc.webDavAuthUser,
               ),
             ),
             TextFormField(
               controller: _password,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
+              decoration: InputDecoration(
+                labelText: loc.webDavAuthPassword,
               ),
             ),
           ],
@@ -563,7 +577,7 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(matLoc.cancelButtonLabel),
         ),
         TextButton(
           onPressed: () {
@@ -572,7 +586,7 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
                   _url.text, _username.text, _password.text));
             }
           },
-          child: const Text('Ok'),
+          child: Text(matLoc.okButtonLabel),
         ),
       ],
     );

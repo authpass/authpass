@@ -19,6 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 late final _logger = Logger('app_bar_menu');
 
@@ -123,12 +124,12 @@ class AppBarMenu {
         onTap: () async {
           analytics.events.trackActionPressed(action: 'forum');
           final url = deps.env.forumUrlNewTopic(
-            body: '\n\n\n'
+            body: nonNls('\n\n\n'
                 'OS: ${AuthPassPlatform.operatingSystem} '
                 '${AuthPassPlatform.operatingSystemVersion}\n'
                 'App: ${(await deps.env.getAppInfo()).longString}\n'
-                '${await LoggingUtils.getDebugDeviceInfo()}',
-            tags: ['fromapp'],
+                '${await LoggingUtils.getDebugDeviceInfo()}'),
+            tags: [nonNls('fromapp')],
           );
           _logger.finer('opening url (${url.length}): $url');
           await DialogUtils.openUrl(url);

@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
+@NonNls
 const _contributorsUrl =
     'https://raw.githubusercontent.com/authpass/authpass/master/CONTRIBUTORS.md';
 
@@ -98,7 +99,7 @@ class AuthPassAboutDialog extends StatelessWidget {
               const SizedBox(height: 32),
               Text(
                 loc.aboutLogFile(logFiles.isEmpty
-                    ? 'No Log File?!'
+                    ? 'No Log File?!' // NON-NLS
                     : logFiles.first.absolute.path),
                 style: Theme.of(context).textTheme.caption,
               ),

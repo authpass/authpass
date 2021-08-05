@@ -12,6 +12,7 @@ import 'package:authpass/utils/uuid_util.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('onedrive_provider');
 
@@ -21,15 +22,26 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   final Env env;
 
+  @NonNls
   static const String _oauthEndpoint =
       'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
+  @NonNls
   static const String _oauthToken =
       'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+  @NonNls
   static const _baseUriString = 'https://graph.microsoft.com/v1.0/me/drive';
   static final _baseUri = Uri.parse(_baseUriString);
 
+  static const _headerEtag = 'etag'; // NON-NLS
+  static const _headerCtag = 'ctag'; // NON-NLS
+  static const _headerIfMatch = 'if-match'; // NON-NLS
+
+  @NonNls
   static const _METADATA_ETAG = 'etag';
+  @NonNls
   static const _METADATA_CTAG = 'ctag';
+  @NonNls
+  static const _oauthScopes = ['offline_access', 'Files.ReadWrite'];
 
   @override
   bool isSupported() => env.oauthRedirectUriSupported;
@@ -46,7 +58,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
     final authUrl = grant.getAuthorizationUrl(Uri.parse(env.oauthRedirectUri!),
-        scopes: ['offline_access', 'Files.ReadWrite']);
+        scopes: _oauthScopes);
     final params = Map<String, String>.from(
         authUrl.queryParameters); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
@@ -80,10 +92,11 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   @override
   FileSourceIcon get displayIcon => FileSourceIcon.oneDrive;
 
+  @NonNls
   @override
   String get displayName => 'One Drive';
 
-  Uri _uri(List<String> subPath) {
+  Uri _uri(@NonNls List<String> subPath) {
     return _baseUri.replace(pathSegments: _baseUri.pathSegments + subPath);
   }
 
@@ -129,8 +142,8 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     final Client client = await requireAuthenticatedClient();
     final response = await client.get(uri);
     return FileContent(response.bodyBytes, <String, dynamic>{
-      _METADATA_ETAG: response.headers['etag'],
-      _METADATA_CTAG: response.headers['ctag'],
+      _METADATA_ETAG: response.headers[_headerEtag],
+      _METADATA_CTAG: response.headers[_headerCtag],
     });
   }
 
@@ -165,9 +178,9 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       uri,
       headers: {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-        ...?cTag == null ? null : {'if-match': cTag},
+        ...?cTag == null ? null : {_headerIfMatch: cTag},
       },
-      body: json.encode({
+      body: json.encode(nonNls({
         'item': fileName == null
             ? {
                 '@microsoft.graph.conflictBehavior': 'replace',
@@ -176,7 +189,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
                 '@microsoft.graph.conflictBehavior': 'fail',
                 'name': fileName,
               },
-      }),
+      })),
     );
 
     try {
@@ -190,7 +203,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
       rethrow;
     }
     final createJson = json.decode(createResponse.body) as Map<String, dynamic>;
-    final uploadUrl = createJson['uploadUrl'] as String;
+    final uploadUrl = createJson[nonNls('uploadUrl')] as String;
     final uploadResponse = await client.put(Uri.parse(uploadUrl), body: bytes);
     _assertSuccessResponse(uploadResponse);
     _logger.fine('uploadResponse: ${uploadResponse.statusCode}');
