@@ -144,8 +144,8 @@ class AuthPassCloudProvider extends CloudStorageProvider
   }
 
   @override
-  Future<void> logout() {
-    throw UnimplementedError();
+  Future<void> logout() async {
+    await _authPassCloudBloc.clearToken();
   }
 
   @override

@@ -10,7 +10,9 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
@@ -208,6 +210,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       'snap connect authpass:password-manager-service';
   int counter = 0;
 
+  static const _openLocalMarker = 'local';
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -355,45 +359,51 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                 spacing: 16,
                 runSpacing: 16,
                 children: <Widget>[
-                  SelectFileAction(
-                    icon: FontAwesomeIcons.hdd,
-                    label: loc.openLocalFile,
-                    onPressed: () async {
-                      if (AuthPassPlatform.isIOS ||
-                          AuthPassPlatform.isAndroid) {
-                        await _openIosAndAndroidLocalFilePicker();
-                      } else {
-                        final file = await openFile();
-                        if (file != null) {
-                          String? macOsBookmark;
-                          if (AuthPassPlatform.isMacOS) {
-                            macOsBookmark = await SecureBookmarks()
-                                .bookmark(File(file.path));
-                          }
-                          await Navigator.of(context)
-                              .push(CredentialsScreen.route(FileSourceLocal(
-                            File(file.path),
-                            uuid: AppDataBloc.createUuid(),
-                            macOsSecureBookmark: macOsBookmark,
-                            filePickerIdentifier: null,
-                          )));
-                        }
-                      }
-                    },
-                  ),
-                  ...cloudStorageBloc.availableCloudStorage.map(
-                    (cs) => SelectFileAction(
-                      icon: cs.displayIcon.iconData,
-                      label: loc.loadFrom(cs.displayName),
-                      onPressed: () async {
-                        final source = await Navigator.of(context).push(
-                            CloudStorageSelector.route(
-                                cs, CloudStorageOpenConfig()));
-                        if (source != null) {
-                          await Navigator.of(context)
-                              .push(CredentialsScreen.route(source.fileSource));
+                  ...cloudStorageBloc.availableCloudStorage
+                      .whereType<AuthPassCloudProvider>()
+                      .map(
+                        (cs) => SelectFileAction(
+                          icon: cs.displayIcon.iconData,
+                          label: cs.displayName,
+                          onPressed: () async {
+                            await _loadFromCloudStorage(context, cs);
+                          },
+                        ),
+                      ),
+                  SelectFileActionChrome(
+                    child: PopupMenuButton(
+                      tooltip: null,
+                      onSelected: (value) async {
+                        if (identical(value, _openLocalMarker)) {
+                          await _openLocalFile(context);
+                        } else if (value is CloudStorageProvider) {
+                          await _loadFromCloudStorage(context, value);
+                        } else {
+                          throw StateError('Invalid action choice $value');
                         }
                       },
+                      itemBuilder: (context) => [
+                        PopupMenuItem<Object>(
+                          value: _openLocalMarker,
+                          child: ListTile(
+                            leading: const FaIcon(FontAwesomeIcons.hdd),
+                            title: Text(loc.openLocalFile),
+                          ),
+                        ),
+                        ...cloudStorageBloc.availableCloudStorage.map(
+                          (cs) => PopupMenuItem<Object>(
+                              value: cs,
+                              child: ListTile(
+                                leading: Icon(cs.displayIcon.iconData),
+                                title: Text(loc.loadFrom(cs.displayName)),
+                              )),
+                        )
+                      ],
+                      child: SelectFileActionContent(
+                        icon: FontAwesomeIcons.folderOpen,
+                        label: loc.loadFromDropdownMenu,
+                      ),
+                      // icon: const FaIcon(FontAwesomeIcons.folderOpen),
                     ),
                   ),
                   SelectFileAction(
@@ -456,6 +466,37 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         ),
       ),
     );
+  }
+
+  Future<void> _loadFromCloudStorage(
+      BuildContext context, CloudStorageProvider cs) async {
+    final source = await Navigator.of(context)
+        .push(CloudStorageSelector.route(cs, CloudStorageOpenConfig()));
+    if (source != null) {
+      await Navigator.of(context)
+          .push(CredentialsScreen.route(source.fileSource));
+    }
+  }
+
+  Future<void> _openLocalFile(BuildContext context) async {
+    if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
+      await _openIosAndAndroidLocalFilePicker();
+    } else {
+      final file = await openFile();
+      if (file != null) {
+        String? macOsBookmark;
+        if (AuthPassPlatform.isMacOS) {
+          macOsBookmark = await SecureBookmarks().bookmark(File(file.path));
+        }
+        await Navigator.of(context)
+            .push(CredentialsScreen.route(FileSourceLocal(
+          File(file.path),
+          uuid: AppDataBloc.createUuid(),
+          macOsSecureBookmark: macOsBookmark,
+          filePickerIdentifier: null,
+        )));
+      }
+    }
   }
 
   Future<void> _openIosAndAndroidLocalFilePicker() async {
@@ -644,19 +685,15 @@ class OpenedFileTile extends StatelessWidget {
   }
 }
 
-class SelectFileAction extends StatelessWidget {
-  const SelectFileAction({
+class SelectFileActionChrome extends StatelessWidget {
+  const SelectFileActionChrome({
     Key? key,
-    this.icon,
-    this.label,
-    this.onPressed,
     this.backgroundColor,
+    required this.child,
   }) : super(key: key);
 
-  final IconData? icon;
-  final String? label;
+  final Widget child;
   final Color? backgroundColor;
-  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -674,34 +711,73 @@ class SelectFileAction extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         color: backgroundColor ?? theme.primaryColor,
         elevation: 4,
-        child: InkWell(
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DefaultTextStyle(
-              style: theme.primaryTextTheme.bodyText2!,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    icon,
-                    color: theme.primaryTextTheme.bodyText2!.color!
-                        .withOpacity(0.8),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    label!,
-                    textAlign: TextAlign.center,
-                    style: theme.primaryTextTheme.bodyText2!
-                        .copyWith(letterSpacing: 0.9),
-                    strutStyle: const StrutStyle(leading: 0.2),
-//                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+        child: child,
+      ),
+    );
+  }
+}
+
+class SelectFileAction extends StatelessWidget {
+  const SelectFileAction({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+    this.backgroundColor,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String label;
+  final Color? backgroundColor;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SelectFileActionChrome(
+      backgroundColor: backgroundColor,
+      child: InkWell(
+        onTap: onPressed,
+        child: SelectFileActionContent(icon: icon, label: label),
+      ),
+    );
+  }
+}
+
+class SelectFileActionContent extends StatelessWidget {
+  const SelectFileActionContent({
+    Key? key,
+    required this.icon,
+    required this.label,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DefaultTextStyle(
+        style: theme.primaryTextTheme.bodyText2!,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              icon,
+              color: theme.primaryTextTheme.bodyText2!.color!.withOpacity(0.8),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: theme.primaryTextTheme.bodyText2!
+                  .copyWith(letterSpacing: 0.9),
+              strutStyle: const StrutStyle(leading: 0.2),
+//                    style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );

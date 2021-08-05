@@ -1,4 +1,6 @@
+import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -19,10 +21,18 @@ import 'package:zxcvbn/zxcvbn.dart';
 final _logger = Logger('create_file');
 
 class CreateFile extends StatefulWidget {
-  static PageRoute<void> route() => MaterialPageRoute(
-        settings: const RouteSettings(name: '/createFile'),
-        builder: (context) => CreateFile(),
+  const CreateFile({this.target});
+  static PageRoute<void> route({CloudStorageSaveTarget? target}) =>
+      MaterialPageRoute(
+        settings: const RouteSettings(
+          name: '/createFile',
+        ),
+        builder: (context) => CreateFile(
+          target: target,
+        ),
       );
+
+  final CloudStorageSaveTarget? target;
 
   @override
   _CreateFileState createState() => _CreateFileState();
@@ -51,6 +61,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final target = widget.target;
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.createPasswordDatabase),
@@ -67,6 +78,21 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                if (target != null) ...[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(target.provider.displayIcon.iconData),
+                      const SizedBox(width: 16),
+                      Text(target.provider.displayName),
+                      ...?target.parent?.let((it) => [
+                            const Text(' » '),
+                            Text(it.pathOrBaseName),
+                          ]),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 TextFormField(
                   controller: _databaseName,
                   decoration: InputDecoration(
@@ -145,6 +171,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
               password: _password.text,
               databaseName: _databaseName.text,
               openAfterCreate: true,
+              target: widget.target,
             );
             _logger.finest('Created file $created');
             await Navigator.of(context)

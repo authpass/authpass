@@ -76,8 +76,9 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           LinkButton(
-            onPressed: () {
-              DialogUtils.openUrl('https://authpass.app/docs/authpass-cloud/');
+            onPressed: () async {
+              await DialogUtils.openUrl(
+                  'https://authpass.app/docs/authpass-cloud/?utm_source=app&utm_campaign=cloud_login');
             },
             child: const Text(
               'AuthPass Cloud\n'
@@ -91,6 +92,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
               labelText: 'Enter email address to register or sign in.',
               hintMaxLines: 2,
             ),
+            autofocus: true,
             keyboardType: TextInputType.emailAddress,
             textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.send,
@@ -99,6 +101,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
                     msg: 'Please enter a valid email address.') +
                 SValidator.email(msg: 'Please enter a valid email address.'),
           ),
+          const SizedBox(height: 8),
           ElevatedButton(
             onPressed: _submitCallback(),
             child: const Text('Confirm Address'),
@@ -158,9 +161,15 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: <Widget>[
         const Text('Please check your emails to confirm your email address.'),
+        const SizedBox(height: 32),
+        Text(
+          'Keep this screen open until you visited the link you received by email.',
+          style: theme.textTheme.caption,
+        ),
         ...?_showResendButton
             ? [
                 const SizedBox(height: 32),
@@ -169,10 +178,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
                   'please check your spam folder. Otherwise you can try \n'
                   'to request a new confirmation link.',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(height: 1.4),
+                  style: theme.textTheme.caption!.copyWith(height: 1.4),
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(

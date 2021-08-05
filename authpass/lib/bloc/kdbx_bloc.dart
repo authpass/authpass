@@ -545,10 +545,11 @@ class KdbxBloc {
 
   /// Creates a new file in the application document directory by the given name.
   /// Throws a [FileExistsException] if a file of the same name already exists.
-  Future<FileSourceLocal> createFile({
+  Future<FileSource> createFile({
     required String password,
     required String databaseName,
     bool openAfterCreate = false,
+    CloudStorageSaveTarget? target,
   }) async {
     analytics.events.trackCreateFile();
     assert(!(databaseName.endsWith('.kdbx')));
@@ -556,20 +557,32 @@ class KdbxBloc {
     final kdbxFile = kdbxFormat.create(
       credentials,
       databaseName,
-      generator: 'AuthPass',
+      generator: Env.AuthPass,
     );
-    final localSource = await _localFileSourceForDbName(databaseName);
-    await localSource.file
-        .writeAsBytes(await _saveFileToBytes(kdbxFile), flush: true);
-    if (openAfterCreate) {
-      await openFile(localSource, credentials).last;
+    final bytes = await _saveFileToBytes(kdbxFile);
+    FileSource fileSource;
+    if (target == null) {
+      final localSource = await _localFileSourceForDbName(databaseName);
+      await localSource.file.writeAsBytes(bytes, flush: true);
+      fileSource = localSource;
+    } else {
+      final entity = await target.provider.createEntity(
+        CloudStorageSelectorSaveResult(
+            target.parent, _fileNameForDbName(databaseName)),
+        bytes,
+      );
+      fileSource = entity;
     }
-    return localSource;
+    if (openAfterCreate) {
+      await openFile(fileSource, credentials).last;
+    }
+    return fileSource;
   }
 
-  Future<FileSourceLocal> _localFileSourceForDbName(
-      String? databaseName) async {
-    final fileName = '$databaseName.kdbx';
+  String _fileNameForDbName(String databaseName) => '$databaseName.kdbx';
+
+  Future<FileSourceLocal> _localFileSourceForDbName(String databaseName) async {
+    final fileName = _fileNameForDbName(databaseName);
     final appDir = await PathUtils().getAppDocDirectory(ensureCreated: true);
     final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
         databaseName: databaseName, uuid: AppDataBloc.createUuid());
@@ -727,7 +740,7 @@ class KdbxBloc {
     if (file == null) {
       throw StateError('file for $source is not open.');
     }
-    final databaseName = file.kdbxFile.body.meta.databaseName.get();
+    final databaseName = file.kdbxFile.body.meta.databaseName.get()!;
     final localSource = await _localFileSourceForDbName(databaseName);
     return (await saveAs(file, localSource)).fileSource;
   }

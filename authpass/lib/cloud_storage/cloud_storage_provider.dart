@@ -141,6 +141,13 @@ typedef PromptUserForCode<T extends UserAuthenticationPromptResult,
 typedef PromptUserResult<T extends UserAuthenticationPromptResult> = void
     Function(T? result);
 
+class CloudStorageSaveTarget {
+  CloudStorageSaveTarget({required this.provider, this.parent});
+
+  final CloudStorageEntity? parent;
+  final CloudStorageProvider provider;
+}
+
 abstract class CloudStorageProvider {
   CloudStorageProvider({required this.helper});
 

@@ -1,9 +1,11 @@
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
+import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -11,8 +13,10 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
 final _logger = Logger('authpass.cloud_storage_ui');
@@ -42,6 +46,7 @@ class CloudStorageSelector extends StatefulWidget {
 
 class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   late bool _isSearch;
+  CloudStorageEntity? _folder;
 
   @override
   void initState() {
@@ -58,12 +63,28 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
   @override
   Widget build(BuildContext context) {
     final config = widget.browserConfig;
+    final analytics = context.watch<Analytics>();
     return Scaffold(
       appBar: AppBar(
         title: Text('CloudStorage - ${widget.provider.displayName}'),
         actions: widget.provider.isAuthenticated != true
             ? null
             : <Widget>[
+                if (widget.browserConfig is CloudStorageOpenConfig) ...[
+                  IconButton(
+                    onPressed: () async {
+                      analytics.events.trackCreateFileAt(
+                          cloudStorageId: widget.provider.id);
+                      await Navigator.of(context).push(CreateFile.route(
+                        target: CloudStorageSaveTarget(
+                          provider: widget.provider,
+                          parent: _folder,
+                        ),
+                      ));
+                    },
+                    icon: const Icon(Icons.create_new_folder),
+                  ),
+                ],
                 IconButton(
                   onPressed: () {
                     widget.provider.logout();
@@ -80,6 +101,7 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
           : Center(
               child: !_isSearch
                   ? CloudStorageBrowser(
+                      onFolderChanged: (folder) => _folder = folder,
                       provider: widget.provider,
                       config: config is CloudStorageBrowserConfig
                           ? config
@@ -321,9 +343,11 @@ class CloudStorageBrowser extends StatefulWidget {
     Key? key,
     required this.provider,
     required this.config,
+    required this.onFolderChanged,
   }) : super(key: key);
   final CloudStorageProvider provider;
   final CloudStorageBrowserConfig config;
+  final void Function(CloudStorageEntity? folder) onFolderChanged;
 
   @override
   _CloudStorageBrowserState createState() => _CloudStorageBrowserState();
@@ -341,10 +365,19 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
   void initState() {
     super.initState();
     _fileNameController.text = widget.config.defaultFileName ?? '';
-    _listFolder();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (task == null && _response == null) {
+      _listFolder();
+    }
   }
 
   Future<void> _listFolder() async {
+    final loc = AppLocalizations.of(context);
+    widget.onFolderChanged(_folder);
     await asyncRunTask((progress) async {
       final response = await widget.provider.list(parent: _folder);
       setState(() {
@@ -352,7 +385,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
           ..where((c) => c!.type != CloudStorageEntityType.unknown)
           ..sort(_compare));
       });
-    }, label: 'Loading');
+    }, label: loc.loading);
   }
 
   int _compare(CloudStorageEntity? a, CloudStorageEntity? b) {

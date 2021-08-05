@@ -104,6 +104,10 @@
   "@openFile": {
     "description": "Displayed as placeholder in password list when no file is open."
   },
+  "loadFromDropdownMenu": "Load from …",
+  "@loadFromDropdownMenu": {
+    "description": "label for dropdown menu which shows more cloud storage options."
+  },
   "loadFrom": "Load from {cloudStorageName}",
   "@loadFrom": {
     "placeholders": {
@@ -402,6 +406,10 @@
   "emptyPasswordVaultButtonLabel": "Create your first Password",
   "@emptyPasswordVaultButtonLabel": {
     "description": "Button shown under placeholder text when password database is empty"
+  },
+  "loading": "Loading",
+  "@loading": {
+    "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
   },
   "loadingFile": "Loading file …",
   "@loadingFile": {
