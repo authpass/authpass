@@ -46,6 +46,7 @@ import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:tinycolor/color_extension.dart';
 
 import '../../theme.dart';
@@ -206,10 +207,12 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     with FutureTaskStateMixin {
   bool _quickUnlockAttempted = false;
   bool _showLinuxAppArmorMessage = false;
+  @NonNls
   static const _linuxAppArmorCommand =
       'snap connect authpass:password-manager-service';
   int counter = 0;
 
+  @NonNls
   static const _openLocalMarker = 'local';
 
   @override
@@ -249,25 +252,27 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     }
   }
 
-  Future<void> _checkQuickUnlock() => asyncRunTask((progress) async {
-        if (_quickUnlockAttempted) {
-          _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
-          return;
-        }
-        _quickUnlockAttempted = true;
-        progress.progressLabel = 'Quick unlocking files ...';
-        final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-        if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
-          _logger
-              .fine('We already have files open. Not attempting quick unlock.');
-          return;
-        }
-        _logger.finer(
-            'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
-        final opened = await kdbxBloc.reopenQuickUnlock(progress);
-        _logger.info(
-            'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
-        if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
+  Future<void> _checkQuickUnlock() {
+    final loc = AppLocalizations.of(context);
+    return asyncRunTask((progress) async {
+      if (_quickUnlockAttempted) {
+        _logger.fine('_checkQuickUnlock already did quick unlock. skipping.');
+        return;
+      }
+      _quickUnlockAttempted = true;
+      progress.progressLabel = loc.quickUnlockingFiles;
+      final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+      if (kdbxBloc.openedFilesWithSources.isNotEmpty) {
+        _logger
+            .fine('We already have files open. Not attempting quick unlock.');
+        return;
+      }
+      _logger.finer(
+          'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
+      final opened = await kdbxBloc.reopenQuickUnlock(loc, progress);
+      _logger.info(
+          'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
+      if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
 //          if (AuthPassPlatform.isMacOS) {
 //            _logger.fine('Lets chill for a second.');
 //            await Future<int>.delayed(const Duration(seconds: 3));
@@ -276,9 +281,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //            _logger.fine('Lets chill for a second.');
 //            await Future<int>.delayed(const Duration(seconds: 3));
 //          }
-          _logger.finer('Pushing main app scaffold. (mounted: $mounted)');
-          unawaited(
-              Navigator.of(context).pushReplacement(MainAppScaffold.route()));
+        _logger.finer('Pushing main app scaffold. (mounted: $mounted)');
+        unawaited(
+            Navigator.of(context).pushReplacement(MainAppScaffold.route()));
 //          WidgetsBinding.instance.scheduleFrameCallback((timeStamp) {
 //            _logger.fine('Frame Callback. adding post frame callback.');
 //            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -290,8 +295,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 //              }
 //            });
 //          });
-        }
-      }, label: AppLocalizations.of(context).quickUnlockingFiles);
+      }
+    }, label: loc.quickUnlockingFiles);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -312,9 +318,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   ? [
                       const SizedBox(height: 16),
                       Text(
-                        'AuthPass requires permission to communicate with '
-                        'Secret Service to store credentials for cloud storage.\n'
-                        'Please run the following command:',
+                        loc.linuxAppArmorWarning,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.caption!.copyWith(
                           fontWeight: FontWeight.bold,
@@ -553,8 +557,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
         return Navigator.of(context).push(CredentialsScreen.route(source));
       }).catchError((Object error, StackTrace stackTrace) {
         _logger.fine('Error while trying to load file source $source');
-        DialogUtils.showErrorDialog(context, 'Error while opening file.',
-            'Unable to open $source.\n$error');
+        DialogUtils.showErrorDialog(context, loc.errorLoadFileFromSourceTitle,
+            loc.errorLoadFileFromSourceBody(source, error));
         return Future<dynamic>.error(error, stackTrace);
       });
     }, label: loc.loadingFile);
@@ -591,7 +595,7 @@ class OpenFileBottomSheet extends StatelessWidget {
                 rootDirectory:
                     await PathUtils().getAppDocDirectory(ensureCreated: true),
                 fsType: FilesystemType.file,
-                allowedExtensions: ['.kdbx'],
+                allowedExtensions: [AppConstants.kdbxExtension],
                 fileTileSelectMode: FileTileSelectMode.wholeTile,
               );
               if (filePath == null) {
@@ -793,37 +797,42 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
   final _formKey = GlobalKey<FormState>();
   Uri? _enteredUrl;
 
-  String? _parseUrl(String? urlString) {
-    try {
-      final uri = Uri.parse(urlString!);
-      if (!uri.scheme.startsWith('http')) {
+  String? Function(String? urlString) _parseUrl(AppLocalizations loc) {
+    return (urlString) {
+      try {
+        final uri = Uri.parse(urlString!);
+        if (!uri.scheme.startsWith(nonNls('http'))) {
+          // NON-NLS
+          _logger.fine(
+              'User entered url with invalid schema ${FormatUtils.anonymizeUrl(urlString)}');
+          return loc.loadFromUrlErrorEnterFullUrl;
+        }
+        _enteredUrl = uri;
+        return null;
+      } on FormatException catch (e) {
         _logger.fine(
-            'User entered url with invalid schema ${FormatUtils.anonymizeUrl(urlString)}');
-        return 'Please enter full url starting with http:// or https://';
+            'User entered invalid url ${FormatUtils.anonymizeUrl(urlString!)}',
+            e);
+        return loc.loadFromUrlErrorInvalidUrl;
       }
-      _enteredUrl = uri;
-      return null;
-    } on FormatException catch (e) {
-      _logger.fine(
-          'User entered invalid url ${FormatUtils.anonymizeUrl(urlString!)}',
-          e);
-      return 'Please enter a valid url.';
-    }
+    };
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
-      title: const Text('Download from Url'),
+      title: Text(loc.loadFromUrl),
       content: Form(
         key: _formKey,
         child: TextFormField(
-          validator: _parseUrl,
-          onSaved: _parseUrl,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.cloud_download),
-            labelText: 'Enter URL',
-            hintText: 'https://',
+          validator: _parseUrl(loc),
+          onSaved: _parseUrl(loc),
+          decoration: InputDecoration(
+            icon: const Icon(Icons.cloud_download),
+            labelText: loc.loadFromUrlEnterUrl,
+            hintText: nonNls('https://'),
           ),
           keyboardType: TextInputType.url,
           autofocus: true,
@@ -834,7 +843,7 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(loc.cancel),
         ),
         TextButton(
           onPressed: () {
@@ -846,7 +855,7 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
               Navigator.of(context).pop();
             }
           },
-          child: const Text('Ok'),
+          child: Text(matLoc.cancelButtonLabel),
         )
       ],
     );
@@ -1089,7 +1098,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         final openFileStream = kdbxBloc.openFile(
           widget.kdbxFilePath,
           Credentials.composite(
-              pw == '' ? null : ProtectedValue.fromString(pw), keyFileContents),
+              pw == CharConstants.empty ? null : ProtectedValue.fromString(pw),
+              keyFileContents),
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
         );
         // TODO handle subsequent errors.

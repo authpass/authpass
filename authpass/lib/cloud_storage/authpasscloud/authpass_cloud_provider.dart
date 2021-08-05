@@ -7,6 +7,7 @@ import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -99,7 +100,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
   final FileSourceIcon displayIcon = FileSourceIcon.authPass;
 
   @override
-  String get displayName => 'AuthPass Cloud';
+  String get displayName => AppConstants.authPassCloud;
 
   @override
   bool get isAuthenticated =>
@@ -129,7 +130,9 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final response = await c.filecloudFileRetrievePost(
         FilecloudFileRetrievePostSchema(fileToken: file.id));
     final fileContent = response.requireSuccess();
-    final versionToken = response.headers['etag']?.firstOrNull as String;
+    // FIXME there must be a better solution than to hard code `etag` here.
+    const _etagHeader = 'etag'; // NON-NLS
+    final versionToken = response.headers[_etagHeader]?.firstOrNull as String;
     final metadata = _FileMetadata(
       name: file.pathOrBaseName,
       fileToken: file.id,

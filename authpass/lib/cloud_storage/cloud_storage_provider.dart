@@ -32,6 +32,7 @@ class LoadFileException implements Exception {
 class LoadFileNotFoundException extends LoadFileException {
   LoadFileNotFoundException(String message) : super(message);
 
+  @NonNls
   @override
   String toString() {
     return 'LoadFileNotFoundException{message: $message}';

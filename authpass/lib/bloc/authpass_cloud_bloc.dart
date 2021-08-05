@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:biometric_storage/biometric_storage.dart';
@@ -16,6 +17,7 @@ import 'package:logging/logging.dart';
 import 'package:openapi_base/openapi_base.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:synchronized/synchronized.dart';
 
 part 'authpass_cloud_bloc.g.dart';
@@ -123,7 +125,7 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   Future<BiometricStorageFile> _getStorageFile() async {
     return await BiometricStorage().getStorage(
-      '${env.storageNamespace ?? ''}AuthPassCloud',
+      nonNls('${env.storageNamespace ?? ''}AuthPassCloud'),
       options: StorageFileInitOptions(authenticationRequired: false),
     );
   }
@@ -194,8 +196,8 @@ class AuthPassCloudBloc with ChangeNotifier {
       final ai = await env.getAppInfo();
       _requestSender = HttpRequestSender(
           clientCreator: () => UserAgentClient(
-              '${ai.shortString} / ${AuthPassPlatform.operatingSystem} '
-              '(${AuthPassPlatform.operatingSystem})',
+              nonNls('${ai.shortString} / ${AuthPassPlatform.operatingSystem} '
+                  '(${AuthPassPlatform.operatingSystem})'),
               http.Client()));
       final baseUri = Uri.parse(featureFlags.authpassCloudUri!);
       final client = AuthPassCloudClient(baseUri, _requestSender!);
@@ -233,7 +235,8 @@ class AuthPassCloudBloc with ChangeNotifier {
   }
 
   Future<String?> createMailbox(
-      {String label = '', String entryUuid = ''}) async {
+      {String label = CharConstants.empty,
+      String entryUuid = CharConstants.empty}) async {
     final client = await _getClient();
     final ret = await client
         .mailboxCreatePost(MailboxCreatePostSchema(

@@ -16,17 +16,20 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('kdbx_bloc');
 
@@ -37,6 +40,7 @@ class FileExistsException extends KdbxException {
 
   final String path;
 
+  @NonNls
   @override
   String toString() {
     return 'FileExistsException{path: $path}';
@@ -56,6 +60,7 @@ class FileAlreadyOpenException extends KdbxException {
   FileSource openFileSource;
   KdbxFile openFile;
 
+  @NonNls
   @override
   String toString() {
     final map = {
@@ -94,6 +99,7 @@ class QuickUnlockStorage {
 
   Future<BiometricStorageFile>? _storageFileCached;
 
+  @NonNls
   Future<BiometricStorageFile> _storageFile() => _storageFileCached ??=
       BiometricStorage().getStorage('${env.storageNamespace ?? ''}QuickUnlock');
 
@@ -425,7 +431,7 @@ class KdbxBloc {
 
   Future<void> continueLoadInBackground(
     StreamIterator<OpenFileResult> openIt, {
-    required String debugName,
+    @NonNls required String debugName,
     required FileSource fileSource,
   }) async {
     try {
@@ -446,7 +452,8 @@ class KdbxBloc {
 
   bool hasQuickUnlockOpen() => _openedFilesQuickUnlock.isNotEmpty;
 
-  Future<int> reopenQuickUnlock([TaskProgress? progress]) =>
+  Future<int> reopenQuickUnlock(AppLocalizations loc,
+          [TaskProgress? progress]) =>
       _quickUnlockCheckRunning ??= (() async {
         try {
           _logger.finer('Checking quick unlock.');
@@ -456,16 +463,17 @@ class KdbxBloc {
           for (final file
               in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
             try {
-              final fileLabel =
-                  '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})';
 //              progress.progressLabel = 'Loading $fileLabel';
 //              await file.key.contentPreCache();
-              progress!.progressLabel = 'Opening $fileLabel';
+              progress!.progressLabel = loc.openFileProgress(
+                  file.key.displayName, filesOpened + 1, unlockFiles.length);
               final open = StreamIterator(openFile(file.key, file.value));
               await open.moveNext();
               filesOpened++;
               unawaited(continueLoadInBackground(open,
-                  debugName: fileLabel, fileSource: file.key));
+                  debugName:
+                      '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})',
+                  fileSource: file.key));
             } catch (e, stackTrace) {
               _logger.severe(
                   'Panic, error while trying to open file from '
@@ -552,7 +560,7 @@ class KdbxBloc {
     CloudStorageSaveTarget? target,
   }) async {
     analytics.events.trackCreateFile();
-    assert(!(databaseName.endsWith('.kdbx')));
+    assert(!(databaseName.endsWith(AppConstants.kdbxExtension)));
     final credentials = Credentials(ProtectedValue.fromString(password));
     final kdbxFile = kdbxFormat.create(
       credentials,
@@ -579,7 +587,8 @@ class KdbxBloc {
     return fileSource;
   }
 
-  String _fileNameForDbName(String databaseName) => '$databaseName.kdbx';
+  String _fileNameForDbName(String databaseName) =>
+      [databaseName, AppConstants.kdbxExtension].join();
 
   Future<FileSourceLocal> _localFileSourceForDbName(String databaseName) async {
     final fileName = _fileNameForDbName(databaseName);
@@ -616,12 +625,14 @@ class KdbxBloc {
   Future<Uint8List> _saveFileToBytes(KdbxFile file) async {
     final generator = file.body.meta.generator.get();
     if (generator == null || generator.isEmpty) {
-      file.body.meta.generator.set('AuthPass (save)');
+      file.body.meta.generator.set(nonNls('AuthPass (save)'));
     }
-    final saveCounter =
-        file.body.meta.customData['codeux.design.authpass.save'] ?? '0';
+    @NonNls
+    const _customDataSaveCount = 'codeux.design.authpass.save'; // NON-NLS
+    final String saveCounter =
+        file.body.meta.customData[_customDataSaveCount] ?? nonNls('0');
     final newCounter = (int.tryParse(saveCounter) ?? 0) + 1;
-    file.body.meta.customData['codeux.design.authpass.save'] = '$newCounter';
+    file.body.meta.customData[_customDataSaveCount] = newCounter.toString();
     analytics.events.trackSaveCount(generator: generator, value: newCounter);
     return await file.save();
   }

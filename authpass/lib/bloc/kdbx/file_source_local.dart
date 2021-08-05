@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/uuid_util.dart';
@@ -12,6 +13,7 @@ import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('file_source_local');
 
@@ -44,16 +46,19 @@ class FileSourceLocal extends FileSource {
     if (_filePickerInfo != null) {
       return _filePickerInfo;
     }
-    if (filePickerIdentifier != null && filePickerIdentifier!.startsWith('{')) {
+    if (filePickerIdentifier != null &&
+        filePickerIdentifier!.startsWith(CharConstants.curlyOpen)) {
       return _filePickerInfo = FileInfo.fromJson(
           json.decode(filePickerIdentifier!) as Map<String, dynamic>);
     }
     return null;
   }
 
+  @NonNls
   @override
   String get typeDebug => '$runtimeType:$typeDebugFilePicker';
-  String get typeDebugFilePicker {
+  @NonNls
+  Future<String> get typeDebugFilePicker async {
     final uri = filePickerInfo?.uri;
     if (uri == null) {
       return macOsSecureBookmark != null ? 'macos' : 'internal';
@@ -142,8 +147,8 @@ class FileSourceLocal extends FileSource {
     if (filePickerIdentifier != null) {
       _logger.finer('Writing into file with file picker.');
       final identifier = filePickerInfo?.identifier ?? filePickerIdentifier;
-      await createFileInNewTempDirectory('$displayNameFromPath.kdbx',
-          (f) async {
+      await createFileInNewTempDirectory(
+          [displayNameFromPath, AppConstants.kdbxExtension].join(), (f) async {
         await f.writeAsBytes(bytes, flush: true);
         final fileInfo =
             await FilePickerWritable().writeFileWithIdentifier(identifier!, f);
@@ -197,6 +202,7 @@ class FileSourceLocal extends FileSource {
         filePickerIdentifier: filePickerIdentifier,
       );
 
+  @NonNls
   @override
   Map<String, String?> toDebugMap() => {
         ...super.toDebugMap(),

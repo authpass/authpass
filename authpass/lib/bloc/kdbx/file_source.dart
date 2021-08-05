@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('file_source');
 
@@ -115,6 +116,7 @@ abstract class FileSource {
   @override
   int get hashCode => uuid.hashCode;
 
+  @NonNls
   @protected
   Map<String, String?> toDebugMap() => {
         'type': runtimeType.toString(),
@@ -139,13 +141,14 @@ class FileSourceUrl extends FileSource {
   FileSourceUrl(this.url, {String? databaseName, required String uuid})
       : super(databaseName: databaseName, uuid: uuid);
 
+  @NonNls
   static const _webCorsProxy = 'https://cors-anywhere.herokuapp.com/';
 
   final Uri? url;
 
   Uri? get _url =>
       AuthPassPlatform.isWeb && !url.toString().contains(_webCorsProxy)
-          ? Uri.parse('$_webCorsProxy$url')
+          ? Uri.parse([_webCorsProxy, url].join())
           : url;
 
   @override

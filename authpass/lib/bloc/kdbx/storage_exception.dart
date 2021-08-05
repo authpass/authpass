@@ -1,3 +1,5 @@
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+
 enum StorageExceptionType {
   conflict,
   unknown,
@@ -17,6 +19,7 @@ abstract class StorageException implements Exception {
   final String details;
   final String? errorBody;
 
+  @NonNls
   @override
   String toString() {
     return 'StorageException{type: $type, details: $details, errorBody: $errorBody}';

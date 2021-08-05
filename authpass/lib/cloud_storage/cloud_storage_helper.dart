@@ -4,6 +4,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 /// Common functionality shared across all cloud storages,
 /// right now simply storing of oauth tokens.
@@ -17,7 +18,7 @@ class CloudStorageHelper implements CloudStorageHelperBase {
 
   Future<BiometricStorageFile> _getStorageFile() async =>
       _storageFile ??= await BiometricStorage().getStorage(
-        '${env.storageNamespace ?? ''}CloudProviderCreds',
+        nonNls('${env.storageNamespace ?? ''}CloudProviderCreds'),
         options: StorageFileInitOptions(authenticationRequired: false),
       );
 

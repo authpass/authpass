@@ -9,8 +9,16 @@ import 'package:clock/clock.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('file_source_cloud_storage');
+
+@NonNls
+const _jsonMetadata = 'metadata';
+@NonNls
+const _jsonCacheDate = 'cacheDate';
+@NonNls
+const _jsonCacheSize = 'cacheSize';
 
 class FileContentCached {
   FileContentCached({
@@ -20,12 +28,12 @@ class FileContentCached {
   }) : assert(cacheDate.isUtc);
   factory FileContentCached.fromJson(Map<String, dynamic> json) =>
       FileContentCached(
-        metadata: json['metadata'] as Map<String, dynamic>?,
+        metadata: json[_jsonMetadata] as Map<String, dynamic>?,
         cacheDate: DateTime.fromMillisecondsSinceEpoch(
-          json['cacheDate'] as int,
+          json[_jsonCacheDate] as int,
           isUtc: true,
         ),
-        cacheSize: json['cacheSize'] as int?,
+        cacheSize: json[_jsonCacheSize] as int?,
       );
 
   final Map<String, dynamic>? metadata;
@@ -33,9 +41,9 @@ class FileContentCached {
   final int? cacheSize;
 
   Map<String, Object?> toJson() => {
-        'metadata': metadata,
-        'cacheDate': cacheDate.millisecond,
-        'cacheSize': cacheSize,
+        _jsonMetadata: metadata,
+        _jsonCacheDate: cacheDate.millisecond,
+        _jsonCacheSize: cacheSize,
       };
 
   @override
@@ -63,6 +71,7 @@ class FileSourceCloudStorage extends FileSource {
 
   final Map<String, String?> fileInfo;
 
+  @NonNls
   @override
   String get typeDebug => '$runtimeType:${provider.id}';
 
@@ -72,8 +81,10 @@ class FileSourceCloudStorage extends FileSource {
   @override
   String get displayPath => provider.displayPath(fileInfo);
 
+  @NonNls
   File _cacheMetadataFile(String cacheDirPath) =>
       File(path.join(cacheDirPath, '$uuid.kdbx.json'));
+  @NonNls
   File _cacheKdbxFile(String cacheDirPath) =>
       File(path.join(cacheDirPath, '$uuid.kdbx'));
 

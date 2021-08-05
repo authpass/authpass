@@ -1,9 +1,12 @@
 class AppConstants {
   static const authPass = 'AuthPass'; // NON-NLS
+  static const authPassCloud = 'AuthPass Cloud'; // NON-NLS
 
   static const routeOpenFile = '/openFile'; // NON-NLS
   static const routeOpenFileParamFile = 'file'; // NON-NLS
   static const routeOpen = '/open'; // NON-NLS
+
+  static const kdbxExtension = '.kdbx'; // NON-NLS
 }
 
 class CharConstants {
@@ -12,6 +15,7 @@ class CharConstants {
   static const plus = '+'; // NON-NLS
 
   static const space = ' '; // NON-NLS
+  static const curlyOpen = '{'; // NON-NLS
 }
 
 class UrlConstants {

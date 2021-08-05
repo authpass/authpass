@@ -190,8 +190,8 @@ class Analytics {
       ga!.sendEvent(category!, action!,
           label: label,
           value: value,
-          parameters:
-              parameters?.map((key, value) => MapEntry(key, value ?? '')));
+          parameters: parameters?.map(
+              (key, value) => MapEntry(key, value ?? CharConstants.empty)));
       _logger.finer(
           '$_dbg event($category, $action, $label, $value) - parameters: $parameters');
     });
@@ -307,44 +307,58 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackDrawerOpen();
 
-  void trackAttachmentAction(String action, {String category = 'attachment'});
+  @NonNls
+  void trackAttachmentAction(
+    String action, {
+    @NonNls String category = 'attachment',
+  });
+
+  @NonNls
   void trackAttachmentAdd(
     AttachmentAddType action,
     String ext,
     int value, {
-    String category = 'attachmentAdd',
+    @NonNls String category = 'attachmentAdd',
   });
 
+  @NonNls
   void trackCloudAuth(
     CloudAuthAction action, {
     String label = 'auth',
     String category = 'cloud',
   });
 
+  @NonNls
   void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
+  @NonNls
   void trackGroupCreate({String category = 'group'});
 
+  @NonNls
   void trackPermanentlyDeleteEntry({
     String category = 'entry',
     String action = 'perm-delete',
     String label = 'confirm',
   });
+  @NonNls
   void trackPermanentlyDeleteEntryCancel({
     String category = 'entry',
     String action = 'perm-delete',
     String label = 'cancel',
   });
+  @NonNls
   void trackPermanentlyDeleteGroup({
     String category = 'group',
     String action = 'perm-delete',
     String label = 'confirm',
   });
+  @NonNls
   void trackPermanentlyDeleteGroupCancel({
     String category = 'group',
     String action = 'perm-delete',
     String label = 'cancel',
   });
 
+  @NonNls
   void trackPreferences({
     required String setting,
     required String to,
@@ -356,17 +370,20 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     String? category,
   });
 
+  @NonNls
   void trackAutofillFilter({
     required String filter,
     String category = 'autofill',
     String action = 'filter',
     required int value,
   });
+  @NonNls
   void trackAutofillSelect({
     String category = 'autofill',
     String action = 'select',
   });
 
+  @NonNls
   void trackTryUnlock({
     required TryUnlockResult action,
     required String ext,
@@ -374,16 +391,19 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     String category = 'tryUnlock',
   });
 
+  @NonNls
   void trackSwipeCopyPassword({
     String action = 'swipe',
     String label = 'password',
   });
 
+  @NonNls
   void trackSwipeCopyUsername({
     String action = 'swipe',
     String label = 'username',
   });
 
+  @NonNls
   void trackEntryAction(EntryActionType label, {String action = 'entry'});
 
   void trackBackupBanner(BannerAction action);

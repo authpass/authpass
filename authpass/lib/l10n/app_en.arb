@@ -84,10 +84,6 @@
   "@selectKeepassFile": {
     "context": "appbar title - select file screen"
   },
-  "quickUnlockingFiles": "Quick unlocking files",
-  "@quickUnlockingFiles": {
-    "context": "select file screen"
-  },
   "selectKeepassFileLabel": "Please select a KeePass (.kdbx) file.",
   "@selectKeepassFileLabel": {
     "context": "select file screen, used as label."
@@ -108,6 +104,25 @@
   "@loadFromDropdownMenu": {
     "description": "label for dropdown menu which shows more cloud storage options."
   },
+  "quickUnlockingFiles": "Quick unlocking files …",
+  "@quickUnlockingFiles": {
+    "description": "Status shown while we are loading files and trying to unlock them."
+  },
+  "openFileProgress": "Opening {fileName} … (${current} / ${totalCount})",
+  "@openFileProgress": {
+    "description": "Progress shown while files are loaded during quick unlock.",
+    "placeholders": {
+      "fileName": {
+        "description": "Name of the file that is currently loaded."
+      },
+      "current": {
+        "description": "The index/number of file currently loading."
+      },
+      "totalCount": {
+        "description": "Total number of files which are loading."
+      }
+    }
+  },
   "loadFrom": "Load from {cloudStorageName}",
   "@loadFrom": {
     "placeholders": {
@@ -116,10 +131,6 @@
         "example": "Dropbox"
       }
     }
-  },
-  "loadFromUrl": "Download from URL",
-  "@loadFromUrl": {
-    "description": "deprecated"
   },
   "loadFromRemoteUrl": "Open kdbx from URL",
   "@loadFromRemoteUrl": {
@@ -502,6 +513,42 @@
       "databaseName": {},
       "openFileSource": {},
       "newFileSource": {}
+    }
+  },
+  "loadFromUrl": "Download from Url",
+  "@loadFromUrl": {
+    "description": ""
+  },
+  "loadFromUrlEnterUrl": "Enter URL",
+  "@loadFromUrlEnterUrl": {
+    "description": "label for input box to enter url."
+  },
+  "loadFromUrlErrorEnterFullUrl": "Please enter full url starting with http:// or https://",
+  "@loadFromUrlErrorEnterFullUrl": {
+    "description": "validator error message when user does not enter a absolute url."
+  },
+  "loadFromUrlErrorInvalidUrl": "Please enter a valid url.",
+  "@loadFromUrlErrorInvalidUrl": {
+    "description": "validator error message hwen user enters a url which could not be parsed."
+  },
+  "linuxAppArmorWarning": "AuthPass requires permission to communicate with Secret Service to store credentials for cloud storage.\nPlease run the following command:",
+  "@linuxAppArmorWarning": {
+    "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "button label for cancelling an action."
+  },
+  "errorLoadFileFromSourceTitle": "Error while opening file.",
+  "@errorLoadFileFromSourceTitle": {
+    "description": "error title when user selects a file which can't be downloaded."
+  },
+  "errorLoadFileFromSourceBody": "Unable to open {source}.\n{error}",
+  "@errorLoadFileFromSourceBody": {
+    "description": "error body when user selects a file which can't be downloaded.",
+    "placeholders": {
+      "source": {},
+      "error": {}
     }
   },
   "errorUnlockFileTitle": "Unable to open File",
