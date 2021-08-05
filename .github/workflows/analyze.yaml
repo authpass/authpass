@@ -33,12 +33,22 @@ jobs:
 #          output:
 #            summary: ${{ steps.test.outputs.summary }}
 #            text_description: ${{ steps.test.outputs.description }}
-      - name: Annotate
-        uses: Attest/annotations-action@master
+#      - name: Annotate
+#        uses: Attest/annotations-action@master
+#        if: ${{ github.head_ref == '' }}
+#        with:
+#          secret: ${{ github.token }}
+#          #token: ${{ github.token }}
+#          path: './annotations_first_50.json'
+#          #input: './annotations_first_50.json'
+#          title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
+      - name: Upload typing results
+        uses: kibalabs/github-action-create-annotations@main
         if: ${{ github.head_ref == '' }}
         with:
-          secret: ${{ github.token }}
-          token: ${{ github.token }}
-          path: './annotations_first_50.json'
-          input: './annotations_first_50.json'
-          title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          json-file-path: ./annotations_first_50.json
+          json-file-path: ./annotations.json
+          #check-name: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
+          check-name: 'String Literals'
+          fail-on-error: false

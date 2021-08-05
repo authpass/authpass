@@ -4,9 +4,9 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-#  FIXME: externalze / annotate all strings so this can be enabled.
-#  plugins:
-#    - string_literal_finder
+#  FIXME: externalize / annotate all strings so this can be enabled.
+  plugins:
+    - string_literal_finder
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

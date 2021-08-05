@@ -10,8 +10,8 @@ pushd ..
 reporoot="$(pwd)"
 popd
 
-_tools/flutter_run.sh pub global activate string_literal_finder
-_tools/flutter_run.sh pub global run \
+#_tools/flutter_run.sh pub global activate string_literal_finder
+_tools/flutter_run.sh pub run \
   string_literal_finder \
   --path lib \
   --exclude-path l10n/ \
@@ -39,8 +39,8 @@ _tools/flutter_run.sh analyze || fail+=('analyze')
 
 _tools/flutter_run.sh format --set-exit-if-changed $(find . -name "*.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" | xargs) || fail+=('format')
 
-if [[ ${fail[@]} ]]; then
-  echo "Errors: $fail"
+if [ ${#fail[@]} -ne 0 ]; then
+  echo "Errors: ${fail[*]}"
   exit 1
 fi
 
