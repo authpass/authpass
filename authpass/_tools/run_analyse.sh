@@ -19,6 +19,8 @@ _tools/flutter_run.sh pub run \
   --metrics-output-file metrics.json || true
 
 cat "${reporoot}/annotations.json" | jq -c '.[:50]' >"${reporoot}/annotations_first_50.json"
+cat "${reporoot}/annotations.json" | jq -c '[.[] | {message, annotation_level: .level, start_line: .line.start, end_line: .line.end, start_column: .column.start, end_column: .column.end, path} | if .start_line == .end_line then . else del(.start_column) | del(.end_column) end]' >"${reporoot}/annotations_github.json"
+
 total_annotations=$(cat "${reporoot}/annotations.json" | jq -c '. | length')
 
 echo "::set-output name=total_annotations::${total_annotations}"

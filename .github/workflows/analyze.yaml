@@ -42,13 +42,17 @@ jobs:
 #          path: './annotations_first_50.json'
 #          #input: './annotations_first_50.json'
 #          title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
+      - uses: actions/upload-artifact@v1
+        with:
+          name: annotations_github
+          path: ./annotations_github.json
       - name: Upload typing results
         uses: kibalabs/github-action-create-annotations@main
         if: ${{ github.head_ref == '' }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 #          json-file-path: ./annotations_first_50.json
-          json-file-path: ./annotations.json
+          json-file-path: ./annotations_github.json
           #check-name: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
           check-name: 'String Literals'
           fail-on-error: false
