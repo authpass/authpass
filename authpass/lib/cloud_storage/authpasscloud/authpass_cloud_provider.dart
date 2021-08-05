@@ -40,8 +40,8 @@ class _FileMetadata {
     required this.versionToken,
   });
   factory _FileMetadata.fromJson(Map<String, dynamic> json) =>
-      _$_FileMetadataFromJson(json);
-  Map<String, dynamic> toJson() => _$_FileMetadataToJson(this);
+      _$FileMetadataFromJson(json);
+  Map<String, dynamic> toJson() => _$FileMetadataToJson(this);
   Map<String, String> toJsonSimple() => toJson().cast();
 
   final String name;

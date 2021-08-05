@@ -7,13 +7,12 @@ part of 'webdav_models.dart';
 // **************************************************************************
 
 UserNamePasswordCredentials _$UserNamePasswordCredentialsFromJson(
-    Map<String, dynamic> json) {
-  return UserNamePasswordCredentials(
-    baseUrl: json['baseUrl'] as String,
-    username: json['username'] as String?,
-    password: json['password'] as String?,
-  );
-}
+        Map<String, dynamic> json) =>
+    UserNamePasswordCredentials(
+      baseUrl: json['baseUrl'] as String,
+      username: json['username'] as String?,
+      password: json['password'] as String?,
+    );
 
 Map<String, dynamic> _$UserNamePasswordCredentialsToJson(
         UserNamePasswordCredentials instance) =>
@@ -23,11 +22,10 @@ Map<String, dynamic> _$UserNamePasswordCredentialsToJson(
       'password': instance.password,
     };
 
-WebDavFileMetadata _$WebDavFileMetadataFromJson(Map<String, dynamic> json) {
-  return WebDavFileMetadata(
-    etag: json['etag'] as String?,
-  );
-}
+WebDavFileMetadata _$WebDavFileMetadataFromJson(Map<String, dynamic> json) =>
+    WebDavFileMetadata(
+      etag: json['etag'] as String?,
+    );
 
 Map<String, dynamic> _$WebDavFileMetadataToJson(WebDavFileMetadata instance) =>
     <String, dynamic>{

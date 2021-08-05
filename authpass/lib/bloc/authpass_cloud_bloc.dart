@@ -30,8 +30,8 @@ class _StoredToken {
     required this.isConfirmed,
   });
   factory _StoredToken.fromJson(Map<String, dynamic> json) =>
-      _$_StoredTokenFromJson(json);
-  Map<String, dynamic> toJson() => _$_StoredTokenToJson(this);
+      _$StoredTokenFromJson(json);
+  Map<String, dynamic> toJson() => _$StoredTokenToJson(this);
 
   final String authToken;
   final bool isConfirmed;
