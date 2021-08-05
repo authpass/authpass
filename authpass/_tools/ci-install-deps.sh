@@ -39,8 +39,18 @@ elif test "${1:-}" == "windows" ; then
 #
 #    exit 0
 else
-#git clone https://github.com/mipmip/blackbox
-    git clone https://github.com/StackExchange/blackbox
+    if ! test -z "${BLACKBOX_SECRET:-}" ; then
+        blackbox='blackbox.go.linux.amd64'
+        curl -L -o ${blackbox} https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.linux.amd64
+
+        chmod +x ${blackbox}
+
+        popd
+        pushd "${root}"
+
+        echo "${BLACKBOX_SECRET}" | ${DEPS}/${blackbox} cipostdeploy -
+
+    fi
 fi
 
 popd
