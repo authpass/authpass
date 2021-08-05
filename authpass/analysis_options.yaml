@@ -24,6 +24,7 @@ string_literal_finder:
   exclude_globs:
     - '_tools/**'
     - 'test_driver/**'
+    - 'integration_test/**'
     - 'test/**'
     - '**/*.freezed.dart'
 

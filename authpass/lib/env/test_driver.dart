@@ -7,6 +7,9 @@ class TestDriverEnv extends EnvAppBase {
   TestDriverEnv() : super(EnvType.production);
 
   @override
+  bool get overrideFlutterOnError => false;
+
+  @override
   bool get diacHidden => true;
   @override
   bool get diacDefaultDisabled => true;

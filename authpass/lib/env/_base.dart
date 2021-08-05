@@ -75,6 +75,8 @@ abstract class Env {
   final EnvType type;
   EnvSecrets? get secrets;
 
+  final overrideFlutterOnError = true;
+
   String get diacEndpoint => 'https://cloud.authpass.app/diac'; // NON-NLS
 
   bool get diacHidden => false;

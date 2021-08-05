@@ -9,7 +9,7 @@ PODS:
     - SwiftProtobuf
   - biometric_storage (0.0.1):
     - Flutter
-  - device_info (0.0.1):
+  - device_info_plus (0.0.1):
     - Flutter
   - file_picker_writable (0.0.1):
     - Flutter
@@ -21,10 +21,12 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - integration_test (0.0.1):
+    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - open_file (0.0.1):
     - Flutter
-  - package_info (0.0.1):
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
@@ -48,13 +50,14 @@ DEPENDENCIES:
   - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
   - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_store_listing (from `.symlinks/plugins/flutter_store_listing/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
-  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -78,8 +81,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/barcode_scan2/ios"
   biometric_storage:
     :path: ".symlinks/plugins/biometric_storage/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker_writable:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
@@ -88,10 +91,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_email_sender/ios"
   flutter_store_listing:
     :path: ".symlinks/plugins/flutter_store_listing/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   open_file:
     :path: ".symlinks/plugins/open_file/ios"
-  package_info:
-    :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   share:
@@ -112,24 +117,25 @@ SPEC CHECKSUMS:
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_store_listing: 8a8514f63b41943433de5d684204ebf1edcbbfe4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  integration_test: 7db6d89f336f671dcbc7563ee27a5b08f6f8aee1
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftProtobuf: 9c85136c6ba74b0a1b84279dbf0f6db8efb714e0
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
-  wakelock: b0843b2479edbf6504d8d262c2959446f35373aa
-  webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
+  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
+  webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
 
 PODFILE CHECKSUM: ed908e41b68d4abb9397f601ad4c25beeffb919f
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

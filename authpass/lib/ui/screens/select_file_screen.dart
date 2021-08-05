@@ -855,7 +855,7 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
               Navigator.of(context).pop();
             }
           },
-          child: Text(matLoc.cancelButtonLabel),
+          child: Text(matLoc.okButtonLabel),
         )
       ],
     );

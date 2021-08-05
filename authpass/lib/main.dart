@@ -93,14 +93,16 @@ Future<void> startApp(Env env) async {
     _logger.info('${debugInfo()}');
   }
 
-  FlutterError.onError = (errorDetails) {
-    _logger.shout(
-        'Unhandled Flutter framework (${errorDetails.library}) error.',
-        errorDetails.exception,
-        errorDetails.stack);
-    _logger.fine(errorDetails.summary.toString());
-    Analytics.trackError(errorDetails.summary.toString(), true);
-  };
+  if (env.overrideFlutterOnError) {
+    FlutterError.onError = (errorDetails) {
+      _logger.shout(
+          'Unhandled Flutter framework (${errorDetails.library}) error.',
+          errorDetails.exception,
+          errorDetails.stack);
+      _logger.fine(errorDetails.summary.toString());
+      Analytics.trackError(errorDetails.summary.toString(), true);
+    };
+  }
 
   FutureTaskStateMixin.defaultShowErrorDialog = (error) {
     DialogUtils.showErrorDialog(

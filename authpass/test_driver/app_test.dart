@@ -46,7 +46,7 @@ void main() {
           'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx');
       await takeScreenshot();
       //await find.ancestor(of: find.text('Ok'), matching: find.byType('FlatButton'));
-      await driver!.tap(find.text('Ok'));
+      await driver!.tap(find.text('OK'));
       await takeScreenshot();
 //      await driver.waitUntilNoTransientCallbacks(
 //          timeout: const Duration(seconds: 10));
