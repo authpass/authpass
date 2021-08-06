@@ -71,6 +71,8 @@ abstract class Env {
   static const AuthPassCloud = 'AuthPass Cloud'; // NON-NLS
   static const KeePassExtension = 'kdbx'; // NON-NLS
 
+  static const _authPassCloudUrl = 'https://cloud.authpass.app'; // NON-NLS
+
   static Env? value;
 
   final EnvType type;
@@ -78,7 +80,7 @@ abstract class Env {
 
   final overrideFlutterOnError = true;
 
-  String get diacEndpoint => 'https://cloud.authpass.app/diac'; // NON-NLS
+  String get diacEndpoint => '$_authPassCloudUrl/diac'; // NON-NLS
 
   bool get diacHidden => false;
 
@@ -135,7 +137,7 @@ abstract class Env {
   final FeatureFlags featureFlags = FeatureFlags(
     (b) => b
       ..authpassCloud = true
-      ..authpassCloudUri = 'https://cloud.authpass.app/', // NON-NLS
+      ..authpassCloudUri = '$_authPassCloudUrl/', // NON-NLS
   );
 
   Future<AppInfo> getAppInfo();

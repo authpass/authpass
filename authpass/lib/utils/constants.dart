@@ -1,3 +1,5 @@
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+
 class AppConstants {
   static const authPass = 'AuthPass'; // NON-NLS
   static const authPassCloud = 'AuthPass Cloud'; // NON-NLS
@@ -31,6 +33,17 @@ class CharConstants {
   static const semiColon = ';'; // NON-NLS
 
   static const equalSign = '='; // NON-NLS
+}
+
+class AssetConstants {
+  @NonNls
+  static const imageOnboardingHeader = 'assets/images/onboarding-header.webp';
+  @NonNls
+  static const imageOnboardingButtonOpen = 'assets/images/safe-filled-v2.webp';
+
+  @NonNls
+  static String imageOnboardingButtonCreate =
+      'assets/images/safe-empty-v2.webp';
 }
 
 class UrlConstants {

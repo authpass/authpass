@@ -18,6 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('manage_file');
 
@@ -268,8 +269,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                                   .toXml()
                                   .toXmlString(pretty: true)));
                         },
-                        child: Text(
-                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects.length} dirty)'),
+                        child: Text(nonNls(
+                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects.length} dirty)')),
                       ),
                     ],
                   ),
@@ -282,6 +283,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     );
   }
 
+  @NonNls
   String _debugKdfType(KdbxFile file) {
     final cipher = file.header.cipher;
     final cipherName = cipher.toString().split('.').last;
@@ -375,6 +377,8 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     _logger.finest('selectedColor:$_selectedColor');
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
       contentPadding: const EdgeInsets.all(6.0),
       content: ConstrainedBox(
@@ -397,7 +401,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
               onChanged: (value) {
                 _selectedColor = null;
               },
-              title: const Text('Clear Color'),
+              title: Text(loc.clearColor),
               dense: true,
             ),
           ],
@@ -408,7 +412,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
           onPressed: () {
             Navigator.of(context).pop(_selectedColor);
           },
-          child: const Text('Ok'),
+          child: Text(matLoc.okButtonLabel),
         ),
       ],
     );

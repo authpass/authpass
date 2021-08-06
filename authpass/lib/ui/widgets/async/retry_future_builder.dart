@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -59,13 +59,14 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T?>> {
           return widget.scaffoldBuilder(context, child, snapshot);
         }
         if (snapshot.hasError) {
+          final loc = AppLocalizations.of(context);
           _logger.warning('Error while creating future.', snapshot.error);
           return widget.scaffoldBuilder(
             context,
             Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text('Error during api call. ${snapshot.error}'),
+                Text(loc.errorDuringNetworkCall(snapshot.error.toString())),
                 ElevatedButton(
                   onPressed: () {
                     setState(
@@ -74,7 +75,7 @@ class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T?>> {
                       },
                     );
                   },
-                  child: const Text('Retry'),
+                  child: Text(loc.retryDialogActionLabel),
                 ),
               ],
             ),
@@ -138,12 +139,13 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
           }
           if (snapshot.hasError) {
             _logger.warning('Error while creating future.', snapshot.error);
+            final loc = AppLocalizations.of(context);
             return widget.scaffoldBuilder(
               context,
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text('Error during api call. ${snapshot.error}'),
+                  Text(loc.errorDuringNetworkCall(snapshot.error.toString())),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -154,7 +156,7 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
                         }
                       });
                     },
-                    child: const Text('Retry'),
+                    child: Text(loc.retryDialogActionLabel),
                   ),
                 ],
               ),

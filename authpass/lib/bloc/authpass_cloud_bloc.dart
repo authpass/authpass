@@ -74,6 +74,11 @@ class AuthPassCloudBloc with ChangeNotifier {
   _StoredToken? _storedToken;
   final _tokenLock = Lock();
 
+  @NonNls
+  late final imageBaseUrl = Uri.parse(
+      ArgumentError.checkNotNull(featureFlags.authpassCloudUri) +
+          'website/image');
+
   late final _cloudStatus = LazyBehaviorSubject<CloudStatus?>(() async {
     if (tokenStatus != TokenStatus.confirmed) {
       return null;

@@ -1319,6 +1319,62 @@
   "@selectIconDialogAction": {
     "description": ""
   },
+  "retryDialogActionLabel": "RETRY",
+  "@retryDialogActionLabel": {
+    "description": ""
+  },
+  "errorDuringNetworkCall": "Error during api call. {errorMessage}",
+  "@errorDuringNetworkCall": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "passwordFilterHideDeleted": "Hide Deleted Entries",
+  "@passwordFilterHideDeleted": {
+    "description": "filter name to show only password entries which are not deleted"
+  },
+  "passwordFilterOnlyDeleted": "Deleted Entries",
+  "@passwordFilterOnlyDeleted": {
+    "description": "filter name to show only deleted password entries"
+  },
+  "passwordFilterPrefixForOneGroup": "Group: {groupName}",
+  "@passwordFilterPrefixForOneGroup": {
+    "description": "The label for a password filter for one specific group",
+    "placeholders": {
+      "groupName": {}
+    }
+  },
+  "passwordFilterPrefixForMultipleGroups": "Custom Filter ({groupCount} Groups)",
+  "@passwordFilterPrefixForMultipleGroups": {
+    "description": "The label for a password filter for multiple groups",
+    "placeholders": {
+      "groupCount": {}
+    }
+  },
+  "menuItemAuthPassCloudAuthenticate": "Authenticate with AuthPass Cloud",
+  "@menuItemAuthPassCloudAuthenticate": {
+    "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
+  },
+  "menuItemAuthPassCloudMailboxes": "AuthPass Mailboxes",
+  "@menuItemAuthPassCloudMailboxes": {
+    "description": ""
+  },
+  "changesWithoutSaving": "You have changes in \"{fileName}\", which does not support writing of changes.",
+  "@changesWithoutSaving": {
+    "description": "",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "changesSaveLocally": "Save locally",
+  "@changesSaveLocally": {
+    "description": ""
+  },
+  "clearColor": "Clear Color",
+  "@clearColor": {
+    "description": "Action to remove a selected color and reset to default."
+  },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {

@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -63,7 +64,7 @@ class OnboardingContent extends StatelessWidget {
     required this.theme,
   }) : super(key: key);
 
-  final AppLocalizations? loc;
+  final AppLocalizations loc;
   final ThemeData theme;
 
   @override
@@ -90,7 +91,7 @@ class OnboardingContent extends StatelessWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 64),
           child: Image.asset(
-            'assets/images/onboarding-header.webp',
+            AssetConstants.imageOnboardingHeader,
             // height: 96 * imageScaleFactor,
             width: 96 * imageScaleFactor,
             fit: BoxFit.contain,
@@ -98,14 +99,14 @@ class OnboardingContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          loc!.onboardingHeadline,
+          loc.onboardingHeadline,
           textAlign: TextAlign.center,
           style: onboardingHeadlineStyle,
         ),
         const SizedBox(height: 16),
         const Expanded(child: SizedBox()),
         Text(
-          loc!.onboardingQuestion,
+          loc.onboardingQuestion,
           textAlign: TextAlign.center,
           style:
               theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
@@ -113,8 +114,8 @@ class OnboardingContent extends StatelessWidget {
         const SizedBox(height: 16),
         // Expanded(child: const SizedBox(height: 32)),
         OnboardingButton(
-          image: Image.asset('assets/images/safe-filled-v2.webp'),
-          labelText: loc!.onboardingYesOpenPasswords,
+          image: Image.asset(AssetConstants.imageOnboardingButtonOpen),
+          labelText: loc.onboardingYesOpenPasswords,
           onPressed: () {
             SelectFileScreen.navigate(context);
             context.read<Analytics>().events.trackOnboardingExisting();
@@ -122,8 +123,8 @@ class OnboardingContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         OnboardingButton(
-          image: Image.asset('assets/images/safe-empty-v2.webp'),
-          labelText: loc!.onboardingNoCreate,
+          image: Image.asset(AssetConstants.imageOnboardingButtonCreate),
+          labelText: loc.onboardingNoCreate,
           onPressed: () {
             Navigator.of(context).push(CreateFile.route());
             context.read<Analytics>().events.trackOnboardingNew();

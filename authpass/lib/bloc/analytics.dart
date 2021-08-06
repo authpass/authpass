@@ -360,8 +360,8 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   @NonNls
   void trackPreferences({
-    required String setting,
-    required String to,
+    @NonNls required String setting,
+    @NonNls required String to,
   }) =>
       _trackPreferences(action: setting, to: to, category: 'preferences');
   void _trackPreferences({
@@ -372,7 +372,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   @NonNls
   void trackAutofillFilter({
-    required String filter,
+    @NonNls required String filter,
     String category = 'autofill',
     String action = 'filter',
     required int value,
@@ -392,13 +392,15 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   });
 
   @NonNls
-  void trackSwipeCopyPassword({
+  void trackCopyPassword({
+    String category = 'copyClipboard',
     String action = 'swipe',
     String label = 'password',
   });
 
   @NonNls
-  void trackSwipeCopyUsername({
+  void trackCopyUsername({
+    String category = 'copyClipboard',
     String action = 'swipe',
     String label = 'username',
   });
