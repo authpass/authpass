@@ -64,10 +64,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Déverrouillage rapide des fichiers",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Veuillez sélectionner un fichier KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -92,10 +88,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Télécharger depuis une adresse URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Ouvrir kdbx à partir d'une adresse URL",
     "@loadFromRemoteUrl": {
@@ -133,6 +125,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Activer la saisie automatique",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "IGNORER",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "Uniquement supporté par Android Oreo (8.0) ou supérieur.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Paramètres",
@@ -464,6 +460,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Mot de passe",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Nouveau groupe",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -719,6 +719,14 @@
     "saving": "Enregistrement",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "Nouveau groupe",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Supprimer",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Erreur inattendue : {error}",
     "@unexpectedError": {

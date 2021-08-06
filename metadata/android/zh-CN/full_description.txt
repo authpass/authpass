@@ -1,14 +1,14 @@
 <p>轻松和安全地记录您所有的密码 ！</p>
 
-<p>契约 (Authpass) 是一个使用广受欢迎的 Keepass (.kdbx) 格式的独立密码管理器。 
+<p> (Authpass) 是一个使用广受欢迎的 Keepass (.kdbx) 格式的独立密码管理器。 
 保存您的密码，同步到您所有的设备，并且随时随地找到您需要的密码。</p>
 
 <ul>
-<li>不再劳心费神记忆帐号密码！<li>
-<li>为您的帐户生成随机密码，更安全，更方便。</li>
-<li>使用生物识别来快速解锁 (目前仅安卓平台可用)。</li>
-<li>借助云盘和webDAV的力量，在全网同步您的帐户。</li>
-<li>全平台支持--Mac、 iOS、 Android、 Linux 和 Windows。</li>
+<li>千百密码，一处保存。<li>
+<li>随机密码，立刻生成。</li>
+<li>生物识别，安全简便。(目前仅安卓平台可用)。</li>
+<li>一次记录，全平台同步。</li>
+<li>主流平台的客户端Windows、Linux、Mac以及安卓、iPhone、iPad</li>
 <li>本程序是自由开源软件！代码发布在 https://github.com/authpass/authpass/</li>
 <li>欢迎捐款！！我们总是需要开发者、翻译者、文档撰写者和用户界面设计者，想要贡献点自己的力量？只需加入我们的Discord频道</li>
 </ul>

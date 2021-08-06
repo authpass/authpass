@@ -72,10 +72,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Rýchlo odomikajúce súbory",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Prosím zvoľte KeePass (.kdbx) súbor.",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -100,10 +96,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Stiahnuť z URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Otvoriť. kdbx súbor z URL",
     "@loadFromRemoteUrl": {
@@ -141,6 +133,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Povoliť automatické doplňovanie",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "ZRUŠIŤ",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "Podporované iba v systéme Android Oreo (8.0) alebo novšom.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Predvoľby",
@@ -487,6 +483,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Heslo",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Nová Skupina",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -750,6 +750,14 @@
     "saving": "Ukladám",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "Nová Skupina",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Zmazať",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Neočakávaná chyba: {error}",
     "@unexpectedError": {

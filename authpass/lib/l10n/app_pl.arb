@@ -76,10 +76,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Szybkie odblokowywanie plików",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Wybierz plik KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -104,10 +100,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Pobierz z adresu URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Otwórz kdbx z URL",
     "@loadFromRemoteUrl": {
@@ -322,6 +314,19 @@
         "description": "label for a key file in combination with mater password",
         "context": "credential screen"
     },
+    "close": "Zamknij",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Dodaj nowe hasło",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
+    "errorOpenFileAlreadyOpenTitle": "Plik jest już otwarty",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
     "errorUnlockFileTitle": "Nie można otworzyć Pliku",
     "@errorUnlockFileTitle": {
         "description": "generic error when opening a file (dialog title)",
@@ -372,6 +377,10 @@
     "saveButtonLabel": "Zapisz",
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
+    },
+    "webDavAuthPassword": "Hasło",
+    "@webDavAuthPassword": {
+        "description": ""
     },
     "initialNewGroupName": "Nowa grupa",
     "@initialNewGroupName": {
@@ -514,6 +523,14 @@
     "saving": "Zapisywanie",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "Nowa grupa",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Usuń",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Nieoczekiwany błąd: {error}",
     "@unexpectedError": {

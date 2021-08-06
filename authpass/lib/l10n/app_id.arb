@@ -76,10 +76,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Buka cepat file",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Silahkan pilih file KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -104,10 +100,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Download dari URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Buka kdbx dari URL",
     "@loadFromRemoteUrl": {
@@ -145,6 +137,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Izinkan Isi Otomatis",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "ABAIKAN",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "Hanya didukung di Android Oreo (8.0) atau keatas.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Preferensi",
@@ -491,6 +487,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Kata Sandi",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Grup baru",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -754,6 +754,14 @@
     "saving": "Menyimpan",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "Grup baru",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Hapus",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Kesalahan tak terduga: {error}",
     "@unexpectedError": {

@@ -76,10 +76,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Sblocco rapido dei file",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Seleziona un file KeePass ( .kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -104,10 +100,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Carica da URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Apri kdbx da URL",
     "@loadFromRemoteUrl": {
@@ -145,6 +137,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Abilita riempimento automatico",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "NASCONDI",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "Supportato solo su Android Oreo (8.0) o versioni successive.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Impostazioni",
@@ -491,6 +487,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Password",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Crea Gruppo",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -746,6 +746,14 @@
     "saving": "Salvataggio in Corso",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "Crea Gruppo",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Elimina",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Errore imprevisto: {error}",
     "@unexpectedError": {

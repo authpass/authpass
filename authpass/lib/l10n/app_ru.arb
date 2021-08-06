@@ -20,10 +20,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Быстрая разблокировка файлов",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Выберите файл KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -44,10 +40,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Загрузить из URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "createNewKeepass": "Впервые в KeePass?\nСоздать новую базу данных паролей",
     "@createNewKeepass": {
@@ -185,6 +177,10 @@
     "@masterPasswordInputLabel": {
         "description": "",
         "context": "credential screen"
+    },
+    "webDavAuthPassword": "Пароль",
+    "@webDavAuthPassword": {
+        "description": ""
     },
     "unexpectedError": "Неожиданная ошибка: {error}",
     "@unexpectedError": {

@@ -80,10 +80,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "快速解鎖",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "請選擇 KeePass（.kdbx）格式檔。",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -108,10 +104,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "開啟 URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "自 URL 開啟 kdbx 檔",
     "@loadFromRemoteUrl": {
@@ -149,6 +141,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "啟用自動填入",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "關閉",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "僅 Android Oreo（8.0）以上支援此功能。",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "偏好設定",
@@ -507,6 +503,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "密碼",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "新群組",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -782,6 +782,14 @@
     "resetValue": "重新設定",
     "@resetValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "newGroupDialogTitle": "新群組",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "刪除",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "不明錯誤：{error}",
     "@unexpectedError": {

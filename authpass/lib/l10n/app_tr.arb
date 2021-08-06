@@ -60,6 +60,8 @@
     "@unableToLaunchUrlTitle": {
         "description": ""
     },
+    "menuItemGeneratePassword": "Parola oluştur",
+    "@menuItemGeneratePassword": {},
     "menuItemCheckForUpdates": "Güncellemeleri kontrol et",
     "@menuItemCheckForUpdates": {},
     "menuItemHelp": "Yardım",
@@ -200,6 +202,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Şifre",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Yeni Grup",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -270,6 +276,14 @@
     },
     "onboardingYesOpenPasswords": "Evet, parolalarımı aç",
     "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "newGroupDialogTitle": "Yeni Grup",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Sil",
+    "@groupActionDelete": {
         "description": ""
     },
     "unexpectedError": "Beklenmeyen Hata: {error}",

@@ -68,13 +68,21 @@
     "@portugueseBrazilian": {
         "description": "Language switcher subtitle"
     },
+    "slovak": "סלובקית",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
+    "dutch": "שווידית",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "בחר",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - בחירת קובץ KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
-    },
-    "quickUnlockingFiles": "שחרור קבצים מהיר",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
     },
     "selectKeepassFileLabel": "נא לבחור בקובץ KeePass‏ (‎.kdbx).",
     "@selectKeepassFileLabel": {
@@ -100,10 +108,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "להוריד מכתובת",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "לפתוח kdbx מכתובת",
     "@loadFromRemoteUrl": {
@@ -141,6 +145,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "הפעלת מילוי אוטומטי",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "להתעלם",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "נתמך רק באנדרואיד אוריאו (8.0) ומעלה.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "העדפות",
@@ -154,6 +162,8 @@
     "aboutLinkGitHub": "ובמיזם הקוד הפתוח",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "קובץ יומן: {logFilePath}",
+    "aboutLinkContributors": "הראה תורמים",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -199,6 +209,14 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "לבדוק עדכונים",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "שלח לוגים",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "שלח לוגים למייל",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "פורום תמיכה",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "דווח על בעיית וקבל עזרה",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "עזרה",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "הצגת תיעוד",
@@ -300,6 +318,10 @@
     "searchButtonLabel": "חיפוש",
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
+    },
+    "filterButtonLabel": "פלטר לפי קבוצה",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
     },
     "clear": "פינוי",
     "@clear": {
@@ -416,6 +438,14 @@
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
     },
+    "close": "סגור",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "הוסף סיסמה",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
     "errorOpenFileAlreadyOpenTitle": "הקובץ כבר פתוח",
     "@errorOpenFileAlreadyOpenTitle": {
         "description": "Trying to open a database from a second file source which is already open.",
@@ -449,6 +479,15 @@
     "dialogContinue": "להמשיך",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "שלח דוח שגיאה",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "דוח על שגיאה בפורום/עזרה",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
     },
     "groupFilterDescription": "נא לבחור אילו קבוצות תוצגנה (רקורסיבית)",
     "@groupFilterDescription": {
@@ -486,6 +525,10 @@
     "saveButtonLabel": "שמירה",
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
+    },
+    "webDavAuthPassword": "סיסמה",
+    "@webDavAuthPassword": {
+        "description": ""
     },
     "initialNewGroupName": "קבוצה חדשה",
     "@initialNewGroupName": {
@@ -750,6 +793,26 @@
     "saving": "נשמר",
     "@saving": {
         "description": "Saving text"
+    },
+    "increaseValue": "הגדל",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "הקטן",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "אפס",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "newGroupDialogTitle": "קבוצה חדשה",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "מחיקה",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "שגיאה בלתי צפויה: {error}",
     "@unexpectedError": {

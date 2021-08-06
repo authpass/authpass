@@ -8,7 +8,7 @@
     "@fieldWebsite": {},
     "fieldTitle": "标题",
     "@fieldTitle": {},
-    "fieldTotp": "双重认证 (TOTP)",
+    "fieldTotp": "双重认证 (Totp)",
     "@fieldTotp": {
         "description": "Label for fields of TOTP (Time based one time passwords)"
     },
@@ -72,19 +72,19 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "荷兰语",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
     "selectItem": "选择...",
     "@selectItem": {
         "description": "semantic label for checkboxes to select item."
     },
-    "selectKeepassFile": "契约 - 打开密码箱",
+    "selectKeepassFile": "魔钥 - 打开密码库",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "快速解锁文件",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
-    "selectKeepassFileLabel": "你的密码库在哪儿呢？（后缀名为.kdbx）",
+    "selectKeepassFileLabel": "请打开一个数据库，后缀名为.kdbx",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
     },
@@ -108,10 +108,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "从链接下载",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "从链接打开 kdbx密码箱",
     "@loadFromRemoteUrl": {
@@ -149,11 +145,15 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "启用密码自动填充",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "这次不要",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "仅支持安卓 8.0 (Oreo) 或更高版本。",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "设置",
     "@preferenceTitle": {},
-    "aboutAppName": "Authpass-契约",
+    "aboutAppName": "Authpass-魔钥",
     "@aboutAppName": {},
     "aboutLinkFeedback": "我们欢迎反馈意见！",
     "@aboutLinkFeedback": {},
@@ -162,6 +162,8 @@
     "aboutLinkGitHub": "本项目是自由开源软件！",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "日志文件： {logFilePath}",
+    "aboutLinkContributors": "显示贡献者",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -207,6 +209,14 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "检查更新",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "发送日志",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "通过电子邮件发送日志",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "支援论坛",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "报告问题并获得帮助",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "寻求帮助",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "在浏览器查阅用户文档",
@@ -361,11 +371,11 @@
     "@doneCopiedField": {
         "description": ""
     },
-    "emptyPasswordVaultPlaceholder": "好了！已经没什么好怕的了！\n那么，我们来准备保护你的第一个密码吧！",
+    "emptyPasswordVaultPlaceholder": "准备好保护你的第一个密码了吗？",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
     },
-    "emptyPasswordVaultButtonLabel": "好！我们出发吧！",
+    "emptyPasswordVaultButtonLabel": "我准备好了！",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
     },
@@ -470,6 +480,15 @@
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
     },
+    "dialogSendErrorReport": "发送错误报告",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "在论坛/帮助中报告错误",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
+    },
     "groupFilterDescription": "选择要显示的分组",
     "@groupFilterDescription": {
         "description": "Description shown in the group list for filtering (e.g. app drawer)",
@@ -506,6 +525,10 @@
     "saveButtonLabel": "保存",
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
+    },
+    "webDavAuthPassword": "密码",
+    "@webDavAuthPassword": {
+        "description": ""
     },
     "initialNewGroupName": "新建分组",
     "@initialNewGroupName": {
@@ -547,7 +570,7 @@
     "@closePasswordFiles": {
         "description": "delete quick unlock (passwords stored in biometric storage)"
     },
-    "clearQuickUnlockSuccess": "已从生物识别记录删除保存的主密码。",
+    "clearQuickUnlockSuccess": "已取消生物识别解锁",
     "@clearQuickUnlockSuccess": {
         "description": ""
     },
@@ -666,7 +689,7 @@
     "@entryAddAttachment": {
         "description": ""
     },
-    "entryAttachmentSizeWarning": "附件可以是任何文件，该文件将与密码文件结合。这个功能是为了方便携带与密码相关的文件，但这会大大增加打开/保存密码所需的时间。",
+    "entryAttachmentSizeWarning": "附件可以是任何文件，它将与密码文件结合，这会大大增加打开/保存密码所需的时间。",
     "@entryAttachmentSizeWarning": {
         "description": ""
     },
@@ -674,7 +697,7 @@
     "@iconPngSizeWarning": {
         "description": "Warning shown when user selects a large png file as custom icon."
     },
-    "notPngError": "只支持PNG (.png) 格式",
+    "notPngError": "只支持PNG格式",
     "@notPngError": {
         "description": "Error when user selects an unsupported file as custom icon."
     },
@@ -726,15 +749,15 @@
     "@onboardingBackToOnboarding": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingBackToOnboardingSubtitle": "我想再一次签订契约\n ~ ( >ω･)～☆",
+    "onboardingBackToOnboardingSubtitle": "我想重新签订契约\n ~（ >ω･）～☆",
     "@onboardingBackToOnboardingSubtitle": {
         "description": "Context menu entry which reverts to onboarding"
     },
-    "onboardingHeadline": "签订契约，\n守护密码！",
+    "onboardingHeadline": "和我签订契约,\n守护密码吧！",
     "@onboardingHeadline": {
         "description": ""
     },
-    "onboardingQuestion": "请问您先前签订过契约吗？\n（或者说，拥有.kdbx文件吗？）",
+    "onboardingQuestion": "请问您之前用过本软件\n或者兼容的密码管理器吗？\n（KeepassDX、KeepassXC等）",
     "@onboardingQuestion": {
         "description": ""
     },
@@ -782,6 +805,14 @@
     "resetValue": "重置",
     "@resetValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "newGroupDialogTitle": "新建分组",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "删除",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "意外错误: {error}",
     "@unexpectedError": {

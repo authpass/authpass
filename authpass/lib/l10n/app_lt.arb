@@ -16,10 +16,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Greitas failų atrakinimas",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Prašome pasirinkti „KeePass“ (.kdbx) failą.",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -40,10 +36,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Atsisiųsti iš URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "createNewKeepass": "Esate naujas „KeePass“ programoje?\nSukurti naują slaptažodžių duomenų bazę",
     "@createNewKeepass": {
@@ -352,6 +344,10 @@
     "@undoButtonLabel": {
         "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
     },
+    "webDavAuthPassword": "Slaptažodis",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Nauja grupė",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -375,6 +371,14 @@
     "groupListFilterAppbarTitle": "Filtruoti pagal grupes",
     "@groupListFilterAppbarTitle": {
         "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "newGroupDialogTitle": "Nauja grupė",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Ištrinti",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Nenumatyta klaida: {error}",
     "@unexpectedError": {

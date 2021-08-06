@@ -1,6 +1,6 @@
 "playstore_full_description","全平台同步你的所有密码！安全又轻松
 
-AuthPass ，又名契约，是一个密码管理器，它使用广受欢迎且久经沙场的 <strong>KeePass</strong> 格式。 保存您的密码， <strong>分享到您的所有设备</strong> 并随时随地找到您需要登录的密码。并且它不大可能让你感到无聊
+AuthPass ，又名魔钥，是一个密码管理器，它使用广受欢迎且久经沙场的 <strong>KeePass</strong> 格式。 保存您的密码， <strong>分享到您的所有设备</strong> 并随时随地找到您需要登录的密码。并且它不大可能让你感到无聊
 
 🗄 千百密码，一处保存。
 🧬 随机密码，立刻生成。
@@ -8,13 +8,13 @@ AuthPass ，又名契约，是一个密码管理器，它使用广受欢迎且�
 🔍 一次记录，全平台同步。
 🖥 所有主流平台的客户端Mac, iPhone, iPad, 安卓手机和平板, Linux and Windows。
 📂 可以同时打开多个密码文件 (e). 。一个用于工作，一个用于个人的，甚至与同事共享您的密码文件
-🤓 自由开源软件，代码详见 https://github. om/authpass/authpass/
+🤓 自由开源软件，代码详见 https://github.com/authpass/authpass/
 ✍ 自动填充（安卓9以上支持，安卓10以上支持浏览器内填充）
 🔦 暗主题😎️
 
 
 <strong>==== UNER YOUR CONTROL====</strong>
-契约 将密码保存在自由开源的Keepass格式里。 它绝不会向我们的服务器偷偷发送您的密码。 不过我们支持保存到云端：
+ 将密码保存在自由开源的Keepass格式里。 它绝不会向我们的服务器偷偷发送您的密码。 不过我们支持保存到云端：
 
 ✅️ 安卓本地文件
 ✅️ 原生谷歌云盘支持
@@ -23,7 +23,7 @@ AuthPass ，又名契约，是一个密码管理器，它使用广受欢迎且�
 ✅️ 原生微软OneDrive支持
 
 <b>== 全功能、全免费、无广告、===</b>
-作为一个自由开源项目，我们不喜欢对用户施加限制，因此 契约 不含有广告也不需要付费！
+作为一个自由开源项目，我们不喜欢对用户施加限制，因此 不含有广告也不需要付费！
 
 <strong>鼓励且欢迎贡献</strong> 我们总会需要更多人手😅 (开发者、翻译家、文档撰写人、用户界面设计师等。) :), 只需加入我们的 <a href=""https://authpass.app/go/discord"">Discord频道</a>
 
@@ -34,38 +34,38 @@ AuthPass ，又名契约，是一个密码管理器，它使用广受欢迎且�
 ","Google Play Store description","4000",""
 "playstore_title","AuthPass - 兼容 KeePass 的密码管理器","Google Play Title","50",""
 "playstore_short_description","全平台同步您的帐号和密码，安全又方便！","Short description in play store.","80",""
-"apple-appstore-title","契约 - 密码管理器","","30",""
-"apple-appstore-subtitle","和我签订契约，保护你的密码吧！","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
+"apple-appstore-title","魔钥 - 密码管理器","","30",""
+"apple-appstore-subtitle","和我签订契约，守护密码吧！","apple-appstore-subtitle -- Used as subtitle in Apple App Store, feel free to be creative ;-) Does not have to match english original, must just be a catchy phrase for the app store.","30",""
 "apple-appstore-description","全平台同步你的所有密码！安全又轻松
 
-AuthPass ，又名契约，是一个密码管理器，它使用广受欢迎且久经沙场的 KeePass 格式。 保存您的密码， 分享到您的所有设备 并随时随地找到您需要登录的密码。并且它不像其他密码管理器那样枯燥 (至少中文界面是的)
+AuthPass，又名魔钥，是一个密码管理器，它使用广受欢迎且久经考验的 KeePass 格式。 保存您的密码， 分享到您的所有设备 并随时随地找到您需要登录的密码。并且它不像其他密码管理器那样枯燥 (至少中文界面是的)
 
 千百密码，一处保存。
 随机密码，立刻生成。
 生物识别，安全简便。
 一次记录，全平台同步。
 所有主流平台的客户端Mac, iPhone, iPad, 安卓手机和平板, Linux and Windows。
-可以同时打开多个密码文件，一个用于工作，一个用于个人，你甚至可以与同事共享您的密码文件
-本程序是自由开源软件，代码详见 https://github. om/authpass/authpass/
+可以同时打开多个密码文件，一个对公，一个私用
+本程序是自由开源软件，代码详见 https://github.com/authpass/authpass/
 支持双重验证 (TOTP) ，扫描二维码或者输入密钥来添加双重认证。
 将二进制文件附加到密码条目（如离线TANS文件）
 自动填充（安卓9以上支持，安卓10以上支持浏览器内填充）
 黑♂暗主题
 
 
-==== UNER YOUR CONTROL====
-契约 将密码保存在自由开源的Keepass格式里。 它绝不会向我们的服务器偷偷发送您的密码。 不过我们支持保存到云端：
+==== 听命于您！====
+ 将密码保存在自由开源的Keepass格式里。 它绝不会向我们的服务器偷偷发送您的密码。 不过我们支持保存到云端：
 
-安卓本地文件
+本地文件
 原生谷歌云盘支持
 原生Dropbox支持
 原生WebDAV支持，可以保存到NextCloud、OwnCloud等自建云服务
 原生微软OneDrive支持
 
 == 全功能、全免费、无广告、===
-作为一个自由开源项目，我们不喜欢对用户施加限制，因此 契约 不含有广告也不需要付费！
+作为一个自由开源项目，我们不喜欢对用户施加限制，因此  不含有广告也不需要付费！
 
-鼓励且欢迎贡献 我们总会需要更多人手😅 (开发者、翻译家、文档撰写人、用户界面设计师等。) :), 只需加入我们的 Discord频道
+鼓励且欢迎贡献 我们总是缺少人手😅 (开发者、翻译家、文档撰写人、用户界面设计师等。) :), 只需加入我们的 Discord频道
 
 ==== 开发中项目🛠️===
 这是一个仍然处于活跃开发状态的项目，我们一直致力于提供更多功能。 如果您通过电子邮件或在Github上的问题跟踪器提供反馈，我们会很开心的。
@@ -74,8 +74,38 @@ AuthPass ，又名契约，是一个密码管理器，它使用广受欢迎且�
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","密码管理器、密码、管理、密钥库、密钥安全、Keepass、Kdbx、webdav、icloud、nextcloud、onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 
-"microsoft-store-windows","","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
-"microsoft-store-windows-short-descriptoin","","short description for windows store 
+"microsoft-store-windows","轻松、安全地跟踪您的所有密码 ！
+
+Authpass，又名魔钥，是一个支持受欢迎并经验证的 KeePass格式的密码管理器。 支持kdbx 3.x 和 4.x 格式。 保存您的密码，分享到您所有的设备，并且随时随地找到它们。
+
+🗄 千百密码，一处保存。
+🧬 随机密码，立刻生成。
+🔍 一次记录，全平台同步。
+🖥 全平台客户端：Windows、Linux、Mac、Android、iPhone/iPad
+📂 同时打开多个密码文件，
+🤓 本应用是自由开源软件，代码请见https://github.com/authpass/authpass/
+🔦 黑♂暗主题
+
+
+=== 听命于您！===
+AuthorPass 将您的所有密码存储在打开Keepass格式中。 准确到你想要它的地方。 它没有向我们的服务器发送您的密码。 但AuthPass 支持保存到：
+✅️ 本地文件
+✅️ 原生谷歌云盘支持
+✅️ 原生Dropbox支持
+✅️ 原生WebDAV支持，可以保存到NextCloud、OwnCloud等自建云服务
+✅️ 原生微软OneDrive支持
+
+=== 全功能、全免费、无广告===
+作为一个自由开源项目，我们不喜欢对用户施加限制，因此 不含有广告也不需要付费！
+
+我们欢迎您加入开发，因为我们总是缺少人手😅 (开发者、翻译家、文档撰写人、用户界面设计师等。) :), 只需加入我们的Discord频道：https://authpass.app/go/discord
+
+==== 开发中项目🛠️===
+这是一个仍然处于活跃开发状态的项目，我们一直致力于提供更多功能。 如果您通过电子邮件或在Github上的 问题跟踪器：https://github.com/authpass/authpass/issues 提供反馈，我们会很开心的。
+
+也加入我们的社区 https://authpass.app/go/discord
+","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
+"microsoft-store-windows-short-descriptoin","自由开源的密码管理器，支持kdbx格式，全平台保护密码和帐户安全。","short description for windows store 
 A shorter, catchy description that may be used in the top of your product’s Store listing
 Recommended length: 270 characters or fewer
 ","1000",""
@@ -89,8 +119,9 @@ Up to 20 app features
 "microsoft-store-windows-search-terms","* authpass
 * kdbx
 * keepass
+* password
 * 密码管理器
-*誓约","search terms for the microsoft store
+* 魔钥","search terms for the microsoft store
 
 Up to 7 search terms
 40 character limit for each search term

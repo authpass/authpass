@@ -80,10 +80,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Bestanden snel ontgrendelen",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Selecteer een KeePass (.kdbx) bestand.",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -108,10 +104,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Download vanaf URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Open kdbx vanaf URL",
     "@loadFromRemoteUrl": {
@@ -149,6 +141,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Automatisch aanvullen inschakelen",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "AFWIJZEN",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "Alleen ondersteund op Android Oreo (8.0) of later.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Voorkeuren",
@@ -507,6 +503,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Wachtwoord",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Nieuwe groep",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -782,6 +782,14 @@
     "resetValue": "Reset",
     "@resetValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "newGroupDialogTitle": "Nieuwe groep",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Verwijderen",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Onverwachte fout: {error}",
     "@unexpectedError": {

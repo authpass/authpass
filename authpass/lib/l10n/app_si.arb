@@ -73,10 +73,6 @@
             }
         }
     },
-    "loadFromUrl": "ඒ.ස.නි.(URL) න් බාගන්න",
-    "@loadFromUrl": {
-        "description": "deprecated"
-    },
     "labelLastOpenFiles": "අවසන්වරට විවෘත කළ ගොනු:",
     "@labelLastOpenFiles": {},
     "preferenceSelectLanguage": "භාෂාව තෝරන්න",
@@ -210,6 +206,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "මුරපදය",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "නව සමූහය",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -277,6 +277,10 @@
     "saving": "සුරකිමින්",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "නව සමූහය",
+    "@newGroupDialogTitle": {
+        "description": ""
     },
     "unexpectedError": "අනපේක්ෂිත දෝෂයකි: {error}",
     "@unexpectedError": {

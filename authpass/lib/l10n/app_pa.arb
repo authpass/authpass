@@ -3,5 +3,20 @@
     "fieldUserName": "User",
     "@fieldUserName": {},
     "fieldPassword": "ਪਾਸਵਰਡ",
-    "@fieldPassword": {}
+    "@fieldPassword": {},
+    "aboutAppName": "Authpass",
+    "@aboutAppName": {},
+    "generatorPassword": "ਪਾਸਵਰਡ",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "masterPasswordInputLabel": "ਪਾਸਵਰਡ",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "webDavAuthPassword": "ਪਾਸਵਰਡ",
+    "@webDavAuthPassword": {
+        "description": ""
+    }
 }

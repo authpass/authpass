@@ -72,10 +72,6 @@
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
     },
-    "quickUnlockingFiles": "Desbloqueio rápido de arquivos",
-    "@quickUnlockingFiles": {
-        "context": "select file screen"
-    },
     "selectKeepassFileLabel": "Selecione um arquivo do KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
@@ -100,10 +96,6 @@
                 "example": "Dropbox"
             }
         }
-    },
-    "loadFromUrl": "Baixar da URL",
-    "@loadFromUrl": {
-        "description": "deprecated"
     },
     "loadFromRemoteUrl": "Abrir kdbx da URL",
     "@loadFromRemoteUrl": {
@@ -141,6 +133,10 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Habilitar preenchimento automático",
     "@preferenceEnableAutoFill": {},
+    "dismissAutofillSuggestionBannerButton": "DISPENSAR",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
     "preferenceAutoFillDescription": "Somente suportado em Android Oreo (8.0) ou posterior.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Preferências",
@@ -487,6 +483,10 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavAuthPassword": "Senha",
+    "@webDavAuthPassword": {
+        "description": ""
+    },
     "initialNewGroupName": "Novo Grupo",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -750,6 +750,14 @@
     "saving": "Salvando",
     "@saving": {
         "description": "Saving text"
+    },
+    "newGroupDialogTitle": "Novo Grupo",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "groupActionDelete": "Apagar",
+    "@groupActionDelete": {
+        "description": ""
     },
     "unexpectedError": "Erro Inesperado: {error}",
     "@unexpectedError": {
