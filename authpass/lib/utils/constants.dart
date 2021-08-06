@@ -44,6 +44,12 @@ class AssetConstants {
   @NonNls
   static String imageOnboardingButtonCreate =
       'assets/images/safe-empty-v2.webp';
+
+  @NonNls
+  static String logoWithText = 'assets/images/logo_with_text.png';
+
+  @NonNls
+  static String logoIcon = 'assets/images/logo_icon.png';
 }
 
 class UrlConstants {

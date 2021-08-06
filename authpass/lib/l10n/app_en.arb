@@ -1375,6 +1375,103 @@
   "@clearColor": {
     "description": "Action to remove a selected color and reset to default."
   },
+  "databaseRenameInputLabel": "Enter database name",
+  "@databaseRenameInputLabel": {
+    "description": ""
+  },
+  "databasePath": "Path",
+  "@databasePath": {
+    "description": ""
+  },
+  "databaseColor": "Color",
+  "@databaseColor": {
+    "description": ""
+  },
+  "databaseColorChoose": "Select a color to distinguish between files.",
+  "@databaseColorChoose": {
+    "description": ""
+  },
+  "databaseKdbxVersion": "KDBX File Version",
+  "@databaseKdbxVersion": {
+    "description": ""
+  },
+  "databaseKdbxUpgradeVersion": "Upgrade to {versionName}",
+  "@databaseKdbxUpgradeVersion": {
+    "description": "",
+    "placeholders": {
+      "versionName": {}
+    }
+  },
+  "databaseKdbxUpgradeSuccessful": "Successfully upgraded file and saved.",
+  "@databaseKdbxUpgradeSuccessful": {
+    "description": ""
+  },
+  "databaseReload": "Reload and Merge",
+  "@databaseReload": {
+    "description": ""
+  },
+  "progressStatus": "Status: {statusProgress}",
+  "@progressStatus": {
+    "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
+    "placeholders": {
+      "statusProgress": {}
+    }
+  },
+  "finishedMerge": "Finished Merge {status}",
+  "@finishedMerge": {
+    "description": "",
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "closeAndLockFile": "Close/Lock",
+  "@closeAndLockFile": {
+    "description": ""
+  },
+  "authPassHomeScreenTagline": "password manager, open source, available on all platforms.",
+  "@authPassHomeScreenTagline": {
+    "description": ""
+  },
+  "addNewPasswordButtonLabel": "Add new Password",
+  "@addNewPasswordButtonLabel": {
+    "description": ""
+  },
+  "unnamedEntryPlaceholder": "(Unnamed)",
+  "@unnamedEntryPlaceholder": {
+    "description": "displayed instead of entry label, if entry has no name or it is blank."
+  },
+  "unnamedGroupPlaceholder": "(Unnamed)",
+  "@unnamedGroupPlaceholder": {
+    "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
+  },
+  "editGroupScreenTitle": "Edit Group",
+  "@editGroupScreenTitle": {
+    "description": ""
+  },
+  "editGroupGroupNameLabel": "Group Name",
+  "@editGroupGroupNameLabel": {
+    "description": ""
+  },
+  "files": "Files",
+  "@files": {
+    "description": ""
+  },
+  "newGroupDialogTitle": "New Group",
+  "@newGroupDialogTitle": {
+    "description": ""
+  },
+  "newGroupDialogInputLabel": "Name for the new group",
+  "@newGroupDialogInputLabel": {
+    "description": ""
+  },
+  "groupActionShowPasswords": "Show passwords",
+  "@groupActionShowPasswords": {
+    "description": ""
+  },
+  "groupActionDelete": "Delete",
+  "@groupActionDelete": {
+    "description": ""
+  },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {

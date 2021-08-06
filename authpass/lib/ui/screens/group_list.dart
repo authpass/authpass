@@ -34,10 +34,17 @@ class GroupViewModel {
       ? PredefinedIcons.iconForGroup(group.icon.get()!)
       : kdbxBloc.fileForKdbxFile(file).fileSource.displayIcon.iconData;
 
-  String get name =>
+  String? get nameOrNull =>
       (isRoot ? file!.body.meta.databaseName.get() : group.name.get())
-          ?.nullIfBlank() ??
-      '(Unnamed)';
+          ?.nullIfBlank();
+
+  String name(AppLocalizations loc) =>
+      nameOrNull ?? loc.unnamedGroupPlaceholder;
+}
+
+enum GroupListLongPressAction {
+  filter,
+  delete,
 }
 
 class GroupList extends StatelessWidget {
@@ -56,18 +63,19 @@ class GroupList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final kdbxBloc = Provider.of<KdbxBloc>(context);
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(parent == null ? 'Files' : parent!.name.get()!),
+        title: Text(parent == null ? loc.files : parent!.name.get()!),
         actions: parent == null
             ? null
             : <Widget>[
                 IconButton(
                   icon: const Icon(FontAwesomeIcons.folderPlus),
                   onPressed: () async {
-                    final newName = await const SimplePromptDialog(
-                      title: 'New Group',
-                      labelText: 'Name for the new group',
+                    final newName = await SimplePromptDialog(
+                      title: loc.newGroupDialogTitle,
+                      labelText: loc.newGroupDialogInputLabel,
                     ).show(context);
                     if (newName != null) {
                       parent!.file!.createGroup(parent: parent!, name: newName);
@@ -87,7 +95,7 @@ class GroupList extends StatelessWidget {
                 final group = rootGroups[index];
                 return ListTile(
                   leading: Icon(group.icon),
-                  title: Text(group.name),
+                  title: Text(group.name(loc)),
 //                  trailing: IconButton(
 //                    icon: Icon(FontAwesomeIcons.solidArrowAltCircleRight),
 //                    onPressed: () async {
@@ -107,49 +115,53 @@ class GroupList extends StatelessWidget {
                   },
                   onLongPress: () async {
 //                    showModalBottomSheet(context: null, builder: () => )
-                    final action = await showDialog<String>(
+                    final action = await showDialog<GroupListLongPressAction>(
                       context: context,
                       builder: (context) => SimpleDialog(
-                        title: Text(group.name),
+                        title: Text(group.name(loc)),
                         children: <Widget>[
                           SimpleDialogOption(
-                            onPressed: () =>
-                                Navigator.of(context).pop('filter'),
-                            child: const ListTile(
-                              leading: Icon(FontAwesomeIcons.filter),
-                              title: Text('Show passwords'),
+                            onPressed: () => Navigator.of(context)
+                                .pop(GroupListLongPressAction.filter),
+                            child: ListTile(
+                              leading: const Icon(FontAwesomeIcons.filter),
+                              title: Text(loc.groupActionShowPasswords),
                             ),
                           ),
                           SimpleDialogOption(
-                            onPressed: () =>
-                                Navigator.of(context).pop('delete'),
-                            child: const ListTile(
-                              leading: Icon(Icons.delete),
-                              title: Text('Delete'),
+                            onPressed: () => Navigator.of(context)
+                                .pop(GroupListLongPressAction.delete),
+                            child: ListTile(
+                              leading: const Icon(Icons.delete),
+                              title: Text(loc.groupActionDelete),
                             ),
                           ),
                         ],
                       ),
                     );
-                    if (action == 'delete') {
-                      _logger.fine('We should delete ${group.name}');
-                      final oldParent = group.group.parent;
-                      group.file!.deleteGroup(group.group);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Deleted group.'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            onPressed: () {
-                              oldParent!.file!.move(group.group, oldParent);
-                            },
+                    if (action == null) {
+                      return;
+                    }
+                    switch (action) {
+                      case GroupListLongPressAction.delete:
+                        _logger.fine('We should delete ${group.name(loc)}');
+                        final oldParent = group.group.parent;
+                        group.file!.deleteGroup(group.group);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(loc.successfullyDeletedGroup),
+                            action: SnackBarAction(
+                              label: loc.undoButtonLabel,
+                              onPressed: () {
+                                oldParent!.file!.move(group.group, oldParent);
+                              },
+                            ),
                           ),
-                        ),
-                      );
-                    } else if (action == 'filter') {
-                      Navigator.of(context).pop(group.group);
-                    } else if (action != null) {
-                      throw StateError('Invalid action $action');
+                        );
+                        break;
+                      case GroupListLongPressAction.filter:
+                        Navigator.of(context).pop(group.group);
+                        break;
                     }
                   },
                 );
@@ -167,7 +179,7 @@ class GroupList extends StatelessWidget {
         : parent!.groups
             .map((e) => GroupViewModel(e, e.file, kdbxBloc))
             .toList();
-    ret.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    ret.sort((a, b) => compareStringsIgnoreCase(a.nameOrNull, b.nameOrNull));
     return ret;
   }
 }
@@ -196,10 +208,12 @@ class _GroupViewModel {
       ? PredefinedIcons.iconForGroup(group.icon.get()!)
       : file.fileSource.displayIcon.iconData;
 
-  String get name =>
+  String? get nameOrNull =>
       (isRoot ? file.kdbxFile.body.meta.databaseName.get() : group.name.get())
-          ?.nullIfBlank() ??
-      '(Unnamed)';
+          ?.nullIfBlank();
+
+  String name(AppLocalizations loc) =>
+      nameOrNull ?? loc.unnamedGroupPlaceholder;
 
   Color? get color => file.openedFile.color;
 
@@ -322,7 +336,7 @@ class GroupListBuilder extends StatelessWidget {
         if (a.isRecycleBin != b.isRecycleBin) {
           return a.isRecycleBin ? 1 : -1;
         }
-        return compareAsciiLowerCaseNatural(a.name, b.name);
+        return compareStringsIgnoreCase(a.nameOrNull, b.nameOrNull);
       }).flattened;
       return [
         _GroupViewModel(
@@ -584,7 +598,7 @@ class GroupListFlatList extends StatelessWidget {
               final action = await showDialog<GroupAction>(
                 context: context,
                 builder: (context) => SimpleDialog(
-                  title: Text(group.name),
+                  title: Text(group.name(loc)),
                   children: <Widget>[
                     if (!group.isOrInRecycleBin) ...[
                       SimpleDialogOption(
@@ -641,7 +655,7 @@ class GroupListFlatList extends StatelessWidget {
                   analytics.events.trackGroupCreate();
                   break;
                 case GroupAction.delete:
-                  _logger.fine('We should delete ${group.name}');
+                  _logger.fine('We should delete ${group.name(loc)}');
                   // for now only allow deleting of empty groups.
                   if (group.group.groups.isNotEmpty) {
                     analytics.events
@@ -688,7 +702,8 @@ class GroupListFlatList extends StatelessWidget {
                   final result = await DialogUtils.showConfirmDialog(
                     context: context,
                     params: ConfirmDialogParams(
-                      content: loc.permanentlyDeleteEntryConfirm(group.name),
+                      content:
+                          loc.permanentlyDeleteEntryConfirm(group.name(loc)),
                     ),
                   );
                   if (!result) {
@@ -839,6 +854,7 @@ class GroupListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context);
 
     return InkWell(
       onTap: isSelected || !isSelectedInherited
@@ -881,7 +897,7 @@ class GroupListTile extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(group.name, style: theme.textTheme.subtitle1),
+                child: Text(group.name(loc), style: theme.textTheme.subtitle1),
               ),
             ),
             const SizedBox(width: 8),

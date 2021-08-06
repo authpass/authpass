@@ -8,9 +8,11 @@ import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/utils/back_button_navigator_delegate.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -172,6 +174,7 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
 class EmptyStateInitialRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       body: Ink(
         color: Theme.of(context).cardColor,
@@ -182,19 +185,18 @@ class EmptyStateInitialRoute extends StatelessWidget {
             children: [
               ...Theme.of(context).brightness == Brightness.light
                   ? [
-                      Image.asset('assets/images/logo_with_text.png'),
+                      Image.asset(AssetConstants.logoWithText),
                     ]
                   : [
                       const SizedBox(height: 64),
-                      Image.asset('assets/images/logo_icon.png'),
+                      Image.asset(AssetConstants.logoIcon),
                       Text(Env.AuthPass,
                           style: Theme.of(context).textTheme.headline3),
-                      Text(
-                          'password manager, open source, available on all platforms.',
+                      Text(loc.authPassHomeScreenTagline,
                           style: Theme.of(context).textTheme.caption),
                       const SizedBox(height: 64),
                     ],
-              const Text('Select a password.'),
+              // const Text('Select a password.'),
               const SizedBox(height: 32),
               PrimaryButton(
                 onPressed: () {
@@ -202,7 +204,7 @@ class EmptyStateInitialRoute extends StatelessWidget {
                   Navigator.of(context)
                       .push(EntryDetailsScreen.route(entry: newEntry));
                 },
-                child: const Text('Add new Password'),
+                child: Text(loc.addNewPasswordButtonLabel),
               ),
             ],
           ),

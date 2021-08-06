@@ -149,7 +149,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   trailing: const Icon(Icons.edit),
                   onTap: () async {
                     final newName = await SimplePromptDialog(
-                      title: 'Enter database name',
+                      title: loc.databaseRenameInputLabel,
                       initialValue: databaseName,
                     ).show(context);
                     if (newName == null) {
@@ -170,7 +170,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   },
                 ),
                 ListTile(
-                  title: const Text('Path'),
+                  title: Text(loc.databasePath),
                   subtitle: Text(_file!.fileSource.displayPath),
                   trailing: SaveFileAsDialogButton(
                     file: _file!,
@@ -184,9 +184,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   ),
                 ),
                 ListTile(
-                  title: const Text('Color'),
-                  subtitle:
-                      const Text('Select a color to distinguish beween files.'),
+                  title: Text(loc.databaseColor),
+                  subtitle: Text(loc.databaseColorChoose),
                   trailing: CircleColor(
                       color: _file!.openedFile.color, circleSize: 24),
                   onTap: () async {
@@ -200,20 +199,20 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   },
                 ),
                 ListTile(
-                  title: const Text('Kdbx File Version'),
-                  subtitle: Text('${_file!.kdbxFile.header.version} '
-                      '(${_debugKdfType(_file!.kdbxFile)})'),
+                  title: Text(loc.databaseKdbxVersion),
+                  subtitle: Text(_file!.kdbxFile.header.version.toString() +
+                      nonNls(' (${_debugKdfType(_file!.kdbxFile)})')),
                   trailing: _file!.kdbxFile.header.version < KdbxVersion.V4
                       ? IconButton(
                           icon: const Icon(Icons.upgrade),
-                          tooltip: 'Upgrade to ${KdbxVersion.V4}',
+                          tooltip:
+                              loc.databaseKdbxUpgradeVersion(KdbxVersion.V4),
                           onPressed: asyncTaskCallback((progress) async {
                             _file!.kdbxFile.upgrade(KdbxVersion.V4.major);
                             await _kdbxBloc.saveFile(_file!.kdbxFile);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Successfully upgraded file and saved.')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text(loc.databaseKdbxUpgradeSuccessful)));
                           }),
                         )
                       : null,
@@ -223,7 +222,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   children: <Widget>[
                     TextButton.icon(
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Reload'),
+                      label: Text(loc.databaseReload),
                       onPressed: asyncTaskCallback((progress) async {
                         final appender = MemoryAppender()
                           ..attachToLogger(Logger.root);
@@ -231,7 +230,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         try {
                           await for (final status in _kdbxBloc.reload(_file!)) {
                             lastStatus = status;
-                            progress.progressLabel = 'Status: $status';
+                            progress.progressLabel = loc.progressStatus(status);
                           }
                         } catch (e, stackTrace) {
                           lastStatus = ReloadStatus.error;
@@ -243,7 +242,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           // final log = appender.log.toString();
                           await appender.dispose();
                           await LogViewerDialog(
-                            title: 'Finished Merge $lastStatus',
+                            title: loc.finishedMerge(lastStatus),
                             log: appender.log,
                           ).open(context);
                         }
@@ -254,7 +253,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         await _kdbxBloc.close(_file!.kdbxFile);
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Close/Lock'),
+                      child: Text(loc.closeAndLockFile),
                     ),
                   ],
                 ),

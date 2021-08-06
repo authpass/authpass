@@ -2,9 +2,11 @@ import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 
 class GroupEditScreen extends StatefulWidget {
@@ -38,9 +40,10 @@ class _GroupEditScreenState extends State<GroupEditScreen>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Group'),
+        title: Text(loc.editGroupScreenTitle),
         actions: [
           ...?!isDirty
               ? null
@@ -99,6 +102,7 @@ class _GroupEditState extends State<GroupEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Form(
       key: widget.formKey,
       child: Container(
@@ -119,8 +123,8 @@ class _GroupEditState extends State<GroupEdit> {
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
-              label: 'Group:',
-              value: _breadcrumbNames().join(' » '),
+              label: loc.entryInfoGroup,
+              value: _breadcrumbNames().join(CharConstants.chevronRight),
               onTap: widget.group.parent == null
                   ? null
                   : () async {
@@ -136,10 +140,10 @@ class _GroupEditState extends State<GroupEdit> {
                         file.move(widget.group, newGroup);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content:
-                                Text('Moved entry into ${newGroup.name.get()}'),
+                            content: Text(loc.movedEntryToGroup(
+                                newGroup.name.get().toString())),
                             action: SnackBarAction(
-                                label: 'Undo',
+                                label: loc.undoButtonLabel,
                                 onPressed: () {
                                   file.move(widget.group, oldGroup!);
                                 }),
@@ -152,11 +156,11 @@ class _GroupEditState extends State<GroupEdit> {
             TextFormField(
               maxLines: null,
               controller: _nameController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
 //        fillColor: const Color(0xfff0f0f0),
                 filled: true,
-                prefixIcon: Icon(Icons.label),
-                labelText: 'Group Name',
+                prefixIcon: const Icon(Icons.label),
+                labelText: loc.editGroupGroupNameLabel,
               ),
               keyboardType: TextInputType.text,
 //    controller: controller,

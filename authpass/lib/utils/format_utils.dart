@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -40,4 +41,17 @@ class Nls {
   static const String COMMA_SPACE = ', '; // NON-NLS
   static const String SLASH = '/'; // NON-NLS
   static const String STAR = '*'; // NON-NLS
+}
+
+int compareStringsIgnoreCase(String? a, String? b) {
+  if (a == b) {
+    return 0;
+  }
+  if (a == null) {
+    return 1;
+  }
+  if (b == null) {
+    return -1;
+  }
+  return compareAsciiLowerCaseNatural(a, b);
 }
