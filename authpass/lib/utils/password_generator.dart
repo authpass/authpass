@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:charcode/ascii.dart';
 import 'package:charcode/html_entity.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class PasswordGenerator {
   factory PasswordGenerator.singleton() => _instance;
@@ -25,10 +26,12 @@ abstract class CharacterSet {
   static const numeric = CharacterRange($0, $9);
   static const alphabetUmlauts = CharacterRange($Agrave, $yuml);
   // CharacterString('äüößÄÜÖ');
+  @NonNls
   static const specialCharacters =
       CharacterString(r'''@%+\/$'!#$^?:,.(){}[]~-_''');
 
   /// keys used for persisting user selection for default password generator.
+  @NonNls
   static const selectableCharacterSets = {
     'alphabetAsciiLowerCase': alphabetAsciiLowerCase,
     'alphabetAsciiUpperCase': alphabetAsciiUpperCase,

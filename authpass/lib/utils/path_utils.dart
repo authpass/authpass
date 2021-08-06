@@ -10,6 +10,7 @@ import 'package:authpass/utils/path_utils_portable.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 abstract class PathUtils implements PathUtil {
   factory PathUtils() => _instance;
@@ -30,8 +31,8 @@ abstract class PathUtils implements PathUtil {
   Future<Directory> getLogDirectory();
   Future<File> saveToTempDirectory(
     Uint8List bytes, {
-    required String dirPrefix,
-    required String fileName,
+    @NonNls required String dirPrefix,
+    @NonNls required String fileName,
   });
 
   Directory _namespaced(Directory base, {String? subNamespace}) {
@@ -50,10 +51,12 @@ abstract class PathUtilsDefault extends PathUtils {
 
   final Map<String, Directory> directoryCache = {};
 
+  @NonNls
   static String _cacheKey(String type, String? subNamespace) {
     return '$type$subNamespace';
   }
 
+  @NonNls
   @override
   Future<Directory> getTemporaryDirectory({String? subNamespace}) async {
     return directoryCache[_cacheKey('temp', subNamespace)] ??= _namespaced(
@@ -90,6 +93,7 @@ abstract class PathUtilsDefault extends PathUtils {
     return _namespaced(await retrieveAppDataDirectory());
   }
 
+  @NonNls
   @override
   Future<Directory> getLogDirectory() async {
     return Directory(path.join(

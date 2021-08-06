@@ -1591,16 +1591,26 @@ class EntryIcon extends StatelessWidget {
     Color? fgColor,
     ThemeData theme,
     double size,
-  ) {
-    return vm.entry.customIcon?.let((customIcon) => Image.memory(
+  ) =>
+      defaultIconForEntry(vm.entry, fgColor, theme, size,
+          fileColor: vm.fileColor);
+
+  static Widget defaultIconForEntry(
+    KdbxEntry entry,
+    Color? fgColor,
+    ThemeData theme,
+    double size, {
+    Color? fileColor,
+  }) {
+    return entry.customIcon?.let((customIcon) => Image.memory(
               customIcon.data,
               width: size,
               height: size,
               fit: BoxFit.contain,
             )) ??
         Icon(
-          PredefinedIcons.iconFor(vm.entry.icon.get()!),
-          color: fgColor ?? ThemeUtil.iconColor(theme, vm.fileColor),
+          PredefinedIcons.iconFor(entry.icon.get()!),
+          color: fgColor ?? ThemeUtil.iconColor(theme, fileColor),
           size: size,
         );
   }

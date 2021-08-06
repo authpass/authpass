@@ -51,6 +51,7 @@ import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:tuple/tuple.dart';
 
 final _logger = Logger('entry_details');
@@ -182,9 +183,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                           Clipboard.setData(ClipboardData(
                               text: entry.toXml().toXmlString(pretty: true)));
                         },
-                        child: const ListTile(
-                          leading: Icon(Icons.bug_report),
-                          title: Text('Debug: Copy XML'),
+                        child: ListTile(
+                          leading: const Icon(Icons.bug_report),
+                          title: Text(nonNls('Debug: Copy XML')),
                         ),
                       ),
                     ]
@@ -204,10 +205,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
           return await DialogUtils.showConfirmDialog(
             context: context,
             params: ConfirmDialogParams(
-                title: 'Unsaved Changes',
-                content:
-                    'There are still unsaved changes. Do you want to discard changes?',
-                positiveButtonText: 'Discard Changes'),
+                title: loc.unsavedChangesWarningTitle,
+                content: loc.unsavedChangesWarningBody,
+                positiveButtonText: loc.unsavedChangesDiscardActionLabel),
           );
         },
         child: Form(
@@ -266,6 +266,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
 
   @protected
   VoidCallback? get saveCallback => asyncTaskCallback(() async {
+        final loc = AppLocalizations.of(context);
         if (formKey.currentState!.validate()) {
           formKey.currentState!.save();
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
@@ -274,14 +275,14 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
               await kdbxBloc.saveFile(file!);
             } on StorageException catch (e, stackTrace) {
               _logger.warning('Error while saving database.', e, stackTrace);
-              await DialogUtils.showErrorDialog(
-                  context, 'Error while saving', 'Unable to save file: $e');
+              await DialogUtils.showErrorDialog(context,
+                  loc.errorWhileSavingTitle, loc.errorWhileSavingBody(e));
               return;
             } catch (e, stackTrace) {
               _logger.severe('Error while saving database.', e, stackTrace);
               if (mounted) {
-                await DialogUtils.showErrorDialog(
-                    context, 'Error while saving', 'Unable to save file: $e');
+                await DialogUtils.showErrorDialog(context,
+                    loc.errorWhileSavingTitle, loc.errorWhileSavingBody(e));
               }
               rethrow;
             }
@@ -293,8 +294,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
             await DialogUtils.showSimpleAlertDialog(
               context,
               null,
-              'Sorry this database does not support saving. '
-              'Please open a local database file.',
+              loc.databaseDoesNotSupportSaving,
               routeAppend: 'databaseNoSupportSaving',
             );
           }
@@ -382,6 +382,7 @@ class _EntryDetailsState extends State<EntryDetails>
         return;
       }
     }
+    final loc = AppLocalizations.of(context);
     final entry = widget.entry.entry;
     final value = entry.getString(commonField.key);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -389,11 +390,11 @@ class _EntryDetailsState extends State<EntryDetails>
       await Clipboard.setData(ClipboardData(text: value.getText()));
 //      await ClipboardManager.copyToClipBoard(value.getText());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${commonField.displayName} copied.'),
+        content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${commonField.displayName} is empty.'),
+        content: Text(loc.copiedFieldEmpty(commonField.displayName)),
       ));
     }
   }
@@ -409,12 +410,12 @@ class _EntryDetailsState extends State<EntryDetails>
         .where((f) => f.showByDefault || entry.getString(f.key) != null)
         .map((f) => Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>(
             oldKeys[f.key] ??
-                GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'),
+                GlobalKey<_EntryFieldState>(debugLabel: f.key.toString()),
             f.key,
             f))
         .followedBy(nonCommonKeys.map((f) => Tuple3(
             oldKeys[f.key] ??
-                GlobalKey<_EntryFieldState>(debugLabel: '${f.key}'),
+                GlobalKey<_EntryFieldState>(debugLabel: f.key.toString()),
             f.key,
             null)))
         .toList();
@@ -548,8 +549,8 @@ class _EntryDetailsState extends State<EntryDetails>
                     entry.setString(
                         key,
                         cf?.protect == true
-                            ? ProtectedValue.fromString('')
-                            : PlainValue(''));
+                            ? ProtectedValue.fromString(CharConstants.empty)
+                            : PlainValue(CharConstants.empty));
                   }
                   Provider.of<Analytics>(context, listen: false)
                       .events
@@ -693,20 +694,21 @@ class _EntryDetailsState extends State<EntryDetails>
   Future<OtpAuth?> _askForTotpSecret(BuildContext context) async {
     Future<OtpAuth?> _cleanOtpCodeCode(String totpCode) async {
       try {
-        if (totpCode.startsWith('otpauth://')) {
-          // NON-NLS
+        if (totpCode.startsWith(OtpAuth.URI_PREFIX)) {
           return OtpAuth.fromUri(Uri.parse(totpCode));
         }
-        final cleaned = totpCode.replaceAll(' ', ''); //?.toUpperCase();
+        final cleaned = totpCode.replaceAll(
+            CharConstants.space, CharConstants.empty); //?.toUpperCase();
         final value = base32.decode(cleaned);
         _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');
         return OtpAuth(secret: value);
       } catch (e, stackTrace) {
         _logger.warning('Invalid base32 code?', e, stackTrace);
+        final loc = AppLocalizations.of(context);
         await DialogUtils.showSimpleAlertDialog(
           context,
-          'Invalid key',
-          'Given input is not a valid base32 TOTP code. Please verify your input.',
+          loc.otpInvalidKeyTitle,
+          loc.otpInvalidKeyBody,
           routeAppend: 'totpInvalidKey',
         );
         return await _askForTotpSecret(context);
@@ -735,9 +737,10 @@ class _EntryDetailsState extends State<EntryDetails>
         _logger.warning('Error during barcode scanning.', e, stackTrace);
       }
     }
-    final totpCode = await const SimplePromptDialog(
-      title: 'Time Based Authentication',
-      helperText: 'Please enter time based key.',
+    final loc = AppLocalizations.of(context);
+    final totpCode = await SimplePromptDialog(
+      title: loc.otpPromptTitle,
+      helperText: loc.otpPromptHelperText,
     ).show(context);
     if (totpCode == null) {
       return null;
@@ -759,12 +762,13 @@ class AttachmentBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final analytics = Provider.of<Analytics>(context);
+    final loc = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.open_in_new),
-          title: const Text('Open'),
+          title: Text(loc.entryAttachmentOpenActionLabel),
           onTap: () async {
             analytics.events.trackAttachmentAction('open');
             Navigator.of(context).pop();
@@ -780,7 +784,7 @@ class AttachmentBottomSheet extends StatelessWidget {
         if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid)
           ListTile(
             leading: const Icon(Icons.share),
-            title: const Text('Share'),
+            title: Text(loc.entryAttachmentShareActionLabel),
             onTap: () async {
               analytics.events.trackAttachmentAction('share');
               final mimeType = lookupMimeType(
@@ -794,13 +798,14 @@ class AttachmentBottomSheet extends StatelessWidget {
               _logger.fine('Opening attachment with mimeType $mimeType');
 
               final tempDir = await PathUtils().getTemporaryDirectory();
-              final f =
-                  await File('${tempDir.path}/${attachment.key.key}').create();
+              final f = await File(path.join(tempDir.path, attachment.key.key))
+                  .create();
               await f.writeAsBytes(attachment.value.value!);
 
               try {
                 await Share.shareFiles([f.path],
-                    mimeTypes: [mimeType], subject: 'Attachment');
+                    mimeTypes: [mimeType],
+                    subject: loc.entryAttachmentShareSubject);
               } finally {
                 unawaited(f.delete());
               }
@@ -813,7 +818,7 @@ class AttachmentBottomSheet extends StatelessWidget {
         if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid)
           ListTile(
             leading: const Icon(Icons.save),
-            title: const Text('Save to device'),
+            title: Text(loc.entryAttachmentSaveActionLabel),
             onTap: () async {
               analytics.events.trackAttachmentAction('saveToDevice');
               Navigator.of(context).pop();
@@ -827,15 +832,15 @@ class AttachmentBottomSheet extends StatelessWidget {
           ),
         ListTile(
           leading: const Icon(Icons.delete),
-          title: const Text('Remove'),
+          title: Text(loc.entryAttachmentRemoveActionLabel),
           onTap: () async {
             analytics.events.trackAttachmentAction('remove');
             Navigator.of(context).pop();
             final confirm = await DialogUtils.showConfirmDialog(
                 context: context,
                 params: ConfirmDialogParams(
-                    content: 'Do you really want to delete'
-                        ' ${attachment.key.key}?'));
+                    content:
+                        loc.entryAttachmentRemoveConfirm(attachment.key.key)));
             if (confirm) {
               entry.removeBinary(attachment.key);
             }
@@ -1046,7 +1051,8 @@ class _EntryFieldState extends State<EntryField>
       _isValueObscured = true;
       _controller = TextEditingController();
     } else {
-      _controller = TextEditingController(text: _fieldValue?.getText() ?? '');
+      _controller = TextEditingController(
+          text: _fieldValue?.getText() ?? CharConstants.empty);
     }
   }
 
@@ -1174,9 +1180,10 @@ class _EntryFieldState extends State<EntryField>
         // only used by [_OtpEntryFieldState]
         throw UnsupportedError('Field does not support this action.');
       case EntryAction.rename:
+        final loc = AppLocalizations.of(context);
         final key = await SimplePromptDialog(
-          title: 'Renaming field',
-          labelText: 'Enter the new name for the field',
+          title: loc.entryRenameFieldPromptTitle,
+          labelText: loc.entryRenameFieldPromptLabel,
           initialValue: widget.fieldKey.key,
         ).show(context);
         if (key != null) {
@@ -1190,12 +1197,13 @@ class _EntryFieldState extends State<EntryField>
       case EntryAction.protect:
         setState(() {
           if (_isProtected) {
-            _fieldValue = PlainValue(_valueCurrent ?? '');
+            _fieldValue = PlainValue(_valueCurrent ?? CharConstants.empty);
             _isValueObscured = false;
           } else {
             _logger.fine(
                 'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
-            _fieldValue = ProtectedValue.fromString(_valueCurrent ?? '');
+            _fieldValue =
+                ProtectedValue.fromString(_valueCurrent ?? CharConstants.empty);
             _isValueObscured = true;
           }
           _initController();
@@ -1208,7 +1216,7 @@ class _EntryFieldState extends State<EntryField>
       case EntryAction.show:
         FullScreenHud.show(context, (context) {
           return FullScreenHud(
-            value: _valueCurrent ?? '',
+            value: _valueCurrent ?? CharConstants.empty,
           );
         });
         break;
@@ -1305,7 +1313,7 @@ class _EntryFieldState extends State<EntryField>
         openError = loc.unableToLaunchUrlNoHandler;
       }
     } catch (e, stackTrace) {
-      openError = '$e';
+      openError = e.toString();
       _logger.severe('Unable to open url, $url', e, stackTrace);
     }
     if (openError != null) {
@@ -1362,7 +1370,8 @@ class _EntryFieldState extends State<EntryField>
     Provider.of<Analytics>(context, listen: false)
         .events
         .trackCopyField(key: widget.fieldKey.key);
-    await Clipboard.setData(ClipboardData(text: _valueCurrent ?? ''));
+    await Clipboard.setData(
+        ClipboardData(text: _valueCurrent ?? CharConstants.empty));
     return true;
   }
 
@@ -1375,7 +1384,7 @@ class _EntryFieldState extends State<EntryField>
     return ObscuredEntryFieldEditor(
       onPressed: () {
         setState(() {
-          _controller.text = _valueCurrent ?? '';
+          _controller.text = _valueCurrent ?? CharConstants.empty;
           _controller.selection = TextSelection(
               baseOffset: 0, extentOffset: _controller.text.length);
           _isValueObscured = false;
@@ -1448,7 +1457,7 @@ class _EntryFieldState extends State<EntryField>
 class _OtpEntryFieldState extends _EntryFieldState {
   Timer? _timer;
 
-  String _currentOtp = '';
+  String _currentOtp = CharConstants.empty;
 
   String? _errorMessage;
 
@@ -1460,51 +1469,31 @@ class _OtpEntryFieldState extends _EntryFieldState {
 
   @override
   String get _valueCurrent =>
-      widget.entry.getString(widget.fieldKey)?.getText() ?? '';
-
-  String? _addBase32Padding(String? base32data) {
-    if (base32data == null) {
-      return null;
-    }
-    final padding = (8 - (base32data.length % 8)) % 8;
-    if (padding == 0) {
-      return base32data;
-    }
-    return base32data + ('=' * padding);
-  }
+      widget.entry.getString(widget.fieldKey)?.getText() ?? CharConstants.empty;
 
   OtpAuth _getOtpAuth() {
     final value = widget.entry.getString(widget.fieldKey)?.getText();
     if (value == null || value.isEmpty) {
       return throw FormatException('OTP Field contains no data.', value);
     }
-    if (value.startsWith('otpauth:')) {
+    if (value.startsWith(OtpAuth.URI_PREFIX)) {
       // Our own format :-) (And also used by KeeWeb)
       return OtpAuth.fromUri(Uri.parse(value));
     }
-    if (value.contains('key=')) {
-      _logger.finer('value contains "key=": $value');
-      // KeeOTP format:key={base32Key}&size=12&step=33&type=Totp&counter=3
-      final data = Uri.splitQueryString(value);
-      try {
-        return OtpAuth(
-          secret: base32.decode(_addBase32Padding(data['key'])!),
-          period: data['step']?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
-          digits: data['size']?.toInt() ?? OtpAuth.DEFAULT_DIGITS,
-        );
-      } on FormatException catch (e, stackTrace) {
-        _logger.fine(
-            'Error parsing $data for ${widget.fieldKey}', e, stackTrace);
-        rethrow;
-      }
+    final otpAuth = OtpAuth.fromQueryString(value);
+    if (otpAuth != null) {
+      return otpAuth;
     }
     // assume base32 encoded secret, with more settings stored in a second field.
     try {
-      final binarySecret = base32.decode(value.replaceAll(' ', ''));
+      final binarySecret = base32
+          .decode(value.replaceAll(CharConstants.space, CharConstants.empty));
       final settings =
-          _commonFields.otpAuthCompat1Settings.stringValue(widget.entry) ?? '';
-      final settingsOptions =
-          settings.isEmpty ? <String>[] : settings.split(';');
+          _commonFields.otpAuthCompat1Settings.stringValue(widget.entry) ??
+              CharConstants.empty;
+      final settingsOptions = settings.isEmpty
+          ? <String>[]
+          : settings.split(CharConstants.semiColon);
       _logger.finest('settings: $settings');
       return OtpAuth(
         secret: binarySecret,
@@ -1543,10 +1532,12 @@ class _OtpEntryFieldState extends _EntryFieldState {
         _errorMessage = null;
       });
     } on FormatException catch (e, stackTrace) {
-      _logger.severe('Error while decoding otpauth url.', e, stackTrace);
+      _logger.severe('Error while decoding otpauth url for ${widget.fieldKey}.',
+          e, stackTrace);
+      final loc = AppLocalizations.of(context);
       setState(() {
-        _currentOtp = '';
-        _errorMessage = 'Error generating token $e';
+        _currentOtp = CharConstants.empty;
+        _errorMessage = loc.otpErrorMessageGeneration(e);
       });
     }
   }
@@ -1599,24 +1590,26 @@ class _OtpEntryFieldState extends _EntryFieldState {
   }
 
   @override
-  List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) =>
-      super
-          ._buildMenuEntries(context)
-          .where((item) =>
-              item is PopupMenuItem &&
-              const [
-                EntryAction.delete,
-                EntryAction.copy,
-              ].contains((item as PopupMenuItem).value))
-          .followedBy([
-        const PopupMenuItem(
-          value: EntryAction.copyRawData,
-          child: ListTile(
-            leading: Icon(Icons.code),
-            title: Text('Copy Secret'),
-          ),
-        )
-      ]).toList();
+  List<PopupMenuEntry<EntryAction>> _buildMenuEntries(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    return super
+        ._buildMenuEntries(context)
+        .where((item) =>
+            item is PopupMenuItem &&
+            const [
+              EntryAction.delete,
+              EntryAction.copy,
+            ].contains((item as PopupMenuItem).value))
+        .followedBy([
+      PopupMenuItem(
+        value: EntryAction.copyRawData,
+        child: ListTile(
+          leading: const Icon(Icons.code),
+          title: Text(loc.otpCopySecretActionLabel),
+        ),
+      )
+    ]).toList();
+  }
 }
 
 class ObscuredEntryFieldEditor extends StatelessWidget {
@@ -1637,6 +1630,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = ThemeUtil.iconColor(Theme.of(context), null);
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context);
 
     return Stack(
       alignment: Alignment.centerRight,
@@ -1650,7 +1644,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
             labelStyle: TextStyle(color: color.withOpacity(0.2)),
           ),
           child: Text(
-            '*' * 10,
+            nonNls('*') * 10,
             style: TextStyle(color: color.withOpacity(0.2)),
           ),
         ),
@@ -1671,7 +1665,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                     // bottom: 16,
                   ),
                   child: Text(
-                    'Protected field. Click to reveal.',
+                    loc.entryFieldProtected,
                     style: TextStyle(
                       color:
                           theme.isDarkTheme ? Colors.white : theme.primaryColor,
@@ -1692,7 +1686,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
         IconButton(
           icon: const Icon(FontAwesomeIcons.eye),
           color: color,
-          tooltip: 'Show protected field',
+          tooltip: loc.entryFieldActionRevealField,
           onPressed: onShowPressed,
         ),
       ],

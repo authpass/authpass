@@ -119,7 +119,8 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   onFieldSubmitted: (val) => _submitCallback()!(),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (value) {
-                    final userInput = _databaseName.text.pathCase.split('/');
+                    final userInput =
+                        _databaseName.text.pathCase.split(CharConstants.slash);
                     setState(() {
                       if (value.isEmpty) {
                         _strength = null;
@@ -140,7 +141,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 PasswordStrengthDisplay(strength: _strength),
                 const SizedBox(height: 8),
                 Text(
-                  'The master password is used to securely encrypt your password database. Make sure to remember it, it can not be restored.',
+                  loc.masterPasswordDescription,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Container(

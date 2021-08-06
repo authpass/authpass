@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/platform.dart';
@@ -27,7 +28,7 @@ class DialogUtils {
     String? title,
     String? content, {
     List<Widget>? moreActions,
-    String routeName = '/dialog/alert/',
+    @NonNls String routeName = '/dialog/alert/',
     @NonNls required String routeAppend,
   }) {
     final materialLoc = MaterialLocalizations.of(context);
@@ -91,16 +92,16 @@ class DialogUtils {
                   .trackActionPressed(action: 'reportToForum');
               final env = context.read<Env>();
               final forumUrl = context.read<Env>().forumUrlNewTopic(
-                title: 'Error Dialog: ${title ?? content}',
-                body: '\n\n\n'
+                title: nonNls('Error Dialog: ${title ?? content}'),
+                body: nonNls('\n\n\n'
                     'title:$title\n'
                     'content: $content\n'
                     'OS: ${AuthPassPlatform.operatingSystem} '
                     '${AuthPassPlatform.operatingSystemVersion}\n'
                     'App Info: ${(await env.getAppInfo()).longString}\n'
-                    'Device: ${await LoggingUtils.getDebugDeviceInfo()}',
+                    'Device: ${await LoggingUtils.getDebugDeviceInfo()}'),
                 category: 11,
-                tags: ['fromapp'],
+                tags: [nonNls('fromapp')],
               );
               _logger.finer('Opening forum url (${forumUrl.length}) $forumUrl');
               await DialogUtils.openUrl(forumUrl);
@@ -133,9 +134,10 @@ class DialogUtils {
   static bool sendLogsSupported() =>
       AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid;
 
+  @NonNls
   static Future<void> sendLogs(
     BuildContext context, {
-    String errorDescription = '',
+    @NonNls String errorDescription = '',
   }) async {
     final env = Provider.of<Env>(context, listen: false);
     final loggingUtil = LoggingUtils();
@@ -167,6 +169,7 @@ class LogViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
       title: title == null ? null : Text(title!),
       insetPadding: const EdgeInsets.all(4),
@@ -189,7 +192,7 @@ class LogViewerDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Ok'),
+          child: Text(matLoc.okButtonLabel),
         ),
       ],
     );
@@ -207,10 +210,11 @@ extension BuildContextError on BuildContext {
       return await cb();
     } catch (error, stackTrace) {
       _logger.severe('Error during action', error, stackTrace);
+      final loc = AppLocalizations.of(this);
       await DialogUtils.showErrorDialog(
         this,
-        'Error while handling action',
-        'Encountered an unexpected error. $error',
+        loc.genericErrorDialogTitle,
+        loc.genericErrorDialogBody(error),
       );
       rethrow;
     }
@@ -221,33 +225,34 @@ class ConfirmDialogParams {
   ConfirmDialogParams({
     this.title,
     required this.content,
-    this.positiveButtonText = 'Ok',
-    this.negativeButtonText = 'Cancel',
+    this.positiveButtonText,
+    this.negativeButtonText,
   });
 
   final String? title;
   final String content;
-  final String positiveButtonText;
-  final String negativeButtonText;
+  final String? positiveButtonText;
+  final String? negativeButtonText;
 }
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({Key? key, this.params}) : super(key: key);
-  final ConfirmDialogParams? params;
+  const ConfirmDialog({Key? key, required this.params}) : super(key: key);
+  final ConfirmDialogParams params;
 
   @override
   Widget build(BuildContext context) {
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
-      title: params!.title != null ? Text(params!.title!) : null,
-      content: Text(params!.content),
+      title: params.title?.let((it) => Text(it)),
+      content: Text(params.content),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text(params!.negativeButtonText),
+          child: Text(params.negativeButtonText ?? matLoc.cancelButtonLabel),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(params!.positiveButtonText),
+          child: Text(params.positiveButtonText ?? matLoc.okButtonLabel),
         ),
       ],
     );
@@ -271,7 +276,7 @@ class SimpleAuthCodePromptDialog extends StatefulWidget
     this.title,
     this.labelText,
     this.helperText,
-    this.initialValue = '',
+    this.initialValue = CharConstants.empty,
   }) : super(key: key);
 
   final String? title;
@@ -283,6 +288,7 @@ class SimpleAuthCodePromptDialog extends StatefulWidget
   _SimpleAuthCodePromptDialogState createState() =>
       _SimpleAuthCodePromptDialogState();
 
+  @NonNls
   @override
   String get name => '/dialog/authCode';
 }
@@ -306,7 +312,7 @@ class _SimpleAuthCodePromptDialogState
 
   bool _handleUri(Uri uri) {
     _logger.fine('Handling uri: $uri');
-    final code = uri.queryParameters['code'];
+    final code = uri.queryParameters[nonNls('code')];
     if (code != null && code.isNotEmpty) {
       Navigator.of(context).pop(code);
     }
@@ -335,7 +341,7 @@ class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
     Key? key,
     this.title,
     this.labelText,
-    this.initialValue = '',
+    this.initialValue = CharConstants.empty,
     this.helperText,
   }) : super(key: key);
   final String? title;
@@ -351,6 +357,7 @@ class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
   @override
   _SimplePromptDialogState createState() => _SimplePromptDialogState();
 
+  @NonNls
   @override
   String get name => '/dialog/prompt/simple';
 }
@@ -397,6 +404,8 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
       title: widget.title == null ? null : Text(widget.title!),
       content: Container(
@@ -404,10 +413,11 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
         child: Row(
           children: <Widget>[
             IconButton(
-              tooltip: 'Paste from clipboard',
+              tooltip: loc.promptDialogPasteActionTooltip,
               icon: const Icon(FontAwesomeIcons.paste),
               onPressed: () async {
-                _controller!.text = await _getClipboardText() ?? '';
+                _controller!.text =
+                    await _getClipboardText() ?? CharConstants.empty;
               },
             ),
             Expanded(
@@ -415,9 +425,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
                 controller: _controller,
                 decoration: InputDecoration(
                   labelText: widget.labelText,
-                  helperText: widget.helperText ??
-                      'Hint: If you need to paste, '
-                          'try the button to the left ;-)',
+                  helperText: widget.helperText ?? loc.promptDialogPasteHint,
                   helperMaxLines: 2,
                 ),
                 autofocus: true,
@@ -434,13 +442,13 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(matLoc.cancelButtonLabel),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(_controller!.text);
           },
-          child: const Text('Ok'),
+          child: Text(matLoc.okButtonLabel),
         ),
       ],
     );
@@ -448,7 +456,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
 }
 
 Future<String?> _getClipboardText() async {
-  return (await Clipboard.getData('text/plain'))?.text;
+  return (await Clipboard.getData(AppConstants.contentTypeTextPlain))?.text;
 }
 
 extension BuildContextSnackBar on BuildContext {

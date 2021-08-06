@@ -309,7 +309,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   @NonNls
   void trackAttachmentAction(
-    String action, {
+    @NonNls String action, {
     @NonNls String category = 'attachment',
   });
 

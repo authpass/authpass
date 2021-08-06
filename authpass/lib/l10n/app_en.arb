@@ -410,6 +410,20 @@
   "@doneCopiedField": {
     "description": ""
   },
+  "copiedFieldToClipboard": "{fieldName} copied.",
+  "@copiedFieldToClipboard": {
+    "description": "",
+    "placeholders": {
+      "fieldName": {}
+    }
+  },
+  "copiedFieldEmpty": "{fieldName} is empty.",
+  "@copiedFieldEmpty": {
+    "description": "Displayed when user wants to copy a field which is empty or not defined.",
+    "placeholders": {
+      "fieldName": {}
+    }
+  },
   "emptyPasswordVaultPlaceholder": "You do not have any password in your database yet.",
   "@emptyPasswordVaultPlaceholder": {
     "description": "Placeholder text shown when a user opens an empty password file."
@@ -599,6 +613,67 @@
   "editAction": "Edit",
   "@editAction": {
     "description": "menu action: edit item (e.g. delete a group)"
+  },
+  "mailboxEnableLabel": "(re)enable",
+  "@mailboxEnableLabel": {
+    "description": ""
+  },
+  "mailboxEnableHint": "Continue receiving emails",
+  "@mailboxEnableHint": {
+    "description": ""
+  },
+  "mailboxDisableLabel": "Disable",
+  "@mailboxDisableLabel": {
+    "description": ""
+  },
+  "mailboxDisableHint": "Receive no more emails",
+  "@mailboxDisableHint": {
+    "description": ""
+  },
+  "mailListNoMail": "You do not have any emails yet.",
+  "@mailListNoMail": {
+    "description": ""
+  },
+  "mailboxLabelPrefixForEntry": "Entry: {entryLabel}",
+  "@mailboxLabelPrefixForEntry": {
+    "description": "when a mailbox was created for a (password) entry.",
+    "placeholders": {
+      "entryLabel": {
+        "description": "The label of the entry this mailbox was created for"
+      }
+    }
+  },
+  "mailboxLabelPrefixUnknownEntry": "Unknown Entry: {entryUuid}",
+  "@mailboxLabelPrefixUnknownEntry": {
+    "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
+    "placeholders": {
+      "entryUuid": {
+        "description": "The internal id of the entry which was no tfound"
+      }
+    }
+  },
+  "mailboxLabelPrefixCreatedAt": "Created at: {dateTime}",
+  "@mailboxLabelPrefixCreatedAt": {
+    "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
+    "placeholders": {
+      "dateTime": {}
+    }
+  },
+  "masterPasswordDescription": "The master password is used to securely encrypt your password database. Make sure to remember it, it can not be restored.",
+  "@masterPasswordDescription": {
+    "description": ""
+  },
+  "unsavedChangesWarningTitle": "Unsaved Changes",
+  "@unsavedChangesWarningTitle": {
+    "description": ""
+  },
+  "unsavedChangesWarningBody": "There are still unsaved changes. Do you want to discard changes?",
+  "@unsavedChangesWarningBody": {
+    "description": ""
+  },
+  "unsavedChangesDiscardActionLabel": "Discard Changes",
+  "@unsavedChangesDiscardActionLabel": {
+    "description": ""
   },
   "deletePermanentlyAction": "Delete Permanently",
   "@deletePermanentlyAction": {
@@ -1062,6 +1137,187 @@
     "placeholders": {
       "itemCount": {}
     }
+  },
+  "mailSubject": "Subject",
+  "@mailSubject": {
+    "description": ""
+  },
+  "mailFrom": "From",
+  "@mailFrom": {
+    "description": ""
+  },
+  "mailDate": "Date",
+  "@mailDate": {
+    "description": ""
+  },
+  "mailMailbox": "Mailbox",
+  "@mailMailbox": {
+    "description": ""
+  },
+  "mailNoData": "No Data",
+  "@mailNoData": {
+    "description": "Message shown when email text body is empty (or can't be decoded)"
+  },
+  "mailMailboxesTitle": "Mailboxes",
+  "@mailMailboxesTitle": {
+    "description": "Title of the screen showing all available mailboxes."
+  },
+  "mailboxCreateButtonLabel": "Create",
+  "@mailboxCreateButtonLabel": {
+    "description": "FAB label to create a new mailbox."
+  },
+  "mailboxNameInputDialogTitle": "Optionally label for new mailbox",
+  "@mailboxNameInputDialogTitle": {
+    "description": "title of the dialog asking for a mailbox label/name"
+  },
+  "mailboxNameInputLabel": "(Internal) Label",
+  "@mailboxNameInputLabel": {
+    "description": "Label for the text field asking for a label for a mailbox, while creating it."
+  },
+  "mailScreenTitle": "AuthPass Mail",
+  "@mailScreenTitle": {
+    "description": "title for the screen showing available emails"
+  },
+  "mailTabBarTitleMailbox": "Mailbox",
+  "@mailTabBarTitleMailbox": {
+    "description": "title for the tab showing list of mailboxes."
+  },
+  "mailTabBarTitleMail": "Mail",
+  "@mailTabBarTitleMail": {
+    "description": "title for the tab showing list of mails."
+  },
+  "mailMailboxListEmpty": "You do not have any mailboxes yet.",
+  "@mailMailboxListEmpty": {
+    "description": ""
+  },
+  "mailMailboxAddressCopied": "Copied mailbox address to clipboard: {mailboxAddress}",
+  "@mailMailboxAddressCopied": {
+    "description": "Success message when mailbox email address was copied to clipboard.",
+    "placeholders": {
+      "mailboxAddress": {
+        "example": "dkasdfiasdfi@mail.authpass.app"
+      }
+    }
+  },
+  "errorWhileSavingTitle": "Error while saving",
+  "@errorWhileSavingTitle": {
+    "description": "title for error dialog shown when an error occurs while saving"
+  },
+  "errorWhileSavingBody": "Unable to save file: {errorMessage}",
+  "@errorWhileSavingBody": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "databaseDoesNotSupportSaving": "Sorry this database does not support saving. Please open a local database file. Or use \"Save As\".",
+  "@databaseDoesNotSupportSaving": {
+    "description": "keepass files loaded through a URL can't be saved."
+  },
+  "otpInvalidKeyTitle": "Invalid Key",
+  "@otpInvalidKeyTitle": {
+    "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
+  },
+  "otpInvalidKeyBody": "Given input is not a valid base32 TOTP code. Please verify your input.",
+  "@otpInvalidKeyBody": {
+    "description": ""
+  },
+  "otpPromptTitle": "Time Based Authentication",
+  "@otpPromptTitle": {
+    "description": ""
+  },
+  "otpPromptHelperText": "Please enter time based key.",
+  "@otpPromptHelperText": {
+    "description": ""
+  },
+  "otpErrorMessageGeneration": "Error generating token: {errorMessage}",
+  "@otpErrorMessageGeneration": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "otpCopySecretActionLabel": "Copy Secret",
+  "@otpCopySecretActionLabel": {
+    "description": ""
+  },
+  "otpEntryLabel": "One Time Token",
+  "@otpEntryLabel": {
+    "description": "The label for entries which show a one time token for a TOTP"
+  },
+  "entryFieldProtected": "Protected field. Click to reveal.",
+  "@entryFieldProtected": {
+    "description": ""
+  },
+  "entryFieldActionRevealField": "Show protected field",
+  "@entryFieldActionRevealField": {
+    "description": ""
+  },
+  "entryAttachmentOpenActionLabel": "Open",
+  "@entryAttachmentOpenActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentShareActionLabel": "Share",
+  "@entryAttachmentShareActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentShareSubject": "Attachment",
+  "@entryAttachmentShareSubject": {
+    "description": "the 'subject' passed to the system when sharing an attachment. "
+  },
+  "entryAttachmentSaveActionLabel": "Save to device",
+  "@entryAttachmentSaveActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentRemoveActionLabel": "Remove",
+  "@entryAttachmentRemoveActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentRemoveConfirm": "Do you really want to delete {attachmentLabel}",
+  "@entryAttachmentRemoveConfirm": {
+    "description": "",
+    "placeholders": {
+      "attachmentLabel": {}
+    }
+  },
+  "entryRenameFieldPromptTitle": "Renaming field",
+  "@entryRenameFieldPromptTitle": {
+    "description": ""
+  },
+  "entryRenameFieldPromptLabel": "Enter the new name for the field",
+  "@entryRenameFieldPromptLabel": {
+    "description": ""
+  },
+  "promptDialogPasteActionTooltip": "Paste from Clipboard",
+  "@promptDialogPasteActionTooltip": {
+    "description": ""
+  },
+  "promptDialogPasteHint": "Hint: If you need to paste, try the button to the left ;-)",
+  "@promptDialogPasteHint": {
+    "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
+  },
+  "genericErrorDialogTitle": "Error while handling action",
+  "@genericErrorDialogTitle": {
+    "description": ""
+  },
+  "genericErrorDialogBody": "Encountered an unexpected error. {errorMessage}",
+  "@genericErrorDialogBody": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "saveAsEntryLocalFile": "Local File",
+  "@saveAsEntryLocalFile": {
+    "description": "menu entry in the 'save as' dialog for saving as local file."
+  },
+  "fileTypePngs": "Images (png)",
+  "@fileTypePngs": {
+    "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
+  },
+  "selectIconDialogAction": "SELECT ICON",
+  "@selectIconDialogAction": {
+    "description": ""
   },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {

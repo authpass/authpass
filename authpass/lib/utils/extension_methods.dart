@@ -1,3 +1,4 @@
+import 'package:authpass/utils/constants.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
 
@@ -13,7 +14,7 @@ extension StringExt on String? {
 
   bool isNullOrEmpty() => this?.isEmpty ?? true;
 
-  String prepend(String prefix) => '$prefix$this';
+  String prepend(String prefix) => prefix + (this ?? CharConstants.empty);
 }
 
 extension StringValueExt on StringValue {

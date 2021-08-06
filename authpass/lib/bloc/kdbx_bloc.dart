@@ -758,13 +758,13 @@ class KdbxBloc {
 
   Map<String, KdbxEntry>? _entryUuidLookup;
 
-  KdbxEntry? findEntryByUuid(String? uuid) {
-    _entryUuidLookup ??= Map.fromEntries(openedFilesKdbx.expand((file) => file
-        .body.rootGroup
-        .getAllEntries()
-        .map((e) => MapEntry(e.uuid.uuid, e))));
+  KdbxEntry? findEntryByUuid(String uuid) {
+    final entryUuidLookup = _entryUuidLookup ??= Map.fromEntries(
+        openedFilesKdbx.expand((file) => file.body.rootGroup
+            .getAllEntries()
+            .map((e) => MapEntry(e.uuid.uuid, e))));
 
-    return _entryUuidLookup![uuid!];
+    return entryUuidLookup[uuid];
   }
 
   void clearEntryByUuidLookup() => _entryUuidLookup = null;

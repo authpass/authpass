@@ -55,7 +55,7 @@ class SaveFileAsDialogButton extends StatelessWidget {
             onSave?.call(fileFuture);
           },
           icon: const Icon(FontAwesomeIcons.hdd),
-          subtitle: 'Local File',
+          subtitle: loc.saveAsEntryLocalFile,
         ),
       ...cloudStorageBloc.availableCloudStorage.map(
         (cs) => SaveFileAs(

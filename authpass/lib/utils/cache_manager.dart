@@ -4,6 +4,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cache_manager/src/storage/cache_object.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class AuthPassCacheManager extends CacheManager {
   factory AuthPassCacheManager({required PathUtils pathUtils}) {
@@ -25,10 +26,11 @@ class AuthPassCacheManager extends CacheManager {
       : key = getKey(pathUtils),
         super(config);
 
+  @NonNls
   static const _keyBase = 'authpassCachedImageData';
   static String getKey(PathUtils pathUtils) => pathUtils.namespace == null
       ? _keyBase
-      : '${_keyBase}__${pathUtils.namespace}';
+      : nonNls('${_keyBase}__${pathUtils.namespace}');
   final String key;
 
   PathUtils pathUtils;

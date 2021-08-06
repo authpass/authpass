@@ -4,21 +4,26 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:ffi/ffi.dart';
 import 'package:logging/logging.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:winsparkle_flutter/winsparkle_flutter.dart';
 
 final _logger = Logger('winsparkle_init');
+
+@NonNls
+const _appCastUrl = 'https://data.authpass.app/data/artifacts/appcast.xml';
+@NonNls
+const _herbertCompany = 'CodeUX.design';
 
 Future<void> initWinSparkle(Env env) async {
   assert(AuthPassPlatform.isWindows);
   _logger.fine('Initializing winsparkle.');
   final freePointers = <Pointer<NativeType>>[];
   try {
-    final url =
-        'https://data.authpass.app/data/artifacts/appcast.xml'.toNativeUtf8();
+    final url = _appCastUrl.toNativeUtf8();
     win_sparkle_set_appcast_url(url);
 
     final appInfo = await env.getAppInfo();
-    final companyName = 'CodeUX.design'.toNativeUtf16();
+    final companyName = _herbertCompany.toNativeUtf16();
     final name = appInfo.appName.toNativeUtf16();
     final appVersion = appInfo.versionLabel.toNativeUtf16();
     freePointers.addAll([companyName, name, appVersion]);

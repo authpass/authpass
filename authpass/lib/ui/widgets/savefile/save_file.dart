@@ -7,15 +7,18 @@ import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('manage_file');
 
@@ -89,14 +92,15 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   Future<FileSource?> _selectLocalFileSource() async {
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
-          '${path.basenameWithoutExtension(widget.file.fileSource.displayPath)}.kdbx',
-          (tempFile) async {
+          path.basenameWithoutExtension(widget.file.fileSource.displayPath) +
+              AppConstants.kdbxExtension, (tempFile) async {
         return await FilePickerWritable().openFileForCreate(
-          fileName:
-              '${path.basenameWithoutExtension(widget.file.fileSource.displayPath)}.kdbx',
+          fileName: path.basenameWithoutExtension(
+                  widget.file.fileSource.displayPath) +
+              AppConstants.kdbxExtension,
           writer: (file) async {
             _logger.fine('Writing placeholder into $file');
-            await file.writeAsString('<placeholder>');
+            await file.writeAsString(nonNls('<placeholder>'));
           },
         );
       });
@@ -113,9 +117,10 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
         filePickerIdentifier: fileInfo.toJsonString(),
       );
     }
+    final loc = AppLocalizations.of(context);
     final pathFile = await getSavePath(
       suggestedName: path.basename(widget.file.fileSource.displayPath),
-      confirmButtonText: 'Save',
+      confirmButtonText: loc.saveButtonLabel,
     );
     if (pathFile == null) {
       // Operation was canceled by the user.
@@ -126,7 +131,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
     String? macOsBookmark;
     if (AuthPassPlatform.isMacOS) {
       // create a dummy file, so we can create a secure bookmark.
-      await outputFile.writeAsString('.');
+      await outputFile.writeAsString(nonNls('.'));
       macOsBookmark = await SecureBookmarks().bookmark(outputFile);
     }
     return FileSourceLocal(

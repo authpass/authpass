@@ -11,12 +11,14 @@ import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 final _logger = Logger('cloud_mailbox');
 
+@Deprecated('no longer used, only the tabbed screen is used right now')
 class CloudMailboxScreen extends StatelessWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
         settings: const RouteSettings(name: '/cloud_mailbox/'),
@@ -26,18 +28,19 @@ class CloudMailboxScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<AuthPassCloudBloc>();
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mailboxes'),
+        title: Text(loc.mailMailboxesTitle),
       ),
       body: CloudMailboxList(bloc: bloc),
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton.extended(
           icon: const Icon(Icons.add),
-          label: const Text('Create'),
+          label: Text(loc.mailboxCreateButtonLabel),
           onPressed: () async {
-            final result = await (const SimplePromptDialog(
-              labelText: 'Optional (internal) label for new mailbox',
+            final result = await (SimplePromptDialog(
+              labelText: loc.mailboxNameInputLabel,
             )).show(context);
             if (result != null) {
               await bloc.createMailbox(label: result);
@@ -85,20 +88,21 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<AuthPassCloudBloc>();
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AuthPass Mail'),
+        title: Text(loc.mailScreenTitle),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
+          tabs: [
             Tab(
-              text: 'Mailbox',
-              icon: Icon(FontAwesomeIcons.boxOpen),
+              text: loc.mailTabBarTitleMailbox,
+              icon: const Icon(FontAwesomeIcons.boxOpen),
             ),
             Tab(
-              text: 'Mail',
-              icon: Icon(FontAwesomeIcons.mailBulk),
+              text: loc.mailTabBarTitleMail,
+              icon: const Icon(FontAwesomeIcons.mailBulk),
             ),
           ],
         ),
@@ -113,16 +117,16 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
       floatingActionButton: _tabController!.index == 0
           ? FloatingActionButton.extended(
               onPressed: () async {
-                final result = await (const SimplePromptDialog(
-                  title: 'Optionally label for new mailbox',
-                  labelText: '(Internal) Label',
+                final result = await (SimplePromptDialog(
+                  title: loc.mailboxNameInputDialogTitle,
+                  labelText: loc.mailboxNameInputLabel,
                 )).show(context);
                 if (result != null) {
                   await bloc.createMailbox(label: result);
                 }
               },
               icon: const Icon(Icons.add),
-              label: const Text('Create'),
+              label: Text(loc.mailboxCreateButtonLabel),
             )
           : null,
     );
@@ -139,6 +143,7 @@ class CloudMailboxList extends StatelessWidget {
     final formatUtil = context.watch<FormatUtils>();
     final kdbxBloc = context.watch<KdbxBloc>();
     final commonFields = context.watch<CommonFields>();
+    final loc = AppLocalizations.of(context);
     // TODO only clear on demand (ie. when something changes in the kdbx file).
     _logger.fine('clearing entry lookup.');
     kdbxBloc.clearEntryByUuidLookup();
@@ -150,15 +155,15 @@ class CloudMailboxList extends StatelessWidget {
           builder: (context, mailboxList) {
             final data = mailboxList.mailboxes!;
             if (data.isEmpty) {
-              return const Center(
-                child: Text('You do not have any mailboxes yet.'),
+              return Center(
+                child: Text(loc.mailMailboxListEmpty),
               );
             }
             return ListView.builder(
               itemBuilder: (context, idx) {
                 final mailbox = data[idx];
                 final vm =
-                    _labelFor(kdbxBloc, commonFields, formatUtil, mailbox);
+                    _labelFor(loc, kdbxBloc, commonFields, formatUtil, mailbox);
                 return ListTile(
                   leading: Icon(vm.icon,
                       color: mailbox.isDisabled ? Colors.black12 : null),
@@ -175,8 +180,8 @@ class CloudMailboxList extends StatelessWidget {
                       ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
                       ..showSnackBar(
                         SnackBar(
-                          content: Text('Copied mailbox address to clipboard: '
-                              '${mailbox.address}'),
+                          content: Text(
+                              loc.mailMailboxAddressCopied(mailbox.address)),
                         ),
                       );
                   },
@@ -188,7 +193,7 @@ class CloudMailboxList extends StatelessWidget {
                         children: <Widget>[
                           ListTile(
                             leading: const Icon(Icons.delete),
-                            title: const Text('Delete'),
+                            title: Text(loc.deleteAction),
                             onTap: () async {
                               Navigator.of(context).pop();
                               await bloc.deleteMailbox(mailbox);
@@ -198,9 +203,8 @@ class CloudMailboxList extends StatelessWidget {
                               ? ListTile(
                                   leading:
                                       const Icon(FontAwesomeIcons.volumeUp),
-                                  title: const Text('(re)enable'),
-                                  subtitle:
-                                      const Text('Continue receiving emails'),
+                                  title: Text(loc.mailboxEnableLabel),
+                                  subtitle: Text(loc.mailboxEnableHint),
                                   onTap: () async {
                                     Navigator.of(context).pop();
                                     await bloc.updateMailbox(
@@ -212,9 +216,8 @@ class CloudMailboxList extends StatelessWidget {
                               : ListTile(
                                   leading:
                                       const Icon(FontAwesomeIcons.volumeMute),
-                                  title: const Text('Disable'),
-                                  subtitle:
-                                      const Text('Receive no more emails'),
+                                  title: Text(loc.mailboxDisableLabel),
+                                  subtitle: Text(loc.mailboxDisableHint),
                                   onTap: () async {
                                     Navigator.of(context).pop();
                                     await bloc.updateMailbox(mailbox,
@@ -236,8 +239,8 @@ class CloudMailboxList extends StatelessWidget {
     );
   }
 
-  MailboxViewModel _labelFor(KdbxBloc kdbxBloc, CommonFields commonFields,
-      FormatUtils formatUtils, Mailbox mailbox) {
+  MailboxViewModel _labelFor(AppLocalizations loc, KdbxBloc kdbxBloc,
+      CommonFields commonFields, FormatUtils formatUtils, Mailbox mailbox) {
     if (mailbox.entryUuid.isNotEmpty) {
       final entry = kdbxBloc.findEntryByUuid(mailbox.entryUuid);
 
@@ -246,21 +249,22 @@ class CloudMailboxList extends StatelessWidget {
         if (label != null) {
           return MailboxViewModel(
             PredefinedIcons.iconFor(entry.icon.get()!),
-            'Entry: $label',
+            loc.mailboxLabelPrefixForEntry(label),
           );
         }
         return MailboxViewModel(
           PredefinedIcons.iconFor(entry.icon.get()!),
-          'Unknown Entry: ${mailbox.entryUuid}',
+          loc.mailboxLabelPrefixUnknownEntry(mailbox.entryUuid),
         );
       }
     } else if (mailbox.label.isNotEmpty == true) {
       return MailboxViewModel(FontAwesomeIcons.boxOpen, mailbox.label);
     }
     return MailboxViewModel(
-        FontAwesomeIcons.boxOpen,
-        'Created at '
-        '${formatUtils.formatDateFull(mailbox.createdAt)}');
+      FontAwesomeIcons.boxOpen,
+      loc.mailboxLabelPrefixCreatedAt(
+          formatUtils.formatDateFull(mailbox.createdAt)),
+    );
   }
 }
 
@@ -278,6 +282,7 @@ class CloudMailList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return RefreshIndicator(
       onRefresh: () async {
         await bloc.loadMessageListMore(reload: true);
@@ -291,8 +296,8 @@ class CloudMailList extends StatelessWidget {
                 bloc.loadMessageListMore();
                 return const Center(child: CircularProgressIndicator());
               }
-              return const Center(
-                child: Text('You do not have any mails yet.'),
+              return Center(
+                child: Text(loc.mailListNoMail),
               );
             }
             return ListView.builder(

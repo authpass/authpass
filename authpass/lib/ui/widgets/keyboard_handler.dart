@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('keyboard_handler');
 
@@ -69,7 +71,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   final _keyboardShortcutEvents = KeyboardShortcutEvents();
 
   final FocusNode _focusNode = FocusNode(
-    debugLabel: 'AuthPassKeyboardFocus',
+    debugLabel: nonNls('AuthPassKeyboardFocus'),
     onKey: (focusNode, rawKeyEvent) {
 //      _logger.info('got onKey: ($focusNode) $rawKeyEvent');
       return KeyEventResult.ignored;
@@ -147,17 +149,18 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                   if (AuthPassPlatform.isLinux) {
                     final w = WidgetsBinding
                         .instance!.focusManager.primaryFocus!.context!.widget;
-                    Clipboard.getData('text/plain').then((value) async {
+                    Clipboard.getData(AppConstants.contentTypeTextPlain)
+                        .then((value) async {
 //                    await Future<void>.delayed(const Duration(seconds: 2));
-                      final newContent = value!.text;
+                      final newContent = value?.text ?? CharConstants.empty;
                       if (w is EditableText) {
                         final s = w.controller.selection;
                         final oldContent = w.controller.text;
                         final before = s.textBefore(oldContent);
                         final after = s.textAfter(oldContent);
-                        w.controller.text = '$before$newContent$after';
+                        w.controller.text = before + newContent + after;
                         w.controller.selection = TextSelection.collapsed(
-                            offset: s.start + newContent!.length);
+                            offset: s.start + newContent.length);
                       }
                     });
                   }
@@ -219,6 +222,7 @@ class KeyboardShortcut {
   const KeyboardShortcut({required this.type});
   final KeyboardShortcutType type;
 
+  @NonNls
   @override
   String toString() {
     return 'KeyboardShortcut{type: $type}';

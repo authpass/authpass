@@ -4,6 +4,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class PathUtilsFromPathProvider extends PathUtilsDefault {
   PathUtilsFromPathProvider.internal() : super.internal();
@@ -30,6 +31,7 @@ class PathUtilsFromPathProvider extends PathUtilsDefault {
     return await _getDesktopDirectory();
   }
 
+  @NonNls
   Future<Directory> _getDesktopDirectory() async {
     // https://stackoverflow.com/a/32937974/109219
     final userHome = AuthPassPlatform.environment['HOME'] ??

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class OtpFieldEntryEditor extends StatelessWidget {
@@ -16,12 +17,13 @@ class OtpFieldEntryEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return StreamBuilder(
       stream: Stream<void>.periodic(const Duration(seconds: 1)),
       builder: (context, snapshot) {
         return InputDecorator(
           decoration: InputDecoration(
-            labelText: 'One Time Token',
+            labelText: loc.otpEntryLabel,
             prefixIcon: CircularPercentIndicator(
               radius: 20.0,
               lineWidth: 4,

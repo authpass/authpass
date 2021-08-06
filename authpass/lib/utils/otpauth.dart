@@ -4,10 +4,13 @@ import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:base32/base32.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:logging/logging.dart';
 import 'package:otp/otp.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
-/// losely based on format from
+final _logger = Logger('otpauth');
+
+/// loosely based on format from
 /// https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 class OtpAuth {
   const OtpAuth({
@@ -32,7 +35,39 @@ class OtpAuth {
   }
 
   @NonNls
+  static OtpAuth? fromQueryString(String value) {
+    if (value.contains('key=')) {
+      _logger.finer('value contains "key=": $value');
+      // KeeOTP format:key={base32Key}&size=12&step=33&type=Totp&counter=3
+      final data = Uri.splitQueryString(value);
+      try {
+        return OtpAuth(
+          secret: base32.decode(_addBase32Padding(data['key'])!),
+          period: data['step']?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
+          digits: data['size']?.toInt() ?? OtpAuth.DEFAULT_DIGITS,
+        );
+      } on FormatException catch (e, stackTrace) {
+        _logger.fine('Error parsing $data', e, stackTrace);
+        rethrow;
+      }
+    }
+  }
+
+  static String? _addBase32Padding(String? base32data) {
+    if (base32data == null) {
+      return null;
+    }
+    final padding = (8 - (base32data.length % 8)) % 8;
+    if (padding == 0) {
+      return base32data;
+    }
+    return base32data + ('=' * padding); // NON-NLS
+  }
+
+  @NonNls
   static const SCHEME = 'otpauth';
+  @NonNls
+  static const URI_PREFIX = '$SCHEME:';
 
   /// we only support time based tokens anyway.
   static const TYPE_TOTP = 'totp'; // NON-NLS
@@ -40,6 +75,10 @@ class OtpAuth {
   static const PARAM_ALGORITHM = 'algorithm'; // NON-NLS
   static const PARAM_DIGITS = 'digits'; // NON-NLS
   static const PARAM_PERIOD = 'period'; // NON-NLS
+
+  static const QUERY_PARAM_KEY = 'key'; // NON-NLS
+  static const QUERY_PARAM_STEP = 'step'; // NON-NLS
+  static const QUERY_PARAM_SIZE = 'size'; // NON-NLS
 
   static const DEFAULT_ALGORITHM = Algorithm.SHA1;
   static const DEFAULT_DIGITS = 6;

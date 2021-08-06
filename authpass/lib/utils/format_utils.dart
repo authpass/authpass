@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('format_utils');
 
@@ -17,9 +18,9 @@ class FormatUtils {
 
   /// To keep things secure, like URLs we just log the first few characters.
   static String maxLength(String string, int maxLength,
-      {String ellipsis = '…'}) {
+      {@NonNls String ellipsis = '…'}) {
     if (string.length > maxLength) {
-      return '${string.substring(0, maxLength)}$ellipsis';
+      return [string.substring(0, maxLength), ellipsis].join();
     }
     return string;
   }

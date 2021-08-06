@@ -6,10 +6,12 @@
 //      fonts:
 //       - asset: fonts/AuthPassIcons.ttf
 import 'package:flutter/widgets.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 class AuthPassIcons {
   AuthPassIcons._();
 
+  @NonNls
   static const String _fontFamily = 'AuthPassIcons';
 
   static const IconData AuthPassLogo =

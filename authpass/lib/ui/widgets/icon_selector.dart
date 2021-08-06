@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:authpass/ui/widgets/centered_icon.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
@@ -49,6 +50,8 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
       content: IconSelector(
         key: _selectorKey,
@@ -60,13 +63,13 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(matLoc.cancelButtonLabel),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(_selectorKey.currentState!._selection);
           },
-          child: const Text('Select icon'),
+          child: Text(loc.selectIconDialogAction),
         ),
       ],
     );
@@ -157,9 +160,11 @@ class _IconSelectorState extends State<IconSelector> {
         return fileInfo;
       });
     } else {
+      final loc = AppLocalizations.of(context);
       final typeGroup = XTypeGroup(
-        label: 'images',
-        extensions: ['jpg', 'png', 'jpeg', 'gif'],
+        label: loc.fileTypePngs,
+        // extensions: ['jpg', 'png', 'jpeg', 'gif'],
+        extensions: [AppConstants.pngExtensionNoDot],
       );
       final file = await openFile(acceptedTypeGroups: [typeGroup]);
       if (file != null) {
@@ -172,7 +177,7 @@ class _IconSelectorState extends State<IconSelector> {
 
   Future<void> _savePngFile(String fileName, Uint8List bytes) async {
     final loc = AppLocalizations.of(context);
-    if (!fileName.toLowerCase().endsWith('.png')) {
+    if (!fileName.toLowerCase().endsWith(AppConstants.pngExtension)) {
       await DialogUtils.showSimpleAlertDialog(
         context,
         null,

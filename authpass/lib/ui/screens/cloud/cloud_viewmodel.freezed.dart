@@ -17,10 +17,10 @@ class _$EmailViewModelTearOff {
   const _$EmailViewModelTearOff();
 
   _EmailViewModel call(
-      {@nullable EmailMessage? emailMessage,
-      @nullable MimeMessage? mimeMessage,
-      @nullable Mailbox? mailbox,
-      @nullable KdbxEntry? kdbxEntry}) {
+      {required EmailMessage emailMessage,
+      MimeMessage? mimeMessage,
+      Mailbox? mailbox,
+      KdbxEntry? kdbxEntry}) {
     return _EmailViewModel(
       emailMessage: emailMessage,
       mimeMessage: mimeMessage,
@@ -35,13 +35,9 @@ const $EmailViewModel = _$EmailViewModelTearOff();
 
 /// @nodoc
 mixin _$EmailViewModel {
-  @nullable
-  EmailMessage? get emailMessage => throw _privateConstructorUsedError;
-  @nullable
+  EmailMessage get emailMessage => throw _privateConstructorUsedError;
   MimeMessage? get mimeMessage => throw _privateConstructorUsedError;
-  @nullable
   Mailbox? get mailbox => throw _privateConstructorUsedError;
-  @nullable
   KdbxEntry? get kdbxEntry => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -55,10 +51,10 @@ abstract class $EmailViewModelCopyWith<$Res> {
           EmailViewModel value, $Res Function(EmailViewModel) then) =
       _$EmailViewModelCopyWithImpl<$Res>;
   $Res call(
-      {@nullable EmailMessage? emailMessage,
-      @nullable MimeMessage? mimeMessage,
-      @nullable Mailbox? mailbox,
-      @nullable KdbxEntry? kdbxEntry});
+      {EmailMessage emailMessage,
+      MimeMessage? mimeMessage,
+      Mailbox? mailbox,
+      KdbxEntry? kdbxEntry});
 }
 
 /// @nodoc
@@ -81,7 +77,7 @@ class _$EmailViewModelCopyWithImpl<$Res>
       emailMessage: emailMessage == freezed
           ? _value.emailMessage
           : emailMessage // ignore: cast_nullable_to_non_nullable
-              as EmailMessage?,
+              as EmailMessage,
       mimeMessage: mimeMessage == freezed
           ? _value.mimeMessage
           : mimeMessage // ignore: cast_nullable_to_non_nullable
@@ -106,10 +102,10 @@ abstract class _$EmailViewModelCopyWith<$Res>
       __$EmailViewModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@nullable EmailMessage? emailMessage,
-      @nullable MimeMessage? mimeMessage,
-      @nullable Mailbox? mailbox,
-      @nullable KdbxEntry? kdbxEntry});
+      {EmailMessage emailMessage,
+      MimeMessage? mimeMessage,
+      Mailbox? mailbox,
+      KdbxEntry? kdbxEntry});
 }
 
 /// @nodoc
@@ -134,7 +130,7 @@ class __$EmailViewModelCopyWithImpl<$Res>
       emailMessage: emailMessage == freezed
           ? _value.emailMessage
           : emailMessage // ignore: cast_nullable_to_non_nullable
-              as EmailMessage?,
+              as EmailMessage,
       mimeMessage: mimeMessage == freezed
           ? _value.mimeMessage
           : mimeMessage // ignore: cast_nullable_to_non_nullable
@@ -155,22 +151,18 @@ class __$EmailViewModelCopyWithImpl<$Res>
 
 class _$_EmailViewModel implements _EmailViewModel {
   const _$_EmailViewModel(
-      {@nullable this.emailMessage,
-      @nullable this.mimeMessage,
-      @nullable this.mailbox,
-      @nullable this.kdbxEntry});
+      {required this.emailMessage,
+      this.mimeMessage,
+      this.mailbox,
+      this.kdbxEntry});
 
   @override
-  @nullable
-  final EmailMessage? emailMessage;
+  final EmailMessage emailMessage;
   @override
-  @nullable
   final MimeMessage? mimeMessage;
   @override
-  @nullable
   final Mailbox? mailbox;
   @override
-  @nullable
   final KdbxEntry? kdbxEntry;
 
   @override
@@ -212,22 +204,18 @@ class _$_EmailViewModel implements _EmailViewModel {
 
 abstract class _EmailViewModel implements EmailViewModel {
   const factory _EmailViewModel(
-      {@nullable EmailMessage? emailMessage,
-      @nullable MimeMessage? mimeMessage,
-      @nullable Mailbox? mailbox,
-      @nullable KdbxEntry? kdbxEntry}) = _$_EmailViewModel;
+      {required EmailMessage emailMessage,
+      MimeMessage? mimeMessage,
+      Mailbox? mailbox,
+      KdbxEntry? kdbxEntry}) = _$_EmailViewModel;
 
   @override
-  @nullable
-  EmailMessage? get emailMessage => throw _privateConstructorUsedError;
+  EmailMessage get emailMessage => throw _privateConstructorUsedError;
   @override
-  @nullable
   MimeMessage? get mimeMessage => throw _privateConstructorUsedError;
   @override
-  @nullable
   Mailbox? get mailbox => throw _privateConstructorUsedError;
   @override
-  @nullable
   KdbxEntry? get kdbxEntry => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

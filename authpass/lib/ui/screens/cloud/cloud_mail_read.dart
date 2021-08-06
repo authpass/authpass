@@ -4,6 +4,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/cloud/cloud_viewmodel.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -14,6 +15,7 @@ import 'package:enough_mail/enough_mail.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -187,39 +189,44 @@ class EmailRead extends StatelessWidget {
           fontFamily: AuthPassTheme.monoFontFamily,
           height: 1.4,
         );
+    final loc = AppLocalizations.of(context);
     final formatUtil = context.watch<FormatUtils>();
     final htmlData = vm.mimeMessage?.decodeTextHtmlPart();
     final textData = vm.mimeMessage?.decodeTextPlainPart();
     final headers = {
-      'Subject': vm.mimeMessage?.decodeHeaderValue('subject') ??
-          vm.emailMessage!.subject,
-      'From': vm.mimeMessage
-              ?.decodeHeaderMailAddressValue('from')
+      loc.mailSubject:
+          vm.mimeMessage?.decodeHeaderValue(MailConventions.headerSubject) ??
+              vm.emailMessage.subject,
+      loc.mailFrom: vm.mimeMessage
+              ?.decodeHeaderMailAddressValue(MailConventions.headerFrom)
               ?.firstOrNull
               ?.toString() ??
-          vm.emailMessage!.sender,
-      'Date': formatUtil.formatDateFull(
-          vm.mimeMessage?.decodeHeaderDateValue('date') ??
-              vm.emailMessage!.createdAt),
-      'Mailbox': vm.kdbxEntry?.label ?? vm.mailbox?.label.takeUnlessBlank(),
+          vm.emailMessage.sender,
+      loc.mailDate: formatUtil.formatDateFull(
+          vm.mimeMessage?.decodeHeaderDateValue(MailConventions.headerDate) ??
+              vm.emailMessage.createdAt),
+      loc.mailMailbox:
+          vm.kdbxEntry?.label ?? vm.mailbox?.label.takeUnlessBlank(),
 //          'To': message.decodeHeaderValue('to'),
     };
+    final theme = Theme.of(context);
     final textSpans = headers.entries
         .where((element) => element.value != null)
         .expand((e) => [
-              TextSpan(text: '${e.key}: '),
+              TextSpan(
+                  text: e.key + CharConstants.colon + CharConstants.space,
+                  style: theme.textTheme.caption),
               TextSpan(
                 text: e.value,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              const TextSpan(text: '\n'),
+              const TextSpan(text: CharConstants.newLine),
             ])
         .toList()
       ..removeLast();
     final entryVm = vm.kdbxEntry
         ?.let((entry) => EntryViewModel(entry, context.watch<KdbxBloc>()));
     const iconSize = 56.0;
-    final theme = Theme.of(context);
     Icon fallbackIcon(BuildContext context) => Icon(
           Icons.email,
           color: theme.iconColor(null),
@@ -288,8 +295,9 @@ class EmailRead extends StatelessWidget {
 //                    child: Linkify(
                               text: (textData ??
                                       vm.mimeMessage?.decodeContentText() ??
-                                      'No data')
-                                  .replaceAll('\r', ''),
+                                      loc.mailNoData)
+                                  .replaceAll(
+                                      nonNls('\r'), CharConstants.empty),
                               maxLines: null,
                               options: const LinkifyOptions(
                                 humanize: false,

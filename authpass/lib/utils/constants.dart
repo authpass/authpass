@@ -7,6 +7,10 @@ class AppConstants {
   static const routeOpen = '/open'; // NON-NLS
 
   static const kdbxExtension = '.kdbx'; // NON-NLS
+  static const pngExtension = '.png'; // NON-NLS
+  static const pngExtensionNoDot = 'png'; // NON-NLS
+
+  static const contentTypeTextPlain = 'text/plain'; // NON-NLS
 }
 
 class CharConstants {
@@ -20,7 +24,13 @@ class CharConstants {
   static const chevronRight = ' » '; // NON-NLS
 
   static const slash = '/'; // NON-NLS
-  static var newLine = '\n'; // NON-NLS
+  static const newLine = '\n'; // NON-NLS
+
+  static const colon = ':'; // NON-NLS
+
+  static const semiColon = ';'; // NON-NLS
+
+  static const equalSign = '='; // NON-NLS
 }
 
 class UrlConstants {

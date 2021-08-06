@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+
 import 'platform_noop.dart' if (dart.library.html) 'platform_web.dart';
 
 /// we do this ourselves so we do not have to depend on flutter for this file.
@@ -9,11 +11,13 @@ class AuthPassPlatform {
   static final Map<String, String> environment =
       _kIsWeb ? const {} : Platform.environment;
 
+  @NonNls
   static String get version => _kIsWeb ? '0.0' : Platform.version;
 
   static bool get isWeb => _kIsWeb;
   static bool get isLinux => !_kIsWeb && Platform.isLinux;
   static bool get isWindows => !_kIsWeb && Platform.isWindows;
+  @NonNls
   static late final bool isWindowsWinAutoUpdate = isWindows &&
       const bool.fromEnvironment('AUTHPASS_WIN_AUTOUPDATE', defaultValue: true);
 
@@ -21,6 +25,7 @@ class AuthPassPlatform {
   /// ie. no files will be written outside the application directory.
   /// (application directory is in this case the
   /// parent directory of the executable)
+  @NonNls
   static bool get isPortable =>
       !_kIsWeb &&
       const bool.fromEnvironment('AUTHPASS_PORTABLE', defaultValue: false);
@@ -28,8 +33,10 @@ class AuthPassPlatform {
   static bool get isIOS => !_kIsWeb && Platform.isIOS;
   static bool get isAndroid => !_kIsWeb && Platform.isAndroid;
 
+  @NonNls
   static String get operatingSystem =>
       _kIsWeb ? 'web' : Platform.operatingSystem;
+  @NonNls
   static String get operatingSystemVersion =>
       _kIsWeb ? 'web' : Platform.operatingSystemVersion;
 
