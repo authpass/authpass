@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
+import 'package:authpass/bloc/kdbx/file_source_web_none.dart'
+    if (dart.library.html) 'package:authpass/bloc/kdbx/file_source_web.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -22,7 +24,7 @@ part 'app_data.g.dart';
 
 final _logger = Logger('app_data');
 
-enum OpenedFilesSourceType { Local, Url, CloudStorage }
+enum OpenedFilesSourceType { Local, Url, CloudStorage, LocalWeb }
 
 class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
   SimpleEnumSerializer(this.enumValues);
@@ -102,6 +104,11 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               ..macOsSecureBookmark = fileSource.macOsSecureBookmark
               ..filePickerIdentifier = fileSource.filePickerIdentifier
               ..name = dbName;
+          } else if (fileSource is FileSourceWeb) {
+            b
+              ..sourceType = OpenedFilesSourceType.LocalWeb
+              ..sourcePath = dbName
+              ..name = dbName;
           } else if (fileSource is FileSourceUrl) {
             b
               ..sourceType = OpenedFilesSourceType.Url
@@ -135,6 +142,11 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           uuid: uuid,
           databaseName: name,
         );
+      case OpenedFilesSourceType.LocalWeb:
+        return FileSourceWeb(
+          databaseName: name,
+          uuid: uuid,
+        );
       case OpenedFilesSourceType.Url:
         return FileSourceUrl(
           Uri.parse(sourcePath),
@@ -155,9 +167,10 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           databaseName: name,
           initialCachedContent: null,
         );
-      default:
-        throw ArgumentError.value(
-            sourceType, 'sourceType', 'Unsupported value.');
+
+      // default:
+      //   throw ArgumentError.value(
+      //       sourceType, 'sourceType', 'Unsupported value.');
     }
   }
 }
