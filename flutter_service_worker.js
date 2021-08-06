@@ -30,12 +30,12 @@ const RESOURCES = {
 "assets/packages/flutter_widget_from_html_core/test/images/logo.png": "57838d52c318faff743130c3fcfae0c6",
 "assets/packages/fwfh_svg/test/images/logo.svg": "fdb46fc7657324f79bd97928651e8274",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"assets/NOTICES": "3280d12636d3987f2f646ae5a216e152",
+"assets/NOTICES": "00d68188a25b211f4d35c7c9535f084c",
 "assets/AssetManifest.json": "bd6d3296050772c529d4030ed8d3b7cb",
-"index.html": "80ba70ff1f75a54896360b22e98118b1",
-"/": "80ba70ff1f75a54896360b22e98118b1",
+"index.html": "12bcb98fe1e4ea8d8ebb1dc0050625ae",
+"/": "12bcb98fe1e4ea8d8ebb1dc0050625ae",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"main.dart.js": "aae3bb829c3bb3de34b48b6ee32aae16",
+"main.dart.js": "78d7752f83ab10a05c1b9738658036b5",
 "version.json": "fa899bc85dbb30b526cbfbc29a36e223",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a"
 };
