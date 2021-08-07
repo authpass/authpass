@@ -29,6 +29,10 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   WebDavProvider({required CloudStorageHelperBase helper})
       : super(helper: helper);
 
+  @NonNls
+  @override
+  final String id = 'WebDavProvider';
+
   static const METHOD_HEAD = 'HEAD'; // NON-NLS
   static const METHOD_PUT = 'PUT'; // NON-NLS
   static const METHOD_PROPFIND = 'PROPFIND'; // NON-NLS

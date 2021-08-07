@@ -20,6 +20,10 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   OneDriveProvider({required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
 
+  @NonNls
+  @override
+  final String id = 'OneDriveProvider';
+
   final Env env;
 
   @NonNls

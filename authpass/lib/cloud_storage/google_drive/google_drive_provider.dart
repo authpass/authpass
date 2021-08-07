@@ -26,6 +26,10 @@ class GoogleDriveProvider
       {required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
 
+  @NonNls
+  @override
+  final String id = 'GoogleDriveProvider';
+
   final Env env;
 
   static const _scopes = [DriveApi.driveScope];

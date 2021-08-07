@@ -14,6 +14,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:openapi_base/openapi_base.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part 'authpass_cloud_provider.g.dart';
 
@@ -70,6 +71,10 @@ class AuthPassCloudProvider extends CloudStorageProvider
   }
 
   late AuthPassCloudBloc _authPassCloudBloc;
+
+  @NonNls
+  @override
+  final String id = 'AuthPassCloudProvider';
 
   @protected
   @override

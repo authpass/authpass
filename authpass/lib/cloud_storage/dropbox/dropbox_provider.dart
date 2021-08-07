@@ -29,6 +29,10 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   DropboxProvider({required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
 
+  @NonNls
+  @override
+  final String id = 'DropboxProvider';
+
   static const _oauthEndpoint =
       'https://www.dropbox.com/oauth2/authorize'; // NON-NLS
   static const _oauthToken =
