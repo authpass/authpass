@@ -19,6 +19,7 @@ import 'package:file/local.dart';
 import 'package:flutter/material.dart' show Color;
 import 'package:logging/logging.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part 'app_data.g.dart';
 
@@ -256,6 +257,7 @@ class AppDataBloc {
 
   final store = SimpleJsonPersistence.getForTypeWithDefault(
     (json) => serializers.deserializeWith(AppData.serializer, json)!,
+    name: nonNls('AppData'),
     defaultCreator: () =>
         AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
     storeBackend: createStoreBackend(
