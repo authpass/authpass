@@ -1591,8 +1591,8 @@ class EntryIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final env = context.watch<Env>();
     final appData = context.watch<AppData>();
-    if (!env.featureFetchWebsiteIconEnabledByDefault &&
-        !appData.fetchWebsiteIconsOrDefault) {
+    if (!(appData.fetchWebsiteIcons ??
+        env.featureFetchWebsiteIconEnabledByDefault)) {
       return fallback(context);
     }
 

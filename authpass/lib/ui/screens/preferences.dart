@@ -258,7 +258,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         CheckboxListTile(
           secondary: const FaIcon(FontAwesomeIcons.download),
-          value: _appData!.fetchWebsiteIconsOrDefault,
+          value: _appData!.fetchWebsiteIcons ??
+              env.featureFetchWebsiteIconEnabledByDefault,
           title: Text(loc.preferenceDynamicLoadIcons),
           subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
               commonFields.url.displayName)),
