@@ -109,9 +109,15 @@ class FileSourceCloudStorage extends FileSource {
 
     // after cache got loaded, download new version.
     _logger.finer('loading ${toString()}');
-    final freshContent = await provider.loadFile(fileInfo);
-    yield freshContent;
-    unawaited(_writeCache(freshContent));
+    try {
+      final freshContent = await provider.loadFile(fileInfo);
+      yield freshContent;
+      unawaited(_writeCache(freshContent));
+    } catch (e, stackTrace) {
+      _logger.severe('Error while loading file from provider ${toString()}', e,
+          stackTrace);
+      rethrow;
+    }
   }
 
   Future<void> _writeCache(FileContent freshContent) async {

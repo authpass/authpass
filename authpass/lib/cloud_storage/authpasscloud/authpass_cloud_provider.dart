@@ -132,7 +132,13 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final fileContent = response.requireSuccess();
     // FIXME there must be a better solution than to hard code `etag` here.
     const _etagHeader = 'etag'; // NON-NLS
-    final versionToken = response.headers[_etagHeader]?.firstOrNull as String;
+    final versionToken = response.headers[_etagHeader]?.firstOrNull;
+    if (versionToken == null) {
+      _logger.warning('response did not contain $_etagHeader header.');
+      throw StateError(
+          'Missing $_etagHeader in response. got: ${response.headers} '
+          '(${response.status})');
+    }
     final metadata = _FileMetadata(
       name: file.pathOrBaseName,
       fileToken: file.id,

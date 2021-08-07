@@ -19,6 +19,7 @@ import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/screens/onboarding/onboarding.dart';
+import 'package:authpass/ui/widgets/authpass_progress_indicator.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/constants.dart';
@@ -918,7 +919,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   String? _invalidPassword;
 
   final _controller = TextEditingController();
-  Future<void>? _loadingFile;
+  Future<bool>? _loadingFile;
 
   late KdbxBloc _kdbxBloc;
   bool? _biometricQuickUnlockSupported = false;
@@ -990,10 +991,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   validator: SValidator.invalidValue(
                       invalidValue: () => _invalidPassword,
                       message: loc.masterPasswordIncorrectValidator),
-                  onEditingComplete: () {
+                  onEditingComplete: () async {
                     FocusScope.of(context).unfocus();
 
-                    _tryUnlock();
+                    await _tryUnlock();
                   },
                 ),
               ),
@@ -1060,7 +1061,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 child: _loadingFile != null
                     ? const Padding(
                         padding: EdgeInsets.all(32),
-                        child: CircularProgressIndicator())
+                        child: AuthPassProgressIndicator())
                     : LinkButton(
                         key: const ValueKey('continue'),
                         onPressed: () async {
@@ -1103,7 +1104,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         final openIt = StreamIterator(openFileStream);
         _loadingFile = openIt.moveNext();
         setState(() {});
-        await _loadingFile;
+        final result = await _loadingFile;
+        _logger.info('waited for file $result');
         final fileResult = openIt.current;
         analytics.trackTiming(
           'tryUnlockFile',
