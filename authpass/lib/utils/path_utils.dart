@@ -5,6 +5,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:authpass/utils/path_utils_path_provider.dart';
 import 'package:authpass/utils/path_utils_portable.dart';
+import 'package:authpass/utils/path_utils_web.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:file/file.dart';
 import 'package:meta/meta.dart';
@@ -17,7 +18,9 @@ abstract class PathUtils implements PathUtil {
 
   static final PathUtils _instance = AuthPassPlatform.isPortable
       ? PathUtilsPortable.internal()
-      : PathUtilsFromPathProvider.internal();
+      : AuthPassPlatform.isWeb
+          ? PathUtilsWeb.internal()
+          : PathUtilsFromPathProvider.internal();
   static final Completer<bool> runAppFinished = Completer<bool>();
 
   static Future<bool> get waitForRunAppFinished => runAppFinished.future;
