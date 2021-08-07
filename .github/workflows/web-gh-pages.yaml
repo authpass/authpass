@@ -5,6 +5,7 @@ on:
     branches:
       - stable
       - beta
+      - web-beta
 
 jobs:
   deploy:
