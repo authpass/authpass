@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/env/_base.dart';
-import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:authpass/utils/path_utils_path_provider.dart';
 import 'package:authpass/utils/path_utils_portable.dart';
 import 'package:authpass/utils/platform.dart';
+import 'package:file/file.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as path;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 abstract class PathUtils implements PathUtil {
@@ -40,9 +38,22 @@ abstract class PathUtils implements PathUtil {
     if (namespace == null && subNamespace == null) {
       return base;
     }
-    return Directory(
-        path.joinAll([base.path, namespace, subNamespace].whereNotNull()))
-      ..create(recursive: true);
+    return base
+        .childDirectoryOrSelf(namespace)
+        .childDirectoryOrSelf(subNamespace)
+      ..createSync(recursive: true);
+    // return Directory(
+    //     path.joinAll([base.path, namespace, subNamespace].whereNotNull()))
+    //   ..create(recursive: true);
+  }
+}
+
+extension on Directory {
+  Directory childDirectoryOrSelf(String? name) {
+    if (name == null) {
+      return this;
+    }
+    return childDirectory(name);
   }
 }
 
@@ -96,8 +107,8 @@ abstract class PathUtilsDefault extends PathUtils {
   @NonNls
   @override
   Future<Directory> getLogDirectory() async {
-    return Directory(path.join(
-        (_namespaced(await retrieveTemporaryDirectory())).path, 'logs'));
+    return _namespaced(await retrieveTemporaryDirectory())
+        .childDirectory('logs');
   }
 
   @override
@@ -108,7 +119,7 @@ abstract class PathUtilsDefault extends PathUtils {
   }) async {
     final tempDirectory = await getTemporaryDirectory();
     final dir = await tempDirectory.createTemp();
-    final f = File(path.join(dir.path, fileName));
+    final f = dir.childFile(fileName); //File(path.join(dir.path, fileName));
     await f.writeAsBytes(bytes);
     return f;
   }

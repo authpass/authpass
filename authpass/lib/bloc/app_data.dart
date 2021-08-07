@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
@@ -16,6 +15,7 @@ import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:file/local.dart';
 import 'package:flutter/material.dart' show Color;
 import 'package:logging/logging.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
@@ -136,7 +136,7 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
     switch (sourceType) {
       case OpenedFilesSourceType.Local:
         return FileSourceLocal(
-          File(sourcePath),
+          (const LocalFileSystem()).file(sourcePath),
           macOsSecureBookmark: macOsSecureBookmark,
           filePickerIdentifier: filePickerIdentifier,
           uuid: uuid,

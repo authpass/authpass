@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
@@ -29,7 +28,6 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -603,7 +601,7 @@ class KdbxBloc {
     }
     final fileName = _fileNameForDbName(databaseName);
     final appDir = await PathUtils().getAppDocDirectory(ensureCreated: true);
-    final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
+    final localSource = FileSourceLocal(appDir.childFile(fileName),
         databaseName: databaseName, uuid: AppDataBloc.createUuid());
     if (localSource.file.existsSync()) {
       throw FileExistsException(path: localSource.file.path);

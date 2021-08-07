@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:clock/clock.dart';
+import 'package:file/file.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -82,18 +81,17 @@ class FileSourceCloudStorage extends FileSource {
   String get displayPath => provider.displayPath(fileInfo);
 
   @NonNls
-  File _cacheMetadataFile(String cacheDirPath) =>
-      File(path.join(cacheDirPath, '$uuid.kdbx.json'));
+  File _cacheMetadataFile(Directory cacheDir) =>
+      cacheDir.childFile('$uuid.kdbx.json');
   @NonNls
-  File _cacheKdbxFile(String cacheDirPath) =>
-      File(path.join(cacheDirPath, '$uuid.kdbx'));
+  File _cacheKdbxFile(Directory cacheDir) => cacheDir.childFile('$uuid.kdbx');
 
   @override
   Stream<FileContent> load() async* {
     // first try to load from cache.
-    _cacheDir ??= await _getCacheDir();
-    final metadataFile = _cacheMetadataFile(_cacheDir!.path);
-    final kdbxFile = _cacheKdbxFile(_cacheDir!.path);
+    final cacheDir = _cacheDir ??= await _getCacheDir();
+    final metadataFile = _cacheMetadataFile(cacheDir);
+    final kdbxFile = _cacheKdbxFile(cacheDir);
     try {
       if (metadataFile.existsSync()) {
         final cacheInfo = FileContentCached.fromJson(json
@@ -119,9 +117,9 @@ class FileSourceCloudStorage extends FileSource {
   Future<void> _writeCache(FileContent freshContent) async {
     assert(freshContent.source == FileContentSource.origin);
     try {
-      _cacheDir ??= await _getCacheDir();
-      final metadataFile = _cacheMetadataFile(_cacheDir!.path);
-      final kdbxFile = _cacheKdbxFile(_cacheDir!.path);
+      final cacheDir = _cacheDir ??= await _getCacheDir();
+      final metadataFile = _cacheMetadataFile(cacheDir);
+      final kdbxFile = _cacheKdbxFile(cacheDir);
       final cacheInfo = FileContentCached(
         metadata: freshContent.metadata,
         cacheDate: clock.now().toUtc(),

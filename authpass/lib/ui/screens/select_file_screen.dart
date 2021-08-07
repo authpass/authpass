@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
@@ -29,6 +29,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:file/file.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
@@ -490,11 +491,11 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       if (file != null) {
         String? macOsBookmark;
         if (AuthPassPlatform.isMacOS) {
-          macOsBookmark = await SecureBookmarks().bookmark(File(file.path));
+          macOsBookmark = await SecureBookmarks().bookmark(io.File(file.path));
         }
         await Navigator.of(context)
             .push(CredentialsScreen.route(FileSourceLocal(
-          File(file.path),
+          FileSourceLocal.localFile(file.path),
           uuid: AppDataBloc.createUuid(),
           macOsSecureBookmark: macOsBookmark,
           filePickerIdentifier: null,
@@ -508,7 +509,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       await FilePickerWritable().openFile((fileInfo, file) async {
         await Navigator.of(context).push(CredentialsScreen.route(
           FileSourceLocal(
-            file,
+            FileSourceLocal.localFile(file.path),
             uuid: AppDataBloc.createUuid(),
             filePickerIdentifier: fileInfo.toJsonString(),
             initialCachedContent: FileContent(await file.readAsBytes()),
@@ -602,9 +603,9 @@ class OpenFileBottomSheet extends StatelessWidget {
                 _logger.fine('User canceled FilesystemPicker.');
                 return;
               }
-              final file = File(filePath);
               await Navigator.of(context).push(CredentialsScreen.route(
-                  FileSourceLocal(file, uuid: AppDataBloc.createUuid())));
+                  FileSourceLocal(FileSourceLocal.localFile(filePath),
+                      uuid: AppDataBloc.createUuid())));
             },
           ),
           ListTile(
@@ -888,7 +889,7 @@ abstract class KeyFile {
 class KeyFileFile implements KeyFile {
   KeyFileFile(this.file);
 
-  final File file;
+  final XFile file;
 
   @override
   Future<Uint8List> readAsBytes() async {
@@ -1028,7 +1029,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       final file = await openFile();
                       if (file != null) {
                         setState(() {
-                          _keyFile = KeyFileFile(File(file.path));
+                          _keyFile = KeyFileFile(file);
                         });
                       } else {
                         setState(() {

@@ -1,18 +1,20 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
+import 'package:file/file.dart';
+import 'package:file/local.dart';
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
-import 'package:path/path.dart' as path;
 
 final _logger = Logger('test_util');
 
+const fs = LocalFileSystem();
+
 class TestUtil {
   static Directory basePath() {
-    final dir = Directory.current;
+    final dir = fs.currentDirectory;
     if (dir.path.endsWith('test')) {
       return dir.parent;
     }
@@ -20,7 +22,7 @@ class TestUtil {
   }
 
   static File filePath(String relativePath) {
-    return File(path.join(basePath().path, relativePath));
+    return basePath().childFile(relativePath);
   }
 
   static Future<Env> createEnv() async {
@@ -77,7 +79,7 @@ class TestPathUtil extends PathUtil {
 
   @override
   Future<Directory> getTemporaryDirectory({String? subNamespace}) async {
-    return _tempDirector ??= await Directory.systemTemp.createTemp();
+    return _tempDirector ??= await fs.systemTempDirectory.createTemp();
   }
 }
 

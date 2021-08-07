@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show HttpHeaders, ContentType, HttpStatus;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';

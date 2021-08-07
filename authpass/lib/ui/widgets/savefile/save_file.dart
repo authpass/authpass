@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
@@ -111,7 +111,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       }
       _logger.fine('writing to ${fileInfo.uri} / ${fileInfo.fileName}');
       return FileSourceLocal(
-        File(fileInfo.fileName!),
+        FileSourceLocal.localFile(fileInfo.fileName!),
         databaseName: widget.file.fileSource.displayName,
         uuid: AppDataBloc.createUuid(),
         filePickerIdentifier: fileInfo.toJsonString(),
@@ -127,7 +127,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       return null;
     }
 
-    final outputFile = File(pathFile);
+    final outputFile = io.File(pathFile);
     String? macOsBookmark;
     if (AuthPassPlatform.isMacOS) {
       // create a dummy file, so we can create a secure bookmark.
@@ -135,7 +135,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       macOsBookmark = await SecureBookmarks().bookmark(outputFile);
     }
     return FileSourceLocal(
-      outputFile,
+      FileSourceLocal.localFile(pathFile),
       uuid: AppDataBloc.createUuid(),
       macOsSecureBookmark: macOsBookmark,
     );

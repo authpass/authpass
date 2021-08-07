@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show HttpHeaders, ContentType;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';

@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:file/file.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 /// A abstract version of [PathUtils] to make things mock able
