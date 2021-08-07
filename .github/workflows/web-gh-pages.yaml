@@ -34,4 +34,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./authpass/build/web
           allow_empty_commit: true
+          cname: web.authpass.app
 
