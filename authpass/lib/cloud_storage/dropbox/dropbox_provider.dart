@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show HttpHeaders, ContentType, HttpStatus;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
@@ -28,6 +28,10 @@ const _HEADER_DOWNLOAD_METADATA = 'Dropbox-API-Result';
 class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   DropboxProvider({required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
+
+  @NonNls
+  @override
+  final String id = 'DropboxProvider';
 
   static const _oauthEndpoint =
       'https://www.dropbox.com/oauth2/authorize'; // NON-NLS

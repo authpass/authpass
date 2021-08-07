@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
@@ -26,6 +25,10 @@ class GoogleDriveProvider
   GoogleDriveProvider(
       {required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
+
+  @NonNls
+  @override
+  final String id = 'GoogleDriveProvider';
 
   final Env env;
 

@@ -125,8 +125,8 @@ abstract class Env {
   bool get featureCloudStorageProprietary => true;
 
   /// Automatically fetch website icons.
-  /// Right now this is only enabled during screenshots.
-  bool get featureFetchWebsiteIconEnabledByDefault => false;
+  /// Right now this is only disabled for fdroid.
+  bool get featureFetchWebsiteIconEnabledByDefault => true;
 
   /// Support for WebDAV
   bool get featureCloudStorageWebDav => true;

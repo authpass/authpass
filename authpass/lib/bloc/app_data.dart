@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
+import 'package:authpass/bloc/kdbx/file_source_web_none.dart'
+    if (dart.library.html) 'package:authpass/bloc/kdbx/file_source_web.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_utils.dart';
@@ -14,15 +15,17 @@ import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:file/local.dart';
 import 'package:flutter/material.dart' show Color;
 import 'package:logging/logging.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part 'app_data.g.dart';
 
 final _logger = Logger('app_data');
 
-enum OpenedFilesSourceType { Local, Url, CloudStorage }
+enum OpenedFilesSourceType { Local, Url, CloudStorage, LocalWeb }
 
 class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
   SimpleEnumSerializer(this.enumValues);
@@ -102,6 +105,11 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
               ..macOsSecureBookmark = fileSource.macOsSecureBookmark
               ..filePickerIdentifier = fileSource.filePickerIdentifier
               ..name = dbName;
+          } else if (fileSource is FileSourceWeb) {
+            b
+              ..sourceType = OpenedFilesSourceType.LocalWeb
+              ..sourcePath = dbName
+              ..name = dbName;
           } else if (fileSource is FileSourceUrl) {
             b
               ..sourceType = OpenedFilesSourceType.Url
@@ -129,11 +137,16 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
     switch (sourceType) {
       case OpenedFilesSourceType.Local:
         return FileSourceLocal(
-          File(sourcePath),
+          (const LocalFileSystem()).file(sourcePath),
           macOsSecureBookmark: macOsSecureBookmark,
           filePickerIdentifier: filePickerIdentifier,
           uuid: uuid,
           databaseName: name,
+        );
+      case OpenedFilesSourceType.LocalWeb:
+        return FileSourceWeb(
+          databaseName: name,
+          uuid: uuid,
         );
       case OpenedFilesSourceType.Url:
         return FileSourceUrl(
@@ -146,7 +159,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String?;
         final provider = cloudStorageBloc.providerById(storageId);
         if (provider == null) {
-          throw StateError('Invalid cloud storage provider id $storageId');
+          throw StateError(''
+              'Invalid cloud storage provider id $storageId');
         }
         return provider.toFileSourceFromFileInfo(
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
@@ -155,9 +169,10 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
           databaseName: name,
           initialCachedContent: null,
         );
-      default:
-        throw ArgumentError.value(
-            sourceType, 'sourceType', 'Unsupported value.');
+
+      // default:
+      //   throw ArgumentError.value(
+      //       sourceType, 'sourceType', 'Unsupported value.');
     }
   }
 }
@@ -243,6 +258,7 @@ class AppDataBloc {
 
   final store = SimpleJsonPersistence.getForTypeWithDefault(
     (json) => serializers.deserializeWith(AppData.serializer, json)!,
+    name: nonNls('AppData'),
     defaultCreator: () =>
         AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
     storeBackend: createStoreBackend(

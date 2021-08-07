@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:isolate';
 
 import 'package:authpass/utils/path_utils.dart';
@@ -7,7 +7,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
-import 'package:path/path.dart' as path;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('logging_utils');
@@ -25,7 +24,7 @@ class LoggingUtils {
           AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
         await PathUtils.waitForRunAppFinished;
         final logsDir = await PathUtils().getLogDirectory();
-        final appLogFile = File(path.join(logsDir.path, nonNls('app.log.txt')));
+        final appLogFile = logsDir.childFile(nonNls('app.log.txt'));
         await appLogFile.parent.create(recursive: true);
         _logger.fine('Logging into $appLogFile');
         return RotatingFileAppender(
@@ -34,7 +33,7 @@ class LoggingUtils {
         );
       });
 
-  List<File> get rotatingFileLoggerFiles =>
+  List<io.File> get rotatingFileLoggerFiles =>
       _rotatingFileLogger.delegatedLogHandler?.getAllLogFiles() ?? [];
 
   void setupLogging({bool fromMainIsolate = false}) {

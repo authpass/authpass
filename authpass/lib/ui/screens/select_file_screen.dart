@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
@@ -19,6 +19,7 @@ import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/main_app_scaffold.dart';
 import 'package:authpass/ui/screens/onboarding/onboarding.dart';
+import 'package:authpass/ui/widgets/authpass_progress_indicator.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/password_input_field.dart';
 import 'package:authpass/utils/constants.dart';
@@ -29,6 +30,7 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:biometric_storage/biometric_storage.dart';
+import 'package:file/file.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
@@ -490,11 +492,11 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       if (file != null) {
         String? macOsBookmark;
         if (AuthPassPlatform.isMacOS) {
-          macOsBookmark = await SecureBookmarks().bookmark(File(file.path));
+          macOsBookmark = await SecureBookmarks().bookmark(io.File(file.path));
         }
         await Navigator.of(context)
             .push(CredentialsScreen.route(FileSourceLocal(
-          File(file.path),
+          FileSourceLocal.localFile(file.path),
           uuid: AppDataBloc.createUuid(),
           macOsSecureBookmark: macOsBookmark,
           filePickerIdentifier: null,
@@ -508,7 +510,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       await FilePickerWritable().openFile((fileInfo, file) async {
         await Navigator.of(context).push(CredentialsScreen.route(
           FileSourceLocal(
-            file,
+            FileSourceLocal.localFile(file.path),
             uuid: AppDataBloc.createUuid(),
             filePickerIdentifier: fileInfo.toJsonString(),
             initialCachedContent: FileContent(await file.readAsBytes()),
@@ -602,9 +604,9 @@ class OpenFileBottomSheet extends StatelessWidget {
                 _logger.fine('User canceled FilesystemPicker.');
                 return;
               }
-              final file = File(filePath);
               await Navigator.of(context).push(CredentialsScreen.route(
-                  FileSourceLocal(file, uuid: AppDataBloc.createUuid())));
+                  FileSourceLocal(FileSourceLocal.localFile(filePath),
+                      uuid: AppDataBloc.createUuid())));
             },
           ),
           ListTile(
@@ -888,7 +890,7 @@ abstract class KeyFile {
 class KeyFileFile implements KeyFile {
   KeyFileFile(this.file);
 
-  final File file;
+  final XFile file;
 
   @override
   Future<Uint8List> readAsBytes() async {
@@ -917,7 +919,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   String? _invalidPassword;
 
   final _controller = TextEditingController();
-  Future<void>? _loadingFile;
+  Future<bool>? _loadingFile;
 
   late KdbxBloc _kdbxBloc;
   bool? _biometricQuickUnlockSupported = false;
@@ -989,10 +991,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   validator: SValidator.invalidValue(
                       invalidValue: () => _invalidPassword,
                       message: loc.masterPasswordIncorrectValidator),
-                  onEditingComplete: () {
+                  onEditingComplete: () async {
                     FocusScope.of(context).unfocus();
 
-                    _tryUnlock();
+                    await _tryUnlock();
                   },
                 ),
               ),
@@ -1028,7 +1030,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       final file = await openFile();
                       if (file != null) {
                         setState(() {
-                          _keyFile = KeyFileFile(File(file.path));
+                          _keyFile = KeyFileFile(file);
                         });
                       } else {
                         setState(() {
@@ -1059,7 +1061,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                 child: _loadingFile != null
                     ? const Padding(
                         padding: EdgeInsets.all(32),
-                        child: CircularProgressIndicator())
+                        child: AuthPassProgressIndicator())
                     : LinkButton(
                         key: const ValueKey('continue'),
                         onPressed: () async {
@@ -1102,7 +1104,8 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
         final openIt = StreamIterator(openFileStream);
         _loadingFile = openIt.moveNext();
         setState(() {});
-        await _loadingFile;
+        final result = await _loadingFile;
+        _logger.info('waited for file $result');
         final fileResult = openIt.current;
         analytics.trackTiming(
           'tryUnlockFile',

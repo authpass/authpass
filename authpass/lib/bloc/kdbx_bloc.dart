@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
@@ -9,8 +8,11 @@ import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
+import 'package:authpass/bloc/kdbx/file_source_web_none.dart'
+    if (dart.library.html) 'package:authpass/bloc/kdbx/file_source_web.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
-import 'package:authpass/bloc/kdbx_argon2_ffi.dart';
+import 'package:authpass/bloc/kdbx_argon2_ffi.dart'
+    if (dart.library.html) 'package:authpass/bloc/kdbx_argon2_web.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
@@ -26,7 +28,6 @@ import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -571,7 +572,7 @@ class KdbxBloc {
     FileSource fileSource;
     if (target == null) {
       final localSource = await _localFileSourceForDbName(databaseName);
-      await localSource.file.writeAsBytes(bytes, flush: true);
+      await localSource.contentWrite(bytes, metadata: <String, dynamic>{});
       fileSource = localSource;
     } else {
       final entity = await target.provider.createEntity(
@@ -590,10 +591,17 @@ class KdbxBloc {
   String _fileNameForDbName(String databaseName) =>
       [databaseName, AppConstants.kdbxExtension].join();
 
-  Future<FileSourceLocal> _localFileSourceForDbName(String databaseName) async {
+  Future<FileSource> _localFileSourceForDbName(String databaseName) async {
+    if (AuthPassPlatform.isWeb) {
+      _logger.finer('in web mode - using FileSourceWeb.');
+      return FileSourceWeb(
+        databaseName: databaseName,
+        uuid: AppDataBloc.createUuid(),
+      );
+    }
     final fileName = _fileNameForDbName(databaseName);
     final appDir = await PathUtils().getAppDocDirectory(ensureCreated: true);
-    final localSource = FileSourceLocal(File(path.join(appDir.path, fileName)),
+    final localSource = FileSourceLocal(appDir.childFile(fileName),
         databaseName: databaseName, uuid: AppDataBloc.createUuid());
     if (localSource.file.existsSync()) {
       throw FileExistsException(path: localSource.file.path);

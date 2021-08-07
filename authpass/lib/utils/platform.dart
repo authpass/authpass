@@ -1,8 +1,11 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
+import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 import 'platform_noop.dart' if (dart.library.html) 'platform_web.dart';
+
+final _logger = Logger('platform');
 
 /// we do this ourselves so we do not have to depend on flutter for this file.
 const bool _kIsWeb = authPassIsWeb;
@@ -41,4 +44,23 @@ class AuthPassPlatform {
       _kIsWeb ? 'web' : Platform.operatingSystemVersion;
 
   static String? get localeName => _kIsWeb ? null : Platform.localeName;
+
+  static Map<String, String> debugInfo() {
+    String handle(String Function() info) {
+      try {
+        return info();
+      } catch (e) {
+        _logger.fine('error fetching info. ', e);
+        return 'throws: $e'; // NON-NLS
+      }
+    }
+
+    return nonNls({
+      'script': handle(() => Platform.script.toFilePath()),
+      'executable': handle(() => Platform.executable),
+      'resolvedExecutable': handle(() => Platform.resolvedExecutable),
+      'executableArguments':
+          handle(() => Platform.executableArguments.toString()),
+    });
+  }
 }

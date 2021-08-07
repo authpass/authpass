@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -798,8 +797,7 @@ class AttachmentBottomSheet extends StatelessWidget {
               _logger.fine('Opening attachment with mimeType $mimeType');
 
               final tempDir = await PathUtils().getTemporaryDirectory();
-              final f = await File(path.join(tempDir.path, attachment.key.key))
-                  .create();
+              final f = await tempDir.childFile(attachment.key.key).create();
               await f.writeAsBytes(attachment.value.value!);
 
               try {

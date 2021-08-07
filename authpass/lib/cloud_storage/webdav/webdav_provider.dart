@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show HttpHeaders, HttpStatus;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
@@ -28,6 +28,10 @@ class WebDavClient extends NegotiateAuthClient {
 class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   WebDavProvider({required CloudStorageHelperBase helper})
       : super(helper: helper);
+
+  @NonNls
+  @override
+  final String id = 'WebDavProvider';
 
   static const METHOD_HEAD = 'HEAD'; // NON-NLS
   static const METHOD_PUT = 'PUT'; // NON-NLS

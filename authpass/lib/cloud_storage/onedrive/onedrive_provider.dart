@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show HttpHeaders, ContentType;
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';
@@ -19,6 +19,10 @@ final _logger = Logger('onedrive_provider');
 class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   OneDriveProvider({required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
+
+  @NonNls
+  @override
+  final String id = 'OneDriveProvider';
 
   final Env env;
 

@@ -159,7 +159,7 @@ abstract class CloudStorageProvider {
   /// whether we are initialized, authenticated and ready for requests.
   bool get isAuthenticated;
 
-  String get id => runtimeType.toString();
+  String get id;
   String get displayName;
   FileSourceIcon get displayIcon;
   bool get supportSearch => false;

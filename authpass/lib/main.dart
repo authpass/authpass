@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:another_flushbar/flushbar_route.dart' as flushbar_route;
@@ -33,6 +32,7 @@ import 'package:authpass/utils/winsparkle_init_noop.dart'
     if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:collection/collection.dart';
 import 'package:diac_client/diac_client.dart';
+import 'package:file/local.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,25 +58,6 @@ void main() => throw Exception('Run some env/*.dart');
 
 final startupStopwatch = Stopwatch();
 
-Map<String, String> debugInfo() {
-  String handle(String Function() info) {
-    try {
-      return info();
-    } catch (e) {
-      _logger.fine('error fetching info. ', e);
-      return 'throws: $e'; // NON-NLS
-    }
-  }
-
-  return nonNls({
-    'script': handle(() => Platform.script.toFilePath()),
-    'executable': handle(() => Platform.executable),
-    'resolvedExecutable': handle(() => Platform.resolvedExecutable),
-    'executableArguments':
-        handle(() => Platform.executableArguments.toString()),
-  });
-}
-
 Future<void> startApp(Env env) async {
   startupStopwatch
     ..start()
@@ -90,7 +71,7 @@ Future<void> startApp(Env env) async {
   _logger.info('Initialized logger. '
       '(${AuthPassPlatform.operatingSystem}, ${AuthPassPlatform.operatingSystemVersion}) ${startupStopwatch.elapsedMilliseconds}');
   if (!AuthPassPlatform.isWeb) {
-    _logger.info('${debugInfo()}');
+    _logger.info('${AuthPassPlatform.debugInfo()}');
   }
 
   if (env.overrideFlutterOnError) {
@@ -271,7 +252,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             }
             await _navigatorKey!.currentState!
                 .push(CredentialsScreen.route(FileSourceLocal(
-              file,
+              (const LocalFileSystem()).file(file.path),
               uuid: AppDataBloc.createUuid(),
               filePickerIdentifier: fileInfo.toJsonString(),
               initialCachedContent: FileContent(await file.readAsBytes()),
@@ -437,8 +418,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             return [
 //              MaterialPageRoute<void>(
 //                  builder: (context) => const SelectFileScreen()),
-              CredentialsScreen.route(
-                  FileSourceLocal(File(file), uuid: AppDataBloc.createUuid())),
+              CredentialsScreen.route(FileSourceLocal(
+                  (const LocalFileSystem().file(file)),
+                  uuid: AppDataBloc.createUuid())),
             ];
           }
           return [

@@ -5,6 +5,7 @@ on:
     branches:
       - stable
       - beta
+      - web-beta
 
 jobs:
   deploy:
@@ -25,7 +26,7 @@ jobs:
           pushd $FLUTTER_HOME/dev/tools && flutter pub get && popd
           pushd authpass && flutter pub get
       - name: Build
-        run: cd authpass && flutter build web -t lib/env/development.dart
+        run: cd authpass && flutter build web -t lib/env/web.dart
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
