@@ -6,9 +6,9 @@ class AuthPassProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (true) {
-      return const CircularProgressIndicator(value: 0.5);
-    }
+    // if (true) {
+    //   return const CircularProgressIndicator(value: 0.5);
+    // }
     return const CircularProgressIndicator();
   }
 }
