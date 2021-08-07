@@ -19,6 +19,9 @@ class FDroid extends EnvAppBase {
       );
 
   @override
+  bool get featureFetchWebsiteIconEnabledByDefault => false;
+
+  @override
   bool get featureCloudStorageProprietary => false;
 
   @override

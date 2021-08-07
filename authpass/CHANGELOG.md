@@ -5,6 +5,7 @@
 * BETA: experimental support for custom authpass cloud file cloud backend. #29
 * Make all (remaining) strings translatable. #78
 * Allow *opening* of kdbx files with empty passwords. #249
+* Enable website icon fetching by default.
 
 # 1.9.0 - 2021-08-02
 
