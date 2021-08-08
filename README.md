@@ -12,6 +12,7 @@ AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdb
 * iOS: [App Store](https://apps.apple.com/app/authpass-password-manager/id1479297675?ls=1&at=11l8ru)
 * Linux Desktop: [Check out our blog post for installation instructions](https://authpass.app/articles/linux-desktop-release-authpass-1.6.3/)
 * Windows Desktop: [Microsoft Store](https://www.microsoft.com/store/apps/9P5N6ZNPSFBN?cid=readme) or [Windows Install Guide](https://authpass.app/docs/install/windows-installation/)
+* Browser/Web: https://web.authpass.app/
 
 ![Mac OS, iOS and Android Screenshot](_docs/authpass-platform-composition.png)
 
