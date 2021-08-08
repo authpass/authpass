@@ -24,9 +24,9 @@ const _contributorsImageMapping = {
 };
 
 class AuthPassAboutDialog extends StatelessWidget {
-  const AuthPassAboutDialog({Key? key, this.env}) : super(key: key);
+  const AuthPassAboutDialog({Key? key, required this.env}) : super(key: key);
 
-  final Env? env;
+  final Env env;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class AuthPassAboutDialog extends StatelessWidget {
     final logFiles = loggingUtil.rotatingFileLoggerFiles;
     final loc = AppLocalizations.of(context);
     return FutureBuilder<AppInfo>(
-        future: env!.getAppInfo(),
+        future: env.getAppInfo(),
         builder: (context, snapshot) {
           final appInfo = snapshot.data;
           return AboutDialog(

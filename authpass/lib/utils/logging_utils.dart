@@ -18,23 +18,24 @@ class LoggingUtils {
 
   static final _instance = LoggingUtils._();
 
-  AsyncInitializingLogHandler<RotatingFileAppender>? _rotatingFileLoggerCached;
-  AsyncInitializingLogHandler<RotatingFileAppender> get _rotatingFileLogger =>
-      _rotatingFileLoggerCached ??=
-          AsyncInitializingLogHandler<RotatingFileAppender>(builder: () async {
-        await PathUtils.waitForRunAppFinished;
-        final logsDir = await PathUtils().getLogDirectory();
-        final appLogFile = logsDir.childFile(nonNls('app.log.txt'));
-        await appLogFile.parent.create(recursive: true);
-        _logger.fine('Logging into $appLogFile');
-        return RotatingFileAppender(
-          rotateAtSizeBytes: 10 * 1024 * 1024,
-          baseFilePath: appLogFile.path,
-        );
-      });
+  late final AsyncInitializingLogHandler<RotatingFileAppender>?
+      _rotatingFileLogger = AuthPassPlatform.isWeb
+          ? null
+          : AsyncInitializingLogHandler<RotatingFileAppender>(
+              builder: () async {
+              await PathUtils.waitForRunAppFinished;
+              final logsDir = await PathUtils().getLogDirectory();
+              final appLogFile = logsDir.childFile(nonNls('app.log.txt'));
+              await appLogFile.parent.create(recursive: true);
+              _logger.fine('Logging into $appLogFile');
+              return RotatingFileAppender(
+                rotateAtSizeBytes: 10 * 1024 * 1024,
+                baseFilePath: appLogFile.path,
+              );
+            });
 
   List<io.File> get rotatingFileLoggerFiles =>
-      _rotatingFileLogger.delegatedLogHandler?.getAllLogFiles() ?? [];
+      _rotatingFileLogger?.delegatedLogHandler?.getAllLogFiles() ?? [];
 
   void setupLogging({bool fromMainIsolate = false}) {
     Logger.root.level = Level.ALL;
@@ -43,7 +44,7 @@ class LoggingUtils {
       return;
     }
     if (fromMainIsolate) {
-      _rotatingFileLogger.attachToLogger(Logger.root);
+      _rotatingFileLogger?.attachToLogger(Logger.root);
     }
     final isolateDebug =
         '${Isolate.current.debugName} (${Isolate.current.hashCode})'; // NON-NLS
