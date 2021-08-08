@@ -108,7 +108,7 @@
   "@quickUnlockingFiles": {
     "description": "Status shown while we are loading files and trying to unlock them."
   },
-  "openFileProgress": "Opening {fileName} … (${current} / ${totalCount})",
+  "openFileProgress": "Opening {fileName} … ({current} / {totalCount})",
   "@openFileProgress": {
     "description": "Progress shown while files are loaded during quick unlock.",
     "placeholders": {
@@ -1117,7 +1117,7 @@
   "@cloudStorageAuthErrorTitle": {
     "description": ""
   },
-  "cloudStorageAuthErrorMessage": "Error while trying to authenticate to ${cloudStorageName}: {errorMessage}",
+  "cloudStorageAuthErrorMessage": "Error while trying to authenticate to {cloudStorageName}: {errorMessage}",
   "@cloudStorageAuthErrorMessage": {
     "description": "",
     "placeholders": {

@@ -106,6 +106,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             keyboardType: TextInputType.emailAddress,
             textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.send,
+            autocorrect: false,
             onEditingComplete: () {},
             validator:
                 SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
