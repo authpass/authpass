@@ -33,6 +33,7 @@ class AuthPassAboutDialog extends StatelessWidget {
     final loggingUtil = LoggingUtils();
     final logFiles = loggingUtil.rotatingFileLoggerFiles;
     final loc = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return FutureBuilder<AppInfo>(
         future: env.getAppInfo(),
         builder: (context, snapshot) {
@@ -85,7 +86,11 @@ class AuthPassAboutDialog extends StatelessWidget {
                         imageBuilder: (uri, title, alt) {
                           final icon = _contributorsImageMapping[alt];
                           if (icon != null) {
-                            return FaIcon(icon, size: 12);
+                            return FaIcon(
+                              icon,
+                              size: 12,
+                              color: theme.textTheme.bodyText1!.color,
+                            );
                           }
                           if (alt != null) {
                             return Text(alt);
