@@ -75,7 +75,7 @@ dependencies:
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.1
 
-  biometric_storage: ^2.0.1
+  biometric_storage: ^3.0.0-rc.3
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
@@ -116,7 +116,7 @@ dependencies:
   http_auth: ^1.0.0
 
   # google drive
-  googleapis: ^3.0.0
+  googleapis: ^4.0.0
   googleapis_auth: ^1.0.0
 
   # dropbox

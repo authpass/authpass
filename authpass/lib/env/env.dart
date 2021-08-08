@@ -1,6 +1,7 @@
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
@@ -55,12 +56,12 @@ abstract class EnvAppBase extends Env {
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();
     return AppInfo((b) => b
-      ..appName = pi?.appName ?? _DEFAULT_APP_NAME
-      ..version = pi?.version ?? _DEFAULT_VERSION
-      ..buildNumber =
-          int.tryParse(pi?.buildNumber ?? _DEFAULT_BUILD_NUMBER.toString()) ??
-              _DEFAULT_BUILD_NUMBER
-      ..packageName = pi?.packageName ?? _DEFAULT_PACKAGE_NAME);
+      ..appName = pi?.appName.nullIfBlank() ?? _DEFAULT_APP_NAME
+      ..version = pi?.version.nullIfBlank() ?? _DEFAULT_VERSION
+      ..buildNumber = int.tryParse(pi?.buildNumber.nullIfBlank() ??
+              _DEFAULT_BUILD_NUMBER.toString()) ??
+          _DEFAULT_BUILD_NUMBER
+      ..packageName = pi?.packageName.nullIfBlank() ?? _DEFAULT_PACKAGE_NAME);
   }
 
   Future<PackageInfo?> _getPackageInfo() async {
