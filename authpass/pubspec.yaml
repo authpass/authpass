@@ -75,7 +75,7 @@ dependencies:
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.1
 
-  biometric_storage: ^3.0.0-rc.3
+  biometric_storage: ^3.0.0-rc.5
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
@@ -204,12 +204,14 @@ dev_dependencies:
 dependency_overrides:
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
-#  pedantic: ^1.9.2
-#  build_runner: ^1.10.2
-#  xml: '>=3.7.0 <4.0.0'
-#  petitparser: '>=3.0.0 <4.0.0'
   # Until built_value_generator supports 2.0.0: https://github.com/google/built_value.dart/pull/1085
   analyzer: ^2.0.0
+  # Until bug fix gets merged: https://github.com/flutter/packages/pull/433 (0.6.5)
+  flutter_markdown:
+    git:
+      url: https://github.com/hpoul/packages.git
+      ref: c7eed4b1f4fec61a4cdfc4f9429775e691836035
+      path: packages/flutter_markdown
   kdbx:
     path: ../deps/kdbx.dart
 #  openapi_base:
