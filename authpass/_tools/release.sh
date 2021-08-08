@@ -194,6 +194,14 @@ case "${flavor}" in
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
     ;;
+    web)
+        version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
+        $FLT build web -t lib/env/web.dart --release \
+            --dart-define=AUTHPASS_VERSION=$version \
+            --dart-define=AUTHPASS_BUILD_NUMBER=$buildnumber \
+            --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor}
+        echo "::set-output name=appversion::${version}"
+    ;;
     *)
         echo "Unsupported command ${flavor}"
     ;;

@@ -48,10 +48,10 @@ fi
 if test "$target_platform" == "macos" ; then
     # make sure cocoapods is up to date.
     pod repo update
-    # upgrade to flutter master channel
-    flutter channel master
-    flutter upgrade
-    flutter config --enable-macos-desktop
+#    # upgrade to flutter master channel
+#    flutter channel master
+#    flutter upgrade
+#    flutter config --enable-macos-desktop
 fi
 
 pwd
