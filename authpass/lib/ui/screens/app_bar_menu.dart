@@ -25,9 +25,12 @@ late final _logger = Logger('app_bar_menu');
 
 class AppBarMenu {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(
-      BuildContext context, OpenedKdbxFiles openedKdbxFiles,
-      {List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
-          secondaryBuilder}) {
+    BuildContext context,
+    OpenedKdbxFiles openedKdbxFiles, {
+    List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
+        secondaryBuilder,
+    bool isOnOpenFileScreen = false,
+  }) {
     final deps = context.read<Deps>();
     final openedFiles = openedKdbxFiles.values;
     final analytics = Provider.of<Analytics>(context, listen: false);
@@ -80,18 +83,20 @@ class AppBarMenu {
                 ),
               ),
             )),
-      PopupMenuItem(
-        value: () {
-          analytics.events.trackActionPressed(action: 'openFile');
-          Navigator.of(context, rootNavigator: true)
-              .push(SelectFileScreen.route());
-        },
-        child: ListTile(
-          key: const ValueKey('openAnotherFile'),
-          leading: const Icon(FontAwesomeIcons.folderPlus),
-          title: Text(loc.menuItemOpenAnotherFile),
+      if (!isOnOpenFileScreen) ...[
+        PopupMenuItem(
+          value: () {
+            analytics.events.trackActionPressed(action: 'openFile');
+            Navigator.of(context, rootNavigator: true)
+                .push(SelectFileScreen.route());
+          },
+          child: ListTile(
+            key: const ValueKey('openAnotherFile'),
+            leading: const Icon(FontAwesomeIcons.folderPlus),
+            title: Text(loc.menuItemOpenAnotherFile),
+          ),
         ),
-      ),
+      ],
       if (secondaryBuilder != null) ...secondaryBuilder(context),
       const PopupMenuDivider(),
       ...?!AuthPassPlatform.isWindowsWinAutoUpdate
@@ -161,6 +166,7 @@ class AppBarMenu {
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)? builder,
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
         secondaryBuilder,
+    bool isOnOpenFileScreen = false,
   }) {
     final openedFiles = Provider.of<OpenedKdbxFiles>(context);
     return PopupMenuButton<VoidCallback>(
@@ -172,6 +178,7 @@ class AppBarMenu {
           context,
           openedFiles,
           secondaryBuilder: secondaryBuilder,
+          isOnOpenFileScreen: isOnOpenFileScreen,
         ),
       ],
     );

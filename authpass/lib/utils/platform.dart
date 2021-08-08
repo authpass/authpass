@@ -50,7 +50,8 @@ class AuthPassPlatform {
       try {
         return info();
       } catch (e) {
-        _logger.fine('error fetching info. ', e);
+        // https://github.com/flutter/flutter/issues/83921
+        _logger.finest('error fetching info. ', e);
         return 'throws: $e'; // NON-NLS
       }
     }

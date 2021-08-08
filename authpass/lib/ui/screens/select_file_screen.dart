@@ -80,39 +80,42 @@ class SelectFileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(loc.selectKeepassFile),
         actions: <Widget>[
-          AppBarMenu.createOverflowMenuButton(context,
-              secondaryBuilder: (context) {
-            return [
-              PopupMenuItem(
-                value: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      OnboardingScreen.route(), (route) => false);
-                },
-                child: ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.route),
-                  title: Text(loc.onboardingBackToOnboarding),
-                  subtitle: Text(loc.onboardingBackToOnboardingSubtitle),
+          AppBarMenu.createOverflowMenuButton(
+            context,
+            isOnOpenFileScreen: true,
+            secondaryBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        OnboardingScreen.route(), (route) => false);
+                  },
+                  child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.route),
+                    title: Text(loc.onboardingBackToOnboarding),
+                    subtitle: Text(loc.onboardingBackToOnboardingSubtitle),
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: () async {
-                  final source = await showDialog<FileSourceUrl>(
-                      context: context,
-                      builder: (context) => SelectUrlDialog());
-                  if (source != null) {
-                    // _loadAndGoToCredentials(source);
-                    await Navigator.of(context)
-                        .push(CredentialsScreen.route(source));
-                  }
-                },
-                child: ListTile(
-                  key: const ValueKey('downloadFromUrl'),
-                  leading: const FaIcon(FontAwesomeIcons.fileCode),
-                  title: Text(loc.loadFromRemoteUrl),
+                PopupMenuItem(
+                  value: () async {
+                    final source = await showDialog<FileSourceUrl>(
+                        context: context,
+                        builder: (context) => SelectUrlDialog());
+                    if (source != null) {
+                      // _loadAndGoToCredentials(source);
+                      await Navigator.of(context)
+                          .push(CredentialsScreen.route(source));
+                    }
+                  },
+                  child: ListTile(
+                    key: const ValueKey('downloadFromUrl'),
+                    leading: const FaIcon(FontAwesomeIcons.fileCode),
+                    title: Text(loc.loadFromRemoteUrl),
+                  ),
                 ),
-              ),
-            ];
-          }),
+              ];
+            },
+          ),
         ],
       ),
       body: Provider<CloudStorageBloc>.value(

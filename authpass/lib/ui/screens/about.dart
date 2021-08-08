@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -14,6 +15,13 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 @NonNls
 const _contributorsUrl =
     'https://raw.githubusercontent.com/authpass/authpass/master/CONTRIBUTORS.md';
+
+@NonNls
+const _contributorsImageMapping = {
+  'GH': FontAwesomeIcons.github,
+  'TWTR': FontAwesomeIcons.twitter,
+  'WebSite': Icons.open_in_browser,
+};
 
 class AuthPassAboutDialog extends StatelessWidget {
   const AuthPassAboutDialog({Key? key, this.env}) : super(key: key);
@@ -75,6 +83,13 @@ class AuthPassAboutDialog extends StatelessWidget {
                       return MarkdownBody(
                         data: snapshot.requireData,
                         imageBuilder: (uri, title, alt) {
+                          final icon = _contributorsImageMapping[alt];
+                          if (icon != null) {
+                            return FaIcon(icon, size: 12);
+                          }
+                          if (alt != null) {
+                            return Text(alt);
+                          }
                           return const SizedBox.shrink(); // Remove images
                         },
                         listItemCrossAxisAlignment:
