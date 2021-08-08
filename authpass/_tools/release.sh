@@ -51,7 +51,7 @@ if test -z "$buildnumber" ; then
     # workaround if for some reason pubspec.lock changes on windows
     # https://github.com/dart-lang/pub/issues/3012
     case "${flavor}" in
-    windows | msix)
+    windows | msix | windowsportable)
       git diff
       git checkout -- pubspec.lock
       ;;
