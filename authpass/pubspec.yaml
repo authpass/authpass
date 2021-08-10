@@ -48,7 +48,7 @@ dependencies:
   file: ^6.1.2
 #  clipboard_manager: ^0.0.4
 
-  flutter_async_utils: ^1.0.0-nullsafety.2
+  flutter_async_utils: ^1.0.0+1
   flutter_svg: ">=0.20.0-nullsafety.3 <1.0.0"
   #usage: ^3.4.1
   usage:
