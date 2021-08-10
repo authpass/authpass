@@ -72,6 +72,10 @@ Future<void> startApp(Env env) async {
       '(${AuthPassPlatform.operatingSystem}, ${AuthPassPlatform.operatingSystemVersion}) ${startupStopwatch.elapsedMilliseconds}');
   if (!AuthPassPlatform.isWeb) {
     _logger.info('${AuthPassPlatform.debugInfo()}');
+    unawaited(Future<dynamic>.delayed(const Duration(seconds: 10))
+        .then((dynamic value) {
+      _logger.info('DeviceInfo: ${LoggingUtils.getDebugDeviceInfo()}');
+    }));
   }
 
   if (env.overrideFlutterOnError) {

@@ -97,21 +97,31 @@ class LoggingUtils {
 extension on AndroidDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
+        'id': id,
+        'tags': tags,
+        'type': type,
+        'model': model,
         'board': board,
+        'brand': brand,
         'device': device,
-        'hardware': hardware,
-        'manufacturer': manufacturer,
         'product': product,
-        'version': version,
+        'display': display,
+        'hardware': hardware,
+        'version': version.toMap(),
+        'manufacturer': manufacturer,
+        'isPhysicalDevice': isPhysicalDevice,
       };
 }
 
 extension on IosDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'localizedModel': localizedModel,
-        'mode': model,
         'name': name,
+        'model': model,
+        'systemName': systemName,
+        'systemVersion': systemVersion,
+        'localizedModel': localizedModel,
+        'utsname': toMap()['utsname'],
       };
 }
 
