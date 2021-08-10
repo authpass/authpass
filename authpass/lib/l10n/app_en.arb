@@ -1273,7 +1273,7 @@
   "@entryAttachmentRemoveActionLabel": {
     "description": ""
   },
-  "entryAttachmentRemoveConfirm": "Do you really want to delete {attachmentLabel}",
+  "entryAttachmentRemoveConfirm": "Do you really want to delete {attachmentLabel}?",
   "@entryAttachmentRemoveConfirm": {
     "description": "",
     "placeholders": {
