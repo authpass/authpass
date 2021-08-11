@@ -132,8 +132,8 @@ class AuthPassCloudProvider extends CloudStorageProvider
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final c = await getClient();
-    final response = await c.filecloudFileRetrievePost(
-        FilecloudFileRetrievePostSchema(fileToken: file.id));
+    final response =
+        await c.filecloudFileRetrievePost(FileId(fileToken: file.id));
     final fileContent = response.requireSuccess();
     // FIXME there must be a better solution than to hard code `etag` here.
     const _etagHeader = 'etag'; // NON-NLS
