@@ -53,8 +53,12 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackActionPressed({required String action}) =>
       trackEvent('actionPressed', <String, dynamic>{'action': action});
   @override
-  void trackCreateFileAt({required String cloudStorageId}) => trackEvent(
-      'createFileAt', <String, dynamic>{'cloudStorageId': cloudStorageId});
+  void trackCreateFileAt(
+          {required String cloudStorageId, required String category}) =>
+      trackEvent('createFileAt', <String, dynamic>{
+        'cloudStorageId': cloudStorageId,
+        'category': category
+      });
   @override
   void trackCreateFile() => trackEvent('createFile', <String, dynamic>{});
   @override

@@ -1,13 +1,17 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
+import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui_auth.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui_authpass_cloud.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/create_file.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/dialog_utils.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -70,9 +74,12 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
             : <Widget>[
                 if (widget.browserConfig is CloudStorageOpenConfig) ...[
                   IconButton(
+                    tooltip: loc.createNewFile,
                     onPressed: () async {
                       analytics.events.trackCreateFileAt(
-                          cloudStorageId: widget.provider.id);
+                        cloudStorageId: widget.provider.id,
+                        category: 'appbar',
+                      );
                       await Navigator.of(context).push(CreateFile.route(
                         target: CloudStorageSaveTarget(
                           provider: widget.provider,
@@ -80,10 +87,11 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                         ),
                       ));
                     },
-                    icon: const Icon(Icons.create_new_folder),
+                    icon: const Icon(Icons.add),
                   ),
                 ],
                 IconButton(
+                  tooltip: loc.logoutTooltip,
                   onPressed: () {
                     widget.provider.logout();
                     setState(() {});
@@ -92,10 +100,29 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                 ),
               ],
       ),
+      floatingActionButton: widget.browserConfig is CloudStorageOpenConfig
+          ? FloatingActionButton(
+              onPressed: () async {
+                analytics.events.trackCreateFileAt(
+                  cloudStorageId: widget.provider.id,
+                  category: 'fab',
+                );
+                await Navigator.of(context).push(CreateFile.route(
+                  target: CloudStorageSaveTarget(
+                    provider: widget.provider,
+                    parent: _folder,
+                  ),
+                ));
+              },
+              tooltip: loc.createNewFile,
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: widget.provider.isAuthenticated != true
           ? Center(
               child: CloudStorageAuthentication(
-                  provider: widget.provider, onSuccess: () => setState(() {})))
+                  provider: widget.provider, onSuccess: () => setState(() {})),
+            )
           : Center(
               child: !_isSearch
                   ? CloudStorageBrowser(
@@ -204,10 +231,12 @@ class SearchResultListView extends StatelessWidget {
     Key? key,
     required this.response,
     required this.onTap,
+    this.provider,
   }) : super(key: key);
 
   final SearchResponse response;
   final void Function(CloudStorageEntity entity) onTap;
+  final AuthPassCloudProvider? provider;
 
   @override
   Widget build(BuildContext context) {
@@ -224,11 +253,49 @@ class SearchResultListView extends StatelessWidget {
               ? FontAwesomeIcons.file
               : FontAwesomeIcons.folder),
           title: Text(entity.name!),
+          trailing: _createMenu(loc, entity),
           subtitle: entity.path == null ? null : Text(entity.path!),
           onTap: () => onTap(entity),
         );
       },
       itemCount: length + 1,
+    );
+  }
+
+  Widget? _createMenu(AppLocalizations loc, CloudStorageEntity entity) {
+    if (entity.type != CloudStorageEntityType.file) {
+      return null;
+    }
+    final provider = this.provider;
+    if (provider == null) {
+      return null;
+    }
+    return PopupMenuButton<VoidCallback>(
+      onSelected: (val) => val(),
+      itemBuilder: (context) {
+        return [
+          PopupMenuItem(
+              value: () async {
+                await Navigator.of(context).push(
+                  ShareFileScreen.route(provider: provider, entity: entity),
+                );
+              },
+              child: ListTile(
+                leading: const Icon(Icons.share),
+                title: Text(loc.authPassCloudShareFileActionLabel),
+              )),
+          PopupMenuItem(
+            value: () async {
+              await provider.delete(entity);
+              context.showSnackBar(loc.successfullyDeletedFileCloudStorage);
+            },
+            child: ListTile(
+              leading: const Icon(Icons.delete_forever),
+              title: Text(loc.deleteAction),
+            ),
+          ),
+        ];
+      },
     );
   }
 }
@@ -346,6 +413,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
             child: task == null && response != null
                 ? SearchResultListView(
                     response: response,
+                    provider: widget.provider.takeAs(),
                     onTap: (item) {
                       _logger.fine('Tapped on $item');
                       if (item.type == CloudStorageEntityType.directory) {
@@ -398,12 +466,5 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
         ],
       ],
     );
-  }
-}
-
-class CloudStorageBrowserItem extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

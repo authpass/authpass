@@ -29,33 +29,50 @@ class RetryFutureBuilder<T> extends StatefulWidget {
       body;
 
   @override
-  _RetryFutureBuilderState createState() => _RetryFutureBuilderState<T>();
+  RetryFutureBuilderState createState() => RetryFutureBuilderState<T>();
 }
 
-class _RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T?>> {
-  Future<T?>? _future;
+class RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
+  Future<T>? _future;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _future = widget.produceFuture(context);
+    reload();
   }
 
   @override
-  void didUpdateWidget(RetryFutureBuilder<T?> oldWidget) {
+  void didUpdateWidget(RetryFutureBuilder<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.produceFuture != widget.produceFuture) {
-      _future = widget.produceFuture(context);
+      reload();
     }
+  }
+
+  void reload() {
+    setState(() {
+      _future = widget.produceFuture(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T?>(
+    return FutureBuilder<T>(
       future: _future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final child = widget.builder(context, snapshot.data);
+          final data = snapshot.requireData;
+          var child = widget.builder(context, data);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            child = Stack(
+              children: [
+                child,
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            );
+          }
           return widget.scaffoldBuilder(context, child, snapshot);
         }
         if (snapshot.hasError) {

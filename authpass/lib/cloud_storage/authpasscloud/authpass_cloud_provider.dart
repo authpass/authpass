@@ -198,4 +198,36 @@ class AuthPassCloudProvider extends CloudStorageProvider
     }));
     return completer.future;
   }
+
+  Future<bool> delete(CloudStorageEntity file) async {
+    final client = await _authPassCloudBloc.client;
+    await client
+        .filecloudFileDeletePost(FileId(fileToken: file.id))
+        .requireSuccess();
+    return true;
+  }
+
+  Future<List<FileTokenInfo>> listShareTokens(CloudStorageEntity file) async {
+    final client = await _authPassCloudBloc.client;
+    final list = await client
+        .filecloudFileTokenListPost(FileId(fileToken: file.id))
+        .requireSuccess();
+    return list.tokens;
+  }
+
+  Future<FileId> createShareToken(
+    CloudStorageEntity file, {
+    required String label,
+    required bool readOnly,
+  }) async {
+    final client = await _authPassCloudBloc.client;
+    final response = await client
+        .filecloudFileTokenCreatePost(FilecloudFileTokenCreatePostSchema(
+          fileToken: file.id,
+          label: label,
+          readOnly: readOnly,
+        ))
+        .requireSuccess();
+    return response;
+  }
 }

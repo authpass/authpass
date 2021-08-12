@@ -269,7 +269,10 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackActionPressed({@NonNls required String action});
 
-  void trackCreateFileAt({required String cloudStorageId});
+  void trackCreateFileAt({
+    required String cloudStorageId,
+    @NonNls required String category,
+  });
 
   void trackCreateFile();
 

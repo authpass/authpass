@@ -73,6 +73,7 @@ class AuthPassCloudBloc with ChangeNotifier {
   AuthPassCloudClient? _client;
   _StoredToken? _storedToken;
   final _tokenLock = Lock();
+  Future<AuthPassCloudClient> get client => _getClient();
 
   @NonNls
   late final imageBaseUrl = Uri.parse(

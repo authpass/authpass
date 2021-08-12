@@ -1444,6 +1444,10 @@
   "@unnamedGroupPlaceholder": {
     "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
   },
+  "unnamedFilePlaceholder": "(Unnamed)",
+  "@unnamedFilePlaceholder": {
+    "description": ""
+  },
   "editGroupScreenTitle": "Edit Group",
   "@editGroupScreenTitle": {
     "description": ""
@@ -1470,6 +1474,89 @@
   },
   "groupActionDelete": "Delete",
   "@groupActionDelete": {
+    "description": ""
+  },
+  "logoutTooltip": "Logout",
+  "@logoutTooltip": {
+    "description": "Tooltip for logging out of a cloud storage provider."
+  },
+  "successfullyDeletedFileCloudStorage": "Successfully deleted file.",
+  "@successfullyDeletedFileCloudStorage": {
+    "description": "deleted file from cloud storage."
+  },
+  "shareDialogTitle": "Sharing Options for {fileName}",
+  "@shareDialogTitle": {
+    "description": "",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "shareFileActionLabel": "Share …",
+  "@shareFileActionLabel": {
+    "description": ""
+  },
+  "shareTokenListEmptyScreenPlaceholder": "File not shared yet.",
+  "@shareTokenListEmptyScreenPlaceholder": {
+    "description": ""
+  },
+  "shareTokenNoLabel": "No Label/Description",
+  "@shareTokenNoLabel": {
+    "description": "User did not specify a description for a given share token."
+  },
+  "shareTokenReadWrite": "Read/Write",
+  "@shareTokenReadWrite": {
+    "description": "Share token allows reading and writing"
+  },
+  "shareTokenReadOnly": "Read only",
+  "@shareTokenReadOnly": {
+    "description": "Share token only allows reading."
+  },
+  "shareCreateTokenDialogTitle": "Share file",
+  "@shareCreateTokenDialogTitle": {
+    "description": ""
+  },
+  "shareCreateTokenReadOnly": "Read only",
+  "@shareCreateTokenReadOnly": {
+    "description": "switch between read only and read/write"
+  },
+  "shareCreateTokenReadOnlyHelpText": "Do not allow saving of changes",
+  "@shareCreateTokenReadOnlyHelpText": {
+    "description": "help text for the switch between read only and read/write"
+  },
+  "shareCreateTokenLabelText": "Description",
+  "@shareCreateTokenLabelText": {
+    "description": "Allows users to add a description/label to a share token."
+  },
+  "shareCreateTokenLabelHint": "Share for my friend",
+  "@shareCreateTokenLabelHint": {
+    "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+  },
+  "shareCreateTokenLabelHelp": "Optional label to differentiate share tokens.",
+  "@shareCreateTokenLabelHelp": {
+    "description": ""
+  },
+  "shareCreateTokenSuccess": "Successfully created token.",
+  "@shareCreateTokenSuccess": {
+    "description": "snackbar when share token was created successfully."
+  },
+  "sharePresentDialogTitle": "Share file with token",
+  "@sharePresentDialogTitle": {
+    "description": ""
+  },
+  "sharePresentDialogHelp": "Using the following token users can access the password file. They will need the password and/or key file to open it.",
+  "@sharePresentDialogHelp": {
+    "description": ""
+  },
+  "sharePresentToken": "Token",
+  "@sharePresentToken": {
+    "description": ""
+  },
+  "sharePresentCopied": "Copied token to clipboard.",
+  "@sharePresentCopied": {
+    "description": ""
+  },
+  "authPassCloudShareFileActionLabel": "Share",
+  "@authPassCloudShareFileActionLabel": {
     "description": ""
   },
   "unexpectedError": "Unexpected Error: {error}",
