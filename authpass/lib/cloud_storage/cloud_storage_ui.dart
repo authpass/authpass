@@ -367,38 +367,35 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                 : const SizedBox.expand(),
           ),
         ),
-        ...?(!widget.config.isSave
-            ? null
-            : [
-                Material(
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              filled: true,
-                            ),
-                            controller: _fileNameController,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        LinkButton(
-                          icon: const Icon(FontAwesomeIcons.save),
-                          onPressed: () {
-                            Navigator.of(context).pop(
-                                CloudStorageSelectorSaveResult(
-                                    _folder, _fileNameController.text));
-                          },
-                          child: Text(loc.saveButtonLabel),
-                        )
-                      ],
+        if (widget.config.isSave) ...[
+          Material(
+            elevation: 4,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        filled: true,
+                      ),
+                      controller: _fileNameController,
                     ),
                   ),
-                ),
-              ]),
+                  const SizedBox(width: 8),
+                  LinkButton(
+                    icon: const Icon(FontAwesomeIcons.save),
+                    onPressed: () {
+                      Navigator.of(context).pop(CloudStorageSelectorSaveResult(
+                          _folder, _fileNameController.text));
+                    },
+                    child: Text(loc.saveButtonLabel),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
