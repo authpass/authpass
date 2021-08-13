@@ -30,7 +30,7 @@ packages:
     source: hosted
     version: "1.1.1+1"
   analyzer:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
@@ -77,7 +77,7 @@ packages:
       name: argon2_ffi_base
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0+2"
+    version: "1.1.0+1"
   args:
     dependency: transitive
     description:
@@ -147,7 +147,7 @@ packages:
       name: biometric_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-rc.6"
+    version: "3.0.0-rc.7"
   boolean_selector:
     dependency: transitive
     description:
@@ -189,7 +189,7 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   build_runner_core:
     dependency: transitive
     description:
@@ -210,14 +210,14 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.1.1"
+    version: "8.1.2"
   built_value_generator:
     dependency: "direct dev"
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.1.1"
+    version: "8.1.2"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -420,7 +420,7 @@ packages:
       name: encrypt
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "5.0.1"
   enough_convert:
     dependency: transitive
     description:
@@ -664,14 +664,14 @@ packages:
       name: flutter_widget_from_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0-dev.2021061301"
+    version: "0.7.0-dev.2021080801"
   flutter_widget_from_html_core:
     dependency: transitive
     description:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0-dev.2021061301"
+    version: "0.7.0-dev.2021080801"
   flutter_windowmanager:
     dependency: "direct main"
     description:
@@ -694,7 +694,7 @@ packages:
       name: freezed
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.3"
+    version: "0.14.5"
   freezed_annotation:
     dependency: "direct main"
     description:
@@ -727,7 +727,7 @@ packages:
       name: fwfh_chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.1+2"
+    version: "0.6.2"
   fwfh_svg:
     dependency: transitive
     description:
@@ -942,7 +942,7 @@ packages:
       name: mockito
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.13"
+    version: "5.0.14"
   msix:
     dependency: "direct dev"
     description:
@@ -1000,7 +1000,7 @@ packages:
       name: openapi_base
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1+4"
+    version: "1.0.2+1"
   otp:
     dependency: "direct main"
     description:
@@ -1161,7 +1161,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.0"
+    version: "3.3.0"
   pool:
     dependency: transitive
     description:
@@ -1639,7 +1639,7 @@ packages:
       name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.0.12"
   win32:
     dependency: transitive
     description:

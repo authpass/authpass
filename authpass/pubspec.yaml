@@ -204,8 +204,6 @@ dev_dependencies:
 dependency_overrides:
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
-  # Until built_value_generator supports 2.0.0: https://github.com/google/built_value.dart/pull/1085
-  analyzer: ^2.0.0
   # Until bug fix gets merged: https://github.com/flutter/packages/pull/433 (0.6.5)
   flutter_markdown:
     git:
