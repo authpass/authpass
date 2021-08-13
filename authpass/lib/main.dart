@@ -12,6 +12,7 @@ import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui_authpass_cloud.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/env/fdroid.dart';
 import 'package:authpass/theme.dart';
@@ -416,8 +417,15 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           }
           if (initialRoute.startsWith(AppConstants.routeOpenFile)) {
             final uri = Uri.parse(initialRoute);
+            final token =
+                uri.queryParameters[AppConstants.routeOpenFileParamToken];
+            if (token != null) {
+              return [
+                AuthPassCloudLoadFileLaunch.route(token: token),
+              ];
+            }
             final file =
-                uri.queryParameters[AppConstants.routeOpenFileParamFile]!;
+                uri.queryParameters[AppConstants.routeOpenFileParamFile];
             _logger.finer('uri: $uri /// file: $file');
             return [
 //              MaterialPageRoute<void>(

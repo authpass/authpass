@@ -13,8 +13,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 
-const _authPassCloudUrlInfo =
-    'https://authpass.app/docs/authpass-cloud/'; // NON-NLS
+const _authPassCloudUrlInfo = AppConstants.authPassCloudInfoUrl;
 const _authPassCloudUrlInfoOpen =
     '$_authPassCloudUrlInfo?utm_source=app&utm_campaign=cloud_login'; // NON-NLS
 
@@ -107,7 +106,9 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.send,
             autocorrect: false,
-            onEditingComplete: () {},
+            onEditingComplete: () {
+              _submitCallback()?.call();
+            },
             validator:
                 SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
                     SValidator.email(msg: loc.authPassCloudAuthEmailInvalid),

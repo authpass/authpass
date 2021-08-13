@@ -119,12 +119,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
       (b) => b
         ..hasMore = false
         ..results.addAll(
-          fileList.files.map((e) => CloudStorageEntity(
-                (cse) => cse
-                  ..id = e.fileToken
-                  ..name = e.name
-                  ..type = CloudStorageEntityType.file,
-              )),
+          fileList.files.map((e) => e.toCloudStorageEntity()),
         ),
     );
   }
@@ -220,7 +215,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
     required String label,
     required bool readOnly,
   }) async {
-    final client = await _authPassCloudBloc.client;
+    final client = await _client;
     final response = await client
         .filecloudFileTokenCreatePost(FilecloudFileTokenCreatePostSchema(
           fileToken: file.id,
@@ -230,4 +225,41 @@ class AuthPassCloudProvider extends CloudStorageProvider
         .requireSuccess();
     return response;
   }
+
+  Future<LoadedShareToken> loadFromShareToken({required String token}) async {
+    final client = await _client;
+    final result = await client
+        .filecloudFileMetadataPost(FileId(fileToken: token))
+        .requireSuccess();
+    final entity = result.toCloudStorageEntity();
+    return LoadedShareToken(
+      fileInfo: result,
+      fileSource: toFileSource(
+        entity,
+        uuid: AppDataBloc.createUuid(),
+        initialCachedContent: null,
+      ),
+    );
+  }
+
+  Future<AuthPassCloudClient> get _client => _authPassCloudBloc.client;
+}
+
+class LoadedShareToken {
+  LoadedShareToken({
+    required this.fileInfo,
+    required this.fileSource,
+  });
+
+  final FileInfo fileInfo;
+  final FileSource fileSource;
+}
+
+extension FileInfoCloudStorage on FileInfo {
+  CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
+        (cse) => cse
+          ..id = fileToken
+          ..name = name
+          ..type = CloudStorageEntityType.file,
+      );
 }

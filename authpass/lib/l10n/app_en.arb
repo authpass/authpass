@@ -1230,7 +1230,7 @@
   "@otpPromptHelperText": {
     "description": ""
   },
-  "otpErrorMessageGeneration": "Error generating token: {errorMessage}",
+  "otpErrorMessageGeneration": "Error generating invite code: {errorMessage}",
   "@otpErrorMessageGeneration": {
     "description": "",
     "placeholders": {
@@ -1501,15 +1501,15 @@
   },
   "shareTokenNoLabel": "No Label/Description",
   "@shareTokenNoLabel": {
-    "description": "User did not specify a description for a given share token."
+    "description": "User did not specify a description for a given share code."
   },
   "shareTokenReadWrite": "Read/Write",
   "@shareTokenReadWrite": {
-    "description": "Share token allows reading and writing"
+    "description": "Share Code allows reading and writing"
   },
   "shareTokenReadOnly": "Read only",
   "@shareTokenReadOnly": {
-    "description": "Share token only allows reading."
+    "description": "Share code only allows reading."
   },
   "shareCreateTokenDialogTitle": "Share file",
   "@shareCreateTokenDialogTitle": {
@@ -1525,38 +1525,58 @@
   },
   "shareCreateTokenLabelText": "Description",
   "@shareCreateTokenLabelText": {
-    "description": "Allows users to add a description/label to a share token."
+    "description": "Allows users to add a description/label to a share code."
   },
   "shareCreateTokenLabelHint": "Share for my friend",
   "@shareCreateTokenLabelHint": {
     "description": "the placeholder/hint text displayed when the user has not yet entered a label"
   },
-  "shareCreateTokenLabelHelp": "Optional label to differentiate share tokens.",
+  "shareCreateTokenLabelHelp": "Optional label to differentiate share code.",
   "@shareCreateTokenLabelHelp": {
     "description": ""
   },
-  "shareCreateTokenSuccess": "Successfully created token.",
+  "shareCreateTokenSuccess": "Successfully created share code.",
   "@shareCreateTokenSuccess": {
-    "description": "snackbar when share token was created successfully."
+    "description": "snackbar when share code was created successfully."
   },
-  "sharePresentDialogTitle": "Share file with token",
+  "sharePresentDialogTitle": "Share file with secret share code",
   "@sharePresentDialogTitle": {
     "description": ""
   },
-  "sharePresentDialogHelp": "Using the following token users can access the password file. They will need the password and/or key file to open it.",
+  "sharePresentDialogHelp": "Using the following share code users can access the password file. They will need the password and/or key file to open it.",
   "@sharePresentDialogHelp": {
     "description": ""
   },
-  "sharePresentToken": "Token",
+  "sharePresentToken": "Share Code",
   "@sharePresentToken": {
     "description": ""
   },
-  "sharePresentCopied": "Copied token to clipboard.",
+  "sharePresentCopied": "Copied share code to clipboard.",
   "@sharePresentCopied": {
     "description": ""
   },
+  "authPassCloudOpenWithShareCodeTooltip": "Open with Share Code",
+  "@authPassCloudOpenWithShareCodeTooltip": {
+    "description": "Allows users to open cloud files using a share code/token."
+  },
   "authPassCloudShareFileActionLabel": "Share",
   "@authPassCloudShareFileActionLabel": {
+    "description": ""
+  },
+  "shareCodeInputDialogTitle": "Input Secret Share Code",
+  "@shareCodeInputDialogTitle": {
+    "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+  },
+  "shareCodeInputDialogScan": "Scan QR Code",
+  "@shareCodeInputDialogScan": {
+    "description": "button label for triggering QR code scanner"
+  },
+  "shareCodeInputLabel": "Secret Share Code",
+  "@shareCodeInputLabel": {
+    "description": ""
+  },
+  "shareCodeInputHelperText": "If you have received a share code, please paste it above.",
+  "@shareCodeInputHelperText": {
     "description": ""
   },
   "unexpectedError": "Unexpected Error: {error}",

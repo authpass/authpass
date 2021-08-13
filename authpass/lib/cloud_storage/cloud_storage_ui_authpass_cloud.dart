@@ -1,19 +1,29 @@
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/ui/screens/hud.dart';
+import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
+import 'package:authpass/ui/widgets/authpass_progress_indicator.dart';
+import 'package:authpass/utils/authpassicons.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
+import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:url_launcher/link.dart';
 
 final _logger = Logger('cloud_storage_ui_authpass_cloud');
 
@@ -117,10 +127,8 @@ class ShareFileBody extends StatelessWidget {
             formatUtils.formatDateFull(token.createdAt)
           ].join(nonNls(' — '))),
           onTap: () async {
-            await showDialog<void>(
-              context: context,
-              builder: (context) => ShareTokenPresent(tokenInfo: token),
-            );
+            await ShareTokenPresent.show(context,
+                token: ShareTokenPresentArgs(token: token.fileToken));
           },
         );
       },
@@ -203,24 +211,35 @@ class _ShareCreateDialogState extends State<ShareCreateDialog>
           }),
           child: task == null
               ? Text(matLoc.okButtonLabel)
-              : const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(),
-                ),
+              : const ProgressIndicatorForButtonBar(),
         ),
       ],
     );
   }
 }
 
+class ShareTokenPresentArgs {
+  ShareTokenPresentArgs({required this.token});
+  final String token;
+}
+
 class ShareTokenPresent extends StatelessWidget {
-  const ShareTokenPresent({
+  ShareTokenPresent({
     Key? key,
     required this.tokenInfo,
   }) : super(key: key);
 
-  final FileTokenInfo tokenInfo;
+  final ShareTokenPresentArgs tokenInfo;
+
+  late final tokenUrl = AppConstants.authPassWebAppUri
+      .replace(
+        fragment: Uri(
+            path: AppConstants.routeOpenFile,
+            queryParameters: <String, String>{
+              AppConstants.routeOpenFileParamToken: tokenInfo.token
+            }).toString(),
+      )
+      .toString();
 
   @override
   Widget build(BuildContext context) {
@@ -238,31 +257,67 @@ class ShareTokenPresent extends StatelessWidget {
               maxLines: null,
             ),
             const SizedBox(height: 32),
-            TextField(
-              onTap: () {
-                _copy(context);
-              },
-              enableInteractiveSelection: false,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: loc.sharePresentToken,
-                // suffix: IconButton(
-                //   padding: EdgeInsets.zero,
-                //   onPressed: () {
-                //     _copy(context);
-                //   },
-                //   icon: const Icon(Icons.copy),
-                //   constraints: BoxConstraints(),
-                // ),
-              ),
-              controller: TextEditingController(text: tokenInfo.fileToken),
-              readOnly: true,
-            ),
-            const SizedBox(height: 8),
-            TextButton.icon(
-              onPressed: () => _copy(context),
-              icon: const Icon(Icons.copy),
-              label: Text(matLoc.copyButtonLabel),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Ink(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          FullScreenHud.show(context,
+                              (context) => FullScreenHud(value: tokenUrl));
+                        },
+                        child: QrImage(
+                          data: tokenUrl,
+                          // backgroundColor: Colors.white,
+                          // foregroundColor: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        onTap: () {
+                          _copy(context);
+                        },
+                        enableInteractiveSelection: false,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: loc.sharePresentToken,
+                          // suffix: IconButton(
+                          //   padding: EdgeInsets.zero,
+                          //   onPressed: () {
+                          //     _copy(context);
+                          //   },
+                          //   icon: const Icon(Icons.copy),
+                          //   constraints: BoxConstraints(),
+                          // ),
+                        ),
+                        controller:
+                            TextEditingController(text: tokenUrl.toString()),
+                        readOnly: true,
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton.icon(
+                        onPressed: () => _copy(context),
+                        icon: const Icon(Icons.copy),
+                        label: Text(matLoc.copyButtonLabel),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -280,7 +335,266 @@ class ShareTokenPresent extends StatelessWidget {
 
   Future<void> _copy(BuildContext context) async {
     final loc = AppLocalizations.of(context);
-    await Clipboard.setData(ClipboardData(text: tokenInfo.fileToken));
+    await Clipboard.setData(ClipboardData(text: tokenUrl));
     context.showSnackBar(loc.sharePresentCopied);
+  }
+
+  static Future<void> show(BuildContext context,
+      {required ShareTokenPresentArgs token}) async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) => ShareTokenPresent(tokenInfo: token),
+      routeSettings: const RouteSettings(name: 'shareTokenPresent'),
+    );
+  }
+}
+
+class ShareCodeInputDialog extends StatefulWidget {
+  const ShareCodeInputDialog({
+    Key? key,
+    required this.provider,
+  }) : super(key: key);
+
+  final AuthPassCloudProvider provider;
+
+  static Future<void> show(
+    BuildContext context, {
+    required AuthPassCloudProvider provider,
+  }) async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) => ShareCodeInputDialog(
+        provider: provider,
+      ),
+      routeSettings: const RouteSettings(name: 'shareCodeInput'),
+    );
+  }
+
+  @override
+  _ShareCodeInputDialogState createState() => _ShareCodeInputDialogState();
+}
+
+class _ShareCodeInputDialogState extends State<ShareCodeInputDialog>
+    with FutureTaskStateMixin {
+  final _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
+    return AlertDialog(
+      title: Text(loc.shareCodeInputDialogTitle),
+      content: Container(
+        constraints: const BoxConstraints(minWidth: 400.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextButton.icon(
+              onPressed: () async {
+                final result = await barcode.BarcodeScanner.scan(
+                    options: const barcode.ScanOptions(
+                        restrictFormat: [barcode.BarcodeFormat.qr]));
+                if (result.type == barcode.ResultType.Barcode) {
+                  _controller.text = result.rawContent;
+                  await _load();
+                }
+              },
+              icon: const Icon(Icons.qr_code_scanner),
+              label: Text(loc.shareCodeInputDialogScan),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                IconButton(
+                  tooltip: loc.promptDialogPasteActionTooltip,
+                  icon: const Icon(FontAwesomeIcons.paste),
+                  onPressed: () async {
+                    final text = await getClipboardText();
+                    if (text != null) {
+                      _controller.text = text;
+                    }
+                  },
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      labelText: loc.shareCodeInputLabel,
+                      helperText: loc.shareCodeInputHelperText,
+                      helperMaxLines: 2,
+                    ),
+                    autofocus: true,
+                    onEditingComplete: () {
+                      Navigator.of(context).pop(_controller.text);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(matLoc.cancelButtonLabel),
+        ),
+        task == null
+            ? TextButton(
+                onPressed: () {
+                  _load();
+                },
+                child: Text(matLoc.okButtonLabel),
+              )
+            : const ProgressIndicatorForButtonBar(),
+      ],
+    );
+  }
+
+  Future<void> _load() async {
+    await asyncRunTask((progress) async {
+      final token = _tokenFromString(_controller.text);
+      final loadedToken =
+          await widget.provider.loadFromShareToken(token: token);
+      await Navigator.of(context)
+          .pushReplacement(CredentialsScreen.route(loadedToken.fileSource));
+    });
+  }
+
+  String _tokenFromString(final String tokenString) {
+    final token = tokenString.trim();
+    if (token.startsWith(nonNls('https://'))) {
+      final parsed = Uri.tryParse(token)?.let((uri) {
+        final fragment = Uri.tryParse(uri.fragment);
+        return fragment?.queryParameters[nonNls('token')];
+      });
+      if (parsed != null) {
+        return parsed;
+      }
+    }
+    return token;
+  }
+}
+
+/// Launch screen when deep linking to token.
+class AuthPassCloudLoadFileLaunch extends StatefulWidget {
+  const AuthPassCloudLoadFileLaunch({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
+
+  static Route<void> route({required String token}) => MaterialPageRoute(
+        builder: (context) => AuthPassCloudLoadFileLaunch(token: token),
+        settings: RouteSettings(
+            name:
+                Uri(path: '/openFile/token', queryParameters: <String, String>{
+          AppConstants.routeOpenFileParamToken: token,
+        }).toString()),
+      );
+
+  final String token;
+
+  @override
+  State<AuthPassCloudLoadFileLaunch> createState() =>
+      _AuthPassCloudLoadFileLaunchState();
+}
+
+class _AuthPassCloudLoadFileLaunchState
+    extends State<AuthPassCloudLoadFileLaunch> with FutureTaskStateMixin {
+  AuthPassCloudProvider? _provider;
+  LoadedShareToken? _loadedToken;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_provider == null) {
+      final bloc = context.watch<CloudStorageBloc>();
+      final provider = _provider =
+          bloc.availableCloudStorage.whereType<AuthPassCloudProvider>().single;
+      asyncRunTask((progress) async {
+        final response = await provider.loadFromShareToken(token: widget.token);
+        setState(() {
+          _loadedToken = response;
+        });
+        _logger.fine('done.');
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loadedToken = _loadedToken;
+    return Scaffold(
+      appBar: AppBar(title: Text('Loading file with share code')),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (loadedToken == null) ...[
+              Text('Loading file ...'),
+              const SizedBox(height: 16),
+              if (task != null) ...[
+                const CircularProgressIndicator(),
+              ] else ...[
+                TextButton(
+                  onPressed: () {},
+                  child: Text('Retry'),
+                ),
+              ],
+            ] else ...[
+              Icon(AuthPassIcons.AuthPassLogo,
+                  color: Theme.of(context).primaryColor, size: 64),
+              const SizedBox(height: 16),
+              Text(loadedToken.fileInfo.name),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(CredentialsScreen.route(loadedToken.fileSource));
+                },
+                child: Text('Open'),
+              ),
+              const SizedBox(height: 32),
+              Text(
+                  'Want to open this file with one of our native Apps instead?'),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Link(
+                    uri: AppConstants.authPassInstall
+                        .utmCampaign('shareCodeLaunch'),
+                    target: LinkTarget.blank,
+                    builder: (context, followLink) => TextButton(
+                      onPressed: followLink,
+                      child: Text('Install App'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  TextButton(
+                    onPressed: () async {
+                      await ShareTokenPresent.show(
+                        context,
+                        token: ShareTokenPresentArgs(
+                            token: loadedToken.fileInfo.fileToken),
+                      );
+                    },
+                    child: Text('Show Share Code'),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }

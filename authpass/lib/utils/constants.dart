@@ -1,11 +1,14 @@
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
+@NonNls
 class AppConstants {
   static const authPass = 'AuthPass'; // NON-NLS
   static const authPassCloud = 'AuthPass Cloud'; // NON-NLS
 
   static const routeOpenFile = '/openFile'; // NON-NLS
   static const routeOpenFileParamFile = 'file'; // NON-NLS
+  /// AuthPass Cloud based share code
+  static const routeOpenFileParamToken = 'token'; // NON-NLS
   static const routeOpen = '/open'; // NON-NLS
 
   static const kdbxExtension = '.kdbx'; // NON-NLS
@@ -13,6 +16,30 @@ class AppConstants {
   static const pngExtensionNoDot = 'png'; // NON-NLS
 
   static const contentTypeTextPlain = 'text/plain'; // NON-NLS
+
+  static const authPassHost = 'authpass.app';
+  static const authPassUrl = 'https://$authPassHost';
+  static const authPassCloudInfoUrl = '$authPassUrl/docs/authpass-cloud/';
+  static late final authPassInstall = Uri.parse(
+      'https://authpass.app/docs/getting-started/#installation--getting-started');
+  static const authPassWebApp = 'https://web.authpass.app';
+  static late final authPassWebAppUri = Uri.parse(authPassWebApp + '/');
+
+  static const utmCampaign = 'utm_campaign';
+  static const utmSource = 'utm_source';
+  static const utmSourceValue = 'app';
+}
+
+extension UriAnalytics on Uri {
+  Uri utmCampaign(@NonNls String campaign) {
+    return replace(
+      queryParameters: <String, List<String>>{
+        ...queryParametersAll,
+        AppConstants.utmCampaign: [campaign],
+        AppConstants.utmSource: [AppConstants.utmSourceValue],
+      },
+    );
+  }
 }
 
 class CharConstants {

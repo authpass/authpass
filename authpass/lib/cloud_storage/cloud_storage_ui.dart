@@ -72,6 +72,18 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
         actions: widget.provider.isAuthenticated != true
             ? null
             : <Widget>[
+                if (widget.provider is AuthPassCloudProvider) ...[
+                  IconButton(
+                    tooltip: loc.authPassCloudOpenWithShareCodeTooltip,
+                    icon: const Icon(Icons.qr_code),
+                    onPressed: () {
+                      ShareCodeInputDialog.show(
+                        context,
+                        provider: widget.provider as AuthPassCloudProvider,
+                      );
+                    },
+                  ),
+                ],
                 if (widget.browserConfig is CloudStorageOpenConfig) ...[
                   IconButton(
                     tooltip: loc.createNewFile,
@@ -100,7 +112,8 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                 ),
               ],
       ),
-      floatingActionButton: widget.browserConfig is CloudStorageOpenConfig
+      floatingActionButton: widget.browserConfig is CloudStorageOpenConfig &&
+              widget.provider.isAuthenticated
           ? FloatingActionButton(
               onPressed: () async {
                 analytics.events.trackCreateFileAt(

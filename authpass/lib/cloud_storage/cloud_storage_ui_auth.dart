@@ -1,5 +1,6 @@
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui_authpass_cloud.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
@@ -15,9 +16,11 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 final _logger = Logger('cloud_storage_ui_auth');
 
 class CloudStorageAuthentication extends StatelessWidget {
-  const CloudStorageAuthentication(
-      {Key? key, required this.provider, this.onSuccess})
-      : super(key: key);
+  const CloudStorageAuthentication({
+    Key? key,
+    required this.provider,
+    this.onSuccess,
+  }) : super(key: key);
 
   final CloudStorageProvider? provider;
   final void Function()? onSuccess;
@@ -25,6 +28,7 @@ class CloudStorageAuthentication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
@@ -41,19 +45,37 @@ class CloudStorageAuthentication extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             loc.cloudStorageLogInCaption,
-            style: Theme.of(context).textTheme.caption,
+            style: theme.textTheme.caption,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          LinkButton(
-            onPressed: () async {
-              await _startLoginFlow(context, forceNoOpenUrl: true);
-            },
-            child: Text(
-              loc.cloudStorageLogInCode,
-              textScaleFactor: 0.75,
+          if (provider is AuthPassCloudProvider) ...[
+            const SizedBox(height: 16),
+            const Text(
+              'Received a Share Code?',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-          ),
+            TextButton.icon(
+              onPressed: () {
+                ShareCodeInputDialog.show(
+                  context,
+                  provider: provider as AuthPassCloudProvider,
+                );
+              },
+              icon: const Icon(Icons.qr_code_scanner),
+              label: Text(loc.authPassCloudOpenWithShareCodeTooltip),
+            )
+          ] else ...[
+            LinkButton(
+              onPressed: () async {
+                await _startLoginFlow(context, forceNoOpenUrl: true);
+              },
+              child: Text(
+                loc.cloudStorageLogInCode,
+                textScaleFactor: 0.75,
+              ),
+            ),
+          ]
         ],
       ),
     );

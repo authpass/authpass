@@ -119,6 +119,10 @@ class DialogUtils {
     return await launch(url, forceSafariVC: false, forceWebView: false);
   }
 
+  static Future<bool> openUri(@NonNls Uri uri) async {
+    return await openUrl(uri.toString());
+  }
+
   static Future<bool> showConfirmDialog({
     required BuildContext context,
     required ConfirmDialogParams params,
@@ -383,7 +387,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
   }
 
   Future<void> _readClipboard({bool setIfChanged = false}) async {
-    final text = await _getClipboardText();
+    final text = await getClipboardText();
     if (setIfChanged && text != _previousClipboard && text != null) {
       _controller!.text = text;
       _controller!.selection =
@@ -417,7 +421,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
               icon: const Icon(FontAwesomeIcons.paste),
               onPressed: () async {
                 _controller!.text =
-                    await _getClipboardText() ?? CharConstants.empty;
+                    await getClipboardText() ?? CharConstants.empty;
               },
             ),
             Expanded(
@@ -455,7 +459,7 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
   }
 }
 
-Future<String?> _getClipboardText() async {
+Future<String?> getClipboardText() async {
   return (await Clipboard.getData(AppConstants.contentTypeTextPlain))?.text;
 }
 
