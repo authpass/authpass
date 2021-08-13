@@ -51,9 +51,9 @@ class CloudStorageAuthentication extends StatelessWidget {
           const SizedBox(height: 16),
           if (provider is AuthPassCloudProvider) ...[
             const SizedBox(height: 16),
-            const Text(
-              'Received a Share Code?',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              loc.shareCodeOpen,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             TextButton.icon(
               onPressed: () {

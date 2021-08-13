@@ -532,22 +532,23 @@ class _AuthPassCloudLoadFileLaunchState
   @override
   Widget build(BuildContext context) {
     final loadedToken = _loadedToken;
+    final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Loading file with share code')),
+      appBar: AppBar(title: Text(loc.shareCodeOpenScreenTitle)),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (loadedToken == null) ...[
-              Text('Loading file ...'),
+              Text(loc.shareCodeLoadingProgress),
               const SizedBox(height: 16),
               if (task != null) ...[
                 const CircularProgressIndicator(),
               ] else ...[
                 TextButton(
                   onPressed: () {},
-                  child: Text('Retry'),
+                  child: Text(loc.retryDialogActionLabel),
                 ),
               ],
             ] else ...[
@@ -561,11 +562,10 @@ class _AuthPassCloudLoadFileLaunchState
                   Navigator.of(context)
                       .push(CredentialsScreen.route(loadedToken.fileSource));
                 },
-                child: Text('Open'),
+                child: Text(loc.shareCodeOpenFileButtonLabel),
               ),
               const SizedBox(height: 32),
-              Text(
-                  'Want to open this file with one of our native Apps instead?'),
+              Text(loc.shareCodeOpenInstallAppCaption),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -575,7 +575,7 @@ class _AuthPassCloudLoadFileLaunchState
                     target: LinkTarget.blank,
                     builder: (context, followLink) => TextButton(
                       onPressed: followLink,
-                      child: Text('Install App'),
+                      child: Text(loc.shareCodeOpenInstallAppButtonLabel),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -587,7 +587,7 @@ class _AuthPassCloudLoadFileLaunchState
                             token: loadedToken.fileInfo.fileToken),
                       );
                     },
-                    child: Text('Show Share Code'),
+                    child: Text(loc.shareCodeOpenShowCodeButtonLabel),
                   ),
                 ],
               ),
