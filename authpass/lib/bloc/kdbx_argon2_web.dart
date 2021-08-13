@@ -22,4 +22,10 @@ class FlutterArgon2 extends Argon2 {
       type: args.type,
     ));
   }
+
+  @override
+  bool get isFfi => false;
+
+  @override
+  bool get isImplemented => true;
 }

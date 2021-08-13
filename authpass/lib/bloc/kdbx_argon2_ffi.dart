@@ -32,4 +32,10 @@ class FlutterArgon2 extends Argon2 {
     LoggingUtils().setupLogging(fromMainIsolate: false);
     return singleton.argon2(args);
   }
+
+  @override
+  bool get isFfi => singleton.isFfi;
+
+  @override
+  bool get isImplemented => singleton.isFfi;
 }
