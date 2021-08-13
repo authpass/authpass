@@ -10,6 +10,7 @@ import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:collection/collection.dart';
@@ -565,7 +566,9 @@ class _AuthPassCloudLoadFileLaunchState
                 child: Text(loc.shareCodeOpenFileButtonLabel),
               ),
               const SizedBox(height: 32),
-              Text(loc.shareCodeOpenInstallAppCaption),
+              Text(AuthPassPlatform.isWeb
+                  ? loc.shareCodeOpenInstallAppCaption
+                  : loc.shareCodeOpenAnotherAppCaption),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

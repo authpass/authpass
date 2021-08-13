@@ -159,8 +159,8 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String?;
         final provider = cloudStorageBloc.providerById(storageId);
         if (provider == null) {
-          throw StateError(''
-              'Invalid cloud storage provider id $storageId');
+          throw StateError('Invalid cloud storage provider id $storageId '
+              '(${cloudStorageBloc.availableCloudStorage.map((e) => e.id).join(',')})');
         }
         return provider.toFileSourceFromFileInfo(
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)

@@ -1599,6 +1599,10 @@
   "@shareCodeOpenInstallAppCaption": {
     "description": ""
   },
+  "shareCodeOpenAnotherAppCaption": "Want to open this file on another device?",
+  "@shareCodeOpenAnotherAppCaption": {
+    "description": ""
+  },
   "shareCodeOpenInstallAppButtonLabel": "Install App",
   "@shareCodeOpenInstallAppButtonLabel": {
     "description": ""
