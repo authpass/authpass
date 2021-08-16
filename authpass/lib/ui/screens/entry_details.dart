@@ -137,9 +137,13 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                       analytics.events.trackPermanentlyDeleteEntryCancel();
                       return;
                     }
+                    subscriptions.cancelSubscriptions();
+                    final scaffoldManager = ScaffoldMessenger.of(context);
+                    Navigator.of(context).pop();
                     entry.file.deletePermanently(entry);
                     analytics.events.trackPermanentlyDeleteEntry();
-                    context.showSnackBar(loc.permanentlyDeletedEntrySnackBar);
+                    scaffoldManager.showSnackBar(SnackBar(
+                        content: Text(loc.permanentlyDeletedEntrySnackBar)));
                   },
                   child: ListTile(
                     leading: const Icon(Icons.delete_forever),

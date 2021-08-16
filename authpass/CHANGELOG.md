@@ -6,6 +6,7 @@
 * Allow closing password entry view while saving files. #252
 * When an error happens during save, changes will not be marked as saved.
 * fix selecting of group for newly created entries #251
+* fix deleting password entry permanently when in entry details view. #253
 
 # 1.9.1 - 2021-08-09
 
