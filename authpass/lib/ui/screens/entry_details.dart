@@ -83,11 +83,27 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
   @override
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final entryDetailsKey = GlobalKey<_EntryDetailsState>();
+  EntryViewModel? entryViewModel;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final kdbxBloc = context.watch<KdbxBloc>();
+    if (entryViewModel == null) {
+      entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
+      handleSubscription(widget.entry.file.dirtyObjectsChanged.listen((event) {
+        setState(() {
+          entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
+        });
+      }));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final env = Provider.of<Env>(context);
-    final vm = EntryViewModel(widget.entry, context.watch<KdbxBloc>());
+    final vm = entryViewModel!;
+    // final vm = EntryViewModel(widget.entry, context.watch<KdbxBloc>());
     final entry = widget.entry;
     final loc = AppLocalizations.of(context);
     final analytics = context.watch<Analytics>();
@@ -621,7 +637,7 @@ class _EntryDetailsState extends State<EntryDetails>
     final file = entry.file;
     final newGroup = toGroup ??
         (await Navigator.of(context).push(GroupListFlat.route(
-          {entry.parent},
+          {entry.parent!},
           groupListMode: GroupListMode.singleSelect,
           rootGroup: entry.file.body.rootGroup,
         )))

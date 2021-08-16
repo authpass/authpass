@@ -207,7 +207,7 @@ class EmptyStateInitialRoute extends StatelessWidget {
               const SizedBox(height: 32),
               PrimaryButton(
                 onPressed: () {
-                  final newEntry = Provider.of<KdbxBloc>(context).createEntry();
+                  final newEntry = context.read<KdbxBloc>().createEntry();
                   Navigator.of(context)
                       .push(EntryDetailsScreen.route(entry: newEntry));
                 },

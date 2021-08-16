@@ -3,6 +3,7 @@ import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -123,34 +124,33 @@ class _GroupEditState extends State<GroupEdit> {
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
-              label: loc.entryInfoGroup,
-              value: _breadcrumbNames().join(CharConstants.chevronRight),
-              onTap: widget.group.parent == null
-                  ? null
-                  : () async {
-                      final file = widget.group.file;
-                      final newGroupList = await Navigator.of(context).push(
-                          GroupListFlat.route({widget.group.parent},
-                              groupListMode: GroupListMode.singleSelect,
-                              rootGroup: file.body.rootGroup));
-                      final newGroup = newGroupList?.first;
-                      if (newGroup != null) {
-                        final oldGroup = widget.group.parent;
-                        file.move(widget.group, newGroup);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(loc.movedEntryToGroup(
-                                newGroup.name.get().toString())),
-                            action: SnackBarAction(
-                                label: loc.undoButtonLabel,
-                                onPressed: () {
-                                  file.move(widget.group, oldGroup!);
-                                }),
-                          ),
-                        );
-                      }
-                    },
-            ),
+                label: loc.entryInfoGroup,
+                value: _breadcrumbNames().join(CharConstants.chevronRight),
+                onTap: widget.group.parent?.let(
+                  (parent) => () async {
+                    final file = widget.group.file;
+                    final newGroupList = await Navigator.of(context).push(
+                        GroupListFlat.route({parent},
+                            groupListMode: GroupListMode.singleSelect,
+                            rootGroup: file.body.rootGroup));
+                    final newGroup = newGroupList?.first;
+                    if (newGroup != null) {
+                      final oldGroup = parent;
+                      file.move(widget.group, newGroup);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(loc.movedEntryToGroup(
+                              newGroup.name.get().toString())),
+                          action: SnackBarAction(
+                              label: loc.undoButtonLabel,
+                              onPressed: () {
+                                file.move(widget.group, oldGroup);
+                              }),
+                        ),
+                      );
+                    }
+                  },
+                )),
             const SizedBox(height: 8),
             TextFormField(
               maxLines: null,

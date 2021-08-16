@@ -224,6 +224,11 @@ class _GroupViewModel {
 
   @override
   int get hashCode => group.hashCode;
+
+  @override
+  String toString() {
+    return group.toString();
+  }
 }
 
 enum GroupListMode {
@@ -247,7 +252,7 @@ class GroupListFlat extends StatelessWidget {
   }) : super(key: key);
 
   static MaterialPageRoute<Set<KdbxGroup>> route(
-    Set<KdbxGroup?> selection, {
+    Set<KdbxGroup> selection, {
     GroupListMode groupListMode = GroupListMode.multiSelectForFilter,
     KdbxGroup? rootGroup,
   }) =>
@@ -263,7 +268,7 @@ class GroupListFlat extends StatelessWidget {
   /// if defined only groups within this group will be shown,
   /// otherwise all groups in all files are shown.
   final KdbxGroup? rootGroup;
-  final Set<KdbxGroup?>? initialSelection;
+  final Set<KdbxGroup>? initialSelection;
   final GroupListMode groupListMode;
 
   @override
@@ -388,7 +393,9 @@ class GroupFilter {
   void remove(_GroupViewModel group) {
     groupFilter.remove(group);
     groupFilterRecursive
-        .remove(group.group.getAllGroups().map((e) => vmByGroup[e]));
+        .removeAll(group.group.getAllGroups().map((e) => _vmByGroup(e)));
+    // _logger.finer(
+    //     'Removing $group from selection. left: $groupFilterRecursive ${groupFilterRecursive.first == _vmByGroup(group.group)} -- ${_vmByGroup(group.group)}');
   }
 
   void clear() {
@@ -400,13 +407,13 @@ class GroupFilter {
 class GroupListFlatContent extends StatefulWidget {
   const GroupListFlatContent({
     Key? key,
-    this.groups,
+    required this.groups,
     required this.initialSelection,
     required this.groupListMode,
   }) : super(key: key);
 
   final Set<KdbxGroup?> initialSelection;
-  final List<_GroupViewModel>? groups;
+  final List<_GroupViewModel> groups;
   final GroupListMode groupListMode;
 
   @override
@@ -425,15 +432,14 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
   @override
   void didUpdateWidget(GroupListFlatContent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.initialSelection != widget.initialSelection) {
-      _initSelection();
-    }
+    // need to update selection when groups changes, or selection changes.
+    _initSelection();
   }
 
   void _initSelection() {
     _groupFilter = GroupFilter(
-        groups: widget.groups!, groupFilter: {}, groupFilterRecursive: {});
-    _groupFilter.addAll(widget.groups!
+        groups: widget.groups, groupFilter: {}, groupFilterRecursive: {});
+    _groupFilter.addAll(widget.groups
         .where((element) => widget.initialSelection.contains(element.group)));
   }
 
@@ -533,7 +539,7 @@ class _GroupListFlatContentState extends State<GroupListFlatContent> {
         onChangedAll: (bool selected) {
           setState(() {
             if (selected) {
-              _groupFilter.addAll(widget.groups!.map((e) => e));
+              _groupFilter.addAll(widget.groups.map((e) => e));
             } else {
               _groupFilter.clear();
             }
@@ -857,15 +863,15 @@ class GroupListTile extends StatelessWidget {
     final loc = AppLocalizations.of(context);
 
     return InkWell(
-      onTap: isSelected || !isSelectedInherited
-          ? () {
-              if (groupListMode == GroupListMode.multiSelectForFilter) {
-                onChanged(!isSelected);
-              } else {
-                onChanged(true);
-              }
-            }
-          : null,
+      onTap: () {
+        if (groupListMode == GroupListMode.multiSelectForFilter) {
+          if (isSelected || !isSelectedInherited) {
+            onChanged(!isSelected);
+          }
+        } else {
+          onChanged(true);
+        }
+      },
       onLongPress: onLongPress,
       child: IntrinsicHeight(
         child: Row(
