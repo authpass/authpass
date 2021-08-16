@@ -42,14 +42,42 @@
   gtag('config', 'UA-91100035-7');
 </script>
 
+  <style>
+    .loading {
+    width: 100%;
+      text-align: center;
+      font-family: sans-serif;
+      margin: 0;
+      position: absolute;
+      top: 40%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 0;
+    }
+    h2 {
+      color: #999;
+      font-size: 12pt;
+      margin-top: 4px;
+    }
+  </style>
+
 </head>
 <body>
+  <div class="loading">
+    <img src="icons/authpass-launcher-512.png" align="center" width="200" />
+    <h1>AuthPass</h1>
+    <h2>Free Password Manager, cross platform available for all your devices.</h2>
+    <p>Loading …</p>
+  </div>
   <script src="js/argon2-bundled.min.js" type="application/javascript"></script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
-    var serviceWorkerVersion = '1747660370';
+    var serviceWorkerVersion = '3357502803';
     var scriptLoaded = false;
     function loadMainDartJs() {
       if (scriptLoaded) {
