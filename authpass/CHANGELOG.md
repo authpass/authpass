@@ -1,4 +1,4 @@
-# 1.9.2 - unreleased
+# 1.9.2 - 2021-08-17
 
 * Share password databases/files with friends using AuthPass Cloud.
   * Create tokens and send them to your friends.

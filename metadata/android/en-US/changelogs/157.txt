@@ -1,0 +1,9 @@
+* Share password databases/files with friends using AuthPass Cloud.
+  * Create tokens and send them to your friends.
+  * Possibility to share read-only access.
+* Allow closing password entry view while saving files. #252
+* When an error happens during save, changes will not be marked as saved.
+* fix selecting of group for newly created entries #251
+* fix deleting password entry permanently when in entry details view. #253
+* Allow changing of master password #46
+
