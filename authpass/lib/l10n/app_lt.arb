@@ -380,6 +380,10 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "Atidaromas failas …",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "Nenumatyta klaida: {error}",
     "@unexpectedError": {
         "placeholders": {

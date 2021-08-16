@@ -282,6 +282,10 @@
     "@newGroupDialogTitle": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "ගොනුව පූරණය වෙමින්…",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "අනපේක්ෂිත දෝෂයකි: {error}",
     "@unexpectedError": {
         "placeholders": {

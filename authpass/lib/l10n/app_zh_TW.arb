@@ -791,6 +791,10 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "檔案讀取中 …",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "不明錯誤：{error}",
     "@unexpectedError": {
         "placeholders": {

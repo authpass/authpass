@@ -759,6 +759,10 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "Carregando arquivo …",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "Erro Inesperado: {error}",
     "@unexpectedError": {
         "placeholders": {

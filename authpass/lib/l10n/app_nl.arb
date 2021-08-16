@@ -72,6 +72,10 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "Nederlands",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
     "selectItem": "Selecteer",
     "@selectItem": {
         "description": "semantic label for checkboxes to select item."
@@ -95,6 +99,29 @@
     "openFile": "Open bestand",
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFromDropdownMenu": "Laden uit …",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Bestanden snel ontgrendelen …",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "Openen {fileName} … ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
     },
     "loadFrom": "Laad van {cloudStorageName}",
     "@loadFrom": {
@@ -141,9 +168,17 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Automatisch aanvullen inschakelen",
     "@preferenceEnableAutoFill": {},
+    "enableAutofillSuggestionBanner": "Je kunt het velden invullen van andere programma's aanzetten door automatisch aanvullen in te schakelen!",
+    "@enableAutofillSuggestionBanner": {
+        "description": "This text will shown as a banner on top of password list"
+    },
     "dismissAutofillSuggestionBannerButton": "AFWIJZEN",
     "@dismissAutofillSuggestionBannerButton": {
         "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
+    "enableAutofillSuggestionBannerButton": "INSCHAKELEN!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
     },
     "preferenceAutoFillDescription": "Alleen ondersteund op Android Oreo (8.0) of later.",
     "@preferenceAutoFillDescription": {},
@@ -158,6 +193,8 @@
     "aboutLinkGitHub": "En Open Source Project",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "Logbestand: {logFilePath}",
+    "aboutLinkContributors": "Toon bijdragers",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -203,6 +240,14 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Controleer op updates",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Verstuur logs",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Verstuur logs via e-mail",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Ondersteuningsforum",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "Rapporteer problemen en hulp vragen",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "Help",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Documentatie weergeven",
@@ -345,6 +390,14 @@
     "@swipeCopyUsername": {
         "description": "swipe action in password list to copy username"
     },
+    "copyUsernameNotExists": "Item heeft geen gebruikersnaam ingesteld.",
+    "@copyUsernameNotExists": {
+        "description": "Error message when trying to copy username from an entry which has none."
+    },
+    "copyPasswordNotExists": "Item heeft geen wachtwoord gedefinieerd.",
+    "@copyPasswordNotExists": {
+        "description": "Error message when trying to copy password from an entry which has none."
+    },
     "doneCopiedPassword": "Wachtwoord gekopieerd naar klembord.",
     "@doneCopiedPassword": {
         "description": "snackbar confirmation that password was copied."
@@ -357,6 +410,20 @@
     "@doneCopiedField": {
         "description": ""
     },
+    "copiedFieldToClipboard": "{fieldName} gekopieerd.",
+    "@copiedFieldToClipboard": {
+        "description": "",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "copiedFieldEmpty": "{fieldName} is leeg.",
+    "@copiedFieldEmpty": {
+        "description": "Displayed when user wants to copy a field which is empty or not defined.",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
     "emptyPasswordVaultPlaceholder": "Je hebt nog geen wachtwoord in je database.",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
@@ -364,6 +431,10 @@
     "emptyPasswordVaultButtonLabel": "Maak je eerste wachtwoord aan",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loading": "Laden",
+    "@loading": {
+        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
     },
     "loadingFile": "Bestand laden …",
     "@loadingFile": {
@@ -432,6 +503,17 @@
     "@addNewPassword": {
         "description": "Tooltip for adding new password button (floating action button)"
     },
+    "errorOpenFileInvalidFileStructureTitle": "Geprobeerd om een ongeldig bestandstype te openen",
+    "@errorOpenFileInvalidFileStructureTitle": {
+        "description": "Title of error dialog when trying to open an invalid/unsupported file type"
+    },
+    "errorOpenFileInvalidFileStructureBody": "Het bestand ({fileName}) lijkt geen geldig KDBX bestand te zijn. Selecteer een geldig KDBX-bestand of maak een nieuwe wachtwoorddatabase.",
+    "@errorOpenFileInvalidFileStructureBody": {
+        "description": "Body of error dialog when trying to open an invalid/unsupported file type",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
     "errorOpenFileAlreadyOpenTitle": "Bestand al geopend",
     "@errorOpenFileAlreadyOpenTitle": {
         "description": "Trying to open a database from a second file source which is already open.",
@@ -445,6 +527,42 @@
             "databaseName": {},
             "openFileSource": {},
             "newFileSource": {}
+        }
+    },
+    "loadFromUrl": "Download vanaf URL",
+    "@loadFromUrl": {
+        "description": ""
+    },
+    "loadFromUrlEnterUrl": "Voer URL in",
+    "@loadFromUrlEnterUrl": {
+        "description": "label for input box to enter url."
+    },
+    "loadFromUrlErrorEnterFullUrl": "Voer de volledige URL in die begint met http:// of https://",
+    "@loadFromUrlErrorEnterFullUrl": {
+        "description": "validator error message when user does not enter a absolute url."
+    },
+    "loadFromUrlErrorInvalidUrl": "Voer een geldige URL in.",
+    "@loadFromUrlErrorInvalidUrl": {
+        "description": "validator error message hwen user enters a url which could not be parsed."
+    },
+    "linuxAppArmorWarning": "AuthPass vereist toestemming om te communiceren met de Secrets Service om referenties op te slaan voor cloud opslag.\nVoer het volgende commando uit:",
+    "@linuxAppArmorWarning": {
+        "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
+    },
+    "cancel": "Annuleer",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
+    "errorLoadFileFromSourceTitle": "Fout bij het openen van bestand.",
+    "@errorLoadFileFromSourceTitle": {
+        "description": "error title when user selects a file which can't be downloaded."
+    },
+    "errorLoadFileFromSourceBody": "Niet mogelijk om {source} te openen.\n{error}",
+    "@errorLoadFileFromSourceBody": {
+        "description": "error body when user selects a file which can't be downloaded.",
+        "placeholders": {
+            "source": {},
+            "error": {}
         }
     },
     "errorUnlockFileTitle": "Kan bestand niet openen",
@@ -465,6 +583,15 @@
     "dialogContinue": "Doorgaan",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Foutrapport versturen",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "Rapporteer fout in Forum/Hulp",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
     },
     "groupFilterDescription": "Selecteer de groepen om te tonen (recursief)",
     "@groupFilterDescription": {
@@ -487,9 +614,82 @@
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
     },
+    "mailboxEnableLabel": "(opnieuw) inschakelen",
+    "@mailboxEnableLabel": {
+        "description": ""
+    },
+    "mailboxEnableHint": "Doorgaan met ontvangen e-mails",
+    "@mailboxEnableHint": {
+        "description": ""
+    },
+    "mailboxDisableLabel": "Uitschakelen",
+    "@mailboxDisableLabel": {
+        "description": ""
+    },
+    "mailboxDisableHint": "Ontvang geen e-mails meer",
+    "@mailboxDisableHint": {
+        "description": ""
+    },
+    "mailListNoMail": "U heeft nog geen e-mails.",
+    "@mailListNoMail": {
+        "description": ""
+    },
+    "mailboxLabelPrefixForEntry": "Entry: {entryLabel}",
+    "@mailboxLabelPrefixForEntry": {
+        "description": "when a mailbox was created for a (password) entry.",
+        "placeholders": {
+            "entryLabel": {
+                "description": "The label of the entry this mailbox was created for"
+            }
+        }
+    },
+    "mailboxLabelPrefixUnknownEntry": "Onbekende invoer: {entryUuid}",
+    "@mailboxLabelPrefixUnknownEntry": {
+        "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
+        "placeholders": {
+            "entryUuid": {
+                "description": "The internal id of the entry which was no tfound"
+            }
+        }
+    },
+    "mailboxLabelPrefixCreatedAt": "Aangemaakt op: {dateTime}",
+    "@mailboxLabelPrefixCreatedAt": {
+        "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
+        "placeholders": {
+            "dateTime": {}
+        }
+    },
+    "masterPasswordDescription": "Het hoofdwachtwoord gebruik je om je wachtwoorddatabase veilig te versleutelen. Zorg ervoor dat u het onthoudt. Het wachtwoord kan niet hersteld worden.",
+    "@masterPasswordDescription": {
+        "description": ""
+    },
+    "unsavedChangesWarningTitle": "Niet-opgeslagen wijzigingen",
+    "@unsavedChangesWarningTitle": {
+        "description": ""
+    },
+    "unsavedChangesWarningBody": "Er zijn nog steeds niet-opgeslagen wijzigingen. Wilt u de wijzigingen weggooien?",
+    "@unsavedChangesWarningBody": {
+        "description": ""
+    },
+    "unsavedChangesDiscardActionLabel": "Wijzigingen weggooien",
+    "@unsavedChangesDiscardActionLabel": {
+        "description": ""
+    },
+    "deletePermanentlyAction": "Permanent verwijderen",
+    "@deletePermanentlyAction": {
+        "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
+    },
+    "restoreFromRecycleBinAction": "Herstellen",
+    "@restoreFromRecycleBinAction": {
+        "description": "menu action: restore an entry/group which was moved into the recycle bin."
+    },
     "deleteAction": "Verwijderen",
     "@deleteAction": {
         "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "deletedEntry": "Verwijderde invoer.",
+    "@deletedEntry": {
+        "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
     },
     "successfullyDeletedGroup": "Verwijderde groep.",
     "@successfullyDeletedGroup": {
@@ -503,8 +703,79 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavSettings": "WebDAV instellingen",
+    "@webDavSettings": {
+        "description": "dialog title for entering WebDAV settings."
+    },
+    "webDavUrlLabel": "URL",
+    "@webDavUrlLabel": {
+        "description": ""
+    },
+    "webDavUrlHelperText": "Basis URL voor je WebDAV service.",
+    "@webDavUrlHelperText": {
+        "description": ""
+    },
+    "webDavUrlValidatorError": "Voer een URL in",
+    "@webDavUrlValidatorError": {
+        "description": ""
+    },
+    "webDavUrlValidatorInvalidUrlError": "Voer een geldige URL in met http:// of https://",
+    "@webDavUrlValidatorInvalidUrlError": {
+        "description": ""
+    },
+    "webDavAuthUser": "Gebruikersnaam",
+    "@webDavAuthUser": {
+        "description": ""
+    },
     "webDavAuthPassword": "Wachtwoord",
     "@webDavAuthPassword": {
+        "description": ""
+    },
+    "mergeSuccessDialogTitle": "Wachtwoorddatabase succesvol samengevoegd",
+    "@mergeSuccessDialogTitle": {
+        "description": ""
+    },
+    "mergeSuccessDialogMessage": "Conflict gedetecteerd bij het opslaan van {fileName}, het is succesvol samengevoegd met het externe bestand: \n\n{mergeSummary}",
+    "@mergeSuccessDialogMessage": {
+        "description": "",
+        "placeholders": {
+            "fileName": {},
+            "mergeSummary": {}
+        }
+    },
+    "forDetailsVisitUrl": "Voor details bezoek {url}",
+    "@forDetailsVisitUrl": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "authPassCloudAuthEmailInputLabel": "Voer e-mailadres in om te registreren of in te loggen.",
+    "@authPassCloudAuthEmailInputLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthEmailInvalid": "Vul een geldig e-mailadres in.",
+    "@authPassCloudAuthEmailInvalid": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailButtonLabel": "Bevestig Adres",
+    "@authPassCloudAuthConfirmEmailButtonLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmail": "Controleer uw e-mails om uw e-mailadres te bevestigen.",
+    "@authPassCloudAuthConfirmEmail": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailExplain": "Houd dit scherm open totdat u de link heeft bezocht die u per e-mail heeft ontvangen.",
+    "@authPassCloudAuthConfirmEmailExplain": {
+        "description": ""
+    },
+    "authPassCloudAuthResendExplain": "Als je nog geen e-mail hebt ontvangen, controleer dan je spam folder. Anders kun je proberen een nieuwe bevestigingslink aan te vragen.",
+    "@authPassCloudAuthResendExplain": {
+        "description": ""
+    },
+    "authPassCloudAuthResendButtonLabel": "Vraag een nieuwe bevestigingslink aan",
+    "@authPassCloudAuthResendButtonLabel": {
         "description": ""
     },
     "initialNewGroupName": "Nieuwe groep",
@@ -789,6 +1060,10 @@
     },
     "groupActionDelete": "Verwijderen",
     "@groupActionDelete": {
+        "description": ""
+    },
+    "shareCodeLoadingProgress": "Bestand laden …",
+    "@shareCodeLoadingProgress": {
         "description": ""
     },
     "unexpectedError": "Onverwachte fout: {error}",

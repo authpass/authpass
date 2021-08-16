@@ -759,6 +759,10 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "Načítavam súbor …",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "Neočakávaná chyba: {error}",
     "@unexpectedError": {
         "placeholders": {

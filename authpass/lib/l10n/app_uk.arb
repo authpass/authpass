@@ -408,6 +408,10 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "Завантаження файлу …",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "Неочікувана помилка: {error}",
     "@unexpectedError": {
         "placeholders": {

@@ -83,16 +83,53 @@ Vous pouvez aussi rejoindre notre communauté sur notre canal discord à l'adres
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","Gestionnaire, Mots de passe, Clés, Sécurité, Keepass, Kdbx, webdav, iCloud, nextCloud, OneDrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 
-"microsoft-store-windows","","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
-"microsoft-store-windows-short-descriptoin","","short description for windows store 
+"microsoft-store-windows","Gardez facilement et en toute sécurité la trace de tous vos mots de passe !
+
+AuthPass est un gestionnaire de mots de passe autonome compatible avec le format populaire et éprouvé KeePass(kdbx 3. ET format kdbx 4.x 🎉). Stockez vos mots de passe, partagez vos mots de passe sur tous vos appareils et de les facilement lorsque vous avez besoin de vous connecter.
+
+🗄 Tous vos mots de passe au même endroit.
+🧬 Générer des mots de passe sécurisés aléatoires pour chacun de vos comptes.
+:magnifying_glass_tilted_left : Gardez une trace de vos comptes sur le Web.
+🖥 Application disponible pour Mac, iPhone, iPad, téléphones et tablettes Android, Linux et Windows.
+📂 Capable d'ouvrir plusieurs fichiers de mot de passe en même temps (ex: un pour le travail, un personnel - ou même pour partager vos fichiers de mot de passe avec les collègues de travail)
+🤓 Open Source, disponible sur https://github. om/authpass/authpass/
+🔦 Dark Theme 😎
+
+
+=== SOUS VOTRE CONTROLE ===
+AuthPass stocke tous vos mots de passe dans le format open source Keepass, exactement où vous le souhaitez. Il n'envoie pas vos mots de passe à nos serveurs. Mais AuthPass prend en charge la sauvegarde vers:
+
+✅ Intégration native de Google Drive
+✅ Intégration native de Dropbox
+✅ Prise en charge Native WebDAV pour stocker dans votre propre NextCloud ou OwnCloud (ou similaire)
+✅ Intégration native de Microsoft OneDrive
+
+=== TOUTES LES FONCTIONNALITÉS, AUCUNE PUBLICITÉ, PAS D'ABONNEMENT ===
+En tant que projet open source, il n'y a pas de restrictions artificielles de fonctionnalités, pas de publicités et pas d'obligation de paiement.
+
+Les contributions sont bienvenues et encouragées 😅 (Toujours à la recherche de développeurs, de traducteurs, de rédacteur de documentation, de concepteurs d'interface utilisateur, etc... :) ), rejoignez notre canal discord : https://authpass. pp/go/discord
+
+=== SOUS DÉVELOPPEMENT ACTIF 🛠️ ===
+Ceci est un projet open source qui est toujours en cours de développement, ajoutant des fonctionnalités. Nous aimerions recevoir vos commentaires par e-mail ou sur le traqueur de tickets sur https://github.com/authpass/authpass/issues/
+
+Rejoignez également la communauté sur notre forum : https://forum.authpass.app/
+","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
+"microsoft-store-windows-short-descriptoin","Gardez vos mots de passe et vos comptes sécurisés sur toutes les plates-formes et tous les appareils. Gestionnaire de mots de passe gratuit et Open Source avec la prise en charge des fichiers de mots de passe au format kdbx.","short description for windows store 
 A shorter, catchy description that may be used in the top of your product’s Store listing
 Recommended length: 270 characters or fewer
 ","1000",""
-"microsoft-store-windows-features","","Short summaries of your product's key features
+"microsoft-store-windows-features","* Stockez vos mots de passe en toute sécurité
+* Open Source
+* Prise en charge des fichiers KeePass standards (kdbx)
+* Synchronisez sur vos appareils avec les services de stockage dans le cloud.","Short summaries of your product's key features
 Displayed as bulleted list
 Up to 20 app features
 (max 200 characters each)","",""
-"microsoft-store-windows-search-terms","","search terms for the microsoft store
+"microsoft-store-windows-search-terms","* gestionnaire de mots de passe
+* authpass
+* kdbx
+* keepass
+* générateur de mots de passe","search terms for the microsoft store
 
 Up to 7 search terms
 40 character limit for each search term

@@ -72,6 +72,10 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "Holandés",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
     "selectItem": "Seleccionar",
     "@selectItem": {
         "description": "semantic label for checkboxes to select item."
@@ -145,6 +149,10 @@
     "@dismissAutofillSuggestionBannerButton": {
         "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
     },
+    "enableAutofillSuggestionBannerButton": "¡HABILITAR!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+    },
     "preferenceAutoFillDescription": "Sólo compatible con Android Oreo (8.0) o posterior.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Preferencias",
@@ -203,6 +211,8 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Buscar actualizaciones",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Enviar bitácoras",
+    "@menuItemSupport": {},
     "menuItemHelp": "Ayuda",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Mostrar documentación",
@@ -447,6 +457,10 @@
             "newFileSource": {}
         }
     },
+    "cancel": "Cancelar",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
     "errorUnlockFileTitle": "No se puede abrir el archivo",
     "@errorUnlockFileTitle": {
         "description": "generic error when opening a file (dialog title)",
@@ -486,6 +500,10 @@
     "editAction": "Editar",
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "mailboxDisableLabel": "Deshabilitar",
+    "@mailboxDisableLabel": {
+        "description": ""
     },
     "deleteAction": "Eliminar",
     "@deleteAction": {
@@ -789,6 +807,10 @@
     },
     "groupActionDelete": "Eliminar",
     "@groupActionDelete": {
+        "description": ""
+    },
+    "shareCodeLoadingProgress": "Cargando archivo …",
+    "@shareCodeLoadingProgress": {
         "description": ""
     },
     "unexpectedError": "Error inesperado: {error}",

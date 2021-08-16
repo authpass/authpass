@@ -763,6 +763,10 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "shareCodeLoadingProgress": "Memuat file…",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
     "unexpectedError": "Kesalahan tak terduga: {error}",
     "@unexpectedError": {
         "placeholders": {

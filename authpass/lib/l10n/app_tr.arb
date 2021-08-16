@@ -8,6 +8,10 @@
     "@fieldWebsite": {},
     "fieldTitle": "Başlık",
     "@fieldTitle": {},
+    "fieldTotp": "Tek Seferlik Şifre (Süreli)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
     "english": "İngilizce",
     "@english": {
         "description": "language switcher subtitle"
@@ -31,6 +35,35 @@
     "spanish": "İspanyolca",
     "@spanish": {
         "description": "language switcher subtitle"
+    },
+    "turkish": "Türkçe",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Seç",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
+    "selectKeepassFile": "AuthPass - KeePass Dosyasını Seç",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "selectKeepassFileLabel": "Lütfen bir KeePass (.kbdx) dosyası seçiniz.",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "createNewFile": "Yeni Dosya oluştur",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
+    },
+    "loadFrom": "{cloudStorageName}'dan yükle",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
     },
     "preferenceSelectLanguage": "Dil Seçin",
     "@preferenceSelectLanguage": {},
