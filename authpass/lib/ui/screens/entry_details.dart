@@ -76,7 +76,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
         StreamSubscriberMixin<EntryDetailsScreen>,
         KdbxObjectSavableStateMixin<EntryDetailsScreen> {
   @override
-  KdbxFile? get file => widget.entry.file;
+  KdbxFile get file => widget.entry.file;
 
   @override
   Changeable get kdbxObject => widget.entry;
@@ -121,7 +121,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                       analytics.events.trackPermanentlyDeleteEntryCancel();
                       return;
                     }
-                    entry.file!.deletePermanently(entry);
+                    entry.file.deletePermanently(entry);
                     analytics.events.trackPermanentlyDeleteEntry();
                     context.showSnackBar(loc.permanentlyDeletedEntrySnackBar);
                   },
@@ -134,7 +134,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                   value: () async {
                     final previousParent = entry.previousParentGroup
                         .get()
-                        ?.let((that) => entry.file!.findGroupByUuid(that));
+                        ?.let((that) => entry.file.findGroupByUuid(that));
                     final entryDetails = entryDetailsKey.currentState;
                     if (entryDetails == null) {
                       return;
@@ -144,7 +144,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                       vm.entry,
                       toGroup: previousParent == null ||
                               previousParent.isInRecycleBin() ||
-                              previousParent == entry.file!.recycleBin
+                              previousParent == entry.file.recycleBin
                           ? null
                           : previousParent,
                     );
@@ -158,13 +158,13 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 PopupMenuItem(
                   value: () {
                     final oldGroup = entry.parent;
-                    entry.file!.deleteEntry(entry);
+                    entry.file.deleteEntry(entry);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(loc.deletedEntry),
                       action: SnackBarAction(
                           label: loc.undoButtonLabel,
                           onPressed: () {
-                            entry.file!.move(entry, oldGroup!);
+                            entry.file.move(entry, oldGroup!);
                           }),
                     ));
                   },
@@ -198,7 +198,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 //      ),
       body: WillPopScope(
         onWillPop: () async {
-          if (!isDirty && !entry.isDirty) {
+          if (!isFormDirty) {
             return true;
           }
           return await DialogUtils.showConfirmDialog(
@@ -231,14 +231,14 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
     on State<T>, TaskStateMixin<T>, StreamSubscriberMixin<T> {
   GlobalKey<FormState> get formKey;
 
-  KdbxFile? get file;
+  KdbxFile get file;
 
   bool _isObjectDirty = false;
 
   bool get isDirty => _isObjectDirty || isFormDirty;
   bool isFormDirty = false;
 
-  Changeable? get kdbxObject;
+  Changeable get kdbxObject;
 
   @override
   void initState() {
@@ -254,7 +254,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
 
   void _registerListener() {
     subscriptions.cancelSubscriptions();
-    handleSubscription(kdbxObject!.changes.listen((change) {
+    handleSubscription(kdbxObject.changes.listen((change) {
       _logger.finer(
           '_isObjectDirty = ${change.isDirty} (before: $_isObjectDirty / formDirty: $isFormDirty');
       setState(() {
@@ -266,12 +266,17 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
   @protected
   VoidCallback? get saveCallback => asyncTaskCallback(() async {
         final loc = AppLocalizations.of(context);
-        if (formKey.currentState!.validate()) {
-          formKey.currentState!.save();
+        final form = formKey.currentState;
+        if (form == null) {
+          return;
+        }
+        if (form.validate()) {
+          form.save();
+          setState(() => isFormDirty = false);
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
           if (kdbxBloc.fileForKdbxFile(file).fileSource.supportsWrite) {
             try {
-              await kdbxBloc.saveFile(file!);
+              await kdbxBloc.saveFile(file);
             } on StorageException catch (e, stackTrace) {
               _logger.warning('Error while saving database.', e, stackTrace);
               await DialogUtils.showErrorDialog(context,
@@ -284,10 +289,6 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
                     loc.errorWhileSavingTitle, loc.errorWhileSavingBody(e));
               }
               rethrow;
-            }
-            // if user navigated away from this entry, just ignore this.
-            if (mounted) {
-              setState(() => isFormDirty = false);
             }
           } else {
             await DialogUtils.showSimpleAlertDialog(
@@ -495,7 +496,7 @@ class _EntryDetailsState extends State<EntryDetails>
                         const SizedBox(height: 16),
                         EntryMetaInfo(
                           label: loc.entryInfoFile,
-                          value: entry.file!.body.meta.databaseName.get(),
+                          value: entry.file.body.meta.databaseName.get(),
                         ),
                         EntryMetaInfo(
                           label: loc.entryInfoGroup,
@@ -622,12 +623,12 @@ class _EntryDetailsState extends State<EntryDetails>
         (await Navigator.of(context).push(GroupListFlat.route(
           {entry.parent},
           groupListMode: GroupListMode.singleSelect,
-          rootGroup: entry.file!.body.rootGroup,
+          rootGroup: entry.file.body.rootGroup,
         )))
             ?.firstOrNull;
     if (newGroup != null) {
       final oldGroup = entry.parent;
-      file!.move(entry, newGroup);
+      file.move(entry, newGroup);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(loc.movedEntryToGroup(newGroup.name.get()!)),

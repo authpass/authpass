@@ -127,8 +127,9 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
                   selectedEntry: _selectedEntry,
                   onEntrySelected: (entry, type) {
                     if (_selectedEntry != entry) {
+                      final Future<dynamic> push;
                       if (type == EntrySelectionType.passiveHighlight) {
-                        _navigatorKey.currentState!.pushAndRemoveUntil(
+                        push = _navigatorKey.currentState!.pushAndRemoveUntil(
                           FocusWorkaroundPageRoute<void>(
                               focusNode: WidgetsBinding
                                   .instance!.focusManager.primaryFocus,
@@ -139,11 +140,17 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
                           (route) => route.isFirst,
                         );
                       } else {
-                        _navigatorKey.currentState!.pushAndRemoveUntil(
+                        push = _navigatorKey.currentState!.pushAndRemoveUntil(
                           EntryDetailsScreen.route(entry: entry),
                           (route) => route.isFirst,
                         );
                       }
+                      push.then((dynamic value) {
+                        _logger.finer('entry route was popped.');
+                        if (entry == _selectedEntry && mounted) {
+                          setState(() => _selectedEntry = null);
+                        }
+                      });
                       setState(() {
                         _selectedEntry = entry;
                       });

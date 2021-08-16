@@ -25,7 +25,7 @@ class GroupViewModel {
   GroupViewModel(this.group, this.file, this.kdbxBloc);
 
   final KdbxGroup group;
-  final KdbxFile? file;
+  final KdbxFile file;
   final KdbxBloc kdbxBloc;
 
   bool get isRoot => group.parent == null;
@@ -35,7 +35,7 @@ class GroupViewModel {
       : kdbxBloc.fileForKdbxFile(file).fileSource.displayIcon.iconData;
 
   String? get nameOrNull =>
-      (isRoot ? file!.body.meta.databaseName.get() : group.name.get())
+      (isRoot ? file.body.meta.databaseName.get() : group.name.get())
           ?.nullIfBlank();
 
   String name(AppLocalizations loc) =>
@@ -78,7 +78,7 @@ class GroupList extends StatelessWidget {
                       labelText: loc.newGroupDialogInputLabel,
                     ).show(context);
                     if (newName != null) {
-                      parent!.file!.createGroup(parent: parent!, name: newName);
+                      parent!.file.createGroup(parent: parent!, name: newName);
                     }
                   },
                 ),
@@ -146,14 +146,14 @@ class GroupList extends StatelessWidget {
                       case GroupListLongPressAction.delete:
                         _logger.fine('We should delete ${group.name(loc)}');
                         final oldParent = group.group.parent;
-                        group.file!.deleteGroup(group.group);
+                        group.file.deleteGroup(group.group);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(loc.successfullyDeletedGroup),
                             action: SnackBarAction(
                               label: loc.undoButtonLabel,
                               onPressed: () {
-                                oldParent!.file!.move(group.group, oldParent);
+                                oldParent!.file.move(group.group, oldParent);
                               },
                             ),
                           ),
@@ -320,7 +320,7 @@ class GroupListBuilder extends StatelessWidget {
               kdbxBloc, file, file.kdbxFile.body.rootGroup, depth))
           .toList();
     } else {
-      final isRecycleBin = group.file!.recycleBin == group;
+      final isRecycleBin = group.file.recycleBin == group;
       final groups = group.groups
           .map((g) => _createViewModel(
                 kdbxBloc,
@@ -686,7 +686,7 @@ class GroupListFlatList extends StatelessWidget {
                       action: SnackBarAction(
                         label: loc.undoButtonLabel,
                         onPressed: () {
-                          oldParent!.file!.move(group.group, oldParent);
+                          oldParent!.file.move(group.group, oldParent);
                           analytics.events
                               .trackGroupDelete(GroupDeleteResult.undo);
                         },
@@ -710,7 +710,7 @@ class GroupListFlatList extends StatelessWidget {
                     analytics.events.trackPermanentlyDeleteGroupCancel();
                     return;
                   }
-                  group.group.file!.deletePermanently(group.group);
+                  group.group.file.deletePermanently(group.group);
                   analytics.events.trackPermanentlyDeleteGroup();
                   context.showSnackBar(loc.permanentlyDeletedEntrySnackBar);
                   break;

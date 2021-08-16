@@ -872,7 +872,7 @@ packages:
       path: "../deps/kdbx.dart"
       relative: true
     source: path
-    version: "2.1.0"
+    version: "2.2.0"
   linkify:
     dependency: transitive
     description:

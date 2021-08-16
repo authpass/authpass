@@ -568,7 +568,8 @@ class KdbxBloc {
       databaseName,
       generator: Env.AuthPass,
     );
-    final bytes = await _saveFileToBytes(kdbxFile);
+    final bytes =
+        await _saveFileToBytes<Uint8List>(kdbxFile, (bytes) async => bytes);
     FileSource fileSource;
     if (target == null) {
       final localSource = await _localFileSourceForDbName(databaseName);
@@ -628,32 +629,35 @@ class KdbxBloc {
     return entry;
   }
 
+  @NonNls
+  static const _customDataSaveCount = 'codeux.design.authpass.save';
+
   /// Wrapper around [file.save()], which adds a bit of meta data
   /// before storing it.
-  Future<Uint8List> _saveFileToBytes(KdbxFile file) async {
+  Future<T> _saveFileToBytes<T>(
+      KdbxFile file, FileSaveCallback<T> saveBytes) async {
     final generator = file.body.meta.generator.get();
     if (generator == null || generator.isEmpty) {
       file.body.meta.generator.set(nonNls('AuthPass (save)'));
     }
-    @NonNls
-    const _customDataSaveCount = 'codeux.design.authpass.save'; // NON-NLS
     final String saveCounter =
         file.body.meta.customData[_customDataSaveCount] ?? nonNls('0');
     final newCounter = (int.tryParse(saveCounter) ?? 0) + 1;
     file.body.meta.customData[_customDataSaveCount] = newCounter.toString();
     analytics.events.trackSaveCount(generator: generator, value: newCounter);
-    return await file.save();
+    return await file.saveTo(saveBytes);
   }
 
   Future<FileContent> saveFile(KdbxFile file,
       {FileSource? toFileSource}) async {
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
     try {
-      final bytes = await _saveFileToBytes(file);
-      final ret = await fileSource.contentWrite(bytes, metadata: null);
+      final ret = await _saveFileToBytes(file, (bytes) async {
+        return await fileSource.contentWrite(bytes, metadata: null);
+      });
       analytics.events
-          .trackSave(type: fileSource.typeDebug, value: bytes.length);
-      analytics.trackTiming('saveFileSize', bytes.length,
+          .trackSave(type: fileSource.typeDebug, value: ret.content.length);
+      analytics.trackTiming('saveFileSize', ret.content.length,
           category: 'fileSize', label: 'save');
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
@@ -663,11 +667,12 @@ class KdbxBloc {
       final remoteFile =
           await kdbxFormat.read(content.content, file.credentials);
       final mergeResult = file.merge(remoteFile);
-      final bytes = await _saveFileToBytes(file);
-      _logger.fine('mergeResult: $mergeResult');
       try {
-        final ret =
-            await fileSource.contentWrite(bytes, metadata: content.metadata);
+        _logger.fine('mergeResult: $mergeResult');
+        final ret = await _saveFileToBytes(
+            file,
+            (bytes) async => await fileSource.contentWrite(bytes,
+                metadata: content.metadata));
         delegate?.conflictMerged(fileSource, file, mergeResult);
         analytics.events.trackSaveConflict(
           type: fileSource.typeDebug,
@@ -675,8 +680,8 @@ class KdbxBloc {
           success: true,
         );
         analytics.events
-            .trackSave(type: fileSource.typeDebug, value: bytes.length);
-        analytics.trackTiming('saveFileSize', bytes.length,
+            .trackSave(type: fileSource.typeDebug, value: ret.content.length);
+        analytics.trackTiming('saveFileSize', ret.content.length,
             category: 'fileSize', label: 'save');
         return ret;
       } catch (e) {
@@ -690,8 +695,8 @@ class KdbxBloc {
     }
   }
 
-  KdbxOpenedFile fileForKdbxFile(KdbxFile? file) =>
-      _openedFilesByKdbxFile[file!] ??
+  KdbxOpenedFile fileForKdbxFile(KdbxFile file) =>
+      _openedFilesByKdbxFile[file] ??
       (() {
         throw StateError('Missing file source for kdbxFile.');
       })();
@@ -747,11 +752,12 @@ class KdbxBloc {
       KdbxOpenedFile oldFile,
       CloudStorageSelectorSaveResult createFileInfo,
       CloudStorageProvider cs) async {
-    final bytes = await _saveFileToBytes(oldFile.kdbxFile);
-    final entity = await cs.createEntity(createFileInfo, bytes);
-    final lastContent = entity.lastContent!;
-    assert(bytes == lastContent.content);
-    return await _savedAs(oldFile, entity, lastContent);
+    return await _saveFileToBytes(oldFile.kdbxFile, (bytes) async {
+      final entity = await cs.createEntity(createFileInfo, bytes);
+      final lastContent = entity.lastContent!;
+      assert(bytes == lastContent.content);
+      return await _savedAs(oldFile, entity, lastContent);
+    });
   }
 
   Future<FileSource> saveLocally(FileSource? source) async {

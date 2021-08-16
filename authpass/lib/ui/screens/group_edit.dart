@@ -33,10 +33,10 @@ class _GroupEditScreenState extends State<GroupEditScreen>
   final formKey = GlobalKey<FormState>();
 
   @override
-  KdbxFile? get file => widget.group.file;
+  KdbxFile get file => widget.group.file;
 
   @override
-  Changeable? get kdbxObject => widget.group;
+  Changeable get kdbxObject => widget.group;
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +128,7 @@ class _GroupEditState extends State<GroupEdit> {
               onTap: widget.group.parent == null
                   ? null
                   : () async {
-                      // TODO
-                      final file = widget.group.file!;
+                      final file = widget.group.file;
                       final newGroupList = await Navigator.of(context).push(
                           GroupListFlat.route({widget.group.parent},
                               groupListMode: GroupListMode.singleSelect,

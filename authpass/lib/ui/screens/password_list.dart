@@ -270,10 +270,10 @@ class PasswordListFilterIsolateRunner {
 }
 
 class GroupFilterEntry {
-  const GroupFilterEntry({this.group, this.isRecursive});
+  const GroupFilterEntry({required this.group, required this.isRecursive});
 
-  final KdbxGroup? group;
-  final bool? isRecursive;
+  final KdbxGroup group;
+  final bool isRecursive;
 }
 
 class GroupFilter {
@@ -321,20 +321,19 @@ class GroupFilter {
   Iterable<KdbxEntry> getEntries(List<KdbxFile> files) {
     if (groups.isNotEmpty) {
       return groups.expand((groupSelected) {
-        final groups = groupSelected.isRecursive!
-            ? groupSelected.group!.getAllGroups()
+        final groups = groupSelected.isRecursive
+            ? groupSelected.group.getAllGroups()
             : [groupSelected.group];
         if (showRecycleBin && showActive) {
-          return groups.expand((g) => g!.entries);
+          return groups.expand((g) => g.entries);
         } else if (showActive) {
           return groups
-              .where(
-                  (g) => g == groupSelected.group || g!.file!.recycleBin != g)
-              .expand((g) => g!.entries);
+              .where((g) => g == groupSelected.group || g.file.recycleBin != g)
+              .expand((g) => g.entries);
         } else if (showRecycleBin) {
           return groups
-              .where((g) => g!.file!.recycleBin == g)
-              .expand((g) => g!.entries);
+              .where((g) => g.file.recycleBin == g)
+              .expand((g) => g.entries);
         } else {
           throw StateError('Impossible. (showRecycleBin: $showRecycleBin,'
               'showActive: $showActive)');
