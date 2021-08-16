@@ -2,6 +2,7 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/theme.dart';
+import 'package:authpass/ui/screens/master_password_change.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -247,6 +248,15 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           ).open(context);
                         }
                       }),
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MasterPasswordChangeScreen.route(
+                                fileSource: widget.fileSource));
+                      },
+                      icon: const Icon(Icons.lock),
+                      label: Text(loc.changeMasterPasswordActionLabel),
                     ),
                     TextButton(
                       onPressed: () async {

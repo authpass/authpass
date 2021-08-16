@@ -466,6 +466,7 @@ Future<String?> getClipboardText() async {
 extension BuildContextSnackBar on BuildContext {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
       String message) {
+    ScaffoldMessenger.of(this).removeCurrentSnackBar();
     return ScaffoldMessenger.of(this)
         .showSnackBar(SnackBar(content: Text(message)));
   }

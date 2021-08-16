@@ -116,7 +116,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   controller: _password,
                   focusNode: _passwordFocus,
                   autofocus: true,
-                  onFieldSubmitted: (val) => _submitCallback()!(),
+                  onFieldSubmitted: (val) => _submitCallback()?.call(),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (value) {
                     final userInput =

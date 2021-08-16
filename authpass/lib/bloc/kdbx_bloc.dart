@@ -414,7 +414,12 @@ class KdbxBloc {
   }
 
   /// writes all opened files into secure storage.
-  Future<void> _updateQuickUnlockStore() async {
+  Future<void> _updateQuickUnlockStore({FileSource? ifRequiredFor}) async {
+    if (ifRequiredFor != null) {
+      if (!_openedFilesQuickUnlock.contains(ifRequiredFor)) {
+        return;
+      }
+    }
     final openedFiles = _openedFiles.value;
     await quickUnlockStorage.updateQuickUnlockFile(
         Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
@@ -649,8 +654,29 @@ class KdbxBloc {
   }
 
   Future<FileContent> saveFile(KdbxFile file,
-      {FileSource? toFileSource}) async {
+      {FileSource? toFileSource, Credentials? updateCredentials}) async {
+    final oldCredentials = file.credentials;
+    if (updateCredentials != null) {
+      file.credentials = updateCredentials;
+    }
+
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
+
+    Future<void> _updateQuickUnlock() async {
+      if (updateCredentials == null) {
+        return;
+      }
+      try {
+        await _updateQuickUnlockStore(ifRequiredFor: fileSource);
+      } on AuthException catch (e) {
+        if (e.code == AuthExceptionCode.userCanceled) {
+          // ignore;
+          return;
+        }
+        rethrow;
+      }
+    }
+
     try {
       final ret = await _saveFileToBytes(file, (bytes) async {
         return await fileSource.contentWrite(bytes, metadata: null);
@@ -659,13 +685,13 @@ class KdbxBloc {
           .trackSave(type: fileSource.typeDebug, value: ret.content.length);
       analytics.trackTiming('saveFileSize', ret.content.length,
           category: 'fileSize', label: 'save');
+      await _updateQuickUnlock();
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
           'Got conflict while writing file. Trying to merge.', e, stackTrace);
       final content = await fileSource.content(updateCache: false).last;
-      final remoteFile =
-          await kdbxFormat.read(content.content, file.credentials);
+      final remoteFile = await kdbxFormat.read(content.content, oldCredentials);
       final mergeResult = file.merge(remoteFile);
       try {
         _logger.fine('mergeResult: $mergeResult');
@@ -683,6 +709,7 @@ class KdbxBloc {
             .trackSave(type: fileSource.typeDebug, value: ret.content.length);
         analytics.trackTiming('saveFileSize', ret.content.length,
             category: 'fileSize', label: 'save');
+        await _updateQuickUnlock();
         return ret;
       } catch (e) {
         analytics.events.trackSaveConflict(
