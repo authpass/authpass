@@ -31,12 +31,12 @@ One day I have to automate this...
   * Already generates all artifacts except macos
   * Run macOS build locally (see above step), publish to app store and create distribution zip file
   * `_tools/upload-artifact.sh /Users/herbert/Downloads/tmp/AuthPass.app-1.7.7_1519.zip`
-* run `appcast.generate.sh` to generate windows appcast update.
 * create tag called `v1.2.3` and `fdroid-v1.2.3`
 * data.authpass.app
   * update `public_html/authpass-data/data/artifacts/stable.txt`
   * run `~/public_html/authpass-data/data/update_stable.sh`
   * update `public_html/authpass-data/data/fdroid-version.txt`
+* run `appcast.generate.sh` to generate windows appcast update.
 * Create GitHub Release
   * Create draft with v1.7.7
   * Run `_tools/release/github-release.sh` - this will upload:
