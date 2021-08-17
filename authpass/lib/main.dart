@@ -74,8 +74,8 @@ Future<void> startApp(Env env) async {
   if (!AuthPassPlatform.isWeb) {
     _logger.info('${AuthPassPlatform.debugInfo()}');
     unawaited(Future<dynamic>.delayed(const Duration(seconds: 10))
-        .then((dynamic value) {
-      _logger.info('DeviceInfo: ${LoggingUtils.getDebugDeviceInfo()}');
+        .then((dynamic value) async {
+      _logger.info('DeviceInfo: ${await LoggingUtils.getDebugDeviceInfo()}');
     }));
   }
 
@@ -295,7 +295,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         Provider<CloudStorageBloc>.value(value: _deps.cloudStorageBloc),
         Provider<AppDataBloc>.value(value: _deps.appDataBloc),
         Provider<AuthPassCacheManager>(
-          create: (context) => AuthPassCacheManager(pathUtils: PathUtils()),
+          create: (context) => AuthPassCacheManager(
+            pathUtils: PathUtils(),
+            env: _deps.env,
+          ),
           dispose: (context, obj) => obj.store.dispose(),
         ),
         StreamProvider<AppData>(

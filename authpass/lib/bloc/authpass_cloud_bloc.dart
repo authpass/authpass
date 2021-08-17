@@ -197,14 +197,19 @@ class AuthPassCloudBloc with ChangeNotifier {
     });
   }
 
+  @NonNls
+  static String getUserAgent(AppInfo ai) => '${ai.appName}/${ai.versionLabel} '
+      '(${AuthPassPlatform.operatingSystem}) [${ai.packageName}]';
+
+  static http.Client getUserAgentClient(AppInfo ai) =>
+      UserAgentClient(nonNls(getUserAgent(ai)), http.Client());
+
   Future<AuthPassCloudClient> _getClient() async {
     return _client ??= await (() async {
       final ai = await env.getAppInfo();
-      _requestSender = HttpRequestSender(
-          clientCreator: () => UserAgentClient(
-              nonNls('${ai.shortString} / ${AuthPassPlatform.operatingSystem} '
-                  '(${AuthPassPlatform.operatingSystem})'),
-              http.Client()));
+
+      _requestSender =
+          HttpRequestSender(clientCreator: () => getUserAgentClient(ai));
       final baseUri = Uri.parse(featureFlags.authpassCloudUri!);
       final client = AuthPassCloudClient(baseUri, _requestSender!);
       final token = await _loadToken();
