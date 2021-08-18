@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/material.dart';
@@ -117,11 +118,15 @@ class AuthPassAboutDialog extends StatelessWidget {
                     );
                   }),
               const SizedBox(height: 32),
-              Text(
-                loc.aboutLogFile(logFiles.isEmpty
-                    ? 'No Log File?!' // NON-NLS
-                    : logFiles.first.absolute.path),
-                style: Theme.of(context).textTheme.caption,
+              TextField(
+                readOnly: true,
+                decoration: const InputDecoration.collapsed(
+                    hintText: CharConstants.empty),
+                controller: TextEditingController(
+                    text: loc.aboutLogFile(logFiles.isEmpty
+                        ? 'No Log File?!' // NON-NLS
+                        : logFiles.first.absolute.path)),
+                style: Theme.of(context).textTheme.caption!,
               ),
             ],
           );
