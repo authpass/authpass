@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:logging/logging.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
+
+final _logger = Logger('cloud_auth');
 
 const _authPassCloudUrlInfo = AppConstants.authPassCloudInfoUrl;
 const _authPassCloudUrlInfoOpen =
@@ -159,6 +162,10 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
 
   Future<void> _scheduleCheck() async {
     _timer = Timer(const Duration(seconds: 3), () async {
+      if (!mounted) {
+        _logger.fine('No longer mounted. Skipping checkConfirmed.');
+        return;
+      }
       if (await widget.bloc.checkConfirmed()) {
         _analytics.events.trackCloudAuth(CloudAuthAction.authSuccess);
       }

@@ -29,9 +29,19 @@ class PrimaryButton extends StatelessWidget {
             ],
           );
     return Theme(
-      data: _createMainButtonTheme(Theme.of(context), large: large),
+      data: _createMainButtonTheme(
+        Theme.of(context),
+        large: large,
+      ),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(elevation: 0),
+        style: ElevatedButton.styleFrom(
+            elevation: 0,
+            padding: large
+                ? const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  )
+                : null),
         onPressed: onPressed,
 //                    color: Theme.of(context).primaryColor,
         child: childWidget,
@@ -42,18 +52,18 @@ class PrimaryButton extends StatelessWidget {
 
 ThemeData _createMainButtonTheme(ThemeData themeData, {bool large = true}) =>
     themeData.copyWith(
-      buttonTheme: themeData.buttonTheme.copyWith(
-        buttonColor: themeData.primaryColor,
-        textTheme: ButtonTextTheme.primary,
-//      disabledColor: AuthPassTheme.disabledPrimaryColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: large
-            ? const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 16,
-              )
-            : null,
-      ),
+//       elevatedButtonTheme: themeData.elevatedButtonTheme.style(
+//         // buttonColor: themeData.primaryColor,
+//         // textTheme: ButtonTextTheme.primary,
+// //      disabledColor: AuthPassTheme.disabledPrimaryColor,
+// //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+// //         padding: large
+// //             ? const EdgeInsets.symmetric(
+// //                 vertical: 16,
+// //                 horizontal: 16,
+// //               )
+// //             : null,
+//       ),
       textTheme: large
           ? themeData.textTheme.apply(fontSizeFactor: 1.4)
           : themeData.textTheme,

@@ -93,7 +93,7 @@ abstract class PathUtilsDefault extends PathUtils {
   /// by the user. - this directory is NOT namespaced during development.
   @override
   Future<Directory> getAppDocDirectory({required bool ensureCreated}) async {
-    final dir = await retrieveApplicationDocumentsDirectory();
+    final dir = _namespaced(await retrieveApplicationDocumentsDirectory());
     if (ensureCreated) {
       return await dir.create(recursive: true);
     }
