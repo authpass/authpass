@@ -14,7 +14,7 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "23.0.0"
+    version: "24.0.0"
   analytics_event:
     dependency: "direct main"
     description:
@@ -35,7 +35,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -147,7 +147,7 @@ packages:
       name: biometric_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-rc.10"
+    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -266,7 +266,7 @@ packages:
       name: chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.2"
+    version: "1.1.0"
   chunked_stream:
     dependency: transitive
     description:
@@ -427,7 +427,7 @@ packages:
       name: enough_convert
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   enough_mail:
     dependency: "direct main"
     description:
@@ -708,7 +708,7 @@ packages:
       name: frontend_server_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -1000,14 +1000,14 @@ packages:
       name: openapi_base
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2+1"
+    version: "1.0.2+2"
   otp:
     dependency: "direct main"
     description:
       name: otp
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   package_config:
     dependency: transitive
     description:
@@ -1021,7 +1021,7 @@ packages:
       name: package_info_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   package_info_plus_linux:
     dependency: transitive
     description:
@@ -1161,7 +1161,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.1"
   pool:
     dependency: transitive
     description:
@@ -1189,7 +1189,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   pub_semver:
     dependency: transitive
     description:
@@ -1299,7 +1299,7 @@ packages:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.1.0"
   source_helper:
     dependency: transitive
     description:
@@ -1518,7 +1518,7 @@ packages:
       name: url_launcher_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   usage:
     dependency: "direct main"
     description:
@@ -1548,7 +1548,7 @@ packages:
       name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.12"
+    version: "2.1.14"
   video_player_platform_interface:
     dependency: transitive
     description:
@@ -1669,7 +1669,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.2"
+    version: "5.2.0"
   yaml:
     dependency: transitive
     description:
