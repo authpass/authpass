@@ -67,8 +67,12 @@ class KeyboardHandler extends StatefulWidget {
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
 }
 
+const keyboardShortcut = KeyboardShortcut(type: KeyboardShortcutType.search);
+
 class _KeyboardHandlerState extends State<KeyboardHandler> {
   final _keyboardShortcutEvents = KeyboardShortcutEvents();
+  final _eventChannel = const EventChannel('platform_channel_events/search');
+  late StreamSubscription<dynamic> _eventChannelSubscription;
 
   final FocusNode _focusNode = FocusNode(
     debugLabel: nonNls('AuthPassKeyboardFocus'),
@@ -81,6 +85,11 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void initState() {
     super.initState();
+
+    _eventChannelSubscription =
+        _eventChannel.receiveBroadcastStream().listen((dynamic event) {
+      _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
+    });
   }
 
   @override
@@ -204,6 +213,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void dispose() {
     _keyboardShortcutEvents.dispose();
+    _eventChannelSubscription.cancel();
     super.dispose();
   }
 }

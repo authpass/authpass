@@ -13,6 +13,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - HotKey (0.1.2)
   - macos_secure_bookmarks (0.0.3):
     - FlutterMacOS
   - package_info_plus_macos (0.0.1):
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - file_picker_writable (from `Flutter/ephemeral/.symlinks/plugins/file_picker_writable/macos`)
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - HotKey
   - macos_secure_bookmarks (from `Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos`)
   - package_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
@@ -44,6 +46,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - FMDB
+    - HotKey
 
 EXTERNAL SOURCES:
   argon2_ffi:
@@ -79,6 +82,7 @@ SPEC CHECKSUMS:
   file_selector_macos: ff6dc948d4ddd34e8602a1f60b7d0b4cc6051a47
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  HotKey: ad59450195936c10992438c4210f673de5aee43e
   macos_secure_bookmarks: cff041c4b377fa00941bb901aaec4d27fac5edf2
   package_info_plus_macos: f010621b07802a241d96d01876d6705f15e77c1c
   path_provider_macos: 160cab0d5461f0c0e02995469a98f24bdb9a3f1f
@@ -86,6 +90,6 @@ SPEC CHECKSUMS:
   url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
   wakelock_macos: bc3f2a9bd8d2e6c89fee1e1822e7ddac3bd004a9
 
-PODFILE CHECKSUM: c7161fcf45d4fd9025dc0f48a76d6e64e52f8176
+PODFILE CHECKSUM: 25ef8009b23faeb01bc1076e30af7fcba3542ebb
 
 COCOAPODS: 1.10.1
