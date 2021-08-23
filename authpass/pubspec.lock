@@ -621,7 +621,7 @@ packages:
   flutter_markdown:
     dependency: "direct main"
     description:
-      path: "packages/flutter_markdown"
+      path: "packages\\flutter_markdown"
       ref: c7eed4b1f4fec61a4cdfc4f9429775e691836035
       resolved-ref: c7eed4b1f4fec61a4cdfc4f9429775e691836035
       url: "https://github.com/hpoul/packages.git"
