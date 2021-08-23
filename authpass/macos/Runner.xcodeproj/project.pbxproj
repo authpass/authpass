@@ -260,6 +260,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/HotKey/HotKey.framework",
 				"${BUILT_PRODUCTS_DIR}/argon2_ffi/argon2_ffi.framework",
 				"${BUILT_PRODUCTS_DIR}/biometric_storage/biometric_storage.framework",
 				"${BUILT_PRODUCTS_DIR}/device_info_plus_macos/device_info_plus_macos.framework",
@@ -275,6 +276,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HotKey.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/argon2_ffi.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/biometric_storage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/device_info_plus_macos.framework",
