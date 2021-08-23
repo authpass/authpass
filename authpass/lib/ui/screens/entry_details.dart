@@ -380,6 +380,8 @@ class _EntryDetailsState extends State<EntryDetails>
         _copyField(commonFields.password);
       } else if (event.type == KeyboardShortcutType.copyUsername) {
         _copyField(commonFields.userName);
+      } else if (event.type == KeyboardShortcutType.copyTotp) {
+        _copyField(commonFields.otpAuthCompat2);
       } else if (event.type == KeyboardShortcutType.escape) {
         FocusManager.instance.primaryFocus?.unfocus();
       } else if (event.type == KeyboardShortcutType.openUrl) {
