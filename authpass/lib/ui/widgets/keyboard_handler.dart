@@ -129,6 +129,8 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                     type: KeyboardShortcutType.copyUsername),
                 LogicalKeyboardKey.keyC: const KeyboardShortcut(
                     type: KeyboardShortcutType.copyPassword),
+                LogicalKeyboardKey.keyT:
+                    const KeyboardShortcut(type: KeyboardShortcutType.copyTotp),
                 LogicalKeyboardKey.keyP:
                     const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
                 LogicalKeyboardKey.keyN:
@@ -210,6 +212,7 @@ enum KeyboardShortcutType {
   search,
   copyPassword,
   copyUsername,
+  copyTotp,
   moveUp,
   moveDown,
   generatePassword,
