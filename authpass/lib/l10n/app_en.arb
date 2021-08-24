@@ -1284,7 +1284,7 @@
   "@entryRenameFieldPromptTitle": {
     "description": ""
   },
-  "removerecentfile": "Remove recent file",
+  "removerecentfile": "Hide",
     "@removerecentfile": {
       "description": ""
     },

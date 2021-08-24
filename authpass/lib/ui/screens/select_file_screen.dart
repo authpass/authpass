@@ -459,24 +459,21 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                       showDialog<void>(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text(loc.removerecentfile),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: Text(loc.cancel),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                              TextButton(
-                                                child: Text(loc.entryAttachmentRemoveActionLabel),
-                                                onPressed: () async {
-                                                  await appDataBloc.update((builder, data) async {
-                                                    await builder.previousFiles.remove(f);
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
+                                          return SimpleDialog(
+                                            title: Text(f.toFileSource(cloudStorageBloc).displayName.toString()),
+                                            children: [
+                                              SimpleDialogOption(
+                                                child:ListTile(
+                                                  leading:const Icon(Icons.remove_circle_outline),
+                                                  title: Text(loc.removerecentfile),
+                                                ),
+                                                  onPressed: () async {
+                                                    await appDataBloc.update((builder, data) async {
+                                                      await builder.previousFiles.remove(f);
+                                                    });
+                                                    Navigator.of(context).pop();
+                                                  }
+                                              )
                                             ],
                                           );
                                         },
@@ -715,6 +712,10 @@ class OpenedFileTile extends StatelessWidget {
                 ],
               ),
             ),
+           GestureDetector(
+             onTap: onLongPressed,
+               child: Icon(Icons.more_vert))
+
           ],
         ),
       ),
