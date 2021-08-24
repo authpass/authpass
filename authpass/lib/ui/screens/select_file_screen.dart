@@ -468,8 +468,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                                   title: Text(loc.removerecentfile),
                                                 ),
                                                   onPressed: () async {
-                                                    await appDataBloc.update((builder, data) async {
-                                                      await builder.previousFiles.remove(f);
+                                                     await appDataBloc.update((builder, data)  {
+                                                       builder.previousFiles.remove(f);
                                                     });
                                                     Navigator.of(context).pop();
                                                   }
@@ -714,7 +714,7 @@ class OpenedFileTile extends StatelessWidget {
             ),
            GestureDetector(
              onTap: onLongPressed,
-               child: Icon(Icons.more_vert))
+               child:const Icon(Icons.more_vert))
 
           ],
         ),
