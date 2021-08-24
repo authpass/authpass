@@ -62,10 +62,12 @@ class SelectFileScreen extends StatelessWidget {
   static Route<Object> route({bool skipQuickUnlock = false}) =>
       MaterialPageRoute(
         settings: const RouteSettings(name: '/selectFile'),
-        builder: (context) => SelectFileScreen(
-          skipQuickUnlock: skipQuickUnlock,
-        ),
+        builder: (context) =>
+            SelectFileScreen(
+              skipQuickUnlock: skipQuickUnlock,
+            ),
       );
+
   static Future<void> navigate(BuildContext context) =>
       Navigator.of(context, rootNavigator: true)
           .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
@@ -74,7 +76,9 @@ class SelectFileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cloudBloc = context.watch<Deps>().cloudStorageBloc;
+    final cloudBloc = context
+        .watch<Deps>()
+        .cloudStorageBloc;
     final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -152,38 +156,38 @@ class ProgressOverlay extends StatelessWidget {
             firstChild: _task == null
                 ? Container()
                 : Container(
-                    color: Colors.black12,
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: theme.cardColor
-                              .withAlpha(250), //Color(0xefffffff),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                        ),
-                        padding: const EdgeInsets.all(32),
-                        child: ValueListenableBuilder<FutureTask>(
-                          valueListenable: _task,
-                          builder: (context, value, child) {
-                            _logger.fine('Generating progress dialog'
-                                ' with label ${value.progressLabel}');
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const CircularProgressIndicator(),
-                                ...?(value.progressLabel == null
-                                    ? null
-                                    : [
-                                        const SizedBox(height: 16),
-                                        Text(value.progressLabel!),
-                                      ]),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+              color: Colors.black12,
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.cardColor
+                        .withAlpha(250), //Color(0xefffffff),
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(8)),
                   ),
+                  padding: const EdgeInsets.all(32),
+                  child: ValueListenableBuilder<FutureTask>(
+                    valueListenable: _task,
+                    builder: (context, value, child) {
+                      _logger.fine('Generating progress dialog'
+                          ' with label ${value.progressLabel}');
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const CircularProgressIndicator(),
+                          ...?(value.progressLabel == null
+                              ? null
+                              : [
+                            const SizedBox(height: 16),
+                            Text(value.progressLabel!),
+                          ]),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
             secondChild: Container(),
             crossFadeState: task != null
                 ? CrossFadeState.showFirst
@@ -276,7 +280,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
           'opening quick unlock. ${++counter} $_quickUnlockAttempted $mounted');
       final opened = await kdbxBloc.reopenQuickUnlock(loc, progress);
       _logger.info(
-          'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx.isNotEmpty}');
+          'opened $opened files with quick unlock. ${kdbxBloc.openedFilesKdbx
+              .isNotEmpty}');
       if (opened > 0 && kdbxBloc.openedFilesKdbx.isNotEmpty) {
 //          if (AuthPassPlatform.isMacOS) {
 //            _logger.fine('Lets chill for a second.');
@@ -322,37 +327,37 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
             children: <Widget>[
               ...?(_showLinuxAppArmorMessage
                   ? [
-                      const SizedBox(height: 16),
-                      Text(
-                        loc.linuxAppArmorWarning,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.caption!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.errorColor,
+                const SizedBox(height: 16),
+                Text(
+                  loc.linuxAppArmorWarning,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.caption!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.errorColor,
+                  ),
+                ),
+                LinkButton(
+                  icon: const Icon(Icons.content_copy),
+                  onPressed: () async {
+                    await Clipboard.setData(
+                        const ClipboardData(text: _linuxAppArmorCommand));
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text(loc.copiedToClipboard),
                         ),
-                      ),
-                      LinkButton(
-                        icon: const Icon(Icons.content_copy),
-                        onPressed: () async {
-                          await Clipboard.setData(
-                              const ClipboardData(text: _linuxAppArmorCommand));
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                content: Text(loc.copiedToClipboard),
-                              ),
-                            );
-                          await _linuxAppArmorCheck();
-                        },
-                        child: const Text(
-                          _linuxAppArmorCommand,
-                          style: TextStyle(
-                              fontFamily: AuthPassTheme.monoFontFamily),
-                          maxLines: null,
-                        ),
-                      ),
-                    ]
+                      );
+                    await _linuxAppArmorCheck();
+                  },
+                  child: const Text(
+                    _linuxAppArmorCommand,
+                    style: TextStyle(
+                        fontFamily: AuthPassTheme.monoFontFamily),
+                    maxLines: null,
+                  ),
+                ),
+              ]
                   : null),
               const SizedBox(height: 16),
               Padding(
@@ -372,14 +377,15 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                   ...cloudStorageBloc.availableCloudStorage
                       .whereType<AuthPassCloudProvider>()
                       .map(
-                        (cs) => SelectFileAction(
+                        (cs) =>
+                        SelectFileAction(
                           icon: cs.displayIcon.iconData,
                           label: cs.displayName,
                           onPressed: () async {
                             await _loadFromCloudStorage(context, cs);
                           },
                         ),
-                      ),
+                  ),
                   SelectFileActionChrome(
                     child: PopupMenuButton(
                       tooltip: null,
@@ -392,7 +398,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           throw StateError('Invalid action choice $value');
                         }
                       },
-                      itemBuilder: (context) => [
+                      itemBuilder: (context) =>
+                      [
                         PopupMenuItem<Object>(
                           value: _openLocalMarker,
                           child: ListTile(
@@ -401,12 +408,13 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                           ),
                         ),
                         ...cloudStorageBloc.availableCloudStorage.map(
-                          (cs) => PopupMenuItem<Object>(
-                              value: cs,
-                              child: ListTile(
-                                leading: Icon(cs.displayIcon.iconData),
-                                title: Text(loc.loadFrom(cs.displayName)),
-                              )),
+                              (cs) =>
+                              PopupMenuItem<Object>(
+                                  value: cs,
+                                  child: ListTile(
+                                    leading: Icon(cs.displayIcon.iconData),
+                                    title: Text(loc.loadFrom(cs.displayName)),
+                                  )),
                         )
                       ],
                       child: SelectFileActionContent(
@@ -443,44 +451,52 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       ...ListTile.divideTiles(
                         context: context,
                         tiles: appData.previousFiles.reversed
-                                .take(5)
-                                .takeIfNotEmpty()
-                                ?.map(
-                                  (f) => OpenedFileTile(
-                                    openedFile:
-                                        f.toFileSource(cloudStorageBloc),
-                                    color: f.color,
-                                    onPressed: () {
-                                      final source =
-                                          f.toFileSource(cloudStorageBloc);
-                                      _loadAndGoToCredentials(source);
-                                    },
-                                    onLongPressed: (){
-                                      showDialog<void>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return SimpleDialog(
-                                            title: Text(f.toFileSource(cloudStorageBloc).displayName.toString()),
-                                            children: [
-                                              SimpleDialogOption(
-                                                child:ListTile(
-                                                  leading:const Icon(Icons.remove_circle_outline),
-                                                  title: Text(loc.removerecentfile),
-                                                ),
-                                                  onPressed: () async {
-                                                     await appDataBloc.update((builder, data)  {
-                                                       builder.previousFiles.remove(f);
-                                                    });
-                                                    Navigator.of(context).pop();
-                                                  }
-                                              )
-                                            ],
-                                          );
-                                        },
+                            .take(5)
+                            .takeIfNotEmpty()
+                            ?.map(
+                              (f) =>
+                              OpenedFileTile(
+                                openedFile:
+                                f.toFileSource(cloudStorageBloc),
+                                color: f.color,
+                                onPressed: () {
+                                  final source =
+                                  f.toFileSource(cloudStorageBloc);
+                                  _loadAndGoToCredentials(source);
+                                },
+                                onLongPressed: () {
+                                  showDialog<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SimpleDialog(
+                                        title: Text(f
+                                            .toFileSource(cloudStorageBloc)
+                                            .displayName
+                                            .toString()),
+                                        children: [
+                                          SimpleDialogOption(
+                                              child: ListTile(
+                                                leading: const Icon(Icons
+                                                    .remove_circle_outline),
+                                                title: Text(
+                                                    loc.removerecentfile),
+                                              ),
+                                              onPressed: () async {
+                                                await appDataBloc.update((
+                                                    builder, data) {
+                                                  builder.previousFiles.remove(
+                                                      f);
+                                                });
+                                                Navigator.of(context).pop();
+                                              }
+                                          )
+                                        ],
                                       );
                                     },
-                                  ),
-                                ) ??
+                                  );
+                                },
+                              ),
+                        ) ??
                             [
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -502,8 +518,8 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     );
   }
 
-  Future<void> _loadFromCloudStorage(
-      BuildContext context, CloudStorageProvider cs) async {
+  Future<void> _loadFromCloudStorage(BuildContext context,
+      CloudStorageProvider cs) async {
     final source = await Navigator.of(context)
         .push(CloudStorageSelector.route(cs, CloudStorageOpenConfig()));
     if (source != null) {
@@ -553,9 +569,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
       await showModalBottomSheet<void>(
         context: context,
         routeSettings: const RouteSettings(name: '/openfileLocal/chooser'),
-        builder: (context) => OpenFileBottomSheet(
-          openFilePickerWritable: openFilePickerWritable,
-        ),
+        builder: (context) =>
+            OpenFileBottomSheet(
+              openFilePickerWritable: openFilePickerWritable,
+            ),
       );
     } else {
       _logger.fine('No kdbx files found, open FilePickerWritable');
@@ -583,7 +600,10 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   void _loadAndGoToCredentials(FileSource source) {
     final loc = AppLocalizations.of(context);
     asyncRunTask((progress) {
-      return source.content().last.then((value) {
+      return source
+          .content()
+          .last
+          .then((value) {
         return Navigator.of(context).push(CredentialsScreen.route(source));
       }).catchError((Object error, StackTrace stackTrace) {
         _logger.fine('Error while trying to load file source $source');
@@ -610,7 +630,10 @@ class OpenFileBottomSheet extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
         top: 16,
-        bottom: MediaQuery.of(context).padding.bottom,
+        bottom: MediaQuery
+            .of(context)
+            .padding
+            .bottom,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -623,7 +646,7 @@ class OpenFileBottomSheet extends StatelessWidget {
               final filePath = await FilesystemPicker.open(
                 context: context,
                 rootDirectory:
-                    await PathUtils().getAppDocDirectory(ensureCreated: true),
+                await PathUtils().getAppDocDirectory(ensureCreated: true),
                 fsType: FilesystemType.file,
                 allowedExtensions: [AppConstants.kdbxExtension],
                 fileTileSelectMode: FileTileSelectMode.wholeTile,
@@ -677,7 +700,9 @@ class OpenedFileTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subtitleStyle = TextStyle(
-        color: ListTileTheme.of(context).textColor ??
+        color: ListTileTheme
+            .of(context)
+            .textColor ??
             theme.textTheme.caption!.color);
     return InkWell(
       onTap: onPressed,
@@ -712,9 +737,9 @@ class OpenedFileTile extends StatelessWidget {
                 ],
               ),
             ),
-           GestureDetector(
-             onTap: onLongPressed,
-               child:const Icon(Icons.more_vert))
+            GestureDetector(
+                onTap: onLongPressed,
+                child: const Icon(Icons.more_vert))
 
           ],
         ),
@@ -838,7 +863,8 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
         if (!uri.scheme.startsWith(nonNls('http'))) {
           // NON-NLS
           _logger.fine(
-              'User entered url with invalid schema ${FormatUtils.anonymizeUrl(urlString)}');
+              'User entered url with invalid schema ${FormatUtils.anonymizeUrl(
+                  urlString)}');
           return loc.loadFromUrlErrorEnterFullUrl;
         }
         _enteredUrl = uri;
@@ -900,11 +926,13 @@ class CredentialsScreen extends StatefulWidget {
   const CredentialsScreen({Key? key, required this.kdbxFilePath})
       : super(key: key);
 
-  static Route<void> route(FileSource kdbxFilePath) => MaterialPageRoute<void>(
+  static Route<void> route(FileSource kdbxFilePath) =>
+      MaterialPageRoute<void>(
         settings: const RouteSettings(name: '/credentials'),
-        builder: (context) => CredentialsScreen(
-          kdbxFilePath: kdbxFilePath,
-        ),
+        builder: (context) =>
+            CredentialsScreen(
+              kdbxFilePath: kdbxFilePath,
+            ),
       );
 
   final FileSource kdbxFilePath;
@@ -974,10 +1002,11 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     _kdbxBloc = Provider.of<KdbxBloc>(context);
     _kdbxBloc.quickUnlockStorage
         .supportsBiometricKeyStore()
-        .then((bool? biometricQuickUnlock) => setState(() {
-              _biometricQuickUnlockSupported = biometricQuickUnlock;
-              _biometricQuickUnlockActivated ??= true;
-            }));
+        .then((bool? biometricQuickUnlock) =>
+        setState(() {
+          _biometricQuickUnlockSupported = biometricQuickUnlock;
+          _biometricQuickUnlockActivated ??= true;
+        }));
   }
 
   @override
@@ -1075,32 +1104,33 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
               ),
               ...(_biometricQuickUnlockSupported!
                   ? [
-                      CheckboxListTile(
-                        value: _biometricQuickUnlockActivated,
-                        dense: true,
-                        title: Text(
-                          loc.saveMasterPasswordBiometric,
-                          textAlign: TextAlign.right,
-                        ),
-                        onChanged: (value) => setState(() {
-                          _biometricQuickUnlockActivated = value;
-                        }),
-                      ),
-                    ]
+                CheckboxListTile(
+                  value: _biometricQuickUnlockActivated,
+                  dense: true,
+                  title: Text(
+                    loc.saveMasterPasswordBiometric,
+                    textAlign: TextAlign.right,
+                  ),
+                  onChanged: (value) =>
+                      setState(() {
+                        _biometricQuickUnlockActivated = value;
+                      }),
+                ),
+              ]
                   : []),
               Container(
                 alignment: Alignment.centerRight,
                 child: _loadingFile != null
                     ? const Padding(
-                        padding: EdgeInsets.all(32),
-                        child: AuthPassProgressIndicator())
+                    padding: EdgeInsets.all(32),
+                    child: AuthPassProgressIndicator())
                     : LinkButton(
-                        key: const ValueKey('continue'),
-                        onPressed: () async {
-                          await _tryUnlock();
-                        },
-                        child: Text(loc.dialogContinue),
-                      ),
+                  key: const ValueKey('continue'),
+                  onPressed: () async {
+                    await _tryUnlock();
+                  },
+                  child: Text(loc.dialogContinue),
+                ),
               ),
             ],
           ),
