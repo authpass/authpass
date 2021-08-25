@@ -719,8 +719,10 @@ class OpenedFileTile extends StatelessWidget {
                 ],
               ),
             ),
-            GestureDetector(
-                onTap: onLongPressed, child: const Icon(Icons.more_vert))
+            IconButton(
+              onPressed: onLongPressed,
+              icon: const Icon(Icons.more_vert),
+            )
           ],
         ),
       ),
