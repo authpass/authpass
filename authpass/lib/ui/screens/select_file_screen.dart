@@ -66,6 +66,7 @@ class SelectFileScreen extends StatelessWidget {
           skipQuickUnlock: skipQuickUnlock,
         ),
       );
+
   static Future<void> navigate(BuildContext context) =>
       Navigator.of(context, rootNavigator: true)
           .pushAndRemoveUntil(SelectFileScreen.route(), (_) => false);
@@ -307,6 +308,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
+    final appDataBloc = Provider.of<AppDataBloc>(context);
     final cloudStorageBloc = Provider.of<CloudStorageBloc>(context);
     final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -453,6 +455,36 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                                       final source =
                                           f.toFileSource(cloudStorageBloc);
                                       _loadAndGoToCredentials(source);
+                                    },
+                                    onLongPressed: () {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return SimpleDialog(
+                                            title: Text(f
+                                                .toFileSource(cloudStorageBloc)
+                                                .displayName
+                                                .toString()),
+                                            children: [
+                                              SimpleDialogOption(
+                                                  child: ListTile(
+                                                    leading: const Icon(Icons
+                                                        .remove_circle_outline),
+                                                    title: Text(
+                                                        loc.removerecentfile),
+                                                  ),
+                                                  onPressed: () async {
+                                                    await appDataBloc.update(
+                                                        (builder, data) {
+                                                      builder.previousFiles
+                                                          .remove(f);
+                                                    });
+                                                    Navigator.of(context).pop();
+                                                  })
+                                            ],
+                                          );
+                                        },
+                                      );
                                     },
                                   ),
                                 ) ??
@@ -687,6 +719,10 @@ class OpenedFileTile extends StatelessWidget {
                 ],
               ),
             ),
+            IconButton(
+              onPressed: onLongPressed,
+              icon: const Icon(Icons.more_vert),
+            )
           ],
         ),
       ),

@@ -1284,6 +1284,10 @@
   "@entryRenameFieldPromptTitle": {
     "description": ""
   },
+  "removerecentfile": "Hide",
+    "@removerecentfile": {
+      "description": ""
+    },
   "entryRenameFieldPromptLabel": "Enter the new name for the field",
   "@entryRenameFieldPromptLabel": {
     "description": ""
