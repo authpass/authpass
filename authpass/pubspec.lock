@@ -675,12 +675,10 @@ packages:
   flutter_windowmanager:
     dependency: "direct main"
     description:
-      path: "."
-      ref: e4840321aa994ce5bc479d0bc9d0d5d0efdad19e
-      resolved-ref: e4840321aa994ce5bc479d0bc9d0d5d0efdad19e
-      url: "https://github.com/authpass/flutter_windowmanager.git"
-    source: git
-    version: "0.0.2"
+      name: flutter_windowmanager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   font_awesome_flutter:
     dependency: "direct main"
     description:
