@@ -386,7 +386,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       tooltip: null,
                       onSelected: (value) async {
                         if (identical(value, _openLocalMarker)) {
-                          await _openLocalFile(context);
+                          await _openLocalOrInternalFile(context);
                         } else if (value is CloudStorageProvider) {
                           await _loadFromCloudStorage(context, value);
                         } else {
@@ -519,6 +519,23 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     }
   }
 
+  Future<void> _openLocalOrInternalFile(BuildContext context) async {
+    final kdbxFiles = await _containsKdbxFiles(
+        await PathUtils().getAppDocDirectory(ensureCreated: false));
+    if (kdbxFiles) {
+      await showModalBottomSheet<void>(
+        context: context,
+        routeSettings: const RouteSettings(name: '/openfileLocal/chooser'),
+        builder: (context) => OpenFileBottomSheet(
+          openFilePickerWritable: () => _openLocalFile(context),
+        ),
+      );
+    } else {
+      _logger.fine('No kdbx files found, open FilePickerWritable');
+      await _openLocalFile(context);
+    }
+  }
+
   Future<void> _openLocalFile(BuildContext context) async {
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       await _openIosAndAndroidLocalFilePicker();
@@ -541,33 +558,16 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   Future<void> _openIosAndAndroidLocalFilePicker() async {
-    Future<void> openFilePickerWritable() async {
-      await FilePickerWritable().openFile((fileInfo, file) async {
-        await Navigator.of(context).push(CredentialsScreen.route(
-          FileSourceLocal(
-            FileSourceLocal.localFile(file.path),
-            uuid: AppDataBloc.createUuid(),
-            filePickerIdentifier: fileInfo.toJsonString(),
-            initialCachedContent: FileContent(await file.readAsBytes()),
-          ),
-        ));
-      });
-    }
-
-    final kdbxFiles = await _containsKdbxFiles(
-        await PathUtils().getAppDocDirectory(ensureCreated: false));
-    if (kdbxFiles) {
-      await showModalBottomSheet<void>(
-        context: context,
-        routeSettings: const RouteSettings(name: '/openfileLocal/chooser'),
-        builder: (context) => OpenFileBottomSheet(
-          openFilePickerWritable: openFilePickerWritable,
+    await FilePickerWritable().openFile((fileInfo, file) async {
+      await Navigator.of(context).push(CredentialsScreen.route(
+        FileSourceLocal(
+          FileSourceLocal.localFile(file.path),
+          uuid: AppDataBloc.createUuid(),
+          filePickerIdentifier: fileInfo.toJsonString(),
+          initialCachedContent: FileContent(await file.readAsBytes()),
         ),
-      );
-    } else {
-      _logger.fine('No kdbx files found, open FilePickerWritable');
-      await openFilePickerWritable();
-    }
+      ));
+    });
   }
 
   Future<bool> _containsKdbxFiles(Directory dir) async {
@@ -627,10 +627,12 @@ class OpenFileBottomSheet extends StatelessWidget {
             title: Text(loc.internalFile),
             subtitle: Text(loc.internalFileSubtitle),
             onTap: () async {
+              final rootDirectory =
+                  await PathUtils().getAppDocDirectory(ensureCreated: true);
+              _logger.fine('Opening picker for $rootDirectory');
               final filePath = await FilesystemPicker.open(
                 context: context,
-                rootDirectory:
-                    await PathUtils().getAppDocDirectory(ensureCreated: true),
+                rootDirectory: rootDirectory,
                 fsType: FilesystemType.file,
                 allowedExtensions: [AppConstants.kdbxExtension],
                 fileTileSelectMode: FileTileSelectMode.wholeTile,
