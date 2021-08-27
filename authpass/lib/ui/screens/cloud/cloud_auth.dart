@@ -5,6 +5,7 @@ import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -146,14 +147,17 @@ class _ConfirmEmailAddress extends StatefulWidget {
   __ConfirmEmailAddressState createState() => __ConfirmEmailAddressState();
 }
 
-class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
+class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
+    with FutureTaskStateMixin {
   Timer? _timer;
   bool _showResendButton = false;
   late Analytics _analytics;
+  late DateTime _tokenCreatedAt;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _tokenCreatedAt = widget.bloc.tokenCreatedAt ?? clock.now();
     if (_timer == null || !_timer!.isActive) {
       _scheduleCheck();
     }
@@ -166,11 +170,12 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
         _logger.fine('No longer mounted. Skipping checkConfirmed.');
         return;
       }
-      if (await widget.bloc.checkConfirmed()) {
-        _analytics.events.trackCloudAuth(CloudAuthAction.authSuccess);
-      }
+      _checkConfirmed();
       unawaited(_scheduleCheck());
-      if (!_showResendButton) {
+      _logger.fine('${clock.now().difference(_tokenCreatedAt)}');
+      if (!_showResendButton &&
+          clock.now().difference(_tokenCreatedAt) >
+              const Duration(seconds: 30)) {
         setState(() {
           _showResendButton = true;
         });
@@ -178,43 +183,78 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress> {
     });
   }
 
+  Future<bool> _checkConfirmed() async {
+    if (await widget.bloc.checkConfirmed()) {
+      _analytics.events.trackCloudAuth(CloudAuthAction.authSuccess);
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loc = AppLocalizations.of(context);
     return Column(
-      children: <Widget>[
+      children: [
         Text(loc.authPassCloudAuthConfirmEmail),
         const SizedBox(height: 32),
         Text(
           loc.authPassCloudAuthConfirmEmailExplain,
           style: theme.textTheme.caption,
         ),
-        ...?_showResendButton
-            ? [
-                const SizedBox(height: 32),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 320),
-                  child: Text(
-                    loc.authPassCloudAuthResendExplain,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.caption!.copyWith(height: 1.4),
-                    maxLines: 5,
-                  ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () {
-                    context
-                        .read<Analytics>()
-                        .events
-                        .trackCloudAuth(CloudAuthAction.authResend);
-                    widget.bloc.clearToken();
-                  },
-                  child: Text(loc.authPassCloudAuthResendButtonLabel),
-                ),
-              ]
-            : null,
+        const SizedBox(height: 32),
+        const CircularProgressIndicator(),
+        const SizedBox(height: 32),
+        if (_showResendButton) ...[
+          TextButton(
+            onPressed: asyncTaskCallback((task) async {
+              _timer?.cancel();
+              try {
+                if (!await _checkConfirmed()) {
+                  await DialogUtils.showSimpleAlertDialog(
+                    context,
+                    null,
+                    loc.authPassCloudAuthNotConfirmed,
+                    routeAppend: 'authPassCloudAuthNotConfirmed',
+                    moreActions: [
+                      TextButton(
+                        onPressed: () {
+                          DialogUtils.openUrl(UrlConstants.forumUrl);
+                        },
+                        child: Text('Get help in the forum'),
+                      )
+                    ],
+                  );
+                }
+              } finally {
+                await _scheduleCheck();
+              }
+            }),
+            child: Text(loc.authPassCloudAuthClickedLink),
+          ),
+          const SizedBox(height: 32),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 320),
+            child: Text(
+              loc.authPassCloudAuthResendExplain,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.caption!.copyWith(height: 1.4),
+              maxLines: 5,
+            ),
+          ),
+          const SizedBox(height: 32),
+          TextButton(
+            onPressed: () {
+              context
+                  .read<Analytics>()
+                  .events
+                  .trackCloudAuth(CloudAuthAction.authResend);
+              widget.bloc.clearToken();
+            },
+            child: Text(loc.authPassCloudAuthResendButtonLabel),
+          ),
+        ],
       ],
     );
   }

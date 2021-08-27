@@ -48,25 +48,9 @@ class SaveFileAs extends StatefulWidget {
 }
 
 class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
-  KdbxBloc? kdbxBloc;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    _init();
-    super.didChangeDependencies();
-  }
-
-  void _init() {
-    kdbxBloc ??= context.read<KdbxBloc>();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final kdbxBloc = context.watch<KdbxBloc>();
     return ListTile(
       leading: widget.icon ?? Icon(widget.cs!.displayIcon.iconData),
       title: Text(widget.title),
@@ -76,13 +60,13 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
         if (widget.local) {
           final fs = await _selectLocalFileSource();
           if (fs != null) {
-            widget.onSave(kdbxBloc!.saveAs(widget.file, fs));
+            widget.onSave(kdbxBloc.saveAs(widget.file, fs));
           }
         } else {
           final result = await _saveAsCloudStorage(widget.cs!);
           if (result != null) {
             widget.onSave(
-                kdbxBloc!.saveAsNewFile(widget.file, result, widget.cs!));
+                kdbxBloc.saveAsNewFile(widget.file, result, widget.cs!));
           }
         }
       },

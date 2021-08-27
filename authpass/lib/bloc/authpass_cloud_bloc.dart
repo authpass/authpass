@@ -30,13 +30,15 @@ class _StoredToken {
   _StoredToken({
     required this.authToken,
     required this.isConfirmed,
-  });
+    required DateTime? createdAt,
+  }) : createdAt = createdAt ?? clock.now().toUtc();
   factory _StoredToken.fromJson(Map<String, dynamic> json) =>
       _$StoredTokenFromJson(json);
   Map<String, dynamic> toJson() => _$StoredTokenToJson(this);
 
   final String authToken;
   final bool isConfirmed;
+  final DateTime createdAt;
 }
 
 enum TokenStatus {
@@ -128,6 +130,8 @@ class AuthPassCloudBloc with ChangeNotifier {
       : _storedToken!.isConfirmed
           ? TokenStatus.confirmed
           : TokenStatus.created;
+
+  DateTime? get tokenCreatedAt => _storedToken?.createdAt;
 
   Future<BiometricStorageFile> _getStorageFile() async {
     return await BiometricStorage().getStorage(
@@ -229,16 +233,24 @@ class AuthPassCloudBloc with ChangeNotifier {
     await _saveToken(_StoredToken(
       authToken: response.authToken,
       isConfirmed: false,
+      createdAt: null,
     ));
   }
 
   Future<bool> checkConfirmed() async {
-    ArgumentError.checkNotNull(_storedToken);
+    final _storedToken = this._storedToken;
+    if (_storedToken == null) {
+      throw ArgumentError('_storedToken');
+    }
     final client = await _getClient();
     final response = await client.emailStatusGet().requireSuccess();
     if (response.status == EmailStatusGetResponseBody200Status.confirmed) {
       await _saveToken(
-        _StoredToken(authToken: _storedToken!.authToken, isConfirmed: true),
+        _StoredToken(
+          authToken: _storedToken.authToken,
+          isConfirmed: true,
+          createdAt: _storedToken.createdAt,
+        ),
       );
       return true;
     }

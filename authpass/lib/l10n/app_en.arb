@@ -1631,6 +1631,14 @@
   "@changeMasterPasswordScreenTitle": {
     "description": "app bar title for change password screen."
   },
+  "authPassCloudAuthClickedLink": "I received email and visited link",
+  "@authPassCloudAuthClickedLink": {
+    "description": ""
+  },
+  "authPassCloudAuthNotConfirmed": "Email address was not yet confirmed. Make sure to click the link in the email you received and solve the captcha to confirm your email address.",
+  "@authPassCloudAuthNotConfirmed": {
+    "description": ""
+  },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {
