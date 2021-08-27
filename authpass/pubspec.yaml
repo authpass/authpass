@@ -173,7 +173,7 @@ dependencies:
   share: ^2.0.1
   collection: ^1.15.0-nullsafety.4
 
-  flutter_markdown: ^0.6.2
+  flutter_markdown: ^0.6.5
 
 dev_dependencies:
   integration_test:
@@ -201,11 +201,6 @@ dependency_overrides:
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
   # Until bug fix gets merged: https://github.com/flutter/packages/pull/433 (0.6.5)
-  flutter_markdown:
-    git:
-      url: https://github.com/hpoul/packages.git
-      ref: c7eed4b1f4fec61a4cdfc4f9429775e691836035
-      path: packages/flutter_markdown
   kdbx:
     path: ../deps/kdbx.dart
 #  openapi_base:

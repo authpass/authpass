@@ -483,7 +483,7 @@ packages:
       name: file_picker_writable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0+1"
+    version: "2.0.1"
   file_selector:
     dependency: "direct main"
     description:
@@ -518,7 +518,7 @@ packages:
       name: file_selector_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.1+1"
+    version: "0.8.1+2"
   file_selector_windows:
     dependency: "direct main"
     description:
@@ -621,11 +621,9 @@ packages:
   flutter_markdown:
     dependency: "direct main"
     description:
-      path: "packages/flutter_markdown"
-      ref: c7eed4b1f4fec61a4cdfc4f9429775e691836035
-      resolved-ref: c7eed4b1f4fec61a4cdfc4f9429775e691836035
-      url: "https://github.com/hpoul/packages.git"
-    source: git
+      name: flutter_markdown
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.5"
   flutter_speed_dial:
     dependency: "direct main"
@@ -671,7 +669,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0-dev.2021080801"
+    version: "0.7.0-dev.2021082103"
   flutter_windowmanager:
     dependency: "direct main"
     description:
@@ -940,7 +938,7 @@ packages:
       name: mockito
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.14"
+    version: "5.0.15"
   msix:
     dependency: "direct dev"
     description:
@@ -1019,7 +1017,7 @@ packages:
       name: package_info_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.6"
   package_info_plus_linux:
     dependency: transitive
     description:
@@ -1047,7 +1045,7 @@ packages:
       name: package_info_plus_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   package_info_plus_windows:
     dependency: transitive
     description:
@@ -1159,7 +1157,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.1"
+    version: "3.3.2"
   pool:
     dependency: transitive
     description:
@@ -1332,14 +1330,14 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0+3"
+    version: "2.0.0+4"
   sqflite_common:
     dependency: transitive
     description:
       name: sqflite_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0+2"
+    version: "2.0.1"
   stack_trace:
     dependency: transitive
     description:
@@ -1509,7 +1507,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.4"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -1560,7 +1558,7 @@ packages:
       name: video_player_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   vm_service:
     dependency: transitive
     description:
@@ -1644,7 +1642,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.5"
+    version: "2.2.7"
   winsparkle_flutter:
     dependency: "direct main"
     description:
