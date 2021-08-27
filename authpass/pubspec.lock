@@ -669,7 +669,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0-dev.2021082103"
+    version: "0.7.0-dev.2021080801"
   flutter_windowmanager:
     dependency: "direct main"
     description:
