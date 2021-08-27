@@ -170,7 +170,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
         _logger.fine('No longer mounted. Skipping checkConfirmed.');
         return;
       }
-      _checkConfirmed();
+      await _checkConfirmed();
       unawaited(_scheduleCheck());
       _logger.fine('${clock.now().difference(_tokenCreatedAt)}');
       if (!_showResendButton &&
@@ -222,7 +222,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
                         onPressed: () {
                           DialogUtils.openUrl(UrlConstants.forumUrl);
                         },
-                        child: Text('Get help in the forum'),
+                        child: Text(loc.getHelpButton),
                       )
                     ],
                   );

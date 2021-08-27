@@ -1639,6 +1639,10 @@
   "@authPassCloudAuthNotConfirmed": {
     "description": ""
   },
+  "getHelpButton": "Get help in the forum",
+  "@getHelpButton": {
+    "description": ""
+  },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {
