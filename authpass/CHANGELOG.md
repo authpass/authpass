@@ -1,6 +1,8 @@
-# 1.9.3 - unreleased
+# 1.9.3 - 2021-08-27
 
 * Allow removing of files from the list of "recent files". [#260](https://github.com/authpass/authpass/pull/260).
+* Improve AuthPass Cloud authentication #259
+* Minor bugfixes
 
 # 1.9.2 - 2021-08-17
 

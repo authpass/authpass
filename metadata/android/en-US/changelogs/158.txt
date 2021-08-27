@@ -1,0 +1,4 @@
+* Allow removing of files from the list of "recent files". [#260](https://github.com/authpass/authpass/pull/260).
+* Improve AuthPass Cloud authentication #259
+* Minor bugfixes
+
