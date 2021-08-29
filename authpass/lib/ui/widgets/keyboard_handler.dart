@@ -83,6 +83,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     },
   );
 
+  bool shouldRegisterGlobalHotkey() {
+    return AuthPassPlatform.isMacOS || AuthPassPlatform.isWindows;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -91,17 +95,16 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
       KeyCode.keyN,
       modifiers: [KeyModifier.control, KeyModifier.alt],
       // Set hotkey scope (default is HotKeyScope.system)
-      scope: HotKeyScope.system, // Set as inapp-wide hotkey.
+      scope: HotKeyScope.system, // Set as system-wide hotkey.
     );
 
-    HotKeyManager.instance.register(
-      _hotKey,
-      keyDownHandler: (hotKey) {
-        _logger.info('received $hotKey');
+    if (shouldRegisterGlobalHotkey()) {
+      HotKeyManager.instance.register(_hotKey, keyDownHandler: (hotKey) {
+        _logger.fine('received global hotkey $hotKey');
         WindowManager.instance.show();
         _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
-      }
-    );
+      });
+    }
   }
 
   @override
@@ -225,7 +228,9 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void dispose() {
     _keyboardShortcutEvents.dispose();
-    HotKeyManager.instance.unregister(_hotKey);
+    if (shouldRegisterGlobalHotkey()) {
+      HotKeyManager.instance.unregister(_hotKey);
+    }
     super.dispose();
   }
 }
@@ -245,6 +250,7 @@ enum KeyboardShortcutType {
 
 class KeyboardShortcut {
   const KeyboardShortcut({required this.type});
+
   final KeyboardShortcutType type;
 
   @NonNls
@@ -263,6 +269,7 @@ class KeyboardShortcutEvents with StreamSubscriberBase {
 
   final StreamController<KeyboardShortcut> _shortcutEvents =
       StreamController<KeyboardShortcut>.broadcast();
+
   Stream<KeyboardShortcut> get shortcutEvents => _shortcutEvents.stream;
 
   void dispose() {
