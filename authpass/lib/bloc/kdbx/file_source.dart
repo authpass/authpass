@@ -106,7 +106,7 @@ abstract class FileSource {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (other is FileSource) {
       return other.uuid == uuid;
     }

@@ -19,6 +19,7 @@ analyzer:
     todo: ignore
   exclude:
     - lib/**/*.g.dart
+    - test/**/*.mocks.dart
 
 string_literal_finder:
   exclude_globs:

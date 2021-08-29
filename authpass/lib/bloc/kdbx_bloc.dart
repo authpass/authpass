@@ -226,6 +226,8 @@ abstract class KdbxBlocDelegate {
   void conflictMerged(FileSource fileSource, KdbxFile file, MergeContext merge);
 }
 
+typedef OpenedFileUpdater = void Function(OpenedFileBuilder b);
+
 class KdbxBloc {
   KdbxBloc({
     required this.env,
@@ -250,7 +252,7 @@ class KdbxBloc {
   final Analytics analytics;
   final CloudStorageBloc cloudStorageBloc;
   final QuickUnlockStorage quickUnlockStorage;
-  final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
+  late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
   final _openedFiles =
@@ -275,7 +277,7 @@ class KdbxBloc {
   }
 
   Future<KdbxOpenedFile> updateOpenedFile(
-      KdbxOpenedFile file, void Function(OpenedFileBuilder b) updater) async {
+      KdbxOpenedFile file, OpenedFileUpdater updater) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
     await appDataBloc.update((b, data) {
       b.previousFiles.map((f) {

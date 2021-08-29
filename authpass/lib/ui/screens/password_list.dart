@@ -64,13 +64,15 @@ class EntryViewModel implements Comparable<EntryViewModel> {
 
   final KdbxBloc kdbxBloc;
   final KdbxEntry entry;
-  String? _website;
 
-  String? get website => _website ??= _normalizeUrl();
+  late final String? website = _normalizeUrl();
   final String? label;
   final String _labelComparable;
   final List<String?> groupNames;
   final Color? fileColor;
+
+  static late final hasSchemaRegexp = RegExp(r'^https?://');
+  static late final hasNewline = RegExp('[\r\n]');
 
   static List<String?> _createGroupNames(KdbxGroup group) =>
       group.breadcrumbs.map((e) => e.name.get()).toList();
@@ -81,16 +83,13 @@ class EntryViewModel implements Comparable<EntryViewModel> {
       return null;
     }
     try {
-      var urlToParse = url;
-      if (!url.contains(nonNls('//'))) {
-        urlToParse = 'http://$url'; // NON-NLS
+      // If the url contains newlines, just take the first line.
+      var urlToParse = url.split(hasNewline).first;
+      if (!url.startsWith(hasSchemaRegexp)) {
+        urlToParse = 'http://$urlToParse'; // NON-NLS
       }
       final parsed = Uri.parse(urlToParse);
-      var ret = parsed;
-      if (!parsed.hasScheme) {
-        ret = parsed.replace(scheme: 'https'); // NON-NLS
-      }
-      final resolved = ret.resolve('/'); // NON-NLS
+      final resolved = parsed.resolve('/'); // NON-NLS
 //      _logger
 //          .finer('url $url ($parsed) with scheme $ret resolved to $resolved');
       return resolved.toString();
@@ -1586,6 +1585,8 @@ class EntryIcon extends StatelessWidget {
   final double size;
   final Widget Function(BuildContext context) fallback;
 
+  static late final newLineRegexp = RegExp(r'[\r\n]');
+
   @override
   Widget build(BuildContext context) {
     final env = context.watch<Env>();
@@ -1595,9 +1596,15 @@ class EntryIcon extends StatelessWidget {
       return fallback(context);
     }
 
-    final url = vm.website;
+    final url = vm.website?.trim();
 
     if (url == null) {
+      return fallback(context);
+    }
+
+    if (url.contains(newLineRegexp)) {
+      // If the url field contains a new line, it's definitely not a URL.
+      // So to avoid spilling secrets over the network, ignore it altogether.
       return fallback(context);
     }
 

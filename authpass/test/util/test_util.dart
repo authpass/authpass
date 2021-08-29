@@ -1,18 +1,24 @@
 import 'dart:convert';
 
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:file/file.dart';
 import 'package:file/local.dart';
+import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 final _logger = Logger('test_util');
 
 const fs = LocalFileSystem();
 
+@GenerateMocks([KdbxBloc])
 class TestUtil {
+  late final kdbxFormat = KdbxFormat();
+
   static Directory basePath() {
     final dir = fs.currentDirectory;
     if (dir.path.endsWith('test')) {
@@ -33,6 +39,11 @@ class TestUtil {
 
     return TestEnv(EnvSecretsFake.fromJson(
         json.decode(secretJson) as Map<String, dynamic>));
+  }
+
+  KdbxFile createFile() {
+    return kdbxFormat.create(
+        Credentials(ProtectedValue.fromString('asdf')), 'asdf');
   }
 }
 
