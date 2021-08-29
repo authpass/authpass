@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:window_manager/window_manager.dart';
 
 final _logger = Logger('keyboard_handler');
 
@@ -71,8 +73,7 @@ const keyboardShortcut = KeyboardShortcut(type: KeyboardShortcutType.search);
 
 class _KeyboardHandlerState extends State<KeyboardHandler> {
   final _keyboardShortcutEvents = KeyboardShortcutEvents();
-  final _eventChannel = const EventChannel('platform_channel_events/search');
-  late StreamSubscription<dynamic> _eventChannelSubscription;
+  late HotKey _hotKey;
 
   final FocusNode _focusNode = FocusNode(
     debugLabel: nonNls('AuthPassKeyboardFocus'),
@@ -86,10 +87,21 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   void initState() {
     super.initState();
 
-    _eventChannelSubscription =
-        _eventChannel.receiveBroadcastStream().listen((dynamic event) {
-      _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
-    });
+    _hotKey = HotKey(
+      KeyCode.keyN,
+      modifiers: [KeyModifier.control, KeyModifier.alt],
+      // Set hotkey scope (default is HotKeyScope.system)
+      scope: HotKeyScope.system, // Set as inapp-wide hotkey.
+    );
+
+    HotKeyManager.instance.register(
+      _hotKey,
+      keyDownHandler: (hotKey) {
+        _logger.info('received $hotKey');
+        WindowManager.instance.show();
+        _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
+      }
+    );
   }
 
   @override
@@ -213,7 +225,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void dispose() {
     _keyboardShortcutEvents.dispose();
-    _eventChannelSubscription.cancel();
+    HotKeyManager.instance.unregister(_hotKey);
     super.dispose();
   }
 }
