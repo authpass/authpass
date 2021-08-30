@@ -6,7 +6,9 @@ list(APPEND FLUTTER_PLUGIN_LIST
   argon2_ffi
   biometric_storage
   file_selector_linux
+  hotkey_manager
   url_launcher_linux
+  window_manager
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

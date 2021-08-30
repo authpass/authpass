@@ -227,6 +227,12 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   /// the internet, instead of showing kdbx icons.
   bool? get fetchWebsiteIcons;
 
+  /// whether to register system wide global shortcuts.
+  bool get systemWideShortcuts;
+
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(AppDataBuilder b) => b..systemWideShortcuts = false;
+
   @override
   Map<String, dynamic> toJson() =>
       serializers.serialize(this) as Map<String, dynamic>;

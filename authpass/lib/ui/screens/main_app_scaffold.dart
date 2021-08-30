@@ -1,4 +1,5 @@
 import 'package:authpass/bloc/analytics.dart';
+import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/main.dart';
@@ -28,11 +29,17 @@ class MainAppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final systemWideShortcuts =
+        context.select<AppData, bool>((appData) => appData.systemWideShortcuts);
     _logger.finer('size.width: ${mediaQuery.size.width}');
     if (mediaQuery.size.width >= Breakpoints.TABLET_WIDTH) {
-      return KeyboardHandler(child: MainAppTabletScaffold());
+      return KeyboardHandler(
+        systemWideShortcuts: systemWideShortcuts,
+        child: MainAppTabletScaffold(),
+      );
     }
     return KeyboardHandler(
+      systemWideShortcuts: systemWideShortcuts,
       child: BackButtonNavigatorDelegate(
         observers: [
           AnalyticsNavigatorObserver(Provider.of<Analytics>(context))
