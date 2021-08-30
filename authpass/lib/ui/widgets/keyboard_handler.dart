@@ -61,9 +61,17 @@ final _logger = Logger('keyboard_handler');
 //}
 
 class KeyboardHandler extends StatefulWidget {
-  const KeyboardHandler({Key? key, this.child}) : super(key: key);
+  const KeyboardHandler({
+    Key? key,
+    required this.systemWideShortcuts,
+    this.child,
+  }) : super(key: key);
 
   final Widget? child;
+  final bool systemWideShortcuts;
+
+  static bool get supportsSystemWideShortcuts =>
+      AuthPassPlatform.isMacOS || AuthPassPlatform.isWindows;
 
   @override
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
@@ -83,10 +91,6 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     },
   );
 
-  bool shouldRegisterGlobalHotkey() {
-    return AuthPassPlatform.isMacOS || AuthPassPlatform.isWindows;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -98,12 +102,36 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
       scope: HotKeyScope.system, // Set as system-wide hotkey.
     );
 
-    if (shouldRegisterGlobalHotkey()) {
+    if (widget.systemWideShortcuts) {
+      _registerSystemWideShortcuts();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant KeyboardHandler oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.systemWideShortcuts != oldWidget.systemWideShortcuts) {
+      if (widget.systemWideShortcuts) {
+        _registerSystemWideShortcuts();
+      } else {
+        _disposeSystemWideShortcuts();
+      }
+    }
+  }
+
+  void _registerSystemWideShortcuts() {
+    if (KeyboardHandler.supportsSystemWideShortcuts) {
       HotKeyManager.instance.register(_hotKey, keyDownHandler: (hotKey) {
         _logger.fine('received global hotkey $hotKey');
         WindowManager.instance.show();
         _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
       });
+    }
+  }
+
+  void _disposeSystemWideShortcuts() {
+    if (KeyboardHandler.supportsSystemWideShortcuts) {
+      HotKeyManager.instance.unregister(_hotKey);
     }
   }
 
@@ -228,9 +256,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void dispose() {
     _keyboardShortcutEvents.dispose();
-    if (shouldRegisterGlobalHotkey()) {
-      HotKeyManager.instance.unregister(_hotKey);
-    }
+    _disposeSystemWideShortcuts();
     super.dispose();
   }
 }

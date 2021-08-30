@@ -184,6 +184,14 @@
   "@preferenceAutoFillDescription": {},
   "preferenceTitle": "Preferences",
   "@preferenceTitle": {},
+  "preferenceEnableSystemWideShortcuts": "Enable system wide shortcuts",
+  "@preferenceEnableSystemWideShortcuts": {
+    "description": ""
+  },
+  "preferenceEnableSystemWideShortcutsHelp": "Registers ctrl+alt+n as system wide shortcut to open search.",
+  "@preferenceEnableSystemWideShortcutsHelp": {
+    "description": ""
+  },
   "aboutAppName": "AuthPass",
   "@aboutAppName": {},
   "aboutLinkFeedback": "We welcome any kind of feedback!",
