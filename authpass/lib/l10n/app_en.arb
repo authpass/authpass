@@ -188,7 +188,7 @@
   "@preferenceEnableSystemWideShortcuts": {
     "description": ""
   },
-  "preferenceEnableSystemWideShortcutsHelp": "Registers ctrl+alt+n as system wide shortcut to open search.",
+  "preferenceEnableSystemWideShortcutsHelp": "Registers ctrl+alt+f as system wide shortcut to open search.",
   "@preferenceEnableSystemWideShortcutsHelp": {
     "description": ""
   },

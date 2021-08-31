@@ -71,7 +71,9 @@ class KeyboardHandler extends StatefulWidget {
   final bool systemWideShortcuts;
 
   static bool get supportsSystemWideShortcuts =>
-      AuthPassPlatform.isMacOS || AuthPassPlatform.isWindows || AuthPassPlatform.isLinux;
+      AuthPassPlatform.isMacOS ||
+      AuthPassPlatform.isWindows ||
+      AuthPassPlatform.isLinux;
 
   @override
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
@@ -96,9 +98,8 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     super.initState();
 
     _hotKey = HotKey(
-      KeyCode.keyN,
+      KeyCode.keyF,
       modifiers: [KeyModifier.control, KeyModifier.alt],
-      // Set hotkey scope (default is HotKeyScope.system)
       scope: HotKeyScope.system, // Set as system-wide hotkey.
     );
 

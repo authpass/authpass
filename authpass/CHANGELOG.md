@@ -1,7 +1,7 @@
 # 1.9.4 - unreleased
 
 * Keyboard shortcut for copy TOTP (ctrl+t) #262
-* Desktop: system wide shortcuts. #262
+* Desktop: system wide shortcuts (ctrl+alt+f for opening search). #262
 
 # 1.9.3 - 2021-08-27
 
