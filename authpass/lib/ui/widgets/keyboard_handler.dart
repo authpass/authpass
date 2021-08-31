@@ -71,7 +71,7 @@ class KeyboardHandler extends StatefulWidget {
   final bool systemWideShortcuts;
 
   static bool get supportsSystemWideShortcuts =>
-      AuthPassPlatform.isMacOS || AuthPassPlatform.isWindows;
+      AuthPassPlatform.isMacOS || AuthPassPlatform.isWindows || AuthPassPlatform.isLinux;
 
   @override
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
