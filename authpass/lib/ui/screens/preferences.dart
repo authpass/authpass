@@ -5,6 +5,7 @@ import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -273,6 +274,23 @@ class _PreferencesBodyState extends State<PreferencesBody>
           },
           tristate: false,
         ),
+        if (KeyboardHandler.supportsSystemWideShortcuts) ...[
+          CheckboxListTile(
+            secondary: const Icon(Icons.desktop_mac),
+            value: _appData!.systemWideShortcuts,
+            title: Text(loc.preferenceEnableSystemWideShortcuts),
+            subtitle: Text(loc.preferenceEnableSystemWideShortcutsHelp),
+            isThreeLine: true,
+            onChanged: (value) {
+              _logger.fine('Changed to $value');
+              _analytics.events.trackPreferences(
+                  setting: 'systemWideShortcuts', to: '$value');
+              _appDataBloc.update(
+                  (builder, data) => builder.systemWideShortcuts = value);
+            },
+            tristate: false,
+          ),
+        ],
       ],
     );
   }

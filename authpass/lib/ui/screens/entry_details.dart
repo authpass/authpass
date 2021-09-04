@@ -377,9 +377,16 @@ class _EntryDetailsState extends State<EntryDetails>
             return;
           }
         }
-        _copyField(commonFields.password);
+        _copyField([commonFields.password]);
       } else if (event.type == KeyboardShortcutType.copyUsername) {
-        _copyField(commonFields.userName);
+        _copyField([commonFields.userName]);
+      } else if (event.type == KeyboardShortcutType.copyTotp) {
+        _logger.fine('Copying ${commonFields.otpAuth}');
+        _copyField([
+          commonFields.otpAuth,
+          commonFields.otpAuthCompat2,
+          commonFields.otpAuthCompat1,
+        ]);
       } else if (event.type == KeyboardShortcutType.escape) {
         FocusManager.instance.primaryFocus?.unfocus();
       } else if (event.type == KeyboardShortcutType.openUrl) {
@@ -395,28 +402,38 @@ class _EntryDetailsState extends State<EntryDetails>
       ?.item1
       .currentState;
 
-  Future<void> _copyField(CommonField commonField) async {
+  Future<bool> _copyField(List<CommonField> commonFields) async {
+    for (final commonField in commonFields) {
+      if (await _copyFieldValue(commonField)) {
+        return true;
+      }
+    }
+    final loc = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(loc.copiedFieldEmpty(commonFields.first.displayName)),
+    ));
+    return false;
+  }
+
+  Future<bool> _copyFieldValue(CommonField commonField) async {
     final field = _fieldStateFor(commonField);
     if (field != null) {
       if (await field.copyValue()) {
-        return;
+        return true;
       }
     }
     final loc = AppLocalizations.of(context);
     final entry = widget.entry.entry;
     final value = entry.getString(commonField.key);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    if (value != null && value.getText() != null) {
-      await Clipboard.setData(ClipboardData(text: value.getText()));
-//      await ClipboardManager.copyToClipBoard(value.getText());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
-      ));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(loc.copiedFieldEmpty(commonField.displayName)),
-      ));
+    if (value == null || value.getText() == null) {
+      return false;
     }
+    await Clipboard.setData(ClipboardData(text: value.getText()));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
+    ));
+    return true;
   }
 
   void _initFields(CommonFields commonFields) {

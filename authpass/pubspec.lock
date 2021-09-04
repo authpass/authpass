@@ -773,6 +773,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  hotkey_manager:
+    dependency: "direct main"
+    description:
+      name: hotkey_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   html:
     dependency: transitive
     description:
@@ -1643,6 +1650,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.7"
+  window_manager:
+    dependency: "direct main"
+    description:
+      name: window_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   winsparkle_flutter:
     dependency: "direct main"
     description:

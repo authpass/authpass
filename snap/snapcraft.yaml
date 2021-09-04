@@ -24,6 +24,7 @@ parts:
       snapcraftctl set-version $(cat version.txt)
     stage-packages:
       - libegl-mesa0
+      - libkeybinder-3.0-0
 
 apps:
   authpass:

@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:window_manager/window_manager.dart';
 
 final _logger = Logger('keyboard_handler');
 
@@ -59,16 +61,29 @@ final _logger = Logger('keyboard_handler');
 //}
 
 class KeyboardHandler extends StatefulWidget {
-  const KeyboardHandler({Key? key, this.child}) : super(key: key);
+  const KeyboardHandler({
+    Key? key,
+    required this.systemWideShortcuts,
+    this.child,
+  }) : super(key: key);
 
   final Widget? child;
+  final bool systemWideShortcuts;
+
+  static bool get supportsSystemWideShortcuts =>
+      AuthPassPlatform.isMacOS ||
+      AuthPassPlatform.isWindows ||
+      AuthPassPlatform.isLinux;
 
   @override
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
 }
 
+const keyboardShortcut = KeyboardShortcut(type: KeyboardShortcutType.search);
+
 class _KeyboardHandlerState extends State<KeyboardHandler> {
   final _keyboardShortcutEvents = KeyboardShortcutEvents();
+  late HotKey _hotKey;
 
   final FocusNode _focusNode = FocusNode(
     debugLabel: nonNls('AuthPassKeyboardFocus'),
@@ -81,6 +96,44 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void initState() {
     super.initState();
+
+    _hotKey = HotKey(
+      KeyCode.keyF,
+      modifiers: [KeyModifier.control, KeyModifier.alt],
+      scope: HotKeyScope.system, // Set as system-wide hotkey.
+    );
+
+    if (widget.systemWideShortcuts) {
+      _registerSystemWideShortcuts();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant KeyboardHandler oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.systemWideShortcuts != oldWidget.systemWideShortcuts) {
+      if (widget.systemWideShortcuts) {
+        _registerSystemWideShortcuts();
+      } else {
+        _disposeSystemWideShortcuts();
+      }
+    }
+  }
+
+  void _registerSystemWideShortcuts() {
+    if (KeyboardHandler.supportsSystemWideShortcuts) {
+      HotKeyManager.instance.register(_hotKey, keyDownHandler: (hotKey) {
+        _logger.fine('received global hotkey $hotKey');
+        WindowManager.instance.show();
+        _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
+      });
+    }
+  }
+
+  void _disposeSystemWideShortcuts() {
+    if (KeyboardHandler.supportsSystemWideShortcuts) {
+      HotKeyManager.instance.unregister(_hotKey);
+    }
   }
 
   @override
@@ -129,6 +182,8 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
                     type: KeyboardShortcutType.copyUsername),
                 LogicalKeyboardKey.keyC: const KeyboardShortcut(
                     type: KeyboardShortcutType.copyPassword),
+                LogicalKeyboardKey.keyT:
+                    const KeyboardShortcut(type: KeyboardShortcutType.copyTotp),
                 LogicalKeyboardKey.keyP:
                     const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
                 LogicalKeyboardKey.keyN:
@@ -202,6 +257,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   @override
   void dispose() {
     _keyboardShortcutEvents.dispose();
+    _disposeSystemWideShortcuts();
     super.dispose();
   }
 }
@@ -210,6 +266,7 @@ enum KeyboardShortcutType {
   search,
   copyPassword,
   copyUsername,
+  copyTotp,
   moveUp,
   moveDown,
   generatePassword,
@@ -220,6 +277,7 @@ enum KeyboardShortcutType {
 
 class KeyboardShortcut {
   const KeyboardShortcut({required this.type});
+
   final KeyboardShortcutType type;
 
   @NonNls
@@ -238,6 +296,7 @@ class KeyboardShortcutEvents with StreamSubscriberBase {
 
   final StreamController<KeyboardShortcut> _shortcutEvents =
       StreamController<KeyboardShortcut>.broadcast();
+
   Stream<KeyboardShortcut> get shortcutEvents => _shortcutEvents.stream;
 
   void dispose() {
