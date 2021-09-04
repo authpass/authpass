@@ -175,8 +175,8 @@ dependencies:
 
   flutter_markdown: ^0.6.5
 
-  hotkey_manager: ^0.0.6
-  window_manager: ^0.0.2
+  hotkey_manager: ^0.1.0
+  window_manager: ^0.0.3
 
 dev_dependencies:
   integration_test:

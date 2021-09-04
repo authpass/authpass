@@ -779,7 +779,7 @@ packages:
       name: hotkey_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.6"
+    version: "0.1.0"
   html:
     dependency: transitive
     description:
@@ -1656,7 +1656,7 @@ packages:
       name: window_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   winsparkle_flutter:
     dependency: "direct main"
     description:
