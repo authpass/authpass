@@ -526,11 +526,9 @@ class KdbxBloc {
       file.kdbxFile.dispose();
     }
     if (clearQuickUnlock) {
-      if (_openedFilesQuickUnlock.isNotEmpty) {
-        // clear all quick unlock data.
-        _openedFilesQuickUnlock.clear();
-        await quickUnlockStorage.updateQuickUnlockFile({});
-      }
+      // clear all quick unlock data.
+      _openedFilesQuickUnlock.clear();
+      await quickUnlockStorage.updateQuickUnlockFile({});
       analytics.events.trackCloseAllFiles(count: _openedFiles.value.length);
     } else {
       analytics.events.trackLockAllFiles(count: _openedFiles.value.length);
