@@ -192,6 +192,26 @@
   "@preferenceEnableSystemWideShortcutsHelp": {
     "description": ""
   },
+  "preferencesSearchFields": "Customize Search fields",
+  "@preferencesSearchFields": {
+    "description": ""
+  },
+  "preferencesSearchFieldPromptTitle": "Search fields",
+  "@preferencesSearchFieldPromptTitle": {
+    "description": ""
+  },
+  "preferencesSearchFieldPromptLabel": "Comma separated list of fields to use in the password list search.",
+  "@preferencesSearchFieldPromptLabel": {
+    "description": ""
+  },
+  "preferencesSearchFieldPromptHelp": "Use {wildCardCharacter} for all, leave empty for default ({defaultSearchFields})",
+  "@preferencesSearchFieldPromptHelp": {
+    "description": "",
+    "placeholders": {
+      "wildCardCharacter": {},
+      "defaultSearchFields": {}
+    }
+  },
   "aboutAppName": "AuthPass",
   "@aboutAppName": {},
   "aboutLinkFeedback": "We welcome any kind of feedback!",

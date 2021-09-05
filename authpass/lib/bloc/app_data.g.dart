@@ -249,6 +249,13 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.searchFields;
+    if (value != null) {
+      result
+        ..add('searchFields')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -334,6 +341,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         case 'systemWideShortcuts':
           result.systemWideShortcuts = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'searchFields':
+          result.searchFields = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
           break;
       }
     }
@@ -566,6 +577,8 @@ class _$AppData extends AppData {
   final bool? fetchWebsiteIcons;
   @override
   final bool systemWideShortcuts;
+  @override
+  final String? searchFields;
 
   factory _$AppData([void Function(AppDataBuilder)? updates]) =>
       (new AppDataBuilder()..update(updates)).build();
@@ -586,7 +599,8 @@ class _$AppData extends AppData {
       this.secureWindow,
       this.localeOverride,
       this.fetchWebsiteIcons,
-      required this.systemWideShortcuts})
+      required this.systemWideShortcuts,
+      this.searchFields})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         previousFiles, 'AppData', 'previousFiles');
@@ -623,7 +637,8 @@ class _$AppData extends AppData {
         secureWindow == other.secureWindow &&
         localeOverride == other.localeOverride &&
         fetchWebsiteIcons == other.fetchWebsiteIcons &&
-        systemWideShortcuts == other.systemWideShortcuts;
+        systemWideShortcuts == other.systemWideShortcuts &&
+        searchFields == other.searchFields;
   }
 
   @override
@@ -644,27 +659,32 @@ class _$AppData extends AppData {
                                                         $jc(
                                                             $jc(
                                                                 $jc(
-                                                                    0,
-                                                                    previousFiles
+                                                                    $jc(
+                                                                        0,
+                                                                        previousFiles
+                                                                            .hashCode),
+                                                                    passwordGeneratorLength
                                                                         .hashCode),
-                                                                passwordGeneratorLength
+                                                                passwordGeneratorCharacterSets
                                                                     .hashCode),
-                                                            passwordGeneratorCharacterSets
+                                                            manualUserType
                                                                 .hashCode),
-                                                        manualUserType
+                                                        firstLaunchedAt
                                                             .hashCode),
-                                                    firstLaunchedAt.hashCode),
-                                                theme.hashCode),
-                                            dismissedBackupLocalFiles.hashCode),
-                                        dismissedAutofillSuggestion.hashCode),
-                                    themeVisualDensity.hashCode),
-                                themeFontSizeFactor.hashCode),
-                            diacOptIn.hashCode),
-                        lastBuildId.hashCode),
-                    secureWindow.hashCode),
-                localeOverride.hashCode),
-            fetchWebsiteIcons.hashCode),
-        systemWideShortcuts.hashCode));
+                                                    theme.hashCode),
+                                                dismissedBackupLocalFiles
+                                                    .hashCode),
+                                            dismissedAutofillSuggestion
+                                                .hashCode),
+                                        themeVisualDensity.hashCode),
+                                    themeFontSizeFactor.hashCode),
+                                diacOptIn.hashCode),
+                            lastBuildId.hashCode),
+                        secureWindow.hashCode),
+                    localeOverride.hashCode),
+                fetchWebsiteIcons.hashCode),
+            systemWideShortcuts.hashCode),
+        searchFields.hashCode));
   }
 
   @override
@@ -686,7 +706,8 @@ class _$AppData extends AppData {
           ..add('secureWindow', secureWindow)
           ..add('localeOverride', localeOverride)
           ..add('fetchWebsiteIcons', fetchWebsiteIcons)
-          ..add('systemWideShortcuts', systemWideShortcuts))
+          ..add('systemWideShortcuts', systemWideShortcuts)
+          ..add('searchFields', searchFields))
         .toString();
   }
 }
@@ -775,6 +796,10 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set systemWideShortcuts(bool? systemWideShortcuts) =>
       _$this._systemWideShortcuts = systemWideShortcuts;
 
+  String? _searchFields;
+  String? get searchFields => _$this._searchFields;
+  set searchFields(String? searchFields) => _$this._searchFields = searchFields;
+
   AppDataBuilder() {
     AppData._setDefaults(this);
   }
@@ -799,6 +824,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _localeOverride = $v.localeOverride;
       _fetchWebsiteIcons = $v.fetchWebsiteIcons;
       _systemWideShortcuts = $v.systemWideShortcuts;
+      _searchFields = $v.searchFields;
       _$v = null;
     }
     return this;
@@ -838,7 +864,8 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               localeOverride: localeOverride,
               fetchWebsiteIcons: fetchWebsiteIcons,
               systemWideShortcuts: BuiltValueNullFieldError.checkNotNull(
-                  systemWideShortcuts, 'AppData', 'systemWideShortcuts'));
+                  systemWideShortcuts, 'AppData', 'systemWideShortcuts'),
+              searchFields: searchFields);
     } catch (_) {
       late String _$failedField;
       try {

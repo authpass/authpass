@@ -42,6 +42,7 @@ extension UriAnalytics on Uri {
   }
 }
 
+@NonNls
 class CharConstants {
   static const empty = ''; // NON-NLS
   static const underScore = '_'; // NON-NLS
@@ -56,10 +57,13 @@ class CharConstants {
   static const newLine = '\n'; // NON-NLS
 
   static const colon = ':'; // NON-NLS
+  static const comma = ',';
 
   static const semiColon = ';'; // NON-NLS
 
-  static const equalSign = '='; // NON-NLS
+  static const equalSign = '=';
+
+  static const star = '*';
 }
 
 class AssetConstants {

@@ -1,5 +1,6 @@
 # 1.9.4 - unreleased
 
+* Allow customizing of search fields.
 * Keyboard shortcut for copy TOTP (ctrl+t) #262
 * Desktop: system wide shortcuts (ctrl+alt+f for opening search). #262
 

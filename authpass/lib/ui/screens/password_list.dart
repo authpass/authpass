@@ -68,14 +68,14 @@ class EntryViewModel implements Comparable<EntryViewModel> {
   late final String? website = _normalizeUrl();
   final String? label;
   final String _labelComparable;
-  final List<String?> groupNames;
+  final List<String> groupNames;
   final Color? fileColor;
 
   static late final hasSchemaRegexp = RegExp(r'^https?://');
   static late final hasNewline = RegExp('[\r\n]');
 
-  static List<String?> _createGroupNames(KdbxGroup group) =>
-      group.breadcrumbs.map((e) => e.name.get()).toList();
+  static List<String> _createGroupNames(KdbxGroup group) =>
+      group.breadcrumbs.map((e) => e.name.get()!).toList();
 
   String? _normalizeUrl() {
     final url = entry.getString(websiteKey)?.getText()?.trim();
@@ -166,6 +166,7 @@ class PasswordList extends StatelessWidget {
         stream: Rx.merge(streams).map((x) => true),
         builder: (context, snapshot) {
           return PasswordListContent(
+            appData: context.watch<AppData>(),
             kdbxBloc: kdbxBloc,
             openedKdbxFiles: kdbxBloc.openedFilesKdbx,
             selectedEntry: selectedEntry,
@@ -186,6 +187,7 @@ enum EntrySelectionType {
 class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
     Key? key,
+    required this.appData,
     required this.kdbxBloc,
     required this.openedKdbxFiles,
     required void Function(KdbxEntry entry, EntrySelectionType type)
@@ -194,6 +196,7 @@ class PasswordListContent extends StatefulWidget {
   })  : _onEntrySelected = onEntrySelected,
         super(key: key);
 
+  final AppData appData;
   final KdbxBloc kdbxBloc;
   final List<KdbxFile> openedKdbxFiles;
 
@@ -230,25 +233,49 @@ class PasswordListContent extends StatefulWidget {
 
 class PasswordListFilterIsolateRunner {
   static List<EntryViewModel> filterEntries(
-      List<EntryViewModel> _allEntries, String query,
-      {int maxResults = 30}) {
+    AppData appData,
+    List<EntryViewModel> _allEntries,
+    String query, {
+    int maxResults = 30,
+  }) {
     _logger.info('We have to filter for $query');
+    final searchKeys = appData.searchFields == CharConstants.star
+        ? null
+        : (appData.searchFields
+                ?.split(CharConstants.comma)
+                .map((e) => KdbxKey(e))
+                .toSet() ??
+            searchFields);
     final terms = query.toLowerCase().split(CharConstants.space);
     return _allEntries
-        .where((entry) => matches(entry, terms))
+        .where((entry) => matches(searchKeys, entry, terms))
         // take no more than 30 for now.
         .take(maxResults)
         .toList(growable: false);
   }
 
-  static final searchFields = [
-    KdbxKeyCommon.TITLE,
-    KdbxKeyCommon.URL,
-    KdbxKeyCommon.USER_NAME,
-  ];
+  static final searchFields = CommonFields.defaultSearchFields;
 
-  static bool matches(EntryViewModel entry, List<String> filterTerms) {
+  static bool matches(
+    Set<KdbxKey>? searchFields,
+    EntryViewModel entry,
+    List<String> filterTerms,
+  ) {
     for (final term in filterTerms) {
+      final matchesNoGroupName = entry.groupNames
+          .where((string) => string.toLowerCase().contains(term))
+          .isEmpty;
+      if (searchFields == null) {
+        if (entry.entry.stringEntries
+                .where((element) =>
+                    element.value?.getText()?.toLowerCase().contains(term) ==
+                    true)
+                .isEmpty &&
+            matchesNoGroupName) {
+          return false;
+        }
+        continue;
+      }
       if (searchFields
               .where((field) =>
                   entry.entry
@@ -258,9 +285,7 @@ class PasswordListFilterIsolateRunner {
                       .contains(term) ==
                   true)
               .isEmpty &&
-          entry.groupNames
-              .where((string) => string!.toLowerCase().contains(term))
-              .isEmpty) {
+          matchesNoGroupName) {
         return false;
       }
     }
@@ -399,20 +424,13 @@ class _PasswordListContentState extends State<PasswordListContent>
     _groupFilterNotifier.addListener(_updateAllEntries);
     _updateAutofillPrefs();
     _updateAutofillMetadata();
-    _subscribetoAppData();
+    _updateDismissedBanners(widget.appData);
   }
 
-  void _subscribetoAppData() {
-    _appDataStream = Provider.of<AppDataBloc>(context, listen: false)
-        .store
-        .onValueChangedAndLoad
-        .listen(_updateDismissedBanners);
-  }
-
-  void _updateDismissedBanners(AppData? data) {
+  void _updateDismissedBanners(AppData data) {
     _dismissedLocalFilesReady = true;
     setState(() {
-      _dismissedLocalFiles = data!.dismissedBackupLocalFiles;
+      _dismissedLocalFiles = data.dismissedBackupLocalFiles;
       _dismissedAutofillSuggestion = data.dismissedAutofillSuggestion;
     });
   }
@@ -473,6 +491,9 @@ class _PasswordListContentState extends State<PasswordListContent>
   @override
   void didUpdateWidget(PasswordListContent oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.appData != widget.appData) {
+      _updateDismissedBanners(widget.appData);
+    }
     if (oldWidget.openedKdbxFiles != widget.openedKdbxFiles) {
       _updateAllEntries();
     }
@@ -814,8 +835,8 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   int _updateFilterQuery(String newQuery) {
-    final entries =
-        PasswordListFilterIsolateRunner.filterEntries(_allEntries!, newQuery);
+    final entries = PasswordListFilterIsolateRunner.filterEntries(
+        widget.appData, _allEntries!, newQuery);
     if (!mounted) {
       _logger.severe('No longer mounted after updating filter query.', null,
           StackTrace.current);

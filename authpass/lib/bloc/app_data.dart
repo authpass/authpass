@@ -230,6 +230,10 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   /// whether to register system wide global shortcuts.
   bool get systemWideShortcuts;
 
+  /// Fields used for searching. By default [CommonFields.defaultSearchFields]
+  /// Values must be comma separated or `*` for all fields.
+  String? get searchFields;
+
   @BuiltValueHook(initializeBuilder: true)
   static void _setDefaults(AppDataBuilder b) => b..systemWideShortcuts = false;
 

@@ -6,6 +6,8 @@ import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
+import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:autofill_service/autofill_service.dart';
@@ -291,6 +293,32 @@ class _PreferencesBodyState extends State<PreferencesBody>
             tristate: false,
           ),
         ],
+        ListTile(
+          leading: const Icon(Icons.search),
+          title: Text(loc.preferencesSearchFields),
+          subtitle: _appData?.searchFields?.let((it) => Text(it)) ??
+              Text(CommonFields.defaultSearchFields
+                  .map((e) => e.key)
+                  .join(CharConstants.comma)),
+          onTap: () async {
+            final value = (await SimplePromptDialog(
+              title: loc.preferencesSearchFieldPromptTitle,
+              labelText: loc.preferencesSearchFieldPromptLabel,
+              initialValue: _appData?.searchFields ?? CharConstants.empty,
+              helperText: loc.preferencesSearchFieldPromptHelp(
+                CharConstants.star,
+                CommonFields.defaultSearchFields
+                    .map((e) => e.key)
+                    .join(CharConstants.comma),
+              ),
+            ).show(context))
+                ?.trim();
+            if (value != null) {
+              await _appDataBloc.update((builder, data) =>
+                  builder.searchFields = value.isEmpty ? null : value);
+            }
+          },
+        ),
       ],
     );
   }

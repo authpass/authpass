@@ -88,6 +88,12 @@ class CommonFields {
     assert(fields.map((f) => f.key).toSet().length == fields.length);
   }
 
+  static final defaultSearchFields = {
+    KdbxKeyCommon.TITLE,
+    KdbxKeyCommon.URL,
+    KdbxKeyCommon.USER_NAME,
+  };
+
   CommonField get title => _fieldByKey(KdbxKeyCommon.TITLE);
 
   CommonField get url => _fieldByKey(KdbxKeyCommon.URL);
