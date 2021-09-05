@@ -394,8 +394,6 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   GroupFilter get _groupFilter => _groupFilterNotifier.value;
 
-  late StreamSubscription<AppData?> _appDataStream;
-
 //  List<EntryViewModel> get _allEntries => _groupFilter == null
 //      ? widget.entries
 //      : _groupFilter
@@ -590,7 +588,6 @@ class _PasswordListContentState extends State<PasswordListContent>
     WidgetsBinding.instance!.removeObserver(this);
     _groupFilterNotifier.removeListener(_updateAllEntries);
     _groupFilterNotifier.dispose();
-    _appDataStream.cancel();
     super.dispose();
   }
 
