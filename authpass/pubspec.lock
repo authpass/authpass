@@ -1653,9 +1653,11 @@ packages:
   window_manager:
     dependency: "direct main"
     description:
-      name: window_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: remove-web
+      resolved-ref: "88f345568ca2ffc0cbad7ec474d82874a4da2933"
+      url: "https://github.com/authpass/window_manager.git"
+    source: git
     version: "0.0.3"
   winsparkle_flutter:
     dependency: "direct main"
