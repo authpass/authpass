@@ -1,12 +1,14 @@
-import 'dart:async';
-
-import 'package:authpass/bloc/app_data.dart';
+import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
+import 'package:authpass/ui/widgets/shortcut/shortcuts.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -15,59 +17,14 @@ import 'package:window_manager/window_manager.dart';
 
 final _logger = Logger('keyboard_handler');
 
-// Seems i can't figure out how to get `Shortcuts` & co to work.. workaround it for now
-// also see https://github.com/flutter/flutter/issues/38076
-
-//// very much copied from the example at
-//// https://github.com/flutter/flutter/blob/master/dev/manual_tests/lib/actions.dart
-//// not sure if i know what i'm doing.
-//
-//class KeyboardHandler extends StatelessWidget {
-//  const KeyboardHandler({Key key, this.child}) : super(key: key);
-//
-//  final Widget child;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Shortcuts(
-//      shortcuts: <LogicalKeySet, Intent>{
-//        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyF): const Intent(AuthpassIntents.searchKey),
-//        LogicalKeySet(LogicalKeyboardKey.keyA): const Intent(AuthpassIntents.searchKey),
-//      },
-//      child: Actions(
-//        actions: {
-//          AuthpassIntents.searchKey: () => CallbackAction(AuthpassIntents.searchKey, onInvoke: (focusNode, _) {
-//                _logger.info('search key action was invoked.');
-//              }),
-//        },
-//        child: DefaultFocusTraversal(
-//          policy: ReadingOrderTraversalPolicy(),
-//          child: Shortcuts(
-//            shortcuts: <LogicalKeySet, Intent>{
-//              LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyF):
-//                  const Intent(AuthpassIntents.searchKey),
-//              LogicalKeySet(LogicalKeyboardKey.keyA): const Intent(AuthpassIntents.searchKey),
-//              LogicalKeySet(LogicalKeyboardKey.tab): const Intent(AuthpassIntents.searchKey),
-//            },
-//            child: FocusScope(
-//              autofocus: true,
-//              child: child,
-//            ),
-//          ),
-//        ),
-//      ),
-//    );
-//  }
-//}
-
 class KeyboardHandler extends StatefulWidget {
   const KeyboardHandler({
     Key? key,
     required this.systemWideShortcuts,
-    this.child,
+    required this.child,
   }) : super(key: key);
 
-  final Widget? child;
+  final Widget child;
   final bool systemWideShortcuts;
 
   static bool get supportsSystemWideShortcuts =>
@@ -79,18 +36,17 @@ class KeyboardHandler extends StatefulWidget {
   _KeyboardHandlerState createState() => _KeyboardHandlerState();
 }
 
-const keyboardShortcut = KeyboardShortcut(type: KeyboardShortcutType.search);
-
 class _KeyboardHandlerState extends State<KeyboardHandler> {
   final _keyboardShortcutEvents = KeyboardShortcutEvents();
+  final _actionsKey = GlobalKey();
   late HotKey _hotKey;
 
   final FocusNode _focusNode = FocusNode(
     debugLabel: nonNls('AuthPassKeyboardFocus'),
-    onKey: (focusNode, rawKeyEvent) {
-//      _logger.info('got onKey: ($focusNode) $rawKeyEvent');
-      return KeyEventResult.ignored;
-    },
+//     onKey: (focusNode, rawKeyEvent) {
+// //      _logger.info('got onKey: ($focusNode) $rawKeyEvent');
+//       return KeyEventResult.ignored;
+//     },
   );
 
   @override
@@ -106,6 +62,14 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     if (widget.systemWideShortcuts) {
       _registerSystemWideShortcuts();
     }
+
+    _keyboardShortcutEvents._changeNotifier.addListener(() {
+      SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+        setState(() {
+          _logger.fine('actions changed.');
+        });
+      });
+    });
   }
 
   @override
@@ -125,7 +89,13 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
       HotKeyManager.instance.register(_hotKey, keyDownHandler: (hotKey) {
         _logger.fine('received global hotkey $hotKey');
         WindowManager.instance.show();
-        _keyboardShortcutEvents._shortcutEvents.add(keyboardShortcut);
+        final context = _actionsKey.currentContext;
+        if (context == null) {
+          _logger.warning('Unable to find context to invoke global action.');
+          return;
+        }
+        Actions.maybeInvoke(context, const SearchIntent());
+        // _keyboardShortcutEvents._shortcutEvents.add(searchKeyboardShortcut);
       });
     }
   }
@@ -144,112 +114,45 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<KeyboardShortcutEvents>.value(
-      value: _keyboardShortcutEvents,
-      child: RawKeyboardListener(
-        focusNode: _focusNode,
-        onKey: (key) {
-          if (key is RawKeyDownEvent) {
-//            final primaryFocus = WidgetsBinding.instance.focusManager.primaryFocus;
-//            if (primaryFocus is FocusScopeNode) {
-//              final focusedChild = primaryFocus.focusedChild;
-//              _logger.info(
-//                  '(me: ${_focusNode.hashCode}, ${_focusNode.hasFocus}, ${_focusNode.hasPrimaryFocus}) primaryFocus(${primaryFocus.hashCode}: ${primaryFocus.hasFocus}, ${primaryFocus.hasPrimaryFocus} /// (${focusedChild.hashCode}) ${focusedChild.hasFocus}, ${focusedChild.hasPrimaryFocus}');
-//            } else {
-//              _logger.info(
-//                  '(me: ${_focusNode.hashCode}, ${_focusNode.hasFocus}, ${_focusNode.hasPrimaryFocus}) primaryFocus(${primaryFocus.hashCode}: ${primaryFocus.hasFocus}, ${primaryFocus.hasPrimaryFocus}');
-//            }
-
-            // for now do everything hard coded, until flutters actions & co get a bit easier to understand.. :-)
-            final modifiers = key.data.modifiersPressed.keys
-                // we don't care about a few modifiers..
-                .where((modifier) => ![
-                      ModifierKey.functionModifier,
-                      ModifierKey.numLockModifier
-                    ].contains(modifier))
-                .toList();
-            final character = key.logicalKey;
-            _logger.info(
-                'RawKeyboardListener.onKey: $modifiers + $character ($key)');
-            final hasControlModifier =
-                modifiers.contains(ModifierKey.controlModifier) ||
-                    modifiers.contains(ModifierKey.metaModifier);
-            if (modifiers.length == 1 && hasControlModifier) {
-              final mapping = {
-                LogicalKeyboardKey.keyF:
-                    const KeyboardShortcut(type: KeyboardShortcutType.search),
-                LogicalKeyboardKey.keyB: const KeyboardShortcut(
-                    type: KeyboardShortcutType.copyUsername),
-                LogicalKeyboardKey.keyC: const KeyboardShortcut(
-                    type: KeyboardShortcutType.copyPassword),
-                LogicalKeyboardKey.keyT:
-                    const KeyboardShortcut(type: KeyboardShortcutType.copyTotp),
-                LogicalKeyboardKey.keyP:
-                    const KeyboardShortcut(type: KeyboardShortcutType.moveUp),
-                LogicalKeyboardKey.keyN:
-                    const KeyboardShortcut(type: KeyboardShortcutType.moveDown),
-                LogicalKeyboardKey.keyG: const KeyboardShortcut(
-                    type: KeyboardShortcutType.generatePassword),
-                LogicalKeyboardKey.keyU:
-                    const KeyboardShortcut(type: KeyboardShortcutType.copyUrl),
-              };
-              final shortcut = mapping[character];
-              if (shortcut != null) {
-                _keyboardShortcutEvents._shortcutEvents.add(shortcut);
-              } else {
-                if (character == LogicalKeyboardKey.bracketRight) {
-                  final t = context.read<AppDataBloc>().updateNextTheme();
-                  _logger.fine('Switching theme to $t');
-                } else if (character == LogicalKeyboardKey.keyV) {
-                  if (AuthPassPlatform.isLinux) {
-                    final w = WidgetsBinding
-                        .instance!.focusManager.primaryFocus!.context!.widget;
-                    Clipboard.getData(AppConstants.contentTypeTextPlain)
-                        .then((value) async {
-//                    await Future<void>.delayed(const Duration(seconds: 2));
-                      final newContent = value?.text ?? CharConstants.empty;
-                      if (w is EditableText) {
-                        final s = w.controller.selection;
-                        final oldContent = w.controller.text;
-                        final before = s.textBefore(oldContent);
-                        final after = s.textAfter(oldContent);
-                        w.controller.text = before + newContent + after;
-                        w.controller.selection = TextSelection.collapsed(
-                            offset: s.start + newContent.length);
-                      }
-                    });
-                  }
-                }
-              }
-            } else if (hasControlModifier &&
-                modifiers.contains(ModifierKey.shiftModifier)) {
-              if (character == LogicalKeyboardKey.keyO) {
-                _keyboardShortcutEvents._shortcutEvents.add(
-                    const KeyboardShortcut(type: KeyboardShortcutType.openUrl));
-              }
-            } else if (modifiers.isEmpty) {
-              _logger.finer('modifiers is empty.. now check which key it is.');
-              if (character == LogicalKeyboardKey.tab) {
-                WidgetsBinding.instance!.focusManager.primaryFocus!.nextFocus();
-                // TODO(flutterbug) see https://github.com/flutter/flutter/issues/36976
-              } else if (character == LogicalKeyboardKey.arrowUp ||
-                  character.keyId == 0x0000f700) {
-                _keyboardShortcutEvents._shortcutEvents.add(
-                    const KeyboardShortcut(type: KeyboardShortcutType.moveUp));
-              } else if (character == LogicalKeyboardKey.arrowDown ||
-                  character.keyId == 0x0000f701) {
-                _logger.info('moving down.');
-                _keyboardShortcutEvents._shortcutEvents.add(
-                    const KeyboardShortcut(
-                        type: KeyboardShortcutType.moveDown));
-              } else if (character == LogicalKeyboardKey.escape) {
-                _keyboardShortcutEvents._shortcutEvents.add(
-                    const KeyboardShortcut(type: KeyboardShortcutType.escape));
-              }
-            }
-          }
-        },
-        child: widget.child!,
+    final s = defaultAuthPassShortcuts;
+    final theme = Theme.of(context);
+    final shortcuts = Map.fromEntries(
+        s.map((e) => MapEntry(e.triggerForPlatform(theme.platform), e.intent)));
+    final loc = AppLocalizations.of(context);
+    final showHelpShortcut = <Type, Action<Intent>>{
+      KeyboardShortcutHelpIntent: CallbackAction(onInvoke: (_) {
+        final descr = s
+            .map((e) => [
+                  e.triggerForPlatform(theme.platform).debugDescribeKeys(),
+                  e.label(loc)
+                ].join(CharConstants.colon + CharConstants.space))
+            .join(CharConstants.newLine);
+        DialogUtils.showSimpleAlertDialog(
+          context,
+          loc.shortcutHelpTitle,
+          descr,
+          routeAppend: 'shortcuts',
+        );
+      })
+    };
+    return Shortcuts(
+      manager: LoggingShortcutManager(),
+      shortcuts: shortcuts,
+      child: Provider<KeyboardShortcutEvents>.value(
+        value: _keyboardShortcutEvents,
+        child: Actions(
+          key: _actionsKey,
+          actions: {
+            ..._keyboardShortcutEvents._intentActionsMap,
+            ...showHelpShortcut,
+          },
+          dispatcher: LoggingActionDispatcher(),
+          child: Focus(
+            focusNode: _focusNode,
+            autofocus: true,
+            child: widget.child,
+          ),
+        ),
       ),
     );
   }
@@ -262,45 +165,67 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
   }
 }
 
-enum KeyboardShortcutType {
-  search,
-  copyPassword,
-  copyUsername,
-  copyTotp,
-  moveUp,
-  moveDown,
-  generatePassword,
-  copyUrl,
-  openUrl,
-  escape,
-}
-
-class KeyboardShortcut {
-  const KeyboardShortcut({required this.type});
-
-  final KeyboardShortcutType type;
-
-  @NonNls
-  @override
-  String toString() {
-    return 'KeyboardShortcut{type: $type}';
-  }
-}
-
 class KeyboardShortcutEvents with StreamSubscriberBase {
-  KeyboardShortcutEvents() {
-    handle(shortcutEvents.listen((event) {
-      _logger.finer('Got keyboard event $event');
-    }));
+  KeyboardShortcutEvents();
+
+  final _changeNotifier = ChangeNotifier();
+  final List<MapEntry<Type, Action<Intent>>> _intentActions = [];
+  Map<Type, Action<Intent>> _intentActionsMap = {};
+
+  IntentActionRegistration registerActions(Map<Type, Action<Intent>> actions) {
+    final newEntries = actions.entries.toList();
+    _intentActions.addAll(newEntries);
+    _intentActionsMap = Map.fromEntries(_intentActions);
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    _changeNotifier.notifyListeners();
+    return IntentActionRegistration._(this, newEntries);
   }
 
-  final StreamController<KeyboardShortcut> _shortcutEvents =
-      StreamController<KeyboardShortcut>.broadcast();
-
-  Stream<KeyboardShortcut> get shortcutEvents => _shortcutEvents.stream;
+  void _removeActions(IntentActionRegistration registration) {
+    registration._registeredActions.forEach(_intentActions.remove);
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    _changeNotifier.notifyListeners();
+  }
 
   void dispose() {
-    _shortcutEvents.close();
     cancelSubscriptions();
+  }
+}
+
+class IntentActionRegistration {
+  IntentActionRegistration._(this._registrar, this._registeredActions);
+
+  final KeyboardShortcutEvents _registrar;
+  final List<MapEntry<Type, Action<Intent>>> _registeredActions;
+
+  void dispose() {
+    _registrar._removeActions(this);
+  }
+}
+
+/// A ShortcutManager that logs all keys that it handles.
+class LoggingShortcutManager extends ShortcutManager {
+  @override
+  KeyEventResult handleKeypress(BuildContext context, RawKeyEvent event,
+      {LogicalKeySet? keysPressed}) {
+    final KeyEventResult result = super.handleKeypress(context, event);
+    _logger.info('handleKeyPress($event, $keysPressed) result: $result');
+    // if (result == KeyEventResult.handled) {
+    //   _logger.fine('Handled shortcut $event in $context');
+    // }
+    return result;
+  }
+}
+
+/// An ActionDispatcher that logs all the actions that it invokes.
+class LoggingActionDispatcher extends ActionDispatcher {
+  @override
+  Object? invokeAction(
+    covariant Action<Intent> action,
+    covariant Intent intent, [
+    BuildContext? context,
+  ]) {
+    _logger.fine('Action invoked: $action($intent) from $context');
+    return super.invokeAction(action, intent, context);
   }
 }

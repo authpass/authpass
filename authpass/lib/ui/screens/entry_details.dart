@@ -20,6 +20,7 @@ import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
+import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
@@ -343,11 +344,19 @@ class _EntryDetailsState extends State<EntryDetails>
     with StreamSubscriberMixin {
   List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>>? _fieldKeys;
 
+  IntentActionRegistration? _shortcutRegistration;
+
+  @override
+  void dispose() {
+    _shortcutRegistration?.dispose();
+    super.dispose();
+  }
+
   void _initShortcutListener(
       KeyboardShortcutEvents events, CommonFields commonFields) {
-    handleSubscription(events.shortcutEvents.listen((event) {
-      _logger.fine('shortcut event: $event //// ${event.type}');
-      if (event.type == KeyboardShortcutType.copyPassword) {
+    _shortcutRegistration?.dispose();
+    _shortcutRegistration = events.registerActions({
+      CopyPasswordIntent: CallbackAction(onInvoke: (_) {
         final context = FocusManager.instance.primaryFocus?.context;
         if (context != null) {
           _logger.fine('context: $context');
@@ -377,24 +386,35 @@ class _EntryDetailsState extends State<EntryDetails>
             return;
           }
         }
+
         _copyField([commonFields.password]);
-      } else if (event.type == KeyboardShortcutType.copyUsername) {
+      }),
+      CopyUsernameIntent: CallbackAction(onInvoke: (_) {
         _copyField([commonFields.userName]);
-      } else if (event.type == KeyboardShortcutType.copyTotp) {
+      }),
+      CopyTotpIntent: CallbackAction(onInvoke: (_) {
         _logger.fine('Copying ${commonFields.otpAuth}');
         _copyField([
           commonFields.otpAuth,
           commonFields.otpAuthCompat2,
           commonFields.otpAuthCompat1,
         ]);
-      } else if (event.type == KeyboardShortcutType.escape) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      } else if (event.type == KeyboardShortcutType.openUrl) {
+      }),
+      OpenUrlIntent: CallbackAction(onInvoke: (_) {
         _fieldStateFor(commonFields.url)?.openUrl();
-      } else if (event.type == KeyboardShortcutType.copyUrl) {
+      }),
+      CopyUrlIntent: CallbackAction(onInvoke: (_) {
         _fieldStateFor(commonFields.url)?.copyValue();
-      }
-    }));
+      }),
+      // DismissIntent: CallbackAction(onInvoke: (_) {
+      //   FocusManager.instance.primaryFocus?.unfocus();
+      // }),
+      // CancelSearchFilterIntent: CallbackAction(onInvoke: (_) {
+      // final primaryFocus = FocusManager.instance.primaryFocus;
+      // if (primaryFocus)
+      //     ?.unfocus();
+      //   }),
+    });
   }
 
   _EntryFieldState? _fieldStateFor(CommonField commonField) => _fieldKeys!
@@ -1056,6 +1076,8 @@ class _EntryFieldState extends State<EntryField>
   final FocusNode _focusNode = FocusNode();
   late CommonFields _commonFields;
 
+  IntentActionRegistration? _keyboardRegistration;
+
   StringValue? get _fieldValue => widget.entry.getString(widget.fieldKey);
 
   set _fieldValue(StringValue? value) {
@@ -1097,13 +1119,11 @@ class _EntryFieldState extends State<EntryField>
     super.didChangeDependencies();
     _commonFields = Provider.of<CommonFields>(context);
     if (widget.fieldKey == _commonFields.password.key) {
-      handleSubscription(Provider.of<KeyboardShortcutEvents>(context)
-          .shortcutEvents
-          .listen((event) {
-        if (event.type == KeyboardShortcutType.generatePassword) {
-          _generatePassword();
-        }
-      }));
+      _keyboardRegistration?.dispose();
+      final keyboardShortcutEvents = context.watch<KeyboardShortcutEvents>();
+      _keyboardRegistration = keyboardShortcutEvents.registerActions({
+        GeneratePassword: CallbackAction(onInvoke: (_) => _generatePassword()),
+      });
     }
   }
 
@@ -1463,6 +1483,7 @@ class _EntryFieldState extends State<EntryField>
   void dispose() {
     _logger
         .fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
+    _keyboardRegistration?.dispose();
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();

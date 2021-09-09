@@ -1671,6 +1671,50 @@
   "@getHelpButton": {
     "description": ""
   },
+  "shortcutCopyUsername": "Copy Username",
+  "@shortcutCopyUsername": {
+    "description": ""
+  },
+  "shortcutCopyPassword": "Copy Password",
+  "@shortcutCopyPassword": {
+    "description": ""
+  },
+  "shortcutCopyTotp": "Copy TOTP",
+  "@shortcutCopyTotp": {
+    "description": ""
+  },
+  "shortcutMoveUp": "Select the previous password",
+  "@shortcutMoveUp": {
+    "description": ""
+  },
+  "shortcutMoveDown": "Select the next password",
+  "@shortcutMoveDown": {
+    "description": ""
+  },
+  "shortcutGeneratePassword": "Generate Password",
+  "@shortcutGeneratePassword": {
+    "description": ""
+  },
+  "shortcutCopyUrl": "Copy URL",
+  "@shortcutCopyUrl": {
+    "description": ""
+  },
+  "shortcutOpenUrl": "Open URL",
+  "@shortcutOpenUrl": {
+    "description": ""
+  },
+  "shortcutCancelSearch": "Cancel Search",
+  "@shortcutCancelSearch": {
+    "description": ""
+  },
+  "shortcutShortcutHelp": "Keyboard Shortcut Help",
+  "@shortcutShortcutHelp": {
+    "description": ""
+  },
+  "shortcutHelpTitle": "Keyboard Shortcuts",
+  "@shortcutHelpTitle": {
+    "description": "title of dialog showing keyboard shortcuts."
+  },
   "unexpectedError": "Unexpected Error: {error}",
   "@unexpectedError": {
     "placeholders": {

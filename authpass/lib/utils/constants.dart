@@ -64,6 +64,8 @@ class CharConstants {
   static const equalSign = '=';
 
   static const star = '*';
+
+  static const questionMark = '?';
 }
 
 class AssetConstants {
