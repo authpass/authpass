@@ -1,6 +1,8 @@
 # 1.9.4 - unreleased
 
 * Allow customizing of search fields.
+* Updated all languages
+  If you find untranslated strings, help us at https://translate.authpass.app/
 * Keyboard shortcut for copy TOTP (ctrl+t) #262
 * Desktop: system wide shortcuts (ctrl+alt+f for opening search). #262
 
