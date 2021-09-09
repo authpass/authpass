@@ -65,6 +65,11 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 
     _keyboardShortcutEvents._changeNotifier.addListener(() {
       SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+        if (!mounted) {
+          _logger.warning(
+              'Got keyboard shortcut event, but was no longer mounted.');
+          return;
+        }
         setState(() {
           _logger.fine('actions changed.');
         });
