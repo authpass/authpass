@@ -62,8 +62,9 @@ class FileSourceLocal extends FileSource {
   @NonNls
   @override
   String get typeDebug => '$runtimeType:$typeDebugFilePicker';
+
   @NonNls
-  Future<String> get typeDebugFilePicker async {
+  String get typeDebugFilePicker {
     final uri = filePickerInfo?.uri;
     if (uri == null) {
       return macOsSecureBookmark != null ? 'macos' : 'internal';
