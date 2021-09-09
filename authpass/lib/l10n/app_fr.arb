@@ -1228,6 +1228,13 @@
     "@otpPromptHelperText": {
         "description": ""
     },
+    "otpErrorMessageGeneration": "Erreur lors de la génération du code d'invitation : {errorMessage}",
+    "@otpErrorMessageGeneration": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
     "otpCopySecretActionLabel": "Copier le secret",
     "@otpCopySecretActionLabel": {
         "description": ""
@@ -1264,8 +1271,19 @@
     "@entryAttachmentRemoveActionLabel": {
         "description": ""
     },
+    "entryAttachmentRemoveConfirm": "Souhaitez vous réellement supprimer {attachmentLabel} ?",
+    "@entryAttachmentRemoveConfirm": {
+        "description": "",
+        "placeholders": {
+            "attachmentLabel": {}
+        }
+    },
     "entryRenameFieldPromptTitle": "Renommer le champ",
     "@entryRenameFieldPromptTitle": {
+        "description": ""
+    },
+    "removerecentfile": "Masquer",
+    "@removerecentfile": {
         "description": ""
     },
     "entryRenameFieldPromptLabel": "Entrez le nouveau nom du champ",
@@ -1460,12 +1478,83 @@
     "@groupActionDelete": {
         "description": ""
     },
+    "logoutTooltip": "Déconnexion",
+    "@logoutTooltip": {
+        "description": "Tooltip for logging out of a cloud storage provider."
+    },
+    "successfullyDeletedFileCloudStorage": "Fichier supprimé avec succès.",
+    "@successfullyDeletedFileCloudStorage": {
+        "description": "deleted file from cloud storage."
+    },
+    "shareDialogTitle": "Options de partage pour {fileName}",
+    "@shareDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "shareFileActionLabel": "Partager …",
+    "@shareFileActionLabel": {
+        "description": ""
+    },
+    "shareTokenListEmptyScreenPlaceholder": "Fichier pas encore partagé.",
+    "@shareTokenListEmptyScreenPlaceholder": {
+        "description": ""
+    },
+    "shareTokenNoLabel": "Aucune étiquette/description",
+    "@shareTokenNoLabel": {
+        "description": "User did not specify a description for a given share code."
+    },
+    "shareTokenReadWrite": "Lire/Écrire",
+    "@shareTokenReadWrite": {
+        "description": "Share Code allows reading and writing"
+    },
+    "shareTokenReadOnly": "Lecture seulement",
+    "@shareTokenReadOnly": {
+        "description": "Share code only allows reading."
+    },
+    "shareCreateTokenDialogTitle": "Partager le fichier",
+    "@shareCreateTokenDialogTitle": {
+        "description": ""
+    },
+    "shareCreateTokenReadOnly": "Lecture seulement",
+    "@shareCreateTokenReadOnly": {
+        "description": "switch between read only and read/write"
+    },
+    "shareCreateTokenReadOnlyHelpText": "Ne pas autoriser la sauvegarde des modifications",
+    "@shareCreateTokenReadOnlyHelpText": {
+        "description": "help text for the switch between read only and read/write"
+    },
+    "shareCreateTokenLabelText": "Description",
+    "@shareCreateTokenLabelText": {
+        "description": "Allows users to add a description/label to a share code."
+    },
+    "shareCreateTokenLabelHint": "Partager pour mon ami",
+    "@shareCreateTokenLabelHint": {
+        "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+    },
     "authPassCloudShareFileActionLabel": "Partager",
     "@authPassCloudShareFileActionLabel": {
         "description": ""
     },
     "shareCodeLoadingProgress": "Chargement du fichier …",
     "@shareCodeLoadingProgress": {
+        "description": ""
+    },
+    "shortcutCopyUsername": "Copier le nom d'utilisateur",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Copier le mot de passe",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Générer un mot de passe",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "Ouvrir l'URL",
+    "@shortcutOpenUrl": {
         "description": ""
     },
     "unexpectedError": "Erreur inattendue : {error}",

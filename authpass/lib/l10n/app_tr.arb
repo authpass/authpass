@@ -56,6 +56,33 @@
     "@createNewFile": {
         "description": "button on select file screen to create a new password database."
     },
+    "openFile": "Dosya Aç",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFromDropdownMenu": "Şuradan yükle …",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Hızlıca dosyalar açılıyor …",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "{fileName} açılıyor … ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
+    },
     "loadFrom": "{cloudStorageName}'dan yükle",
     "@loadFrom": {
         "placeholders": {
@@ -65,22 +92,58 @@
             }
         }
     },
+    "loadFromRemoteUrl": "İnternetten kbdx aç",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
+    "createNewKeepass": "KeePass'ta yeni misin?\nYeni Şifre Veritabanı oluştur",
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
+    "labelLastOpenFiles": "Son açılan dosyalar:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Henüz hiç dosya açılmadı.",
+    "@noFilesHaveBeenOpenYet": {},
     "preferenceSelectLanguage": "Dil Seçin",
     "@preferenceSelectLanguage": {},
     "preferenceLanguage": "Dil",
     "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Yazı Tipi Büyüklüğü",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Genişlik",
+    "@preferenceVisualDensity": {},
     "preferenceTheme": "Tema",
     "@preferenceTheme": {},
+    "preferenceThemeLight": "Açık",
+    "@preferenceThemeLight": {},
     "preferenceThemeDark": "Koyu",
     "@preferenceThemeDark": {},
     "preferenceSystemDefault": "Sistem varsayılanı",
     "@preferenceSystemDefault": {},
     "preferenceDefault": "Varsayılan",
     "@preferenceDefault": {},
+    "lockAllFiles": "Bütün açık dosyaları kilitle",
+    "@lockAllFiles": {},
     "preferenceAllowScreenshots": "Uygulamanın ekran görüntülerine izin verin",
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Otomatik doldurmayı etkinleştir",
     "@preferenceEnableAutoFill": {},
+    "enableAutofillSuggestionBanner": "Otomatik tamamlama'yı açarak diper uygulamalarda da şifrelerinizi kullanabilirsiniz!",
+    "@enableAutofillSuggestionBanner": {
+        "description": "This text will shown as a banner on top of password list"
+    },
+    "dismissAutofillSuggestionBannerButton": "REDDET",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
+    "enableAutofillSuggestionBannerButton": "ETKİNLEŞTİR!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+    },
+    "preferenceAutoFillDescription": "Sadece Android Oreo (8.0) ve sonrasında desteklenir.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Tercihler",
+    "@preferenceTitle": {},
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "Her türlü geri bildirimi memnuniyetle karşılıyoruz!",
@@ -89,20 +152,72 @@
     "@aboutLinkVisitWebsite": {},
     "aboutLinkGitHub": "Ve Açık Kaynak Projesi",
     "@aboutLinkGitHub": {},
+    "aboutLogFile": "Kayıt Dosyası: {logFilePath}",
+    "aboutLinkContributors": "Katkıda Bulunanları Göster",
+    "@aboutLinkContributors": {},
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
     "unableToLaunchUrlTitle": "Url açılamıyor",
     "@unableToLaunchUrlTitle": {
         "description": ""
     },
+    "unableToLaunchUrlDescription": "{url} açılamıyor: {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Url için uygulama yok.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "URL açıldı: {url}",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
+    },
     "menuItemGeneratePassword": "Parola oluştur",
     "@menuItemGeneratePassword": {},
+    "menuItemPreferences": "Tercihler",
+    "@menuItemPreferences": {},
+    "menuItemOpenAnotherFile": "Başka dosya aç",
+    "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Güncellemeleri kontrol et",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Kayıtları gönder",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Kayıtları eposta ile gönder",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Forum",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "Sorun bildir ve yardım al",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "Yardım",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Belgeleri göster",
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "Hakkında",
     "@menuItemAbout": {},
+    "actionOpenUrl": "URL aç",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
     "passwordPlainText": "Şifreyi göster",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
@@ -115,22 +230,77 @@
     "@generatePassword": {
         "description": "screen title for password generator"
     },
+    "doneButtonLabel": "Tamam",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
     "useAsDefault": "Varsayılan olarak kullan",
     "@useAsDefault": {
         "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Küçük harf (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Büyük harf (A-Z)",
+    "@characterSetUpperCase": {
         "context": "Password generator"
     },
     "characterSetNumeric": "Sayısal (0-9)",
     "@characterSetNumeric": {
         "context": "Password generator"
     },
+    "characterSetUmlauts": "İki noktalılar (öüä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
     "characterSetSpecial": "Özel (@%+)",
     "@characterSetSpecial": {
         "context": "Password generator"
     },
+    "length": "Uzunluk",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "El ile",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "customLengthHelperText": "Sadece {customMinLength}'dan fazla uzunluklarda",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural,=1 {Bir dosya kaydedildi: {files}}other {{numFiles} Dosya kaydedildi: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
     "manageGroups": "Grupları Yönet",
     "@manageGroups": {
         "description": ""
+    },
+    "lockFiles": "Dosyaları kilitle",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
     },
     "searchHint": "Ara",
     "@searchHint": {
@@ -139,6 +309,10 @@
     "searchButtonLabel": "Ara",
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
+    },
+    "filterButtonLabel": "Gruplara göre filtrele",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
     },
     "clear": "Sil",
     "@clear": {
@@ -218,6 +392,38 @@
     "editAction": "Düzenle",
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "mailboxEnableHint": "Eposta almaya devam et",
+    "@mailboxEnableHint": {
+        "description": ""
+    },
+    "mailboxDisableLabel": "Devre dışı bırak",
+    "@mailboxDisableLabel": {
+        "description": ""
+    },
+    "mailboxDisableHint": "Daha fazla eposta alma",
+    "@mailboxDisableHint": {
+        "description": ""
+    },
+    "mailListNoMail": "Henüz epostanız yok.",
+    "@mailListNoMail": {
+        "description": ""
+    },
+    "masterPasswordDescription": "Ana şifre, sizin şifre veritabanınızı güvenli bir şekilde şifrelemek için kullanılır. Lütfen unutmayınız, kurtarma işlemi yapılamaz.",
+    "@masterPasswordDescription": {
+        "description": ""
+    },
+    "unsavedChangesWarningTitle": "Kaydedilmemiş Değişiklikler",
+    "@unsavedChangesWarningTitle": {
+        "description": ""
+    },
+    "unsavedChangesWarningBody": "Hala kaydedilmemiş değişiklikler var. Değişiklikleri silecek misiniz?",
+    "@unsavedChangesWarningBody": {
+        "description": ""
+    },
+    "unsavedChangesDiscardActionLabel": "Değişiklikleri sil",
+    "@unsavedChangesDiscardActionLabel": {
+        "description": ""
     },
     "deleteAction": "Sil",
     "@deleteAction": {
@@ -317,6 +523,22 @@
     },
     "groupActionDelete": "Sil",
     "@groupActionDelete": {
+        "description": ""
+    },
+    "shortcutCopyUsername": "Kullanıcı Adını Kopyala",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Şifreyi Kopyala",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Parola oluştur",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "URL aç",
+    "@shortcutOpenUrl": {
         "description": ""
     },
     "unexpectedError": "Beklenmeyen Hata: {error}",

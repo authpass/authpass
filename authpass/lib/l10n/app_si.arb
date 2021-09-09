@@ -286,6 +286,14 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "පරිශීලක නාමය පිටපත්",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "මුරපදය පිටපත්",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
     "unexpectedError": "අනපේක්ෂිත දෝෂයකි: {error}",
     "@unexpectedError": {
         "placeholders": {

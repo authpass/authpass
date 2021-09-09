@@ -72,6 +72,14 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "Belanda",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Pilih",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - Pilih file KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -91,6 +99,29 @@
     "openFile": "Buka File",
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFromDropdownMenu": "Muat dari…",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Membuka file cepat …",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "Membuka {fileName} … ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
     },
     "loadFrom": "Muat dari {cloudStorageName}",
     "@loadFrom": {
@@ -141,6 +172,10 @@
     "@dismissAutofillSuggestionBannerButton": {
         "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
     },
+    "enableAutofillSuggestionBannerButton": "AKTIFKAN!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+    },
     "preferenceAutoFillDescription": "Hanya didukung di Android Oreo (8.0) atau keatas.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Preferensi",
@@ -154,6 +189,8 @@
     "aboutLinkGitHub": "Dan proyek Open Source kami",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "File Log: {logFilePath}",
+    "aboutLinkContributors": "Tampilkan Kontributor",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -199,6 +236,12 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Cek pembaruan",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Kirim logs",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Kirim logs lewat email",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Forum Dukungan",
+    "@menuItemForum": {},
     "menuItemHelp": "Bantuan",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Tampilkan dokumentasi",
@@ -301,6 +344,10 @@
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
+    "filterButtonLabel": "Saring berdasarkan grup",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
     "clear": "Bersihkan",
     "@clear": {
         "description": "Remove existing group filter from password list"
@@ -349,6 +396,20 @@
     "@doneCopiedField": {
         "description": ""
     },
+    "copiedFieldToClipboard": "{fieldName} disalin.",
+    "@copiedFieldToClipboard": {
+        "description": "",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "copiedFieldEmpty": "{fieldName} kosong.",
+    "@copiedFieldEmpty": {
+        "description": "Displayed when user wants to copy a field which is empty or not defined.",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
     "emptyPasswordVaultPlaceholder": "Anda belum memiliki kata sandi di database anda.",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
@@ -356,6 +417,10 @@
     "emptyPasswordVaultButtonLabel": "Buat Kata Sandi pertama anda",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loading": "Memuat",
+    "@loading": {
+        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
     },
     "loadingFile": "Memuat file…",
     "@loadingFile": {
@@ -416,6 +481,14 @@
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
     },
+    "close": "Tutup",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Tambah kata sandi baru",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
     "errorOpenFileAlreadyOpenTitle": "File telah terbuka",
     "@errorOpenFileAlreadyOpenTitle": {
         "description": "Trying to open a database from a second file source which is already open.",
@@ -430,6 +503,22 @@
             "openFileSource": {},
             "newFileSource": {}
         }
+    },
+    "loadFromUrl": "Unduh dari Url",
+    "@loadFromUrl": {
+        "description": ""
+    },
+    "loadFromUrlEnterUrl": "Masukkan URL",
+    "@loadFromUrlEnterUrl": {
+        "description": "label for input box to enter url."
+    },
+    "cancel": "Batal",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
+    "errorLoadFileFromSourceTitle": "Galat saat membuka file.",
+    "@errorLoadFileFromSourceTitle": {
+        "description": "error title when user selects a file which can't be downloaded."
     },
     "errorUnlockFileTitle": "Tidak dapat membuka file",
     "@errorUnlockFileTitle": {
@@ -449,6 +538,15 @@
     "dialogContinue": "Lanjutkan",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Kirim laporan galat",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "Laporkaan galat di Forum/Bantuan",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
     },
     "groupFilterDescription": "Pilih grup yang akan ditampilkan (rekursif)",
     "@groupFilterDescription": {
@@ -471,9 +569,58 @@
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
     },
+    "mailboxDisableLabel": "Nonaktifkan",
+    "@mailboxDisableLabel": {
+        "description": ""
+    },
+    "mailboxLabelPrefixForEntry": "Entri: {entryLabel}",
+    "@mailboxLabelPrefixForEntry": {
+        "description": "when a mailbox was created for a (password) entry.",
+        "placeholders": {
+            "entryLabel": {
+                "description": "The label of the entry this mailbox was created for"
+            }
+        }
+    },
+    "mailboxLabelPrefixUnknownEntry": "Entri tidak diketahui: {entryUuid}",
+    "@mailboxLabelPrefixUnknownEntry": {
+        "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
+        "placeholders": {
+            "entryUuid": {
+                "description": "The internal id of the entry which was no tfound"
+            }
+        }
+    },
+    "mailboxLabelPrefixCreatedAt": "Dibuat pada: {dateTime}",
+    "@mailboxLabelPrefixCreatedAt": {
+        "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
+        "placeholders": {
+            "dateTime": {}
+        }
+    },
+    "unsavedChangesWarningTitle": "Perubahan belum disimpan",
+    "@unsavedChangesWarningTitle": {
+        "description": ""
+    },
+    "unsavedChangesDiscardActionLabel": "Batalkan perubahan",
+    "@unsavedChangesDiscardActionLabel": {
+        "description": ""
+    },
+    "deletePermanentlyAction": "Hapus Permanen",
+    "@deletePermanentlyAction": {
+        "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
+    },
+    "restoreFromRecycleBinAction": "Pulihkan",
+    "@restoreFromRecycleBinAction": {
+        "description": "menu action: restore an entry/group which was moved into the recycle bin."
+    },
     "deleteAction": "Hapus",
     "@deleteAction": {
         "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "deletedEntry": "Hapus entri.",
+    "@deletedEntry": {
+        "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
     },
     "successfullyDeletedGroup": "Grup terhapus.",
     "@successfullyDeletedGroup": {
@@ -487,9 +634,44 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavSettings": "Pengaturan WebDAV",
+    "@webDavSettings": {
+        "description": "dialog title for entering WebDAV settings."
+    },
+    "webDavUrlLabel": "URL",
+    "@webDavUrlLabel": {
+        "description": ""
+    },
+    "webDavAuthUser": "Nama pengguna",
+    "@webDavAuthUser": {
+        "description": ""
+    },
     "webDavAuthPassword": "Kata Sandi",
     "@webDavAuthPassword": {
         "description": ""
+    },
+    "forDetailsVisitUrl": "Informasi lebih lanjut kunjungi {url}",
+    "@forDetailsVisitUrl": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "authPassCloudAuthEmailInvalid": "Harap masukkan alamat email yang valid.",
+    "@authPassCloudAuthEmailInvalid": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailButtonLabel": "Konfirmasi alamat",
+    "@authPassCloudAuthConfirmEmailButtonLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthResendButtonLabel": "Minta tautan konfirmasi baru",
+    "@authPassCloudAuthResendButtonLabel": {
+        "description": ""
+    },
+    "permanentlyDeletedEntrySnackBar": "Entri dihapus permanen.",
+    "@permanentlyDeletedEntrySnackBar": {
+        "description": "snackbar confirming that the entry was deleted."
     },
     "initialNewGroupName": "Grup baru",
     "@initialNewGroupName": {
@@ -755,16 +937,432 @@
     "@saving": {
         "description": "Saving text"
     },
+    "increaseValue": "Tambah",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "Kurangi",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "cloudStorageLogInCode": "Masukkan kode",
+    "@cloudStorageLogInCode": {
+        "description": "for oauth authentication user has to enter auth code - this is the label for the text field."
+    },
+    "cloudStorageAuthCodeLabel": "Kode Otentikasi",
+    "@cloudStorageAuthCodeLabel": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorTitle": "Galat ketika mengotentikasi",
+    "@cloudStorageAuthErrorTitle": {
+        "description": ""
+    },
+    "cloudStorageSearchBoxLabel": "Cari Kueri",
+    "@cloudStorageSearchBoxLabel": {
+        "description": ""
+    },
+    "cloudStorageItemsInFolder": "{itemCount} item di folder ini.",
+    "@cloudStorageItemsInFolder": {
+        "description": "",
+        "placeholders": {
+            "itemCount": {}
+        }
+    },
+    "mailSubject": "Subjek",
+    "@mailSubject": {
+        "description": ""
+    },
+    "mailFrom": "Dari",
+    "@mailFrom": {
+        "description": ""
+    },
+    "mailDate": "Tanggal",
+    "@mailDate": {
+        "description": ""
+    },
+    "mailMailbox": "Kotak surat",
+    "@mailMailbox": {
+        "description": ""
+    },
+    "mailNoData": "Tidak ada Data",
+    "@mailNoData": {
+        "description": "Message shown when email text body is empty (or can't be decoded)"
+    },
+    "mailMailboxesTitle": "Kotak surat",
+    "@mailMailboxesTitle": {
+        "description": "Title of the screen showing all available mailboxes."
+    },
+    "mailboxCreateButtonLabel": "Buat",
+    "@mailboxCreateButtonLabel": {
+        "description": "FAB label to create a new mailbox."
+    },
+    "mailboxNameInputLabel": "Label (Internal)",
+    "@mailboxNameInputLabel": {
+        "description": "Label for the text field asking for a label for a mailbox, while creating it."
+    },
+    "errorWhileSavingTitle": "Galat ketika menyimpan",
+    "@errorWhileSavingTitle": {
+        "description": "title for error dialog shown when an error occurs while saving"
+    },
+    "errorWhileSavingBody": "Tidak dapat menyimpan file: {errorMessage}",
+    "@errorWhileSavingBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "otpInvalidKeyTitle": "Kunci tidak valid",
+    "@otpInvalidKeyTitle": {
+        "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
+    },
+    "otpCopySecretActionLabel": "Salin rahasia",
+    "@otpCopySecretActionLabel": {
+        "description": ""
+    },
+    "otpEntryLabel": "Token sekali pakai",
+    "@otpEntryLabel": {
+        "description": "The label for entries which show a one time token for a TOTP"
+    },
+    "entryFieldActionRevealField": "Tampilkan bidang yang dilindungi",
+    "@entryFieldActionRevealField": {
+        "description": ""
+    },
+    "entryAttachmentOpenActionLabel": "Buka",
+    "@entryAttachmentOpenActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareActionLabel": "Bagikan",
+    "@entryAttachmentShareActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareSubject": "Lampiran",
+    "@entryAttachmentShareSubject": {
+        "description": "the 'subject' passed to the system when sharing an attachment. "
+    },
+    "entryAttachmentSaveActionLabel": "Simpan ke perangkat",
+    "@entryAttachmentSaveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveActionLabel": "Hapus",
+    "@entryAttachmentRemoveActionLabel": {
+        "description": ""
+    },
+    "entryRenameFieldPromptTitle": "Ubah nama bidang",
+    "@entryRenameFieldPromptTitle": {
+        "description": ""
+    },
+    "promptDialogPasteActionTooltip": "Tempel dari papan klip",
+    "@promptDialogPasteActionTooltip": {
+        "description": ""
+    },
+    "saveAsEntryLocalFile": "File lokal",
+    "@saveAsEntryLocalFile": {
+        "description": "menu entry in the 'save as' dialog for saving as local file."
+    },
+    "fileTypePngs": "Gambar (png)",
+    "@fileTypePngs": {
+        "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
+    },
+    "selectIconDialogAction": "PILIH IKON",
+    "@selectIconDialogAction": {
+        "description": ""
+    },
+    "retryDialogActionLabel": "COBA LAGI",
+    "@retryDialogActionLabel": {
+        "description": ""
+    },
+    "errorDuringNetworkCall": "Galat saat memanggil api. {errorMessage}",
+    "@errorDuringNetworkCall": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "passwordFilterHideDeleted": "Sembunyikan entri yang dihapus",
+    "@passwordFilterHideDeleted": {
+        "description": "filter name to show only password entries which are not deleted"
+    },
+    "passwordFilterOnlyDeleted": "Entri yang dihapus",
+    "@passwordFilterOnlyDeleted": {
+        "description": "filter name to show only deleted password entries"
+    },
+    "passwordFilterPrefixForOneGroup": "Grup: {groupName}",
+    "@passwordFilterPrefixForOneGroup": {
+        "description": "The label for a password filter for one specific group",
+        "placeholders": {
+            "groupName": {}
+        }
+    },
+    "passwordFilterPrefixForMultipleGroups": "Filter kustom ({groupCount} Grup)",
+    "@passwordFilterPrefixForMultipleGroups": {
+        "description": "The label for a password filter for multiple groups",
+        "placeholders": {
+            "groupCount": {}
+        }
+    },
+    "menuItemAuthPassCloudAuthenticate": "Otentikasi dengan AuthPass Cloud",
+    "@menuItemAuthPassCloudAuthenticate": {
+        "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
+    },
+    "changesSaveLocally": "Simpan secara lokal",
+    "@changesSaveLocally": {
+        "description": ""
+    },
+    "clearColor": "Hapus Warna",
+    "@clearColor": {
+        "description": "Action to remove a selected color and reset to default."
+    },
+    "databaseRenameInputLabel": "Masukkan nama basisdata",
+    "@databaseRenameInputLabel": {
+        "description": ""
+    },
+    "databasePath": "Jalur",
+    "@databasePath": {
+        "description": ""
+    },
+    "databaseColor": "Warna",
+    "@databaseColor": {
+        "description": ""
+    },
+    "databaseColorChoose": "Pilih warna untuk membedakan file.",
+    "@databaseColorChoose": {
+        "description": ""
+    },
+    "databaseKdbxVersion": "Versi file KDBX",
+    "@databaseKdbxVersion": {
+        "description": ""
+    },
+    "databaseKdbxUpgradeVersion": "Perbarui ke {versionName}",
+    "@databaseKdbxUpgradeVersion": {
+        "description": "",
+        "placeholders": {
+            "versionName": {}
+        }
+    },
+    "databaseKdbxUpgradeSuccessful": "File berhasil diperbarui dan disimpan.",
+    "@databaseKdbxUpgradeSuccessful": {
+        "description": ""
+    },
+    "progressStatus": "Status: {statusProgress}",
+    "@progressStatus": {
+        "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
+        "placeholders": {
+            "statusProgress": {}
+        }
+    },
+    "closeAndLockFile": "Tutup/Kunci",
+    "@closeAndLockFile": {
+        "description": ""
+    },
+    "authPassHomeScreenTagline": "pengelola kata sandi, open source, tersedia di berbagai platform.",
+    "@authPassHomeScreenTagline": {
+        "description": ""
+    },
+    "addNewPasswordButtonLabel": "Tambah kata sandi baru",
+    "@addNewPasswordButtonLabel": {
+        "description": ""
+    },
+    "unnamedEntryPlaceholder": "(belum dinamai)",
+    "@unnamedEntryPlaceholder": {
+        "description": "displayed instead of entry label, if entry has no name or it is blank."
+    },
+    "unnamedGroupPlaceholder": "(belum dinamai)",
+    "@unnamedGroupPlaceholder": {
+        "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
+    },
+    "unnamedFilePlaceholder": "(belum dinamai)",
+    "@unnamedFilePlaceholder": {
+        "description": ""
+    },
+    "editGroupScreenTitle": "Sunting grup",
+    "@editGroupScreenTitle": {
+        "description": ""
+    },
+    "editGroupGroupNameLabel": "Nama grup",
+    "@editGroupGroupNameLabel": {
+        "description": ""
+    },
+    "files": "Berkas",
+    "@files": {
+        "description": ""
+    },
     "newGroupDialogTitle": "Grup baru",
     "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "newGroupDialogInputLabel": "Nama untuk grup baru",
+    "@newGroupDialogInputLabel": {
+        "description": ""
+    },
+    "groupActionShowPasswords": "Tampilkan kata sandi",
+    "@groupActionShowPasswords": {
         "description": ""
     },
     "groupActionDelete": "Hapus",
     "@groupActionDelete": {
         "description": ""
     },
+    "logoutTooltip": "Keluar",
+    "@logoutTooltip": {
+        "description": "Tooltip for logging out of a cloud storage provider."
+    },
+    "successfullyDeletedFileCloudStorage": "File berhasil dihapus.",
+    "@successfullyDeletedFileCloudStorage": {
+        "description": "deleted file from cloud storage."
+    },
+    "shareDialogTitle": "Opsi berbagi untuk {fileName}",
+    "@shareDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "shareFileActionLabel": "Bagikan …",
+    "@shareFileActionLabel": {
+        "description": ""
+    },
+    "shareTokenListEmptyScreenPlaceholder": "Belum ada file yang dibagikan.",
+    "@shareTokenListEmptyScreenPlaceholder": {
+        "description": ""
+    },
+    "shareTokenNoLabel": "Tidak ada label/deskripsi",
+    "@shareTokenNoLabel": {
+        "description": "User did not specify a description for a given share code."
+    },
+    "shareTokenReadWrite": "Baca/Tulis",
+    "@shareTokenReadWrite": {
+        "description": "Share Code allows reading and writing"
+    },
+    "shareTokenReadOnly": "Baca saja",
+    "@shareTokenReadOnly": {
+        "description": "Share code only allows reading."
+    },
+    "shareCreateTokenDialogTitle": "Bagikan file",
+    "@shareCreateTokenDialogTitle": {
+        "description": ""
+    },
+    "shareCreateTokenReadOnly": "Baca saja",
+    "@shareCreateTokenReadOnly": {
+        "description": "switch between read only and read/write"
+    },
+    "shareCreateTokenReadOnlyHelpText": "Jangan perbolehkan menyimpan perubahan",
+    "@shareCreateTokenReadOnlyHelpText": {
+        "description": "help text for the switch between read only and read/write"
+    },
+    "shareCreateTokenLabelText": "Deskripsi",
+    "@shareCreateTokenLabelText": {
+        "description": "Allows users to add a description/label to a share code."
+    },
+    "shareCreateTokenLabelHint": "Bagikan ke teman",
+    "@shareCreateTokenLabelHint": {
+        "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+    },
+    "shareCreateTokenLabelHelp": "Label opsional untuk membedakan share code.",
+    "@shareCreateTokenLabelHelp": {
+        "description": ""
+    },
+    "shareCreateTokenSuccess": "Share Code berhasil dibuat.",
+    "@shareCreateTokenSuccess": {
+        "description": "snackbar when share code was created successfully."
+    },
+    "sharePresentDialogTitle": "Bagikan file dengan share code rahasia",
+    "@sharePresentDialogTitle": {
+        "description": ""
+    },
+    "sharePresentToken": "Bagikan kode",
+    "@sharePresentToken": {
+        "description": ""
+    },
+    "sharePresentCopied": "Share code disalin ke papan klip.",
+    "@sharePresentCopied": {
+        "description": ""
+    },
+    "authPassCloudOpenWithShareCodeTooltip": "Buka dengan share code",
+    "@authPassCloudOpenWithShareCodeTooltip": {
+        "description": "Allows users to open cloud files using a share code/token."
+    },
+    "authPassCloudShareFileActionLabel": "Bagikan",
+    "@authPassCloudShareFileActionLabel": {
+        "description": ""
+    },
+    "shareCodeInputDialogTitle": "Masukkan share code rahasia",
+    "@shareCodeInputDialogTitle": {
+        "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+    },
+    "shareCodeInputDialogScan": "Pindai Kode QR",
+    "@shareCodeInputDialogScan": {
+        "description": "button label for triggering QR code scanner"
+    },
+    "shareCodeInputLabel": "Bagikan Kode Rahasia",
+    "@shareCodeInputLabel": {
+        "description": ""
+    },
+    "shareCodeInputHelperText": "Jika anda memiliki share code, silakan tempel di atas.",
+    "@shareCodeInputHelperText": {
+        "description": ""
+    },
+    "shareCodeOpen": "Terima Share Code untuk AuthPass Cloud?",
+    "@shareCodeOpen": {
+        "description": ""
+    },
+    "shareCodeOpenScreenTitle": "Memuat file dengan share code",
+    "@shareCodeOpenScreenTitle": {
+        "description": ""
+    },
     "shareCodeLoadingProgress": "Memuat file…",
     "@shareCodeLoadingProgress": {
+        "description": ""
+    },
+    "shareCodeOpenFileButtonLabel": "BUKA",
+    "@shareCodeOpenFileButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppCaption": "Buka file ini dengan aplikasi kami?",
+    "@shareCodeOpenInstallAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenAnotherAppCaption": "Buka file ini di perangkat lain?",
+    "@shareCodeOpenAnotherAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppButtonLabel": "Pasang aplikasi",
+    "@shareCodeOpenInstallAppButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenShowCodeButtonLabel": "Tampilkan Kode Berbagi",
+    "@shareCodeOpenShowCodeButtonLabel": {
+        "description": ""
+    },
+    "changeMasterPasswordActionLabel": "Ganti kata sandi utama",
+    "@changeMasterPasswordActionLabel": {
+        "description": "label for the button to show the dialog for changing master password."
+    },
+    "changeMasterPasswordFormSubmit": "Simpan dengan kata sandi baru",
+    "@changeMasterPasswordFormSubmit": {
+        "description": ""
+    },
+    "changeMasterPasswordSuccess": "Kata sandi utama berhasil disimpan.",
+    "@changeMasterPasswordSuccess": {
+        "description": ""
+    },
+    "changeMasterPasswordScreenTitle": "Ganti kata sandi utama",
+    "@changeMasterPasswordScreenTitle": {
+        "description": "app bar title for change password screen."
+    },
+    "shortcutCopyUsername": "Salin Nama Pengguna",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Salin Kata Sandi",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Penghasil Kata Sandi",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "Buka URL",
+    "@shortcutOpenUrl": {
         "description": ""
     },
     "unexpectedError": "Kesalahan tak terduga: {error}",

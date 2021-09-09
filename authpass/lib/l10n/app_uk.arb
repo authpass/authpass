@@ -412,6 +412,18 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "Копіювати ім'я користувача",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Копіювати пароль",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Згенерувати пароль",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
     "unexpectedError": "Неочікувана помилка: {error}",
     "@unexpectedError": {
         "placeholders": {

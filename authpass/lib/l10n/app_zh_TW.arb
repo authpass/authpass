@@ -795,6 +795,22 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "複製帳號",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "複製密碼",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "產生密碼",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "開啟 URL",
+    "@shortcutOpenUrl": {
+        "description": ""
+    },
     "unexpectedError": "不明錯誤：{error}",
     "@unexpectedError": {
         "placeholders": {

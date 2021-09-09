@@ -778,6 +778,17 @@
     "@authPassCloudAuthResendButtonLabel": {
         "description": ""
     },
+    "permanentlyDeleteEntryConfirm": "Dit zal het wachtwoord permanent verwijderen {title}. Dit kan niet ongedaan gemaakt worden. Wilt u doorgaan?",
+    "@permanentlyDeleteEntryConfirm": {
+        "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
+        "placeholders": {
+            "title": {}
+        }
+    },
+    "permanentlyDeletedEntrySnackBar": "Item permanent verwijderd.",
+    "@permanentlyDeletedEntrySnackBar": {
+        "description": "snackbar confirming that the entry was deleted."
+    },
     "initialNewGroupName": "Nieuwe groep",
     "@initialNewGroupName": {
         "description": "initial name of groups when user creates a new one."
@@ -1054,16 +1065,580 @@
     "@resetValue": {
         "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
     },
+    "cloudStorageAppBarTitle": "Cloudopslag - {cloudStorageName}",
+    "@cloudStorageAppBarTitle": {
+        "description": "app bar title for opening/saving to cloud storage.",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageLogInCaption": "U wordt omgeleid naar AuthPass authenticeren om toegang te krijgen tot uw gegevens.",
+    "@cloudStorageLogInCaption": {
+        "description": ""
+    },
+    "cloudStorageLogInCode": "Voer code in",
+    "@cloudStorageLogInCode": {
+        "description": "for oauth authentication user has to enter auth code - this is the label for the text field."
+    },
+    "launchUrlError": "Kan URL niet starten. Bezoek {url}",
+    "@launchUrlError": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "cloudStorageLogInActionLabel": "Inloggen op {cloudStorageName}",
+    "@cloudStorageLogInActionLabel": {
+        "description": "when the user has not authenticated yet, he will see this button to start the login flow of a cloud storage backend.",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageAuthCodeDialogTitle": "{cloudStorageName} authenticatie",
+    "@cloudStorageAuthCodeDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageAuthCodeLabel": "Authenticatie code",
+    "@cloudStorageAuthCodeLabel": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorTitle": "Fout tijdens authenticatie",
+    "@cloudStorageAuthErrorTitle": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorMessage": "Fout bij het authenticeren van {cloudStorageName}: {errorMessage}",
+    "@cloudStorageAuthErrorMessage": {
+        "description": "",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            },
+            "errorMessage": {}
+        }
+    },
+    "cloudStorageSearchBoxLabel": "Zoekopdracht",
+    "@cloudStorageSearchBoxLabel": {
+        "description": ""
+    },
+    "cloudStorageItemsInFolder": "{itemCount} items in deze map.",
+    "@cloudStorageItemsInFolder": {
+        "description": "",
+        "placeholders": {
+            "itemCount": {}
+        }
+    },
+    "mailSubject": "Onderwerp",
+    "@mailSubject": {
+        "description": ""
+    },
+    "mailFrom": "Van",
+    "@mailFrom": {
+        "description": ""
+    },
+    "mailDate": "Datum",
+    "@mailDate": {
+        "description": ""
+    },
+    "mailMailbox": "Postvak",
+    "@mailMailbox": {
+        "description": ""
+    },
+    "mailNoData": "Geen gegevens",
+    "@mailNoData": {
+        "description": "Message shown when email text body is empty (or can't be decoded)"
+    },
+    "mailMailboxesTitle": "Postvakken",
+    "@mailMailboxesTitle": {
+        "description": "Title of the screen showing all available mailboxes."
+    },
+    "mailboxCreateButtonLabel": "Maken",
+    "@mailboxCreateButtonLabel": {
+        "description": "FAB label to create a new mailbox."
+    },
+    "mailboxNameInputDialogTitle": "Optioneel labelen voor nieuw postvak",
+    "@mailboxNameInputDialogTitle": {
+        "description": "title of the dialog asking for a mailbox label/name"
+    },
+    "mailboxNameInputLabel": "(intern) label",
+    "@mailboxNameInputLabel": {
+        "description": "Label for the text field asking for a label for a mailbox, while creating it."
+    },
+    "mailScreenTitle": "AuthPass mail",
+    "@mailScreenTitle": {
+        "description": "title for the screen showing available emails"
+    },
+    "mailTabBarTitleMailbox": "Postvak",
+    "@mailTabBarTitleMailbox": {
+        "description": "title for the tab showing list of mailboxes."
+    },
+    "mailTabBarTitleMail": "E-mail",
+    "@mailTabBarTitleMail": {
+        "description": "title for the tab showing list of mails."
+    },
+    "mailMailboxListEmpty": "Je hebt nog geen postvakken.",
+    "@mailMailboxListEmpty": {
+        "description": ""
+    },
+    "mailMailboxAddressCopied": "Postvak adres gekopieerd naar het klembord: {mailboxAddress}",
+    "@mailMailboxAddressCopied": {
+        "description": "Success message when mailbox email address was copied to clipboard.",
+        "placeholders": {
+            "mailboxAddress": {
+                "example": "dkasdfiasdfi@mail.authpass.app"
+            }
+        }
+    },
+    "errorWhileSavingTitle": "Fout bij opslaan",
+    "@errorWhileSavingTitle": {
+        "description": "title for error dialog shown when an error occurs while saving"
+    },
+    "errorWhileSavingBody": "Kan bestand niet opslaan: {errorMessage}",
+    "@errorWhileSavingBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "databaseDoesNotSupportSaving": "Sorry, deze database ondersteunt geen opslaan. Open een lokaal databasebestand. Of gebruik \"Opslaan als\".",
+    "@databaseDoesNotSupportSaving": {
+        "description": "keepass files loaded through a URL can't be saved."
+    },
+    "otpInvalidKeyTitle": "Ongeldige sleutel",
+    "@otpInvalidKeyTitle": {
+        "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
+    },
+    "otpInvalidKeyBody": "De gegeven invoer is geen geldige base32 TOTP-code. Controleer je invoer.",
+    "@otpInvalidKeyBody": {
+        "description": ""
+    },
+    "otpPromptTitle": "Authenticatie op basis van tijd",
+    "@otpPromptTitle": {
+        "description": ""
+    },
+    "otpPromptHelperText": "Voer de op tijd gebaseerde sleutel in.",
+    "@otpPromptHelperText": {
+        "description": ""
+    },
+    "otpErrorMessageGeneration": "Fout bij genereren uitnodigingscode: {errorMessage}",
+    "@otpErrorMessageGeneration": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "otpCopySecretActionLabel": "Kopieer Secret",
+    "@otpCopySecretActionLabel": {
+        "description": ""
+    },
+    "otpEntryLabel": "Eenmalige token",
+    "@otpEntryLabel": {
+        "description": "The label for entries which show a one time token for a TOTP"
+    },
+    "entryFieldProtected": "Beschermd veld. Klik om te tonen.",
+    "@entryFieldProtected": {
+        "description": ""
+    },
+    "entryFieldActionRevealField": "Toon beschermd veld",
+    "@entryFieldActionRevealField": {
+        "description": ""
+    },
+    "entryAttachmentOpenActionLabel": "Open",
+    "@entryAttachmentOpenActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareActionLabel": "Delen",
+    "@entryAttachmentShareActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareSubject": "Bijlage",
+    "@entryAttachmentShareSubject": {
+        "description": "the 'subject' passed to the system when sharing an attachment. "
+    },
+    "entryAttachmentSaveActionLabel": "Opslaan op apparaat",
+    "@entryAttachmentSaveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveActionLabel": "Verwijderen",
+    "@entryAttachmentRemoveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveConfirm": "Weet je zeker dat je {attachmentLabel} wilt verwijderen?",
+    "@entryAttachmentRemoveConfirm": {
+        "description": "",
+        "placeholders": {
+            "attachmentLabel": {}
+        }
+    },
+    "entryRenameFieldPromptTitle": "Veld hernoemen",
+    "@entryRenameFieldPromptTitle": {
+        "description": ""
+    },
+    "entryRenameFieldPromptLabel": "Voer de nieuwe naam voor het veld in",
+    "@entryRenameFieldPromptLabel": {
+        "description": ""
+    },
+    "promptDialogPasteActionTooltip": "Plakken vanaf klembord",
+    "@promptDialogPasteActionTooltip": {
+        "description": ""
+    },
+    "promptDialogPasteHint": "Tip: Als je wilt plakken, probeer dan de knop links ;-)",
+    "@promptDialogPasteHint": {
+        "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
+    },
+    "genericErrorDialogTitle": "Fout bij het afhandelen actie",
+    "@genericErrorDialogTitle": {
+        "description": ""
+    },
+    "genericErrorDialogBody": "Onverwachte fout opgetreden. {errorMessage}",
+    "@genericErrorDialogBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "saveAsEntryLocalFile": "Lokaal bestand",
+    "@saveAsEntryLocalFile": {
+        "description": "menu entry in the 'save as' dialog for saving as local file."
+    },
+    "fileTypePngs": "Afbeeldingen (png)",
+    "@fileTypePngs": {
+        "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
+    },
+    "selectIconDialogAction": "SELECTEER ICON",
+    "@selectIconDialogAction": {
+        "description": ""
+    },
+    "retryDialogActionLabel": "OPNIEUW",
+    "@retryDialogActionLabel": {
+        "description": ""
+    },
+    "errorDuringNetworkCall": "Fout tijdens Api oproep. {errorMessage}",
+    "@errorDuringNetworkCall": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "passwordFilterHideDeleted": "Verwijderde items verbergen",
+    "@passwordFilterHideDeleted": {
+        "description": "filter name to show only password entries which are not deleted"
+    },
+    "passwordFilterOnlyDeleted": "Verwijderde items",
+    "@passwordFilterOnlyDeleted": {
+        "description": "filter name to show only deleted password entries"
+    },
+    "passwordFilterPrefixForOneGroup": "Groep: {groupName}",
+    "@passwordFilterPrefixForOneGroup": {
+        "description": "The label for a password filter for one specific group",
+        "placeholders": {
+            "groupName": {}
+        }
+    },
+    "passwordFilterPrefixForMultipleGroups": "Aangepast filter ({groupCount} groepen)",
+    "@passwordFilterPrefixForMultipleGroups": {
+        "description": "The label for a password filter for multiple groups",
+        "placeholders": {
+            "groupCount": {}
+        }
+    },
+    "menuItemAuthPassCloudAuthenticate": "Authenticeer met AuthPass Cloud",
+    "@menuItemAuthPassCloudAuthenticate": {
+        "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
+    },
+    "menuItemAuthPassCloudMailboxes": "Authass postbussen",
+    "@menuItemAuthPassCloudMailboxes": {
+        "description": ""
+    },
+    "changesWithoutSaving": "Je hebt wijzigingen in \"{fileName}\", die geen ondersteuning heeft voor het schrijven van wijzigingen.",
+    "@changesWithoutSaving": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "changesSaveLocally": "Bewaar lokaal",
+    "@changesSaveLocally": {
+        "description": ""
+    },
+    "clearColor": "Kleur verwijderen",
+    "@clearColor": {
+        "description": "Action to remove a selected color and reset to default."
+    },
+    "databaseRenameInputLabel": "Voer databasenaam in",
+    "@databaseRenameInputLabel": {
+        "description": ""
+    },
+    "databasePath": "Pad",
+    "@databasePath": {
+        "description": ""
+    },
+    "databaseColor": "Kleur",
+    "@databaseColor": {
+        "description": ""
+    },
+    "databaseColorChoose": "Selecteer een kleur om onderscheid te maken tussen bestanden.",
+    "@databaseColorChoose": {
+        "description": ""
+    },
+    "databaseKdbxVersion": "KDBX Bestandsversie",
+    "@databaseKdbxVersion": {
+        "description": ""
+    },
+    "databaseKdbxUpgradeVersion": "Upgrade naar {versionName}",
+    "@databaseKdbxUpgradeVersion": {
+        "description": "",
+        "placeholders": {
+            "versionName": {}
+        }
+    },
+    "databaseKdbxUpgradeSuccessful": "Bestand succesvol bijgewerkt en opgeslagen.",
+    "@databaseKdbxUpgradeSuccessful": {
+        "description": ""
+    },
+    "databaseReload": "Herladen en samenvoegen",
+    "@databaseReload": {
+        "description": ""
+    },
+    "progressStatus": "Status: {statusProgress}",
+    "@progressStatus": {
+        "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
+        "placeholders": {
+            "statusProgress": {}
+        }
+    },
+    "finishedMerge": "Samenvoegen {status} gelukt",
+    "@finishedMerge": {
+        "description": "",
+        "placeholders": {
+            "status": {}
+        }
+    },
+    "closeAndLockFile": "Sluiten/Vergrendelen",
+    "@closeAndLockFile": {
+        "description": ""
+    },
+    "authPassHomeScreenTagline": "wachtwoordmanager, open source, beschikbaar op alle platformen.",
+    "@authPassHomeScreenTagline": {
+        "description": ""
+    },
+    "addNewPasswordButtonLabel": "Nieuw wachtwoord toevoegen",
+    "@addNewPasswordButtonLabel": {
+        "description": ""
+    },
+    "unnamedEntryPlaceholder": "(naamloos)",
+    "@unnamedEntryPlaceholder": {
+        "description": "displayed instead of entry label, if entry has no name or it is blank."
+    },
+    "unnamedGroupPlaceholder": "(naamloos)",
+    "@unnamedGroupPlaceholder": {
+        "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
+    },
+    "unnamedFilePlaceholder": "(naamloos)",
+    "@unnamedFilePlaceholder": {
+        "description": ""
+    },
+    "editGroupScreenTitle": "Groep bewerken",
+    "@editGroupScreenTitle": {
+        "description": ""
+    },
+    "editGroupGroupNameLabel": "Groep Naam",
+    "@editGroupGroupNameLabel": {
+        "description": ""
+    },
+    "files": "Bestanden",
+    "@files": {
+        "description": ""
+    },
     "newGroupDialogTitle": "Nieuwe groep",
     "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "newGroupDialogInputLabel": "Naam voor de nieuwe groep",
+    "@newGroupDialogInputLabel": {
+        "description": ""
+    },
+    "groupActionShowPasswords": "Wachtwoord weergeven",
+    "@groupActionShowPasswords": {
         "description": ""
     },
     "groupActionDelete": "Verwijderen",
     "@groupActionDelete": {
         "description": ""
     },
+    "logoutTooltip": "Uitloggen",
+    "@logoutTooltip": {
+        "description": "Tooltip for logging out of a cloud storage provider."
+    },
+    "successfullyDeletedFileCloudStorage": "Bestand succesvol verwijderd.",
+    "@successfullyDeletedFileCloudStorage": {
+        "description": "deleted file from cloud storage."
+    },
+    "shareDialogTitle": "Opties voor delen {fileName}",
+    "@shareDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "shareFileActionLabel": "Delen …",
+    "@shareFileActionLabel": {
+        "description": ""
+    },
+    "shareTokenListEmptyScreenPlaceholder": "Bestand nog niet gedeeld.",
+    "@shareTokenListEmptyScreenPlaceholder": {
+        "description": ""
+    },
+    "shareTokenNoLabel": "Geen label/omschrijving",
+    "@shareTokenNoLabel": {
+        "description": "User did not specify a description for a given share code."
+    },
+    "shareTokenReadWrite": "Lezen/schrijven",
+    "@shareTokenReadWrite": {
+        "description": "Share Code allows reading and writing"
+    },
+    "shareTokenReadOnly": "Alleen lezen",
+    "@shareTokenReadOnly": {
+        "description": "Share code only allows reading."
+    },
+    "shareCreateTokenDialogTitle": "Bestand delen",
+    "@shareCreateTokenDialogTitle": {
+        "description": ""
+    },
+    "shareCreateTokenReadOnly": "Alleen lezen",
+    "@shareCreateTokenReadOnly": {
+        "description": "switch between read only and read/write"
+    },
+    "shareCreateTokenReadOnlyHelpText": "Opslaan van wijzigingen niet toestaan",
+    "@shareCreateTokenReadOnlyHelpText": {
+        "description": "help text for the switch between read only and read/write"
+    },
+    "shareCreateTokenLabelText": "Omschrijving",
+    "@shareCreateTokenLabelText": {
+        "description": "Allows users to add a description/label to a share code."
+    },
+    "shareCreateTokenLabelHint": "Deel met mijn vriend",
+    "@shareCreateTokenLabelHint": {
+        "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+    },
+    "shareCreateTokenLabelHelp": "Optioneel label om de deelcode te differentiëren.",
+    "@shareCreateTokenLabelHelp": {
+        "description": ""
+    },
+    "shareCreateTokenSuccess": "Deelcode succesvol aangemaakt.",
+    "@shareCreateTokenSuccess": {
+        "description": "snackbar when share code was created successfully."
+    },
+    "sharePresentDialogTitle": "Deel bestand met geheime deelcode",
+    "@sharePresentDialogTitle": {
+        "description": ""
+    },
+    "sharePresentDialogHelp": "Met de volgende deelcode hebben gebruikers toegang tot het wachtwoord bestand. Ze hebben het wachtwoord en/of sleutelbestand nodig om het te openen.",
+    "@sharePresentDialogHelp": {
+        "description": ""
+    },
+    "sharePresentToken": "Deelcode",
+    "@sharePresentToken": {
+        "description": ""
+    },
+    "sharePresentCopied": "Deelcode gekopieerd naar klembord.",
+    "@sharePresentCopied": {
+        "description": ""
+    },
+    "authPassCloudOpenWithShareCodeTooltip": "Openen met deelcode",
+    "@authPassCloudOpenWithShareCodeTooltip": {
+        "description": "Allows users to open cloud files using a share code/token."
+    },
+    "authPassCloudShareFileActionLabel": "Delen",
+    "@authPassCloudShareFileActionLabel": {
+        "description": ""
+    },
+    "shareCodeInputDialogTitle": "Geheime deelcode invoeren",
+    "@shareCodeInputDialogTitle": {
+        "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+    },
+    "shareCodeInputDialogScan": "Scan QR Code",
+    "@shareCodeInputDialogScan": {
+        "description": "button label for triggering QR code scanner"
+    },
+    "shareCodeInputLabel": "Geheime deelcode",
+    "@shareCodeInputLabel": {
+        "description": ""
+    },
+    "shareCodeInputHelperText": "Als je een deelcode hebt ontvangen, plak deze dan hierboven.",
+    "@shareCodeInputHelperText": {
+        "description": ""
+    },
+    "shareCodeOpen": "Een deelcode ontvangen voor AuthPass Cloud?",
+    "@shareCodeOpen": {
+        "description": ""
+    },
+    "shareCodeOpenScreenTitle": "Bestand met deelcode laden",
+    "@shareCodeOpenScreenTitle": {
+        "description": ""
+    },
     "shareCodeLoadingProgress": "Bestand laden …",
     "@shareCodeLoadingProgress": {
+        "description": ""
+    },
+    "shareCodeOpenFileButtonLabel": "OPEN",
+    "@shareCodeOpenFileButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppCaption": "Wil je dit bestand in plaats daarvan openen met een van onze native Apps?",
+    "@shareCodeOpenInstallAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenAnotherAppCaption": "Wil je dit bestand op een ander apparaat openen?",
+    "@shareCodeOpenAnotherAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppButtonLabel": "App installeren",
+    "@shareCodeOpenInstallAppButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenShowCodeButtonLabel": "Toon deelcode",
+    "@shareCodeOpenShowCodeButtonLabel": {
+        "description": ""
+    },
+    "changeMasterPasswordActionLabel": "Hoofdwachtwoord wijzigen",
+    "@changeMasterPasswordActionLabel": {
+        "description": "label for the button to show the dialog for changing master password."
+    },
+    "changeMasterPasswordFormSubmit": "Opslaan met nieuw wachtwoord",
+    "@changeMasterPasswordFormSubmit": {
+        "description": ""
+    },
+    "changeMasterPasswordSuccess": "Hoofdwachtwoord succesvol opgeslagen.",
+    "@changeMasterPasswordSuccess": {
+        "description": ""
+    },
+    "changeMasterPasswordScreenTitle": "Hoofdwachtwoord wijzigen",
+    "@changeMasterPasswordScreenTitle": {
+        "description": "app bar title for change password screen."
+    },
+    "shortcutCopyUsername": "Gebruikersnaam kopiëren",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Wachtwoord kopiëren",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Wachtwoord genereren",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "Open URL",
+    "@shortcutOpenUrl": {
         "description": ""
     },
     "unexpectedError": "Onverwachte fout: {error}",

@@ -16,6 +16,70 @@
     "@english": {
         "description": "language switcher subtitle"
     },
+    "german": "Немецкий",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Русский",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Украинский",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Литовский",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Французский",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Испанский",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "Индонезийский",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "Турецкий",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Иврит",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "итальянский",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Китайский упрощённый",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "Китайский традиционный",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Португальский, бразильский",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "Словацкий",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
+    "dutch": "Голландский",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Выбрать",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - выберите KeePass файл",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -23,6 +87,10 @@
     "selectKeepassFileLabel": "Выберите файл KeePass (.kdbx).",
     "@selectKeepassFileLabel": {
         "context": "select file screen, used as label."
+    },
+    "createNewFile": "Создать новый файл",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
     },
     "openLocalFile": "Открыть\nлокальный файл",
     "@openLocalFile": {
@@ -32,6 +100,29 @@
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
     },
+    "loadFromDropdownMenu": "Загрузить из …",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Быстрая разблокировка файлов…",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "Открывается {fileName}… ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
+    },
     "loadFrom": "Загрузить из {cloudStorageName}",
     "@loadFrom": {
         "placeholders": {
@@ -40,6 +131,10 @@
                 "example": "Dropbox"
             }
         }
+    },
+    "loadFromRemoteUrl": "Открыть kdbx из URL-адреса",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
     },
     "createNewKeepass": "Впервые в KeePass?\nСоздать новую базу данных паролей",
     "@createNewKeepass": {
@@ -73,6 +168,18 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Включить автозаполнение",
     "@preferenceEnableAutoFill": {},
+    "enableAutofillSuggestionBanner": "Вы можете заполнить поле другого приложения, включив автозаполнение!",
+    "@enableAutofillSuggestionBanner": {
+        "description": "This text will shown as a banner on top of password list"
+    },
+    "dismissAutofillSuggestionBannerButton": "ОТКЛЮЧИТЬ",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
+    "enableAutofillSuggestionBannerButton": "Включить!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+    },
     "preferenceAutoFillDescription": "Поддерживается с Android Oreo (8.0) или более поздней версии.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Настройки",
@@ -86,11 +193,42 @@
     "aboutLinkGitHub": "И исходный код проекта",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "Файл журнала: {logFilePath}",
+    "aboutLinkContributors": "Показать участников",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
                 "type": "String",
                 "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
+    "unableToLaunchUrlTitle": "Не удается открыть Url",
+    "@unableToLaunchUrlTitle": {
+        "description": ""
+    },
+    "unableToLaunchUrlDescription": "Не удалось запустить {url}: {openError}",
+    "@unableToLaunchUrlDescription": {
+        "description": "",
+        "placeholders": {
+            "url": {
+                "description": "URL which we tried to open."
+            },
+            "openError": {
+                "description": "Information about the error"
+            }
+        }
+    },
+    "unableToLaunchUrlNoHandler": "Нет доступных приложений для url.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "Открытый URL: {url}",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
             }
         }
     },
@@ -102,12 +240,24 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Проверить обновления",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Отправить журнал",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Отправлять журналы по электронной почте",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Форум поддержки",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "Сообщить о проблемах и получить помощь",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "Помощь",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Показать документацию",
     "@menuItemHelpSubtitle": {},
     "menuItemAbout": "О программе",
     "@menuItemAbout": {},
+    "actionOpenUrl": "Открыть URL-адрес",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
     "passwordPlainText": "Показать пароль",
     "@passwordPlainText": {
         "description": "Master password input: show password as plain text during input. (shown as tooltip)"
@@ -169,17 +319,1309 @@
             }
         }
     },
+    "savedFiles": "{numFiles, plural,=1 {Сохранён один файл: {files}} other {{numFiles} файлов сохранено: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
+    "manageGroups": "Управление группами",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Заблокировать файлы",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Поиск",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "Поиск",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
+    "filterButtonLabel": "Фильтр по группе",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
+    "clear": "Очистить",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Фильтр:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Выберите пароль для автозаполнения.",
+    "@autofillPrompt": {
+        "description": ""
+    },
     "copiedToClipboard": "Скопировано в буфер обмена.",
     "@copiedToClipboard": {
         "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(без заголовка)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(без имени пользователя)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Настройка …",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Копировать пароль",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Копировать имя пользователя",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "copyUsernameNotExists": "Имя пользователя не определено.",
+    "@copyUsernameNotExists": {
+        "description": "Error message when trying to copy username from an entry which has none."
+    },
+    "copyPasswordNotExists": "Пароль не определен.",
+    "@copyPasswordNotExists": {
+        "description": "Error message when trying to copy password from an entry which has none."
+    },
+    "doneCopiedPassword": "Пароль скопирован в буфер обмена.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Имя пользователя скопировано в буфер обмена.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "doneCopiedField": "Скопировано.",
+    "@doneCopiedField": {
+        "description": ""
+    },
+    "copiedFieldToClipboard": "{fieldName} скопировано.",
+    "@copiedFieldToClipboard": {
+        "description": "",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "copiedFieldEmpty": "{fieldName} пустое.",
+    "@copiedFieldEmpty": {
+        "description": "Displayed when user wants to copy a field which is empty or not defined.",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "emptyPasswordVaultPlaceholder": "У Вас ещё нет паролей в вашей базе данных.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Создайте ваш первый Пароль",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loading": "Загрузка",
+    "@loading": {
+        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
+    },
+    "loadingFile": "Загрузка файла …",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "Локальный файл",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "База данных ранее созданная с AuthPass",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Выбор Файла",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Откройте файл с устройства.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialLabel": "Введите пароль для:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
     },
     "masterPasswordInputLabel": "Пароль",
     "@masterPasswordInputLabel": {
         "description": "",
         "context": "credential screen"
     },
+    "masterPasswordEmptyValidator": "Пожалуйста, введите Ваш пароль.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Неверный пароль",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Использовать файл Ключа",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Сохранить пароль с биометрической разблокировкой?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "close": "Закрыть",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Добавить Новый Пароль",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
+    "errorOpenFileInvalidFileStructureTitle": "Попытка открыть файл неверного типа",
+    "@errorOpenFileInvalidFileStructureTitle": {
+        "description": "Title of error dialog when trying to open an invalid/unsupported file type"
+    },
+    "errorOpenFileInvalidFileStructureBody": "Кажется, файл ({fileName}) не является валидным файлом KDBX. Пожалуйста, выберите валидный файл KDBX, или создайте новую базу данных паролей.",
+    "@errorOpenFileInvalidFileStructureBody": {
+        "description": "Body of error dialog when trying to open an invalid/unsupported file type",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "errorOpenFileAlreadyOpenTitle": "Файл уже открыт",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "Выбранная база данных {databaseName} уже открыта через {openFileSource} (Была попытка открыть её через {newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
+    "loadFromUrl": "Скачать через URL",
+    "@loadFromUrl": {
+        "description": ""
+    },
+    "loadFromUrlEnterUrl": "Введите URL",
+    "@loadFromUrlEnterUrl": {
+        "description": "label for input box to enter url."
+    },
+    "loadFromUrlErrorEnterFullUrl": "Пожалуйста, введиье полный url начинающийся с http:// или http://",
+    "@loadFromUrlErrorEnterFullUrl": {
+        "description": "validator error message when user does not enter a absolute url."
+    },
+    "loadFromUrlErrorInvalidUrl": "Пожалуйста, введите правильный url.",
+    "@loadFromUrlErrorInvalidUrl": {
+        "description": "validator error message hwen user enters a url which could not be parsed."
+    },
+    "linuxAppArmorWarning": "AuthPass нужны разрешения для взаимодействия с Сервисом Паролей для сохранения учётных данных для облачных хранилищ.\nПожалуйста, введите следующую комманду:",
+    "@linuxAppArmorWarning": {
+        "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
+    },
+    "cancel": "Отмена",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
+    "errorLoadFileFromSourceTitle": "Ошибка во время открытия файла.",
+    "@errorLoadFileFromSourceTitle": {
+        "description": "error title when user selects a file which can't be downloaded."
+    },
+    "errorLoadFileFromSourceBody": "Не удалось открыть {source}.\n{error}",
+    "@errorLoadFileFromSourceBody": {
+        "description": "error body when user selects a file which can't be downloaded.",
+        "placeholders": {
+            "source": {},
+            "error": {}
+        }
+    },
+    "errorUnlockFileTitle": "Не удается открыть файл",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Неизвестная ошибка при попытке открыть файл. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Продолжить",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Отправить отчет об ошибке",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "Сообщить об ошибке на форум/справка",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
+    },
+    "groupFilterDescription": "Выберите, какие группы показывать (рекурсивно)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Выбрать все",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "groupFilterDeselectAll": "Отменить выбор",
+    "@groupFilterDeselectAll": {
+        "context": "group filter"
+    },
+    "createSubgroup": "Создать подгруппу",
+    "@createSubgroup": {
+        "description": "menu action: create nested group inside another group"
+    },
+    "editAction": "Редактирование",
+    "@editAction": {
+        "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "mailboxEnableLabel": "(повторно) включить",
+    "@mailboxEnableLabel": {
+        "description": ""
+    },
+    "mailboxEnableHint": "Продолжить получение писем",
+    "@mailboxEnableHint": {
+        "description": ""
+    },
+    "mailboxDisableLabel": "Отключить",
+    "@mailboxDisableLabel": {
+        "description": ""
+    },
+    "mailboxDisableHint": "Больше не получать электронные письма",
+    "@mailboxDisableHint": {
+        "description": ""
+    },
+    "mailListNoMail": "У вас пока нет ни одного письма.",
+    "@mailListNoMail": {
+        "description": ""
+    },
+    "mailboxLabelPrefixForEntry": "Вход: {entryLabel}",
+    "@mailboxLabelPrefixForEntry": {
+        "description": "when a mailbox was created for a (password) entry.",
+        "placeholders": {
+            "entryLabel": {
+                "description": "The label of the entry this mailbox was created for"
+            }
+        }
+    },
+    "mailboxLabelPrefixUnknownEntry": "Неизвестная запись: {entryUuid}",
+    "@mailboxLabelPrefixUnknownEntry": {
+        "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
+        "placeholders": {
+            "entryUuid": {
+                "description": "The internal id of the entry which was no tfound"
+            }
+        }
+    },
+    "mailboxLabelPrefixCreatedAt": "Создано: {dateTime}",
+    "@mailboxLabelPrefixCreatedAt": {
+        "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
+        "placeholders": {
+            "dateTime": {}
+        }
+    },
+    "masterPasswordDescription": "Мастер-пароль используется для безопасного шифрования базы данных паролей. Обязательно запомните его, восстановить его будет невозможно.",
+    "@masterPasswordDescription": {
+        "description": ""
+    },
+    "unsavedChangesWarningTitle": "Несохраненные изменения",
+    "@unsavedChangesWarningTitle": {
+        "description": ""
+    },
+    "unsavedChangesWarningBody": "Все еще есть несохраненные изменения. Вы хотите отменить изменения?",
+    "@unsavedChangesWarningBody": {
+        "description": ""
+    },
+    "unsavedChangesDiscardActionLabel": "Отменить изменения",
+    "@unsavedChangesDiscardActionLabel": {
+        "description": ""
+    },
+    "deletePermanentlyAction": "Удалить навсегда",
+    "@deletePermanentlyAction": {
+        "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
+    },
+    "restoreFromRecycleBinAction": "Восстановить",
+    "@restoreFromRecycleBinAction": {
+        "description": "menu action: restore an entry/group which was moved into the recycle bin."
+    },
+    "deleteAction": "Удалить",
+    "@deleteAction": {
+        "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "deletedEntry": "Запись удалена.",
+    "@deletedEntry": {
+        "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
+    },
+    "successfullyDeletedGroup": "Группа удалена.",
+    "@successfullyDeletedGroup": {
+        "description": "snackbar after deleting a group."
+    },
+    "undoButtonLabel": "Отменить",
+    "@undoButtonLabel": {
+        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+    },
+    "saveButtonLabel": "Сохранить",
+    "@saveButtonLabel": {
+        "description": "save file, for example button displayed in entry details"
+    },
+    "webDavSettings": "Настройки WebDAV",
+    "@webDavSettings": {
+        "description": "dialog title for entering WebDAV settings."
+    },
+    "webDavUrlValidatorError": "Пожалуйста, введите URL",
+    "@webDavUrlValidatorError": {
+        "description": ""
+    },
+    "webDavUrlValidatorInvalidUrlError": "Пожалуйста, введите правильный url с http:// или https://",
+    "@webDavUrlValidatorInvalidUrlError": {
+        "description": ""
+    },
+    "webDavAuthUser": "Имя пользователя",
+    "@webDavAuthUser": {
+        "description": ""
+    },
     "webDavAuthPassword": "Пароль",
     "@webDavAuthPassword": {
+        "description": ""
+    },
+    "mergeSuccessDialogTitle": "База данных паролей успешно объединена",
+    "@mergeSuccessDialogTitle": {
+        "description": ""
+    },
+    "mergeSuccessDialogMessage": "Конфликт при сохранении {fileName}, он был успешно объединён с удаленным файлом: \n\n{mergeSummary}",
+    "@mergeSuccessDialogMessage": {
+        "description": "",
+        "placeholders": {
+            "fileName": {},
+            "mergeSummary": {}
+        }
+    },
+    "forDetailsVisitUrl": "Для получения подробной информации посетите {url}",
+    "@forDetailsVisitUrl": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "authPassCloudAuthEmailInputLabel": "Введите адрес электронной почты для регистрации или входа.",
+    "@authPassCloudAuthEmailInputLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthEmailInvalid": "Пожалуйста, введите правильный адрес электронной почты.",
+    "@authPassCloudAuthEmailInvalid": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailButtonLabel": "Подтвердите адрес",
+    "@authPassCloudAuthConfirmEmailButtonLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmail": "Пожалуйста, проверьте вашу электронную почту, чтобы подтвердить ваш адрес электронной почты.",
+    "@authPassCloudAuthConfirmEmail": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailExplain": "Держите этот экран открытым, пока вы не перешли по ссылке, которую вы получили по электронной почте.",
+    "@authPassCloudAuthConfirmEmailExplain": {
+        "description": ""
+    },
+    "authPassCloudAuthResendExplain": "Если вы не получили электронное письмо, пожалуйста, проверьте папку со спамом. В противном случае вы можете попробовать запросить новую ссылку для подтверждения.",
+    "@authPassCloudAuthResendExplain": {
+        "description": ""
+    },
+    "authPassCloudAuthResendButtonLabel": "Запросить новую ссылку для подтверждения",
+    "@authPassCloudAuthResendButtonLabel": {
+        "description": ""
+    },
+    "permanentlyDeleteEntryConfirm": "Это навсегда удалит запись с паролем {title}. Это действие не может быть отменено. Вы хотите продолжить?",
+    "@permanentlyDeleteEntryConfirm": {
+        "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
+        "placeholders": {
+            "title": {}
+        }
+    },
+    "permanentlyDeletedEntrySnackBar": "Запись окончательно удалена.",
+    "@permanentlyDeletedEntrySnackBar": {
+        "description": "snackbar confirming that the entry was deleted."
+    },
+    "initialNewGroupName": "Новая группа",
+    "@initialNewGroupName": {
+        "description": "initial name of groups when user creates a new one."
+    },
+    "deleteGroupErrorTitle": "Не удается удалить группу",
+    "@deleteGroupErrorTitle": {
+        "description": "Title of error dialog when group could not be deleted."
+    },
+    "deleteGroupErrorBodyContainsGroup": "Эта группа все еще содержит другие группы. Вы можете удалить только пустые группы.",
+    "@deleteGroupErrorBodyContainsGroup": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "deleteGroupErrorBodyContainsEntries": "Эта группа по-прежнему содержит записи с паролем. Вы можете удалить только пустые группы.",
+    "@deleteGroupErrorBodyContainsEntries": {
+        "description": "Body of error dialog when a group can't be deleted because it is not empty."
+    },
+    "groupListAppBarTitle": "Группы",
+    "@groupListAppBarTitle": {
+        "description": "title in the app bar for the groups list"
+    },
+    "groupListFilterAppbarTitle": "Фильтр по группам",
+    "@groupListFilterAppbarTitle": {
+        "description": "title in the app bar for group lists when displayed for filtering password list"
+    },
+    "clearQuickUnlock": "Очистить Биометрическое Хранилище",
+    "@clearQuickUnlock": {
+        "description": ""
+    },
+    "clearQuickUnlockSubtitle": "Удалить сохраненные мастер-пароли",
+    "@clearQuickUnlockSubtitle": {
+        "description": ""
+    },
+    "unlock": "Разблокировать базу",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "заблокировать базу",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "Удалены сохраненные мастер-пароли из биометрического хранилища.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "Подпишитесь на Новости о приложении, Опросы.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Время от времени будет отправлять сетевой запрос для получения новостей.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "Автозаполнение: Включить отладку",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Показывает информационные слои для каждого поля ввода",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Создать базу данных паролей",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Имя вашей новой базы данных",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    },
+    "validatorNameMissing": "Пожалуйста, введите имя для вашей новой базы данных.",
+    "@validatorNameMissing": {
+        "description": "Error message when no password database name is given."
+    },
+    "masterPasswordHelpText": "Выберите мастер-пароль. Не забудьте его запомнить.",
+    "@masterPasswordHelpText": {
+        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+    },
+    "inputMasterPasswordText": "Мастер-пароль",
+    "@inputMasterPasswordText": {
+        "description": "Creating new file: input field for master password"
+    },
+    "masterPasswordMissingCreate": "Пожалуйста, введите безопасный, запоминающийся пароль.",
+    "@masterPasswordMissingCreate": {
+        "description": "Text displayed when master password is empty while creating new password database"
+    },
+    "createDatabaseAction": "Создать базу данных",
+    "@createDatabaseAction": {
+        "description": "Label for button to create new database"
+    },
+    "databaseExistsError": "Файл уже существует",
+    "@databaseExistsError": {
+        "description": "dialog title for error message when creating a new database with a name which already exists."
+    },
+    "databaseExistsErrorDescription": "Ошибка во время создания базы данных {filePath}. Файл уже существует. Пожалуйста, выберите другое имя.",
+    "@databaseExistsErrorDescription": {
+        "description": "dialog body for error message when creating a new database with a name which already exists.",
+        "placeholders": {
+            "filePath": {
+                "description": "file path which already existed."
+            }
+        }
+    },
+    "databaseCreateDefaultName": "ЛичныеПароли",
+    "@databaseCreateDefaultName": {
+        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+    },
+    "preferenceDynamicLoadIcons": "Динамически загружать иконки",
+    "@preferenceDynamicLoadIcons": {
+        "description": "preferences: dynamically load website icons"
+    },
+    "preferenceDynamicLoadIconsSubtitle": "Будут посылаться http запросы со значением поля {urlFieldName} для загрузки иконок сайтов.",
+    "@preferenceDynamicLoadIconsSubtitle": {
+        "description": "preferences: dynamically load website icons help text.",
+        "placeholders": {
+            "urlFieldName": {
+                "example": "Website"
+            }
+        }
+    },
+    "passwordScore": "Сила: {score} из 4",
+    "@passwordScore": {
+        "description": "choosing a master password - calculated password strength.",
+        "placeholders": {
+            "score": {
+                "description": "integer of the score.",
+                "example": "3"
+            }
+        }
+    },
+    "entryInfoFile": "Файл:",
+    "@entryInfoFile": {
+        "description": ""
+    },
+    "entryInfoGroup": "Группа:",
+    "@entryInfoGroup": {
+        "description": ""
+    },
+    "entryInfoLastModified": "Последняя дата изменения:",
+    "@entryInfoLastModified": {
+        "description": ""
+    },
+    "movedEntryToGroup": "Перемещена запись в {groupName}",
+    "@movedEntryToGroup": {
+        "description": "",
+        "placeholders": {
+            "groupName": {
+                "description": "Name of the group the entry was moved to."
+            }
+        }
+    },
+    "sizeBytes": "{count} байтов",
+    "@sizeBytes": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
+    "entryAddAttachment": "Добавить вложение",
+    "@entryAddAttachment": {
+        "description": ""
+    },
+    "entryAttachmentSizeWarning": "Вложенные файлы будут встроенны в файл пароля. Это может значительно увеличить время требуемого для открытия/созранения паролей.",
+    "@entryAttachmentSizeWarning": {
+        "description": ""
+    },
+    "iconPngSizeWarning": "Кастомные иконкт будут встроенны в файл пароля. Это может значительно увеличить время требуемое для открытия/сохранения паролей.",
+    "@iconPngSizeWarning": {
+        "description": "Warning shown when user selects a large png file as custom icon."
+    },
+    "notPngError": "Выбранный файл не является PNG.",
+    "@notPngError": {
+        "description": "Error when user selects an unsupported file as custom icon."
+    },
+    "entryAddField": "Добавить запись",
+    "@entryAddField": {
+        "description": ""
+    },
+    "entryCustomField": "Кастомное поле",
+    "@entryCustomField": {
+        "description": ""
+    },
+    "entryCustomFieldTitle": "Добавление нового кастомного поля",
+    "@entryCustomFieldTitle": {
+        "description": ""
+    },
+    "entryCustomFieldInputLabel": "Введите имя поля",
+    "@entryCustomFieldInputLabel": {
+        "description": ""
+    },
+    "swipeCopyField": "Скопировать поле",
+    "@swipeCopyField": {
+        "description": ""
+    },
+    "fieldRename": "Переименовать",
+    "@fieldRename": {
+        "description": ""
+    },
+    "fieldGeneratePassword": "Сгенерировать пароль …",
+    "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "Защитить значение",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "Не защищать значение",
+    "@fieldUnprotect": {
+        "description": ""
+    },
+    "fieldPresent": "Показать",
+    "@fieldPresent": {
+        "description": ""
+    },
+    "fieldGenerateEmail": "Сгенерировать почту",
+    "@fieldGenerateEmail": {
+        "description": ""
+    },
+    "onboardingBackToOnboarding": "Тур",
+    "@onboardingBackToOnboarding": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingBackToOnboardingSubtitle": "Переживите опыт первого запуска 😅️",
+    "@onboardingBackToOnboardingSubtitle": {
+        "description": "Context menu entry which reverts to onboarding"
+    },
+    "onboardingHeadline": "Давайте обезопасим Ваши пароли!",
+    "@onboardingHeadline": {
+        "description": ""
+    },
+    "onboardingQuestion": "Вы использовали менеджер паролей раньше?",
+    "@onboardingQuestion": {
+        "description": ""
+    },
+    "onboardingYesOpenPasswords": "Да, открыть мои пароли",
+    "@onboardingYesOpenPasswords": {
+        "description": ""
+    },
+    "onboardingNoCreate": "Я новичок! Научите меня.",
+    "@onboardingNoCreate": {
+        "description": ""
+    },
+    "backupButton": "СОХРАНИТЬ В ОБЛАКО",
+    "@backupButton": {
+        "description": "Button that is displayed in backup warnings"
+    },
+    "dismissBackupButton": "ОТКЛОНИТЬ",
+    "@dismissBackupButton": {
+        "description": "Button that is displayed in backup warnings to dismiss the warning"
+    },
+    "backupWarningMessage": "Ваши пароли в {databasename} сохранены только локально!",
+    "@backupWarningMessage": {
+        "description": "Warning message that is displayed in backup warnings",
+        "placeholders": {
+            "databasename": {
+                "example": "PasswordDatabase"
+            }
+        }
+    },
+    "saveAs": "Сохранить в...",
+    "@saveAs": {
+        "description": "Save as text"
+    },
+    "saving": "Сохранение",
+    "@saving": {
+        "description": "Saving text"
+    },
+    "increaseValue": "Увеличить",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "Уменьшить",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "Сбросить",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "cloudStorageAppBarTitle": "Облачное Хранилище - {cloudStorageName}",
+    "@cloudStorageAppBarTitle": {
+        "description": "app bar title for opening/saving to cloud storage.",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageLogInCaption": "Вы будете перенаправлены чтобы авторизовать AuthPass для доступа вк вашим данным.",
+    "@cloudStorageLogInCaption": {
+        "description": ""
+    },
+    "cloudStorageLogInCode": "Введите код",
+    "@cloudStorageLogInCode": {
+        "description": "for oauth authentication user has to enter auth code - this is the label for the text field."
+    },
+    "launchUrlError": "Невозможно открыть url. Пожалуйста, откройте {url}",
+    "@launchUrlError": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "cloudStorageLogInActionLabel": "Войдите в {cloudStorageName}",
+    "@cloudStorageLogInActionLabel": {
+        "description": "when the user has not authenticated yet, he will see this button to start the login flow of a cloud storage backend.",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageAuthCodeDialogTitle": "Аутентификация {cloudStorageName}",
+    "@cloudStorageAuthCodeDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageAuthCodeLabel": "Код аутентификации",
+    "@cloudStorageAuthCodeLabel": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorTitle": "Ошибка при аутентификации",
+    "@cloudStorageAuthErrorTitle": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorMessage": "Ошибка при попытке аутентификации в {cloudStorageName}: {errorMessage}",
+    "@cloudStorageAuthErrorMessage": {
+        "description": "",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            },
+            "errorMessage": {}
+        }
+    },
+    "cloudStorageSearchBoxLabel": "Поисковый запрос",
+    "@cloudStorageSearchBoxLabel": {
+        "description": ""
+    },
+    "cloudStorageItemsInFolder": "{itemCount} элементов в этой папке.",
+    "@cloudStorageItemsInFolder": {
+        "description": "",
+        "placeholders": {
+            "itemCount": {}
+        }
+    },
+    "mailSubject": "Тема",
+    "@mailSubject": {
+        "description": ""
+    },
+    "mailFrom": "Из",
+    "@mailFrom": {
+        "description": ""
+    },
+    "mailDate": "Дата",
+    "@mailDate": {
+        "description": ""
+    },
+    "mailMailbox": "Почтовый ящик",
+    "@mailMailbox": {
+        "description": ""
+    },
+    "mailNoData": "Нет данных",
+    "@mailNoData": {
+        "description": "Message shown when email text body is empty (or can't be decoded)"
+    },
+    "mailMailboxesTitle": "Почтовые ящики",
+    "@mailMailboxesTitle": {
+        "description": "Title of the screen showing all available mailboxes."
+    },
+    "mailboxCreateButtonLabel": "Создать",
+    "@mailboxCreateButtonLabel": {
+        "description": "FAB label to create a new mailbox."
+    },
+    "mailboxNameInputDialogTitle": "При необходимости метка для нового почтового ящика",
+    "@mailboxNameInputDialogTitle": {
+        "description": "title of the dialog asking for a mailbox label/name"
+    },
+    "mailboxNameInputLabel": "(внутренняя) Метка",
+    "@mailboxNameInputLabel": {
+        "description": "Label for the text field asking for a label for a mailbox, while creating it."
+    },
+    "mailScreenTitle": "Почта AuthPass",
+    "@mailScreenTitle": {
+        "description": "title for the screen showing available emails"
+    },
+    "mailTabBarTitleMailbox": "Почтовый ящик",
+    "@mailTabBarTitleMailbox": {
+        "description": "title for the tab showing list of mailboxes."
+    },
+    "mailTabBarTitleMail": "Почта",
+    "@mailTabBarTitleMail": {
+        "description": "title for the tab showing list of mails."
+    },
+    "mailMailboxListEmpty": "У вас еще нет почтовых ящиков.",
+    "@mailMailboxListEmpty": {
+        "description": ""
+    },
+    "mailMailboxAddressCopied": "Адрес почтового ящика скопирован в буфер обмена: {mailboxAddress}",
+    "@mailMailboxAddressCopied": {
+        "description": "Success message when mailbox email address was copied to clipboard.",
+        "placeholders": {
+            "mailboxAddress": {
+                "example": "dkasdfiasdfi@mail.authpass.app"
+            }
+        }
+    },
+    "errorWhileSavingTitle": "Ошибка при сохранении",
+    "@errorWhileSavingTitle": {
+        "description": "title for error dialog shown when an error occurs while saving"
+    },
+    "errorWhileSavingBody": "Не удалось сохранить файл: {errorMessage}",
+    "@errorWhileSavingBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "databaseDoesNotSupportSaving": "Извините, эта база данных не поддерживает сохранение. Пожалуйста, откройте локальный файл базы данных. Или используйте \"Сохранить как\".",
+    "@databaseDoesNotSupportSaving": {
+        "description": "keepass files loaded through a URL can't be saved."
+    },
+    "otpInvalidKeyTitle": "Неверный ключ",
+    "@otpInvalidKeyTitle": {
+        "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
+    },
+    "otpInvalidKeyBody": "Данный ввод не является допустимым кодом TOTP base32. Пожалуйста, проверьте введённые данные.",
+    "@otpInvalidKeyBody": {
+        "description": ""
+    },
+    "otpPromptTitle": "Аутентификация на основе времени",
+    "@otpPromptTitle": {
+        "description": ""
+    },
+    "otpPromptHelperText": "Пожалуйста, введите ключ, основанный на времени.",
+    "@otpPromptHelperText": {
+        "description": ""
+    },
+    "otpErrorMessageGeneration": "Ошибка при создании кода приглашения: {errorMessage}",
+    "@otpErrorMessageGeneration": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "otpCopySecretActionLabel": "Копировать секрет",
+    "@otpCopySecretActionLabel": {
+        "description": ""
+    },
+    "otpEntryLabel": "Одноразовый токен",
+    "@otpEntryLabel": {
+        "description": "The label for entries which show a one time token for a TOTP"
+    },
+    "entryFieldProtected": "Защищенное поле. Нажмите, чтобы открыть.",
+    "@entryFieldProtected": {
+        "description": ""
+    },
+    "entryFieldActionRevealField": "Показать защищённое поле",
+    "@entryFieldActionRevealField": {
+        "description": ""
+    },
+    "entryAttachmentOpenActionLabel": "Открыть",
+    "@entryAttachmentOpenActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareActionLabel": "Поделиться",
+    "@entryAttachmentShareActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareSubject": "Вложение",
+    "@entryAttachmentShareSubject": {
+        "description": "the 'subject' passed to the system when sharing an attachment. "
+    },
+    "entryAttachmentSaveActionLabel": "Сохранить на устройство",
+    "@entryAttachmentSaveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveActionLabel": "Удалить",
+    "@entryAttachmentRemoveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveConfirm": "Вы действительно хотите удалить {attachmentLabel}?",
+    "@entryAttachmentRemoveConfirm": {
+        "description": "",
+        "placeholders": {
+            "attachmentLabel": {}
+        }
+    },
+    "entryRenameFieldPromptTitle": "Переименование поля",
+    "@entryRenameFieldPromptTitle": {
+        "description": ""
+    },
+    "removerecentfile": "Скрыть",
+    "@removerecentfile": {
+        "description": ""
+    },
+    "entryRenameFieldPromptLabel": "Введите новое имя для поля",
+    "@entryRenameFieldPromptLabel": {
+        "description": ""
+    },
+    "promptDialogPasteActionTooltip": "Вставить из буфера обмена",
+    "@promptDialogPasteActionTooltip": {
+        "description": ""
+    },
+    "promptDialogPasteHint": "Подсказка: Если вам нужно вставить, попробуйте кнопку слева ;-)",
+    "@promptDialogPasteHint": {
+        "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
+    },
+    "genericErrorDialogTitle": "Ошибка при обработке действия",
+    "@genericErrorDialogTitle": {
+        "description": ""
+    },
+    "genericErrorDialogBody": "Произошла непредвиденная ошибка. {errorMessage}",
+    "@genericErrorDialogBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "saveAsEntryLocalFile": "Локальный файл",
+    "@saveAsEntryLocalFile": {
+        "description": "menu entry in the 'save as' dialog for saving as local file."
+    },
+    "fileTypePngs": "Изображения (png)",
+    "@fileTypePngs": {
+        "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
+    },
+    "selectIconDialogAction": "ВЫБЕРИТЕ ЗНАЧОК",
+    "@selectIconDialogAction": {
+        "description": ""
+    },
+    "retryDialogActionLabel": "Повторить попытку",
+    "@retryDialogActionLabel": {
+        "description": ""
+    },
+    "errorDuringNetworkCall": "Ошибка во время api вызова. {errorMessage}",
+    "@errorDuringNetworkCall": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "passwordFilterHideDeleted": "Скрыть удалённые записи",
+    "@passwordFilterHideDeleted": {
+        "description": "filter name to show only password entries which are not deleted"
+    },
+    "passwordFilterOnlyDeleted": "Удалённые записи",
+    "@passwordFilterOnlyDeleted": {
+        "description": "filter name to show only deleted password entries"
+    },
+    "passwordFilterPrefixForOneGroup": "Группа: {groupName}",
+    "@passwordFilterPrefixForOneGroup": {
+        "description": "The label for a password filter for one specific group",
+        "placeholders": {
+            "groupName": {}
+        }
+    },
+    "passwordFilterPrefixForMultipleGroups": "Кастомный фильтр ({groupCount} групп)",
+    "@passwordFilterPrefixForMultipleGroups": {
+        "description": "The label for a password filter for multiple groups",
+        "placeholders": {
+            "groupCount": {}
+        }
+    },
+    "menuItemAuthPassCloudAuthenticate": "Авторизоваться с AuthPass Cloud",
+    "@menuItemAuthPassCloudAuthenticate": {
+        "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
+    },
+    "menuItemAuthPassCloudMailboxes": "Почтовые ящики AuthPass",
+    "@menuItemAuthPassCloudMailboxes": {
+        "description": ""
+    },
+    "changesWithoutSaving": "У вас есть изменения в \"{fileName}\", которые не поддерживают запись изменений.",
+    "@changesWithoutSaving": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "changesSaveLocally": "Сохранить локально",
+    "@changesSaveLocally": {
+        "description": ""
+    },
+    "clearColor": "Очистить цвет",
+    "@clearColor": {
+        "description": "Action to remove a selected color and reset to default."
+    },
+    "databaseRenameInputLabel": "Введите имя базы данных",
+    "@databaseRenameInputLabel": {
+        "description": ""
+    },
+    "databasePath": "Путь",
+    "@databasePath": {
+        "description": ""
+    },
+    "databaseColor": "Цвет",
+    "@databaseColor": {
+        "description": ""
+    },
+    "databaseColorChoose": "Выберите цвет, чтобы отличать среди файлов.",
+    "@databaseColorChoose": {
+        "description": ""
+    },
+    "databaseKdbxVersion": "Версия файла KDBX",
+    "@databaseKdbxVersion": {
+        "description": ""
+    },
+    "databaseKdbxUpgradeVersion": "Обновите до {versionName}",
+    "@databaseKdbxUpgradeVersion": {
+        "description": "",
+        "placeholders": {
+            "versionName": {}
+        }
+    },
+    "databaseKdbxUpgradeSuccessful": "Файл успешно обновлён и сохранён.",
+    "@databaseKdbxUpgradeSuccessful": {
+        "description": ""
+    },
+    "databaseReload": "Обновить и слить",
+    "@databaseReload": {
+        "description": ""
+    },
+    "progressStatus": "Статус: {statusProgress}",
+    "@progressStatus": {
+        "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
+        "placeholders": {
+            "statusProgress": {}
+        }
+    },
+    "finishedMerge": "Закончено слитие {status}",
+    "@finishedMerge": {
+        "description": "",
+        "placeholders": {
+            "status": {}
+        }
+    },
+    "closeAndLockFile": "Закрыть/заблокровать",
+    "@closeAndLockFile": {
+        "description": ""
+    },
+    "authPassHomeScreenTagline": "менеджер паролей, с открым исходных кодом, доступный на всех платформах.",
+    "@authPassHomeScreenTagline": {
+        "description": ""
+    },
+    "addNewPasswordButtonLabel": "Добавить новый пароль",
+    "@addNewPasswordButtonLabel": {
+        "description": ""
+    },
+    "unnamedEntryPlaceholder": "(Безымянный)",
+    "@unnamedEntryPlaceholder": {
+        "description": "displayed instead of entry label, if entry has no name or it is blank."
+    },
+    "unnamedGroupPlaceholder": "(Безымянный)",
+    "@unnamedGroupPlaceholder": {
+        "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
+    },
+    "unnamedFilePlaceholder": "(Безымянный)",
+    "@unnamedFilePlaceholder": {
+        "description": ""
+    },
+    "editGroupScreenTitle": "Редактировать группу",
+    "@editGroupScreenTitle": {
+        "description": ""
+    },
+    "editGroupGroupNameLabel": "Имя группы",
+    "@editGroupGroupNameLabel": {
+        "description": ""
+    },
+    "files": "Файлы",
+    "@files": {
+        "description": ""
+    },
+    "newGroupDialogTitle": "Новая группа",
+    "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "newGroupDialogInputLabel": "Имя новой группы",
+    "@newGroupDialogInputLabel": {
+        "description": ""
+    },
+    "groupActionShowPasswords": "Показать пароли",
+    "@groupActionShowPasswords": {
+        "description": ""
+    },
+    "groupActionDelete": "Удалить",
+    "@groupActionDelete": {
+        "description": ""
+    },
+    "logoutTooltip": "Выйти",
+    "@logoutTooltip": {
+        "description": "Tooltip for logging out of a cloud storage provider."
+    },
+    "successfullyDeletedFileCloudStorage": "Успешно удалён файл.",
+    "@successfullyDeletedFileCloudStorage": {
+        "description": "deleted file from cloud storage."
+    },
+    "shareDialogTitle": "Опции общего доступа для {fileName}",
+    "@shareDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "shareFileActionLabel": "Поделиться …",
+    "@shareFileActionLabel": {
+        "description": ""
+    },
+    "shareTokenListEmptyScreenPlaceholder": "Вы ещё не поделились файлом.",
+    "@shareTokenListEmptyScreenPlaceholder": {
+        "description": ""
+    },
+    "shareTokenNoLabel": "Нет метки/описания",
+    "@shareTokenNoLabel": {
+        "description": "User did not specify a description for a given share code."
+    },
+    "shareTokenReadWrite": "Чтение/запись",
+    "@shareTokenReadWrite": {
+        "description": "Share Code allows reading and writing"
+    },
+    "shareTokenReadOnly": "Только чтение",
+    "@shareTokenReadOnly": {
+        "description": "Share code only allows reading."
+    },
+    "shareCreateTokenDialogTitle": "Поделиться файлом",
+    "@shareCreateTokenDialogTitle": {
+        "description": ""
+    },
+    "shareCreateTokenReadOnly": "Только чтение",
+    "@shareCreateTokenReadOnly": {
+        "description": "switch between read only and read/write"
+    },
+    "shareCreateTokenReadOnlyHelpText": "Не разрешать сохранение изменений",
+    "@shareCreateTokenReadOnlyHelpText": {
+        "description": "help text for the switch between read only and read/write"
+    },
+    "shareCreateTokenLabelText": "Описание",
+    "@shareCreateTokenLabelText": {
+        "description": "Allows users to add a description/label to a share code."
+    },
+    "shareCreateTokenLabelHint": "Поделиться с моим другом",
+    "@shareCreateTokenLabelHint": {
+        "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+    },
+    "shareCreateTokenLabelHelp": "Не обязательная метка чтобы различать код общего доступа.",
+    "@shareCreateTokenLabelHelp": {
+        "description": ""
+    },
+    "shareCreateTokenSuccess": "Успешно создан код общего доступа.",
+    "@shareCreateTokenSuccess": {
+        "description": "snackbar when share code was created successfully."
+    },
+    "sharePresentDialogTitle": "Поделиться файл с секретным кодом общего доступа",
+    "@sharePresentDialogTitle": {
+        "description": ""
+    },
+    "sharePresentDialogHelp": "Используя этот код общего доступа пользователи могут иметь доступ к файлу паролей. Им нужен будет пароль и/или файл ключа чтобы открыть его.",
+    "@sharePresentDialogHelp": {
+        "description": ""
+    },
+    "authPassCloudShareFileActionLabel": "Поделиться",
+    "@authPassCloudShareFileActionLabel": {
+        "description": ""
+    },
+    "shareCodeInputDialogTitle": "Ввести секретный код",
+    "@shareCodeInputDialogTitle": {
+        "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+    },
+    "shareCodeInputDialogScan": "Сканировать QR-код",
+    "@shareCodeInputDialogScan": {
+        "description": "button label for triggering QR code scanner"
+    },
+    "shareCodeInputLabel": "Секретный код",
+    "@shareCodeInputLabel": {
+        "description": ""
+    },
+    "shareCodeInputHelperText": "Если вы получили код доступа, вставьте его выше.",
+    "@shareCodeInputHelperText": {
+        "description": ""
+    },
+    "shareCodeOpen": "Получен код доступа для AuthPass Cloud?",
+    "@shareCodeOpen": {
+        "description": ""
+    },
+    "shareCodeOpenScreenTitle": "Загрузка файла с кодом доступа",
+    "@shareCodeOpenScreenTitle": {
+        "description": ""
+    },
+    "shareCodeLoadingProgress": "Загрузка файла …",
+    "@shareCodeLoadingProgress": {
+        "description": ""
+    },
+    "shareCodeOpenFileButtonLabel": "Открыть",
+    "@shareCodeOpenFileButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppCaption": "Хотите вместо этого открыть этот файл с помощью одного из наших собственных приложений?",
+    "@shareCodeOpenInstallAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenAnotherAppCaption": "Хотите открыть этот файл на другом устройстве?",
+    "@shareCodeOpenAnotherAppCaption": {
+        "description": ""
+    },
+    "changeMasterPasswordActionLabel": "Изменить мастер-пароль",
+    "@changeMasterPasswordActionLabel": {
+        "description": "label for the button to show the dialog for changing master password."
+    },
+    "changeMasterPasswordFormSubmit": "Сохранить с новым паролем",
+    "@changeMasterPasswordFormSubmit": {
+        "description": ""
+    },
+    "changeMasterPasswordSuccess": "Пароль успешно сохранен.",
+    "@changeMasterPasswordSuccess": {
+        "description": ""
+    },
+    "changeMasterPasswordScreenTitle": "Изменить мастер-пароль",
+    "@changeMasterPasswordScreenTitle": {
+        "description": "app bar title for change password screen."
+    },
+    "authPassCloudAuthClickedLink": "Я получил электронную почту и посетил ссылку",
+    "@authPassCloudAuthClickedLink": {
+        "description": ""
+    },
+    "authPassCloudAuthNotConfirmed": "Адрес электронной почты еще не подтвержден. Обязательно нажмите ссылку в полученном электронном письме и введите код, чтобы подтвердить свой адрес электронной почты.",
+    "@authPassCloudAuthNotConfirmed": {
+        "description": ""
+    },
+    "getHelpButton": "Получить помощь на форуме",
+    "@getHelpButton": {
+        "description": ""
+    },
+    "shortcutCopyUsername": "Копировать имя пользователя",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Копировать пароль",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Сгенерировать пароль",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "Открыть URL-адрес",
+    "@shortcutOpenUrl": {
         "description": ""
     },
     "unexpectedError": "Неожиданная ошибка: {error}",

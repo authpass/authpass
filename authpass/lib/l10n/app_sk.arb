@@ -763,6 +763,22 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "Kopírovať používateľské meno",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Kopírovať Heslo",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Generovať heslo",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "Otvoriť URL",
+    "@shortcutOpenUrl": {
+        "description": ""
+    },
     "unexpectedError": "Neočakávaná chyba: {error}",
     "@unexpectedError": {
         "placeholders": {

@@ -818,6 +818,22 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "Benutzername kopieren",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Passwort kopieren",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Passwort generieren",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "URL Öffnen",
+    "@shortcutOpenUrl": {
+        "description": ""
+    },
     "unexpectedError": "Unerwarteter Fehler: {error}",
     "@unexpectedError": {
         "placeholders": {

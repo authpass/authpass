@@ -818,6 +818,22 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "העתקת שם משתמש",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "העתקת סיסמה",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "יצירת סיסמה",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "פתיחת כתובת",
+    "@shortcutOpenUrl": {
+        "description": ""
+    },
     "unexpectedError": "שגיאה בלתי צפויה: {error}",
     "@unexpectedError": {
         "placeholders": {

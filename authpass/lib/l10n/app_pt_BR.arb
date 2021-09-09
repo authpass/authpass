@@ -763,6 +763,22 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "Copiar Usuário",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Copiar Senha",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Gerar Senha",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutOpenUrl": "Abrir URL",
+    "@shortcutOpenUrl": {
+        "description": ""
+    },
     "unexpectedError": "Erro Inesperado: {error}",
     "@unexpectedError": {
         "placeholders": {

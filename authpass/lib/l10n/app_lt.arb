@@ -384,6 +384,18 @@
     "@shareCodeLoadingProgress": {
         "description": ""
     },
+    "shortcutCopyUsername": "Kopijuoti naudotojo vardą",
+    "@shortcutCopyUsername": {
+        "description": ""
+    },
+    "shortcutCopyPassword": "Kopijuoti slaptažodį",
+    "@shortcutCopyPassword": {
+        "description": ""
+    },
+    "shortcutGeneratePassword": "Generuoti slaptažodį",
+    "@shortcutGeneratePassword": {
+        "description": ""
+    },
     "unexpectedError": "Nenumatyta klaida: {error}",
     "@unexpectedError": {
         "placeholders": {
