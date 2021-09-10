@@ -9,6 +9,7 @@ import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
@@ -272,7 +273,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
         .filecloudAttachmentPost(encrypted,
             fileName: name, fileToken: fileToken)
         .requireSuccess();
-    _logger.fine('Successfully uploaded file.')
+    _logger.fine('Successfully uploaded file.');
     return AuthPassExternalAttachment(
       attachmentId: response.attachmentToken,
       secret: base64.encode(key),
@@ -304,6 +305,45 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final content = gzip.decode(compressed) as Uint8List;
     _logger.fine('decompressed attachment. ${content.length}');
     return content;
+  }
+
+  Future<void> openedFile(KdbxBloc bloc, KdbxOpenedFile openedFile) async {
+    final fileSource = openedFile.fileSource;
+    if (fileSource is! FileSourceCloudStorage) {
+      return;
+    }
+    final entity = CloudStorageEntity.fromSimpleFileInfo(fileSource.fileInfo);
+
+    final watch = Stopwatch()..start();
+    final attachments = openedFile.kdbxFile.ctx.binariesIterable
+        .map((e) {
+          final info = bloc.attachmentInfo(e);
+          if (info == null) {
+            return null;
+          }
+          return info.attachmentId;
+        })
+        .whereNotNull()
+        .toList();
+    bloc.analytics.trackTiming('touchAttachments', watch.elapsedMilliseconds);
+    if (attachments.isNotEmpty) {
+      final client = await _client;
+      try {
+        await client
+            .filecloudAttachmentTouchPost(
+              AttachmentTouch(
+                file: FileId(fileToken: entity.id),
+                attachmentTokens: attachments,
+              ),
+            )
+            .requireSuccess();
+        _logger.info('Touched ${attachments.length} attachments.');
+      } catch (e, stackTrace) {
+        _logger.severe('Unable to touch attachments.', e, stackTrace);
+      }
+    } else {
+      _logger.info('No attachments.');
+    }
   }
 
   Future<AuthPassCloudClient> get _client => _authPassCloudBloc.client;

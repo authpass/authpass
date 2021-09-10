@@ -508,6 +508,7 @@ class _EntryDetailsState extends State<EntryDetails>
   @override
   Widget build(BuildContext context) {
     final commonFields = Provider.of<CommonFields>(context);
+    final kdbxBloc = context.watch<KdbxBloc>();
     final vm = widget.entry;
     final entry = widget.entry.entry;
     final formatUtils = Provider.of<FormatUtils>(context);
@@ -619,6 +620,7 @@ class _EntryDetailsState extends State<EntryDetails>
               ),
               const Divider(),
               ...entry.binaryEntries.map((e) {
+                final info = kdbxBloc.attachmentInfo(e.value);
                 return InkWell(
                   onTap: () async {
                     await showModalBottomSheet<void>(
@@ -636,7 +638,9 @@ class _EntryDetailsState extends State<EntryDetails>
                     ),
                     child: Row(
                       children: <Widget>[
-                        const Icon(Icons.attach_file),
+                        info == null
+                            ? const Icon(Icons.attach_file)
+                            : const Icon(Icons.cloud),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Column(
@@ -645,8 +649,13 @@ class _EntryDetailsState extends State<EntryDetails>
                             children: <Widget>[
                               Text(e.key.key, style: theme.textTheme.subtitle1),
                               const SizedBox(height: 2),
-                              Text(loc.sizeBytes(e.value.value.length),
-                                  style: theme.textTheme.caption),
+                              info == null
+                                  ? Text(loc.sizeBytes(e.value.value.length),
+                                      style: theme.textTheme.caption)
+                                  : Text(
+                                      loc.sizeBytesStoredAuthPassCloud(
+                                          info.size),
+                                      style: theme.textTheme.caption),
                             ],
                           ),
                         ),
@@ -721,7 +730,13 @@ class _EntryDetailsState extends State<EntryDetails>
   Future<void> _attachFileContent(String fileName, Uint8List bytes) async {
     final analytics = Provider.of<Analytics>(context, listen: false);
     final loc = AppLocalizations.of(context);
-    if (bytes.lengthInBytes > 10 * 1024) {
+    final kdbxBloc = widget.entry.kdbxBloc;
+
+    final attachmentProvider =
+        await kdbxBloc.attachmentProviderForFileSource(widget.entry.entry.file);
+
+    if (attachmentProvider is! AttachmentProviderAuthPassCloud &&
+        bytes.lengthInBytes > 10 * 1024) {
       if (!await DialogUtils.showConfirmDialog(
         context: context,
         params: ConfirmDialogParams(
@@ -741,7 +756,7 @@ class _EntryDetailsState extends State<EntryDetails>
       path.extension(fileName),
       bytes.lengthInBytes,
     );
-    await widget.entry.kdbxBloc.attachFile(
+    await attachmentProvider.attachFile(
       entry: widget.entry.entry,
       fileName: fileName,
       bytes: bytes,
@@ -830,7 +845,9 @@ class AttachmentBottomSheet extends StatelessWidget {
             analytics.events.trackAttachmentAction('open');
             Navigator.of(context).pop();
             final kdbxBloc = context.read<KdbxBloc>();
-            final bytes = await kdbxBloc.readAttachmentBytes(
+            final provider =
+                await kdbxBloc.attachmentProviderForFileSource(entry.file);
+            final bytes = await provider.readAttachmentBytes(
                 entry.file, attachment.value);
             final f = await PathUtils().saveToTempDirectory(bytes,
                 dirPrefix: 'openbinary', fileName: attachment.key.key);
@@ -846,7 +863,9 @@ class AttachmentBottomSheet extends StatelessWidget {
             onTap: () async {
               analytics.events.trackAttachmentAction('share');
               final kdbxBloc = context.read<KdbxBloc>();
-              final bytes = await kdbxBloc.readAttachmentBytes(
+              final provider =
+                  await kdbxBloc.attachmentProviderForFileSource(entry.file);
+              final bytes = await provider.readAttachmentBytes(
                   entry.file, attachment.value);
               final mimeType = lookupMimeType(
                 attachment.key.key,
@@ -882,7 +901,9 @@ class AttachmentBottomSheet extends StatelessWidget {
               analytics.events.trackAttachmentAction('saveToDevice');
               Navigator.of(context).pop();
               final kdbxBloc = context.read<KdbxBloc>();
-              final bytes = await kdbxBloc.readAttachmentBytes(
+              final provider =
+                  await kdbxBloc.attachmentProviderForFileSource(entry.file);
+              final bytes = await provider.readAttachmentBytes(
                   entry.file, attachment.value);
               await FilePickerWritable().openFileForCreate(
                   fileName: attachment.key.key,

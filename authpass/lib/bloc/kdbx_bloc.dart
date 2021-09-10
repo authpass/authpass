@@ -330,6 +330,17 @@ class KdbxBloc {
           file, credentials, fileContent, addToQuickUnlock);
       addToQuickUnlock = false;
 
+      if (file is FileSourceCloudStorage) {
+        final provider = file.provider;
+        if (provider is AuthPassCloudProvider) {
+          unawaited((() async {
+            await Future<void>.delayed(const Duration(seconds: 2));
+            _logger.fine('touch files.');
+            await provider.openedFile(this, openedFile);
+          })());
+        }
+      }
+
       yield OpenFileResult(
         kdbxOpenedFile: openedFile,
         fileContent: fileContent,
@@ -848,6 +859,90 @@ class KdbxBloc {
     }
   }
 
+  Future<AttachmentProvider> attachmentProviderForFileSource(
+      KdbxFile file) async {
+    final appData = await appDataBloc.store.load();
+    if (!appData.authPassCloudAttachmentsOrDefault) {
+      _logger.info('AuthPass Cloud Attachments disabled.');
+      return AttachmentProviderLocal();
+    }
+    final openedFile = fileForKdbxFile(file);
+    final fs = openedFile.fileSource;
+    if (fs is! FileSourceCloudStorage) {
+      return AttachmentProviderLocal();
+    }
+    final provider = fs.provider;
+    if (provider is! AuthPassCloudProvider) {
+      return AttachmentProviderLocal();
+    }
+    return AttachmentProviderAuthPassCloud(
+      kdbxBloc: this,
+      fs: fs,
+      provider: provider,
+    );
+  }
+
+  AuthPassExternalAttachment? attachmentInfo(KdbxBinary binary) {
+    if (!attachmentIsFromCloud(binary)) {
+      return null;
+    }
+    final data = binary.value
+        .sublist(AuthPassExternalAttachment.prefixIdentifierBytes.length);
+    final infoJson = json.decode(utf8.decode(data)) as Map<String, dynamic>;
+    return AuthPassExternalAttachment.fromJson(infoJson);
+  }
+
+  bool attachmentIsFromCloud(KdbxBinary binary) {
+    final cloudId = AuthPassExternalAttachment.prefixIdentifierBytes;
+    if (binary.value.length < cloudId.length) {
+      return false;
+    }
+    return ByteUtils.eq(binary.value.sublist(0, cloudId.length), cloudId);
+  }
+}
+
+abstract class AttachmentProvider {
+  Future<Uint8List> readAttachmentBytes(KdbxFile file, KdbxBinary binary);
+  Future<void> attachFile({
+    required KdbxEntry entry,
+    required String fileName,
+    required Uint8List bytes,
+  });
+}
+
+class AttachmentProviderLocal extends AttachmentProvider {
+  @override
+  Future<Uint8List> readAttachmentBytes(
+      KdbxFile file, KdbxBinary binary) async {
+    return binary.value;
+  }
+
+  @override
+  Future<void> attachFile({
+    required KdbxEntry entry,
+    required String fileName,
+    required Uint8List bytes,
+  }) async {
+    entry.createBinary(
+      isProtected: false,
+      name: fileName,
+      bytes: bytes,
+    );
+  }
+}
+
+class AttachmentProviderAuthPassCloud extends AttachmentProvider {
+  AttachmentProviderAuthPassCloud({
+    required this.kdbxBloc,
+    required this.provider,
+    required this.fs,
+  });
+
+  final KdbxBloc kdbxBloc;
+  final AuthPassCloudProvider provider;
+  final FileSourceCloudStorage fs;
+
+  @override
   Future<void> attachFile({
     required KdbxEntry entry,
     required String fileName,
@@ -873,20 +968,6 @@ class KdbxBloc {
     required String fileName,
     required Uint8List bytes,
   }) async {
-    final appData = await appDataBloc.store.load();
-    if (!appData.authPassCloudAttachmentsOrDefault) {
-      _logger.info('AuthPass Cloud Attachments disabled.');
-      return false;
-    }
-    final openedFile = fileForKdbxFile(entry.file);
-    final fs = openedFile.fileSource;
-    if (fs is! FileSourceCloudStorage) {
-      return false;
-    }
-    final provider = fs.provider;
-    if (provider is! AuthPassCloudProvider) {
-      return false;
-    }
     _logger.info('Lets try AuthPass Cloud Attachments.');
     try {
       final attachmentInfo = await provider.createAttachment(
@@ -907,31 +988,12 @@ class KdbxBloc {
     }
   }
 
-  bool attachmentIsFromCloud(KdbxBinary binary) {
-    final cloudId = AuthPassExternalAttachment.prefixIdentifierBytes;
-    if (binary.value.length < cloudId.length) {
-      return false;
-    }
-    return ByteUtils.eq(binary.value.sublist(0, cloudId.length), cloudId);
-  }
-
+  @override
   Future<Uint8List> readAttachmentBytes(
       KdbxFile file, KdbxBinary binary) async {
-    if (!attachmentIsFromCloud(binary)) {
+    final info = kdbxBloc.attachmentInfo(binary);
+    if (info == null) {
       return binary.value;
-    }
-    final data = binary.value
-        .sublist(AuthPassExternalAttachment.prefixIdentifierBytes.length);
-    final infoJson = json.decode(utf8.decode(data)) as Map<String, dynamic>;
-    final info = AuthPassExternalAttachment.fromJson(infoJson);
-    final openedFile = fileForKdbxFile(file);
-    final fs = openedFile.fileSource;
-    if (fs is! FileSourceCloudStorage) {
-      throw Exception('kdbx file was not loaded through AuthPass Cloud');
-    }
-    final provider = fs.provider;
-    if (provider is! AuthPassCloudProvider) {
-      throw Exception('kdbx file was not loaded through AuthPass Cloud');
     }
 
     return await provider.loadAttachment(info);

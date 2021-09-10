@@ -964,6 +964,16 @@
       }
     }
   },
+  "sizeBytesStoredAuthPassCloud": "{count} bytes, stored on AuthPass Cloud",
+  "@sizeBytesStoredAuthPassCloud": {
+    "description": "",
+    "placeholders": {
+      "count": {
+        "description": "file size in bytes",
+        "example": "123"
+      }
+    }
+  },
   "sizeBytes": "{count} bytes",
   "@sizeBytes": {
     "description": "",
@@ -1595,6 +1605,15 @@
   "@authPassCloudShareFileActionLabel": {
     "description": ""
   },
+  "preferenceAuthPassCloudAttachmentTitle": "Use AuthPass Cloud Attachments",
+  "@preferenceAuthPassCloudAttachmentTitle": {
+    "description": ""
+  },
+  "preferenceAuthPassCloudAttachmentSubtitle": "Store Attachments encrypted on AuthPass Cloud separately.",
+  "@preferenceAuthPassCloudAttachmentSubtitle": {
+    "description": ""
+  },
+
   "shareCodeInputDialogTitle": "Input Secret Share Code",
   "@shareCodeInputDialogTitle": {
     "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"

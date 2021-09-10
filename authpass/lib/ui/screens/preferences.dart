@@ -6,6 +6,7 @@ import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/locked_screen.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
+import 'package:authpass/utils/authpassicons.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
@@ -273,6 +274,24 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 .trackPreferences(setting: 'fetchWebsiteIcons', to: '$value');
             _appDataBloc
                 .update((builder, data) => builder.fetchWebsiteIcons = value);
+          },
+          tristate: false,
+        ),
+        CheckboxListTile(
+          secondary: const FaIcon(AuthPassIcons.AuthPassLogo),
+          value: _appData!.authPassCloudAttachments ??
+              _appData!.authPassCloudAttachmentsOrDefault,
+          title: Text(loc.preferenceAuthPassCloudAttachmentTitle),
+          subtitle: Text(loc.preferenceAuthPassCloudAttachmentSubtitle),
+          // subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
+          //     commonFields.url.displayName)),
+          isThreeLine: true,
+          onChanged: (value) {
+            _logger.fine('Changed to authPassCloudAttachments: $value');
+            _analytics.events.trackPreferences(
+                setting: 'authPassCloudAttachments', to: '$value');
+            _appDataBloc.update(
+                (builder, data) => builder.authPassCloudAttachments = value);
           },
           tristate: false,
         ),
