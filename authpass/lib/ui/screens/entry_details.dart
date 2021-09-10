@@ -645,7 +645,7 @@ class _EntryDetailsState extends State<EntryDetails>
                             children: <Widget>[
                               Text(e.key.key, style: theme.textTheme.subtitle1),
                               const SizedBox(height: 2),
-                              Text(loc.sizeBytes(e.value.value!.length),
+                              Text(loc.sizeBytes(e.value.value.length),
                                   style: theme.textTheme.caption),
                             ],
                           ),
@@ -830,7 +830,7 @@ class AttachmentBottomSheet extends StatelessWidget {
             analytics.events.trackAttachmentAction('open');
             Navigator.of(context).pop();
             final f = await PathUtils().saveToTempDirectory(
-                attachment.value.value!,
+                attachment.value.value,
                 dirPrefix: 'openbinary',
                 fileName: attachment.key.key);
             _logger.fine('Opening ${f.path}');
@@ -846,17 +846,17 @@ class AttachmentBottomSheet extends StatelessWidget {
               analytics.events.trackAttachmentAction('share');
               final mimeType = lookupMimeType(
                 attachment.key.key,
-                headerBytes: attachment.value.value!.length >
+                headerBytes: attachment.value.value.length >
                         defaultMagicNumbersMaxLength
-                    ? Uint8List.sublistView(attachment.value.value!, 0,
-                        defaultMagicNumbersMaxLength)
+                    ? Uint8List.sublistView(
+                        attachment.value.value, 0, defaultMagicNumbersMaxLength)
                     : null,
               )!;
               _logger.fine('Opening attachment with mimeType $mimeType');
 
               final tempDir = await PathUtils().getTemporaryDirectory();
               final f = await tempDir.childFile(attachment.key.key).create();
-              await f.writeAsBytes(attachment.value.value!);
+              await f.writeAsBytes(attachment.value.value);
 
               try {
                 await Share.shareFiles([f.path],
@@ -882,7 +882,7 @@ class AttachmentBottomSheet extends StatelessWidget {
                   fileName: attachment.key.key,
                   writer: (file) async {
                     _logger.fine('Opening ${file.path}');
-                    await file.writeAsBytes(attachment.value.value!);
+                    await file.writeAsBytes(attachment.value.value);
                   });
             },
           ),
