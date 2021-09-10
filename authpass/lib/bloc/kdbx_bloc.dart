@@ -7,12 +7,14 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_web_none.dart'
     if (dart.library.html) 'package:authpass/bloc/kdbx/file_source_web.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_argon2_ffi.dart'
     if (dart.library.html) 'package:authpass/bloc/kdbx_argon2_web.dart';
+import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
@@ -844,6 +846,95 @@ class KdbxBloc {
         dirtyObjects.forEach(file.kdbxFile.dirtyObject);
       }
     }
+  }
+
+  Future<void> attachFile({
+    required KdbxEntry entry,
+    required String fileName,
+    required Uint8List bytes,
+  }) async {
+    final attached = await attachFileToCloud(
+      entry: entry,
+      fileName: fileName,
+      bytes: bytes,
+    );
+    if (attached) {
+      return;
+    }
+    entry.createBinary(
+      isProtected: false,
+      name: fileName,
+      bytes: bytes,
+    );
+  }
+
+  Future<bool> attachFileToCloud({
+    required KdbxEntry entry,
+    required String fileName,
+    required Uint8List bytes,
+  }) async {
+    final appData = await appDataBloc.store.load();
+    if (!appData.authPassCloudAttachmentsOrDefault) {
+      _logger.info('AuthPass Cloud Attachments disabled.');
+      return false;
+    }
+    final openedFile = fileForKdbxFile(entry.file);
+    final fs = openedFile.fileSource;
+    if (fs is! FileSourceCloudStorage) {
+      return false;
+    }
+    final provider = fs.provider;
+    if (provider is! AuthPassCloudProvider) {
+      return false;
+    }
+    _logger.info('Lets try AuthPass Cloud Attachments.');
+    try {
+      final attachmentInfo = await provider.createAttachment(
+          fileSource: fs, name: fileName, bytes: bytes);
+      final info = [
+        attachmentInfo.identifier,
+        json.encode(attachmentInfo.toJson())
+      ].join();
+      entry.createBinary(
+        isProtected: false,
+        name: fileName,
+        bytes: utf8.encode(info) as Uint8List,
+      );
+      return true;
+    } catch (e, stackTrace) {
+      _logger.severe('Error while uploading attachment.', e, stackTrace);
+      rethrow;
+    }
+  }
+
+  bool attachmentIsFromCloud(KdbxBinary binary) {
+    final cloudId = AuthPassExternalAttachment.prefixIdentifierBytes;
+    if (binary.value.length < cloudId.length) {
+      return false;
+    }
+    return ByteUtils.eq(binary.value.sublist(0, cloudId.length), cloudId);
+  }
+
+  Future<Uint8List> readAttachmentBytes(
+      KdbxFile file, KdbxBinary binary) async {
+    if (!attachmentIsFromCloud(binary)) {
+      return binary.value;
+    }
+    final data = binary.value
+        .sublist(AuthPassExternalAttachment.prefixIdentifierBytes.length);
+    final infoJson = json.decode(utf8.decode(data)) as Map<String, dynamic>;
+    final info = AuthPassExternalAttachment.fromJson(infoJson);
+    final openedFile = fileForKdbxFile(file);
+    final fs = openedFile.fileSource;
+    if (fs is! FileSourceCloudStorage) {
+      throw Exception('kdbx file was not loaded through AuthPass Cloud');
+    }
+    final provider = fs.provider;
+    if (provider is! AuthPassCloudProvider) {
+      throw Exception('kdbx file was not loaded through AuthPass Cloud');
+    }
+
+    return await provider.loadAttachment(info);
   }
 }
 

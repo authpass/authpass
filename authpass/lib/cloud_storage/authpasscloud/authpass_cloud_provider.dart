@@ -1,19 +1,24 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
+import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:openapi_base/openapi_base.dart';
+import 'package:pointycastle/export.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part 'authpass_cloud_provider.g.dart';
@@ -242,6 +247,65 @@ class AuthPassCloudProvider extends CloudStorageProvider
     );
   }
 
+  Future<AuthPassExternalAttachment> createAttachment({
+    required FileSourceCloudStorage fileSource,
+    required String name,
+    required Uint8List bytes,
+  }) async {
+    final client = await _client;
+    final entity = CloudStorageEntity.fromSimpleFileInfo(fileSource.fileInfo);
+    final fileToken = entity.id;
+
+    /// 32 bytes key plus 12 bytes nonce.
+    final key = ByteUtils.randomBytes(32 + 12);
+    final cipherKey = key.sublist(0, 32);
+    final cipherNonce = key.sublist(32);
+    final gzipped = gzip.encode(bytes) as Uint8List;
+    _logger
+        .finer('compressed attachment ${gzipped.length} (was ${bytes.length})');
+    final chaCha = ChaCha7539Engine()
+      ..init(true, ParametersWithIV(KeyParameter(cipherKey), cipherNonce));
+    final encrypted = chaCha.process(gzipped);
+    _logger.finer('encrypted attachment ${encrypted.length} - uploading…');
+
+    final response = await client
+        .filecloudAttachmentPost(encrypted,
+            fileName: name, fileToken: fileToken)
+        .requireSuccess();
+    _logger.fine('Successfully uploaded file.')
+    return AuthPassExternalAttachment(
+      attachmentId: response.attachmentToken,
+      secret: base64.encode(key),
+      format: AttachmentFormat.gzipChaCha7539,
+      size: bytes.length,
+    );
+  }
+
+  Future<Uint8List> loadAttachment(AuthPassExternalAttachment info) async {
+    final client = await _client;
+    final data = await client
+        .filecloudAttachmentRetrievePost(
+            AttachmentId(attachmentToken: info.attachmentId))
+        .requireSuccess();
+    if (info.format != AttachmentFormat.gzipChaCha7539) {
+      throw StateError('Unsupported.');
+    }
+    final key = base64.decode(info.secret);
+    if (key.length != 32 + 12) {
+      throw FormatException(
+          'Expected secret to be 44 bytes. was: ${key.length}');
+    }
+    final cipherKey = key.sublist(0, 32);
+    final cipherNonce = key.sublist(32);
+    final chaCha = ChaCha7539Engine()
+      ..init(false, ParametersWithIV(KeyParameter(cipherKey), cipherNonce));
+    final compressed = chaCha.process(data);
+    _logger.fine('decrypted attachment. ${compressed.length}');
+    final content = gzip.decode(compressed) as Uint8List;
+    _logger.fine('decompressed attachment. ${content.length}');
+    return content;
+  }
+
   Future<AuthPassCloudClient> get _client => _authPassCloudBloc.client;
 }
 
@@ -262,4 +326,41 @@ extension FileInfoCloudStorage on FileInfo {
           ..name = name
           ..type = CloudStorageEntityType.file,
       );
+}
+
+@JsonSerializable()
+class AuthPassExternalAttachment {
+  AuthPassExternalAttachment({
+    required this.attachmentId,
+    required this.secret,
+    required this.format,
+    required this.size,
+  });
+  factory AuthPassExternalAttachment.fromJson(Map<String, dynamic> json) =>
+      _$AuthPassExternalAttachmentFromJson(json);
+  Map<String, dynamic> toJson() => _$AuthPassExternalAttachmentToJson(this);
+
+  @JsonKey(name: 'id')
+  final String attachmentId;
+
+  /// for ChaCha7539 contains secret and nonce.
+  final String secret;
+
+  // @JsonKey(unknownEnumValue: AttachmentFormat.unsupported)
+  final AttachmentFormat format;
+
+  final int size;
+
+  @NonNls
+  String get identifier => prefixIdentifier;
+
+  @NonNls
+  static const prefixIdentifier = 'https://authpass.app/filecloud ';
+
+  static late final prefixIdentifierBytes = utf8.encode(prefixIdentifier);
+}
+
+enum AttachmentFormat {
+  gzipChaCha7539,
+  unsupported,
 }

@@ -227,6 +227,11 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   /// the internet, instead of showing kdbx icons.
   bool? get fetchWebsiteIcons;
 
+  /// whether to use cloud attachments.
+  bool? get authPassCloudAttachments;
+  bool get authPassCloudAttachmentsOrDefault =>
+      authPassCloudAttachments ?? false;
+
   /// whether to register system wide global shortcuts.
   bool get systemWideShortcuts;
 

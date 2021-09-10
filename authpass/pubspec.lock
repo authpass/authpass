@@ -1159,12 +1159,12 @@ packages:
     source: hosted
     version: "2.0.1"
   pointycastle:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.2"
+    version: "3.3.4"
   pool:
     dependency: transitive
     description:

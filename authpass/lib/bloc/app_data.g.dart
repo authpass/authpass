@@ -249,6 +249,13 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.authPassCloudAttachments;
+    if (value != null) {
+      result
+        ..add('authPassCloudAttachments')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.searchFields;
     if (value != null) {
       result
@@ -336,6 +343,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
           break;
         case 'fetchWebsiteIcons':
           result.fetchWebsiteIcons = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'authPassCloudAttachments':
+          result.authPassCloudAttachments = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
         case 'systemWideShortcuts':
@@ -576,6 +587,8 @@ class _$AppData extends AppData {
   @override
   final bool? fetchWebsiteIcons;
   @override
+  final bool? authPassCloudAttachments;
+  @override
   final bool systemWideShortcuts;
   @override
   final String? searchFields;
@@ -599,6 +612,7 @@ class _$AppData extends AppData {
       this.secureWindow,
       this.localeOverride,
       this.fetchWebsiteIcons,
+      this.authPassCloudAttachments,
       required this.systemWideShortcuts,
       this.searchFields})
       : super._() {
@@ -637,6 +651,7 @@ class _$AppData extends AppData {
         secureWindow == other.secureWindow &&
         localeOverride == other.localeOverride &&
         fetchWebsiteIcons == other.fetchWebsiteIcons &&
+        authPassCloudAttachments == other.authPassCloudAttachments &&
         systemWideShortcuts == other.systemWideShortcuts &&
         searchFields == other.searchFields;
   }
@@ -660,29 +675,31 @@ class _$AppData extends AppData {
                                                             $jc(
                                                                 $jc(
                                                                     $jc(
-                                                                        0,
-                                                                        previousFiles
+                                                                        $jc(
+                                                                            0,
+                                                                            previousFiles
+                                                                                .hashCode),
+                                                                        passwordGeneratorLength
                                                                             .hashCode),
-                                                                    passwordGeneratorLength
+                                                                    passwordGeneratorCharacterSets
                                                                         .hashCode),
-                                                                passwordGeneratorCharacterSets
+                                                                manualUserType
                                                                     .hashCode),
-                                                            manualUserType
+                                                            firstLaunchedAt
                                                                 .hashCode),
-                                                        firstLaunchedAt
-                                                            .hashCode),
-                                                    theme.hashCode),
-                                                dismissedBackupLocalFiles
+                                                        theme.hashCode),
+                                                    dismissedBackupLocalFiles
+                                                        .hashCode),
+                                                dismissedAutofillSuggestion
                                                     .hashCode),
-                                            dismissedAutofillSuggestion
-                                                .hashCode),
-                                        themeVisualDensity.hashCode),
-                                    themeFontSizeFactor.hashCode),
-                                diacOptIn.hashCode),
-                            lastBuildId.hashCode),
-                        secureWindow.hashCode),
-                    localeOverride.hashCode),
-                fetchWebsiteIcons.hashCode),
+                                            themeVisualDensity.hashCode),
+                                        themeFontSizeFactor.hashCode),
+                                    diacOptIn.hashCode),
+                                lastBuildId.hashCode),
+                            secureWindow.hashCode),
+                        localeOverride.hashCode),
+                    fetchWebsiteIcons.hashCode),
+                authPassCloudAttachments.hashCode),
             systemWideShortcuts.hashCode),
         searchFields.hashCode));
   }
@@ -706,6 +723,7 @@ class _$AppData extends AppData {
           ..add('secureWindow', secureWindow)
           ..add('localeOverride', localeOverride)
           ..add('fetchWebsiteIcons', fetchWebsiteIcons)
+          ..add('authPassCloudAttachments', authPassCloudAttachments)
           ..add('systemWideShortcuts', systemWideShortcuts)
           ..add('searchFields', searchFields))
         .toString();
@@ -791,6 +809,11 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   set fetchWebsiteIcons(bool? fetchWebsiteIcons) =>
       _$this._fetchWebsiteIcons = fetchWebsiteIcons;
 
+  bool? _authPassCloudAttachments;
+  bool? get authPassCloudAttachments => _$this._authPassCloudAttachments;
+  set authPassCloudAttachments(bool? authPassCloudAttachments) =>
+      _$this._authPassCloudAttachments = authPassCloudAttachments;
+
   bool? _systemWideShortcuts;
   bool? get systemWideShortcuts => _$this._systemWideShortcuts;
   set systemWideShortcuts(bool? systemWideShortcuts) =>
@@ -823,6 +846,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _secureWindow = $v.secureWindow;
       _localeOverride = $v.localeOverride;
       _fetchWebsiteIcons = $v.fetchWebsiteIcons;
+      _authPassCloudAttachments = $v.authPassCloudAttachments;
       _systemWideShortcuts = $v.systemWideShortcuts;
       _searchFields = $v.searchFields;
       _$v = null;
@@ -863,6 +887,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               secureWindow: secureWindow,
               localeOverride: localeOverride,
               fetchWebsiteIcons: fetchWebsiteIcons,
+              authPassCloudAttachments: authPassCloudAttachments,
               systemWideShortcuts: BuiltValueNullFieldError.checkNotNull(
                   systemWideShortcuts, 'AppData', 'systemWideShortcuts'),
               searchFields: searchFields);

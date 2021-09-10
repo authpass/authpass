@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i11;
+import 'dart:typed_data' as _i14;
 
 import 'package:authpass/bloc/analytics.dart' as _i4;
 import 'package:authpass/bloc/app_data.dart' as _i3;
@@ -234,6 +235,33 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
       (super.noSuchMethod(Invocation.method(#reload, [file]),
               returnValue: Stream<_i6.ReloadStatus>.empty())
           as _i11.Stream<_i6.ReloadStatus>);
+  @override
+  _i11.Future<void> attachFile(
+          {_i7.KdbxEntry? entry, String? fileName, _i14.Uint8List? bytes}) =>
+      (super.noSuchMethod(
+              Invocation.method(#attachFile, [],
+                  {#entry: entry, #fileName: fileName, #bytes: bytes}),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i11.Future<void>);
+  @override
+  _i11.Future<bool> attachFileToCloud(
+          {_i7.KdbxEntry? entry, String? fileName, _i14.Uint8List? bytes}) =>
+      (super.noSuchMethod(
+          Invocation.method(#attachFileToCloud, [],
+              {#entry: entry, #fileName: fileName, #bytes: bytes}),
+          returnValue: Future<bool>.value(false)) as _i11.Future<bool>);
+  @override
+  bool attachmentIsFromCloud(_i7.KdbxBinary? binary) =>
+      (super.noSuchMethod(Invocation.method(#attachmentIsFromCloud, [binary]),
+          returnValue: false) as bool);
+  @override
+  _i11.Future<_i14.Uint8List> readAttachmentBytes(
+          _i7.KdbxFile? file, _i7.KdbxBinary? binary) =>
+      (super.noSuchMethod(
+              Invocation.method(#readAttachmentBytes, [file, binary]),
+              returnValue: Future<_i14.Uint8List>.value(_i14.Uint8List(0)))
+          as _i11.Future<_i14.Uint8List>);
   @override
   String toString() => super.toString();
 }
