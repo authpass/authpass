@@ -1,6 +1,7 @@
-# 1.9.4 - unreleased
+# 1.9.4 - 2021-09-13
 
 * Allow customizing of search fields.
+* Support for storing attachments outside password file on AuthPass Cloud (Not enabled by default)
 * Updated all languages
   If you find untranslated strings, help us at https://translate.authpass.app/
 * Keyboard shortcut for copy TOTP (ctrl+t) #262

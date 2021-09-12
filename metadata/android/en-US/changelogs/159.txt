@@ -1,0 +1,7 @@
+* Allow customizing of search fields.
+* Support for storing attachments outside password file on AuthPass Cloud (Not enabled by default)
+* Updated all languages
+  If you find untranslated strings, help us at https://translate.authpass.app/
+* Keyboard shortcut for copy TOTP (ctrl+t) #262
+* Desktop: system wide shortcuts (ctrl+alt+f for opening search). #262
+
