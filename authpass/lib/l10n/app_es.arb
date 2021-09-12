@@ -180,6 +180,18 @@
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Preferencias",
     "@preferenceTitle": {},
+    "preferenceEnableSystemWideShortcuts": "Habilitar accesos directos del sistema",
+    "@preferenceEnableSystemWideShortcuts": {
+        "description": ""
+    },
+    "preferencesSearchFields": "Personalizar campos de búsqueda",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Campos de búsqueda",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "¡Agradecemos cualquier tipo de comentarios!",
@@ -1160,6 +1172,10 @@
     "@mailboxNameInputDialogTitle": {
         "description": "title of the dialog asking for a mailbox label/name"
     },
+    "mailboxNameInputLabel": "(Interno) Etiqueta",
+    "@mailboxNameInputLabel": {
+        "description": "Label for the text field asking for a label for a mailbox, while creating it."
+    },
     "mailTabBarTitleMailbox": "Buzón",
     "@mailTabBarTitleMailbox": {
         "description": "title for the tab showing list of mailboxes."
@@ -1281,6 +1297,10 @@
     "promptDialogPasteHint": "Sugerencia: Si necesita pegar, pruebe el botón de la izquierda ;-)",
     "@promptDialogPasteHint": {
         "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
+    },
+    "genericErrorDialogTitle": "Error al manejar la acción",
+    "@genericErrorDialogTitle": {
+        "description": ""
     },
     "genericErrorDialogBody": "Se encontró un error inesperado. {errorMessage}",
     "@genericErrorDialogBody": {
@@ -1537,6 +1557,10 @@
     "@shareCodeInputHelperText": {
         "description": ""
     },
+    "shareCodeOpenScreenTitle": "Cargando archivo con código compartido",
+    "@shareCodeOpenScreenTitle": {
+        "description": ""
+    },
     "shareCodeLoadingProgress": "Cargando archivo …",
     "@shareCodeLoadingProgress": {
         "description": ""
@@ -1551,6 +1575,10 @@
     },
     "shareCodeOpenInstallAppButtonLabel": "Instalar Aplicación",
     "@shareCodeOpenInstallAppButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenShowCodeButtonLabel": "Mostrar código compartido",
+    "@shareCodeOpenShowCodeButtonLabel": {
         "description": ""
     },
     "changeMasterPasswordActionLabel": "Cambiar contraseña maestra",
@@ -1589,13 +1617,41 @@
     "@shortcutCopyPassword": {
         "description": ""
     },
+    "shortcutCopyTotp": "Copiar TOTP",
+    "@shortcutCopyTotp": {
+        "description": ""
+    },
+    "shortcutMoveUp": "Seleccione la contraseña anterior",
+    "@shortcutMoveUp": {
+        "description": ""
+    },
+    "shortcutMoveDown": "Seleccione la siguiente contraseña",
+    "@shortcutMoveDown": {
+        "description": ""
+    },
     "shortcutGeneratePassword": "Generar contraseña",
     "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutCopyUrl": "Copiar URL",
+    "@shortcutCopyUrl": {
         "description": ""
     },
     "shortcutOpenUrl": "Abrir URL",
     "@shortcutOpenUrl": {
         "description": ""
+    },
+    "shortcutCancelSearch": "Cancelar búsqueda",
+    "@shortcutCancelSearch": {
+        "description": ""
+    },
+    "shortcutShortcutHelp": "Ayuda de atajo de teclado",
+    "@shortcutShortcutHelp": {
+        "description": ""
+    },
+    "shortcutHelpTitle": "Atajos de teclado",
+    "@shortcutHelpTitle": {
+        "description": "title of dialog showing keyboard shortcuts."
     },
     "unexpectedError": "Error inesperado: {error}",
     "@unexpectedError": {
