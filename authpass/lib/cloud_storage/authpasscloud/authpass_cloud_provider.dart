@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
+import 'package:archive/archive.dart' as archive;
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
@@ -12,6 +13,7 @@ import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -261,7 +263,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final key = ByteUtils.randomBytes(32 + 12);
     final cipherKey = key.sublist(0, 32);
     final cipherNonce = key.sublist(32);
-    final gzipped = gzip.encode(bytes) as Uint8List;
+    final gzipped = _gzipEncode(bytes);
     _logger
         .finer('compressed attachment ${gzipped.length} (was ${bytes.length})');
     final chaCha = ChaCha7539Engine()
@@ -302,7 +304,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
       ..init(false, ParametersWithIV(KeyParameter(cipherKey), cipherNonce));
     final compressed = chaCha.process(data);
     _logger.fine('decrypted attachment. ${compressed.length}');
-    final content = gzip.decode(compressed) as Uint8List;
+    final content = _gzipDecode(compressed);
     _logger.fine('decompressed attachment. ${content.length}');
     return content;
   }
@@ -403,4 +405,18 @@ class AuthPassExternalAttachment {
 enum AttachmentFormat {
   gzipChaCha7539,
   unsupported,
+}
+
+Uint8List _gzipEncode(Uint8List bytes) {
+  if (AuthPassPlatform.isWeb) {
+    return archive.GZipEncoder().encode(bytes) as Uint8List;
+  }
+  return io.GZipCodec().encode(bytes) as Uint8List;
+}
+
+Uint8List _gzipDecode(Uint8List bytes) {
+  if (AuthPassPlatform.isWeb) {
+    return archive.GZipDecoder().decodeBytes(bytes) as Uint8List;
+  }
+  return io.GZipCodec().decode(bytes) as Uint8List;
 }

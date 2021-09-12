@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "2.0.1"
   archive:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: archive
       url: "https://pub.dartlang.org"
