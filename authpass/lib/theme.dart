@@ -61,6 +61,7 @@ class AuthPassTheme {
 
 abstract class Breakpoints {
   static const TABLET_WIDTH = 720;
+  static const LARGE_TABLET_WIDTH = 1120;
 }
 
 // during development use getters :-)
@@ -74,7 +75,7 @@ ThemeData _customize(ThemeData base) {
   pageTransitionBuilders[TargetPlatform.macOS] =
       const FadeUpwardsPageTransitionsBuilder();
   return base.copyWith(
-    androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+    // androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     pageTransitionsTheme:
         PageTransitionsTheme(builders: pageTransitionBuilders),
   );

@@ -119,12 +119,15 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
     super.dispose();
   }
 
+  bool attachedDrawer = false;
   @override
   Widget build(BuildContext context) {
+    attachedDrawer =
+        MediaQuery.of(context).size.width >= Breakpoints.LARGE_TABLET_WIDTH;
     return Row(
       children: <Widget>[
         SizedBox(
-          width: 384,
+          width: attachedDrawer ? 684 : 384, //TODO:
           child: Navigator(
             onGenerateRoute: (settings) {
               assert(settings.name == Navigator.defaultRouteName);

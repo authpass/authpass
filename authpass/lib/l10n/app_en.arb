@@ -378,6 +378,10 @@
   "@searchButtonLabel": {
     "description": "search button tooltip/semantic label"
   },
+  "pinButtonLabel": "Pin/Unpin",
+  "@pinButtonLabel": {
+    "description": "pin menu button tooltip/semantic label"
+  },
   "filterButtonLabel": "Filter by group",
   "@filterButtonLabel": {
     "description": "tooltip/semantic label for filter app bar icon."
