@@ -61,6 +61,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
 
   AutofillServiceStatus? _autofillStatus;
   AutofillPreferences? _autofillPrefs;
+  String? autolockTime = "30 Sec";
 
   late AppDataBloc _appDataBloc;
   AppData? _appData;
@@ -259,6 +260,29 @@ class _PreferencesBodyState extends State<PreferencesBody>
             _analytics.events.trackPreferences(
                 setting: 'localeOverride', to: result?.locale ?? 'null');
           },
+        ),
+        ListTile(
+          leading: const FaIcon(FontAwesomeIcons.lock),
+          title: Text("AutoLock"),
+          trailing: DropdownButton<String>(
+            underline: Text(''),
+            value: _appData!.autolockval,
+            items:
+                <String>['Off', '30 Sec', '1 Min', '5 Min'].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (val) {
+              setState(() {
+                // _appDataBloc
+                //     .update((builder, data) => builder.autolockval = val);
+                //autolockTime = val;
+              });
+            },
+          ),
+          onTap: () {},
         ),
         CheckboxListTile(
           secondary: const FaIcon(FontAwesomeIcons.download),

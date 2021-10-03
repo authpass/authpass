@@ -420,6 +420,10 @@ class _PasswordListContentState extends State<PasswordListContent>
     cancelSearchFilterAction.updateEnabled();
   }
 
+  late AppDataBloc _appDataBloc;
+  AppData? _appData;
+
+  late KdbxBloc kdbxBloc2;
   String? __filterQuery;
   final _filterTextEditingController = TextEditingController();
   final FocusNode _filterFocusNode = FocusNode();
@@ -542,14 +546,43 @@ class _PasswordListContentState extends State<PasswordListContent>
           baseOffset: 0,
           extentOffset: _filterTextEditingController.text.length);
 
+  late Timer _timer;
+  //int _start=;
+  bool timeout = false;
+
+  void startTimer() {
+    int _start = 30; //_appData!.autolocksec;
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          timeout = true;
+          timer.cancel();
+        } else {
+          _start--;
+        }
+      },
+    );
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     _logger.finer('didChangeAppLifecycleState($state)');
     if (state == AppLifecycleState.resumed) {
+      if (timeout) {
+        kdbxBloc2.closeAllFiles(clearQuickUnlock: false);
+        Navigator.pushReplacement(
+            context, SelectFileScreen.route(skipQuickUnlock: false));
+      }
       setState(() {
         _selectAllFilter();
       });
+    } else if (state == AppLifecycleState.paused) {
+      //_start = _appData!.autolocksec; //5;
+      timeout = false;
+      startTimer();
     }
   }
 
@@ -629,7 +662,10 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   AppBar _buildDefaultAppBar(BuildContext context) {
+    _appDataBloc = Provider.of<AppDataBloc>(context);
+
     final kdbxBloc = Provider.of<KdbxBloc>(context);
+    kdbxBloc2 = Provider.of<KdbxBloc>(context);
     final isDirty = kdbxBloc.openedFiles.entries.any((element) =>
         element.key.supportsWrite &&
         element.value.kdbxFile.dirtyObjects.isNotEmpty);
