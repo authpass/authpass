@@ -217,7 +217,7 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   int? get lastBuildId;
 
   int get autolocksec => 30;
-  String? get autolockval => "Off";
+  String? get autolockval => 'Off';
 
   /// Android only: disable screenshots, etc. (FLAG_SECURE)
   bool? get secureWindow;

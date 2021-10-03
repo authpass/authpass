@@ -263,9 +263,9 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         ListTile(
           leading: const FaIcon(FontAwesomeIcons.lock),
-          title: Text("AutoLock"),
+          title: Text('AutoLock'),
           trailing: DropdownButton<String>(
-            underline: Text(''),
+            underline: const Text(''),
             value: _appData!.autolockval,
             items:
                 <String>['Off', '30 Sec', '1 Min', '5 Min'].map((String value) {
