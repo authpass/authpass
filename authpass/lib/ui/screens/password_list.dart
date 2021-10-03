@@ -549,7 +549,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   void startTimer() {
     int _start = 30; //_appData!.autolocksec;
-    const oneSec = const Duration(seconds: 1);
+    var oneSec =  Duration(seconds: 1);
     Timer.periodic(
       oneSec,
       (Timer timer) {

@@ -61,7 +61,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
 
   AutofillServiceStatus? _autofillStatus;
   AutofillPreferences? _autofillPrefs;
-  String? autolockTime = "30 Sec";
+
 
   late AppDataBloc _appDataBloc;
   AppData? _appData;
@@ -263,7 +263,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         ListTile(
           leading: const FaIcon(FontAwesomeIcons.lock),
-          title: Text('AutoLock'),
+          title:const Text('AutoLock'),
           trailing: DropdownButton<String>(
             underline: const Text(''),
             value: _appData!.autolockval,
