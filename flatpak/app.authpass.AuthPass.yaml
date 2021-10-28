@@ -31,19 +31,19 @@ modules:
   
   - name: authpass
     buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network
     build-commands:
-      - cp authpass /app/
-      - cp -r data /app/
-      - cp -r lib /app/
+      - curl -L https://data.authpass.app/data/artifacts/authpass-linux-latest.tar.gz -O
+      - tar -zxf authpass-linux-latest.tar.gz
+      - cp -r authpass/* /app/
       - chmod +x /app/authpass
       - mkdir -p /app/bin
       - ln -s /app/authpass /app/bin/authpass
       - install -Dm644 app.authpass.AuthPass.png /app/share/icons/hicolor/512x512/apps/app.authpass.AuthPass.png
       - install -Dm644 app.authpass.AuthPass.desktop /app/share/applications/app.authpass.AuthPass.desktop
     sources:
-      - type: archive
-        url: https://data.authpass.app/data/artifacts/authpass-linux-1.9.5_1873.tar.gz
-        sha256: 62595c2b047cab0f9e63bdd83f85db14657eff1e1c5a90a9a82558a29ac6fb69
       - type: file
         path: app.authpass.AuthPass.png
       - type: file
