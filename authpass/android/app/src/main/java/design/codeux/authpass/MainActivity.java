@@ -15,7 +15,6 @@ import io.flutter.plugin.common.MethodChannel;
 
 import android.view.WindowManager.LayoutParams;
 import android.view.WindowManager; 
-import android.view.WindowManager.LayoutParams;
 
 public class MainActivity extends FlutterFragmentActivity {
     private static final String CHANNEL = "app.authpass/misc";
