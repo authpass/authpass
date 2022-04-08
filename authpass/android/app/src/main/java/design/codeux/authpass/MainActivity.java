@@ -13,6 +13,10 @@ import io.flutter.embedding.android.SplashScreen;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 
+import android.view.WindowManager.LayoutParams;
+import android.view.WindowManager; 
+import android.view.WindowManager.LayoutParams;
+
 public class MainActivity extends FlutterFragmentActivity {
     private static final String CHANNEL = "app.authpass/misc";
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
@@ -25,6 +29,10 @@ public class MainActivity extends FlutterFragmentActivity {
         if (getIntent() != null) {
             logger.debug("onCreate Intent extras: " + getIntent().getExtras());
         }
+        
+//      window protection from screenshots and screen recordings 
+        getWindow().addFlags(LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
     }
 
     @Override
