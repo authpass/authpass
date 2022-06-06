@@ -1470,7 +1470,7 @@ packages:
       name: string_literal_finder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   string_literal_finder_annotations:
     dependency: "direct main"
     description:

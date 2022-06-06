@@ -21,6 +21,7 @@ analyzer:
     - lib/**/*.g.dart
     - lib/**/*.freezed.dart
     - test/**/*.mocks.dart
+    - lib/generated_plugin_registrant.dart
 
 string_literal_finder:
   exclude_globs:
@@ -29,7 +30,6 @@ string_literal_finder:
     - 'integration_test/**'
     - 'test/**'
     - '**/*.freezed.dart'
-    - 'lib/generated_plugin_registrant.dart'
 
 linter:
   rules:
