@@ -1386,14 +1386,16 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
   Future<void> _copyUsername(
       BuildContext context, CommonFields commonFields, AppLocalizations loc,
       {@NonNls String analyticsAction = 'swipe'}) async {
+    final analytics = context.read<Analytics>();
     final stringValue = entry.entry.getString(commonFields.userName.key);
     if (stringValue == null || stringValue.isNullOrEmpty()) {
       context.showSnackBar(loc.copyUsernameNotExists);
       return;
     }
     await Clipboard.setData(ClipboardData(text: stringValue.getText()));
+    // ignore: use_build_context_synchronously
     context.showSnackBar(loc.doneCopiedUsername);
-    context.read<Analytics>().events.trackCopyUsername(action: analyticsAction);
+    analytics.events.trackCopyUsername(action: analyticsAction);
   }
 
   Future<void> _copyPassword(
@@ -1405,7 +1407,9 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       return;
     }
     await Clipboard.setData(ClipboardData(text: stringValue.getText()));
+    // ignore: use_build_context_synchronously
     context.showSnackBar(loc.doneCopiedPassword);
+    // ignore: use_build_context_synchronously
     context.read<Analytics>().events.trackCopyPassword(action: analyticsAction);
   }
 }

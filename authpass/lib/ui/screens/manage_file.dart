@@ -242,6 +242,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                               const Duration(milliseconds: 100));
                           // final log = appender.log.toString();
                           await appender.dispose();
+                          // ignore: use_build_context_synchronously
                           await LogViewerDialog(
                             title: loc.finishedMerge(lastStatus),
                             log: appender.log,
@@ -261,6 +262,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     TextButton(
                       onPressed: () async {
                         await _kdbxBloc.close(_file!.kdbxFile);
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       },
                       child: Text(loc.closeAndLockFile),

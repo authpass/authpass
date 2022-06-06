@@ -136,6 +136,7 @@ class _GroupEditState extends State<GroupEdit> {
                     if (newGroup != null) {
                       final oldGroup = parent;
                       file.move(widget.group, newGroup);
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(loc.movedEntryToGroup(

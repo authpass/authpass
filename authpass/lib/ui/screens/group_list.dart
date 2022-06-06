@@ -1,3 +1,6 @@
+// FIXME need to fix this lint
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';

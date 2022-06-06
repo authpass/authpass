@@ -169,6 +169,7 @@ class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
 
   VoidCallback? _submitCallback() => asyncTaskCallback((progress) async {
         if (_formKey.currentState!.validate()) {
+          final loc = AppLocalizations.of(context);
           final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
           await kdbxBloc.saveFile(
             widget.file,
@@ -177,8 +178,11 @@ class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
               null,
             ),
           );
-          final loc = AppLocalizations.of(context);
+          // ignore: use_build_context_synchronously
           context.showSnackBar(loc.changeMasterPasswordSuccess);
+          if (!mounted) {
+            return;
+          }
           Navigator.of(context).pop();
         }
       });

@@ -63,6 +63,7 @@ class LockedScreen extends StatelessWidget {
             child: TextButton(
               onPressed: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
+                // ignore: use_build_context_synchronously
                 await SelectFileScreen.navigate(context);
               },
               child: Text(loc.closePasswordFiles.toUpperCase()),

@@ -524,8 +524,10 @@ class PreferencesOverflowMenuAction extends HookWidget {
             PopupMenuItem(
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
+                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
+                // ignore: use_build_context_synchronously
                 await SelectFileScreen.navigate(context);
               },
               child: ListTile(
@@ -539,6 +541,7 @@ class PreferencesOverflowMenuAction extends HookWidget {
             PopupMenuItem(
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: false);
+                // ignore: use_build_context_synchronously
                 await Navigator.of(context, rootNavigator: true)
                     .pushAndRemoveUntil(LockedScreen.route(), (_) => false);
               },

@@ -175,6 +175,7 @@ class CloudMailboxList extends StatelessWidget {
                   onTap: () async {
                     await Clipboard.setData(
                         ClipboardData(text: mailbox.address));
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
                       ..showSnackBar(

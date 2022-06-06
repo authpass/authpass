@@ -29,6 +29,7 @@ string_literal_finder:
     - 'integration_test/**'
     - 'test/**'
     - '**/*.freezed.dart'
+    - 'lib/generated_plugin_registrant.dart'
 
 linter:
   rules:

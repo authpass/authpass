@@ -173,6 +173,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
               target: widget.target,
             );
             _logger.finest('Created file $created');
+            // ignore: use_build_context_synchronously
             await Navigator.of(context)
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (e, stackTrace) {
