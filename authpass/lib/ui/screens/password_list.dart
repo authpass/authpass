@@ -9,7 +9,6 @@ import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
-import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
@@ -415,8 +414,6 @@ class _CancelSearchFilterAction extends Action<CancelSearchFilterIntent> {
 class _PasswordListContentState extends State<PasswordListContent>
     with StreamSubscriberMixin, WidgetsBindingObserver, FutureTaskStateMixin {
   List<EntryViewModel>? _filteredEntries;
-  bool pinNavbar = true;
-  bool attachedDrawer = false;
   String? get _filterQuery => __filterQuery;
   set _filterQuery(String? filterQuery) {
     __filterQuery = filterQuery;
@@ -735,16 +732,6 @@ class _PasswordListContentState extends State<PasswordListContent>
                 _filteredEntries = _allEntries;
               });
             }),
-        attachedDrawer
-            ? IconButton(
-                icon: const Icon(Icons.menu_open_rounded),
-                tooltip: loc.pinButtonLabel,
-                onPressed: () {
-                  setState(() {
-                    pinNavbar = !pinNavbar;
-                  });
-                })
-            : Container(),
         StreamBuilder<CloudStatus?>(
           stream: context.watch<AuthPassCloudBloc>().cloudStatus,
           initialData: null,
@@ -1068,8 +1055,6 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   @override
   Widget build(BuildContext context) {
-    attachedDrawer =
-        MediaQuery.of(context).size.width >= Breakpoints.LARGE_TABLET_WIDTH;
     final entries = _filteredEntries ?? _allEntries;
     final listPrefix = [
       ...?[
@@ -1098,85 +1083,64 @@ class _PasswordListContentState extends State<PasswordListContent>
         appBar: _filteredEntries == null
             ? _buildDefaultAppBar(context)
             : _buildFilterAppBar(context),
-        drawer: attachedDrawer
-            ? null
-            : Drawer(
-                child: PasswordListDrawer(
-                  initialSelection:
-                      _groupFilter.groups.map((e) => e.group).toSet(),
-                  selectionChanged: (Set<KdbxGroup> selection) {
-                    _createGroupFilter(loc, selection);
-                  },
-                ),
-              ),
+        drawer: Drawer(
+          child: PasswordListDrawer(
+            initialSelection: _groupFilter.groups.map((e) => e.group).toSet(),
+            selectionChanged: (Set<KdbxGroup> selection) {
+              _createGroupFilter(loc, selection);
+            },
+          ),
+        ),
         body: ProgressOverlay(
-            task: task,
-            child: Row(
-              children: [
-                attachedDrawer && pinNavbar
-                    ? SizedBox(
-                        width: 300,
-                        child: PasswordListDrawer(
-                          initialSelection:
-                              _groupFilter.groups.map((e) => e.group).toSet(),
-                          selectionChanged: (Set<KdbxGroup> selection) {
-                            _createGroupFilter(loc, selection);
-                          },
-                        ),
-                      )
-                    : Container(),
-                SizedBox(
-                  width: 384,
-                  child: _allEntries!.isEmpty
-                      ? NoPasswordsEmptyView(
-                          listPrefix: listPrefix,
-                          onPrimaryButtonPressed: () {
-                            final kdbxBloc =
-                                Provider.of<KdbxBloc>(context, listen: false);
-                            final entry = kdbxBloc.createEntry();
+          task: task,
+          child: _allEntries!.isEmpty
+              ? NoPasswordsEmptyView(
+                  listPrefix: listPrefix,
+                  onPrimaryButtonPressed: () {
+                    final kdbxBloc =
+                        Provider.of<KdbxBloc>(context, listen: false);
+                    final entry = kdbxBloc.createEntry();
 //                Navigator.of(context).push(EntryDetailsScreen.route(entry: entry));
-                            widget.onEntrySelected(
-                                context, entry, EntrySelectionType.activeOpen);
-                          },
-                        )
-                      : Scrollbar(
-                          child: ListView.builder(
-                            itemCount: entries!.length + 1,
-                            itemBuilder: (context, index) {
-                              // handle [listPrefix]
-                              if (index == 0) {
-                                if (listPrefix.isEmpty) {
-                                  return const SizedBox();
-                                }
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: listPrefix,
-                                );
-                              }
-                              index--;
-
-                              final entry = entries[index];
-
-                              final openedFile =
-                                  kdbxBloc.fileForKdbxFile(entry.entry.file);
-                              final fileColor = openedFile.openedFile.color;
-//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
-                              return PasswordEntryListTileWrapper(
-                                entry: entry,
-                                fileColor: fileColor,
-                                filterQuery: _filterQuery,
-                                selectedEntry: widget.selectedEntry,
-                                onEntrySelected:
-                                    (KdbxEntry entry, EntrySelectionType type) {
-                                  widget.onEntrySelected(context, entry, type);
-                                },
-                              );
-                            },
-                          ),
-                        ),
+                    widget.onEntrySelected(
+                        context, entry, EntrySelectionType.activeOpen);
+                  },
                 )
-              ],
-            )),
+              : Scrollbar(
+                  child: ListView.builder(
+                    itemCount: entries!.length + 1,
+                    itemBuilder: (context, index) {
+                      // handle [listPrefix]
+                      if (index == 0) {
+                        if (listPrefix.isEmpty) {
+                          return const SizedBox();
+                        }
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: listPrefix,
+                        );
+                      }
+                      index--;
+
+                      final entry = entries[index];
+
+                      final openedFile =
+                          kdbxBloc.fileForKdbxFile(entry.entry.file);
+                      final fileColor = openedFile.openedFile.color;
+//                _logger.finer('listview item. selectedEntry: ${widget.selectedEntry}');
+                      return PasswordEntryListTileWrapper(
+                        entry: entry,
+                        fileColor: fileColor,
+                        filterQuery: _filterQuery,
+                        selectedEntry: widget.selectedEntry,
+                        onEntrySelected:
+                            (KdbxEntry entry, EntrySelectionType type) {
+                          widget.onEntrySelected(context, entry, type);
+                        },
+                      );
+                    },
+                  ),
+                ),
+        ),
         floatingActionButton: _allEntries!.isEmpty ||
                 _filterQuery != null ||
                 _autofillMetadata != null
