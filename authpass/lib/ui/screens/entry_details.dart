@@ -49,7 +49,7 @@ import 'package:otp/otp.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:tuple/tuple.dart';
 

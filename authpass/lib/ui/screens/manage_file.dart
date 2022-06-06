@@ -208,6 +208,9 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           onPressed: asyncTaskCallback((progress) async {
                             _file!.kdbxFile.upgrade(KdbxVersion.V4.major);
                             await _kdbxBloc.saveFile(_file!.kdbxFile);
+                            if (!mounted) {
+                              return;
+                            }
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content:
                                     Text(loc.databaseKdbxUpgradeSuccessful)));

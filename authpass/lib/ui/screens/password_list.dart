@@ -836,7 +836,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       // old deprecated value:
       // textTheme: theme.primaryTextTheme,
       // brightness: theme.primaryColorBrightness,
-      systemOverlayStyle: theme.primaryColorBrightness == Brightness.dark
+      systemOverlayStyle: theme.brightness == Brightness.dark
           ? SystemUiOverlayStyle.light
           : SystemUiOverlayStyle.dark,
       leading: IconButton(

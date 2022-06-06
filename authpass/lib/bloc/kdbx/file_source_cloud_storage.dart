@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -7,7 +8,6 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:clock/clock.dart';
 import 'package:file/file.dart';
 import 'package:logging/logging.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('file_source_cloud_storage');

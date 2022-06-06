@@ -299,6 +299,7 @@ class SearchResultListView extends StatelessWidget {
           PopupMenuItem(
             value: () async {
               await provider.delete(entity);
+              // ignore: use_build_context_synchronously
               context.showSnackBar(loc.successfullyDeletedFileCloudStorage);
             },
             child: ListTile(

@@ -15,7 +15,6 @@ import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:openapi_base/openapi_base.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:synchronized/synchronized.dart';

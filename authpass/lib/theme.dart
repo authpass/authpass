@@ -74,7 +74,8 @@ ThemeData _customize(ThemeData base) {
   pageTransitionBuilders[TargetPlatform.macOS] =
       const FadeUpwardsPageTransitionsBuilder();
   return base.copyWith(
-    androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+    // androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+    useMaterial3: true,
     pageTransitionsTheme:
         PageTransitionsTheme(builders: pageTransitionBuilders),
   );

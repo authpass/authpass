@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'icon_selector.dart';
@@ -11,27 +12,7 @@ part of 'icon_selector.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$SelectedIconTearOff {
-  const _$SelectedIconTearOff();
-
-  _SelectedIconPredefined predefined(KdbxIcon icon) {
-    return _SelectedIconPredefined(
-      icon,
-    );
-  }
-
-  _SelectedIconCustom custom(KdbxCustomIcon custom) {
-    return _SelectedIconCustom(
-      custom,
-    );
-  }
-}
-
-/// @nodoc
-const $SelectedIcon = _$SelectedIconTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$SelectedIcon {
@@ -92,29 +73,30 @@ class _$SelectedIconCopyWithImpl<$Res> implements $SelectedIconCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$SelectedIconPredefinedCopyWith<$Res> {
-  factory _$SelectedIconPredefinedCopyWith(_SelectedIconPredefined value,
-          $Res Function(_SelectedIconPredefined) then) =
-      __$SelectedIconPredefinedCopyWithImpl<$Res>;
+abstract class _$$_SelectedIconPredefinedCopyWith<$Res> {
+  factory _$$_SelectedIconPredefinedCopyWith(_$_SelectedIconPredefined value,
+          $Res Function(_$_SelectedIconPredefined) then) =
+      __$$_SelectedIconPredefinedCopyWithImpl<$Res>;
   $Res call({KdbxIcon icon});
 }
 
 /// @nodoc
-class __$SelectedIconPredefinedCopyWithImpl<$Res>
+class __$$_SelectedIconPredefinedCopyWithImpl<$Res>
     extends _$SelectedIconCopyWithImpl<$Res>
-    implements _$SelectedIconPredefinedCopyWith<$Res> {
-  __$SelectedIconPredefinedCopyWithImpl(_SelectedIconPredefined _value,
-      $Res Function(_SelectedIconPredefined) _then)
-      : super(_value, (v) => _then(v as _SelectedIconPredefined));
+    implements _$$_SelectedIconPredefinedCopyWith<$Res> {
+  __$$_SelectedIconPredefinedCopyWithImpl(_$_SelectedIconPredefined _value,
+      $Res Function(_$_SelectedIconPredefined) _then)
+      : super(_value, (v) => _then(v as _$_SelectedIconPredefined));
 
   @override
-  _SelectedIconPredefined get _value => super._value as _SelectedIconPredefined;
+  _$_SelectedIconPredefined get _value =>
+      super._value as _$_SelectedIconPredefined;
 
   @override
   $Res call({
     Object? icon = freezed,
   }) {
-    return _then(_SelectedIconPredefined(
+    return _then(_$_SelectedIconPredefined(
       icon == freezed
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -149,19 +131,19 @@ class _$_SelectedIconPredefined
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _SelectedIconPredefined &&
-            (identical(other.icon, icon) ||
-                const DeepCollectionEquality().equals(other.icon, icon)));
+        (other.runtimeType == runtimeType &&
+            other is _$_SelectedIconPredefined &&
+            const DeepCollectionEquality().equals(other.icon, icon));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(icon);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(icon));
 
   @JsonKey(ignore: true)
   @override
-  _$SelectedIconPredefinedCopyWith<_SelectedIconPredefined> get copyWith =>
-      __$SelectedIconPredefinedCopyWithImpl<_SelectedIconPredefined>(
+  _$$_SelectedIconPredefinedCopyWith<_$_SelectedIconPredefined> get copyWith =>
+      __$$_SelectedIconPredefinedCopyWithImpl<_$_SelectedIconPredefined>(
           this, _$identity);
 
   @override
@@ -228,39 +210,39 @@ class _$_SelectedIconPredefined
 }
 
 abstract class _SelectedIconPredefined implements SelectedIcon {
-  const factory _SelectedIconPredefined(KdbxIcon icon) =
+  const factory _SelectedIconPredefined(final KdbxIcon icon) =
       _$_SelectedIconPredefined;
 
   KdbxIcon get icon => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$SelectedIconPredefinedCopyWith<_SelectedIconPredefined> get copyWith =>
+  _$$_SelectedIconPredefinedCopyWith<_$_SelectedIconPredefined> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$SelectedIconCustomCopyWith<$Res> {
-  factory _$SelectedIconCustomCopyWith(
-          _SelectedIconCustom value, $Res Function(_SelectedIconCustom) then) =
-      __$SelectedIconCustomCopyWithImpl<$Res>;
+abstract class _$$_SelectedIconCustomCopyWith<$Res> {
+  factory _$$_SelectedIconCustomCopyWith(_$_SelectedIconCustom value,
+          $Res Function(_$_SelectedIconCustom) then) =
+      __$$_SelectedIconCustomCopyWithImpl<$Res>;
   $Res call({KdbxCustomIcon custom});
 }
 
 /// @nodoc
-class __$SelectedIconCustomCopyWithImpl<$Res>
+class __$$_SelectedIconCustomCopyWithImpl<$Res>
     extends _$SelectedIconCopyWithImpl<$Res>
-    implements _$SelectedIconCustomCopyWith<$Res> {
-  __$SelectedIconCustomCopyWithImpl(
-      _SelectedIconCustom _value, $Res Function(_SelectedIconCustom) _then)
-      : super(_value, (v) => _then(v as _SelectedIconCustom));
+    implements _$$_SelectedIconCustomCopyWith<$Res> {
+  __$$_SelectedIconCustomCopyWithImpl(
+      _$_SelectedIconCustom _value, $Res Function(_$_SelectedIconCustom) _then)
+      : super(_value, (v) => _then(v as _$_SelectedIconCustom));
 
   @override
-  _SelectedIconCustom get _value => super._value as _SelectedIconCustom;
+  _$_SelectedIconCustom get _value => super._value as _$_SelectedIconCustom;
 
   @override
   $Res call({
     Object? custom = freezed,
   }) {
-    return _then(_SelectedIconCustom(
+    return _then(_$_SelectedIconCustom(
       custom == freezed
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
@@ -295,19 +277,20 @@ class _$_SelectedIconCustom
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _SelectedIconCustom &&
-            (identical(other.custom, custom) ||
-                const DeepCollectionEquality().equals(other.custom, custom)));
+        (other.runtimeType == runtimeType &&
+            other is _$_SelectedIconCustom &&
+            const DeepCollectionEquality().equals(other.custom, custom));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(custom);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(custom));
 
   @JsonKey(ignore: true)
   @override
-  _$SelectedIconCustomCopyWith<_SelectedIconCustom> get copyWith =>
-      __$SelectedIconCustomCopyWithImpl<_SelectedIconCustom>(this, _$identity);
+  _$$_SelectedIconCustomCopyWith<_$_SelectedIconCustom> get copyWith =>
+      __$$_SelectedIconCustomCopyWithImpl<_$_SelectedIconCustom>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -373,11 +356,11 @@ class _$_SelectedIconCustom
 }
 
 abstract class _SelectedIconCustom implements SelectedIcon {
-  const factory _SelectedIconCustom(KdbxCustomIcon custom) =
+  const factory _SelectedIconCustom(final KdbxCustomIcon custom) =
       _$_SelectedIconCustom;
 
   KdbxCustomIcon get custom => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$SelectedIconCustomCopyWith<_SelectedIconCustom> get copyWith =>
+  _$$_SelectedIconCustomCopyWith<_$_SelectedIconCustom> get copyWith =>
       throw _privateConstructorUsedError;
 }

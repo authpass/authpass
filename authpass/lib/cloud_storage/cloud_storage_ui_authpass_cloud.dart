@@ -336,6 +336,7 @@ class ShareTokenPresent extends StatelessWidget {
   Future<void> _copy(BuildContext context) async {
     final loc = AppLocalizations.of(context);
     await Clipboard.setData(ClipboardData(text: tokenUrl));
+    // ignore: use_build_context_synchronously
     context.showSnackBar(loc.sharePresentCopied);
   }
 
@@ -458,6 +459,7 @@ class _ShareCodeInputDialogState extends State<ShareCodeInputDialog>
       final token = _tokenFromString(_controller.text);
       final loadedToken =
           await widget.provider.loadFromShareToken(token: token);
+      // ignore: use_build_context_synchronously
       await Navigator.of(context)
           .pushReplacement(CredentialsScreen.route(loadedToken.fileSource));
     });

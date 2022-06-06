@@ -17,7 +17,7 @@ class _$AppInfo extends AppInfo {
   final String packageName;
 
   factory _$AppInfo([void Function(AppInfoBuilder)? updates]) =>
-      (new AppInfoBuilder()..update(updates)).build();
+      (new AppInfoBuilder()..update(updates))._build();
 
   _$AppInfo._(
       {required this.appName,
@@ -25,12 +25,12 @@ class _$AppInfo extends AppInfo {
       required this.buildNumber,
       required this.packageName})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(appName, 'AppInfo', 'appName');
-    BuiltValueNullFieldError.checkNotNull(version, 'AppInfo', 'version');
+    BuiltValueNullFieldError.checkNotNull(appName, r'AppInfo', 'appName');
+    BuiltValueNullFieldError.checkNotNull(version, r'AppInfo', 'version');
     BuiltValueNullFieldError.checkNotNull(
-        buildNumber, 'AppInfo', 'buildNumber');
+        buildNumber, r'AppInfo', 'buildNumber');
     BuiltValueNullFieldError.checkNotNull(
-        packageName, 'AppInfo', 'packageName');
+        packageName, r'AppInfo', 'packageName');
   }
 
   @override
@@ -60,7 +60,7 @@ class _$AppInfo extends AppInfo {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('AppInfo')
+    return (newBuiltValueToStringHelper(r'AppInfo')
           ..add('appName', appName)
           ..add('version', version)
           ..add('buildNumber', buildNumber)
@@ -114,17 +114,19 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
   }
 
   @override
-  _$AppInfo build() {
+  AppInfo build() => _build();
+
+  _$AppInfo _build() {
     final _$result = _$v ??
         new _$AppInfo._(
             appName: BuiltValueNullFieldError.checkNotNull(
-                appName, 'AppInfo', 'appName'),
+                appName, r'AppInfo', 'appName'),
             version: BuiltValueNullFieldError.checkNotNull(
-                version, 'AppInfo', 'version'),
+                version, r'AppInfo', 'version'),
             buildNumber: BuiltValueNullFieldError.checkNotNull(
-                buildNumber, 'AppInfo', 'buildNumber'),
+                buildNumber, r'AppInfo', 'buildNumber'),
             packageName: BuiltValueNullFieldError.checkNotNull(
-                packageName, 'AppInfo', 'packageName'));
+                packageName, r'AppInfo', 'packageName'));
     replace(_$result);
     return _$result;
   }
@@ -137,7 +139,7 @@ class _$FeatureFlags extends FeatureFlags {
   final String? authpassCloudUri;
 
   factory _$FeatureFlags([void Function(FeatureFlagsBuilder)? updates]) =>
-      (new FeatureFlagsBuilder()..update(updates)).build();
+      (new FeatureFlagsBuilder()..update(updates))._build();
 
   _$FeatureFlags._({this.authpassCloud, this.authpassCloudUri}) : super._();
 
@@ -163,7 +165,7 @@ class _$FeatureFlags extends FeatureFlags {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('FeatureFlags')
+    return (newBuiltValueToStringHelper(r'FeatureFlags')
           ..add('authpassCloud', authpassCloud)
           ..add('authpassCloudUri', authpassCloudUri))
         .toString();
@@ -208,7 +210,9 @@ class FeatureFlagsBuilder
   }
 
   @override
-  _$FeatureFlags build() {
+  FeatureFlags build() => _build();
+
+  _$FeatureFlags _build() {
     final _$result = _$v ??
         new _$FeatureFlags._(
             authpassCloud: authpassCloud, authpassCloudUri: authpassCloudUri);
@@ -217,4 +221,4 @@ class FeatureFlagsBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

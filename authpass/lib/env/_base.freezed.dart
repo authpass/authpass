@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '_base.dart';
@@ -11,36 +12,7 @@ part of '_base.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$EnvSecretsTearOff {
-  const _$EnvSecretsTearOff();
-
-  _EnvSecrets call(
-      {@nullable required String? analyticsAmplitudeApiKey,
-      @nullable required String? analyticsGoogleAnalyticsId,
-      @nullable required String? googleClientId,
-      @nullable required String? googleClientSecret,
-      @nullable required String? dropboxKey,
-      @nullable required String? dropboxSecret,
-      @nullable required String? microsoftClientId,
-      @nullable required String? microsoftClientSecret}) {
-    return _EnvSecrets(
-      analyticsAmplitudeApiKey: analyticsAmplitudeApiKey,
-      analyticsGoogleAnalyticsId: analyticsGoogleAnalyticsId,
-      googleClientId: googleClientId,
-      googleClientSecret: googleClientSecret,
-      dropboxKey: dropboxKey,
-      dropboxSecret: dropboxSecret,
-      microsoftClientId: microsoftClientId,
-      microsoftClientSecret: microsoftClientSecret,
-    );
-  }
-}
-
-/// @nodoc
-const $EnvSecrets = _$EnvSecretsTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$EnvSecrets {
@@ -139,10 +111,11 @@ class _$EnvSecretsCopyWithImpl<$Res> implements $EnvSecretsCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$EnvSecretsCopyWith<$Res> implements $EnvSecretsCopyWith<$Res> {
-  factory _$EnvSecretsCopyWith(
-          _EnvSecrets value, $Res Function(_EnvSecrets) then) =
-      __$EnvSecretsCopyWithImpl<$Res>;
+abstract class _$$_EnvSecretsCopyWith<$Res>
+    implements $EnvSecretsCopyWith<$Res> {
+  factory _$$_EnvSecretsCopyWith(
+          _$_EnvSecrets value, $Res Function(_$_EnvSecrets) then) =
+      __$$_EnvSecretsCopyWithImpl<$Res>;
   @override
   $Res call(
       {@nullable String? analyticsAmplitudeApiKey,
@@ -156,14 +129,14 @@ abstract class _$EnvSecretsCopyWith<$Res> implements $EnvSecretsCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$EnvSecretsCopyWithImpl<$Res> extends _$EnvSecretsCopyWithImpl<$Res>
-    implements _$EnvSecretsCopyWith<$Res> {
-  __$EnvSecretsCopyWithImpl(
-      _EnvSecrets _value, $Res Function(_EnvSecrets) _then)
-      : super(_value, (v) => _then(v as _EnvSecrets));
+class __$$_EnvSecretsCopyWithImpl<$Res> extends _$EnvSecretsCopyWithImpl<$Res>
+    implements _$$_EnvSecretsCopyWith<$Res> {
+  __$$_EnvSecretsCopyWithImpl(
+      _$_EnvSecrets _value, $Res Function(_$_EnvSecrets) _then)
+      : super(_value, (v) => _then(v as _$_EnvSecrets));
 
   @override
-  _EnvSecrets get _value => super._value as _EnvSecrets;
+  _$_EnvSecrets get _value => super._value as _$_EnvSecrets;
 
   @override
   $Res call({
@@ -176,7 +149,7 @@ class __$EnvSecretsCopyWithImpl<$Res> extends _$EnvSecretsCopyWithImpl<$Res>
     Object? microsoftClientId = freezed,
     Object? microsoftClientSecret = freezed,
   }) {
-    return _then(_EnvSecrets(
+    return _then(_$_EnvSecrets(
       analyticsAmplitudeApiKey: analyticsAmplitudeApiKey == freezed
           ? _value.analyticsAmplitudeApiKey
           : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
@@ -259,65 +232,54 @@ class _$_EnvSecrets implements _EnvSecrets {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _EnvSecrets &&
-            (identical(
-                    other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) ||
-                const DeepCollectionEquality().equals(
-                    other.analyticsAmplitudeApiKey,
-                    analyticsAmplitudeApiKey)) &&
-            (identical(other.analyticsGoogleAnalyticsId,
-                    analyticsGoogleAnalyticsId) ||
-                const DeepCollectionEquality().equals(
-                    other.analyticsGoogleAnalyticsId,
-                    analyticsGoogleAnalyticsId)) &&
-            (identical(other.googleClientId, googleClientId) ||
-                const DeepCollectionEquality()
-                    .equals(other.googleClientId, googleClientId)) &&
-            (identical(other.googleClientSecret, googleClientSecret) ||
-                const DeepCollectionEquality()
-                    .equals(other.googleClientSecret, googleClientSecret)) &&
-            (identical(other.dropboxKey, dropboxKey) ||
-                const DeepCollectionEquality()
-                    .equals(other.dropboxKey, dropboxKey)) &&
-            (identical(other.dropboxSecret, dropboxSecret) ||
-                const DeepCollectionEquality()
-                    .equals(other.dropboxSecret, dropboxSecret)) &&
-            (identical(other.microsoftClientId, microsoftClientId) ||
-                const DeepCollectionEquality()
-                    .equals(other.microsoftClientId, microsoftClientId)) &&
-            (identical(other.microsoftClientSecret, microsoftClientSecret) ||
-                const DeepCollectionEquality().equals(
-                    other.microsoftClientSecret, microsoftClientSecret)));
+        (other.runtimeType == runtimeType &&
+            other is _$_EnvSecrets &&
+            const DeepCollectionEquality().equals(
+                other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) &&
+            const DeepCollectionEquality().equals(
+                other.analyticsGoogleAnalyticsId, analyticsGoogleAnalyticsId) &&
+            const DeepCollectionEquality()
+                .equals(other.googleClientId, googleClientId) &&
+            const DeepCollectionEquality()
+                .equals(other.googleClientSecret, googleClientSecret) &&
+            const DeepCollectionEquality()
+                .equals(other.dropboxKey, dropboxKey) &&
+            const DeepCollectionEquality()
+                .equals(other.dropboxSecret, dropboxSecret) &&
+            const DeepCollectionEquality()
+                .equals(other.microsoftClientId, microsoftClientId) &&
+            const DeepCollectionEquality()
+                .equals(other.microsoftClientSecret, microsoftClientSecret));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(analyticsAmplitudeApiKey) ^
-      const DeepCollectionEquality().hash(analyticsGoogleAnalyticsId) ^
-      const DeepCollectionEquality().hash(googleClientId) ^
-      const DeepCollectionEquality().hash(googleClientSecret) ^
-      const DeepCollectionEquality().hash(dropboxKey) ^
-      const DeepCollectionEquality().hash(dropboxSecret) ^
-      const DeepCollectionEquality().hash(microsoftClientId) ^
-      const DeepCollectionEquality().hash(microsoftClientSecret);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(analyticsAmplitudeApiKey),
+      const DeepCollectionEquality().hash(analyticsGoogleAnalyticsId),
+      const DeepCollectionEquality().hash(googleClientId),
+      const DeepCollectionEquality().hash(googleClientSecret),
+      const DeepCollectionEquality().hash(dropboxKey),
+      const DeepCollectionEquality().hash(dropboxSecret),
+      const DeepCollectionEquality().hash(microsoftClientId),
+      const DeepCollectionEquality().hash(microsoftClientSecret));
 
   @JsonKey(ignore: true)
   @override
-  _$EnvSecretsCopyWith<_EnvSecrets> get copyWith =>
-      __$EnvSecretsCopyWithImpl<_EnvSecrets>(this, _$identity);
+  _$$_EnvSecretsCopyWith<_$_EnvSecrets> get copyWith =>
+      __$$_EnvSecretsCopyWithImpl<_$_EnvSecrets>(this, _$identity);
 }
 
 abstract class _EnvSecrets implements EnvSecrets {
   const factory _EnvSecrets(
-      {@nullable required String? analyticsAmplitudeApiKey,
-      @nullable required String? analyticsGoogleAnalyticsId,
-      @nullable required String? googleClientId,
-      @nullable required String? googleClientSecret,
-      @nullable required String? dropboxKey,
-      @nullable required String? dropboxSecret,
-      @nullable required String? microsoftClientId,
-      @nullable required String? microsoftClientSecret}) = _$_EnvSecrets;
+      {@nullable required final String? analyticsAmplitudeApiKey,
+      @nullable required final String? analyticsGoogleAnalyticsId,
+      @nullable required final String? googleClientId,
+      @nullable required final String? googleClientSecret,
+      @nullable required final String? dropboxKey,
+      @nullable required final String? dropboxSecret,
+      @nullable required final String? microsoftClientId,
+      @nullable required final String? microsoftClientSecret}) = _$_EnvSecrets;
 
   @override
   @nullable
@@ -345,6 +307,6 @@ abstract class _EnvSecrets implements EnvSecrets {
   String? get microsoftClientSecret => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$EnvSecretsCopyWith<_EnvSecrets> get copyWith =>
+  _$$_EnvSecretsCopyWith<_$_EnvSecrets> get copyWith =>
       throw _privateConstructorUsedError;
 }

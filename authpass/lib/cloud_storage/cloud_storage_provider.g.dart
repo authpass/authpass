@@ -18,11 +18,11 @@ class _$CloudStorageEntity extends CloudStorageEntity {
 
   factory _$CloudStorageEntity(
           [void Function(CloudStorageEntityBuilder)? updates]) =>
-      (new CloudStorageEntityBuilder()..update(updates)).build();
+      (new CloudStorageEntityBuilder()..update(updates))._build();
 
   _$CloudStorageEntity._({required this.id, this.type, this.name, this.path})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, 'CloudStorageEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(id, r'CloudStorageEntity', 'id');
   }
 
   @override
@@ -52,7 +52,7 @@ class _$CloudStorageEntity extends CloudStorageEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CloudStorageEntity')
+    return (newBuiltValueToStringHelper(r'CloudStorageEntity')
           ..add('id', id)
           ..add('type', type)
           ..add('name', name)
@@ -107,11 +107,13 @@ class CloudStorageEntityBuilder
   }
 
   @override
-  _$CloudStorageEntity build() {
+  CloudStorageEntity build() => _build();
+
+  _$CloudStorageEntity _build() {
     final _$result = _$v ??
         new _$CloudStorageEntity._(
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'CloudStorageEntity', 'id'),
+                id, r'CloudStorageEntity', 'id'),
             type: type,
             name: name,
             path: path);
@@ -127,12 +129,14 @@ class _$SearchResponse extends SearchResponse {
   final bool hasMore;
 
   factory _$SearchResponse([void Function(SearchResponseBuilder)? updates]) =>
-      (new SearchResponseBuilder()..update(updates)).build();
+      (new SearchResponseBuilder()..update(updates))._build();
 
   _$SearchResponse._({required this.results, required this.hasMore})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(results, 'SearchResponse', 'results');
-    BuiltValueNullFieldError.checkNotNull(hasMore, 'SearchResponse', 'hasMore');
+    BuiltValueNullFieldError.checkNotNull(
+        results, r'SearchResponse', 'results');
+    BuiltValueNullFieldError.checkNotNull(
+        hasMore, r'SearchResponse', 'hasMore');
   }
 
   @override
@@ -158,7 +162,7 @@ class _$SearchResponse extends SearchResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('SearchResponse')
+    return (newBuiltValueToStringHelper(r'SearchResponse')
           ..add('results', results)
           ..add('hasMore', hasMore))
         .toString();
@@ -203,14 +207,16 @@ class SearchResponseBuilder
   }
 
   @override
-  _$SearchResponse build() {
+  SearchResponse build() => _build();
+
+  _$SearchResponse _build() {
     _$SearchResponse _$result;
     try {
       _$result = _$v ??
           new _$SearchResponse._(
               results: results.build(),
               hasMore: BuiltValueNullFieldError.checkNotNull(
-                  hasMore, 'SearchResponse', 'hasMore'));
+                  hasMore, r'SearchResponse', 'hasMore'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -218,7 +224,7 @@ class SearchResponseBuilder
         results.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'SearchResponse', _$failedField, e.toString());
+            r'SearchResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -227,4 +233,4 @@ class SearchResponseBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

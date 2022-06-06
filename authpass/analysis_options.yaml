@@ -19,6 +19,7 @@ analyzer:
     todo: ignore
   exclude:
     - lib/**/*.g.dart
+    - lib/**/*.freezed.dart
     - test/**/*.mocks.dart
 
 string_literal_finder:
@@ -33,6 +34,10 @@ linter:
   rules:
     use_key_in_widget_constructors: false
     constant_identifier_names: false
+    # this makes no sense for an app?
+    library_private_types_in_public_api: false
+    # TODO This should probably be fixed..
+    depend_on_referenced_packages: false
 
     always_declare_return_types: true
     prefer_single_quotes: true

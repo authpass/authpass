@@ -16,7 +16,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
 
   @override
   void trackLaunch({required Brightness systemBrightness}) =>
-      trackEvent('launch', <String, dynamic>{
+      trackEvent('launch', <String, Object?>{
         'systemBrightness': systemBrightness.toString().substring(11)
       });
   @override
@@ -24,7 +24,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {required String? userType,
           required String device,
           required int value}) =>
-      trackEvent('init', <String, dynamic>{
+      trackEvent('init', <String, Object?>{
         'userType': userType,
         'device': device,
         'value': value
@@ -34,7 +34,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'onboarding',
           String action = 'click',
           String label = 'onboardingNewbie'}) =>
-      trackEvent('onboardingNew', <String, dynamic>{
+      trackEvent('onboardingNew', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
@@ -44,78 +44,78 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'onboarding',
           String action = 'click',
           String label = 'onboardingExisting'}) =>
-      trackEvent('onboardingExisting', <String, dynamic>{
+      trackEvent('onboardingExisting', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
       });
   @override
   void trackActionPressed({required String action}) =>
-      trackEvent('actionPressed', <String, dynamic>{'action': action});
+      trackEvent('actionPressed', <String, Object?>{'action': action});
   @override
   void trackCreateFileAt(
           {required String cloudStorageId, required String category}) =>
-      trackEvent('createFileAt', <String, dynamic>{
+      trackEvent('createFileAt', <String, Object?>{
         'cloudStorageId': cloudStorageId,
         'category': category
       });
   @override
-  void trackCreateFile() => trackEvent('createFile', <String, dynamic>{});
+  void trackCreateFile() => trackEvent('createFile', <String, Object?>{});
   @override
   void trackOpenFile({required String type}) =>
-      trackEvent('openFile', <String, dynamic>{'type': type});
+      trackEvent('openFile', <String, Object?>{'type': type});
   @override
   void trackOpenFile2({required String generator, required String version}) =>
       trackEvent('openFile2',
-          <String, dynamic>{'generator': generator, 'version': version});
+          <String, Object?>{'generator': generator, 'version': version});
   @override
   void trackSelectEntry({EntrySelectionType? type}) => trackEvent(
-      'selectEntry', <String, dynamic>{'type': type?.toString().substring(19)});
+      'selectEntry', <String, Object?>{'type': type?.toString().substring(19)});
   @override
   void trackCopyField({required String key}) =>
-      trackEvent('copyField', <String, dynamic>{'key': key});
+      trackEvent('copyField', <String, Object?>{'key': key});
   @override
   void trackAddField({required String key}) =>
-      trackEvent('addField', <String, dynamic>{'key': key});
+      trackEvent('addField', <String, Object?>{'key': key});
   @override
   void trackCloseAllFiles({required int count}) =>
-      trackEvent('closeAllFiles', <String, dynamic>{'count': count});
+      trackEvent('closeAllFiles', <String, Object?>{'count': count});
   @override
   void trackLockAllFiles({required int count}) =>
-      trackEvent('lockAllFiles', <String, dynamic>{'count': count});
+      trackEvent('lockAllFiles', <String, Object?>{'count': count});
   @override
   void trackUserType({String? userType}) =>
-      trackEvent('userType', <String, dynamic>{'userType': userType});
+      trackEvent('userType', <String, Object?>{'userType': userType});
   @override
-  void trackCloseFile() => trackEvent('closeFile', <String, dynamic>{});
+  void trackCloseFile() => trackEvent('closeFile', <String, Object?>{});
   @override
   void trackPasswordListEmpty() =>
-      trackEvent('passwordListEmpty', <String, dynamic>{});
+      trackEvent('passwordListEmpty', <String, Object?>{});
   @override
   void trackQuickUnlock({int? value}) =>
-      trackEvent('quickUnlock', <String, dynamic>{'value': value});
+      trackEvent('quickUnlock', <String, Object?>{'value': value});
   @override
   void trackSave({required String type, int? value}) =>
-      trackEvent('save', <String, dynamic>{'type': type, 'value': value});
+      trackEvent('save', <String, Object?>{'type': type, 'value': value});
   @override
   void trackSaveConflict(
           {required String type, int? value, required bool success}) =>
       trackEvent('saveConflict',
-          <String, dynamic>{'type': type, 'value': value, 'success': success});
+          <String, Object?>{'type': type, 'value': value, 'success': success});
   @override
   void trackSaveCount({required String? generator, required int value}) =>
       trackEvent('saveCount',
-          <String, dynamic>{'generator': generator, 'value': value});
+          <String, Object?>{'generator': generator, 'value': value});
   @override
-  void trackDrawerOpen() => trackEvent('drawerOpen', <String, dynamic>{});
+  void trackDrawerOpen() => trackEvent('drawerOpen', <String, Object?>{});
   @override
   void trackAttachmentAction(String action, {String category = 'attachment'}) =>
       trackEvent('attachmentAction',
-          <String, dynamic>{'action': action, 'category': category});
+          <String, Object?>{'action': action, 'category': category});
   @override
   void trackAttachmentAdd(AttachmentAddType action, String ext, int value,
           {String category = 'attachmentAdd'}) =>
-      trackEvent('attachmentAdd', <String, dynamic>{
+      trackEvent('attachmentAdd', <String, Object?>{
         'action': action.toString().substring(18),
         'ext': ext,
         'value': value,
@@ -124,7 +124,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackCloudAuth(CloudAuthAction action,
           {String label = 'auth', String category = 'cloud'}) =>
-      trackEvent('cloudAuth', <String, dynamic>{
+      trackEvent('cloudAuth', <String, Object?>{
         'action': action.toString().substring(16),
         'label': label,
         'category': category
@@ -132,19 +132,19 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   @override
   void trackGroupDelete(GroupDeleteResult result,
           {String category = 'group'}) =>
-      trackEvent('groupDelete', <String, dynamic>{
+      trackEvent('groupDelete', <String, Object?>{
         'result': result.toString().substring(18),
         'category': category
       });
   @override
   void trackGroupCreate({String category = 'group'}) =>
-      trackEvent('groupCreate', <String, dynamic>{'category': category});
+      trackEvent('groupCreate', <String, Object?>{'category': category});
   @override
   void trackPermanentlyDeleteEntry(
           {String category = 'entry',
           String action = 'perm-delete',
           String label = 'confirm'}) =>
-      trackEvent('permanentlyDeleteEntry', <String, dynamic>{
+      trackEvent('permanentlyDeleteEntry', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
@@ -154,7 +154,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'entry',
           String action = 'perm-delete',
           String label = 'cancel'}) =>
-      trackEvent('permanentlyDeleteEntryCancel', <String, dynamic>{
+      trackEvent('permanentlyDeleteEntryCancel', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
@@ -164,7 +164,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'group',
           String action = 'perm-delete',
           String label = 'confirm'}) =>
-      trackEvent('permanentlyDeleteGroup', <String, dynamic>{
+      trackEvent('permanentlyDeleteGroup', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
@@ -174,7 +174,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'group',
           String action = 'perm-delete',
           String label = 'cancel'}) =>
-      trackEvent('permanentlyDeleteGroupCancel', <String, dynamic>{
+      trackEvent('permanentlyDeleteGroupCancel', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
@@ -183,14 +183,14 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void _trackPreferences(
           {required String action, required String to, String? category}) =>
       trackEvent('preferences',
-          <String, dynamic>{'action': action, 'to': to, 'category': category});
+          <String, Object?>{'action': action, 'to': to, 'category': category});
   @override
   void trackAutofillFilter(
           {required String filter,
           String category = 'autofill',
           String action = 'filter',
           required int value}) =>
-      trackEvent('autofillFilter', <String, dynamic>{
+      trackEvent('autofillFilter', <String, Object?>{
         'filter': filter,
         'category': category,
         'action': action,
@@ -200,14 +200,14 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void trackAutofillSelect(
           {String category = 'autofill', String action = 'select'}) =>
       trackEvent('autofillSelect',
-          <String, dynamic>{'category': category, 'action': action});
+          <String, Object?>{'category': category, 'action': action});
   @override
   void trackTryUnlock(
           {required TryUnlockResult action,
           required String ext,
           required String source,
           String category = 'tryUnlock'}) =>
-      trackEvent('tryUnlock', <String, dynamic>{
+      trackEvent('tryUnlock', <String, Object?>{
         'action': action.toString().substring(16),
         'ext': ext,
         'source': source,
@@ -218,7 +218,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'copyClipboard',
           String action = 'swipe',
           String label = 'password'}) =>
-      trackEvent('copyPassword', <String, dynamic>{
+      trackEvent('copyPassword', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
@@ -228,21 +228,21 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           {String category = 'copyClipboard',
           String action = 'swipe',
           String label = 'username'}) =>
-      trackEvent('copyUsername', <String, dynamic>{
+      trackEvent('copyUsername', <String, Object?>{
         'category': category,
         'action': action,
         'label': label
       });
   @override
   void trackEntryAction(EntryActionType label, {String action = 'entry'}) =>
-      trackEvent('entryAction', <String, dynamic>{
+      trackEvent('entryAction', <String, Object?>{
         'label': label.toString().substring(16),
         'action': action
       });
   @override
   void trackBackupBanner(BannerAction action) => trackEvent('backupBanner',
-      <String, dynamic>{'action': action.toString().substring(13)});
+      <String, Object?>{'action': action.toString().substring(13)});
   @override
   void trackAutofillBanner(BannerAction action) => trackEvent('autofillBanner',
-      <String, dynamic>{'action': action.toString().substring(13)});
+      <String, Object?>{'action': action.toString().substring(13)});
 }

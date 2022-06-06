@@ -88,13 +88,13 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'uuid':
           result.uuid = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'lastOpenedAt':
           result.lastOpenedAt = serializers.deserialize(value,
@@ -102,16 +102,16 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
           break;
         case 'sourceType':
           result.sourceType = serializers.deserialize(value,
-                  specifiedType: const FullType(OpenedFilesSourceType))
+                  specifiedType: const FullType(OpenedFilesSourceType))!
               as OpenedFilesSourceType;
           break;
         case 'sourcePath':
           result.sourcePath = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'biometricStoreName':
           result.biometricStoreName = serializers.deserialize(value,
@@ -273,7 +273,7 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -351,7 +351,7 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
           break;
         case 'systemWideShortcuts':
           result.systemWideShortcuts = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'searchFields':
           result.searchFields = serializers.deserialize(value,
@@ -385,7 +385,7 @@ class _$OpenedFile extends OpenedFile {
   final int? colorCode;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder)? updates]) =>
-      (new OpenedFileBuilder()..update(updates)).build();
+      (new OpenedFileBuilder()..update(updates))._build();
 
   _$OpenedFile._(
       {required this.uuid,
@@ -398,12 +398,12 @@ class _$OpenedFile extends OpenedFile {
       this.filePickerIdentifier,
       this.colorCode})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(uuid, 'OpenedFile', 'uuid');
+    BuiltValueNullFieldError.checkNotNull(uuid, r'OpenedFile', 'uuid');
     BuiltValueNullFieldError.checkNotNull(
-        sourceType, 'OpenedFile', 'sourceType');
+        sourceType, r'OpenedFile', 'sourceType');
     BuiltValueNullFieldError.checkNotNull(
-        sourcePath, 'OpenedFile', 'sourcePath');
-    BuiltValueNullFieldError.checkNotNull(name, 'OpenedFile', 'name');
+        sourcePath, r'OpenedFile', 'sourcePath');
+    BuiltValueNullFieldError.checkNotNull(name, r'OpenedFile', 'name');
   }
 
   @override
@@ -445,7 +445,7 @@ class _$OpenedFile extends OpenedFile {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('OpenedFile')
+    return (newBuiltValueToStringHelper(r'OpenedFile')
           ..add('uuid', uuid)
           ..add('lastOpenedAt', lastOpenedAt)
           ..add('sourceType', sourceType)
@@ -534,18 +534,20 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   }
 
   @override
-  _$OpenedFile build() {
+  OpenedFile build() => _build();
+
+  _$OpenedFile _build() {
     final _$result = _$v ??
         new _$OpenedFile._(
             uuid: BuiltValueNullFieldError.checkNotNull(
-                uuid, 'OpenedFile', 'uuid'),
+                uuid, r'OpenedFile', 'uuid'),
             lastOpenedAt: lastOpenedAt,
             sourceType: BuiltValueNullFieldError.checkNotNull(
-                sourceType, 'OpenedFile', 'sourceType'),
+                sourceType, r'OpenedFile', 'sourceType'),
             sourcePath: BuiltValueNullFieldError.checkNotNull(
-                sourcePath, 'OpenedFile', 'sourcePath'),
+                sourcePath, r'OpenedFile', 'sourcePath'),
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'OpenedFile', 'name'),
+                name, r'OpenedFile', 'name'),
             biometricStoreName: biometricStoreName,
             macOsSecureBookmark: macOsSecureBookmark,
             filePickerIdentifier: filePickerIdentifier,
@@ -594,7 +596,7 @@ class _$AppData extends AppData {
   final String? searchFields;
 
   factory _$AppData([void Function(AppDataBuilder)? updates]) =>
-      (new AppDataBuilder()..update(updates)).build();
+      (new AppDataBuilder()..update(updates))._build();
 
   _$AppData._(
       {required this.previousFiles,
@@ -617,11 +619,11 @@ class _$AppData extends AppData {
       this.searchFields})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        previousFiles, 'AppData', 'previousFiles');
+        previousFiles, r'AppData', 'previousFiles');
     BuiltValueNullFieldError.checkNotNull(passwordGeneratorCharacterSets,
-        'AppData', 'passwordGeneratorCharacterSets');
+        r'AppData', 'passwordGeneratorCharacterSets');
     BuiltValueNullFieldError.checkNotNull(
-        systemWideShortcuts, 'AppData', 'systemWideShortcuts');
+        systemWideShortcuts, r'AppData', 'systemWideShortcuts');
   }
 
   @override
@@ -706,7 +708,7 @@ class _$AppData extends AppData {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('AppData')
+    return (newBuiltValueToStringHelper(r'AppData')
           ..add('previousFiles', previousFiles)
           ..add('passwordGeneratorLength', passwordGeneratorLength)
           ..add(
@@ -866,7 +868,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   }
 
   @override
-  _$AppData build() {
+  AppData build() => _build();
+
+  _$AppData _build() {
     _$AppData _$result;
     try {
       _$result = _$v ??
@@ -889,7 +893,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
               fetchWebsiteIcons: fetchWebsiteIcons,
               authPassCloudAttachments: authPassCloudAttachments,
               systemWideShortcuts: BuiltValueNullFieldError.checkNotNull(
-                  systemWideShortcuts, 'AppData', 'systemWideShortcuts'),
+                  systemWideShortcuts, r'AppData', 'systemWideShortcuts'),
               searchFields: searchFields);
     } catch (_) {
       late String _$failedField;
@@ -904,7 +908,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
         _dismissedBackupLocalFiles?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'AppData', _$failedField, e.toString());
+            r'AppData', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -913,4 +917,4 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

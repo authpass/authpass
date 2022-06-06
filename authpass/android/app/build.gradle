@@ -103,7 +103,8 @@ android {
             dimension "hpdist"
             project.flutter.target = 'lib/env/fdroid.dart'
             applicationIdSuffix = '.fdroid'
-            signingConfig null
+            // https://issuetracker.google.com/issues/197430188
+            signingConfig?.setConfig(null)
         }
         // Binary distribution for direct release through github.
         sideload {
