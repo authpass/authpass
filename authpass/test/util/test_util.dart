@@ -56,16 +56,16 @@ class CloudStorageHelperMock implements CloudStorageHelperBase {
   Map<String, String>? __storage;
   Future<Map<String, String>> _storage() async =>
       __storage ??= await (() async {
-        final _storage = <String, String>{};
+        final storage = <String, String>{};
         if (_file.existsSync()) {
           _logger.fine('Loading from $_file');
-          _storage.addAll((json.decode(await _file.readAsString()) as Map)
+          storage.addAll((json.decode(await _file.readAsString()) as Map)
               .cast<String, String>());
         } else {
           _logger
               .severe('Unable to find cloud storage file at ${_file.absolute}');
         }
-        return _storage;
+        return storage;
       })();
 
   @override

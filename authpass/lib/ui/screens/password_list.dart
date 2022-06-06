@@ -72,8 +72,8 @@ class EntryViewModel implements Comparable<EntryViewModel> {
   final List<String> groupNames;
   final Color? fileColor;
 
-  static late final hasSchemaRegexp = RegExp(r'^https?://');
-  static late final hasNewline = RegExp('[\r\n]');
+  static final hasSchemaRegexp = RegExp(r'^https?://');
+  static final hasNewline = RegExp('[\r\n]');
 
   static List<String> _createGroupNames(KdbxGroup group) =>
       group.breadcrumbs.map((e) => e.name.get()!).toList();
@@ -235,7 +235,7 @@ class PasswordListContent extends StatefulWidget {
 class PasswordListFilterIsolateRunner {
   static List<EntryViewModel> filterEntries(
     AppData appData,
-    List<EntryViewModel> _allEntries,
+    List<EntryViewModel> allEntries,
     String query, {
     int maxResults = 30,
   }) {
@@ -248,7 +248,7 @@ class PasswordListFilterIsolateRunner {
                 .toSet() ??
             searchFields);
     final terms = query.toLowerCase().split(CharConstants.space);
-    return _allEntries
+    return allEntries
         .where((entry) => matches(searchKeys, entry, terms))
         // take no more than 30 for now.
         .take(maxResults)
@@ -1694,7 +1694,7 @@ class EntryIcon extends StatelessWidget {
   final double size;
   final Widget Function(BuildContext context) fallback;
 
-  static late final newLineRegexp = RegExp(r'[\r\n]');
+  static final newLineRegexp = RegExp(r'[\r\n]');
 
   @override
   Widget build(BuildContext context) {

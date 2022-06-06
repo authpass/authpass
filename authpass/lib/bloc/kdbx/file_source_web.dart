@@ -59,7 +59,7 @@ class _SimpleKeyValueStore {
     _init();
   }
 
-  static late final instance = _SimpleKeyValueStore._();
+  static final instance = _SimpleKeyValueStore._();
 
   void _init() {}
 

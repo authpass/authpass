@@ -141,14 +141,14 @@ class ProgressOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _task = task;
+    final task = task;
 
     return Stack(
       children: <Widget>[
         child,
         Positioned.fill(
           child: AnimatedCrossFade(
-            firstChild: _task == null
+            firstChild: task == null
                 ? Container()
                 : Container(
                     color: Colors.black12,
@@ -162,7 +162,7 @@ class ProgressOverlay extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(32),
                         child: ValueListenableBuilder<FutureTask>(
-                          valueListenable: _task,
+                          valueListenable: task,
                           builder: (context, value, child) {
                             _logger.fine('Generating progress dialog'
                                 ' with label ${value.progressLabel}');

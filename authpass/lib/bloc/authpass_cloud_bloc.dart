@@ -79,8 +79,7 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   @NonNls
   late final imageBaseUrl = Uri.parse(
-      ArgumentError.checkNotNull(featureFlags.authpassCloudUri) +
-          'website/image');
+      '${ArgumentError.checkNotNull(featureFlags.authpassCloudUri)}website/image');
 
   late final _cloudStatus = LazyBehaviorSubject<CloudStatus?>(() async {
     if (tokenStatus != TokenStatus.confirmed) {
@@ -238,8 +237,8 @@ class AuthPassCloudBloc with ChangeNotifier {
   }
 
   Future<bool> checkConfirmed() async {
-    final _storedToken = this._storedToken;
-    if (_storedToken == null) {
+    final storedToken = _storedToken;
+    if (storedToken == null) {
       throw ArgumentError('_storedToken');
     }
     final client = await _getClient();
@@ -247,9 +246,9 @@ class AuthPassCloudBloc with ChangeNotifier {
     if (response.status == EmailStatusGetResponseBody200Status.confirmed) {
       await _saveToken(
         _StoredToken(
-          authToken: _storedToken.authToken,
+          authToken: storedToken.authToken,
           isConfirmed: true,
-          createdAt: _storedToken.createdAt,
+          createdAt: storedToken.createdAt,
         ),
       );
       return true;

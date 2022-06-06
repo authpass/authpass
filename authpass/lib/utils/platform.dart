@@ -21,7 +21,7 @@ class AuthPassPlatform {
   static bool get isLinux => !_kIsWeb && Platform.isLinux;
   static bool get isWindows => !_kIsWeb && Platform.isWindows;
   @NonNls
-  static late final bool isWindowsWinAutoUpdate = isWindows &&
+  static final bool isWindowsWinAutoUpdate = isWindows &&
       const bool.fromEnvironment('AUTHPASS_WIN_AUTOUPDATE', defaultValue: true);
 
   /// Whether this is a "portable" build -

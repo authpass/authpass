@@ -20,7 +20,7 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
-late final _logger = Logger('app_bar_menu');
+final _logger = Logger('app_bar_menu');
 
 class AppBarMenu {
   static Iterable<PopupMenuEntry<VoidCallback>> createDefaultPopupMenuItems(

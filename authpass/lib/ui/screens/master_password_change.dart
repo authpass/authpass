@@ -64,7 +64,7 @@ class MasterPasswordChangeForm extends StatefulWidget {
 
 class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
     with FutureTaskStateMixin {
-  static late final _zxcvbn = Zxcvbn();
+  static final _zxcvbn = Zxcvbn();
 
   final _databaseName = TextEditingController();
   final TextEditingController _password = TextEditingController();

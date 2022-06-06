@@ -75,7 +75,7 @@ dependencies:
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.1
 
-  biometric_storage: ^3.0.1-dev.1
+  biometric_storage: ^4.1.1
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
@@ -151,7 +151,6 @@ dependencies:
   flutter_windowmanager: ^0.2.0
 
   mime: ^1.0.0
-  pedantic: ^1.9.2
   ffi: ^1.0.0
   # AuthPass Cloud email deps
   enough_mail: ^1.2.2
@@ -202,9 +201,9 @@ dev_dependencies:
   freezed: ^0.14.1+3
   plugin_platform_interface: ^2.0.0
   msix: ^2.1.3
-  flutter_lints: ^1.0.4
   string_literal_finder: ^1.0.2
   archive: ^3.1.2
+  flutter_lints: ^2.0.1
 
 dependency_overrides:
 #  analytics_event_gen:

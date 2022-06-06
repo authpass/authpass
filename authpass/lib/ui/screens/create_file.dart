@@ -236,17 +236,17 @@ class _PasswordStrengthDisplayState
 
   @override
   Widget build(BuildContext context) {
-    final _strength = widget.strength;
+    final strength = widget.strength;
     // final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final feedback = _strength?.feedback.warning.takeUnlessBlank() ??
+    final feedback = strength?.feedback.warning.takeUnlessBlank() ??
         // _strength?.feedback?.suggestions?.firstOrNull ??
         ''; // NON-NLS
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (_strength != null) ...[
+        if (strength != null) ...[
           LinearProgressIndicator(
             value: _scoreTween!.evaluate(animation)! / 5.0,
             valueColor: AlwaysStoppedAnimation(

@@ -139,12 +139,12 @@ class AuthPassCloudProvider extends CloudStorageProvider
         await c.filecloudFileRetrievePost(FileId(fileToken: file.id));
     final fileContent = response.requireSuccess();
     // FIXME there must be a better solution than to hard code `etag` here.
-    const _etagHeader = 'etag'; // NON-NLS
-    final versionToken = response.headers[_etagHeader]?.firstOrNull;
+    const etagHeader = 'etag'; // NON-NLS
+    final versionToken = response.headers[etagHeader]?.firstOrNull;
     if (versionToken == null) {
-      _logger.warning('response did not contain $_etagHeader header.');
+      _logger.warning('response did not contain $etagHeader header.');
       throw StateError(
-          'Missing $_etagHeader in response. got: ${response.headers} '
+          'Missing $etagHeader in response. got: ${response.headers} '
           '(${response.status})');
     }
     final metadata = _FileMetadata(
@@ -399,7 +399,7 @@ class AuthPassExternalAttachment {
   @NonNls
   static const prefixIdentifier = 'https://authpass.app/filecloud ';
 
-  static late final prefixIdentifierBytes = utf8.encode(prefixIdentifier);
+  static final prefixIdentifierBytes = utf8.encode(prefixIdentifier);
 }
 
 enum AttachmentFormat {

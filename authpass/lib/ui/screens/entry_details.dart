@@ -1832,14 +1832,14 @@ class StringEntryFieldEditor extends StatelessWidget {
           if (fieldKey == commonFields.password.key &&
               controller!.text.isEmpty) {
             return IconButton(
-                tooltip: loc.menuItemGeneratePassword + ' (cmd+g)', // NON-NLS
+                tooltip: '${loc.menuItemGeneratePassword} (cmd+g)', // NON-NLS
                 icon: const Icon(Icons.refresh),
                 onPressed: delegate.generatePassword,
                 color: color);
           }
           if (fieldKey == commonFields.url.key && controller!.text.isNotEmpty) {
             return IconButton(
-                tooltip: loc.actionOpenUrl + ' (shift+cmd+U)', // NON-NLS
+                tooltip: '${loc.actionOpenUrl} (shift+cmd+U)', // NON-NLS
                 icon: const Icon(Icons.open_in_new),
                 onPressed: delegate.openUrl,
                 color: color);

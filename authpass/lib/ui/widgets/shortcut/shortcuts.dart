@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 typedef LabelProvider = String Function(AppLocalizations loc);
 
-late final defaultAuthPassShortcuts = [
+final defaultAuthPassShortcuts = [
   AuthPassShortcut.def(
     key: LogicalKeyboardKey.keyF,
     intent: const SearchIntent(),
