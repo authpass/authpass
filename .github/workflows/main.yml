@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -18,8 +18,8 @@ jobs:
         flavor: ['playstore', 'playstoredev', 'samsungapps', 'sideload', 'huawei', 'amazon']
         shouldRelease:
           - ${{ contains(github.ref, 'stable') || startsWith(github.ref, 'refs/heads/v') }}
-        isMaster:
-          - ${{ contains(github.ref, 'master') }}
+        isMain:
+          - ${{ contains(github.ref, 'main') }}
         exclude:
           - shouldRelease: false
             flavor: amazon
@@ -38,7 +38,7 @@ jobs:
     - name: Checkout submodules
       shell: bash
       run: |
-        echo "shouldRelease: ${{matrix.shouldRelease}} - isMaster: ${{matrix.isMaster}} - ref: ${{github.ref}}"
+        echo "shouldRelease: ${{matrix.shouldRelease}} - isMain: ${{matrix.isMain}} - ref: ${{github.ref}}"
         auth_header="$(git config --local --get http.https://github.com/.extraheader)"
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
