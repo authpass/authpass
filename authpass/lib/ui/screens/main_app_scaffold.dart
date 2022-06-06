@@ -12,7 +12,6 @@ import 'package:authpass/ui/widgets/utils/back_button_navigator_delegate.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
@@ -142,7 +141,7 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
                         push = _navigatorKey.currentState!.pushAndRemoveUntil(
                           FocusWorkaroundPageRoute<void>(
                               focusNode: WidgetsBinding
-                                  .instance!.focusManager.primaryFocus,
+                                  .instance.focusManager.primaryFocus,
                               settings: const RouteSettings(name: '/entry'),
                               builder: (context) => EntryDetailsScreen(
                                     entry: entry,

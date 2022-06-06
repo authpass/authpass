@@ -38,7 +38,6 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -388,9 +387,11 @@ class _EntryDetailsState extends State<EntryDetails>
         }
 
         _copyField([commonFields.password]);
+        return null;
       }),
       CopyUsernameIntent: CallbackAction(onInvoke: (_) {
         _copyField([commonFields.userName]);
+        return null;
       }),
       CopyTotpIntent: CallbackAction(onInvoke: (_) {
         _logger.fine('Copying ${commonFields.otpAuth}');
@@ -399,12 +400,15 @@ class _EntryDetailsState extends State<EntryDetails>
           commonFields.otpAuthCompat2,
           commonFields.otpAuthCompat1,
         ]);
+        return null;
       }),
       OpenUrlIntent: CallbackAction(onInvoke: (_) {
         _fieldStateFor(commonFields.url)?.openUrl();
+        return null;
       }),
       CopyUrlIntent: CallbackAction(onInvoke: (_) {
         _fieldStateFor(commonFields.url)?.copyValue();
+        return null;
       }),
       // DismissIntent: CallbackAction(onInvoke: (_) {
       //   FocusManager.instance.primaryFocus?.unfocus();
@@ -1471,7 +1475,7 @@ class _EntryFieldState extends State<EntryField>
           _controller.selection = TextSelection(
               baseOffset: 0, extentOffset: _controller.text.length);
           _isValueObscured = false;
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             _focusNode.requestFocus();
             _logger.finer('requesting focus.');
           });

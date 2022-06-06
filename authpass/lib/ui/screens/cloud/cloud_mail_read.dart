@@ -14,7 +14,6 @@ import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';

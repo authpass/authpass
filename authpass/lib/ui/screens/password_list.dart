@@ -42,7 +42,6 @@ import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -204,7 +203,7 @@ class PasswordListContent extends StatefulWidget {
 
   @NonNls
   bool get isAutofillSelector =>
-      WidgetsBinding.instance!.window.defaultRouteName == '/autofill';
+      WidgetsBinding.instance.window.defaultRouteName == '/autofill';
   final void Function(KdbxEntry entry, EntrySelectionType type)
       _onEntrySelected;
   final KdbxEntry? selectedEntry;
@@ -409,6 +408,7 @@ class _CancelSearchFilterAction extends Action<CancelSearchFilterIntent> {
   @override
   Object? invoke(CancelSearchFilterIntent intent) {
     state._cancelFilter();
+    return null;
   }
 }
 
@@ -460,7 +460,7 @@ class _PasswordListContentState extends State<PasswordListContent>
 //    _isolateRunner.then((runner) => runner.run(PasswordListFilterIsolateRunner.init, widget.entries)).then((result) {
 //      _logger.finer('Initializd filter isolate $result');
 //    });
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _updateAllEntries();
     _groupFilterNotifier.addListener(_updateAllEntries);
     _updateAutofillPrefs();
@@ -570,7 +570,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             _filteredEntries = _allEntries;
           }
           _selectAllFilter();
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             _filterFocusNode.requestFocus();
           });
         }),
@@ -587,7 +587,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   // ignore: unused_element
   bool _isFocusInForeignTextField() {
     final widget =
-        WidgetsBinding.instance!.focusManager.primaryFocus?.context?.widget;
+        WidgetsBinding.instance.focusManager.primaryFocus?.context?.widget;
     if (widget == null) {
       return false;
     }
@@ -624,7 +624,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     _logger.info('Disposing isolate runner.');
 //    _isolateRunner.then<void>((runner) => runner.close());
     _filterFocusNode.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _groupFilterNotifier.removeListener(_updateAllEntries);
     _groupFilterNotifier.dispose();
     _actionsRegistration?.dispose();
@@ -933,7 +933,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   List<Widget>? _buildAutofillListPrefix() {
     if (!widget.isAutofillSelector) {
       _logger.info(
-          'not autofill: ${WidgetsBinding.instance!.window.defaultRouteName}');
+          'not autofill: ${WidgetsBinding.instance.window.defaultRouteName}');
       return null;
     }
     final loc = AppLocalizations.of(context);

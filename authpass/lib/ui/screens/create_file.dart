@@ -8,15 +8,12 @@ import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 // ignore: implementation_imports
-import 'package:zxcvbn/src/result.dart';
 import 'package:zxcvbn/zxcvbn.dart';
 
 final _logger = Logger('create_file');

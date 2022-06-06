@@ -141,7 +141,6 @@ ThemeData createDarkTheme() {
     primary: AuthPassTheme.primaryColor,
     onPrimary: Colors.white,
     secondary: AuthPassTheme.primarySwatch[300]!,
-    secondaryVariant: AuthPassTheme.primarySwatch[500]!,
   );
   return _customize(ThemeData(
     typography: _getTypography(),

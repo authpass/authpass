@@ -51,6 +51,7 @@ class OtpAuth {
         rethrow;
       }
     }
+    return null;
   }
 
   static String? _addBase32Padding(String? base32data) {

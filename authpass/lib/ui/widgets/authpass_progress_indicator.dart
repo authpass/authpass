@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AuthPassProgressIndicator extends StatelessWidget {
   const AuthPassProgressIndicator({Key? key}) : super(key: key);

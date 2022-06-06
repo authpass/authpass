@@ -35,7 +35,6 @@ import 'package:collection/collection.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file/local.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -281,7 +280,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   Widget build(BuildContext context) {
     // TODO generate localizations.
     _logger.fine('Building AuthPass App state. route: '
-        '${WidgetsBinding.instance!.window.defaultRouteName}');
+        '${WidgetsBinding.instance.window.defaultRouteName}');
     return MultiProvider(
       providers: [
         Provider<DiacBloc>(
@@ -374,10 +373,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             viewportSizeWidth: mq.size.width,
             viewportSizeHeight: mq.size.height,
             displaySizeWidth:
-                WidgetsBinding.instance!.window.physicalSize.width,
+                WidgetsBinding.instance.window.physicalSize.width,
             displaySizeHeight:
-                WidgetsBinding.instance!.window.physicalSize.height,
-            devicePixelRatio: WidgetsBinding.instance!.window.devicePixelRatio,
+                WidgetsBinding.instance.window.physicalSize.height,
+            devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
           final localizations = AppLocalizations.of(context);
@@ -408,7 +407,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           _deps.analytics.trackScreen(initialRoute);
           _deps.analytics.events.trackLaunch(
               systemBrightness:
-                  WidgetsBinding.instance!.window.platformBrightness);
+                  WidgetsBinding.instance.window.platformBrightness);
           if (startupStopwatch.isRunning) {
             startupStopwatch.stop();
             _deps.analytics.trackTiming(

@@ -1,8 +1,6 @@
 import 'package:authpass/utils/constants.dart';
-import 'package:built_value/built_value.dart' hide nullable;
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:meta/meta.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part '_base.g.dart';

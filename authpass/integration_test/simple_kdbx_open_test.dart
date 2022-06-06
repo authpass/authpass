@@ -8,8 +8,7 @@ import 'package:integration_test/integration_test.dart';
 
 void main() {
   // ignore: unused_local_variable
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized()
-      as IntegrationTestWidgetsFlutterBinding;
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('failing test example', (WidgetTester tester) async {
     unawaited(env.TestDriverEnv().start());

@@ -2,9 +2,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/utils/extension_methods.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:provider/provider.dart';
 

@@ -34,8 +34,6 @@ import 'package:file/file.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
@@ -226,7 +224,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
     super.didChangeDependencies();
     _logger.finer('didChangeDependencies ${widget.skipQuickUnlock}');
     if (!widget.skipQuickUnlock) {
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _checkQuickUnlock();
       });
     }

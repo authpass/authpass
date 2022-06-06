@@ -7,7 +7,6 @@ import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/iterables.dart' as iterables;

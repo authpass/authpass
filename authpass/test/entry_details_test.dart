@@ -1,7 +1,6 @@
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:clock/clock.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';

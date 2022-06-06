@@ -5,8 +5,6 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -64,7 +62,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     }
 
     _keyboardShortcutEvents._changeNotifier.addListener(() {
-      SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
         if (!mounted) {
           _logger.warning(
               'Got keyboard shortcut event, but was no longer mounted.');
@@ -138,6 +136,7 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
           descr,
           routeAppend: 'shortcuts',
         );
+        return null;
       })
     };
     return Shortcuts(
