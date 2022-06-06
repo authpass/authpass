@@ -33,6 +33,7 @@ if (secretPropertiesFile.exists()) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -40,10 +41,6 @@ android {
 //    buildToolsVersion "29.0.2"
     ndkVersion System.getProperty("design.codeux.ndkVersion", "21.0.6113669")
 
-    lintOptions {
-        disable 'InvalidPackage'
-        checkReleaseBuilds false
-    }
 
     defaultConfig {
         applicationId "design.codeux.authpass"
@@ -136,6 +133,10 @@ android {
             project.flutter.target = 'lib/env/development.dart'
             applicationIdSuffix = '.debug'
         }
+    }
+    lint {
+        checkReleaseBuilds false
+        disable 'InvalidPackage'
     }
 }
 

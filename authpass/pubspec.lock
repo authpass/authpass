@@ -669,14 +669,14 @@ packages:
       name: flutter_widget_from_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0"
+    version: "0.8.5"
   flutter_widget_from_html_core:
     dependency: transitive
     description:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0"
+    version: "0.8.5+3"
   flutter_windowmanager:
     dependency: "direct main"
     description:
@@ -738,6 +738,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.2+2"
+  fwfh_selectable_text:
+    dependency: transitive
+    description:
+      name: fwfh_selectable_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.3+1"
   fwfh_svg:
     dependency: transitive
     description:
@@ -745,6 +752,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.2"
+  fwfh_text_style:
+    dependency: transitive
+    description:
+      name: fwfh_text_style
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.7.3+2"
   fwfh_url_launcher:
     dependency: transitive
     description:

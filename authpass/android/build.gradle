@@ -3,19 +3,22 @@ if (System.getProperty("design.codeux.ndkVersion") == null) {
     if (rootProject.hasProperty('design.codeux.ndkVersion')) {
         System.setProperty("design.codeux.ndkVersion", rootProject.getProperty("design.codeux.ndkVersion"))
     } else {
-        System.setProperty("design.codeux.ndkVersion", "21.0.6113669")
+        System.setProperty("design.codeux.ndkVersion", "22.1.7171670")
     }
 }
 println("ndkVersion: ${System.getProperty("design.codeux.ndkVersion")}")
 
 buildscript {
+    ext.kotlin_version = '1.6.10'
+
     repositories {
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
