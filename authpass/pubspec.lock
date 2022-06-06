@@ -28,7 +28,7 @@ packages:
       name: analytics_event_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   analyzer:
     dependency: transitive
     description:
