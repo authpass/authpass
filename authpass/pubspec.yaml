@@ -11,9 +11,9 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  #  kdbx: ^0.2.0
-  kdbx:
-    path: ../deps/kdbx.dart
+  kdbx: ^2.3.0
+#  kdbx:
+#    path: ../deps/kdbx.dart
   argon2_ffi: ^1.0.0
   simple_form_field_validator: ^1.0.0
 #    git:
@@ -37,6 +37,7 @@ dependencies:
   json_annotation: ^4.0.0
   freezed_annotation: ^0.14.1
   built_value: ^8.0.6
+  built_collection: ^5.1.1
   simple_json_persistence: ^2.0.1
   provider: ^6.0.0
   flutter_hooks: ^0.18.0
@@ -205,12 +206,11 @@ dev_dependencies:
   archive: ^3.1.2
   flutter_lints: ^2.0.1
 
-dependency_overrides:
+#dependency_overrides:
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
-  # Until bug fix gets merged: https://github.com/flutter/packages/pull/433 (0.6.5)
-  kdbx:
-    path: ../deps/kdbx.dart
+#  kdbx:
+#    path: ../deps/kdbx.dart
 #  openapi_base:
 #    path: /Users/herbert/dev/openapi_dart/packages/openapi_base
 #  flutter_async_utils:

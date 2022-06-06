@@ -97,13 +97,13 @@ class SelectFileScreen extends StatelessWidget {
                 ),
                 PopupMenuItem(
                   value: () async {
+                    final navigator = Navigator.of(context);
                     final source = await showDialog<FileSourceUrl>(
                         context: context,
                         builder: (context) => SelectUrlDialog());
                     if (source != null) {
                       // _loadAndGoToCredentials(source);
-                      await Navigator.of(context)
-                          .push(CredentialsScreen.route(source));
+                      await navigator.push(CredentialsScreen.route(source));
                     }
                   },
                   child: ListTile(
@@ -141,7 +141,7 @@ class ProgressOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final task = task;
+    final task = this.task;
 
     return Stack(
       children: <Widget>[

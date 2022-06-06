@@ -276,8 +276,8 @@ class EmailRead extends StatelessWidget {
                                   const BoxDecoration(color: Colors.white),
                               child: HtmlWidget(
                                 htmlData,
-                                onTapUrl: (link) {
-                                  DialogUtils.openUrl(link);
+                                onTapUrl: (link) async {
+                                  return DialogUtils.openUrl(link);
                                 },
                               ),
                             ),
