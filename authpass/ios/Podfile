@@ -41,6 +41,7 @@ post_install do |installer|
     target.build_configurations.each do |config|
 
       # disable all permissions for permission_handler
+      # also customize audio_session (see below)
       #
       # TODO: remove this https://github.com/andyduke/filesystem_picker/issues/10
       # This is bullshit, the plugin is only used for `filesystem_picker` which
@@ -81,19 +82,24 @@ post_install do |installer|
         'PERMISSION_MEDIA_LIBRARY=0',
 
         ## dart: PermissionGroup.sensors
-        'PERMISSION_SENSORS=0'
-      ]
+        'PERMISSION_SENSORS=0',
 
-    end
-
-    # https://pub.dev/packages/audio_session#ios-setup
-    # (flutter_widget_from_html depends on audio_session)
-    target.build_configurations.each do |config|
-      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-        '$(inherited)',
+        # https://pub.dev/packages/audio_session#ios-setup
+        # (flutter_widget_from_html depends on audio_session)
         'AUDIO_SESSION_MICROPHONE=0'
+
       ]
+
     end
+
+#     # https://pub.dev/packages/audio_session#ios-setup
+#     # (flutter_widget_from_html depends on audio_session)
+#     target.build_configurations.each do |config|
+#       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+#         '$(inherited)',
+#         'AUDIO_SESSION_MICROPHONE=0'
+#       ]
+#     end
 
 
   end
