@@ -372,8 +372,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           _deps.analytics.updateSizes(
             viewportSizeWidth: mq.size.width,
             viewportSizeHeight: mq.size.height,
-            displaySizeWidth:
-                WidgetsBinding.instance.window.physicalSize.width,
+            displaySizeWidth: WidgetsBinding.instance.window.physicalSize.width,
             displaySizeHeight:
                 WidgetsBinding.instance.window.physicalSize.height,
             devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,

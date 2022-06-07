@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ThemeUtil {
@@ -9,5 +8,6 @@ class ThemeUtil {
 
 extension ThemeDataExt on ThemeData {
   bool get isDarkTheme => brightness == Brightness.dark;
+
   Color iconColor(Color? fileColor) => ThemeUtil.iconColor(this, fileColor);
 }
