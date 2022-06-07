@@ -87,10 +87,16 @@ class QuickUnlockStorage {
   final Analytics analytics;
   bool? _supported;
 
+  static var debugForceNoBiometricSupport = false;
+
   /// should only be used if used in non interactive callbacks.
   bool? get supportsBiometricKeystoreAlready => _supported;
 
   Future<bool> supportsBiometricKeyStore() async {
+    if (debugForceNoBiometricSupport) {
+      _logger.warning('debugForceNoBiometricSupport enabled.');
+      return false;
+    }
     if (_supported != null) {
       return _supported!;
     }

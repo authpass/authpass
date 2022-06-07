@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/test_driver.dart' as env;
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:flutter/widgets.dart';
@@ -11,6 +12,7 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('failing test example', (WidgetTester tester) async {
+    QuickUnlockStorage.debugForceNoBiometricSupport = true;
     unawaited(env.TestDriverEnv().start());
     await tester.pumpAndSettle();
 

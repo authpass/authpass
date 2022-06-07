@@ -1,6 +1,8 @@
 PODS:
   - argon2_ffi (0.0.1):
     - Flutter
+  - audio_session (0.0.1):
+    - Flutter
   - autofill_service (0.0.1):
     - Flutter
   - barcode_scan2 (0.0.1):
@@ -23,30 +25,33 @@ PODS:
   - FMDB/standard (2.7.5)
   - integration_test (0.0.1):
     - Flutter
+  - just_audio (0.0.1):
+    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - open_file (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider (0.0.1):
+  - path_provider_ios (0.0.1):
     - Flutter
-  - share (0.0.1):
+  - share_plus (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftProtobuf (1.17.0)
-  - url_launcher (0.0.1):
+  - url_launcher_ios (0.0.1):
     - Flutter
-  - video_player (0.0.1):
+  - video_player_avfoundation (0.0.1):
     - Flutter
   - wakelock (0.0.1):
     - Flutter
-  - webview_flutter (0.0.1):
+  - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - argon2_ffi (from `.symlinks/plugins/argon2_ffi/ios`)
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
   - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
@@ -56,15 +61,16 @@ DEPENDENCIES:
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_store_listing (from `.symlinks/plugins/flutter_store_listing/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - share (from `.symlinks/plugins/share/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - video_player (from `.symlinks/plugins/video_player/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -75,6 +81,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   argon2_ffi:
     :path: ".symlinks/plugins/argon2_ffi/ios"
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   autofill_service:
     :path: ".symlinks/plugins/autofill_service/ios"
   barcode_scan2:
@@ -93,27 +101,30 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_store_listing/ios"
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
+  just_audio:
+    :path: ".symlinks/plugins/just_audio/ios"
   open_file:
     :path: ".symlinks/plugins/open_file/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  share:
-    :path: ".symlinks/plugins/share/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
-  video_player:
-    :path: ".symlinks/plugins/video_player/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
@@ -123,19 +134,20 @@ SPEC CHECKSUMS:
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_store_listing: 8a8514f63b41943433de5d684204ebf1edcbbfe4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  integration_test: 7db6d89f336f671dcbc7563ee27a5b08f6f8aee1
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftProtobuf: 9c85136c6ba74b0a1b84279dbf0f6db8efb714e0
-  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
-  webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
+  webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
 PODFILE CHECKSUM: ed908e41b68d4abb9397f601ad4c25beeffb919f
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3

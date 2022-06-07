@@ -964,7 +964,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
   Future<bool>? _loadingFile;
 
   late KdbxBloc _kdbxBloc;
-  bool? _biometricQuickUnlockSupported = false;
+  bool _biometricQuickUnlockSupported = false;
   bool? _biometricQuickUnlockActivated;
 
   KeyFile? _keyFile;
@@ -984,7 +984,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
     _kdbxBloc = Provider.of<KdbxBloc>(context);
     _kdbxBloc.quickUnlockStorage
         .supportsBiometricKeyStore()
-        .then((bool? biometricQuickUnlock) => setState(() {
+        .then((biometricQuickUnlock) => setState(() {
               _biometricQuickUnlockSupported = biometricQuickUnlock;
               _biometricQuickUnlockActivated ??= true;
             }));
