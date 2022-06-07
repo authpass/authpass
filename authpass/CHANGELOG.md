@@ -1,5 +1,7 @@
-# 1.9.5 - unreleased
+# 1.9.5 - 2022-06-08
 
+* Update/Improve translations.
+* Upgrade to Flutter 3.0, Upgrade dependencies.
 
 # 1.9.4 - 2021-09-13
 
