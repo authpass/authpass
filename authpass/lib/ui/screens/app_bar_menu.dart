@@ -42,7 +42,7 @@ class AppBarMenu {
         },
         child: ListTile(
           key: const ValueKey('openPasswordGenerator'),
-          leading: const Icon(FontAwesomeIcons.random),
+          leading: const Icon(FontAwesomeIcons.shuffle),
           title: Text(loc.menuItemGeneratePassword),
         ),
       ),
@@ -52,7 +52,7 @@ class AppBarMenu {
           Navigator.of(context).push(PreferencesScreen.route());
         },
         child: ListTile(
-          leading: const Icon(FontAwesomeIcons.cogs),
+          leading: const Icon(FontAwesomeIcons.gears),
           title: Text(loc.menuItemPreferences),
         ),
       ),

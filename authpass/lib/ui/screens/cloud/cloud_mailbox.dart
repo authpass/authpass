@@ -101,7 +101,7 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
             ),
             Tab(
               text: loc.mailTabBarTitleMail,
-              icon: const Icon(FontAwesomeIcons.mailBulk),
+              icon: const Icon(FontAwesomeIcons.envelopesBulk),
             ),
           ],
         ),
@@ -202,7 +202,7 @@ class CloudMailboxList extends StatelessWidget {
                           mailbox.isDisabled
                               ? ListTile(
                                   leading:
-                                      const Icon(FontAwesomeIcons.volumeUp),
+                                      const Icon(FontAwesomeIcons.volumeHigh),
                                   title: Text(loc.mailboxEnableLabel),
                                   subtitle: Text(loc.mailboxEnableHint),
                                   onTap: () async {
@@ -215,7 +215,7 @@ class CloudMailboxList extends StatelessWidget {
                                 )
                               : ListTile(
                                   leading:
-                                      const Icon(FontAwesomeIcons.volumeMute),
+                                      const Icon(FontAwesomeIcons.volumeXmark),
                                   title: Text(loc.mailboxDisableLabel),
                                   subtitle: Text(loc.mailboxDisableHint),
                                   onTap: () async {

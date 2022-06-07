@@ -622,7 +622,7 @@ class GroupListFlatList extends StatelessWidget {
                       onPressed: () =>
                           Navigator.of(context).pop(GroupAction.edit),
                       child: ListTile(
-                        leading: const Icon(FontAwesomeIcons.edit),
+                        leading: const Icon(FontAwesomeIcons.penToSquare),
                         title: Text(loc.editAction),
                       ),
                     ),

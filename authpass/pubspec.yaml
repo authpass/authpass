@@ -52,7 +52,7 @@ dependencies:
 #  clipboard_manager: ^0.0.4
 
   flutter_async_utils: ^1.0.0+1
-  flutter_svg: ">=0.20.0-nullsafety.3 <1.0.0"
+  flutter_svg: ^1.1.0
   #usage: ^3.4.1
   usage:
     git:
@@ -64,7 +64,7 @@ dependencies:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info_plus: ^2.1.0
+  device_info_plus: ^3.2.4
   path_provider: ^2.0.1
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
@@ -73,8 +73,8 @@ dependencies:
   autofill_service:
     path: ../deps/autofill_service
 
-  flutter_colorpicker: ^0.5.0
-  flutter_speed_dial: ^4.3.0
+  flutter_colorpicker: ^1.0.3
+  flutter_speed_dial: ^6.0.0
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.1
 
@@ -83,7 +83,7 @@ dependencies:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
   url_launcher: ^6.0.2
-  font_awesome_flutter: ^9.0.0
+  font_awesome_flutter: ^10.1.0
   otp: ^3.0.0-nullsafety.0
   pointycastle: ^3.3.4
   #zxcvbn: ^0.0.1
@@ -132,15 +132,15 @@ dependencies:
       ref: 595e5829bd3a36a69999a99473d3aad6fd8febc8
 
   # FDE
-  file_selector: ^0.8.2
-  file_selector_macos: ^0.0.4
-  file_selector_windows: ^0.0.2
+  file_selector: ^0.8.4+2
+#  file_selector_macos: ^0.0.4
+#  file_selector_windows: ^0.0.2
   file_selector_linux: ^0.0.2
 
   macos_secure_bookmarks: ^0.2.0
 
   # UI Utils
-  percent_indicator: ^3.3.0-nullsafety.1
+  percent_indicator: ^4.2.2
 
   # Plugins
   #flutter_barcode_scanner: ^0.1.7
@@ -156,7 +156,7 @@ dependencies:
   mime: ^1.0.0
   ffi: ^2.0.0
   # AuthPass Cloud email deps
-  enough_mail: ^1.2.2
+  enough_mail: ^2.1.0
   flutter_widget_from_html: ^0.8.5
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
@@ -210,6 +210,8 @@ dev_dependencies:
 
 dependency_overrides:
   ffi: ^2.0.0
+  # https://github.com/Enough-Software/enough_mail/issues/194
+  crypto: 3.0.1
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
 #  kdbx:

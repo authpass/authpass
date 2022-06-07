@@ -398,7 +398,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                         PopupMenuItem<Object>(
                           value: _openLocalMarker,
                           child: ListTile(
-                            leading: const FaIcon(FontAwesomeIcons.hdd),
+                            leading: const FaIcon(FontAwesomeIcons.hardDrive),
                             title: Text(loc.openLocalFile),
                           ),
                         ),
@@ -648,7 +648,7 @@ class OpenFileBottomSheet extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const FaIcon(FontAwesomeIcons.hdd),
+            leading: const FaIcon(FontAwesomeIcons.hardDrive),
             title: Text(loc.filePicker),
             subtitle: Text(loc.filePickerSubtitle),
             onTap: () async {
@@ -1047,7 +1047,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
 //                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   icon: Icon(_keyFile == null
                       ? FontAwesomeIcons.folderOpen
-                      : FontAwesomeIcons.edit),
+                      : FontAwesomeIcons.penToSquare),
                   label: Text(_keyFile == null
                       ? loc.useKeyFile
                       : path.basename(_keyFile!.displayName!)),

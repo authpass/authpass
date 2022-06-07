@@ -34,7 +34,7 @@ class CloudStorageAuthentication extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           PrimaryButton(
-            icon: const Icon(FontAwesomeIcons.signInAlt),
+            icon: const Icon(FontAwesomeIcons.rightToBracket),
             onPressed: () async {
               await _startLoginFlow(context);
             },

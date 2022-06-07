@@ -107,7 +107,7 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                     widget.provider.logout();
                     setState(() {});
                   },
-                  icon: const Icon(FontAwesomeIcons.signOutAlt),
+                  icon: const Icon(FontAwesomeIcons.rightFromBracket),
                 ),
               ],
       ),
@@ -465,7 +465,7 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                   ),
                   const SizedBox(width: 8),
                   LinkButton(
-                    icon: const Icon(FontAwesomeIcons.save),
+                    icon: const Icon(FontAwesomeIcons.floppyDisk),
                     onPressed: () {
                       Navigator.of(context).pop(CloudStorageSelectorSaveResult(
                           _folder, _fileNameController.text));

@@ -201,7 +201,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
           },
         ),
         ValueSelectorTile(
-          icon: const FaIcon(FontAwesomeIcons.arrowsAltH),
+          icon: const FaIcon(FontAwesomeIcons.leftRight),
           title: Text(loc.preferenceVisualDensity),
           onChanged: (value) {
             _appDataBloc
@@ -425,21 +425,21 @@ class ValueSelectorTile extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: FaIcon(
-                  FontAwesomeIcons.minusSquare,
+                  FontAwesomeIcons.squareMinus,
                   semanticLabel: loc.decreaseValue,
                 ),
                 onPressed: () => _updateValue(-1),
               ),
               IconButton(
                 icon: FaIcon(
-                  FontAwesomeIcons.plusSquare,
+                  FontAwesomeIcons.squarePlus,
                   semanticLabel: loc.increaseValue,
                 ),
                 onPressed: () => _updateValue(1),
               ),
               IconButton(
                 icon: FaIcon(
-                  FontAwesomeIcons.times,
+                  FontAwesomeIcons.xmark,
                   semanticLabel: loc.resetValue,
                 ),
                 onPressed: () => onChanged(null),
@@ -546,7 +546,7 @@ class PreferencesOverflowMenuAction extends HookWidget {
                     .pushAndRemoveUntil(LockedScreen.route(), (_) => false);
               },
               child: ListTile(
-                leading: const Icon(FontAwesomeIcons.signOutAlt),
+                leading: const Icon(FontAwesomeIcons.rightFromBracket),
                 title: Text(loc.lockAllFiles),
               ),
             ),

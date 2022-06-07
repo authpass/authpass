@@ -147,7 +147,7 @@ packages:
       name: basic_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.9.4"
+    version: "4.2.2"
   biometric_storage:
     dependency: "direct main"
     description:
@@ -331,7 +331,7 @@ packages:
     source: hosted
     version: "0.3.3+1"
   crypto:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -364,7 +364,7 @@ packages:
       name: device_info_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "3.2.4"
   device_info_plus_linux:
     dependency: transitive
     description:
@@ -434,7 +434,7 @@ packages:
       name: enough_mail
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.6"
+    version: "2.1.0"
   enough_serialization:
     dependency: transitive
     description:
@@ -452,9 +452,11 @@ packages:
   expressions:
     dependency: transitive
     description:
-      name: expressions
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "84192f4b8ac7e53889d2b980df62cc1cdbf47da7"
+      resolved-ref: "84192f4b8ac7e53889d2b980df62cc1cdbf47da7"
+      url: "https://github.com/legacyofplay/expressions.git"
+    source: git
     version: "0.2.3"
   fake_async:
     dependency: transitive
@@ -490,7 +492,7 @@ packages:
       name: file_selector
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.2+1"
+    version: "0.8.4+2"
   file_selector_linux:
     dependency: "direct main"
     description:
@@ -499,12 +501,12 @@ packages:
     source: hosted
     version: "0.0.2+1"
   file_selector_macos:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: file_selector_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+1"
+    version: "0.8.2+2"
   file_selector_platform_interface:
     dependency: transitive
     description:
@@ -520,12 +522,12 @@ packages:
     source: hosted
     version: "0.8.1+5"
   file_selector_windows:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: file_selector_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2+1"
+    version: "0.8.2+2"
   filesystem_picker:
     dependency: "direct main"
     description:
@@ -579,7 +581,7 @@ packages:
       name: flutter_colorpicker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0"
+    version: "1.0.3"
   flutter_driver:
     dependency: "direct dev"
     description: flutter
@@ -631,7 +633,7 @@ packages:
       name: flutter_speed_dial
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.6.6"
+    version: "6.0.0"
   flutter_store_listing:
     dependency: "direct main"
     description:
@@ -645,7 +647,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.23.0+1"
+    version: "1.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -683,7 +685,7 @@ packages:
       name: font_awesome_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.2.0"
+    version: "10.1.0"
   freezed:
     dependency: "direct dev"
     description:
@@ -842,7 +844,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.3"
+    version: "3.2.0"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -1122,14 +1124,14 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.1+1"
+    version: "1.0.0"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "1.0.0"
   path_provider:
     dependency: "direct main"
     description:
@@ -1192,14 +1194,14 @@ packages:
       name: percent_indicator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.4.0"
+    version: "4.2.2"
   petitparser:
     dependency: transitive
     description:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "5.0.0"
   pigment:
     dependency: transitive
     description:
@@ -1828,7 +1830,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.3.1"
+    version: "6.1.0"
   yaml:
     dependency: transitive
     description:

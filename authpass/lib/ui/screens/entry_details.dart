@@ -1350,7 +1350,7 @@ class _EntryFieldState extends State<EntryField>
       PopupMenuItem(
         value: EntryAction.passwordGenerator,
         child: ListTile(
-          leading: const Icon(FontAwesomeIcons.random),
+          leading: const Icon(FontAwesomeIcons.shuffle),
           title: Text(loc.generatePassword),
 //            subtitle: null,
         ),

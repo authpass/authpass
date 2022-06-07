@@ -11,13 +11,13 @@ extension FileSourceIconUi on FileSourceIcon {
       case FileSourceIcon.googleDrive:
         return FontAwesomeIcons.googleDrive;
       case FileSourceIcon.webDav:
-        return FontAwesomeIcons.cloudUploadAlt;
+        return FontAwesomeIcons.cloudArrowUp;
       case FileSourceIcon.oneDrive:
         return FontAwesomeIcons.microsoft;
       case FileSourceIcon.hdd:
-        return FontAwesomeIcons.hdd;
+        return FontAwesomeIcons.hardDrive;
       case FileSourceIcon.externalLink:
-        return FontAwesomeIcons.externalLinkAlt;
+        return FontAwesomeIcons.upRightFromSquare;
       case FileSourceIcon.authPass:
         return AuthPassIcons.AuthPassLogo;
     }

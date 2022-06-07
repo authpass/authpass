@@ -96,7 +96,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                 IconButton(
                     icon: _forcePlainText
                         ? const Icon(FontAwesomeIcons.html5)
-                        : const Icon(FontAwesomeIcons.removeFormat),
+                        : const Icon(FontAwesomeIcons.textSlash),
                     onPressed: () {
                       setState(() {
                         _forcePlainText = !_forcePlainText;
