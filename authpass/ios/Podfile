@@ -86,6 +86,15 @@ post_install do |installer|
 
     end
 
+    # https://pub.dev/packages/audio_session#ios-setup
+    # (flutter_widget_from_html depends on audio_session)
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'AUDIO_SESSION_MICROPHONE=0'
+      ]
+    end
+
 
   end
 end
