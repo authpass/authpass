@@ -179,7 +179,7 @@ case "${flavor}" in
             --dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass.${flavor} \
             --dart-define=AUTHPASS_WIN_AUTOUPDATE=false
         git checkout -- pubspec.lock
-        $FLT pub run msix:create --v "${version}.0"
+        $FLT pub run msix:create --version "${version}.0"
 
         outputdir="build/windows/runner/Release"
 
