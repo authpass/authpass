@@ -24,6 +24,7 @@ import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
+import 'package:authpass/utils/base32utils.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
@@ -34,7 +35,6 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
-import 'package:base32/base32.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -776,9 +776,7 @@ class _EntryDetailsState extends State<EntryDetails>
         if (totpCode.startsWith(OtpAuth.URI_PREFIX)) {
           return OtpAuth.fromUri(Uri.parse(totpCode));
         }
-        final cleaned = totpCode.replaceAll(
-            CharConstants.space, CharConstants.empty); //?.toUpperCase();
-        final value = base32.decode(cleaned);
+        final value = base32Decode(totpCode);
         _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');
         return OtpAuth(secret: value);
       } catch (e, stackTrace) {
@@ -1577,8 +1575,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
     }
     // assume base32 encoded secret, with more settings stored in a second field.
     try {
-      final binarySecret = base32
-          .decode(value.replaceAll(CharConstants.space, CharConstants.empty));
+      final binarySecret = base32Decode(value);
       final settings =
           _commonFields.otpAuthCompat1Settings.stringValue(widget.entry) ??
               CharConstants.empty;
@@ -1604,7 +1601,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
   void _updateOtp() {
     try {
       final otpAuth = _getOtpAuth();
-      final secretBase32 = base32.encode(otpAuth.secret);
+      final secretBase32 = base32Encode(otpAuth.secret);
       _logger.fine('uri: $otpAuth');
       final now = clock.now().millisecondsSinceEpoch;
       final totpCode = OTP.generateTOTPCodeString(

@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:authpass/utils/base32utils.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
-import 'package:base32/base32.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:logging/logging.dart';
 import 'package:otp/otp.dart';
@@ -27,7 +27,7 @@ class OtpAuth {
     return OtpAuth(
       label: uri.pathSegments
           .firstWhere((element) => true, orElse: () => CharConstants.empty),
-      secret: base32.decode(p[PARAM_SECRET]!),
+      secret: base32Decode(p[PARAM_SECRET]!),
       algorithm: algorithmForString(p[PARAM_ALGORITHM]) ?? DEFAULT_ALGORITHM,
       digits: p[PARAM_DIGITS]?.toInt() ?? DEFAULT_DIGITS,
       period: p[PARAM_PERIOD]?.toInt() ?? DEFAULT_PERIOD,
@@ -42,7 +42,7 @@ class OtpAuth {
       final data = Uri.splitQueryString(value);
       try {
         return OtpAuth(
-          secret: base32.decode(_addBase32Padding(data['key'])!),
+          secret: base32Decode(_addBase32Padding(data['key'])!),
           period: data['step']?.toInt() ?? OtpAuth.DEFAULT_PERIOD,
           digits: data['size']?.toInt() ?? OtpAuth.DEFAULT_DIGITS,
         );
@@ -106,7 +106,7 @@ class OtpAuth {
         host: TYPE_TOTP,
         pathSegments: [label],
         queryParameters: <String, String?>{
-          PARAM_SECRET: base32.encode(secret),
+          PARAM_SECRET: base32Encode(secret),
           PARAM_ALGORITHM: algorithms[algorithm],
           PARAM_DIGITS: digits.toString(),
           PARAM_PERIOD: period.toString(),
