@@ -49,6 +49,13 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            // Filter for architectures supported by Flutter.
+            // https://github.com/flutter/flutter/issues/83596#issuecomment-1082781598
+            // https://docs.flutter.dev/development/add-to-app/android/project-setup
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
     }
 
     signingConfigs {
