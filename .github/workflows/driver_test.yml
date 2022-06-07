@@ -35,7 +35,7 @@ jobs:
       matrix:
         device:
 #          - "iPhone 8 (13.1)"
-          - "iPhone .* Pro Max "
+          - "iPhone 12 Pro Max "
 
       fail-fast: true
 
@@ -55,20 +55,24 @@ jobs:
       env:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
       run: "./authpass/_tools/ci-install-deps.sh ios"
-    - name: List all simulators
-      run: xcrun instruments -s
-    # get UUID  simulator and boot a simulator on mac from  command line
-    - name: Start Simulator
-      run: |
-        UDID=$(
-          xcrun instruments -s |
-          awk \
-            -F ' *[][]' \
-            -v 'device=${{ matrix.device }}' \
-            '$1 ~ device { print $2 }' | head -n 1
-        )
-        echo starting ${UDID}
-        xcrun simctl boot "${UDID:?No Simulator with this name found}"
+#    - name: List all simulators
+#      run: xcrun instruments -s
+#    # get UUID  simulator and boot a simulator on mac from  command line
+#    - name: Start Simulator
+#      run: |
+#        UDID=$(
+#          xcrun instruments -s |
+#          awk \
+#            -F ' *[][]' \
+#            -v 'device=${{ matrix.device }}' \
+#            '$1 ~ device { print $2 }' | head -n 1
+#        )
+#        echo starting ${UDID}
+#        xcrun simctl boot "${UDID:?No Simulator with this name found}"
+    - name: 'Start Simulator'
+      uses: futureware-tech/simulator-action@v1
+      with:
+        model: ${{ matrix.device }}
     - name: run test ${{ matrix.flavor }}
       run: "cd authpass && ~/deps/flutter/bin/flutter drive --target=test_driver/app.dart"
     - uses: actions/upload-artifact@v1
