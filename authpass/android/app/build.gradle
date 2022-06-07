@@ -162,16 +162,16 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
 
-    implementation "androidx.appcompat:appcompat:1.1.0"
-    implementation "androidx.fragment:fragment:1.2.4"
+    implementation "androidx.appcompat:appcompat:1.4.2"
+    implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     // logging
-    implementation "org.slf4j:slf4j-api:1.7.28"
+    implementation "org.slf4j:slf4j-api:1.7.30"
     implementation "io.github.microutils:kotlin-logging:1.7.6"
     implementation "uk.uuid.slf4j:slf4j-android:1.7.28-0"
 
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
