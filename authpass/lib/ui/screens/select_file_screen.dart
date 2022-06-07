@@ -1083,7 +1083,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   },
                 ),
               ),
-              ...(_biometricQuickUnlockSupported!
+              ...(_biometricQuickUnlockSupported
                   ? [
                       CheckboxListTile(
                         value: _biometricQuickUnlockActivated,
