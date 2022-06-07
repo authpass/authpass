@@ -184,6 +184,34 @@
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Paramètres",
     "@preferenceTitle": {},
+    "preferenceEnableSystemWideShortcuts": "Activer les raccourcis dans tout le système",
+    "@preferenceEnableSystemWideShortcuts": {
+        "description": ""
+    },
+    "preferenceEnableSystemWideShortcutsHelp": "Enregistrer ctrl+alt+f dans le système comme un raccourci pour ouvrir la recherche.",
+    "@preferenceEnableSystemWideShortcutsHelp": {
+        "description": ""
+    },
+    "preferencesSearchFields": "Personnaliser les champs de recherche",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Champs de recherche",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptLabel": "Liste des champs séparés par des virgules à utiliser dans la recherche de la liste des mots de passe.",
+    "@preferencesSearchFieldPromptLabel": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptHelp": "Utiliser {wildCardCharacter} pour tous, laisser vide pour les valeurs par défaut ({defaultSearchFields})",
+    "@preferencesSearchFieldPromptHelp": {
+        "description": "",
+        "placeholders": {
+            "wildCardCharacter": {},
+            "defaultSearchFields": {}
+        }
+    },
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "Tout type de commentaire est le bienvenu !",
@@ -934,6 +962,16 @@
             }
         }
     },
+    "sizeBytesStoredAuthPassCloud": "{count} octets, stockés dans le AuthPass Cloud",
+    "@sizeBytesStoredAuthPassCloud": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
     "sizeBytes": "{count} octets",
     "@sizeBytes": {
         "description": "",
@@ -1188,7 +1226,7 @@
     "@mailMailboxListEmpty": {
         "description": ""
     },
-    "mailMailboxAddressCopied": "Adresse mail copiée dans le presse-papiers: {mailboxAddress}",
+    "mailMailboxAddressCopied": "Adresse e-mail copiée dans le presse-papiers: {mailboxAddress}",
     "@mailMailboxAddressCopied": {
         "description": "Success message when mailbox email address was copied to clipboard.",
         "placeholders": {
@@ -1533,12 +1571,120 @@
     "@shareCreateTokenLabelHint": {
         "description": "the placeholder/hint text displayed when the user has not yet entered a label"
     },
+    "shareCreateTokenLabelHelp": "Libellé facultatif pour différencier le code de partage.",
+    "@shareCreateTokenLabelHelp": {
+        "description": ""
+    },
+    "shareCreateTokenSuccess": "Code de partage créé avec succès.",
+    "@shareCreateTokenSuccess": {
+        "description": "snackbar when share code was created successfully."
+    },
+    "sharePresentDialogTitle": "Partager un fichier avec un code secret de partage",
+    "@sharePresentDialogTitle": {
+        "description": ""
+    },
+    "sharePresentDialogHelp": "En utilisant le code de partage suivant, les utilisateurs peuvent accéder au fichier de mot de passe. Ils auront besoin du mot de passe et/ou du fichier clé pour l'ouvrir.",
+    "@sharePresentDialogHelp": {
+        "description": ""
+    },
+    "sharePresentToken": "Partager le Code",
+    "@sharePresentToken": {
+        "description": ""
+    },
+    "sharePresentCopied": "Code de partage copié dans le presse-papiers.",
+    "@sharePresentCopied": {
+        "description": ""
+    },
+    "authPassCloudOpenWithShareCodeTooltip": "Ouvrir avec le Code de Partage",
+    "@authPassCloudOpenWithShareCodeTooltip": {
+        "description": "Allows users to open cloud files using a share code/token."
+    },
     "authPassCloudShareFileActionLabel": "Partager",
     "@authPassCloudShareFileActionLabel": {
         "description": ""
     },
+    "preferenceAuthPassCloudAttachmentTitle": "Utiliser les pièces jointes AuthPass Cloud",
+    "@preferenceAuthPassCloudAttachmentTitle": {
+        "description": ""
+    },
+    "preferenceAuthPassCloudAttachmentSubtitle": "Stocker séparément les pièces jointes chiffrées sur AuthPass Cloud.",
+    "@preferenceAuthPassCloudAttachmentSubtitle": {
+        "description": ""
+    },
+    "shareCodeInputDialogTitle": "Saisir le code de partage secret",
+    "@shareCodeInputDialogTitle": {
+        "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+    },
+    "shareCodeInputDialogScan": "Scanner le Code QR",
+    "@shareCodeInputDialogScan": {
+        "description": "button label for triggering QR code scanner"
+    },
+    "shareCodeInputLabel": "Partager le Code Secret",
+    "@shareCodeInputLabel": {
+        "description": ""
+    },
+    "shareCodeInputHelperText": "Si vous avez reçu un code de partage, veuillez le coller ci-dessus.",
+    "@shareCodeInputHelperText": {
+        "description": ""
+    },
+    "shareCodeOpen": "Vous avez reçu un code de partage pour AuthPass Cloud ?",
+    "@shareCodeOpen": {
+        "description": ""
+    },
+    "shareCodeOpenScreenTitle": "Chargement du fichier avec le code de partage",
+    "@shareCodeOpenScreenTitle": {
+        "description": ""
+    },
     "shareCodeLoadingProgress": "Chargement du fichier …",
     "@shareCodeLoadingProgress": {
+        "description": ""
+    },
+    "shareCodeOpenFileButtonLabel": "OUVRIR",
+    "@shareCodeOpenFileButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppCaption": "Voulez-vous ouvrir ce fichier avec l'une de nos applications natives à la place ?",
+    "@shareCodeOpenInstallAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenAnotherAppCaption": "Voulez-vous ouvrir ce fichier sur un autre appareil ?",
+    "@shareCodeOpenAnotherAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppButtonLabel": "Installer l'app",
+    "@shareCodeOpenInstallAppButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenShowCodeButtonLabel": "Afficher le Code de Partage",
+    "@shareCodeOpenShowCodeButtonLabel": {
+        "description": ""
+    },
+    "changeMasterPasswordActionLabel": "Changer le mot de passe maître",
+    "@changeMasterPasswordActionLabel": {
+        "description": "label for the button to show the dialog for changing master password."
+    },
+    "changeMasterPasswordFormSubmit": "Sauvegarder avec un nouveau mot de passe",
+    "@changeMasterPasswordFormSubmit": {
+        "description": ""
+    },
+    "changeMasterPasswordSuccess": "Mot de passe maître sauvegardé avec succès.",
+    "@changeMasterPasswordSuccess": {
+        "description": ""
+    },
+    "changeMasterPasswordScreenTitle": "Changer le mot de passe maître",
+    "@changeMasterPasswordScreenTitle": {
+        "description": "app bar title for change password screen."
+    },
+    "authPassCloudAuthClickedLink": "J'ai reçu un e-mail et j'ai visité le lien",
+    "@authPassCloudAuthClickedLink": {
+        "description": ""
+    },
+    "authPassCloudAuthNotConfirmed": "L'adresse e-mail n'a pas encore été confirmée. Assurez-vous de cliquer sur le lien dans l'e-mail que vous avez reçu et de résoudre le captcha pour confirmer votre adresse e-mail.",
+    "@authPassCloudAuthNotConfirmed": {
+        "description": ""
+    },
+    "getHelpButton": "Obtenir de l'aide dans le forum",
+    "@getHelpButton": {
         "description": ""
     },
     "shortcutCopyUsername": "Copier le nom d'utilisateur",
@@ -1549,13 +1695,41 @@
     "@shortcutCopyPassword": {
         "description": ""
     },
+    "shortcutCopyTotp": "Copier le TOTP",
+    "@shortcutCopyTotp": {
+        "description": ""
+    },
+    "shortcutMoveUp": "Sélectionner le mot de passe précédent",
+    "@shortcutMoveUp": {
+        "description": ""
+    },
+    "shortcutMoveDown": "Sélectionner le mot de passe suivant",
+    "@shortcutMoveDown": {
+        "description": ""
+    },
     "shortcutGeneratePassword": "Générer un mot de passe",
     "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutCopyUrl": "Copier l'URL",
+    "@shortcutCopyUrl": {
         "description": ""
     },
     "shortcutOpenUrl": "Ouvrir l'URL",
     "@shortcutOpenUrl": {
         "description": ""
+    },
+    "shortcutCancelSearch": "Annuler la recherche",
+    "@shortcutCancelSearch": {
+        "description": ""
+    },
+    "shortcutShortcutHelp": "Aide pour les Raccourcis clavier",
+    "@shortcutShortcutHelp": {
+        "description": ""
+    },
+    "shortcutHelpTitle": "Raccourcis clavier",
+    "@shortcutHelpTitle": {
+        "description": "title of dialog showing keyboard shortcuts."
     },
     "unexpectedError": "Erreur inattendue : {error}",
     "@unexpectedError": {

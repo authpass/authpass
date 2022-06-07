@@ -184,6 +184,34 @@
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Настройки",
     "@preferenceTitle": {},
+    "preferenceEnableSystemWideShortcuts": "Включить общесистемные ярлыки",
+    "@preferenceEnableSystemWideShortcuts": {
+        "description": ""
+    },
+    "preferenceEnableSystemWideShortcutsHelp": "Регистрирует сочетание клавиш ctrl+alt+f в качестве общесистемного ярлыка для открытия поиска.",
+    "@preferenceEnableSystemWideShortcutsHelp": {
+        "description": ""
+    },
+    "preferencesSearchFields": "Настройка полей поиска",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Поля поиска",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptLabel": "Список полей, разделенных запятыми, для использования в поиске по списку паролей.",
+    "@preferencesSearchFieldPromptLabel": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptHelp": "Используйте {wildCardCharacter} для всех, оставьте пустым по умолчанию ({defaultSearchFields})",
+    "@preferencesSearchFieldPromptHelp": {
+        "description": "",
+        "placeholders": {
+            "wildCardCharacter": {},
+            "defaultSearchFields": {}
+        }
+    },
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "Мы рады любым отзывам!",
@@ -338,7 +366,7 @@
     "@manageGroups": {
         "description": ""
     },
-    "lockFiles": "Заблокировать файлы",
+    "lockFiles": "Заблокировать",
     "@lockFiles": {
         "description": "Close all files and return to start screen."
     },
@@ -459,6 +487,11 @@
     "@filePickerSubtitle": {
         "description": "Choose a file with the system's file picker. (ios/android)",
         "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Учетные данные",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
     },
     "credentialLabel": "Введите пароль для:",
     "@credentialLabel": {
@@ -662,7 +695,7 @@
     "@unsavedChangesWarningTitle": {
         "description": ""
     },
-    "unsavedChangesWarningBody": "Все еще есть несохраненные изменения. Вы хотите отменить изменения?",
+    "unsavedChangesWarningBody": "Есть все еще несохраненные изменения. Вы хотите отменить изменения?",
     "@unsavedChangesWarningBody": {
         "description": ""
     },
@@ -701,6 +734,14 @@
     "webDavSettings": "Настройки WebDAV",
     "@webDavSettings": {
         "description": "dialog title for entering WebDAV settings."
+    },
+    "webDavUrlLabel": "URL-адрес",
+    "@webDavUrlLabel": {
+        "description": ""
+    },
+    "webDavUrlHelperText": "Базовый Url-адрес вашего сервиса WebDAV.",
+    "@webDavUrlHelperText": {
+        "description": ""
     },
     "webDavUrlValidatorError": "Пожалуйста, введите URL",
     "@webDavUrlValidatorError": {
@@ -808,15 +849,15 @@
     "@clearQuickUnlockSubtitle": {
         "description": ""
     },
-    "unlock": "Разблокировать базу",
+    "unlock": "Разблокировать",
     "@unlock": {
         "description": ""
     },
-    "closePasswordFiles": "заблокировать базу",
+    "closePasswordFiles": "закрыть базу",
     "@closePasswordFiles": {
         "description": "delete quick unlock (passwords stored in biometric storage)"
     },
-    "clearQuickUnlockSuccess": "Удалены сохраненные мастер-пароли из биометрического хранилища.",
+    "clearQuickUnlockSuccess": "Сохраненные мастер-пароли удалены из биометрического хранилища.",
     "@clearQuickUnlockSuccess": {
         "description": ""
     },
@@ -873,7 +914,7 @@
             }
         }
     },
-    "databaseCreateDefaultName": "ЛичныеПароли",
+    "databaseCreateDefaultName": "Личные Пароли",
     "@databaseCreateDefaultName": {
         "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
     },
@@ -890,7 +931,7 @@
             }
         }
     },
-    "passwordScore": "Сила: {score} из 4",
+    "passwordScore": "Надежность: {score} из 4",
     "@passwordScore": {
         "description": "choosing a master password - calculated password strength.",
         "placeholders": {
@@ -921,6 +962,16 @@
             }
         }
     },
+    "sizeBytesStoredAuthPassCloud": "{count} байт, сохранено в облаке AuthPass",
+    "@sizeBytesStoredAuthPassCloud": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
     "sizeBytes": "{count} байтов",
     "@sizeBytes": {
         "description": "",
@@ -935,11 +986,11 @@
     "@entryAddAttachment": {
         "description": ""
     },
-    "entryAttachmentSizeWarning": "Вложенные файлы будут встроенны в файл пароля. Это может значительно увеличить время требуемого для открытия/созранения паролей.",
+    "entryAttachmentSizeWarning": "Вложенные файлы будут встроены в файл пароля. Это может значительно увеличить время необходимое для открытия/сохранения паролей.",
     "@entryAttachmentSizeWarning": {
         "description": ""
     },
-    "iconPngSizeWarning": "Кастомные иконкт будут встроенны в файл пароля. Это может значительно увеличить время требуемое для открытия/сохранения паролей.",
+    "iconPngSizeWarning": "Пользовательские значки будут встроены в файл пароля. Это может значительно увеличить время, необходимое для открытия/сохранения паролей.",
     "@iconPngSizeWarning": {
         "description": "Warning shown when user selects a large png file as custom icon."
     },
@@ -947,15 +998,15 @@
     "@notPngError": {
         "description": "Error when user selects an unsupported file as custom icon."
     },
-    "entryAddField": "Добавить запись",
+    "entryAddField": "Добавить поле",
     "@entryAddField": {
         "description": ""
     },
-    "entryCustomField": "Кастомное поле",
+    "entryCustomField": "Настраиваемое поле",
     "@entryCustomField": {
         "description": ""
     },
-    "entryCustomFieldTitle": "Добавление нового кастомного поля",
+    "entryCustomFieldTitle": "Добавление нового настраиваемого поля",
     "@entryCustomFieldTitle": {
         "description": ""
     },
@@ -1061,7 +1112,7 @@
             }
         }
     },
-    "cloudStorageLogInCaption": "Вы будете перенаправлены чтобы авторизовать AuthPass для доступа вк вашим данным.",
+    "cloudStorageLogInCaption": "Вы будете перенаправлены чтобы авторизовать AuthPass для доступа к вашим данным.",
     "@cloudStorageLogInCaption": {
         "description": ""
     },
@@ -1308,7 +1359,7 @@
     "@selectIconDialogAction": {
         "description": ""
     },
-    "retryDialogActionLabel": "Повторить попытку",
+    "retryDialogActionLabel": "Повторить",
     "@retryDialogActionLabel": {
         "description": ""
     },
@@ -1469,7 +1520,7 @@
     "@logoutTooltip": {
         "description": "Tooltip for logging out of a cloud storage provider."
     },
-    "successfullyDeletedFileCloudStorage": "Успешно удалён файл.",
+    "successfullyDeletedFileCloudStorage": "Файл успешно удалён.",
     "@successfullyDeletedFileCloudStorage": {
         "description": "deleted file from cloud storage."
     },
@@ -1528,7 +1579,7 @@
     "@shareCreateTokenSuccess": {
         "description": "snackbar when share code was created successfully."
     },
-    "sharePresentDialogTitle": "Поделиться файл с секретным кодом общего доступа",
+    "sharePresentDialogTitle": "Поделиться файлом используя код общего доступа",
     "@sharePresentDialogTitle": {
         "description": ""
     },
@@ -1536,11 +1587,31 @@
     "@sharePresentDialogHelp": {
         "description": ""
     },
+    "sharePresentToken": "Код доступа",
+    "@sharePresentToken": {
+        "description": ""
+    },
+    "sharePresentCopied": "Код доступа скопирован в буфер обмена.",
+    "@sharePresentCopied": {
+        "description": ""
+    },
+    "authPassCloudOpenWithShareCodeTooltip": "Открыть с помощью кода общего доступа",
+    "@authPassCloudOpenWithShareCodeTooltip": {
+        "description": "Allows users to open cloud files using a share code/token."
+    },
     "authPassCloudShareFileActionLabel": "Поделиться",
     "@authPassCloudShareFileActionLabel": {
         "description": ""
     },
-    "shareCodeInputDialogTitle": "Ввести секретный код",
+    "preferenceAuthPassCloudAttachmentTitle": "Использовать облачные вложения AuthPass",
+    "@preferenceAuthPassCloudAttachmentTitle": {
+        "description": ""
+    },
+    "preferenceAuthPassCloudAttachmentSubtitle": "Хранить вложения, зашифрованные в облаке AuthPass, отдельно.",
+    "@preferenceAuthPassCloudAttachmentSubtitle": {
+        "description": ""
+    },
+    "shareCodeInputDialogTitle": "Ввести секретный код доступа",
     "@shareCodeInputDialogTitle": {
         "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
     },
@@ -1548,7 +1619,7 @@
     "@shareCodeInputDialogScan": {
         "description": "button label for triggering QR code scanner"
     },
-    "shareCodeInputLabel": "Секретный код",
+    "shareCodeInputLabel": "Секретный код доступа",
     "@shareCodeInputLabel": {
         "description": ""
     },
@@ -1578,6 +1649,14 @@
     },
     "shareCodeOpenAnotherAppCaption": "Хотите открыть этот файл на другом устройстве?",
     "@shareCodeOpenAnotherAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppButtonLabel": "Установить приложение",
+    "@shareCodeOpenInstallAppButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenShowCodeButtonLabel": "Показать код общего доступа",
+    "@shareCodeOpenShowCodeButtonLabel": {
         "description": ""
     },
     "changeMasterPasswordActionLabel": "Изменить мастер-пароль",
@@ -1616,13 +1695,41 @@
     "@shortcutCopyPassword": {
         "description": ""
     },
+    "shortcutCopyTotp": "Копировать TOTP",
+    "@shortcutCopyTotp": {
+        "description": ""
+    },
+    "shortcutMoveUp": "Выбрать предыдущий пароль",
+    "@shortcutMoveUp": {
+        "description": ""
+    },
+    "shortcutMoveDown": "Выбрать следующий пароль",
+    "@shortcutMoveDown": {
+        "description": ""
+    },
     "shortcutGeneratePassword": "Сгенерировать пароль",
     "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutCopyUrl": "Копировать URL",
+    "@shortcutCopyUrl": {
         "description": ""
     },
     "shortcutOpenUrl": "Открыть URL-адрес",
     "@shortcutOpenUrl": {
         "description": ""
+    },
+    "shortcutCancelSearch": "Отменить поиск",
+    "@shortcutCancelSearch": {
+        "description": ""
+    },
+    "shortcutShortcutHelp": "Справка по сочетанию клавиш",
+    "@shortcutShortcutHelp": {
+        "description": ""
+    },
+    "shortcutHelpTitle": "Горячие клавиши",
+    "@shortcutHelpTitle": {
+        "description": "title of dialog showing keyboard shortcuts."
     },
     "unexpectedError": "Неожиданная ошибка: {error}",
     "@unexpectedError": {

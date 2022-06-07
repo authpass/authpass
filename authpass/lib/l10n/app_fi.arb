@@ -1,3 +1,83 @@
 {
-    "@@locale": "fi"
+    "@@locale": "fi",
+    "fieldUserName": "Käyttäjä",
+    "@fieldUserName": {},
+    "fieldPassword": "Salasana",
+    "@fieldPassword": {},
+    "fieldWebsite": "Verkkosivusto",
+    "@fieldWebsite": {},
+    "fieldTitle": "Otsikko",
+    "@fieldTitle": {},
+    "fieldTotp": "Kertakäyttöinen salasana (Ajan perusteella)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
+    "english": "Englanti",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "Saksa",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Venäjä",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Ukraina",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Liettua",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Ranska",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Espanja",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "Indonesia",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "Turkki",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Heprea",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "Italia",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Kiina Yksinkertaistettu",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "Kiina Perinteinen",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Portugali, Brasilia",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "Slovakia",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
+    "dutch": "Hollanti",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Valitse",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    }
 }

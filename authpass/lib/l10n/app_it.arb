@@ -72,6 +72,14 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "Olandese",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Seleziona",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - Seleziona il File KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -91,6 +99,29 @@
     "openFile": "Apri File",
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFromDropdownMenu": "Carica da …",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Sblocco rapido dei file…",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "Apertura {fileName} … ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
     },
     "loadFrom": "Carica da {cloudStorageName}",
     "@loadFrom": {
@@ -137,14 +168,50 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Abilita riempimento automatico",
     "@preferenceEnableAutoFill": {},
+    "enableAutofillSuggestionBanner": "Puoi riempire il campo di altre applicazioni abilitando l'auto-riempimento!",
+    "@enableAutofillSuggestionBanner": {
+        "description": "This text will shown as a banner on top of password list"
+    },
     "dismissAutofillSuggestionBannerButton": "NASCONDI",
     "@dismissAutofillSuggestionBannerButton": {
         "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
+    "enableAutofillSuggestionBannerButton": "ABILITA!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
     },
     "preferenceAutoFillDescription": "Supportato solo su Android Oreo (8.0) o versioni successive.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Impostazioni",
     "@preferenceTitle": {},
+    "preferenceEnableSystemWideShortcuts": "Abilita le scorciatoie di sistema",
+    "@preferenceEnableSystemWideShortcuts": {
+        "description": ""
+    },
+    "preferenceEnableSystemWideShortcutsHelp": "Registra ctrl+alt+f come scorciatoia di sistema per aprire la ricerca.",
+    "@preferenceEnableSystemWideShortcutsHelp": {
+        "description": ""
+    },
+    "preferencesSearchFields": "Personalizza i campi di ricerca",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Cerca i campi",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptLabel": "Elenco di campi separati da virgole da usare nella ricerca di una lista di password.",
+    "@preferencesSearchFieldPromptLabel": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptHelp": "Usa {wildCardCharacter} per tutti, lascia vuoto per impostazione predefinita ({defaultSearchFields})",
+    "@preferencesSearchFieldPromptHelp": {
+        "description": "",
+        "placeholders": {
+            "wildCardCharacter": {},
+            "defaultSearchFields": {}
+        }
+    },
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "Siamo aperti a qualsiasi suggerimento!",
@@ -154,6 +221,8 @@
     "aboutLinkGitHub": "E supportare il progetto su GitHub",
     "@aboutLinkGitHub": {},
     "aboutLogFile": "File di log: {logFilePath}",
+    "aboutLinkContributors": "Mostra collaboratori",
+    "@aboutLinkContributors": {},
     "@aboutLogFile": {
         "placeholders": {
             "logFilePath": {
@@ -199,6 +268,14 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Verifica aggiornamenti",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Invia i log",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Invia i log via email",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Forum di supporto",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "Segnala problemi e ottieni assistenza",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "Aiuto",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Visualizza la documentazione",
@@ -301,6 +378,10 @@
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
+    "filterButtonLabel": "Filtra per gruppo",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
     "clear": "Rimuovi",
     "@clear": {
         "description": "Remove existing group filter from password list"
@@ -337,6 +418,14 @@
     "@swipeCopyUsername": {
         "description": "swipe action in password list to copy username"
     },
+    "copyUsernameNotExists": "La voce non ha alcun nome utente definito.",
+    "@copyUsernameNotExists": {
+        "description": "Error message when trying to copy username from an entry which has none."
+    },
+    "copyPasswordNotExists": "La voce non ha alcuna password definita.",
+    "@copyPasswordNotExists": {
+        "description": "Error message when trying to copy password from an entry which has none."
+    },
     "doneCopiedPassword": "Password copiata negli appunti.",
     "@doneCopiedPassword": {
         "description": "snackbar confirmation that password was copied."
@@ -349,6 +438,20 @@
     "@doneCopiedField": {
         "description": ""
     },
+    "copiedFieldToClipboard": "{fieldName} copiato.",
+    "@copiedFieldToClipboard": {
+        "description": "",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "copiedFieldEmpty": "{fieldName} è vuoto.",
+    "@copiedFieldEmpty": {
+        "description": "Displayed when user wants to copy a field which is empty or not defined.",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
     "emptyPasswordVaultPlaceholder": "Non hai alcuna password nel tuo database.",
     "@emptyPasswordVaultPlaceholder": {
         "description": "Placeholder text shown when a user opens an empty password file."
@@ -356,6 +459,10 @@
     "emptyPasswordVaultButtonLabel": "Crea la tua prima password",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loading": "Caricamento",
+    "@loading": {
+        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
     },
     "loadingFile": "Caricamento del file …",
     "@loadingFile": {
@@ -416,6 +523,25 @@
         "description": "Label for the checkbox to save master password for quick unlock.",
         "context": "credential screen"
     },
+    "close": "Chiudi",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Aggiungi nuova password",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
+    "errorOpenFileInvalidFileStructureTitle": "Tentato di aprire un tipo di file non valido",
+    "@errorOpenFileInvalidFileStructureTitle": {
+        "description": "Title of error dialog when trying to open an invalid/unsupported file type"
+    },
+    "errorOpenFileInvalidFileStructureBody": "Il file ({fileName}) non sembra essere un file KDBX valido. Scegliere un file KDBX valido o creare un nuovo database di password.",
+    "@errorOpenFileInvalidFileStructureBody": {
+        "description": "Body of error dialog when trying to open an invalid/unsupported file type",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
     "errorOpenFileAlreadyOpenTitle": "File già aperto",
     "@errorOpenFileAlreadyOpenTitle": {
         "description": "Trying to open a database from a second file source which is already open.",
@@ -429,6 +555,42 @@
             "databaseName": {},
             "openFileSource": {},
             "newFileSource": {}
+        }
+    },
+    "loadFromUrl": "Scarica da Url",
+    "@loadFromUrl": {
+        "description": ""
+    },
+    "loadFromUrlEnterUrl": "Inserisci URL",
+    "@loadFromUrlEnterUrl": {
+        "description": "label for input box to enter url."
+    },
+    "loadFromUrlErrorEnterFullUrl": "Per favore inserisci l'Url completo, a partire da http:// o https://",
+    "@loadFromUrlErrorEnterFullUrl": {
+        "description": "validator error message when user does not enter a absolute url."
+    },
+    "loadFromUrlErrorInvalidUrl": "Per favore inserisci un Url valido.",
+    "@loadFromUrlErrorInvalidUrl": {
+        "description": "validator error message hwen user enters a url which could not be parsed."
+    },
+    "linuxAppArmorWarning": "AuthPass richiede il permesso di comunicare con il Servizio Segreto e di memorizzare le credenziali per l'archiviazione cloud.\nPer favore, esegui il seguente comando:",
+    "@linuxAppArmorWarning": {
+        "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
+    },
+    "cancel": "Elimina",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
+    "errorLoadFileFromSourceTitle": "Errore nell'apertura del file.",
+    "@errorLoadFileFromSourceTitle": {
+        "description": "error title when user selects a file which can't be downloaded."
+    },
+    "errorLoadFileFromSourceBody": "Impossibile aprire {source}.\n{error}",
+    "@errorLoadFileFromSourceBody": {
+        "description": "error body when user selects a file which can't be downloaded.",
+        "placeholders": {
+            "source": {},
+            "error": {}
         }
     },
     "errorUnlockFileTitle": "Impossibile aprire il File",
@@ -449,6 +611,15 @@
     "dialogContinue": "Continua",
     "@dialogContinue": {
         "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Invia Report Errore",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "Segnala errore nel Forum/Aiuto",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
     },
     "groupFilterDescription": "Seleziona quali Gruppi mostrare (e relativi sottogruppi)",
     "@groupFilterDescription": {
@@ -471,9 +642,82 @@
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
     },
+    "mailboxEnableLabel": "(ri)abilita",
+    "@mailboxEnableLabel": {
+        "description": ""
+    },
+    "mailboxEnableHint": "Continua a ricevere e-mail",
+    "@mailboxEnableHint": {
+        "description": ""
+    },
+    "mailboxDisableLabel": "Disabilita",
+    "@mailboxDisableLabel": {
+        "description": ""
+    },
+    "mailboxDisableHint": "Non ricevere più email",
+    "@mailboxDisableHint": {
+        "description": ""
+    },
+    "mailListNoMail": "Non hai ancora nessuna email.",
+    "@mailListNoMail": {
+        "description": ""
+    },
+    "mailboxLabelPrefixForEntry": "Voce: {entryLabel}",
+    "@mailboxLabelPrefixForEntry": {
+        "description": "when a mailbox was created for a (password) entry.",
+        "placeholders": {
+            "entryLabel": {
+                "description": "The label of the entry this mailbox was created for"
+            }
+        }
+    },
+    "mailboxLabelPrefixUnknownEntry": "Voce sconosciuta: {entryUuid}",
+    "@mailboxLabelPrefixUnknownEntry": {
+        "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
+        "placeholders": {
+            "entryUuid": {
+                "description": "The internal id of the entry which was no tfound"
+            }
+        }
+    },
+    "mailboxLabelPrefixCreatedAt": "Creato il: {dateTime}",
+    "@mailboxLabelPrefixCreatedAt": {
+        "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
+        "placeholders": {
+            "dateTime": {}
+        }
+    },
+    "masterPasswordDescription": "La password principale viene utilizzata per crittografare in modo sicuro il tuo database delle password. Assicurati di ricordarla, non può essere ripristinata.",
+    "@masterPasswordDescription": {
+        "description": ""
+    },
+    "unsavedChangesWarningTitle": "Modifiche Non Salvate",
+    "@unsavedChangesWarningTitle": {
+        "description": ""
+    },
+    "unsavedChangesWarningBody": "Ci sono ancora modifiche non salvate. Vuoi annullare le modifiche?",
+    "@unsavedChangesWarningBody": {
+        "description": ""
+    },
+    "unsavedChangesDiscardActionLabel": "Annulla Modifiche",
+    "@unsavedChangesDiscardActionLabel": {
+        "description": ""
+    },
+    "deletePermanentlyAction": "Elimina definitivamente",
+    "@deletePermanentlyAction": {
+        "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
+    },
+    "restoreFromRecycleBinAction": "Ripristina",
+    "@restoreFromRecycleBinAction": {
+        "description": "menu action: restore an entry/group which was moved into the recycle bin."
+    },
     "deleteAction": "Elimina",
     "@deleteAction": {
         "description": "menu action: delete item (e.g. delete a group)"
+    },
+    "deletedEntry": "Voce eliminata.",
+    "@deletedEntry": {
+        "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
     },
     "successfullyDeletedGroup": "Gruppo eliminato.",
     "@successfullyDeletedGroup": {
@@ -487,9 +731,91 @@
     "@saveButtonLabel": {
         "description": "save file, for example button displayed in entry details"
     },
+    "webDavSettings": "Impostazioni WebDAV",
+    "@webDavSettings": {
+        "description": "dialog title for entering WebDAV settings."
+    },
+    "webDavUrlLabel": "URL",
+    "@webDavUrlLabel": {
+        "description": ""
+    },
+    "webDavUrlHelperText": "Base Url al tuo servizio WebDAV.",
+    "@webDavUrlHelperText": {
+        "description": ""
+    },
+    "webDavUrlValidatorError": "Per favore inserisci un URL",
+    "@webDavUrlValidatorError": {
+        "description": ""
+    },
+    "webDavUrlValidatorInvalidUrlError": "Per favore inserisci un Url valido con http:// o https://",
+    "@webDavUrlValidatorInvalidUrlError": {
+        "description": ""
+    },
+    "webDavAuthUser": "Nome Utente",
+    "@webDavAuthUser": {
+        "description": ""
+    },
     "webDavAuthPassword": "Password",
     "@webDavAuthPassword": {
         "description": ""
+    },
+    "mergeSuccessDialogTitle": "Database di password unito con successo",
+    "@mergeSuccessDialogTitle": {
+        "description": ""
+    },
+    "mergeSuccessDialogMessage": "Conflitto rilevato durante il salvataggio di {fileName}, è stato unito con successo con il file remoto: \n\n{mergeSummary}",
+    "@mergeSuccessDialogMessage": {
+        "description": "",
+        "placeholders": {
+            "fileName": {},
+            "mergeSummary": {}
+        }
+    },
+    "forDetailsVisitUrl": "Per i dettagli visita {url}",
+    "@forDetailsVisitUrl": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "authPassCloudAuthEmailInputLabel": "Inserisci l'indirizzo email per registrarti o accedere.",
+    "@authPassCloudAuthEmailInputLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthEmailInvalid": "Inserisci un indirizzo email valido.",
+    "@authPassCloudAuthEmailInvalid": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailButtonLabel": "Conferma l'indirizzo",
+    "@authPassCloudAuthConfirmEmailButtonLabel": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmail": "Controlla le tue email per confermare il tuo indirizzo email.",
+    "@authPassCloudAuthConfirmEmail": {
+        "description": ""
+    },
+    "authPassCloudAuthConfirmEmailExplain": "Mantieni aperta questa schermata finché non avrai visitato il link che hai ricevuto via email.",
+    "@authPassCloudAuthConfirmEmailExplain": {
+        "description": ""
+    },
+    "authPassCloudAuthResendExplain": "Se non hai ricevuto un'email, controlla la cartella spam. Altrimenti puoi provare a richiedere un nuovo link di conferma.",
+    "@authPassCloudAuthResendExplain": {
+        "description": ""
+    },
+    "authPassCloudAuthResendButtonLabel": "Richiedi un nuovo link di conferma",
+    "@authPassCloudAuthResendButtonLabel": {
+        "description": ""
+    },
+    "permanentlyDeleteEntryConfirm": "Questo eliminerà definitivamente la voce di password {title}. Questo non può essere annullato. Vuoi continuare?",
+    "@permanentlyDeleteEntryConfirm": {
+        "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
+        "placeholders": {
+            "title": {}
+        }
+    },
+    "permanentlyDeletedEntrySnackBar": "Voce eliminata definitivamente.",
+    "@permanentlyDeletedEntrySnackBar": {
+        "description": "snackbar confirming that the entry was deleted."
     },
     "initialNewGroupName": "Crea Gruppo",
     "@initialNewGroupName": {
@@ -636,6 +962,16 @@
             }
         }
     },
+    "sizeBytesStoredAuthPassCloud": "{count} byte, archiviati su AuthPass Cloud",
+    "@sizeBytesStoredAuthPassCloud": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
     "sizeBytes": "{count} byte",
     "@sizeBytes": {
         "description": "",
@@ -688,6 +1024,14 @@
     },
     "fieldGeneratePassword": "Genera una Password…",
     "@fieldGeneratePassword": {
+        "description": ""
+    },
+    "fieldProtect": "Valore protetto",
+    "@fieldProtect": {
+        "description": ""
+    },
+    "fieldUnprotect": "Valore non protetto",
+    "@fieldUnprotect": {
         "description": ""
     },
     "fieldPresent": "Mostra (QR Code)",
@@ -747,16 +1091,600 @@
     "@saving": {
         "description": "Saving text"
     },
+    "increaseValue": "Aumenta",
+    "@increaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "decreaseValue": "Riduci",
+    "@decreaseValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "resetValue": "Reset",
+    "@resetValue": {
+        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+    },
+    "cloudStorageAppBarTitle": "CloudStorage - {cloudStorageName}",
+    "@cloudStorageAppBarTitle": {
+        "description": "app bar title for opening/saving to cloud storage.",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageLogInCaption": "Sarai reindirizzato all'autenticazione AuthPass per accedere ai tuoi dati.",
+    "@cloudStorageLogInCaption": {
+        "description": ""
+    },
+    "cloudStorageLogInCode": "Inserisci il codice",
+    "@cloudStorageLogInCode": {
+        "description": "for oauth authentication user has to enter auth code - this is the label for the text field."
+    },
+    "launchUrlError": "Impossibile lanciare l'url. Visita {url}",
+    "@launchUrlError": {
+        "description": "",
+        "placeholders": {
+            "url": {}
+        }
+    },
+    "cloudStorageLogInActionLabel": "Accedi a {cloudStorageName}",
+    "@cloudStorageLogInActionLabel": {
+        "description": "when the user has not authenticated yet, he will see this button to start the login flow of a cloud storage backend.",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageAuthCodeDialogTitle": "{cloudStorageName} Autenticazione",
+    "@cloudStorageAuthCodeDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            }
+        }
+    },
+    "cloudStorageAuthCodeLabel": "Codice Di Autenticazione",
+    "@cloudStorageAuthCodeLabel": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorTitle": "Errore durante l'autenticazione",
+    "@cloudStorageAuthErrorTitle": {
+        "description": ""
+    },
+    "cloudStorageAuthErrorMessage": "Errore durante il tentativo di autenticazione su {cloudStorageName}: {errorMessage}",
+    "@cloudStorageAuthErrorMessage": {
+        "description": "",
+        "placeholders": {
+            "cloudStorageName": {
+                "example": "Dropbox"
+            },
+            "errorMessage": {}
+        }
+    },
+    "cloudStorageSearchBoxLabel": "Query di ricerca",
+    "@cloudStorageSearchBoxLabel": {
+        "description": ""
+    },
+    "cloudStorageItemsInFolder": "{itemCount} oggetti in questa cartella.",
+    "@cloudStorageItemsInFolder": {
+        "description": "",
+        "placeholders": {
+            "itemCount": {}
+        }
+    },
+    "mailSubject": "Oggetto",
+    "@mailSubject": {
+        "description": ""
+    },
+    "mailFrom": "Da",
+    "@mailFrom": {
+        "description": ""
+    },
+    "mailDate": "Data",
+    "@mailDate": {
+        "description": ""
+    },
+    "mailMailbox": "Casella postale",
+    "@mailMailbox": {
+        "description": ""
+    },
+    "mailNoData": "Nessun Dato",
+    "@mailNoData": {
+        "description": "Message shown when email text body is empty (or can't be decoded)"
+    },
+    "mailMailboxesTitle": "Caselle postali",
+    "@mailMailboxesTitle": {
+        "description": "Title of the screen showing all available mailboxes."
+    },
+    "mailboxCreateButtonLabel": "Crea",
+    "@mailboxCreateButtonLabel": {
+        "description": "FAB label to create a new mailbox."
+    },
+    "mailboxNameInputDialogTitle": "Etichetta opzionale per la nuova casella",
+    "@mailboxNameInputDialogTitle": {
+        "description": "title of the dialog asking for a mailbox label/name"
+    },
+    "mailboxNameInputLabel": "Etichetta (Interna)",
+    "@mailboxNameInputLabel": {
+        "description": "Label for the text field asking for a label for a mailbox, while creating it."
+    },
+    "mailScreenTitle": "Mail AuthPass",
+    "@mailScreenTitle": {
+        "description": "title for the screen showing available emails"
+    },
+    "mailTabBarTitleMailbox": "Casella postale",
+    "@mailTabBarTitleMailbox": {
+        "description": "title for the tab showing list of mailboxes."
+    },
+    "mailTabBarTitleMail": "Mail",
+    "@mailTabBarTitleMail": {
+        "description": "title for the tab showing list of mails."
+    },
+    "mailMailboxListEmpty": "Non hai ancora nessuna casella di posta.",
+    "@mailMailboxListEmpty": {
+        "description": ""
+    },
+    "mailMailboxAddressCopied": "Indirizzo della casella postale copiato negli appunti: {mailboxAddress}",
+    "@mailMailboxAddressCopied": {
+        "description": "Success message when mailbox email address was copied to clipboard.",
+        "placeholders": {
+            "mailboxAddress": {
+                "example": "dkasdfiasdfi@mail.authpass.app"
+            }
+        }
+    },
+    "errorWhileSavingTitle": "Errore durante il salvataggio",
+    "@errorWhileSavingTitle": {
+        "description": "title for error dialog shown when an error occurs while saving"
+    },
+    "errorWhileSavingBody": "Impossibile salvare il file: {errorMessage}",
+    "@errorWhileSavingBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "databaseDoesNotSupportSaving": "Spiacenti, questo database non supporta il salvataggio. Apri un file di database locale. Oppure usa \"Salva come\".",
+    "@databaseDoesNotSupportSaving": {
+        "description": "keepass files loaded through a URL can't be saved."
+    },
+    "otpInvalidKeyTitle": "Chiave Non Valida",
+    "@otpInvalidKeyTitle": {
+        "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
+    },
+    "otpInvalidKeyBody": "L'input inserito non è un codice TOTP base32 valido. Verifica il tuo input.",
+    "@otpInvalidKeyBody": {
+        "description": ""
+    },
+    "otpPromptTitle": "Autenticazione A Tempo",
+    "@otpPromptTitle": {
+        "description": ""
+    },
+    "otpPromptHelperText": "Inserisci la chiave a tempo.",
+    "@otpPromptHelperText": {
+        "description": ""
+    },
+    "otpErrorMessageGeneration": "Errore nella generazione del codice di invito: {errorMessage}",
+    "@otpErrorMessageGeneration": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "otpCopySecretActionLabel": "Copia Segreto",
+    "@otpCopySecretActionLabel": {
+        "description": ""
+    },
+    "otpEntryLabel": "Token monouso",
+    "@otpEntryLabel": {
+        "description": "The label for entries which show a one time token for a TOTP"
+    },
+    "entryFieldProtected": "Campo protetto. Clicca per rivelare.",
+    "@entryFieldProtected": {
+        "description": ""
+    },
+    "entryFieldActionRevealField": "Mostra il campo protetto",
+    "@entryFieldActionRevealField": {
+        "description": ""
+    },
+    "entryAttachmentOpenActionLabel": "Apri",
+    "@entryAttachmentOpenActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareActionLabel": "Condividi",
+    "@entryAttachmentShareActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentShareSubject": "Allegato",
+    "@entryAttachmentShareSubject": {
+        "description": "the 'subject' passed to the system when sharing an attachment. "
+    },
+    "entryAttachmentSaveActionLabel": "Salva sul dispositivo",
+    "@entryAttachmentSaveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveActionLabel": "Rimuovi",
+    "@entryAttachmentRemoveActionLabel": {
+        "description": ""
+    },
+    "entryAttachmentRemoveConfirm": "Vuoi davvero rimuovere {attachmentLabel}?",
+    "@entryAttachmentRemoveConfirm": {
+        "description": "",
+        "placeholders": {
+            "attachmentLabel": {}
+        }
+    },
+    "entryRenameFieldPromptTitle": "Rinomina il campo",
+    "@entryRenameFieldPromptTitle": {
+        "description": ""
+    },
+    "removerecentfile": "Nascondi",
+    "@removerecentfile": {
+        "description": ""
+    },
+    "entryRenameFieldPromptLabel": "Inserisci il nuovo nome del campo",
+    "@entryRenameFieldPromptLabel": {
+        "description": ""
+    },
+    "promptDialogPasteActionTooltip": "Incolla dagli appunti",
+    "@promptDialogPasteActionTooltip": {
+        "description": ""
+    },
+    "promptDialogPasteHint": "Suggerimento: Se hai bisogno di incollare, prova il pulsante a sinistra ;-)",
+    "@promptDialogPasteHint": {
+        "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
+    },
+    "genericErrorDialogTitle": "Errore nella gestione dell'azione",
+    "@genericErrorDialogTitle": {
+        "description": ""
+    },
+    "genericErrorDialogBody": "Hai riscontrato un errore imprevisto. {errorMessage}",
+    "@genericErrorDialogBody": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "saveAsEntryLocalFile": "File Locale",
+    "@saveAsEntryLocalFile": {
+        "description": "menu entry in the 'save as' dialog for saving as local file."
+    },
+    "fileTypePngs": "Immagini (png)",
+    "@fileTypePngs": {
+        "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
+    },
+    "selectIconDialogAction": "SELEZIONA ICONA",
+    "@selectIconDialogAction": {
+        "description": ""
+    },
+    "retryDialogActionLabel": "RIPROVA",
+    "@retryDialogActionLabel": {
+        "description": ""
+    },
+    "errorDuringNetworkCall": "Errore durante la chiamata Api. {errorMessage}",
+    "@errorDuringNetworkCall": {
+        "description": "",
+        "placeholders": {
+            "errorMessage": {}
+        }
+    },
+    "passwordFilterHideDeleted": "Nascondi Voci Eliminate",
+    "@passwordFilterHideDeleted": {
+        "description": "filter name to show only password entries which are not deleted"
+    },
+    "passwordFilterOnlyDeleted": "Voci Eliminate",
+    "@passwordFilterOnlyDeleted": {
+        "description": "filter name to show only deleted password entries"
+    },
+    "passwordFilterPrefixForOneGroup": "Gruppo: {groupName}",
+    "@passwordFilterPrefixForOneGroup": {
+        "description": "The label for a password filter for one specific group",
+        "placeholders": {
+            "groupName": {}
+        }
+    },
+    "passwordFilterPrefixForMultipleGroups": "Filtro Personalizzato ({groupCount} Gruppi)",
+    "@passwordFilterPrefixForMultipleGroups": {
+        "description": "The label for a password filter for multiple groups",
+        "placeholders": {
+            "groupCount": {}
+        }
+    },
+    "menuItemAuthPassCloudAuthenticate": "Autenticati con AuthPass Cloud",
+    "@menuItemAuthPassCloudAuthenticate": {
+        "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
+    },
+    "menuItemAuthPassCloudMailboxes": "Mailbox AuthPass",
+    "@menuItemAuthPassCloudMailboxes": {
+        "description": ""
+    },
+    "changesWithoutSaving": "Sono presenti modifiche in \"{fileName}\", che non supporta la scrittura delle modifiche.",
+    "@changesWithoutSaving": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "changesSaveLocally": "Salva in locale",
+    "@changesSaveLocally": {
+        "description": ""
+    },
+    "clearColor": "Elimina Colore",
+    "@clearColor": {
+        "description": "Action to remove a selected color and reset to default."
+    },
+    "databaseRenameInputLabel": "Inserisci il nome del database",
+    "@databaseRenameInputLabel": {
+        "description": ""
+    },
+    "databasePath": "Percorso",
+    "@databasePath": {
+        "description": ""
+    },
+    "databaseColor": "Colore",
+    "@databaseColor": {
+        "description": ""
+    },
+    "databaseColorChoose": "Selezionare un colore per distinguere i file.",
+    "@databaseColorChoose": {
+        "description": ""
+    },
+    "databaseKdbxVersion": "Versione File KDBX",
+    "@databaseKdbxVersion": {
+        "description": ""
+    },
+    "databaseKdbxUpgradeVersion": "Aggiorna a {versionName}",
+    "@databaseKdbxUpgradeVersion": {
+        "description": "",
+        "placeholders": {
+            "versionName": {}
+        }
+    },
+    "databaseKdbxUpgradeSuccessful": "File aggiornato e salvato con successo.",
+    "@databaseKdbxUpgradeSuccessful": {
+        "description": ""
+    },
+    "databaseReload": "Ricarica e unisci",
+    "@databaseReload": {
+        "description": ""
+    },
+    "progressStatus": "Stato: {statusProgress}",
+    "@progressStatus": {
+        "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
+        "placeholders": {
+            "statusProgress": {}
+        }
+    },
+    "finishedMerge": "Unione completata {status}",
+    "@finishedMerge": {
+        "description": "",
+        "placeholders": {
+            "status": {}
+        }
+    },
+    "closeAndLockFile": "Chiudi/Blocca",
+    "@closeAndLockFile": {
+        "description": ""
+    },
+    "authPassHomeScreenTagline": "password manager, open source, disponibile su tutte le piattaforme.",
+    "@authPassHomeScreenTagline": {
+        "description": ""
+    },
+    "addNewPasswordButtonLabel": "Aggiungi una nuova password",
+    "@addNewPasswordButtonLabel": {
+        "description": ""
+    },
+    "unnamedEntryPlaceholder": "(Senza Nome)",
+    "@unnamedEntryPlaceholder": {
+        "description": "displayed instead of entry label, if entry has no name or it is blank."
+    },
+    "unnamedGroupPlaceholder": "(Senza Nome)",
+    "@unnamedGroupPlaceholder": {
+        "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
+    },
+    "unnamedFilePlaceholder": "(Senza Nome)",
+    "@unnamedFilePlaceholder": {
+        "description": ""
+    },
+    "editGroupScreenTitle": "Modifica Gruppo",
+    "@editGroupScreenTitle": {
+        "description": ""
+    },
+    "editGroupGroupNameLabel": "Nome Del Gruppo",
+    "@editGroupGroupNameLabel": {
+        "description": ""
+    },
+    "files": "File",
+    "@files": {
+        "description": ""
+    },
     "newGroupDialogTitle": "Crea Gruppo",
     "@newGroupDialogTitle": {
+        "description": ""
+    },
+    "newGroupDialogInputLabel": "Nome del nuovo gruppo",
+    "@newGroupDialogInputLabel": {
+        "description": ""
+    },
+    "groupActionShowPasswords": "Mostra le password",
+    "@groupActionShowPasswords": {
         "description": ""
     },
     "groupActionDelete": "Elimina",
     "@groupActionDelete": {
         "description": ""
     },
+    "logoutTooltip": "Disconnetti",
+    "@logoutTooltip": {
+        "description": "Tooltip for logging out of a cloud storage provider."
+    },
+    "successfullyDeletedFileCloudStorage": "File eliminato con successo.",
+    "@successfullyDeletedFileCloudStorage": {
+        "description": "deleted file from cloud storage."
+    },
+    "shareDialogTitle": "Opzioni di condivisione di {fileName}",
+    "@shareDialogTitle": {
+        "description": "",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "shareFileActionLabel": "Condividi …",
+    "@shareFileActionLabel": {
+        "description": ""
+    },
+    "shareTokenListEmptyScreenPlaceholder": "File non ancora condiviso.",
+    "@shareTokenListEmptyScreenPlaceholder": {
+        "description": ""
+    },
+    "shareTokenNoLabel": "Nessuna Etichetta/Descrizione",
+    "@shareTokenNoLabel": {
+        "description": "User did not specify a description for a given share code."
+    },
+    "shareTokenReadWrite": "Lettura/Scrittura",
+    "@shareTokenReadWrite": {
+        "description": "Share Code allows reading and writing"
+    },
+    "shareTokenReadOnly": "Sola lettura",
+    "@shareTokenReadOnly": {
+        "description": "Share code only allows reading."
+    },
+    "shareCreateTokenDialogTitle": "Condividi file",
+    "@shareCreateTokenDialogTitle": {
+        "description": ""
+    },
+    "shareCreateTokenReadOnly": "Sola lettura",
+    "@shareCreateTokenReadOnly": {
+        "description": "switch between read only and read/write"
+    },
+    "shareCreateTokenReadOnlyHelpText": "Non consentire il salvataggio delle modifiche",
+    "@shareCreateTokenReadOnlyHelpText": {
+        "description": "help text for the switch between read only and read/write"
+    },
+    "shareCreateTokenLabelText": "Descrizione",
+    "@shareCreateTokenLabelText": {
+        "description": "Allows users to add a description/label to a share code."
+    },
+    "shareCreateTokenLabelHint": "Condividi con il mio amico",
+    "@shareCreateTokenLabelHint": {
+        "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+    },
+    "shareCreateTokenLabelHelp": "Etichetta facoltativa per differenziare il codice di condivisione.",
+    "@shareCreateTokenLabelHelp": {
+        "description": ""
+    },
+    "shareCreateTokenSuccess": "Codice di condivisione creato con successo.",
+    "@shareCreateTokenSuccess": {
+        "description": "snackbar when share code was created successfully."
+    },
+    "sharePresentDialogTitle": "Condividi il file con il codice di condivisione segreto",
+    "@sharePresentDialogTitle": {
+        "description": ""
+    },
+    "sharePresentDialogHelp": "Utilizzando il seguente codice di condivisione gli utenti possono accedere al file di password. Avranno bisogno della password e/o del file chiave per aprirlo.",
+    "@sharePresentDialogHelp": {
+        "description": ""
+    },
+    "sharePresentToken": "Condividi Il Codice",
+    "@sharePresentToken": {
+        "description": ""
+    },
+    "sharePresentCopied": "Codice di condivisione copiato negli appunti.",
+    "@sharePresentCopied": {
+        "description": ""
+    },
+    "authPassCloudOpenWithShareCodeTooltip": "Apri con il codice di condivisione",
+    "@authPassCloudOpenWithShareCodeTooltip": {
+        "description": "Allows users to open cloud files using a share code/token."
+    },
+    "authPassCloudShareFileActionLabel": "Condividi",
+    "@authPassCloudShareFileActionLabel": {
+        "description": ""
+    },
+    "preferenceAuthPassCloudAttachmentTitle": "Usa Gli Allegati Cloud AuthPass",
+    "@preferenceAuthPassCloudAttachmentTitle": {
+        "description": ""
+    },
+    "preferenceAuthPassCloudAttachmentSubtitle": "Memorizza gli allegati crittografati separatamente su AuthPass Cloud.",
+    "@preferenceAuthPassCloudAttachmentSubtitle": {
+        "description": ""
+    },
+    "shareCodeInputDialogTitle": "Inserisci Codice Segreto Di Condivisione",
+    "@shareCodeInputDialogTitle": {
+        "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+    },
+    "shareCodeInputDialogScan": "Scansiona il codice QR",
+    "@shareCodeInputDialogScan": {
+        "description": "button label for triggering QR code scanner"
+    },
+    "shareCodeInputLabel": "Codice Di Condivisione Segreto",
+    "@shareCodeInputLabel": {
+        "description": ""
+    },
+    "shareCodeInputHelperText": "Se hai ricevuto un codice di condivisione, incollalo sopra.",
+    "@shareCodeInputHelperText": {
+        "description": ""
+    },
+    "shareCodeOpen": "Hai ricevuto un codice di condivisione per AuthPass Cloud?",
+    "@shareCodeOpen": {
+        "description": ""
+    },
+    "shareCodeOpenScreenTitle": "Caricamento file con codice di condivisione",
+    "@shareCodeOpenScreenTitle": {
+        "description": ""
+    },
     "shareCodeLoadingProgress": "Caricamento del file …",
     "@shareCodeLoadingProgress": {
+        "description": ""
+    },
+    "shareCodeOpenFileButtonLabel": "APRI",
+    "@shareCodeOpenFileButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppCaption": "Vuoi aprire questo file con una delle nostre applicazioni native?",
+    "@shareCodeOpenInstallAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenAnotherAppCaption": "Vuoi aprire questo file su un altro dispositivo?",
+    "@shareCodeOpenAnotherAppCaption": {
+        "description": ""
+    },
+    "shareCodeOpenInstallAppButtonLabel": "Installa App",
+    "@shareCodeOpenInstallAppButtonLabel": {
+        "description": ""
+    },
+    "shareCodeOpenShowCodeButtonLabel": "Mostra Codice Di Condivisione",
+    "@shareCodeOpenShowCodeButtonLabel": {
+        "description": ""
+    },
+    "changeMasterPasswordActionLabel": "Cambia Password Principale",
+    "@changeMasterPasswordActionLabel": {
+        "description": "label for the button to show the dialog for changing master password."
+    },
+    "changeMasterPasswordFormSubmit": "Salva con nuova password",
+    "@changeMasterPasswordFormSubmit": {
+        "description": ""
+    },
+    "changeMasterPasswordSuccess": "Password principale salvata con successo.",
+    "@changeMasterPasswordSuccess": {
+        "description": ""
+    },
+    "changeMasterPasswordScreenTitle": "Cambia Password Principale",
+    "@changeMasterPasswordScreenTitle": {
+        "description": "app bar title for change password screen."
+    },
+    "authPassCloudAuthClickedLink": "Ho ricevuto l'email e visitato il link",
+    "@authPassCloudAuthClickedLink": {
+        "description": ""
+    },
+    "authPassCloudAuthNotConfirmed": "L'indirizzo email non è stato ancora confermato. Assicurati di fare clic sul link nell'email che hai ricevuto e di risolvere il captcha per confermare il tuo indirizzo email.",
+    "@authPassCloudAuthNotConfirmed": {
+        "description": ""
+    },
+    "getHelpButton": "Ottieni aiuto nel forum",
+    "@getHelpButton": {
         "description": ""
     },
     "shortcutCopyUsername": "Copia il Nome Utente",
@@ -767,13 +1695,41 @@
     "@shortcutCopyPassword": {
         "description": ""
     },
+    "shortcutCopyTotp": "Copia TOTP",
+    "@shortcutCopyTotp": {
+        "description": ""
+    },
+    "shortcutMoveUp": "Seleziona la password precedente",
+    "@shortcutMoveUp": {
+        "description": ""
+    },
+    "shortcutMoveDown": "Seleziona la password successiva",
+    "@shortcutMoveDown": {
+        "description": ""
+    },
     "shortcutGeneratePassword": "Genera una Password",
     "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutCopyUrl": "Copia URL",
+    "@shortcutCopyUrl": {
         "description": ""
     },
     "shortcutOpenUrl": "Apri URL",
     "@shortcutOpenUrl": {
         "description": ""
+    },
+    "shortcutCancelSearch": "Annulla Ricerca",
+    "@shortcutCancelSearch": {
+        "description": ""
+    },
+    "shortcutShortcutHelp": "Guida Scorciatoia Tastiera",
+    "@shortcutShortcutHelp": {
+        "description": ""
+    },
+    "shortcutHelpTitle": "Scorciatoie da tastiera",
+    "@shortcutHelpTitle": {
+        "description": "title of dialog showing keyboard shortcuts."
     },
     "unexpectedError": "Errore imprevisto: {error}",
     "@unexpectedError": {

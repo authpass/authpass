@@ -184,6 +184,34 @@
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Voorkeuren",
     "@preferenceTitle": {},
+    "preferenceEnableSystemWideShortcuts": "Activeer systeem brede snelkoppelingen",
+    "@preferenceEnableSystemWideShortcuts": {
+        "description": ""
+    },
+    "preferenceEnableSystemWideShortcutsHelp": "Registreert ctrl + alt+f als systeem brede snelkoppeling om te zoeken.",
+    "@preferenceEnableSystemWideShortcutsHelp": {
+        "description": ""
+    },
+    "preferencesSearchFields": "Zoekvelden aanpassen",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Zoekvelden",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptLabel": "Komma's gescheiden lijst van velden om te gebruiken bij het zoeken in wachtwoordlijsten.",
+    "@preferencesSearchFieldPromptLabel": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptHelp": "Gebruik {wildCardCharacter} voor iedereen, laat leeg voor standaard ({defaultSearchFields})",
+    "@preferencesSearchFieldPromptHelp": {
+        "description": "",
+        "placeholders": {
+            "wildCardCharacter": {},
+            "defaultSearchFields": {}
+        }
+    },
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "Wij verwelkomen elke vorm van feedback!",
@@ -934,6 +962,16 @@
             }
         }
     },
+    "sizeBytesStoredAuthPassCloud": "{count} bytes, opgeslagen in AuthPass Cloud",
+    "@sizeBytesStoredAuthPassCloud": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "description": "file size in bytes",
+                "example": "123"
+            }
+        }
+    },
     "sizeBytes": "{count} bytes",
     "@sizeBytes": {
         "description": "",
@@ -1282,6 +1320,10 @@
     "@entryRenameFieldPromptTitle": {
         "description": ""
     },
+    "removerecentfile": "Verbergen",
+    "@removerecentfile": {
+        "description": ""
+    },
     "entryRenameFieldPromptLabel": "Voer de nieuwe naam voor het veld in",
     "@entryRenameFieldPromptLabel": {
         "description": ""
@@ -1561,6 +1603,14 @@
     "@authPassCloudShareFileActionLabel": {
         "description": ""
     },
+    "preferenceAuthPassCloudAttachmentTitle": "Gebruik AuthPass Cloudbijlagen",
+    "@preferenceAuthPassCloudAttachmentTitle": {
+        "description": ""
+    },
+    "preferenceAuthPassCloudAttachmentSubtitle": "Sla bijlagen afzonderlijk versleuteld in AuthPass Cloud.",
+    "@preferenceAuthPassCloudAttachmentSubtitle": {
+        "description": ""
+    },
     "shareCodeInputDialogTitle": "Geheime deelcode invoeren",
     "@shareCodeInputDialogTitle": {
         "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
@@ -1625,6 +1675,18 @@
     "@changeMasterPasswordScreenTitle": {
         "description": "app bar title for change password screen."
     },
+    "authPassCloudAuthClickedLink": "Ik heb de e-mail ontvangen en de link bezocht",
+    "@authPassCloudAuthClickedLink": {
+        "description": ""
+    },
+    "authPassCloudAuthNotConfirmed": "E-mailadres is nog niet bevestigd. Zorg ervoor dat in de e-mail op de link klikt en vervolgens de captcha oplost om je e-mailadres te bevestigen.",
+    "@authPassCloudAuthNotConfirmed": {
+        "description": ""
+    },
+    "getHelpButton": "Hulp krijgen in het forum",
+    "@getHelpButton": {
+        "description": ""
+    },
     "shortcutCopyUsername": "Gebruikersnaam kopiëren",
     "@shortcutCopyUsername": {
         "description": ""
@@ -1633,13 +1695,41 @@
     "@shortcutCopyPassword": {
         "description": ""
     },
+    "shortcutCopyTotp": "TOTP kopiëren",
+    "@shortcutCopyTotp": {
+        "description": ""
+    },
+    "shortcutMoveUp": "Selecteer vorig wachtwoord",
+    "@shortcutMoveUp": {
+        "description": ""
+    },
+    "shortcutMoveDown": "Selecteer het volgende wachtwoord",
+    "@shortcutMoveDown": {
+        "description": ""
+    },
     "shortcutGeneratePassword": "Wachtwoord genereren",
     "@shortcutGeneratePassword": {
+        "description": ""
+    },
+    "shortcutCopyUrl": "Kopieer URL",
+    "@shortcutCopyUrl": {
         "description": ""
     },
     "shortcutOpenUrl": "Open URL",
     "@shortcutOpenUrl": {
         "description": ""
+    },
+    "shortcutCancelSearch": "Zoeken annuleren",
+    "@shortcutCancelSearch": {
+        "description": ""
+    },
+    "shortcutShortcutHelp": "Toetsenbord sneltoets Help",
+    "@shortcutShortcutHelp": {
+        "description": ""
+    },
+    "shortcutHelpTitle": "Toetsenbord sneltoetsen",
+    "@shortcutHelpTitle": {
+        "description": "title of dialog showing keyboard shortcuts."
     },
     "unexpectedError": "Onverwachte fout: {error}",
     "@unexpectedError": {

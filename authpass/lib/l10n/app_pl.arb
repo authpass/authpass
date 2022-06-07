@@ -72,6 +72,14 @@
     "@slovak": {
         "description": "Language switcher subtitle"
     },
+    "dutch": "Holenderski",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Zaznacz",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
     "selectKeepassFile": "AuthPass - Wybierz plik KeePass",
     "@selectKeepassFile": {
         "context": "appbar title - select file screen"
@@ -91,6 +99,29 @@
     "openFile": "Otwórz plik",
     "@openFile": {
         "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFromDropdownMenu": "Wczytaj z…",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Szybkie odblokowanie plików…",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "Otwieranie {fileName} … ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
     },
     "loadFrom": "Wczytaj z {cloudStorageName}",
     "@loadFrom": {
@@ -119,6 +150,8 @@
     "@preferenceLanguage": {},
     "preferenceTextScaleFactor": "Współczynnik Skalowania tekstu",
     "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Gęstość rozstawienia elementów",
+    "@preferenceVisualDensity": {},
     "preferenceTheme": "Motyw",
     "@preferenceTheme": {},
     "preferenceThemeLight": "Jasny",
@@ -135,16 +168,65 @@
     "@preferenceAllowScreenshots": {},
     "preferenceEnableAutoFill": "Włącz autouzupełnienie",
     "@preferenceEnableAutoFill": {},
+    "enableAutofillSuggestionBanner": "Możesz automatycznie uzupełniać dane logowania w aplikacjach aktywując tę opcję!",
+    "@enableAutofillSuggestionBanner": {
+        "description": "This text will shown as a banner on top of password list"
+    },
+    "dismissAutofillSuggestionBannerButton": "ODRZUĆ",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
+    "enableAutofillSuggestionBannerButton": "AKTYWUJ!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+    },
     "preferenceAutoFillDescription": "Obsługiwane tylko na Androidzie Oreo (8.0) lub nowszym.",
     "@preferenceAutoFillDescription": {},
     "preferenceTitle": "Ustawienia",
     "@preferenceTitle": {},
+    "preferenceEnableSystemWideShortcuts": "Włącz globalne skróty klawiszowe",
+    "@preferenceEnableSystemWideShortcuts": {
+        "description": ""
+    },
+    "preferenceEnableSystemWideShortcutsHelp": "Rejestruje w systemie skrót ctrl+alt+f do otwierania wyszukiwania.",
+    "@preferenceEnableSystemWideShortcutsHelp": {
+        "description": ""
+    },
+    "preferencesSearchFields": "Dostosuj pola wyszukiwania",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Pola wyszukiwania",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptHelp": "Użyj {wildCardCharacter} dla wszystkich, pozostaw puste dla wartości domyślnej ({defaultSearchFields})",
+    "@preferencesSearchFieldPromptHelp": {
+        "description": "",
+        "placeholders": {
+            "wildCardCharacter": {},
+            "defaultSearchFields": {}
+        }
+    },
     "aboutAppName": "AuthPass",
     "@aboutAppName": {},
     "aboutLinkFeedback": "Cieszymy się z wszelkiego rodzaju opinii!",
     "@aboutLinkFeedback": {},
     "aboutLinkVisitWebsite": "Upewnij się, że odwiedziłeś naszą stronę internetową",
     "@aboutLinkVisitWebsite": {},
+    "aboutLinkGitHub": "oraz otwartoźródłowy projekt",
+    "@aboutLinkGitHub": {},
+    "aboutLogFile": "Plik dziennika: {logFilePath}",
+    "aboutLinkContributors": "Pokaż współtwórców",
+    "@aboutLinkContributors": {},
+    "@aboutLogFile": {
+        "placeholders": {
+            "logFilePath": {
+                "type": "String",
+                "example": "/Users/mustermann/log.txt"
+            }
+        }
+    },
     "unableToLaunchUrlTitle": "Nie można otworzyć adresu URL",
     "@unableToLaunchUrlTitle": {
         "description": ""
@@ -161,6 +243,19 @@
             }
         }
     },
+    "unableToLaunchUrlNoHandler": "Brak dostępnej aplikacji dla adresu URL.",
+    "@unableToLaunchUrlNoHandler": {
+        "description": ""
+    },
+    "launchedUrl": "Otwarto adres URL: {url}",
+    "@launchedUrl": {
+        "description": "snackbar confirmation after opening a url externally",
+        "placeholders": {
+            "url": {
+                "description": "URL which was just launched."
+            }
+        }
+    },
     "menuItemGeneratePassword": "Wygeneruj hasło",
     "@menuItemGeneratePassword": {},
     "menuItemPreferences": "Ustawienia",
@@ -169,10 +264,20 @@
     "@menuItemOpenAnotherFile": {},
     "menuItemCheckForUpdates": "Sprawdź aktualizacje",
     "@menuItemCheckForUpdates": {},
+    "menuItemSupport": "Wyślij plik dziennika",
+    "@menuItemSupport": {},
+    "menuItemSupportSubtitle": "Wyślij dziennik przez e-mail",
+    "@menuItemSupportSubtitle": {},
+    "menuItemForum": "Forum pomocy technicznej",
+    "@menuItemForum": {},
+    "menuItemForumSubtitle": "Zgłoś problemy i uzyskaj pomoc",
+    "@menuItemForumSubtitle": {},
     "menuItemHelp": "Pomoc",
     "@menuItemHelp": {},
     "menuItemHelpSubtitle": "Pokaż dokumentację",
     "@menuItemHelpSubtitle": {},
+    "menuItemAbout": "O aplikacji",
+    "@menuItemAbout": {},
     "actionOpenUrl": "Otwórz adres URL",
     "@actionOpenUrl": {
         "description": "tooltip for button to open URL/Website of an entry."
@@ -188,6 +293,10 @@
     "generatePassword": "Wygeneruj hasło",
     "@generatePassword": {
         "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Gotowe",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
     },
     "useAsDefault": "Użyj jako domyślnych",
     "@useAsDefault": {
@@ -224,6 +333,31 @@
         "description": "Label for custom length field",
         "context": "Password generator"
     },
+    "customLengthHelperText": "Zostanie użyte dla wartości > {customMinLength}",
+    "@customLengthHelperText": {
+        "description": "Help text for custom length field",
+        "context": "Password generator",
+        "placeholders": {
+            "customMinLength": {
+                "example": "40"
+            }
+        }
+    },
+    "savedFiles": "{numFiles, plural, =1 {Plik zapisany: {files}} few {{numFiles} pliki zapisane: {files}} other {{numFiles} plików zapisanych: {files}}}",
+    "@savedFiles": {
+        "description": "Message displayed when files were saved. (One or more).",
+        "context": "Password list",
+        "placeholders": {
+            "numFiles": {
+                "description": "Number of files that have been saved (at least 1)",
+                "type": "int",
+                "format": "compactLong"
+            },
+            "files": {
+                "description": "Comma separated list of vault names."
+            }
+        }
+    },
     "manageGroups": "Zarządzaj grupami",
     "@manageGroups": {
         "description": ""
@@ -240,6 +374,14 @@
     "@searchButtonLabel": {
         "description": "search button tooltip/semantic label"
     },
+    "filterButtonLabel": "Filtruj według grup",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
+    "clear": "Wyczyść",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
     "autofillFilterPrefix": "Filtr:",
     "@autofillFilterPrefix": {
         "description": "Label displayed for android auto fill"
@@ -251,6 +393,10 @@
     "noTitle": "(brak tytułu)",
     "@noTitle": {
         "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(bez nazwy użytkownika)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
     },
     "filterCustomize": "Dostosuj …",
     "@filterCustomize": {
@@ -276,9 +422,27 @@
     "@doneCopiedField": {
         "description": ""
     },
+    "copiedFieldToClipboard": "Skopiowano {fieldName}.",
+    "@copiedFieldToClipboard": {
+        "description": "",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "copiedFieldEmpty": "{fieldName} jest puste.",
+    "@copiedFieldEmpty": {
+        "description": "Displayed when user wants to copy a field which is empty or not defined.",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
     "emptyPasswordVaultButtonLabel": "Utwórz swoje pierwsze hasło",
     "@emptyPasswordVaultButtonLabel": {
         "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loading": "Ładowanie",
+    "@loading": {
+        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
     },
     "loadingFile": "Ładowanie pliku …",
     "@loadingFile": {
@@ -327,6 +491,22 @@
         "description": "Trying to open a database from a second file source which is already open.",
         "context": "credential screen"
     },
+    "loadFromUrl": "Pobierz z adresu URL",
+    "@loadFromUrl": {
+        "description": ""
+    },
+    "loadFromUrlEnterUrl": "Wprowadź adres URL",
+    "@loadFromUrlEnterUrl": {
+        "description": "label for input box to enter url."
+    },
+    "loadFromUrlErrorInvalidUrl": "Wprowadź poprawny adres URL.",
+    "@loadFromUrlErrorInvalidUrl": {
+        "description": "validator error message hwen user enters a url which could not be parsed."
+    },
+    "cancel": "Anuluj",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
     "errorUnlockFileTitle": "Nie można otworzyć Pliku",
     "@errorUnlockFileTitle": {
         "description": "generic error when opening a file (dialog title)",
@@ -361,6 +541,10 @@
     "editAction": "Edytuj",
     "@editAction": {
         "description": "menu action: edit item (e.g. delete a group)"
+    },
+    "mailboxDisableLabel": "Wyłącz",
+    "@mailboxDisableLabel": {
+        "description": ""
     },
     "deleteAction": "Usuń",
     "@deleteAction": {

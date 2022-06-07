@@ -1,3 +1,552 @@
 {
-    "@@locale": "pt"
+    "@@locale": "pt",
+    "fieldUserName": "Usuário",
+    "@fieldUserName": {},
+    "fieldPassword": "Palavra-passe",
+    "@fieldPassword": {},
+    "fieldWebsite": "Website",
+    "@fieldWebsite": {},
+    "fieldTitle": "Título",
+    "@fieldTitle": {},
+    "fieldTotp": "Senha Única (Baseado no Tempo)",
+    "@fieldTotp": {
+        "description": "Label for fields of TOTP (Time based one time passwords)"
+    },
+    "english": "Inglês",
+    "@english": {
+        "description": "language switcher subtitle"
+    },
+    "german": "Alemão",
+    "@german": {
+        "description": "language switcher subtitle"
+    },
+    "russian": "Russo",
+    "@russian": {
+        "description": "language switcher subtitle"
+    },
+    "ukrainian": "Ucraniano",
+    "@ukrainian": {
+        "description": "language switcher subtitle"
+    },
+    "lithuanian": "Lituano",
+    "@lithuanian": {
+        "description": "language switcher subtitle"
+    },
+    "french": "Francês",
+    "@french": {
+        "description": "language switcher subtitle"
+    },
+    "spanish": "Espanhol",
+    "@spanish": {
+        "description": "language switcher subtitle"
+    },
+    "indonesian": "Indonésio",
+    "@indonesian": {
+        "description": "language switcher subtitle"
+    },
+    "turkish": "Turco",
+    "@turkish": {
+        "description": "Language switcher subtitle"
+    },
+    "hebrew": "Hebraico",
+    "@hebrew": {
+        "description": "Language switcher subtitle"
+    },
+    "italian": "Italiano",
+    "@italian": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseSimplified": "Chinês simplificado",
+    "@chineseSimplified": {
+        "description": "Language switcher subtitle"
+    },
+    "chineseTraditional": "Chinês tradicional",
+    "@chineseTraditional": {
+        "description": "Language switcher subtitle"
+    },
+    "portugueseBrazilian": "Português brasileiro",
+    "@portugueseBrazilian": {
+        "description": "Language switcher subtitle"
+    },
+    "slovak": "Eslovaco",
+    "@slovak": {
+        "description": "Language switcher subtitle"
+    },
+    "dutch": "Holandês",
+    "@dutch": {
+        "description": "Language switcher subtitle"
+    },
+    "selectItem": "Selecionar",
+    "@selectItem": {
+        "description": "semantic label for checkboxes to select item."
+    },
+    "selectKeepassFile": "AuthPass - Selecionar arquivo KeePass",
+    "@selectKeepassFile": {
+        "context": "appbar title - select file screen"
+    },
+    "selectKeepassFileLabel": "Por favor, selecione um arquivo KeePass (.kdbx)",
+    "@selectKeepassFileLabel": {
+        "context": "select file screen, used as label."
+    },
+    "createNewFile": "Criar novo arquivo",
+    "@createNewFile": {
+        "description": "button on select file screen to create a new password database."
+    },
+    "openLocalFile": "Abrir\nArquivo Local",
+    "@openLocalFile": {
+        "context": "select file screen, big button open local file."
+    },
+    "openFile": "Abrir arquivo",
+    "@openFile": {
+        "description": "Displayed as placeholder in password list when no file is open."
+    },
+    "loadFromDropdownMenu": "Carregar de …",
+    "@loadFromDropdownMenu": {
+        "description": "label for dropdown menu which shows more cloud storage options."
+    },
+    "quickUnlockingFiles": "Desbloqueio rápido de arquivos …",
+    "@quickUnlockingFiles": {
+        "description": "Status shown while we are loading files and trying to unlock them."
+    },
+    "openFileProgress": "Abrindo {fileName} … ({current} / {totalCount})",
+    "@openFileProgress": {
+        "description": "Progress shown while files are loaded during quick unlock.",
+        "placeholders": {
+            "fileName": {
+                "description": "Name of the file that is currently loaded."
+            },
+            "current": {
+                "description": "The index/number of file currently loading."
+            },
+            "totalCount": {
+                "description": "Total number of files which are loading."
+            }
+        }
+    },
+    "loadFrom": "Carregar de {cloudStorageName}",
+    "@loadFrom": {
+        "placeholders": {
+            "cloudStorageName": {
+                "type": "String",
+                "example": "Dropbox"
+            }
+        }
+    },
+    "loadFromRemoteUrl": "Abrir kdbx de URL",
+    "@loadFromRemoteUrl": {
+        "description": "Overflow menu option to load KeePass file from URL."
+    },
+    "createNewKeepass": "Novo no KeePass?\nCriar nova base de dados de senhas",
+    "@createNewKeepass": {
+        "description": "deprecated"
+    },
+    "labelLastOpenFiles": "Últimos arquivos abertos:",
+    "@labelLastOpenFiles": {},
+    "noFilesHaveBeenOpenYet": "Nenhum arquivo foi aberto ainda.",
+    "@noFilesHaveBeenOpenYet": {},
+    "preferenceSelectLanguage": "Selecione o idioma",
+    "@preferenceSelectLanguage": {},
+    "preferenceLanguage": "Língua",
+    "@preferenceLanguage": {},
+    "preferenceTextScaleFactor": "Fator de Escala de Texto",
+    "@preferenceTextScaleFactor": {},
+    "preferenceVisualDensity": "Densidade visual",
+    "@preferenceVisualDensity": {},
+    "preferenceTheme": "Tema",
+    "@preferenceTheme": {},
+    "preferenceThemeLight": "Claro",
+    "@preferenceThemeLight": {},
+    "preferenceThemeDark": "Escuro",
+    "@preferenceThemeDark": {},
+    "preferenceSystemDefault": "Padrão do Sistema",
+    "@preferenceSystemDefault": {},
+    "preferenceDefault": "Predefinição",
+    "@preferenceDefault": {},
+    "lockAllFiles": "Bloquear todos os arquivos abertos",
+    "@lockAllFiles": {},
+    "preferenceAllowScreenshots": "Permitir capturas de tela do App",
+    "@preferenceAllowScreenshots": {},
+    "preferenceEnableAutoFill": "Ativar preenchimento automático",
+    "@preferenceEnableAutoFill": {},
+    "enableAutofillSuggestionBanner": "Você pode preencher o campo de outra aplicação ativando o preenchimento automático!",
+    "@enableAutofillSuggestionBanner": {
+        "description": "This text will shown as a banner on top of password list"
+    },
+    "dismissAutofillSuggestionBannerButton": "Dispensar",
+    "@dismissAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+    },
+    "enableAutofillSuggestionBannerButton": "ATIVAR!",
+    "@enableAutofillSuggestionBannerButton": {
+        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+    },
+    "preferenceAutoFillDescription": "Suportado somente no Android Oreo (8.0) ou superior.",
+    "@preferenceAutoFillDescription": {},
+    "preferenceTitle": "Preferências",
+    "@preferenceTitle": {},
+    "preferencesSearchFields": "Personalizar os Campos de Pesquisa",
+    "@preferencesSearchFields": {
+        "description": ""
+    },
+    "preferencesSearchFieldPromptTitle": "Campos de pesquisa",
+    "@preferencesSearchFieldPromptTitle": {
+        "description": ""
+    },
+    "menuItemAbout": "Sobre",
+    "@menuItemAbout": {},
+    "actionOpenUrl": "Abrir URL",
+    "@actionOpenUrl": {
+        "description": "tooltip for button to open URL/Website of an entry."
+    },
+    "passwordPlainText": "Mostrar senha",
+    "@passwordPlainText": {
+        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+    },
+    "generatorPassword": "Senha",
+    "@generatorPassword": {
+        "description": "Label for generated password"
+    },
+    "generatePassword": "Gerar Senha",
+    "@generatePassword": {
+        "description": "screen title for password generator"
+    },
+    "doneButtonLabel": "Concluído",
+    "@doneButtonLabel": {
+        "description": "generic button label for 'Done' action."
+    },
+    "useAsDefault": "Usar como Padrão",
+    "@useAsDefault": {
+        "description": "Button Label for Password generator settings: use as defaults",
+        "context": "Password generator"
+    },
+    "characterSetLowerCase": "Minúsculas (a-z)",
+    "@characterSetLowerCase": {
+        "context": "Password generator"
+    },
+    "characterSetUpperCase": "Maiúsculas (A-Z)",
+    "@characterSetUpperCase": {
+        "context": "Password generator"
+    },
+    "characterSetNumeric": "Números (0-9)",
+    "@characterSetNumeric": {
+        "context": "Password generator"
+    },
+    "characterSetUmlauts": "Trema (ä)",
+    "@characterSetUmlauts": {
+        "context": "Password generator"
+    },
+    "characterSetSpecial": "Caracteres especiais (@%+)",
+    "@characterSetSpecial": {
+        "context": "Password generator"
+    },
+    "length": "Tamanho",
+    "@length": {
+        "description": "Length of password",
+        "context": "Password generator"
+    },
+    "customLength": "Tamanho personalizado",
+    "@customLength": {
+        "description": "Label for custom length field",
+        "context": "Password generator"
+    },
+    "manageGroups": "Gerenciar Grupos",
+    "@manageGroups": {
+        "description": ""
+    },
+    "lockFiles": "Bloquear Arquivos",
+    "@lockFiles": {
+        "description": "Close all files and return to start screen."
+    },
+    "searchHint": "Pesquisar",
+    "@searchHint": {
+        "description": "Placeholder in the password list search box"
+    },
+    "searchButtonLabel": "Pesquisar",
+    "@searchButtonLabel": {
+        "description": "search button tooltip/semantic label"
+    },
+    "filterButtonLabel": "Filtrar por grupo",
+    "@filterButtonLabel": {
+        "description": "tooltip/semantic label for filter app bar icon."
+    },
+    "clear": "Limpar",
+    "@clear": {
+        "description": "Remove existing group filter from password list"
+    },
+    "autofillFilterPrefix": "Filtro:",
+    "@autofillFilterPrefix": {
+        "description": "Label displayed for android auto fill"
+    },
+    "autofillPrompt": "Selecione a senha para preenchimento automático.",
+    "@autofillPrompt": {
+        "description": ""
+    },
+    "copiedToClipboard": "Copiado para a área de transferência.",
+    "@copiedToClipboard": {
+        "description": "Snackbar text when copying text to clipboard."
+    },
+    "noTitle": "(sem título)",
+    "@noTitle": {
+        "description": "Text to display in place of a title, when password entry has no name assigned."
+    },
+    "noUsername": "(sem nome)",
+    "@noUsername": {
+        "description": "Text to display in place of a user name in the password list if none is defined."
+    },
+    "filterCustomize": "Personalizar …",
+    "@filterCustomize": {
+        "description": "Customize filter in password list"
+    },
+    "swipeCopyPassword": "Copiar Senha",
+    "@swipeCopyPassword": {
+        "description": "swipe action in password list to copy password"
+    },
+    "swipeCopyUsername": "Copiar Usuário",
+    "@swipeCopyUsername": {
+        "description": "swipe action in password list to copy username"
+    },
+    "copyUsernameNotExists": "Entrada não possui um nome de usuário definido.",
+    "@copyUsernameNotExists": {
+        "description": "Error message when trying to copy username from an entry which has none."
+    },
+    "copyPasswordNotExists": "Entrada não possui um nome de usuário definido.",
+    "@copyPasswordNotExists": {
+        "description": "Error message when trying to copy password from an entry which has none."
+    },
+    "doneCopiedPassword": "Senha copiada para área de transferência.",
+    "@doneCopiedPassword": {
+        "description": "snackbar confirmation that password was copied."
+    },
+    "doneCopiedUsername": "Senha copiada para área de transferência.",
+    "@doneCopiedUsername": {
+        "description": "snackbar confirmation that username was copied."
+    },
+    "doneCopiedField": "Copiado.",
+    "@doneCopiedField": {
+        "description": ""
+    },
+    "copiedFieldToClipboard": "{fieldName} copiado.",
+    "@copiedFieldToClipboard": {
+        "description": "",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "copiedFieldEmpty": "{fieldName} está vazio.",
+    "@copiedFieldEmpty": {
+        "description": "Displayed when user wants to copy a field which is empty or not defined.",
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
+    "emptyPasswordVaultPlaceholder": "Você ainda não tem nenhuma senha no seu banco de dados.",
+    "@emptyPasswordVaultPlaceholder": {
+        "description": "Placeholder text shown when a user opens an empty password file."
+    },
+    "emptyPasswordVaultButtonLabel": "Crie sua primeira senha",
+    "@emptyPasswordVaultButtonLabel": {
+        "description": "Button shown under placeholder text when password database is empty"
+    },
+    "loading": "Carregando...",
+    "@loading": {
+        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
+    },
+    "loadingFile": "Carregando arquivo …",
+    "@loadingFile": {
+        "description": "credential screen while unlocking file."
+    },
+    "internalFile": "Arquivo interno",
+    "@internalFile": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "internalFileSubtitle": "Banco de dados criado com o AuthPass",
+    "@internalFileSubtitle": {
+        "description": "Choose a file previously created in AuthPass app sandbox",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePicker": "Selecionador de Arquivo",
+    "@filePicker": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "filePickerSubtitle": "Abrir arquivo a partir do dispositivo.",
+    "@filePickerSubtitle": {
+        "description": "Choose a file with the system's file picker. (ios/android)",
+        "context": "open file picker: internal file vs. file picker"
+    },
+    "credentialsAppBarTitle": "Credenciais",
+    "@credentialsAppBarTitle": {
+        "description": "Credential screen to enter master password when opening kdbx file.",
+        "context": "credential screen"
+    },
+    "credentialLabel": "Digite a senha para:",
+    "@credentialLabel": {
+        "description": "Label for the file/database being opened",
+        "context": "credential screen"
+    },
+    "masterPasswordInputLabel": "Palavra-passe",
+    "@masterPasswordInputLabel": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordEmptyValidator": "Por favor, digite sua senha.",
+    "@masterPasswordEmptyValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "masterPasswordIncorrectValidator": "Senha inválida",
+    "@masterPasswordIncorrectValidator": {
+        "description": "",
+        "context": "credential screen"
+    },
+    "useKeyFile": "Usar o arquivo chave",
+    "@useKeyFile": {
+        "description": "label for a key file in combination with mater password",
+        "context": "credential screen"
+    },
+    "saveMasterPasswordBiometric": "Salvar senha com armazenamento de chave biométrica?",
+    "@saveMasterPasswordBiometric": {
+        "description": "Label for the checkbox to save master password for quick unlock.",
+        "context": "credential screen"
+    },
+    "close": "Fechar",
+    "@close": {
+        "description": "Tooltip/semantic label for close button"
+    },
+    "addNewPassword": "Adicionar nova senha",
+    "@addNewPassword": {
+        "description": "Tooltip for adding new password button (floating action button)"
+    },
+    "errorOpenFileInvalidFileStructureTitle": "Tentou abrir arquivo inválido",
+    "@errorOpenFileInvalidFileStructureTitle": {
+        "description": "Title of error dialog when trying to open an invalid/unsupported file type"
+    },
+    "errorOpenFileInvalidFileStructureBody": "O arquivo ({fileName}) parece não ser um arquivo KDBX válido. Por favor escolha um arquivo KDBX válido ou crie um novo banco de dados de senhas.",
+    "@errorOpenFileInvalidFileStructureBody": {
+        "description": "Body of error dialog when trying to open an invalid/unsupported file type",
+        "placeholders": {
+            "fileName": {}
+        }
+    },
+    "errorOpenFileAlreadyOpenTitle": "Arquivo já aberto",
+    "@errorOpenFileAlreadyOpenTitle": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen"
+    },
+    "errorOpenFileAlreadyOpenBody": "O banco de dados {databaseName} já está aberto a partir de {openFileSource} (Tentativa de abrir a partir de {newFileSource})",
+    "@errorOpenFileAlreadyOpenBody": {
+        "description": "Trying to open a database from a second file source which is already open.",
+        "context": "credential screen",
+        "placeholders": {
+            "databaseName": {},
+            "openFileSource": {},
+            "newFileSource": {}
+        }
+    },
+    "loadFromUrl": "Baixar do Url",
+    "@loadFromUrl": {
+        "description": ""
+    },
+    "loadFromUrlEnterUrl": "Inserir URL",
+    "@loadFromUrlEnterUrl": {
+        "description": "label for input box to enter url."
+    },
+    "loadFromUrlErrorEnterFullUrl": "Por favor, insira a url completa, começando com http:// ou https://",
+    "@loadFromUrlErrorEnterFullUrl": {
+        "description": "validator error message when user does not enter a absolute url."
+    },
+    "loadFromUrlErrorInvalidUrl": "Por favor, insira uma URL válida.",
+    "@loadFromUrlErrorInvalidUrl": {
+        "description": "validator error message hwen user enters a url which could not be parsed."
+    },
+    "linuxAppArmorWarning": "AuthPass requer permissão para se comunicar com o Serviço Secreto para armazenar credenciais de armazenamento em nuvem.\nPor favor, execute o seguinte comando:",
+    "@linuxAppArmorWarning": {
+        "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
+    },
+    "cancel": "Cancelar",
+    "@cancel": {
+        "description": "button label for cancelling an action."
+    },
+    "errorLoadFileFromSourceTitle": "Erro ao abrir o arquivo.",
+    "@errorLoadFileFromSourceTitle": {
+        "description": "error title when user selects a file which can't be downloaded."
+    },
+    "errorLoadFileFromSourceBody": "Não é possível abrir {source}.\n{error}",
+    "@errorLoadFileFromSourceBody": {
+        "description": "error body when user selects a file which can't be downloaded.",
+        "placeholders": {
+            "source": {},
+            "error": {}
+        }
+    },
+    "errorUnlockFileTitle": "Não foi possível abrir o arquivo",
+    "@errorUnlockFileTitle": {
+        "description": "generic error when opening a file (dialog title)",
+        "context": "credential screen"
+    },
+    "errorUnlockFileBody": "Erro desconhecido ao tentar abrir o arquivo. {error}",
+    "@errorUnlockFileBody": {
+        "description": "generic error when opening a file (description)",
+        "context": "credential screen",
+        "placeholders": {
+            "error": {
+                "description": "Error details."
+            }
+        }
+    },
+    "dialogContinue": "Continuar",
+    "@dialogContinue": {
+        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+    },
+    "dialogSendErrorReport": "Enviar relatório de erro",
+    "@dialogSendErrorReport": {
+        "description": "action button in error dialogs to send email to support with log file.",
+        "context": "error dialog"
+    },
+    "dialogReportErrorForum": "Relatar erro no Fórum/Ajuda",
+    "@dialogReportErrorForum": {
+        "description": "action button in error dialog to open forum and create new topic."
+    },
+    "groupFilterDescription": "Selecionar quais grupos a exibir (recursivamente)",
+    "@groupFilterDescription": {
+        "description": "Description shown in the group list for filtering (e.g. app drawer)",
+        "context": "group filter"
+    },
+    "groupFilterSelectAll": "Selecionar todos",
+    "@groupFilterSelectAll": {
+        "context": "group filter"
+    },
+    "unlock": "Desbloquear arquivos",
+    "@unlock": {
+        "description": ""
+    },
+    "closePasswordFiles": "fechar arquivos de senha",
+    "@closePasswordFiles": {
+        "description": "delete quick unlock (passwords stored in biometric storage)"
+    },
+    "clearQuickUnlockSuccess": "Senha mestra salva do armazenamento biométrico.",
+    "@clearQuickUnlockSuccess": {
+        "description": ""
+    },
+    "diacOptIn": "Opte por receber notícias do aplicativo, Inquéritos.",
+    "@diacOptIn": {},
+    "diacOptInSubtitle": "Às vezes, enviará uma solicitação de rede para buscar notícias.",
+    "@diacOptInSubtitle": {},
+    "enableAutofillDebug": "Preenchimento automático: Ativar debug",
+    "@enableAutofillDebug": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "enableAutofillDebugSubtitle": "Mostra camadas de informações para cada campo de entrada",
+    "@enableAutofillDebugSubtitle": {
+        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+    },
+    "createPasswordDatabase": "Criar banco de dados de senha",
+    "@createPasswordDatabase": {
+        "description": ""
+    },
+    "nameNewPasswordDatabase": "Nome do seu novo banco de dados",
+    "@nameNewPasswordDatabase": {
+        "description": "creating new kdbx file, prompt"
+    }
 }

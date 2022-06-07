@@ -78,16 +78,53 @@ Unisciti anche alla community nel nostro canale discord su https://authpass.app/
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","Password Manager, Password, Manage, Keystore, Keysafe,Keepass,Kdbx,webdav,icloud,nextcloud,onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
 
-"microsoft-store-windows","","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
-"microsoft-store-windows-short-descriptoin","","short description for windows store 
+"microsoft-store-windows","Tieni traccia di tutte le tue password in modo semplice e sicuro!
+
+AuthPass è un gestore di password standalone con supporto per il famoso e collaudato formato KeePass (kdbx 3. E kdbx 4.x 🎉). 
+Memorizza le tue password, condividi su tutti i tuoi dispositivi e trovale facilmente ogni qualvolta hai bisogno di accedere.
+
+🗄 Tutte le tue password in un unico posto.
+🧬 Genera sicure password casuali per ciascuno dei tuoi account.
+🔍 Tieni traccia dei tuoi account attraverso il web.
+🖥 App disponibile per Mac, iPhone, iPad, telefoni e tablet Android, Linux e Windows.
+📂 Apri contemporaneamente più file di password (per esempio uno per lavoro, uno personale - oppure condividi i file di password con i collaboratori)
+🤓 Open Source è disponibile su https://github. om/authpass/authpass/
+🔦 Dark Theme 😎
+
+
+=== SOTTO IL TUO CONTROLLO ===
+AuthPass memorizza tutte le password in formato Keepass aperto, esattamente dove vuoi. Non invia le password ai nostri server. Ma AuthPass supporta il salvataggio in:
+
+✅ Integrazione Nativa con Google Drive
+✅ Integrazione Nativa con Dropbox
+✅ Supporto Nativo WebDAV per memorizzare nel tuo NextCloud o OwnCloud (o simile)
+✅ Integrazione Nativa con Microsoft OneDrive
+
+=== FUNZIONALITÀ COMPLETA, NESSUNA PUBBLICITÀ, NESSUN ABBONAMENTO===
+In quanto progetto open source non ha restrizioni artificiali, nessun annuncio e nessun obbligo di pagamento.
+I contributi sono benvenuti e incoraggiati 😅 (Siamo sempre alla ricerca di sviluppatori, traduttori, scrittori di documentazione, UI designer, etc. :) ), basta unirsi al nostro canale discord: https://authpass. pp/go/discord
+
+=== IN SVILUPPO ATTIVO 🛠️ ===
+Questo è un progetto open source ancora in fase di forte sviluppo, in via di ampliamento delle funzioni. Ci piacerebbe il tuo feedback via email o sul tracker dei problemi su https://github.com/authpass/authpass/issues/
+
+Unisciti anche alla community sul nostro forum: https://forum.authpass.app/
+","Windows Store listing description https://docs.microsoft.com/en-us/windows/uwp/publish/write-a-great-app-description","",""
+"microsoft-store-windows-short-descriptoin","Mantieni le password e gli account al sicuro su tutte le piattaforme e i dispositivi. Gestore di password gratuito e Open Source con supporto per i file di password kdbx.","short description for windows store 
 A shorter, catchy description that may be used in the top of your product’s Store listing
 Recommended length: 270 characters or fewer
 ","1000",""
-"microsoft-store-windows-features","","Short summaries of your product's key features
+"microsoft-store-windows-features","* Salva in modo sicuro le tue password
+* Open Source
+* Supporto per i file KeePass standard (kdbx)
+* Mantieni sincronizzati i tuoi dispositivi con servizi di cloud storage.","Short summaries of your product's key features
 Displayed as bulleted list
 Up to 20 app features
 (max 200 characters each)","",""
-"microsoft-store-windows-search-terms","","search terms for the microsoft store
+"microsoft-store-windows-search-terms","* gestore di password
+* authpass
+* kdbx
+* keepass
+* generatore di password","search terms for the microsoft store
 
 Up to 7 search terms
 40 character limit for each search term
