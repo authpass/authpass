@@ -1,6 +1,8 @@
 PODS:
   - argon2_ffi (0.0.1):
     - FlutterMacOS
+  - audio_session (0.0.1):
+    - FlutterMacOS
   - biometric_storage (0.0.1):
     - FlutterMacOS
   - device_info_plus_macos (0.0.1):
@@ -17,11 +19,15 @@ PODS:
   - hotkey_manager (0.0.1):
     - FlutterMacOS
     - HotKey
+  - just_audio (0.0.1):
+    - FlutterMacOS
   - macos_secure_bookmarks (0.0.3):
     - FlutterMacOS
   - package_info_plus_macos (0.0.1):
     - FlutterMacOS
   - path_provider_macos (0.0.1):
+    - FlutterMacOS
+  - share_plus_macos (0.0.1):
     - FlutterMacOS
   - sqflite (0.0.2):
     - FlutterMacOS
@@ -35,15 +41,18 @@ PODS:
 
 DEPENDENCIES:
   - argon2_ffi (from `Flutter/ephemeral/.symlinks/plugins/argon2_ffi/macos`)
+  - audio_session (from `Flutter/ephemeral/.symlinks/plugins/audio_session/macos`)
   - biometric_storage (from `Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos`)
   - device_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos`)
   - file_picker_writable (from `Flutter/ephemeral/.symlinks/plugins/file_picker_writable/macos`)
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - hotkey_manager (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos`)
+  - just_audio (from `Flutter/ephemeral/.symlinks/plugins/just_audio/macos`)
   - macos_secure_bookmarks (from `Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos`)
   - package_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
+  - share_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/share_plus_macos/macos`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - wakelock_macos (from `Flutter/ephemeral/.symlinks/plugins/wakelock_macos/macos`)
@@ -57,6 +66,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   argon2_ffi:
     :path: Flutter/ephemeral/.symlinks/plugins/argon2_ffi/macos
+  audio_session:
+    :path: Flutter/ephemeral/.symlinks/plugins/audio_session/macos
   biometric_storage:
     :path: Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos
   device_info_plus_macos:
@@ -69,12 +80,16 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral
   hotkey_manager:
     :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos
+  just_audio:
+    :path: Flutter/ephemeral/.symlinks/plugins/just_audio/macos
   macos_secure_bookmarks:
     :path: Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos
   package_info_plus_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos
   path_provider_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+  share_plus_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/share_plus_macos/macos
   sqflite:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
   url_launcher_macos:
@@ -86,22 +101,25 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   argon2_ffi: ea9adefd65ac7236d1af897150c27f4c7db90d12
+  audio_session: dea1f41890dbf1718f04a56f1d6150fd50039b72
   biometric_storage: 43caa6e7ef00e8e19c074216e7e1786dacda9e76
   device_info_plus_macos: 1ad388a1ef433505c4038e7dd9605aadd1e2e9c7
   file_picker_writable: 91694d55c22f8430d4be119f0afb49755e65cd0c
-  file_selector_macos: ff6dc948d4ddd34e8602a1f60b7d0b4cc6051a47
+  file_selector_macos: f1b08a781e66103e3ba279fd5d4024a2478b3af6
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   HotKey: ad59450195936c10992438c4210f673de5aee43e
   hotkey_manager: ad673457691f4d39e481be04a61da2ae07d81c62
+  just_audio: 9b67ca7b97c61cfc9784ea23cd8cc55eb226d489
   macos_secure_bookmarks: cff041c4b377fa00941bb901aaec4d27fac5edf2
   package_info_plus_macos: f010621b07802a241d96d01876d6705f15e77c1c
-  path_provider_macos: 160cab0d5461f0c0e02995469a98f24bdb9a3f1f
+  path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
+  share_plus_macos: 853ee48e7dce06b633998ca0735d482dd671ade4
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
-  url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
+  url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3
   wakelock_macos: bc3f2a9bd8d2e6c89fee1e1822e7ddac3bd004a9
   window_manager: f5fa14814635f059571527ddd5e676f688af552c
 
-PODFILE CHECKSUM: c7161fcf45d4fd9025dc0f48a76d6e64e52f8176
+PODFILE CHECKSUM: 290b89638b803a41d96e2a2c02a9e1e635956f78
 
 COCOAPODS: 1.11.3
