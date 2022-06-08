@@ -1,0 +1,5 @@
+# 1.9.5 - 2022-06-08
+
+* Update/Improve translations.
+* Upgrade to Flutter 3.0, Upgrade dependencies.
+
