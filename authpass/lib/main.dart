@@ -19,6 +19,7 @@ import 'package:authpass/theme.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/onboarding/onboarding.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
+import 'package:authpass/ui/widgets/platform_menu_bar.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/diac_utils.dart';
@@ -179,14 +180,14 @@ class AuthPassApp extends StatefulWidget {
   const AuthPassApp({
     Key? key,
     required this.env,
-    this.navigatorKey,
+    required this.navigatorKey,
     required this.deps,
     required this.isFirstRun,
   }) : super(key: key);
 
   final Env env;
   final Deps deps;
-  final GlobalKey<NavigatorState>? navigatorKey;
+  final GlobalKey<NavigatorState> navigatorKey;
   final bool isFirstRun;
   @visibleForTesting
   static GlobalKey<NavigatorState>? currentNavigatorKey;
@@ -384,7 +385,10 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
               Provider.value(value: FormatUtils(locale: locale.toString())),
               Provider<CommonFields>.value(value: CommonFields(localizations)),
             ],
-            child: child,
+            child: PlatformMenuBarWrapper(
+              navigatorKey: _navigatorKey!,
+              child: child ?? Container(),
+            ),
           );
           if (_appData?.themeFontSizeFactor != null) {
             return TweenAnimationBuilder<double>(
@@ -568,7 +572,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           final flushbar = FlushbarHelper.createSuccess(message: 'Thanks! 🎉️');
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
-          unawaited(widget.navigatorKey!.currentState?.push<void>(route));
+          unawaited(widget.navigatorKey.currentState?.push<void>(route));
           await _deps.appDataBloc
               .update((builder, data) => builder.diacOptIn = true);
           return true;
@@ -579,7 +583,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                   'check out the preferences 🙏️.');
           final route = flushbar_route.showFlushbar<void>(
               context: context, flushbar: flushbar);
-          await widget.navigatorKey!.currentState?.push<void>(route);
+          await widget.navigatorKey.currentState?.push<void>(route);
           return true;
         }
       }),

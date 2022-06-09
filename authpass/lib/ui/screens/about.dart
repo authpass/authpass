@@ -135,10 +135,10 @@ class AuthPassAboutDialog extends StatelessWidget {
 
   static void openDialog(BuildContext context) {
     final env = Provider.of<Env>(context, listen: false);
-    Provider.of<Analytics>(context, listen: false).trackScreen('/about');
     showDialog<void>(
       context: context,
       builder: (context) => AuthPassAboutDialog(env: env),
+      routeSettings: const RouteSettings(name: '/about'),
     );
   }
 

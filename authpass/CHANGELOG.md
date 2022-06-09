@@ -1,3 +1,7 @@
+# Unreleased
+
+* MacOS: Added system menu.
+
 # 1.9.5 - 2022-06-08
 
 * Update/Improve translations.

@@ -15,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 final _logger = Logger('authpass.dialog_utils');
@@ -119,7 +120,7 @@ class DialogUtils {
   }
 
   static Future<bool> openUri(@NonNls Uri uri) async {
-    return await openUrl(uri.toString());
+    return await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   static Future<bool> showConfirmDialog({
