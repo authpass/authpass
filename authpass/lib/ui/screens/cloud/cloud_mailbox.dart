@@ -88,12 +88,14 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
   Widget build(BuildContext context) {
     final bloc = context.watch<AuthPassCloudBloc>();
     final loc = AppLocalizations.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.mailScreenTitle),
         bottom: TabBar(
           controller: _tabController,
+          labelColor: theme.colorScheme.onSurfaceVariant,
           tabs: [
             Tab(
               text: loc.mailTabBarTitleMailbox,

@@ -75,7 +75,6 @@ ThemeData _customize(ThemeData base) {
       const FadeUpwardsPageTransitionsBuilder();
   return base.copyWith(
     // androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
-    useMaterial3: true,
     pageTransitionsTheme:
         PageTransitionsTheme(builders: pageTransitionBuilders),
   );
@@ -105,7 +104,7 @@ Typography _getTypography() {
   } else {
     _logger.info(
         'using default theme $defaultTargetPlatform -- ${AuthPassPlatform.operatingSystemVersion}');
-    return Typography.material2018(platform: defaultTargetPlatform);
+    return Typography.material2021(platform: defaultTargetPlatform);
   }
 }
 
@@ -133,6 +132,7 @@ ThemeData createTheme() {
   return _customize(ThemeData(
     primarySwatch: AuthPassTheme.primarySwatch,
     typography: _getTypography(),
+    useMaterial3: true,
   ));
 }
 
@@ -145,6 +145,7 @@ ThemeData createDarkTheme() {
   return _customize(ThemeData(
     typography: _getTypography(),
     primaryColor: colorScheme.primary,
+    useMaterial3: true,
     textSelectionTheme: TextSelectionThemeData(
       selectionHandleColor: AuthPassTheme.primarySwatch[800],
     ),
