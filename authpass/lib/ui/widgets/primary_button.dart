@@ -27,14 +27,17 @@ class PrimaryButton extends StatelessWidget {
               child!,
             ],
           );
+    final theme = Theme.of(context);
     return Theme(
       data: _createMainButtonTheme(
-        Theme.of(context),
+        theme,
         large: large,
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             elevation: 0,
+            primary: theme.colorScheme.primary,
+            onPrimary: theme.colorScheme.onPrimary,
             padding: large
                 ? const EdgeInsets.symmetric(
                     vertical: 16,
