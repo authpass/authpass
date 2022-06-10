@@ -9,6 +9,25 @@
     <uses-permission android:name="android.permission.CAMERA"
        />
 
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.SENDTO" />
+      <data android:scheme="mailto" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="http" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="mailto" />
+    </intent>
+  </queries>
+
     <!-- this permission is added by the open_file plugin, but nobody
     hopefully stores apk files in their password database. -->
     <uses-permission
