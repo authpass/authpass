@@ -4,8 +4,8 @@ const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "flutter.js": "0816e65a103ba8ba51b174eeeeb2cb67",
-"index.html": "b04a215a2da3994e78a6cd28a597fcae",
-"/": "b04a215a2da3994e78a6cd28a597fcae",
+"index.html": "024672d0da57baffc953d9ea64fd0d3f",
+"/": "024672d0da57baffc953d9ea64fd0d3f",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
 "canvaskit/canvaskit.wasm": "4b83d89d9fecbea8ca46f2f760c5a9ba",
@@ -40,7 +40,7 @@ const RESOURCES = {
 "version.json": "d8cf89825711babfe5cc6f0e6183f7f2",
 "js/README.md": "20e28da2a4aaa5b4956d794075e1d6a6",
 "js/argon2-bundled.min.js": "6c006c4658c1954a2e78b68130f97ea7",
-"main.dart.js": "e397a4199fd53f1294e544b5f24bfca8",
+"main.dart.js": "febd4cdfa28f0e2946083535447a2099",
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "icons/authpass-launcher-192.png": "66bc9dfe1b283d730ec395348dc97d31"
 };
