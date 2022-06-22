@@ -64,7 +64,7 @@ dependencies:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info_plus: ^3.2.4
+  device_info_plus: ^4.0.0
   path_provider: ^2.0.1
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
@@ -210,8 +210,6 @@ dev_dependencies:
 
 dependency_overrides:
   ffi: ^2.0.0
-  # https://github.com/Enough-Software/enough_mail/issues/194
-  crypto: 3.0.1
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
 #  kdbx:
