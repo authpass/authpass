@@ -1,0 +1,5 @@
+Package: authpass
+Version: 1.0
+Architecture: amd64
+Maintainer: Herbert Poul
+Description: AuthPass - Password Manager based on Flutter for all platforms. Keepass 2.x (kdbx 3.x) compatible.

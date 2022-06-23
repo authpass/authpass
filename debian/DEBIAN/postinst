@@ -1,0 +1,2 @@
+#!/bin/bash
+ln -s /opt/authpass/authpass /usr/bin/authpass

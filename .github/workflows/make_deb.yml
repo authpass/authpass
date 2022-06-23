@@ -1,0 +1,27 @@
+name: make_deb
+
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd debian/opt/authpass
+          wget https://authpass-data.codeux.design/data/artifacts/authpass-linux-latest.tar.gz
+          tar -zxvf authpass-linux-latest.tar.gz authpass -C . --strip-components=1
+          rm authpass-linux-latest.tar.gz
+          cd ../../../
+          dpkg-deb --build --root-owner-group ./debian 
+          mv debian.deb authpass.deb
+      - uses: actions/upload-artifact@v3
+        with:
+          name: authpass
+          path: authpass.deb
+
+#tar -zxvf authpass-linux-latest.tar.gz authpass/. -C .
