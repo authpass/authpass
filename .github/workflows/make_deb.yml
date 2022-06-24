@@ -44,5 +44,3 @@ jobs:
           name: ${{ steps.build.outputs.outputfilename }}
           path: ${{ steps.build.outputs.outputpath }}
           if-no-files-found: error
-
-#tar -zxvf authpass-linux-latest.tar.gz authpass/. -C .
