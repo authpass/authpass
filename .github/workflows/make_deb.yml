@@ -4,27 +4,45 @@ on:
   push:
     branches:
       - 'main'
+      - 'linux**'
+  workflow_run:
+    workflows: ["build linux"]
+    types: [completed]
+  workflow_dispatch:
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          cd debian/opt/authpass
+      - uses: actions/checkout@v3
+      - name: Postdeploy
+        env:
+          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+        run: authpass/_tools/postdeploy.sh
+      - id: build
+        run: |
+          path=debian/opt/authpass
+          cd "$path"
           wget https://authpass-data.codeux.design/data/artifacts/authpass-linux-latest.tar.gz
           tar -zxvf authpass-linux-latest.tar.gz authpass -C . --strip-components=1
           rm authpass-linux-latest.tar.gz
           version=$(cat version.txt)
+          version_name=${version/+/_}
+          filename="authpass-linux-${version_name}.deb"
           cd ../../../
           sed -i "s/1.0/${version}/g" debian/usr/share/applications/authpass.desktop
           sed -i "s/1.0/${version}/g" debian/DEBIAN/control
           dpkg-deb --build --root-owner-group ./debian 
-          mv debian.deb authpass.deb
+          mv debian.deb $filename
+          echo "::set-output name=outputfilename::${filename}"
+          echo "::set-output name=outputpath::${filename}"
+      - name: upload artifact
+        run: ./authpass/_tools/upload-artifact.sh ${{ steps.build.outputs.outputfilename }}
       - uses: actions/upload-artifact@v3
         with:
-          name: authpass
-          path: authpass.deb
+          name: ${{ steps.build.outputs.outputfilename }}
+          path: ${{ steps.build.outputs.outputpath }}
+          if-no-files-found: error
 
 #tar -zxvf authpass-linux-latest.tar.gz authpass/. -C .
