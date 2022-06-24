@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=authpass
+GenericName=Password Manager
+Comment=Manage your passwords
+Exec=/usr/bin/authpass
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Network;
+Icon=/opt/authpass/icon.svg

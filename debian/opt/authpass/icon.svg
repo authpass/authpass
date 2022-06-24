@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>AuthPassMacLogoOutline Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M864,256 C881.673112,256 896,270.326888 896,288 L896,352 C896,369.673112 881.673112,384 864,384 L832,384 L832,505.6 C832,509.134622 829.134622,512 825.6,512 L774.4,512 C770.865378,512 768,509.134622 768,505.6 L768,454.4 C768,450.865378 765.134622,448 761.6,448 L710.4,448 C706.865378,448 704,450.865378 704,454.4 L704,569.6 C704,573.134622 701.134622,576 697.6,576 L646.4,576 C642.865378,576 640,573.134622 640,569.6 L640,390.4 C640,386.865378 637.134622,384 633.6,384 L487.554175,384 C463.312764,384 441.151924,397.696152 430.310835,419.37833 L320,640 L116.46745,640 C85.9598645,640 59.6933162,618.466581 53.7102865,588.551433 L0.251028653,321.255143 C0.0853170855,320.426585 0.0853170855,319.573415 0.251028653,318.744857 L53.7102865,51.4485674 C59.6933162,21.5334188 85.9598645,0 116.46745,0 L320,0 L430.310835,220.62167 C441.151924,242.303848 463.312764,256 487.554175,256 L864,256 Z" id="path-1"></path>
+    </defs>
+    <g id="AuthPassMacLogoOutline-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Logo-Final-2" transform="translate(64.000000, 191.000000)">
+            <g id="Logo-Final">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Key" fill="#626BC6" xlink:href="#path-1"></use>
+                <rect id="Rectangle" fill="#8A93EE" mask="url(#mask-2)" x="-64" y="256" width="1024" height="128"></rect>
+                <rect id="Rectangle" fill="#6B6F99" mask="url(#mask-2)" x="-64" y="384" width="1024" height="256"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
