@@ -43,6 +43,7 @@ modules:
       - ln -s /app/authpass /app/bin/authpass
       - install -Dm644 app.authpass.AuthPass.png /app/share/icons/hicolor/512x512/apps/app.authpass.AuthPass.png
       - install -Dm644 app.authpass.AuthPass.desktop /app/share/applications/app.authpass.AuthPass.desktop
+      - install -Dpm644 app.authpass.AuthPass.metainfo.xml /app/share/metainfo/app.authpass.AuthPass.metainfo.xml
     sources:
       - type: file
         url: https://data.authpass.app/data/artifacts/authpass-linux-1.9.6_1921.tar.gz
@@ -50,9 +51,11 @@ modules:
         dest-filename: authpass-linux-latest.tar.gz
         x-checker-data:
           type: rotating-url
-          url: https://data.authpass.app/data/artifacts/authpass-linux-latest.tar.gz.txt
+          url: https://data.authpass.app/data/artifact.download/authpass-linux-stable.tar.gz/version.txt
           pattern: https://data.authpass.app/data/artifacts/authpass-linux-(.+).tar.gz
       - type: file
         path: app.authpass.AuthPass.png
       - type: file
         path: app.authpass.AuthPass.desktop
+      - type: file
+        path: app.authpass.AuthPass.metainfo.xml
