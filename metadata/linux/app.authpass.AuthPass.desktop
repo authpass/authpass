@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=AuthPass
+GenericName=Password Manager
+Type=Application
+Exec=authpass
+Terminal=false
+Icon=app.authpass.AuthPass
+Categories=Utility;Security;

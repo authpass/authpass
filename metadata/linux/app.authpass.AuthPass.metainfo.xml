@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+        <id>app.authpass.AuthPass</id>
+
+        <name>AuthPass</name>
+        <summary>Password Manager: Keep your passwords safe across all platforms and devices</summary>
+        <content_rating type="oars-1.1" />
+        <url type="homepage">https://authpass.app/</url>
+        <url type="bugtracker">https://github.com/authpass/authpass/issues</url>
+        <url type="donation">https://github.com/sponsors/hpoul</url>
+        <url type="translate">https://translate.authpass.app</url>
+
+        <metadata_license>MIT</metadata_license>
+        <project_license>GPL-3.0-or-later</project_license>
+
+        <supports>
+                <control>pointing</control>
+                <control>keyboard</control>
+                <control>touch</control>
+        </supports>
+
+        <description>
+                <p>Easily and securely keep track of all your Passwords!</p>
+<p>AuthPass is a stand alone password manager with support for the popular and proven KeePass (kdbx 3.x AND kdbx 4.x) format. Store your passwords, share across all your devices and easily find them whenever you need to login.</p>
+<ul>
+<li>All your passwords in one place.</li>
+<li>Generate secure random passwords for each of your accounts.</li>
+<li>Keep track of your accounts across the web.</li>
+<li>App available for Mac, iPhone, iPad, Android Phones and Tablets, Linux and Windows.</li>
+<li>Open multiple password files at the same time (e.g. one for work, one for personal - or even share your password files with coworkers)</li>
+<li>Open Source available on https://github.com/authpass/authpass/</li>
+<li>Dark Theme</li>
+</ul>
+<p><em>=== UNDER YOUR CONTROL ===</em></p>
+<p>AuthPass stores all your passwords in the open Keepass format, exactly where you want it. It does not send your passwords to our servers. But AuthPass supports saving to:</p>
+<ul>
+<li>Any local content provider from Android</li>
+<li>Native Google Drive Integration</li>
+<li>Native Dropbox Integation</li>
+<li>Native WebDAV support to store in your own NextCloud or OwnCloud (or similar)</li>
+<li>Native Microsoft OneDrive integration</li>
+</ul>
+<p><em>=== FULL FEATURED, NO ADS, NO SUBSCRIPTION ===</em></p>
+<p>As an open source project there are no artificial feature restrictions, no ads and no requirement for payments.</p>
+<p><em>Contributions welcome and encouraged</em> ;-) (Always looking for developers, translators, documentation writers, UI designer, etc. :) ), just join our discord channel: https://authpass.app/go/discord</p>
+<p><em>=== UNDER ACTIVE DEVELOPMENT ===</em></p>
+<p>This is an open source project which is still under heavy development, adding features. We would love your feedback via email or on the issue tracker at https://github.com/authpass/authpass/issues/</p>
+<p>Also join the community on our discord channel at https://authpass.app/go/discord</p>
+
+        </description>
+
+        <launchable type="desktop-id">app.authpass.AuthPass.desktop</launchable>
+        <screenshots>
+                <screenshot type="default">
+                        <image>https://data.authpass.app/data/screenshot_composition_small.png</image>
+                </screenshot>
+        </screenshots>
+        <releases>
+    <release version="1.9.6_1904" date="2022-06-10"/>
+  </releases>
+</component>
