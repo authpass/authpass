@@ -31,11 +31,11 @@ modules:
   
   - name: authpass
     buildsystem: simple
-    build-options:
-      build-args:
-        - --share=network
+    # build-options:
+    #   build-args:
+    #     - --share=network
     build-commands:
-      - curl -L https://data.authpass.app/data/artifacts/authpass-linux-latest.tar.gz -O
+      # - curl -L https://data.authpass.app/data/artifacts/authpass-linux-latest.tar.gz -O
       - tar -zxf authpass-linux-latest.tar.gz
       - cp -r authpass/* /app/
       - chmod +x /app/authpass
@@ -44,6 +44,14 @@ modules:
       - install -Dm644 app.authpass.AuthPass.png /app/share/icons/hicolor/512x512/apps/app.authpass.AuthPass.png
       - install -Dm644 app.authpass.AuthPass.desktop /app/share/applications/app.authpass.AuthPass.desktop
     sources:
+      - type: file
+        url: https://data.authpass.app/data/artifacts/authpass-linux-1.9.6_1921.tar.gz
+        sha512: 16daa9ca30dce002c1a4900139ba8819247f27d75a298362ba438ee8be4adb1ac3c3fd22d4600624f443781cc2bcf4229f4a2c767b181841b28c579fe97a7909
+        dest-filename: authpass-linux-latest.tar.gz
+        x-checker-data:
+          type: rotating-url
+          url: https://data.authpass.app/data/artifacts/authpass-linux-latest.tar.gz.txt
+          pattern: https://data.authpass.app/data/artifacts/authpass-linux-(.+).tar.gz
       - type: file
         path: app.authpass.AuthPass.png
       - type: file
