@@ -92,6 +92,10 @@ class TestPathUtil extends PathUtil {
   Future<Directory> getTemporaryDirectory({String? subNamespace}) async {
     return _tempDirector ??= await fs.systemTempDirectory.createTemp();
   }
+
+  @override
+  Future<Directory> getCacheDirectory({String? subNamespace}) async =>
+      getTemporaryDirectory(subNamespace: subNamespace);
 }
 
 class EnvSecretsFake extends Fake implements EnvSecrets {

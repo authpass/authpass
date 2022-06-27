@@ -79,9 +79,21 @@ abstract class PathUtilsDefault extends PathUtils {
     );
   }
 
+  @NonNls
+  @override
+  Future<Directory> getCacheDirectory({String? subNamespace}) async {
+    return directoryCache[_cacheKey('cache', subNamespace)] ??= _namespaced(
+      await retrieveCacheDirectory(),
+      subNamespace: subNamespace,
+    );
+  }
+
   @protected
   @visibleForOverriding
   Future<Directory> retrieveTemporaryDirectory();
+  @protected
+  @visibleForOverriding
+  Future<Directory> retrieveCacheDirectory();
   @protected
   @visibleForOverriding
   Future<Directory> retrieveApplicationDocumentsDirectory();

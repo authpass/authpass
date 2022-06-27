@@ -1839,7 +1839,7 @@ packages:
     source: git
     version: "1.0.1"
   xdg_directories:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: xdg_directories
       url: "https://pub.dartlang.org"

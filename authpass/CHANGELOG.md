@@ -1,6 +1,8 @@
 # Unreleased
 
 * MacOS: Added system menu.
+* Linux: Cleanup of directory usage: 
+  appdata will go to `$XDG_CONFIG_HOME`, cached password files to `$XDG_CACHE_HOME`
 
 # 1.9.5 - 2022-06-08
 

@@ -25,4 +25,10 @@ class PathUtilsWeb extends PathUtilsDefault {
   Future<Directory> retrieveTemporaryDirectory() async {
     return fileSystem.directory('/temp');
   }
+
+  @NonNls
+  @override
+  Future<Directory> retrieveCacheDirectory() async {
+    return fileSystem.directory('/cache');
+  }
 }
