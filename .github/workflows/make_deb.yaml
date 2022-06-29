@@ -31,8 +31,8 @@ jobs:
           version_name=${version/+/_}
           filename="authpass-linux-${version_name}.deb"
           cd ../../../
-          sed -i "s/1.0/${version}/g" debian/usr/share/applications/authpass.desktop
-          sed -i "s/1.0/${version}/g" debian/DEBIAN/control
+          sed -i "s/^Version=1.0/Version=${version}/g" debian/usr/share/applications/authpass.desktop
+          sed -i "s/^Version: 1.0/Version: ${version}/g" debian/DEBIAN/control
           dpkg-deb --build --root-owner-group ./debian 
           mv debian.deb $filename
           echo "::set-output name=outputfilename::${filename}"
