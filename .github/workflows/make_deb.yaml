@@ -1,10 +1,10 @@
 name: make_deb
 
 on:
-  push:
-    branches:
-      - 'main'
-      - 'linux**'
+#  push:
+#    branches:
+#      - 'main'
+#      - 'linux**'
   workflow_run:
     workflows: ["build linux"]
     types: [completed]
