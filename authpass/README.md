@@ -63,6 +63,7 @@ One day I have to automate this...
     docker-compose run bionic ./update.sh bionic
     ```
   * snapcraft.io is already published to `edge` channel. [release it to stable](https://snapcraft.io/authpass/releases).
+  * flathub.com should already be [updated](https://github.com/flathub/app.authpass.AuthPass) automatically daily. [check download](https://flathub.org/apps/details/app.authpass.AuthPass) ... [stats](https://klausenbusk.github.io/flathub-stats/#ref=app.authpass.AuthPass&interval=infinity&downloadType=installs%2Bupdates)
 
 ## Resources
 

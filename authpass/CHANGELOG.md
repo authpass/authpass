@@ -1,4 +1,4 @@
-# Unreleased
+# 1.9.7 - 2022-06-30
 
 * MacOS: Added system menu.
 * Linux: Cleanup of directory usage: 
