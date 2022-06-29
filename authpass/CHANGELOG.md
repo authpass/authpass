@@ -4,6 +4,7 @@
 * Linux: Cleanup of directory usage: 
   appdata will go to `$XDG_CONFIG_HOME`, cached password files to `$XDG_CACHE_HOME`
 * Linux: Flatpak release, [published to flathub](https://flathub.org/apps/details/app.authpass.AuthPass).
+* Linux: Debian package with apt repository at https://packagecloud.io/authpass/authpass
 * Dropbox: Fix authentication flow to request a valid/long lived `refresh_token`.
 
 # 1.9.6 - 2022-06-13

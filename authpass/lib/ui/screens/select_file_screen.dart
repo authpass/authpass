@@ -1189,6 +1189,11 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
           ext: _fileExtension(),
           source: widget.kdbxFilePath.typeDebug,
         );
+        if (!mounted) {
+          _logger.warning(
+              'Credential screen no longer mounted when handling error.');
+          return;
+        }
         setState(() {
           _invalidPassword = pw;
           _formKey.currentState!.validate();
