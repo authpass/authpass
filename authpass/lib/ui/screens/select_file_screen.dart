@@ -521,20 +521,31 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
   }
 
   Future<void> _openLocalOrInternalFile(BuildContext context) async {
-    final kdbxFiles = await _containsKdbxFiles(
-        await PathUtils().getAppDocDirectory(ensureCreated: false));
-    if (kdbxFiles) {
-      await showModalBottomSheet<void>(
-        context: context,
-        routeSettings: const RouteSettings(name: '/openfileLocal/chooser'),
-        builder: (context) => OpenFileBottomSheet(
-          openFilePickerWritable: () => _openLocalFile(context),
-        ),
-      );
-    } else {
+    try {
+      // on windows this can throw permission errors.
+      // e.g. https://github.com/authpass/authpass/issues/301
+      // https://forum.authpass.app/t/authpass-on-windows-11-cannot-open-a-local-kdbx-file-tries-to-access-my-music-folder/503
+      final kdbxFiles = await _containsKdbxFiles(
+          await PathUtils().getAppDocDirectory(ensureCreated: false));
+      if (kdbxFiles) {
+        await showModalBottomSheet<void>(
+          context: context,
+          routeSettings: const RouteSettings(name: '/openfileLocal/chooser'),
+          builder: (context) => OpenFileBottomSheet(
+            openFilePickerWritable: () => _openLocalFile(context),
+          ),
+        );
+        return;
+      }
       _logger.fine('No kdbx files found, open FilePickerWritable');
-      await _openLocalFile(context);
+    } catch (e, stackTrace) {
+      _logger.fine('Error while checking app doc directory for kdbx files.', e,
+          stackTrace);
+      context
+          .read<Analytics>()
+          .trackGenericEvent('error', 'openLocalFile', label: e.toString());
     }
+    await _openLocalFile(context);
   }
 
   Future<void> _openLocalFile(BuildContext context) async {
