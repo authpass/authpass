@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
@@ -47,10 +48,18 @@ class TestUtil {
   }
 }
 
+class MockAnalytics implements Analytics {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
+}
+
 class CloudStorageHelperMock implements CloudStorageHelperBase {
   CloudStorageHelperMock();
 //  @override
 //  final Env env;
+
+  @override
+  final Analytics analytics = MockAnalytics();
 
   File get _file => TestUtil.filePath('test/_cloudStorageHelper.json');
   Map<String, String>? __storage;

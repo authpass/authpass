@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
@@ -9,11 +10,13 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 /// Common functionality shared across all cloud storages,
 /// right now simply storing of oauth tokens.
 class CloudStorageHelper implements CloudStorageHelperBase {
-  CloudStorageHelper(this.env, this.pathUtil);
+  CloudStorageHelper(this.env, this.pathUtil, this.analytics);
 
   final Env env;
   @override
   final PathUtil pathUtil;
+  @override
+  final Analytics analytics;
   BiometricStorageFile? _storageFile;
 
   Future<BiometricStorageFile> _getStorageFile() async =>

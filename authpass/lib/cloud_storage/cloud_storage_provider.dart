@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
@@ -241,6 +242,7 @@ abstract class CloudStorageProvider {
 
 abstract class CloudStorageHelperBase {
   PathUtil get pathUtil;
+  Analytics get analytics;
   Future<String?> loadCredentials(String cloudStorageId);
 
   Future<void> saveCredentials(String cloudStorageId, String data);

@@ -120,6 +120,12 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   void _onCredentialsRefreshed(oauth2.Credentials credentials) {
     _logger.fine('Received new credentials from oauth.');
     storeCredentials(credentials.toJson());
+    helper.analytics.trackGenericEvent(
+      'dropbox',
+      'credentialRefreshed',
+      label: 'refresh:${credentials.refreshToken?.length},'
+          'endpoint:${credentials.tokenEndpoint != null}',
+    );
   }
 
   @override

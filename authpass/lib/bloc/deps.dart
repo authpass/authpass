@@ -10,7 +10,7 @@ class Deps {
   factory Deps({required Env env}) {
     final appDataBloc = AppDataBloc(env);
     final analytics = Analytics(env: env);
-    final cloudStorageBloc = CloudStorageBloc(env, PathUtils());
+    final cloudStorageBloc = CloudStorageBloc(env, PathUtils(), analytics);
     return Deps._(
       env: env,
       appDataBloc: appDataBloc,
