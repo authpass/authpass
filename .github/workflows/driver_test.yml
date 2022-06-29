@@ -75,7 +75,7 @@ jobs:
         model: ${{ matrix.device }}
     - name: run test ${{ matrix.flavor }}
       run: "cd authpass && ~/deps/flutter/bin/flutter drive --target=test_driver/app.dart"
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v3
       with:
         name: driver-screenshots
         path: authpass/build/screenshots
