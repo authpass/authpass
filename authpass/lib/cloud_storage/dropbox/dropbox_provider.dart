@@ -103,8 +103,11 @@ class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 //    final authUrl = grant.getAuthorizationUrl(null);
     final authUrl = grant.getAuthorizationUrl(
         env.oauthRedirectUri != null ? Uri.parse(env.oauthRedirectUri!) : null);
-    final params = Map<String, String>.from(
-        authUrl.queryParameters); //..remove('redirect_uri');
+    @NonNls
+    final params = <String, String>{
+      ...authUrl.queryParameters,
+      'token_access_type': 'offline',
+    }; //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
     final code =
         await oAuthTokenPrompt(prompt as PromptUserForCode, url.toString());
