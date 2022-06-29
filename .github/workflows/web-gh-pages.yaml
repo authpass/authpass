@@ -16,7 +16,7 @@ jobs:
           submodules: true
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           channel: 'dev'
 
