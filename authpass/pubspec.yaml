@@ -287,3 +287,4 @@ msix_config:
   store: true
   languages: 'en-us,de,fr,he,id,it,pt-BR,sk,es,zh-CN,zh-TW'
   file_extension: '.kdbx'
+  build_windows: false
