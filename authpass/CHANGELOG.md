@@ -1,3 +1,11 @@
+# Unreleased
+
+* Fix preventing screenshots on Android #320
+
+# 1.9.8
+
+* Windows Store Bugfix release
+
 # 1.9.7 - 2022-06-30
 
 * MacOS: Added system menu.

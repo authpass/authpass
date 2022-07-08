@@ -218,15 +218,20 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         setState(() {
           _appData = appData;
         });
-        if (AuthPassPlatform.isAndroid) {
-          if (appData.secureWindowOrDefault) {
-            FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-          } else {
-            FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-          }
-        }
       }
     }));
+    if (AuthPassPlatform.isAndroid) {
+      handleSubscription(_deps.appDataBloc.store.onValueChangedAndLoad
+          .map((event) => event.secureWindowOrDefault)
+          .distinct()
+          .listen((secureWindowOrDefault) {
+        if (secureWindowOrDefault) {
+          FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+        } else {
+          FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+        }
+      }));
+    }
     if (AuthPassPlatform.isWindows) {
       if (AuthPassPlatform.isWindowsWinAutoUpdate) {
         _logger.info('Initializing winsparkle.');
