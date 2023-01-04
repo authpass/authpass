@@ -1,4 +1,2 @@
-actions@github.com
-authpass-ci-cirrus-key@codeux.design
-authpass-ci-key@m.poul.at
+actions.github@m.poul.at
 herbert@poul.at
