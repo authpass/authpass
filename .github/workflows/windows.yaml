@@ -55,9 +55,9 @@ jobs:
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
       run: ./authpass/_tools/ci-release.sh ${{ matrix.flavor }}
-    - shell: bash
-      run: |
-        cat authpass/lib/generated_plugin_registrant.dart
+#    - shell: bash
+#      run: |
+#        cat authpass/lib/generated_plugin_registrant.dart
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.buildapk.outputs.outputfilename }}
