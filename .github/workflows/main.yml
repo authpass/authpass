@@ -48,7 +48,7 @@ jobs:
       run: authpass/_tools/postdeploy.sh
     - name: debug android directory
       run: echo "${ANDROID_SDK_ROOT} , ${ANDROID_HOME}" , Running in ${{ github.ref }}
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
       with:
         ruby-version: '2.6'
