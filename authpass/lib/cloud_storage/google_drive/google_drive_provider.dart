@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/app_data.dart';
@@ -9,10 +8,10 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_models.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:googleapis/drive/v3.dart';
-import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
@@ -21,7 +20,7 @@ final _logger = Logger('authpass.google_drive_bloc');
 const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 
 class GoogleDriveProvider
-    extends CloudStorageProviderClientBase<AutoRefreshingAuthClient> {
+    extends CloudStorageProviderClientBase<oauth2.Client> {
   GoogleDriveProvider(
       {required this.env, required CloudStorageHelperBase helper})
       : super(helper: helper);
@@ -32,70 +31,67 @@ class GoogleDriveProvider
 
   final Env env;
 
+  static const _oauthEndpoint =
+      'https://accounts.google.com/o/oauth2/v2/auth'; // NON-NLS
+  static const _oauthToken = 'https://oauth2.googleapis.com/token'; // NON-NLS
+
   static const _scopes = [DriveApi.driveScope];
 
-  ClientId get _clientId =>
-      ClientId(env.secrets!.googleClientId!, env.secrets!.googleClientSecret);
+  String get _clientId => env.secrets!.googleClientId!;
+  String get _clientSecret => env.secrets!.googleClientSecret!;
 
   @override
-  Future<AutoRefreshingAuthClient> clientFromAuthenticationFlow<
+  Future<oauth2.Client?> clientFromAuthenticationFlow<
       TF extends UserAuthenticationPromptResult,
       UF extends UserAuthenticationPromptData<TF>>(prompt) async {
-//    assert(prompt is PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>);
-//    final oAuthPrompt = prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>;
-    final client = await clientViaUserConsentManual(
+    final grant = oauth2.AuthorizationCodeGrant(
       _clientId,
-      _scopes,
-      (uri) => oAuthTokenPrompt(prompt as PromptUserForCode, uri)
-          .then((value) => value!),
+      Uri.parse(_oauthEndpoint),
+      Uri.parse(_oauthToken),
+      secret: _clientSecret,
+      onCredentialsRefreshed: _onCredentialsRefreshed,
     );
-    client.credentialUpdates.listen(_credentialsChanged);
-    _credentialsChanged(client.credentials);
-    _logger.finer('Finished user consent.');
+//    final authUrl = grant.getAuthorizationUrl(null);
+    final authUrl = grant.getAuthorizationUrl(
+        env.oauthRedirectUri != null ? Uri.parse(env.oauthRedirectUri!) : null);
+    @NonNls
+    final params = <String, String>{
+      ...authUrl.queryParameters,
+      'scope': _scopes.join(','),
+      'access_type': 'offline',
+    }; //..remove('redirect_uri');
+    final url = authUrl.replace(queryParameters: params);
+    final code =
+        await oAuthTokenPrompt(prompt as PromptUserForCode, url.toString());
+    if (code == null) {
+      _logger.warning('User cancelled authorization. (did not provide code)');
+      return null;
+    }
+    final client = await grant.handleAuthorizationCode(code);
+    _onCredentialsRefreshed(client.credentials);
     return client;
+  }
+
+  void _onCredentialsRefreshed(oauth2.Credentials credentials) {
+    _logger.fine('Received new credentials from oauth.');
+    storeCredentials(credentials.toJson());
+    helper.analytics.trackGenericEvent(
+      'googledrive',
+      'credentialRefreshed',
+      label: 'refresh:${credentials.refreshToken?.length},'
+          'endpoint:${credentials.tokenEndpoint != null}',
+    );
   }
 
   @override
-  AutoRefreshingAuthClient clientWithStoredCredentials(String stored) {
-    final accessCredentials = _parseAccessCredentials(stored);
-    final client = autoRefreshingClient(_clientId, accessCredentials, Client());
-    client.credentialUpdates.listen(_credentialsChanged);
-    return client;
-  }
-
-  void _credentialsChanged(AccessCredentials credentials) {
-    final jsonString = nonNls(<String, dynamic>{
-      'accessToken': _accessTokenToJson(credentials.accessToken),
-      'refreshToken': credentials.refreshToken,
-      'idToken': credentials.idToken,
-      'scopes': credentials.scopes,
-    });
-    storeCredentials(json.encode(jsonString));
-  }
-
-  Map<String, dynamic> _accessTokenToJson(AccessToken at) =>
-      nonNls(<String, dynamic>{
-        'type': at.type,
-        'data': at.data,
-        'expiry': at.expiry.toString(),
-      });
-
-  AccessToken _accessTokenFromJson(Map<String, dynamic> map) {
-    return nonNls(AccessToken(
-      map['type'] as String,
-      map['data'] as String,
-      DateTime.parse(map['expiry'] as String),
-    ));
-  }
-
-  AccessCredentials _parseAccessCredentials(String jsonString) {
-    final map = json.decode(jsonString) as Map<String, dynamic>;
-    return nonNls(AccessCredentials(
-      _accessTokenFromJson(map['accessToken'] as Map<String, dynamic>),
-      map['refreshToken'] as String?,
-      (map['scopes'] as List).cast<String>(),
-      idToken: map['idToken'] as String?,
-    ));
+  oauth2.Client clientWithStoredCredentials(String stored) {
+    final credentials = oauth2.Credentials.fromJson(stored);
+    return oauth2.Client(
+      credentials,
+      identifier: env.secrets!.dropboxKey,
+      secret: env.secrets!.dropboxSecret,
+      onCredentialsRefreshed: _onCredentialsRefreshed,
+    );
   }
 
   @override

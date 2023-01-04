@@ -247,7 +247,12 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
     if (AuthPassPlatform.isIOS ||
         AuthPassPlatform.isAndroid ||
         AuthPassPlatform.isMacOS) {
+      _logger.fine('Register FilePickerWritable listeners.');
       return FilePickerWritable().init()
+        ..registerUriHandler((uri) {
+          _logger.fine('we have received uri: $uri');
+          return false;
+        })
         ..registerFileOpenHandler((fileInfo, file) async {
           _logger.fine('got a new fileInfo: $fileInfo');
           Future<void> openRoute() async {
