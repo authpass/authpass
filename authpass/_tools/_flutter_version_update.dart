@@ -13,7 +13,7 @@ import 'package:path/path.dart' as path;
 // const FLUTTER_VERSION = '1.23.0-18.0.pre';
 // const FLUTTER_VERSION = '2.1.0-12.1.pre';
 // const FLUTTER_VERSION = '2.6.0-0.0.pre';
-const FLUTTER_VERSION = '3.0.1';
+const FLUTTER_VERSION = '3.3.10';
 const FLUTTER_URL =
     'https://storage.googleapis.com/flutter_infra_release/releases/';
 const OUTPUT_FILE = '_flutter_version.sh';
