@@ -4,7 +4,7 @@ set -xeu
 
 root="${0%/*}/.."
 
-packages="$root/.packages"
+packages="$root/.dart_tool/package_config.json"
 
 if ! test -f "$packages" ; then
 	echo "Unable to find $packages"
@@ -12,6 +12,7 @@ if ! test -f "$packages" ; then
 fi
 
 flutter=`cat "$packages" | grep "^flutter:" | sed "s/^flutter://" | sed "s/^file:\/\///" | sed "s/\/packages.*//" | sed "s/\/C:\//\/c\//"`
+flutter=`cat $packages | jq -r '.packages[] | select(.name == "flutter").rootUri' | sed "s/^file:\/\///" | sed "s/\/packages.*//" | sed "s/\/C:\//\/c\//"`
 
 if ! [[ $flutter == "/"* ]] ; then
 	flutter="${root}/$flutter"
