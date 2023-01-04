@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:authpass/ui/widgets/centered_icon.dart';
 import 'package:authpass/utils/constants.dart';

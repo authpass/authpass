@@ -22,7 +22,6 @@ class PlatformMenuBarWrapper extends StatelessWidget {
     final deps = context.read<Deps>();
     final loc = AppLocalizations.of(context);
     return PlatformMenuBar(
-      body: child,
       menus: [
         PlatformMenu(
           label: loc.aboutAppName,
@@ -75,6 +74,7 @@ class PlatformMenuBarWrapper extends StatelessWidget {
           ],
         ),
       ],
+      child: child,
     );
   }
 }

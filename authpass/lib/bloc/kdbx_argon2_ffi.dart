@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:argon2_ffi_base/argon2_ffi_base.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/foundation.dart';

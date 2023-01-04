@@ -23,7 +23,7 @@ class LinkButton extends StatelessWidget {
         ? TextButton(
             onPressed: onPressed,
             style: TextButton.styleFrom(
-              primary: theme.primaryColor,
+              foregroundColor: theme.primaryColor,
               padding: padding,
               tapTargetSize: materialTapTargetSize,
             ),
@@ -34,7 +34,7 @@ class LinkButton extends StatelessWidget {
             icon: icon!,
             label: child,
             style: TextButton.styleFrom(
-              primary: theme.primaryColor,
+              foregroundColor: theme.primaryColor,
               padding: padding,
               tapTargetSize: materialTapTargetSize,
             ),

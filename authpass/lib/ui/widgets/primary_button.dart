@@ -35,9 +35,9 @@ class PrimaryButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+            foregroundColor: theme.colorScheme.onPrimary,
+            backgroundColor: theme.colorScheme.primary,
             elevation: 0,
-            primary: theme.colorScheme.primary,
-            onPrimary: theme.colorScheme.onPrimary,
             padding: large
                 ? const EdgeInsets.symmetric(
                     vertical: 16,

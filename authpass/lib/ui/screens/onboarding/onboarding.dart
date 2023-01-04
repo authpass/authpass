@@ -170,7 +170,7 @@ class OnboardingButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         elevation: 8,
-        primary: theme.primaryColor,
+        backgroundColor: theme.primaryColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       // elevation: 8,

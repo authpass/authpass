@@ -2,7 +2,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:authpass/bloc/analytics.dart';
@@ -771,7 +770,7 @@ class _EntryDetailsState extends State<EntryDetails>
   }
 
   Future<OtpAuth?> _askForTotpSecret(BuildContext context) async {
-    Future<OtpAuth?> _cleanOtpCodeCode(String totpCode) async {
+    Future<OtpAuth?> cleanOtpCodeCode(String totpCode) async {
       try {
         if (totpCode.startsWith(OtpAuth.URI_PREFIX)) {
           return OtpAuth.fromUri(Uri.parse(totpCode));
@@ -800,7 +799,7 @@ class _EntryDetailsState extends State<EntryDetails>
 
         final barcodeResult = await barcode.BarcodeScanner.scan();
         if (barcodeResult.type == barcode.ResultType.Barcode) {
-          return _cleanOtpCodeCode(barcodeResult.rawContent);
+          return cleanOtpCodeCode(barcodeResult.rawContent);
         }
 
 //        final scanResult = await barcode.BarcodeScanner.scan();
@@ -822,7 +821,7 @@ class _EntryDetailsState extends State<EntryDetails>
     if (totpCode == null) {
       return null;
     }
-    return _cleanOtpCodeCode(totpCode);
+    return cleanOtpCodeCode(totpCode);
   }
 }
 

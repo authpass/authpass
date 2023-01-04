@@ -680,7 +680,7 @@ class KdbxBloc {
 
     final fileSource = toFileSource ?? fileForKdbxFile(file).fileSource;
 
-    Future<void> _updateQuickUnlock() async {
+    Future<void> updateQuickUnlock() async {
       if (updateCredentials == null) {
         return;
       }
@@ -703,7 +703,7 @@ class KdbxBloc {
           .trackSave(type: fileSource.typeDebug, value: ret.content.length);
       analytics.trackTiming('saveFileSize', ret.content.length,
           category: 'fileSize', label: 'save');
-      await _updateQuickUnlock();
+      await updateQuickUnlock();
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
@@ -727,7 +727,7 @@ class KdbxBloc {
             .trackSave(type: fileSource.typeDebug, value: ret.content.length);
         analytics.trackTiming('saveFileSize', ret.content.length,
             category: 'fileSize', label: 'save');
-        await _updateQuickUnlock();
+        await updateQuickUnlock();
         return ret;
       } catch (e) {
         analytics.events.trackSaveConflict(

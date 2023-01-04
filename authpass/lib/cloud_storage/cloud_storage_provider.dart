@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
@@ -12,7 +11,6 @@ import 'package:built_value/built_value.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 

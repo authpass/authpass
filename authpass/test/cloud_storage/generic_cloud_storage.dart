@@ -25,7 +25,7 @@ void simpleCloudStorageTestSuite({
   final saveString3 = utf8.encode('Lorem Ipsum Another Content') as Uint8List;
   final saveStrings = [saveString1, saveString2, saveString3];
 
-  int _findString(Uint8List bytes) {
+  int findString(Uint8List bytes) {
     return saveStrings.indexWhere((element) => ByteUtils.eq(element, bytes));
   }
 
@@ -53,8 +53,7 @@ void simpleCloudStorageTestSuite({
     } on StorageConflictException catch (e, stackTrace) {
       _logger.severe('storage conflict', e, stackTrace);
       await for (final c in fileSource.content()) {
-        _logger
-            .info('${c.source}: ${c.metadata} --- ${_findString(c.content)}');
+        _logger.info('${c.source}: ${c.metadata} --- ${findString(c.content)}');
       }
       _logger.info('Done loading.');
       fail('detected a conflict!');

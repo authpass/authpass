@@ -45,7 +45,7 @@ void main() {
       );
       when(kdbxBloc.fileForKdbxFile(any)).thenReturn(fakeKdbxOpenedFile);
     });
-    String? _website(String value) {
+    String? website(String value) {
       entry.setString(EntryViewModel.websiteKey, PlainValue(value));
       final vm = EntryViewModel(entry, kdbxBloc);
       return vm.website;
@@ -54,12 +54,12 @@ void main() {
     test('url transforms', () {
       // bloc.fileForFileSource()
 
-      expect(_website('authpass.app'), 'http://authpass.app/');
+      expect(website('authpass.app'), 'http://authpass.app/');
       // TODO we should probably fix this somehow.
-      expect(_website('authpass.app\nloremipsum'), 'http://authpass.app/');
-      expect(_website('\n\nauthpass.app\r\n'), 'http://authpass.app/');
-      expect(_website('\n\nauthpass.app//blubb\r\n'), 'http://authpass.app/');
-      expect(_website('   \n'), isNull);
+      expect(website('authpass.app\nloremipsum'), 'http://authpass.app/');
+      expect(website('\n\nauthpass.app\r\n'), 'http://authpass.app/');
+      expect(website('\n\nauthpass.app//blubb\r\n'), 'http://authpass.app/');
+      expect(website('   \n'), isNull);
     });
   });
 }
