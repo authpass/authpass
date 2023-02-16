@@ -418,6 +418,9 @@ class KdbxBloc {
     if (addToQuickUnlock) {
       _openedFilesQuickUnlock.add(file);
       _logger.fine('adding file to quick unlock.');
+      await appDataBloc.update((b, data) {
+        b.quickUnlockFiles.add(openedFile);
+      });
       await _updateQuickUnlockStore();
     }
     return kdbxOpenedFile;
@@ -547,6 +550,10 @@ class KdbxBloc {
       // clear all quick unlock data.
       _openedFilesQuickUnlock.clear();
       await quickUnlockStorage.updateQuickUnlockFile({});
+      await appDataBloc.update(
+              (builder, data) {
+            builder.quickUnlockFiles.clear();
+          });
       analytics.events.trackCloseAllFiles(count: _openedFiles.value.length);
     } else {
       analytics.events.trackLockAllFiles(count: _openedFiles.value.length);
