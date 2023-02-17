@@ -92,8 +92,9 @@ class FileSourceCloudStorage extends FileSource {
     final cacheDir = _cacheDir ??= await _getCacheDir();
     final metadataFile = _cacheMetadataFile(cacheDir);
     final kdbxFile = _cacheKdbxFile(cacheDir);
+    final cacheAvailable = metadataFile.existsSync() && kdbxFile.existsSync();
     try {
-      if (metadataFile.existsSync()) {
+      if (metadataFile.existsSync() && kdbxFile.existsSync()) {
         final cacheInfo = FileContentCached.fromJson(json
             .decode(await metadataFile.readAsString()) as Map<String, dynamic>);
         final content = await kdbxFile.readAsBytes();
@@ -116,7 +117,10 @@ class FileSourceCloudStorage extends FileSource {
     } catch (e, stackTrace) {
       _logger.severe('Error while loading file from provider ${toString()}', e,
           stackTrace);
-      rethrow;
+      if(cacheAvailable){
+        throw LoadFileException('Error loading file from provider ${toString()}.');
+      }
+      throw LoadFileException('Error loading file from cache and provider ${toString()}.');
     }
   }
 

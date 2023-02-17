@@ -506,6 +506,7 @@ class KdbxBloc {
                   'quick unlock. ignoring file for now. ${file.key}',
                   e,
                   stackTrace);
+              rethrow;
             }
           }
           analytics.events.trackQuickUnlock(value: filesOpened);
