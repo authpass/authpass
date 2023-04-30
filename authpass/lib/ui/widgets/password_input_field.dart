@@ -66,10 +66,11 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
           )),
       autocorrect: false,
       autovalidateMode: widget.autovalidateMode,
-      obscureText: _obscureText,
+      obscureText: true,
       validator: widget.validator,
       onEditingComplete: widget.onEditingComplete,
       onChanged: widget.onChanged,
     );
   }
 }
+
