@@ -1,7 +1,7 @@
 # About
 
 Some of the contributors for [AuthPass](https://authpass.app/), 
-check [how out the website on how to contribute][1] and 
+check [out the website on how to contribute][1] and 
 [CONTRIBUTING.md for code level contributions][2].
 
 [1]: https://authpass.app/docs/support-authpass-get-involved/#support-authpass--spread-the-word
