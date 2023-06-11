@@ -288,7 +288,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, one {} two {שני קבצים נשמרו: {files}} many {{numFiles} קבצים נשמרו: {files}} =1 {קובץ אחד נשמר: {files}} other {{numFiles} קבצים נשמרו: {files}}}",
+    "savedFiles": "{numFiles, plural, two {שני קבצים נשמרו: {files}} many {{numFiles} קבצים נשמרו: {files}} =1 {קובץ אחד נשמר: {files}} other {{numFiles} קבצים נשמרו: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",

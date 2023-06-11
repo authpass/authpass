@@ -432,7 +432,7 @@
         "description": "generic error when opening a file (dialog title)",
         "context": "credential screen"
     },
-    "errorUnlockFileBody": "Neznáma chyba pri otvárani súboruor}. {error}",
+    "errorUnlockFileBody": "Neznáma chyba pri otvárani súboruor. {error}",
     "@errorUnlockFileBody": {
         "description": "generic error when opening a file (description)",
         "context": "credential screen",

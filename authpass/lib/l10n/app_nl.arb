@@ -347,7 +347,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, one {} =1 {Eén bestand opgeslagen: {files}} other {{numFiles} bestanden opgeslagen: {files}}}",
+    "savedFiles": "{numFiles, plural, =1 {Eén bestand opgeslagen: {files}} other {{numFiles} bestanden opgeslagen: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",

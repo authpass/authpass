@@ -266,7 +266,7 @@
             }
         }
     },
-    "savedFiles": "{numFiles, plural, one {} =1 {Um arquivo salvo: {files}} other {{numFiles} arquivos salvos: {files}}}",
+    "savedFiles": "{numFiles, plural, =1 {Um arquivo salvo: {files}} other {{numFiles} arquivos salvos: {files}}}",
     "@savedFiles": {
         "description": "Message displayed when files were saved. (One or more).",
         "context": "Password list",
