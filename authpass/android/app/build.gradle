@@ -37,7 +37,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 //    buildToolsVersion "29.0.2"
     ndkVersion System.getProperty("design.codeux.ndkVersion", "21.0.6113669")
 
@@ -45,7 +45,7 @@ android {
     defaultConfig {
         applicationId "design.codeux.authpass"
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
