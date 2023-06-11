@@ -27,7 +27,7 @@ class PlatformMenuBarWrapper extends StatelessWidget {
           label: loc.aboutAppName,
           menus: [
             PlatformMenuItemGroup(
-              members: <MenuItem>[
+              members: <PlatformMenuItem>[
                 PlatformMenuItem(
                   label: loc.menuItemAbout,
                   onSelected: () {
@@ -38,7 +38,7 @@ class PlatformMenuBarWrapper extends StatelessWidget {
               ],
             ),
             PlatformMenuItemGroup(
-              members: <MenuItem>[
+              members: <PlatformMenuItem>[
                 PlatformMenuItem(
                   label: loc.menuItemPreferences,
                   onSelected: () {
@@ -62,7 +62,7 @@ class PlatformMenuBarWrapper extends StatelessWidget {
           label: loc.menuItemHelp,
           menus: [
             PlatformMenuItemGroup(
-              members: <MenuItem>[
+              members: <PlatformMenuItem>[
                 PlatformMenuItem(
                   label: loc.menuItemForum,
                   onSelected: () {

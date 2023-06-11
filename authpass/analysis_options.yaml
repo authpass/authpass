@@ -7,9 +7,6 @@ analyzer:
 #  FIXME: externalize / annotate all strings so this can be enabled.
   plugins:
     - string_literal_finder
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
   errors:
     # treat missing required parameters as a warning (not a hint)
     missing_required_param: warning
@@ -22,6 +19,9 @@ analyzer:
     - lib/**/*.freezed.dart
     - test/**/*.mocks.dart
     - lib/generated_plugin_registrant.dart
+  language:
+    strict-casts: true
+    strict-raw-types: true
 
 string_literal_finder:
   exclude_globs:
