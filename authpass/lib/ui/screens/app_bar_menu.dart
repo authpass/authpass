@@ -159,7 +159,7 @@ class AppBarMenu {
     ];
   }
 
-  static PopupMenuButton createOverflowMenuButton(
+  static PopupMenuButton<VoidCallback> createOverflowMenuButton(
     BuildContext context, {
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)? builder,
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?

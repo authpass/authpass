@@ -126,7 +126,7 @@ Future<void> startApp(Env env) async {
     });
   }, zoneSpecification: ZoneSpecification(
     fork: (Zone self, ZoneDelegate parent, Zone zone,
-        ZoneSpecification? specification, Map? zoneValues) {
+        ZoneSpecification? specification, Map<dynamic, dynamic>? zoneValues) {
       // ignore: avoid_print
       print('Forking zone.'); // NON-NLS
       return parent.fork(zone, specification, zoneValues);
@@ -633,7 +633,7 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
     _sendScreenView(previousRoute);
   }
 
-  String _screenNameFor(Route? route) {
+  String _screenNameFor(Route<dynamic>? route) {
     final name = route?.settings.name;
     if (name != null) {
       return name;
@@ -649,7 +649,7 @@ class AnalyticsNavigatorObserver extends NavigatorObserver {
     return (route?.runtimeType).toString(); // NON-NLS
   }
 
-  void _sendScreenView(Route? route) {
+  void _sendScreenView(Route<dynamic>? route) {
     final screenName = _screenNameFor(route);
     analytics.trackScreen(screenName);
   }

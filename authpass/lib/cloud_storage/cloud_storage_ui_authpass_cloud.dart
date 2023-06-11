@@ -55,7 +55,7 @@ class ShareFileScreen extends StatefulWidget {
 }
 
 class _ShareFileScreenState extends State<ShareFileScreen> {
-  final _retryBuilder = GlobalKey<RetryFutureBuilderState>();
+  final _retryBuilder = GlobalKey<RetryFutureBuilderState<dynamic>>();
 
   @override
   Widget build(BuildContext context) {

@@ -228,11 +228,11 @@ Future<String> deviceInfo() async {
   // get information about the current device.
   if (AuthPassPlatform.isAndroid) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-    return androidInfo.model ?? _unknown;
+    return androidInfo.model;
   }
   if (AuthPassPlatform.isIOS) {
     final iosInfo = await DeviceInfoPlugin().iosInfo;
-    return iosInfo.utsname.machine ?? _unknown;
+    return iosInfo.utsname.machine;
   }
   return [
     _unknown,

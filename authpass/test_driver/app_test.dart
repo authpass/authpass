@@ -11,7 +11,7 @@ void main() {
     final downloadButton = find.byValueKey('downloadFromUrl');
 
     FlutterDriver? driver;
-    StreamSubscription? streamSubscription;
+    StreamSubscription<dynamic>? streamSubscription;
 
     var screenshotCount = 0;
 
@@ -30,9 +30,8 @@ void main() {
 
     // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
-      if (driver != null) {
-        await driver!.close();
-      }
+      await driver?.close();
+      // ignore: dead_code
       await streamSubscription?.cancel();
     });
 

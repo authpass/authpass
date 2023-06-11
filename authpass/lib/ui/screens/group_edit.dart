@@ -36,7 +36,7 @@ class _GroupEditScreenState extends State<GroupEditScreen>
   KdbxFile get file => widget.group.file;
 
   @override
-  Changeable get kdbxObject => widget.group;
+  Changeable<KdbxNode> get kdbxObject => widget.group;
 
   @override
   Widget build(BuildContext context) {

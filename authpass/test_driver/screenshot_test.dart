@@ -13,7 +13,7 @@ import 'util/_screenshots_util.dart';
 void main() {
   group('Simple KDBX Open', () {
     FlutterDriver? driver;
-    StreamSubscription? streamSubscription;
+    StreamSubscription<dynamic>? streamSubscription;
 
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
@@ -40,6 +40,7 @@ void main() {
       if (driver != null) {
         await driver!.close();
       }
+      // ignore: dead_code
       await streamSubscription?.cancel();
     });
     test('open kdbx 3 file', () async {

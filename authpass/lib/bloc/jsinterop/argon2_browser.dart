@@ -69,7 +69,7 @@ class Argon2Result {
 class PromiseJsImpl<T> {
   external PromiseJsImpl(Function resolver);
 
-  external PromiseJsImpl then([
+  external PromiseJsImpl<dynamic> then([
     void Function(T result) onResolve,
     void Function(dynamic) onReject,
   ]);

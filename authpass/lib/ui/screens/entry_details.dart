@@ -82,7 +82,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
   KdbxFile get file => widget.entry.file;
 
   @override
-  Changeable get kdbxObject => widget.entry;
+  Changeable<KdbxNode> get kdbxObject => widget.entry;
   @override
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final entryDetailsKey = GlobalKey<_EntryDetailsState>();
@@ -261,7 +261,7 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
   bool get isDirty => _isObjectDirty || isFormDirty;
   bool isFormDirty = false;
 
-  Changeable get kdbxObject;
+  Changeable<KdbxNode> get kdbxObject;
 
   @override
   void initState() {
@@ -456,7 +456,8 @@ class _EntryDetailsState extends State<EntryDetails>
     if (value == null || value.getText() == null) {
       return false;
     }
-    await Clipboard.setData(ClipboardData(text: value.getText() ?? ''));
+    await Clipboard.setData(
+        ClipboardData(text: value.getText() ?? CharConstants.empty));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
     ));

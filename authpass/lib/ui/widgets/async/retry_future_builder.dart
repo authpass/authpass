@@ -28,7 +28,7 @@ class RetryFutureBuilder<T> extends StatefulWidget {
       body;
 
   @override
-  RetryFutureBuilderState createState() => RetryFutureBuilderState<T>();
+  State<RetryFutureBuilder<T>> createState() => RetryFutureBuilderState<T>();
 }
 
 class RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
@@ -126,7 +126,7 @@ class RetryStreamBuilder<T> extends StatefulWidget {
   final ScaffoldBuilder<T> scaffoldBuilder;
 
   @override
-  _RetryStreamBuilderState createState() => _RetryStreamBuilderState<T>();
+  State<RetryStreamBuilder<T>> createState() => _RetryStreamBuilderState<T>();
 }
 
 class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {

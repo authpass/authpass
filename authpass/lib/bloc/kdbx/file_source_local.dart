@@ -181,8 +181,9 @@ class FileSourceLocal extends FileSource {
     } finally {
       unawaited(tempDir
           .delete(recursive: true)
-          .catchError((dynamic error, StackTrace stackTrace) {
+          .catchError((Object error, StackTrace stackTrace) {
         _logger.warning('Error while deleting temp dir.', error, stackTrace);
+        throw error;
       }));
     }
   }

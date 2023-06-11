@@ -1392,7 +1392,8 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       context.showSnackBar(loc.copyUsernameNotExists);
       return;
     }
-    await Clipboard.setData(ClipboardData(text: stringValue.getText() ?? ''));
+    await Clipboard.setData(
+        ClipboardData(text: stringValue.getText() ?? CharConstants.empty));
     // ignore: use_build_context_synchronously
     context.showSnackBar(loc.doneCopiedUsername);
     analytics.events.trackCopyUsername(action: analyticsAction);
@@ -1406,7 +1407,8 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       context.showSnackBar(loc.copyPasswordNotExists);
       return;
     }
-    await Clipboard.setData(ClipboardData(text: stringValue.getText() ?? ''));
+    await Clipboard.setData(
+        ClipboardData(text: stringValue.getText() ?? CharConstants.empty));
     // ignore: use_build_context_synchronously
     context.showSnackBar(loc.doneCopiedPassword);
     // ignore: use_build_context_synchronously
@@ -1594,7 +1596,8 @@ class PasswordEntryTile extends StatelessWidget {
                           ) ??
                           TextSpan(text: loc.noUsername),
                       style: theme.textTheme.bodyLarge!.copyWith(
-                          fontSize: 12, color: theme.textTheme.bodySmall!.color),
+                          fontSize: 12,
+                          color: theme.textTheme.bodySmall!.color),
                     ),
                   ),
                   ...?vm.groupNames.length < 2
@@ -1608,8 +1611,8 @@ class PasswordEntryTile extends StatelessWidget {
                             overflow: TextOverflow.fade,
                             maxLines: 1,
                             textAlign: TextAlign.right,
-                            style:
-                                theme.textTheme.bodySmall!.copyWith(fontSize: 10),
+                            style: theme.textTheme.bodySmall!
+                                .copyWith(fontSize: 10),
                           ),
                         ],
                 ],

@@ -10,7 +10,7 @@ import 'package:yaml/yaml.dart' as yaml;
 // ignore_for_file: avoid_print
 
 /// Called by integration test to capture images.
-Future screenshot(final FlutterDriver? driver, Config config, String name,
+Future<void> screenshot(final FlutterDriver? driver, Config config, String name,
     {Duration timeout = const Duration(seconds: 30),
     bool silent = false,
     bool waitUntilNoTransientCallbacks = true}) async {
@@ -68,19 +68,19 @@ class Config {
 
   final String configPath;
 
-  Map? _configInfo;
+  Map<dynamic, dynamic>? _configInfo;
 
   // // Getters
   String? get stagingDir => _configInfo!['staging'] as String?;
 }
 
 /// Parse a yaml file.
-Map? parseYamlFile(String yamlPath) =>
+Map<dynamic, dynamic>? parseYamlFile(String yamlPath) =>
     jsonDecode(jsonEncode(yaml.loadYaml(fs.file(yamlPath).readAsStringSync())))
         as Map?;
 
 /// Parse a yaml string.
-Map? parseYamlStr(String yamlString) =>
+Map<dynamic, dynamic>? parseYamlStr(String yamlString) =>
     jsonDecode(jsonEncode(yaml.loadYaml(yamlString))) as Map?;
 
 /// default config file name

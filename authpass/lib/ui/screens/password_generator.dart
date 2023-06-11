@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/slide_hide_widget.dart';
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/password_generator.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,8 @@ class _GeneratePasswordState extends State<GeneratePassword> {
               padding: const EdgeInsets.all(16),
               child: InkWell(
                 onTap: () {
-                  Clipboard.setData(ClipboardData(text: _password ?? ''));
+                  Clipboard.setData(
+                      ClipboardData(text: _password ?? CharConstants.empty));
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar(reason: SnackBarClosedReason.remove)
                     ..showSnackBar(
@@ -328,7 +330,8 @@ class OptionToggleTile extends StatelessWidget {
           children: [
             Checkbox(value: value, onChanged: (value) => onChanged(value!)),
             Expanded(
-              child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+              child:
+                  Text(label, style: Theme.of(context).textTheme.titleMedium),
             ),
             // Switch(value: value, onChanged: onChanged),
           ],
