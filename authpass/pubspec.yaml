@@ -52,7 +52,7 @@ dependencies:
 #  clipboard_manager: ^0.0.4
 
   flutter_async_utils: ^1.0.0+1
-  flutter_svg: ^1.1.0
+  flutter_svg: ^2.0.0
   #usage: ^3.4.1
   usage:
     git:
@@ -158,7 +158,7 @@ dependencies:
   ffi: ^2.0.0
   # AuthPass Cloud email deps
   enough_mail: ^2.1.1
-  flutter_widget_from_html: ^0.9.0+2
+  flutter_widget_from_html: ^0.10.1
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
 #      url: https://github.com/Sub6Resources/flutter_html.git
@@ -174,7 +174,7 @@ dependencies:
     git:
       url: https://github.com/authpass/winsparkle_flutter.git
       ref: c5154e337e8cf7091a629b7dcdbaf44aea194374
-  share_plus: ^4.0.7
+  share_plus: ^7.0.2
   collection: ^1.15.0-nullsafety.4
 
   flutter_markdown: ^0.6.5
@@ -214,6 +214,12 @@ dependency_overrides:
   ffi: ^2.0.0
   # enough_mail still has 0.17 pinned. remove this once enough_mail is updated.
   intl: ^0.18.0
+  # https://github.com/creativecreatorormaybenot/wakelock/pull/203
+  wakelock_windows:
+    git:
+      url: https://github.com/timsneath/wakelock
+      ref: win32-v5
+      path: wakelock_windows
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
 #  kdbx:
