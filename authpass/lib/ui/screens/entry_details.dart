@@ -455,7 +455,7 @@ class _EntryDetailsState extends State<EntryDetails>
     if (value == null || value.getText() == null) {
       return false;
     }
-    await Clipboard.setData(ClipboardData(text: value.getText()));
+    await Clipboard.setData(ClipboardData(text: value.getText() ?? ''));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
     ));

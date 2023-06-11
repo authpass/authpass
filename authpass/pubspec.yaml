@@ -46,7 +46,7 @@ dependencies:
   http: ^0.13.0
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.1.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   path: ^1.8.0
   file: ^6.1.2
 #  clipboard_manager: ^0.0.4
@@ -156,7 +156,7 @@ dependencies:
   mime: ^1.0.0
   ffi: ^2.0.0
   # AuthPass Cloud email deps
-  enough_mail: ^2.1.0
+  enough_mail: ^2.1.1
   flutter_widget_from_html: ^0.9.0+2
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
@@ -211,6 +211,8 @@ dev_dependencies:
 
 dependency_overrides:
   ffi: ^2.0.0
+  # enough_mail still has 0.17 pinned. remove this once enough_mail is updated.
+  intl: ^0.18.0
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
 #  kdbx:

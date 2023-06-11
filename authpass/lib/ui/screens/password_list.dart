@@ -32,7 +32,7 @@ import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:autofill_service/autofill_service.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:built_collection/built_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:collection/collection.dart' show IterableExtension;
@@ -735,7 +735,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         StreamBuilder<CloudStatus?>(
           stream: context.watch<AuthPassCloudBloc>().cloudStatus,
           initialData: null,
-          builder: (context, cloudStatusSnapshot) => Badge(
+          builder: (context, cloudStatusSnapshot) => badges.Badge(
             badgeContent: cloudStatusSnapshot.hasData &&
                     cloudStatusSnapshot.data!.messagesUnread > 0
                 ? Text(cloudStatusSnapshot.data!.messagesUnread.toString(),
@@ -744,7 +744,7 @@ class _PasswordListContentState extends State<PasswordListContent>
             showBadge: cloudStatusSnapshot.hasData &&
                 cloudStatusSnapshot.data!.messagesUnread > 0,
             badgeColor: Theme.of(context).primaryColorDark,
-            position: BadgePosition.topEnd(top: 0, end: 3),
+            position: badges.BadgePosition.topEnd(top: 0, end: 3),
             child: PopupMenuButton<VoidCallback>(
               key: const ValueKey('appBarOverflowMenu'),
               onSelected: (item) {
@@ -1230,7 +1230,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                 .push(CloudMailboxTabScreen.route());
           },
           child: ListTile(
-            leading: Badge(
+            leading: badges.Badge(
               badgeContent:
                   cloudStatus != null && cloudStatus.messagesUnread > 0
                       ? Text(
@@ -1392,7 +1392,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       context.showSnackBar(loc.copyUsernameNotExists);
       return;
     }
-    await Clipboard.setData(ClipboardData(text: stringValue.getText()));
+    await Clipboard.setData(ClipboardData(text: stringValue.getText() ?? ''));
     // ignore: use_build_context_synchronously
     context.showSnackBar(loc.doneCopiedUsername);
     analytics.events.trackCopyUsername(action: analyticsAction);
@@ -1406,7 +1406,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
       context.showSnackBar(loc.copyPasswordNotExists);
       return;
     }
-    await Clipboard.setData(ClipboardData(text: stringValue.getText()));
+    await Clipboard.setData(ClipboardData(text: stringValue.getText() ?? ''));
     // ignore: use_build_context_synchronously
     context.showSnackBar(loc.doneCopiedPassword);
     // ignore: use_build_context_synchronously
