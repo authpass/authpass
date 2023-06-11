@@ -70,6 +70,11 @@ class OtpAuth {
   @NonNls
   static const URI_PREFIX = '$SCHEME:';
 
+  @NonNls
+  static const MIGRATION_SCHEME = 'otpauth-migration';
+  @NonNls
+  static const MIGRATION_URI_PREFIX = '$MIGRATION_SCHEME:';
+
   /// we only support time based tokens anyway.
   static const TYPE_TOTP = 'totp'; // NON-NLS
   static const PARAM_SECRET = 'secret'; // NON-NLS

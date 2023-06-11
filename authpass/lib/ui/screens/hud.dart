@@ -35,7 +35,7 @@ class FullScreenHud extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 320),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: QrImage(
+                  child: QrImageView(
                     data: value,
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,

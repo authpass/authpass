@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  kdbx: ^2.3.0
+  kdbx: ^2.4.0
 #  kdbx:
 #    path: ../deps/kdbx.dart
   argon2_ffi: ^1.0.0
@@ -58,13 +58,13 @@ dependencies:
     git:
       url: https://github.com/hpoul/usage.git
       ref: custom-user-agent-rebased
-  package_info_plus: ^1.0.3
+  package_info_plus: ^4.0.2
 #  package_info: ^0.4.0+13
 #  package_info_macos:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info_plus: ^4.0.0
+  device_info_plus: ^9.0.0
   path_provider: ^2.0.1
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
@@ -76,15 +76,16 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_speed_dial: ^6.0.0
   flutter_email_sender: ^5.0.0
-  flutter_store_listing: ^0.2.1
+  flutter_store_listing: ^0.2.2
 
-  biometric_storage: ^4.1.1
+  biometric_storage: ^5.0.0
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0
   otp: ^3.0.0-nullsafety.0
+  otpauth_migration: ^0.0.7
   pointycastle: ^3.3.4
   #zxcvbn: ^0.0.1
   zxcvbn: # null-safety https://github.com/careapp-inc/zxcvbn-dart/pull/7
@@ -105,7 +106,7 @@ dependencies:
       ref: 87f654ce7b79daddfbe7cdf7b7d9bb27574a8b89
 
   # (Small) utility packages
-  quiver: ">=3.0.0-nullsafety.3 <4.0.0"
+  quiver: ">=3.2.0 <4.0.0"
   tuple: ^2.0.0
   rxdart: ^0.27.0
   charcode: ^1.1.3

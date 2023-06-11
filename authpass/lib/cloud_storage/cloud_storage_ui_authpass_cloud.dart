@@ -273,7 +273,7 @@ class ShareTokenPresent extends StatelessWidget {
                           FullScreenHud.show(context,
                               (context) => FullScreenHud(value: tokenUrl));
                         },
-                        child: QrImage(
+                        child: QrImageView(
                           data: tokenUrl,
                           // backgroundColor: Colors.white,
                           // foregroundColor: Colors.black,

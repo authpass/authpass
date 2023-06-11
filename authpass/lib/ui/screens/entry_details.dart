@@ -48,6 +48,7 @@ import 'package:logging/logging.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
+import 'package:otpauth_migration/otpauth_migration.dart';
 import 'package:path/path.dart' as path;
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
@@ -653,7 +654,8 @@ class _EntryDetailsState extends State<EntryDetails>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Text(e.key.key, style: theme.textTheme.titleMedium),
+                              Text(e.key.key,
+                                  style: theme.textTheme.titleMedium),
                               const SizedBox(height: 2),
                               info == null
                                   ? Text(loc.sizeBytes(e.value.value.length),
@@ -774,6 +776,21 @@ class _EntryDetailsState extends State<EntryDetails>
       try {
         if (totpCode.startsWith(OtpAuth.URI_PREFIX)) {
           return OtpAuth.fromUri(Uri.parse(totpCode));
+        }
+        if (totpCode.startsWith(OtpAuth.MIGRATION_URI_PREFIX)) {
+          final migration = OtpAuthMigration();
+          final uris = migration.decode(totpCode);
+          if (uris.length != 1) {
+            final loc = AppLocalizations.of(context);
+            await DialogUtils.showErrorDialog(
+              context,
+              loc.otpUnsupportedMigrationTitle,
+              loc.otpUnsupportedMigrationBody(uris.length),
+              routeAppend: 'invalidTotpMigration',
+            );
+            return null;
+          }
+          return OtpAuth.fromUri(Uri.parse(uris.first));
         }
         final value = base32Decode(totpCode);
         _logger.fine('Got totp secret with ${value.lengthInBytes} bytes.');

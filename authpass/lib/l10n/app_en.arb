@@ -1260,6 +1260,13 @@
   "@otpInvalidKeyBody": {
     "description": ""
   },
+  "otpUnsupportedMigrationTitle": "Unsupported OTP Migration",
+  "otpUnsupportedMigrationBody": "We currently only support single item migrations. Got {uriCount}",
+  "@otpUnsupportedMigrationBody": {
+    "placeholders": {
+      "uriCount": {}
+    }
+  },
   "otpPromptTitle": "Time Based Authentication",
   "@otpPromptTitle": {
     "description": ""
