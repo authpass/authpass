@@ -44,7 +44,7 @@ class CloudStorageAuthentication extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             loc.cloudStorageLogInCaption,
-            style: theme.textTheme.caption,
+            style: theme.textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

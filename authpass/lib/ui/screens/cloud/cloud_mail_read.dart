@@ -184,7 +184,7 @@ class EmailRead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.bodyText1!.copyWith(
+    final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
           fontFamily: AuthPassTheme.monoFontFamily,
           height: 1.4,
         );
@@ -214,7 +214,7 @@ class EmailRead extends StatelessWidget {
         .expand((e) => [
               TextSpan(
                   text: e.key + CharConstants.colon + CharConstants.space,
-                  style: theme.textTheme.caption),
+                  style: theme.textTheme.bodySmall),
               TextSpan(
                 text: e.value,
                 style: const TextStyle(fontWeight: FontWeight.bold),

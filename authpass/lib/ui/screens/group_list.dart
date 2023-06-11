@@ -905,7 +905,7 @@ class GroupListTile extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(group.name(loc), style: theme.textTheme.subtitle1),
+                child: Text(group.name(loc), style: theme.textTheme.titleMedium),
               ),
             ),
             const SizedBox(width: 8),

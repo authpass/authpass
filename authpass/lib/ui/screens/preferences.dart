@@ -411,7 +411,7 @@ class ValueSelectorTile extends StatelessWidget {
               SizedBox(width: 32 + density.horizontal * 2),
               Expanded(
                 child: DefaultTextStyle(
-                  style: theme.textTheme.subtitle1!,
+                  style: theme.textTheme.titleMedium!,
                   child: title!,
                 ),
               ),

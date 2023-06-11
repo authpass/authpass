@@ -831,8 +831,8 @@ class _PasswordListContentState extends State<PasswordListContent>
     return AppBar(
       backgroundColor: theme.primaryColor,
       iconTheme: theme.primaryIconTheme,
-      toolbarTextStyle: theme.primaryTextTheme.bodyText2,
-      titleTextStyle: theme.primaryTextTheme.headline6,
+      toolbarTextStyle: theme.primaryTextTheme.bodyMedium,
+      titleTextStyle: theme.primaryTextTheme.titleLarge,
       // old deprecated value:
       // textTheme: theme.primaryTextTheme,
       // brightness: theme.primaryColorBrightness,
@@ -848,7 +848,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       title: Theme(
         data: theme,
         child: TextField(
-          style: theme.textTheme.headline6,
+          style: theme.textTheme.titleLarge,
           // we also want the same cursorColor for mac/ios
           cursorColor: theme.textSelectionTheme.cursorColor,
           focusNode: _filterFocusNode,
@@ -1238,7 +1238,7 @@ class _PasswordListContentState extends State<PasswordListContent>
                           style: TextStyle(
                               color: Theme.of(context)
                                   .primaryTextTheme
-                                  .bodyText1!
+                                  .bodyLarge!
                                   .color),
                         )
                       : null,
@@ -1476,19 +1476,19 @@ class UnsupportedWrite extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        color: theme.errorColor.withOpacity(0.2),
+        color: theme.colorScheme.error.withOpacity(0.2),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: <Widget>[
-              Icon(Icons.warning, color: theme.errorColor),
+              Icon(Icons.warning, color: theme.colorScheme.error),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   children: [
                     Text(loc.changesWithoutSaving(source.displayName)),
                     const SizedBox(height: 4),
-                    Text(source.displayPath, style: theme.textTheme.caption),
+                    Text(source.displayPath, style: theme.textTheme.bodySmall),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -1573,7 +1573,7 @@ class PasswordEntryTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   DefaultTextStyle(
-                    style: theme.textTheme.subtitle1!.copyWith(
+                    style: theme.textTheme.titleMedium!.copyWith(
                         fontWeight: FontWeight.normal, color: fgColor),
                     child: Text.rich(
                       _highlightFilterQuery(vm.label?.nullIfBlank()) ??
@@ -1583,9 +1583,9 @@ class PasswordEntryTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   DefaultTextStyle(
-                    style: theme.textTheme.bodyText1!.copyWith(
+                    style: theme.textTheme.bodyLarge!.copyWith(
                         fontSize: 13,
-                        color: fgColor ?? theme.textTheme.caption!.color),
+                        color: fgColor ?? theme.textTheme.bodySmall!.color),
                     child: Text.rich(
                       _highlightFilterQuery(
                             commonFields.userName
@@ -1593,8 +1593,8 @@ class PasswordEntryTile extends StatelessWidget {
                                 ?.nullIfBlank(),
                           ) ??
                           TextSpan(text: loc.noUsername),
-                      style: theme.textTheme.bodyText1!.copyWith(
-                          fontSize: 12, color: theme.textTheme.caption!.color),
+                      style: theme.textTheme.bodyLarge!.copyWith(
+                          fontSize: 12, color: theme.textTheme.bodySmall!.color),
                     ),
                   ),
                   ...?vm.groupNames.length < 2
@@ -1609,7 +1609,7 @@ class PasswordEntryTile extends StatelessWidget {
                             maxLines: 1,
                             textAlign: TextAlign.right,
                             style:
-                                theme.textTheme.caption!.copyWith(fontSize: 10),
+                                theme.textTheme.bodySmall!.copyWith(fontSize: 10),
                           ),
                         ],
                 ],

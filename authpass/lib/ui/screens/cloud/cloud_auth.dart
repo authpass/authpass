@@ -200,7 +200,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
         const SizedBox(height: 32),
         Text(
           loc.authPassCloudAuthConfirmEmailExplain,
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         const SizedBox(height: 32),
         const CircularProgressIndicator(),
@@ -238,7 +238,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
             child: Text(
               loc.authPassCloudAuthResendExplain,
               textAlign: TextAlign.center,
-              style: theme.textTheme.caption!.copyWith(height: 1.4),
+              style: theme.textTheme.bodySmall!.copyWith(height: 1.4),
               maxLines: 5,
             ),
           ),

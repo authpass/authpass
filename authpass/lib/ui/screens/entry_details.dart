@@ -653,15 +653,15 @@ class _EntryDetailsState extends State<EntryDetails>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Text(e.key.key, style: theme.textTheme.subtitle1),
+                              Text(e.key.key, style: theme.textTheme.titleMedium),
                               const SizedBox(height: 2),
                               info == null
                                   ? Text(loc.sizeBytes(e.value.value.length),
-                                      style: theme.textTheme.caption)
+                                      style: theme.textTheme.bodySmall)
                                   : Text(
                                       loc.sizeBytesStoredAuthPassCloud(
                                           info.size),
-                                      style: theme.textTheme.caption),
+                                      style: theme.textTheme.bodySmall),
                             ],
                           ),
                         ),
@@ -972,11 +972,11 @@ class EntryMetaInfo extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(label!, style: theme.textTheme.caption),
+                  Text(label!, style: theme.textTheme.bodySmall),
                   Text(
                     value!,
-                    style: theme.textTheme.bodyText1!
-                        .copyWith(color: theme.textTheme.caption!.color),
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: theme.textTheme.bodySmall!.color),
                     maxLines: 2,
                   ),
                 ],
@@ -1007,7 +1007,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
       onPressed: () async {
         final rb = context.findRenderObject() as RenderBox;
         final overlay =
-            Overlay.of(context)!.context.findRenderObject() as RenderBox;
+            Overlay.of(context).context.findRenderObject() as RenderBox;
         final position = RelativeRect.fromRect(
           Rect.fromPoints(
             rb.localToGlobal(Offset.zero, ancestor: overlay),
@@ -1203,7 +1203,7 @@ class _EntryFieldState extends State<EntryField>
       child: HighlightWidget(
         key: _highlightWidgetKey,
         childOnHighlight: Text(loc.doneCopiedField,
-            style: theme.textTheme.bodyText2!
+            style: theme.textTheme.bodyMedium!
                 .copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

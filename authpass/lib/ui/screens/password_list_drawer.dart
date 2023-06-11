@@ -54,7 +54,7 @@ class _PasswordListDrawerState extends State<PasswordListDrawer> {
             alignment: Alignment.bottomLeft,
             child: Text(
               Env.AuthPass,
-              style: theme.primaryTextTheme.headline3,
+              style: theme.primaryTextTheme.displaySmall,
             ),
           ),
         ),

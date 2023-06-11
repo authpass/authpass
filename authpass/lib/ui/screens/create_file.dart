@@ -139,7 +139,7 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 const SizedBox(height: 8),
                 Text(
                   loc.masterPasswordDescription,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 8),
@@ -273,7 +273,7 @@ class _PasswordStrengthDisplayState
                 textAlign: TextAlign.right,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: theme.textTheme.caption,
+                style: theme.textTheme.bodySmall,
               ),
             ],
           ),

@@ -364,14 +364,14 @@ class MailListTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text(message.subject, style: theme.textTheme.subtitle1),
+                  Text(message.subject, style: theme.textTheme.titleMedium),
                   const SizedBox(height: 4),
                   Text(
                     message.sender,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
-                    style: theme.textTheme.caption,
+                    style: theme.textTheme.bodySmall,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -379,7 +379,7 @@ class MailListTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
-                    style: theme.textTheme.caption!
+                    style: theme.textTheme.bodySmall!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],

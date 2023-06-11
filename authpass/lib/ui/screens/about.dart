@@ -90,7 +90,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                             return FaIcon(
                               icon,
                               size: 12,
-                              color: theme.textTheme.bodyText1!.color,
+                              color: theme.textTheme.bodyLarge!.color,
                             );
                           }
                           if (alt != null) {
@@ -126,7 +126,7 @@ class AuthPassAboutDialog extends StatelessWidget {
                     text: loc.aboutLogFile(logFiles.isEmpty
                         ? 'No Log File?!' // NON-NLS
                         : logFiles.first.absolute.path)),
-                style: Theme.of(context).textTheme.caption!,
+                style: Theme.of(context).textTheme.bodySmall!,
               ),
             ],
           );
@@ -182,13 +182,13 @@ class UrlLink extends StatelessWidget {
             children: <Widget>[
               Text(
                 caption,
-                style: theme.textTheme.caption,
+                style: theme.textTheme.bodySmall,
               ),
               const SizedBox(height: 4),
               Text(
                 url,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyText2!
+                style: theme.textTheme.bodyMedium!
                     .apply(color: theme.primaryColor, fontSizeFactor: 0.95)
                     .copyWith(fontWeight: FontWeight.bold),
               ),

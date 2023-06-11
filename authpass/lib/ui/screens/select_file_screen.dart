@@ -327,9 +327,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                       Text(
                         loc.linuxAppArmorWarning,
                         textAlign: TextAlign.center,
-                        style: theme.textTheme.caption!.copyWith(
+                        style: theme.textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: theme.errorColor,
+                          color: theme.colorScheme.error,
                         ),
                       ),
                       LinkButton(
@@ -360,7 +360,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
                   loc.selectKeepassFileLabel,
-                  style: theme.textTheme.caption,
+                  style: theme.textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -438,7 +438,7 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
                     children: <Widget>[
                       Text(
                         loc.labelLastOpenFiles,
-                        style: theme.textTheme.caption,
+                        style: theme.textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
                       ...ListTile.divideTiles(
@@ -698,7 +698,7 @@ class OpenedFileTile extends StatelessWidget {
     final theme = Theme.of(context);
     final subtitleStyle = TextStyle(
         color: ListTileTheme.of(context).textColor ??
-            theme.textTheme.caption!.color);
+            theme.textTheme.bodySmall!.color);
     return InkWell(
       onTap: onPressed,
       onLongPress: onLongPressed,
@@ -817,20 +817,20 @@ class SelectFileActionContent extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DefaultTextStyle(
-        style: theme.primaryTextTheme.bodyText2!,
+        style: theme.primaryTextTheme.bodyMedium!,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
               icon,
-              color: theme.primaryTextTheme.bodyText2!.color!.withOpacity(0.8),
+              color: theme.primaryTextTheme.bodyMedium!.color!.withOpacity(0.8),
             ),
             const SizedBox(height: 8),
             Text(
               label,
               textAlign: TextAlign.center,
-              style: theme.primaryTextTheme.bodyText2!
+              style: theme.primaryTextTheme.bodyMedium!
                   .copyWith(letterSpacing: 0.9),
               strutStyle: const StrutStyle(leading: 0.2),
 //                    style: TextStyle(fontWeight: FontWeight.bold),
@@ -1021,10 +1021,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   children: <Widget>[
                     Text(loc.credentialLabel),
                     Text(widget.kdbxFilePath.displayName,
-                        style: theme.textTheme.headline4),
+                        style: theme.textTheme.headlineMedium),
                     Text(
                       widget.kdbxFilePath.displayPath,
-                      style: theme.textTheme.caption,
+                      style: theme.textTheme.bodySmall,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

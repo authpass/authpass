@@ -328,7 +328,7 @@ class OptionToggleTile extends StatelessWidget {
           children: [
             Checkbox(value: value, onChanged: (value) => onChanged(value!)),
             Expanded(
-              child: Text(label, style: Theme.of(context).textTheme.subtitle1),
+              child: Text(label, style: Theme.of(context).textTheme.titleMedium),
             ),
             // Switch(value: value, onChanged: onChanged),
           ],

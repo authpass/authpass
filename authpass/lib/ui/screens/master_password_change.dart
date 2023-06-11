@@ -145,7 +145,7 @@ class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
               const SizedBox(height: 8),
               Text(
                 loc.masterPasswordDescription,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               Container(
                 padding: const EdgeInsets.only(top: 8),

@@ -71,7 +71,7 @@ class OnboardingContent extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     var imageScaleFactor = 1.0;
-    var onboardingHeadlineStyle = theme.textTheme.headline3;
+    var onboardingHeadlineStyle = theme.textTheme.displaySmall;
     if (mq.orientation == Orientation.portrait) {
       // let's try to do some magic in portrait mode to fit it in.
       _logger.fine('height: ${mq.size.height}');
@@ -108,7 +108,7 @@ class OnboardingContent extends StatelessWidget {
           loc.onboardingQuestion,
           textAlign: TextAlign.center,
           style:
-              theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+              theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         // Expanded(child: const SizedBox(height: 32)),
@@ -154,7 +154,7 @@ class OnboardingButton extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     _logger.fine('with: ${mq.size.width}');
-    var textStyle = theme.primaryTextTheme.bodyText1!.apply(
+    var textStyle = theme.primaryTextTheme.bodyLarge!.apply(
       fontSizeFactor: 1.5,
       shadows: const [
         Shadow(

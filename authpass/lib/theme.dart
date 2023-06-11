@@ -10,6 +10,7 @@ final _logger = Logger('theme');
 class AuthPassTheme {
   @NonNls
   static const monoFontFamily = 'JetBrainsMono';
+
 //  static const Color linkColor = Colors.blueAccent;
   static const int _primaryColorValue = 0xFF626bc6;
   static const Color primaryColor = Color(_primaryColorValue);
@@ -149,12 +150,55 @@ ThemeData createDarkTheme() {
     textSelectionTheme: TextSelectionThemeData(
       selectionHandleColor: AuthPassTheme.primarySwatch[800],
     ),
-//    textSelectionColor: Colors.red,
-    toggleableActiveColor: colorScheme.primary,
 //    cursorColor: Colors.red,
     brightness: Brightness.dark,
     colorScheme: colorScheme,
     primarySwatch: AuthPassTheme.primarySwatch,
-    selectedRowColor: colorScheme.surface,
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return null;
+        }
+        if (states.contains(MaterialState.selected)) {
+          return colorScheme.primary;
+        }
+        return null;
+      }),
+    ),
+    radioTheme: RadioThemeData(
+      fillColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return null;
+        }
+        if (states.contains(MaterialState.selected)) {
+          return colorScheme.primary;
+        }
+        return null;
+      }),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return null;
+        }
+        if (states.contains(MaterialState.selected)) {
+          return colorScheme.primary;
+        }
+        return null;
+      }),
+      trackColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return null;
+        }
+        if (states.contains(MaterialState.selected)) {
+          return colorScheme.primary;
+        }
+        return null;
+      }),
+    ),
   ));
 }
