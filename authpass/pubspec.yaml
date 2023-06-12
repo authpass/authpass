@@ -88,7 +88,7 @@ dependencies:
   otpauth_migration: #^0.0.7
     git:
       url: https://github.com/authpass/otpauth_migration.git
-      ref: e1e8bbd615d4bde036c668f45ae7aac7d5502a2a
+      ref: 56e9e7d64d7fa111924dae72188145c9851b9e17
   pointycastle: ^3.3.4
   #zxcvbn: ^0.0.1
   zxcvbn: # null-safety https://github.com/careapp-inc/zxcvbn-dart/pull/7
