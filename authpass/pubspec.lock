@@ -1182,10 +1182,11 @@ packages:
   otpauth_migration:
     dependency: "direct main"
     description:
-      name: otpauth_migration
-      sha256: "5c0ac119b8d957b27bf12a2982c923a4457e69ae5a0a11e833d1b51faae016d9"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: e1e8bbd615d4bde036c668f45ae7aac7d5502a2a
+      resolved-ref: e1e8bbd615d4bde036c668f45ae7aac7d5502a2a
+      url: "https://github.com/authpass/otpauth_migration.git"
+    source: git
     version: "0.0.7"
   package_config:
     dependency: transitive

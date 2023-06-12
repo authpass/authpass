@@ -85,7 +85,10 @@ dependencies:
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0
   otp: ^3.0.0-nullsafety.0
-  otpauth_migration: ^0.0.7
+  otpauth_migration: #^0.0.7
+    git:
+      url: https://github.com/authpass/otpauth_migration.git
+      ref: e1e8bbd615d4bde036c668f45ae7aac7d5502a2a
   pointycastle: ^3.3.4
   #zxcvbn: ^0.0.1
   zxcvbn: # null-safety https://github.com/careapp-inc/zxcvbn-dart/pull/7
