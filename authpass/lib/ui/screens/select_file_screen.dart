@@ -321,6 +321,44 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              IntrinsicWidth(
+                stepWidth: 100,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 400),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      ...?(appData.quickUnlockFiles.isNotEmpty ? [
+                        const SizedBox(height: 16),
+                        Text(
+                          loc.quickunlockableFiles,
+                          style: theme.textTheme.caption,
+                          textAlign: TextAlign.center,
+                        ),
+                        ...ListTile.divideTiles(
+                          context: context,
+                          tiles: appData.quickUnlockFiles.map(
+                                (f) => OpenedFileTile(
+                              openedFile:
+                              f.toFileSource(cloudStorageBloc),
+                              color: f.color,
+                            ),
+                          )
+                        ),
+                        LinkButton(
+                          icon: const Icon(Icons.lock_open),
+                          onPressed: () {
+                            _quickUnlockAttempted = false;
+                            _checkQuickUnlock();
+                          },
+                          child: Text(loc.unlock),
+                        )
+                      ] : null)
+                    ],
+                  ),
+                ),
+              ),
               ...?(_showLinuxAppArmorMessage
                   ? [
                       const SizedBox(height: 16),
@@ -732,7 +770,7 @@ class OpenedFileTile extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
+            if(onLongPressed != null) IconButton(
               onPressed: onLongPressed,
               icon: const Icon(Icons.more_vert),
             )

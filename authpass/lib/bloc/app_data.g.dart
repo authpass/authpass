@@ -150,6 +150,10 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
       serializers.serialize(object.previousFiles,
           specifiedType:
               const FullType(BuiltList, const [const FullType(OpenedFile)])),
+      'quickUnlockFiles',
+      serializers.serialize(object.quickUnlockFiles,
+          specifiedType:
+          const FullType(BuiltList, const [const FullType(OpenedFile)])),
       'passwordGeneratorCharacterSets',
       serializers.serialize(object.passwordGeneratorCharacterSets,
           specifiedType:
@@ -282,6 +286,12 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(OpenedFile)]))!
               as BuiltList<Object?>);
+          break;
+        case 'quickUnlockFiles':
+          result.quickUnlockFiles.replace(serializers.deserialize(value,
+              specifiedType: const FullType(
+                  BuiltList, const [const FullType(OpenedFile)]))!
+          as BuiltList<Object?>);
           break;
         case 'passwordGeneratorLength':
           result.passwordGeneratorLength = serializers.deserialize(value,
@@ -561,6 +571,8 @@ class _$AppData extends AppData {
   @override
   final BuiltList<OpenedFile> previousFiles;
   @override
+  final BuiltList<OpenedFile> quickUnlockFiles;
+  @override
   final int? passwordGeneratorLength;
   @override
   final BuiltSet<String> passwordGeneratorCharacterSets;
@@ -600,6 +612,7 @@ class _$AppData extends AppData {
 
   _$AppData._(
       {required this.previousFiles,
+      required this.quickUnlockFiles,
       this.passwordGeneratorLength,
       required this.passwordGeneratorCharacterSets,
       this.manualUserType,
@@ -620,6 +633,8 @@ class _$AppData extends AppData {
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         previousFiles, r'AppData', 'previousFiles');
+    BuiltValueNullFieldError.checkNotNull(
+        quickUnlockFiles, r'AppData', 'quickUnlockFiles');
     BuiltValueNullFieldError.checkNotNull(passwordGeneratorCharacterSets,
         r'AppData', 'passwordGeneratorCharacterSets');
     BuiltValueNullFieldError.checkNotNull(
@@ -638,6 +653,7 @@ class _$AppData extends AppData {
     if (identical(other, this)) return true;
     return other is AppData &&
         previousFiles == other.previousFiles &&
+        quickUnlockFiles == other.quickUnlockFiles &&
         passwordGeneratorLength == other.passwordGeneratorLength &&
         passwordGeneratorCharacterSets ==
             other.passwordGeneratorCharacterSets &&
@@ -678,8 +694,11 @@ class _$AppData extends AppData {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            0,
-                                                                            previousFiles
+                                                                            $jc(
+                                                                                0,
+                                                                                previousFiles
+                                                                                    .hashCode),
+                                                                            quickUnlockFiles
                                                                                 .hashCode),
                                                                         passwordGeneratorLength
                                                                             .hashCode),
@@ -710,6 +729,7 @@ class _$AppData extends AppData {
   String toString() {
     return (newBuiltValueToStringHelper(r'AppData')
           ..add('previousFiles', previousFiles)
+          ..add('quickUnlockFiles', quickUnlockFiles)
           ..add('passwordGeneratorLength', passwordGeneratorLength)
           ..add(
               'passwordGeneratorCharacterSets', passwordGeneratorCharacterSets)
@@ -740,6 +760,12 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _$this._previousFiles ??= new ListBuilder<OpenedFile>();
   set previousFiles(ListBuilder<OpenedFile>? previousFiles) =>
       _$this._previousFiles = previousFiles;
+
+  ListBuilder<OpenedFile>? _quickUnlockFiles;
+  ListBuilder<OpenedFile> get quickUnlockFiles =>
+      _$this._quickUnlockFiles ??= new ListBuilder<OpenedFile>();
+  set quickUnlockFiles(ListBuilder<OpenedFile>? quickUnlockFiles) =>
+      _$this._quickUnlockFiles = quickUnlockFiles;
 
   int? _passwordGeneratorLength;
   int? get passwordGeneratorLength => _$this._passwordGeneratorLength;
@@ -833,6 +859,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
     final $v = _$v;
     if ($v != null) {
       _previousFiles = $v.previousFiles.toBuilder();
+      _quickUnlockFiles = $v.quickUnlockFiles.toBuilder();
       _passwordGeneratorLength = $v.passwordGeneratorLength;
       _passwordGeneratorCharacterSets =
           $v.passwordGeneratorCharacterSets.toBuilder();
@@ -876,6 +903,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       _$result = _$v ??
           new _$AppData._(
               previousFiles: previousFiles.build(),
+              quickUnlockFiles: quickUnlockFiles.build(),
               passwordGeneratorLength: passwordGeneratorLength,
               passwordGeneratorCharacterSets:
                   passwordGeneratorCharacterSets.build(),
@@ -900,6 +928,9 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
       try {
         _$failedField = 'previousFiles';
         previousFiles.build();
+
+        _$failedField = 'quickUnlockFiles';
+        quickUnlockFiles.build();
 
         _$failedField = 'passwordGeneratorCharacterSets';
         passwordGeneratorCharacterSets.build();

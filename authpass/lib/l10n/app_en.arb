@@ -1748,5 +1748,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "quickunlockableFiles": "Quick unlockable files:",
+    "@quickunlockableFiles": {
+      "description": "title of list with quick unlockable files."
+    }
 }
