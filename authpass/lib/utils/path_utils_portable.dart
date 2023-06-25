@@ -84,4 +84,7 @@ class PathUtilsPortable extends PathUtilsDefault {
   Future<Directory> retrieveTemporaryDirectory() async => _subDir('Temp');
   @override
   Future<Directory> retrieveCacheDirectory() async => _subDir('Cache');
+
+  @override
+  Future<Directory> retrieveApplicationSupportDirectory() async => _subDir('Support');
 }

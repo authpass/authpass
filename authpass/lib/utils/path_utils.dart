@@ -88,6 +88,15 @@ abstract class PathUtilsDefault extends PathUtils {
     );
   }
 
+  @NonNls
+  @override
+  Future<Directory> getApplicationSupportDirectory({String? subNamespace}) async {
+    return directoryCache[_cacheKey('cloudcache', subNamespace)] ??= _namespaced(
+      await retrieveApplicationSupportDirectory(),
+      subNamespace: subNamespace,
+    );
+  }
+
   @protected
   @visibleForOverriding
   Future<Directory> retrieveTemporaryDirectory();
@@ -100,6 +109,8 @@ abstract class PathUtilsDefault extends PathUtils {
   @protected
   @visibleForOverriding
   Future<Directory> retrieveAppDataDirectory();
+  @visibleForOverriding
+  Future<Directory> retrieveApplicationSupportDirectory();
 
   /// Document directory for "internal" kdbx files which should be accessible
   /// by the user. - this directory is NOT namespaced during development.

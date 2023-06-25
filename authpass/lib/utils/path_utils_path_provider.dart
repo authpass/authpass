@@ -48,6 +48,10 @@ class PathUtilsFromPathProvider extends PathUtilsDefault {
     return await _getDesktopAppDataDirectory();
   }
 
+  @override
+  Future<Directory> retrieveApplicationSupportDirectory() async => fileSystem
+      .directory(await path_provider.getApplicationSupportDirectory());
+
   @NonNls
   Future<Directory> _getDesktopAppDataDirectory() async {
     // https://stackoverflow.com/a/32937974/109219

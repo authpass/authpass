@@ -31,4 +31,10 @@ class PathUtilsWeb extends PathUtilsDefault {
   Future<Directory> retrieveCacheDirectory() async {
     return fileSystem.directory('/cache');
   }
+
+  @NonNls
+  @override
+  Future<Directory> retrieveApplicationSupportDirectory() async {
+    return fileSystem.directory('/support');
+  }
 }
