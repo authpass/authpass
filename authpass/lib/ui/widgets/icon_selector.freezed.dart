@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'icon_selector.dart';
 
@@ -24,8 +24,8 @@ mixin _$SelectedIcon {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(KdbxIcon icon)? predefined,
-    TResult Function(KdbxCustomIcon custom)? custom,
+    TResult? Function(KdbxIcon icon)? predefined,
+    TResult? Function(KdbxCustomIcon custom)? custom,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -43,8 +43,8 @@ mixin _$SelectedIcon {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SelectedIconPredefined value)? predefined,
-    TResult Function(_SelectedIconCustom value)? custom,
+    TResult? Function(_SelectedIconPredefined value)? predefined,
+    TResult? Function(_SelectedIconCustom value)? custom,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,16 +60,18 @@ mixin _$SelectedIcon {
 abstract class $SelectedIconCopyWith<$Res> {
   factory $SelectedIconCopyWith(
           SelectedIcon value, $Res Function(SelectedIcon) then) =
-      _$SelectedIconCopyWithImpl<$Res>;
+      _$SelectedIconCopyWithImpl<$Res, SelectedIcon>;
 }
 
 /// @nodoc
-class _$SelectedIconCopyWithImpl<$Res> implements $SelectedIconCopyWith<$Res> {
+class _$SelectedIconCopyWithImpl<$Res, $Val extends SelectedIcon>
+    implements $SelectedIconCopyWith<$Res> {
   _$SelectedIconCopyWithImpl(this._value, this._then);
 
-  final SelectedIcon _value;
   // ignore: unused_field
-  final $Res Function(SelectedIcon) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -77,27 +79,25 @@ abstract class _$$_SelectedIconPredefinedCopyWith<$Res> {
   factory _$$_SelectedIconPredefinedCopyWith(_$_SelectedIconPredefined value,
           $Res Function(_$_SelectedIconPredefined) then) =
       __$$_SelectedIconPredefinedCopyWithImpl<$Res>;
+  @useResult
   $Res call({KdbxIcon icon});
 }
 
 /// @nodoc
 class __$$_SelectedIconPredefinedCopyWithImpl<$Res>
-    extends _$SelectedIconCopyWithImpl<$Res>
+    extends _$SelectedIconCopyWithImpl<$Res, _$_SelectedIconPredefined>
     implements _$$_SelectedIconPredefinedCopyWith<$Res> {
   __$$_SelectedIconPredefinedCopyWithImpl(_$_SelectedIconPredefined _value,
       $Res Function(_$_SelectedIconPredefined) _then)
-      : super(_value, (v) => _then(v as _$_SelectedIconPredefined));
+      : super(_value, _then);
 
-  @override
-  _$_SelectedIconPredefined get _value =>
-      super._value as _$_SelectedIconPredefined;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? icon = freezed,
+    Object? icon = null,
   }) {
     return _then(_$_SelectedIconPredefined(
-      icon == freezed
+      null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as KdbxIcon,
@@ -133,15 +133,15 @@ class _$_SelectedIconPredefined
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SelectedIconPredefined &&
-            const DeepCollectionEquality().equals(other.icon, icon));
+            (identical(other.icon, icon) || other.icon == icon));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(icon));
+  int get hashCode => Object.hash(runtimeType, icon);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SelectedIconPredefinedCopyWith<_$_SelectedIconPredefined> get copyWith =>
       __$$_SelectedIconPredefinedCopyWithImpl<_$_SelectedIconPredefined>(
           this, _$identity);
@@ -158,8 +158,8 @@ class _$_SelectedIconPredefined
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(KdbxIcon icon)? predefined,
-    TResult Function(KdbxCustomIcon custom)? custom,
+    TResult? Function(KdbxIcon icon)? predefined,
+    TResult? Function(KdbxCustomIcon custom)? custom,
   }) {
     return predefined?.call(icon);
   }
@@ -189,8 +189,8 @@ class _$_SelectedIconPredefined
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SelectedIconPredefined value)? predefined,
-    TResult Function(_SelectedIconCustom value)? custom,
+    TResult? Function(_SelectedIconPredefined value)? predefined,
+    TResult? Function(_SelectedIconCustom value)? custom,
   }) {
     return predefined?.call(this);
   }
@@ -213,7 +213,7 @@ abstract class _SelectedIconPredefined implements SelectedIcon {
   const factory _SelectedIconPredefined(final KdbxIcon icon) =
       _$_SelectedIconPredefined;
 
-  KdbxIcon get icon => throw _privateConstructorUsedError;
+  KdbxIcon get icon;
   @JsonKey(ignore: true)
   _$$_SelectedIconPredefinedCopyWith<_$_SelectedIconPredefined> get copyWith =>
       throw _privateConstructorUsedError;
@@ -224,26 +224,25 @@ abstract class _$$_SelectedIconCustomCopyWith<$Res> {
   factory _$$_SelectedIconCustomCopyWith(_$_SelectedIconCustom value,
           $Res Function(_$_SelectedIconCustom) then) =
       __$$_SelectedIconCustomCopyWithImpl<$Res>;
+  @useResult
   $Res call({KdbxCustomIcon custom});
 }
 
 /// @nodoc
 class __$$_SelectedIconCustomCopyWithImpl<$Res>
-    extends _$SelectedIconCopyWithImpl<$Res>
+    extends _$SelectedIconCopyWithImpl<$Res, _$_SelectedIconCustom>
     implements _$$_SelectedIconCustomCopyWith<$Res> {
   __$$_SelectedIconCustomCopyWithImpl(
       _$_SelectedIconCustom _value, $Res Function(_$_SelectedIconCustom) _then)
-      : super(_value, (v) => _then(v as _$_SelectedIconCustom));
+      : super(_value, _then);
 
-  @override
-  _$_SelectedIconCustom get _value => super._value as _$_SelectedIconCustom;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? custom = freezed,
+    Object? custom = null,
   }) {
     return _then(_$_SelectedIconCustom(
-      custom == freezed
+      null == custom
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
               as KdbxCustomIcon,
@@ -279,15 +278,15 @@ class _$_SelectedIconCustom
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SelectedIconCustom &&
-            const DeepCollectionEquality().equals(other.custom, custom));
+            (identical(other.custom, custom) || other.custom == custom));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(custom));
+  int get hashCode => Object.hash(runtimeType, custom);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SelectedIconCustomCopyWith<_$_SelectedIconCustom> get copyWith =>
       __$$_SelectedIconCustomCopyWithImpl<_$_SelectedIconCustom>(
           this, _$identity);
@@ -304,8 +303,8 @@ class _$_SelectedIconCustom
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(KdbxIcon icon)? predefined,
-    TResult Function(KdbxCustomIcon custom)? custom,
+    TResult? Function(KdbxIcon icon)? predefined,
+    TResult? Function(KdbxCustomIcon custom)? custom,
   }) {
     return custom?.call(this.custom);
   }
@@ -335,8 +334,8 @@ class _$_SelectedIconCustom
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SelectedIconPredefined value)? predefined,
-    TResult Function(_SelectedIconCustom value)? custom,
+    TResult? Function(_SelectedIconPredefined value)? predefined,
+    TResult? Function(_SelectedIconCustom value)? custom,
   }) {
     return custom?.call(this);
   }
@@ -359,7 +358,7 @@ abstract class _SelectedIconCustom implements SelectedIcon {
   const factory _SelectedIconCustom(final KdbxCustomIcon custom) =
       _$_SelectedIconCustom;
 
-  KdbxCustomIcon get custom => throw _privateConstructorUsedError;
+  KdbxCustomIcon get custom;
   @JsonKey(ignore: true)
   _$$_SelectedIconCustomCopyWith<_$_SelectedIconCustom> get copyWith =>
       throw _privateConstructorUsedError;

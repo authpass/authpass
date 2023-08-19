@@ -34,7 +34,7 @@ Map<String, dynamic> _$AuthPassExternalAttachmentToJson(
     <String, dynamic>{
       'id': instance.attachmentId,
       'secret': instance.secret,
-      'format': _$AttachmentFormatEnumMap[instance.format],
+      'format': _$AttachmentFormatEnumMap[instance.format]!,
       'size': instance.size,
     };
 

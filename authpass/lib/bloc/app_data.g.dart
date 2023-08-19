@@ -429,18 +429,17 @@ class _$OpenedFile extends OpenedFile {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc($jc($jc(0, uuid.hashCode), sourceType.hashCode),
-                            sourcePath.hashCode),
-                        name.hashCode),
-                    biometricStoreName.hashCode),
-                macOsSecureBookmark.hashCode),
-            filePickerIdentifier.hashCode),
-        colorCode.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, uuid.hashCode);
+    _$hash = $jc(_$hash, sourceType.hashCode);
+    _$hash = $jc(_$hash, sourcePath.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, biometricStoreName.hashCode);
+    _$hash = $jc(_$hash, macOsSecureBookmark.hashCode);
+    _$hash = $jc(_$hash, filePickerIdentifier.hashCode);
+    _$hash = $jc(_$hash, colorCode.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
@@ -660,50 +659,27 @@ class _$AppData extends AppData {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            0,
-                                                                            previousFiles
-                                                                                .hashCode),
-                                                                        passwordGeneratorLength
-                                                                            .hashCode),
-                                                                    passwordGeneratorCharacterSets
-                                                                        .hashCode),
-                                                                manualUserType
-                                                                    .hashCode),
-                                                            firstLaunchedAt
-                                                                .hashCode),
-                                                        theme.hashCode),
-                                                    dismissedBackupLocalFiles
-                                                        .hashCode),
-                                                dismissedAutofillSuggestion
-                                                    .hashCode),
-                                            themeVisualDensity.hashCode),
-                                        themeFontSizeFactor.hashCode),
-                                    diacOptIn.hashCode),
-                                lastBuildId.hashCode),
-                            secureWindow.hashCode),
-                        localeOverride.hashCode),
-                    fetchWebsiteIcons.hashCode),
-                authPassCloudAttachments.hashCode),
-            systemWideShortcuts.hashCode),
-        searchFields.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, previousFiles.hashCode);
+    _$hash = $jc(_$hash, passwordGeneratorLength.hashCode);
+    _$hash = $jc(_$hash, passwordGeneratorCharacterSets.hashCode);
+    _$hash = $jc(_$hash, manualUserType.hashCode);
+    _$hash = $jc(_$hash, firstLaunchedAt.hashCode);
+    _$hash = $jc(_$hash, theme.hashCode);
+    _$hash = $jc(_$hash, dismissedBackupLocalFiles.hashCode);
+    _$hash = $jc(_$hash, dismissedAutofillSuggestion.hashCode);
+    _$hash = $jc(_$hash, themeVisualDensity.hashCode);
+    _$hash = $jc(_$hash, themeFontSizeFactor.hashCode);
+    _$hash = $jc(_$hash, diacOptIn.hashCode);
+    _$hash = $jc(_$hash, lastBuildId.hashCode);
+    _$hash = $jc(_$hash, secureWindow.hashCode);
+    _$hash = $jc(_$hash, localeOverride.hashCode);
+    _$hash = $jc(_$hash, fetchWebsiteIcons.hashCode);
+    _$hash = $jc(_$hash, authPassCloudAttachments.hashCode);
+    _$hash = $jc(_$hash, systemWideShortcuts.hashCode);
+    _$hash = $jc(_$hash, searchFields.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
@@ -917,4 +893,4 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

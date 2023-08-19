@@ -242,7 +242,7 @@ Future<String> deviceInfo() async {
 }
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
-  void trackLaunch({required Brightness systemBrightness});
+  void trackLaunch({required Brightness? systemBrightness});
 
   Future<void> trackInit(
           {required String? userType, required int value}) async =>
