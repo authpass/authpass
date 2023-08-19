@@ -107,8 +107,8 @@ class OnboardingContent extends StatelessWidget {
         Text(
           loc.onboardingQuestion,
           textAlign: TextAlign.center,
-          style:
-              theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          style: theme.textTheme.titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         // Expanded(child: const SizedBox(height: 32)),

@@ -202,6 +202,7 @@ class _GroupViewModel {
   final int level;
   final bool isRecycleBin;
   final bool inRecycleBin;
+
   bool get isOrInRecycleBin => isRecycleBin || inRecycleBin;
 
   bool get isRoot => group.parent == null;
@@ -905,7 +906,8 @@ class GroupListTile extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(group.name(loc), style: theme.textTheme.titleMedium),
+                child:
+                    Text(group.name(loc), style: theme.textTheme.titleMedium),
               ),
             ),
             const SizedBox(width: 8),
