@@ -1,6 +1,7 @@
 # Unreleased
 
 * Fix preventing screenshots on Android #320
+* MacOS: Raise minimum to MacOS 10.14 (was 10.12.2): https://github.com/flutter/flutter/issues/114445
 
 # 1.9.8
 

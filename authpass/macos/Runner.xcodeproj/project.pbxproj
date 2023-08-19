@@ -275,7 +275,7 @@
 				"${BUILT_PRODUCTS_DIR}/share_plus/share_plus.framework",
 				"${BUILT_PRODUCTS_DIR}/sqflite/sqflite.framework",
 				"${BUILT_PRODUCTS_DIR}/url_launcher_macos/url_launcher_macos.framework",
-				"${BUILT_PRODUCTS_DIR}/wakelock_macos/wakelock_macos.framework",
+				"${BUILT_PRODUCTS_DIR}/wakelock_plus/wakelock_plus.framework",
 				"${BUILT_PRODUCTS_DIR}/window_manager/window_manager.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -296,7 +296,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/share_plus.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sqflite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/url_launcher_macos.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/wakelock_macos.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/wakelock_plus.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/window_manager.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -453,8 +453,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/DebugProfile.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 64ZPC769JY;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -467,8 +467,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PROVISIONING_PROFILE_SPECIFIER = "Herbert mac App Development";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Profile;
@@ -601,7 +601,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -629,7 +629,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PROVISIONING_PROFILE_SPECIFIER = "Mac App Store AuthPass Distribution Profile 2021";
 				SWIFT_VERSION = 5.0;
 			};

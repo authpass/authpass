@@ -78,7 +78,7 @@ dependencies:
   flutter_email_sender: ^5.0.0
   flutter_store_listing: ^0.2.2
 
-  biometric_storage: ^5.0.0
+  biometric_storage: ^5.0.0+1
 #  biometric_storage:
 #    path: ../deps/biometric_storage
   uuid: ^3.0.1
@@ -158,7 +158,7 @@ dependencies:
   flutter_windowmanager: ^0.2.0
 
   mime: ^1.0.0
-  ffi: ^2.0.0
+  ffi: ^2.1.0
   # AuthPass Cloud email deps
   enough_mail: ^2.1.1
   flutter_widget_from_html: ^0.10.1
@@ -214,15 +214,10 @@ dev_dependencies:
   xdg_directories: ^0.2.0+1
 
 dependency_overrides:
-  ffi: ^2.0.0
+#  ffi: ^2.0.0
   # enough_mail still has 0.17 pinned. remove this once enough_mail is updated.
   intl: ^0.18.0
   # https://github.com/creativecreatorormaybenot/wakelock/pull/203
-  wakelock_windows:
-    git:
-      url: https://github.com/timsneath/wakelock
-      ref: win32-v5
-      path: wakelock_windows
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen
 #  kdbx:
