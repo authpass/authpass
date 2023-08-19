@@ -903,8 +903,7 @@ class AttachmentBottomSheet extends StatelessWidget {
               await f.writeAsBytes(bytes);
 
               try {
-                await Share.shareFiles([f.path],
-                    mimeTypes: [mimeType],
+                await Share.shareXFiles([XFile(f.path, mimeType: mimeType)],
                     subject: loc.entryAttachmentShareSubject);
               } finally {
                 unawaited(f.delete());

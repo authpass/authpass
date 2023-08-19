@@ -93,6 +93,10 @@ class CloudStorageAuthentication extends StatelessWidget {
 
           if (!forceNoOpenUrl) {
             if (!await DialogUtils.openUrl(uri)) {
+              if (!context.mounted) {
+                _logger.severe('Widget no longer mounted, not showing dialog.');
+                return;
+              }
               await DialogUtils.showSimpleAlertDialog(
                 context,
                 null,
@@ -126,6 +130,9 @@ class CloudStorageAuthentication extends StatelessWidget {
       onSuccess!();
     } catch (e, stackTrace) {
       _logger.severe('Error while authenticating.', e, stackTrace);
+      if (!context.mounted) {
+        return;
+      }
       await DialogUtils.showErrorDialog(context, loc.cloudStorageAuthErrorTitle,
           loc.cloudStorageAuthErrorMessage(provider!.displayName, e));
     }

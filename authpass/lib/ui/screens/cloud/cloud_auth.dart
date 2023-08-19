@@ -211,6 +211,12 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
               _timer?.cancel();
               try {
                 if (!await _checkConfirmed()) {
+                  if (!context.mounted) {
+                    _logger
+                        .severe('Widget no longer mounted. not showing dialog. '
+                            'authPassCloudAuthNotConfirmed');
+                    return;
+                  }
                   await DialogUtils.showSimpleAlertDialog(
                     context,
                     null,

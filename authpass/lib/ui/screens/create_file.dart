@@ -178,6 +178,10 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                 .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
           } on FileExistsException catch (e, stackTrace) {
             _logger.warning('Showing file exists error dialog.', e, stackTrace);
+            if (!context.mounted) {
+              _logger.severe('context no longer mounted. not showing dialog.');
+              return;
+            }
             final loc = AppLocalizations.of(context);
             await DialogUtils.showSimpleAlertDialog(
               context,

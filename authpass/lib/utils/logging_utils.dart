@@ -107,9 +107,22 @@ extension on AndroidDeviceInfo {
         'product': product,
         'display': display,
         'hardware': hardware,
-        'version': version.toMap(),
+        'version': version.importantInfo(),
         'manufacturer': manufacturer,
         'isPhysicalDevice': isPhysicalDevice,
+      };
+}
+
+extension on AndroidBuildVersion {
+  @NonNls
+  Map<String, dynamic> importantInfo() => <String, dynamic>{
+        'baseOS': baseOS,
+        'sdkInt': sdkInt,
+        'release': release,
+        'codename': codename,
+        'incremental': incremental,
+        'previewSdkInt': previewSdkInt,
+        'securityPatch': securityPatch,
       };
 }
 
@@ -121,7 +134,7 @@ extension on IosDeviceInfo {
         'systemName': systemName,
         'systemVersion': systemVersion,
         'localizedModel': localizedModel,
-        'utsname': toMap()['utsname'],
+        'utsname': data['utsname'],
       };
 }
 

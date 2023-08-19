@@ -162,7 +162,7 @@ class _IconSelectorState extends State<IconSelector> {
       final typeGroup = XTypeGroup(
         label: loc.fileTypePngs,
         // extensions: ['jpg', 'png', 'jpeg', 'gif'],
-        extensions: [AppConstants.pngExtensionNoDot],
+        extensions: const [AppConstants.pngExtensionNoDot],
       );
       final file = await openFile(acceptedTypeGroups: [typeGroup]);
       if (file != null) {

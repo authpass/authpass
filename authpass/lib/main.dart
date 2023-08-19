@@ -290,8 +290,9 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   @override
   Widget build(BuildContext context) {
     // TODO generate localizations.
+    final view = View.maybeOf(context);
     _logger.fine('Building AuthPass App state. route: '
-        '${WidgetsBinding.instance.window.defaultRouteName}');
+        '${view?.platformDispatcher.defaultRouteName}');
     return MultiProvider(
       providers: [
         Provider<DiacBloc>(
@@ -380,13 +381,13 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
 //        themeMode: ThemeMode.light,
         builder: (context, child) {
           final mq = MediaQuery.of(context);
+          final physicalSize = view?.physicalSize;
           _deps.analytics.updateSizes(
             viewportSizeWidth: mq.size.width,
             viewportSizeHeight: mq.size.height,
-            displaySizeWidth: WidgetsBinding.instance.window.physicalSize.width,
-            displaySizeHeight:
-                WidgetsBinding.instance.window.physicalSize.height,
-            devicePixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
+            displaySizeWidth: physicalSize?.width,
+            displaySizeHeight: physicalSize?.height,
+            devicePixelRatio: view?.devicePixelRatio,
           );
           final locale = Localizations.localeOf(context);
           final localizations = AppLocalizations.of(context);
@@ -419,8 +420,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           _logger.fine('initialRoute: $initialRoute');
           _deps.analytics.trackScreen(initialRoute);
           _deps.analytics.events.trackLaunch(
-              systemBrightness:
-                  WidgetsBinding.instance.window.platformBrightness);
+              systemBrightness: view?.platformDispatcher.platformBrightness);
           if (startupStopwatch.isRunning) {
             startupStopwatch.stop();
             _deps.analytics.trackTiming(

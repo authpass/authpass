@@ -35,6 +35,7 @@ import 'package:autofill_service/autofill_service.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:built_collection/built_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 // import 'package:collection/collection.dart' show IterableExtension;
 import 'package:diac_client/diac_client.dart';
 import 'package:flinq/flinq.dart';
@@ -165,12 +166,17 @@ class PasswordList extends StatelessWidget {
     return StreamBuilder<bool>(
         stream: Rx.merge(streams).map((x) => true),
         builder: (context, snapshot) {
+          @NonNls
+          final isAutofill =
+              View.maybeOf(context)?.platformDispatcher.defaultRouteName ==
+                  '/autofill';
           return PasswordListContent(
             appData: context.watch<AppData>(),
             kdbxBloc: kdbxBloc,
             openedKdbxFiles: kdbxBloc.openedFilesKdbx,
             selectedEntry: selectedEntry,
             onEntrySelected: onEntrySelected,
+            isAutofillSelector: isAutofill,
           );
         });
   }
@@ -192,6 +198,7 @@ class PasswordListContent extends StatefulWidget {
     required this.openedKdbxFiles,
     required void Function(KdbxEntry entry, EntrySelectionType type)
         onEntrySelected,
+    required this.isAutofillSelector,
     this.selectedEntry,
   })  : _onEntrySelected = onEntrySelected,
         super(key: key);
@@ -201,8 +208,7 @@ class PasswordListContent extends StatefulWidget {
   final List<KdbxFile> openedKdbxFiles;
 
   @NonNls
-  bool get isAutofillSelector =>
-      WidgetsBinding.instance.window.defaultRouteName == '/autofill';
+  final bool isAutofillSelector;
   final void Function(KdbxEntry entry, EntrySelectionType type)
       _onEntrySelected;
   final KdbxEntry? selectedEntry;
@@ -414,7 +420,9 @@ class _CancelSearchFilterAction extends Action<CancelSearchFilterIntent> {
 class _PasswordListContentState extends State<PasswordListContent>
     with StreamSubscriberMixin, WidgetsBindingObserver, FutureTaskStateMixin {
   List<EntryViewModel>? _filteredEntries;
+
   String? get _filterQuery => __filterQuery;
+
   set _filterQuery(String? filterQuery) {
     __filterQuery = filterQuery;
     cancelSearchFilterAction.updateEnabled();
@@ -922,7 +930,7 @@ class _PasswordListContentState extends State<PasswordListContent>
   List<Widget>? _buildAutofillListPrefix() {
     if (!widget.isAutofillSelector) {
       _logger.info(
-          'not autofill: ${WidgetsBinding.instance.window.defaultRouteName}');
+          'not autofill: ${View.maybeOf(context)?.platformDispatcher.defaultRouteName}');
       return null;
     }
     final loc = AppLocalizations.of(context);
@@ -1273,7 +1281,9 @@ class _PasswordListContentState extends State<PasswordListContent>
 
 class SearchAction extends Action<SearchIntent> {
   SearchAction(this.state);
+
   final _PasswordListContentState state;
+
   @override
   Object? invoke(SearchIntent intent) {
     _logger.info('We should start search.');
@@ -1363,7 +1373,10 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
                         border: Border(
                             left: BorderSide(color: fileColor!, width: 4))))
                 : BoxDecoration(
-                    color: Theme.of(context).selectedRowColor,
+                    color: theme.listTileTheme.selectedTileColor ??
+                        (theme.brightness == Brightness.dark
+                            ? Colors.grey[800]
+                            : Colors.grey[100]),
                     border: Border(
                       right: BorderSide(
                           color: Theme.of(context).primaryColor, width: 4),

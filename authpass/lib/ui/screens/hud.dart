@@ -38,7 +38,14 @@ class FullScreenHud extends StatelessWidget {
                   child: QrImageView(
                     data: value,
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
+                    eyeStyle: const QrEyeStyle(
+                      color: Colors.black,
+                      eyeShape: QrEyeShape.square,
+                    ),
+                    dataModuleStyle: const QrDataModuleStyle(
+                      color: Colors.black,
+                      dataModuleShape: QrDataModuleShape.square,
+                    ),
                   ),
                 ),
               ),

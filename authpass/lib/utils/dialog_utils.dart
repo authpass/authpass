@@ -91,7 +91,7 @@ class DialogUtils {
                   .events
                   .trackActionPressed(action: 'reportToForum');
               final env = context.read<Env>();
-              final forumUrl = context.read<Env>().forumUrlNewTopic(
+              final forumUrl = env.forumUrlNewTopic(
                 title: nonNls('Error Dialog: ${title ?? content}'),
                 body: nonNls('\n\n\n'
                     'title:$title\n'
