@@ -25,5 +25,11 @@ fi
 
 echo flutter: $flutter
 
-"$flutter/bin/flutter" $@
+if test "$1" == "dart" ; then
+  shift
+  "$flutter/bin/dart" "$@"
+else
+
+  "$flutter/bin/flutter" $@
+fi
 

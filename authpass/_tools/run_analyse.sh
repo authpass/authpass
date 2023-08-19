@@ -39,7 +39,7 @@ fail=()
 
 _tools/flutter_run.sh analyze || fail+=('analyze')
 
-_tools/flutter_run.sh format --set-exit-if-changed $(find . -name "*.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" | xargs) || fail+=('format')
+_tools/flutter_run.sh dart format --set-exit-if-changed $(find . -name "*.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" | xargs) || fail+=('format')
 
 if [ ${#fail[@]} -ne 0 ]; then
   echo "Errors: ${fail[*]}"
