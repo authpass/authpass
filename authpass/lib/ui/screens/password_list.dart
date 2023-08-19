@@ -743,7 +743,9 @@ class _PasswordListContentState extends State<PasswordListContent>
                 : null,
             showBadge: cloudStatusSnapshot.hasData &&
                 cloudStatusSnapshot.data!.messagesUnread > 0,
-            badgeColor: Theme.of(context).primaryColorDark,
+            badgeStyle: badges.BadgeStyle(
+              badgeColor: Theme.of(context).primaryColorDark,
+            ),
             position: badges.BadgePosition.topEnd(top: 0, end: 3),
             child: PopupMenuButton<VoidCallback>(
               key: const ValueKey('appBarOverflowMenu'),
@@ -1243,7 +1245,9 @@ class _PasswordListContentState extends State<PasswordListContent>
                         )
                       : null,
               showBadge: cloudStatus != null && cloudStatus.messagesUnread > 0,
-              badgeColor: Theme.of(context).primaryColor,
+              badgeStyle: badges.BadgeStyle(
+                badgeColor: Theme.of(context).primaryColor,
+              ),
               child: const Icon(Icons.cloud),
             ),
             title: Text(loc.menuItemAuthPassCloudMailboxes),
