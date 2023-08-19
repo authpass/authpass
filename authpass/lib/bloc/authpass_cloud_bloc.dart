@@ -52,7 +52,7 @@ class AuthPassCloudBlocDummy with ChangeNotifier implements AuthPassCloudBloc {
 }
 
 /// mixin for classes which need a [AuthPassCloudClient]
-abstract class AuthPassCloudClientConsumer {
+mixin AuthPassCloudClientConsumer {
   @protected
   AuthPassCloudBloc getAuthPassCloudBloc();
 

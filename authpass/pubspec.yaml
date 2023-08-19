@@ -4,7 +4,7 @@ publish_to: none
 version: 1.9.9+164
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -43,7 +43,7 @@ dependencies:
   simple_json_persistence: ^2.0.1
   provider: ^6.0.0
   flutter_hooks: ^0.18.0
-  http: ^0.13.0
+  http: '>=0.13.0 <2.0.0'
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.1.0
   intl: ^0.18.0
@@ -74,8 +74,8 @@ dependencies:
     path: ../deps/autofill_service
 
   flutter_colorpicker: ^1.0.3
-  flutter_speed_dial: ^6.0.0
-  flutter_email_sender: ^5.0.0
+  flutter_speed_dial: ^7.0.0
+  flutter_email_sender: ^6.0.1
   flutter_store_listing: ^0.2.2
 
   biometric_storage: ^5.0.0+1
@@ -101,7 +101,7 @@ dependencies:
   badges: ^3.1.1
   qr_flutter: ^4.0.0
   another_flushbar: ^1.10.20
-  filesystem_picker: ^2.0.0-nullsafety.0
+  filesystem_picker: ^3.1.0
   #tinycolor: ^1.0.3
   tinycolor: # null-safety https://github.com/FooStudio/tinycolor/pull/13
     git:
@@ -124,7 +124,7 @@ dependencies:
   http_auth: ^1.0.0
 
   # google drive
-  googleapis: ^9.0.0
+  googleapis: ^11.4.0
   googleapis_auth: ^1.0.0
 
   # dropbox
@@ -163,7 +163,7 @@ dependencies:
 #    git:
 #      url: https://github.com/Sub6Resources/flutter_html.git
 #      ref: 957c9f833e70d6a74ae7969d6d7e341d765046d6
-  flutter_linkify: ^5.0.2
+  flutter_linkify: ^6.0.0
 #  openapi_base: ^0.1.5+5
   flutter_cache_manager: ^3.0.0-nullsafety.1
   cached_network_image: ^3.0.0-nullsafety
