@@ -1,5 +1,6 @@
 # Unreleased
 
+* Support for importing TOTP codes from Google Authenticator using export QR codes.
 * Fix preventing screenshots on Android #320
 * MacOS: Raise minimum to MacOS 10.14 (was 10.12.2): https://github.com/flutter/flutter/issues/114445
 

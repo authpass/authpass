@@ -102,7 +102,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       );
     }
     final loc = AppLocalizations.of(context);
-    final pathFile = await getSavePath(
+    final pathFile = await getSaveLocation(
       suggestedName: path.basename(widget.file.fileSource.displayPath),
       confirmButtonText: loc.saveButtonLabel,
     );
@@ -111,7 +111,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       return null;
     }
 
-    final outputFile = io.File(pathFile);
+    final outputFile = io.File(pathFile.path);
     String? macOsBookmark;
     if (AuthPassPlatform.isMacOS) {
       // create a dummy file, so we can create a secure bookmark.
@@ -119,7 +119,7 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
       macOsBookmark = await SecureBookmarks().bookmark(outputFile);
     }
     return FileSourceLocal(
-      FileSourceLocal.localFile(pathFile),
+      FileSourceLocal.localFile(pathFile.path),
       uuid: AppDataBloc.createUuid(),
       macOsSecureBookmark: macOsBookmark,
     );
