@@ -1,1 +1,2 @@
+-printusage _proguard_usage.txt
 -printconfiguration _debug-full-r8-config.txt

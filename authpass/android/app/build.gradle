@@ -134,13 +134,10 @@ android {
 //            minification is enabled by flutter build command, so nothing we need to do here.
 //            NOTE: only `flutter build apk/appbundle` will enable it,
 //            BUT NOT `flutter run --release`!!
-//            minifyEnabled true
-//            proguardFiles getDefaultProguardFile(
-//                    'proguard-android-optimize.txt'),
-//                    // List additional ProGuard rules for the given build type here. By default,
-//                    // Android Studio creates and includes an empty rules file for you (located
-//                    // at the root directory of each module).
-//                    'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'),'proguard-rules.pro'
         }
         debug {
             project.flutter.target = 'lib/env/development.dart'
