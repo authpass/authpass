@@ -71,7 +71,7 @@ dependencies:
   flutter_email_sender: ^6.0.1
   flutter_store_listing: ^0.3.0
 
-  biometric_storage: ^5.0.0+2
+  biometric_storage: ^5.0.0+3
   uuid: ^3.0.1
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0

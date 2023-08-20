@@ -42,6 +42,14 @@ subprojects {
             jvmToolchain(17)
         }
     }
+//    if (project.path == ":biometric_storage") {
+//        apply plugin: 'com.android.library'
+//        apply plugin: 'kotlin-android'
+//        dependencies {
+//            implementation "org.slf4j:slf4j-api:2.0.7"
+//        }
+//    }
+
     if (project.path == ":flutter_zxing") {
         apply plugin: 'com.android.library'
         android {

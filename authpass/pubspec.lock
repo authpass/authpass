@@ -155,10 +155,10 @@ packages:
     dependency: "direct main"
     description:
       name: biometric_storage
-      sha256: fcba030b69e3a7effea1ca3c4c9829ba2dd1279c7bb573381247874720f5f1c0
+      sha256: "7afeda0cdd7a7f0ff37e6b63837af2dd02cfc7027a6b6bf5e7c5796dbe1c02a5"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0+2"
+    version: "5.0.0+3"
   boolean_selector:
     dependency: transitive
     description:
