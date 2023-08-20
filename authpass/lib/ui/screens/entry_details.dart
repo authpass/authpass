@@ -815,11 +815,15 @@ class _EntryDetailsState extends State<EntryDetails>
 //        final barcode = await FlutterBarcodeScanner.scanBarcode(
 //            '#ff6666', 'Cancel', true, ScanMode.QR);
 
+        final loc = AppLocalizations.of(context);
         final barcodeResult =
-            await Navigator.of(context).push(BarcodeScanScreen.route(formats: [
-          BarcodeFormat.qrCode,
-          BarcodeFormat.microQRCode,
-        ]));
+            await Navigator.of(context).push(BarcodeScanScreen.route(
+          titleText: loc.scanQrCodeTitle,
+          formats: [
+            BarcodeFormat.qrCode,
+            BarcodeFormat.microQRCode,
+          ],
+        ));
 
         if (barcodeResult case ScanResultValid(barcode: final barcode)) {
           return cleanOtpCodeCode(barcode.text);

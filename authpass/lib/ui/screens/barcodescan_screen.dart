@@ -1,7 +1,6 @@
 import 'package:authpass/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
-
 import 'package:logging/logging.dart';
 
 final _logger = Logger('barcodescan_screen');
@@ -9,26 +8,35 @@ final _logger = Logger('barcodescan_screen');
 class BarcodeScanScreen extends StatelessWidget {
   const BarcodeScanScreen({
     super.key,
+    required this.titleText,
     required this.formats,
   });
 
+  final String titleText;
   final List<BarcodeFormat> formats;
 
   static Route<ScanResult> route({
+    required String titleText,
     List<BarcodeFormat> formats = BarcodeFormat.any,
   }) =>
       MaterialPageRoute(
-        builder: (context) => BarcodeScanScreen(formats: formats),
+        builder: (context) => BarcodeScanScreen(
+          titleText: titleText,
+          formats: formats,
+        ),
       );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan QR Code.'),
+        title: Text(titleText),
       ),
       body: ReaderWidget(
         codeFormat: formats.toIntValue(),
+        scannerOverlay: const DynamicScannerOverlay(
+          cutOutSize: 0.8,
+        ),
         onScan: (result) {
           _logger.fine('scanned: $result');
           if (result.isValid) {

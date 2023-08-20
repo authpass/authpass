@@ -392,8 +392,12 @@ class _ShareCodeInputDialogState extends State<ShareCodeInputDialog>
           children: [
             TextButton.icon(
               onPressed: () async {
-                final result = await Navigator.of(context).push(
-                    BarcodeScanScreen.route(formats: [BarcodeFormat.qrCode]));
+                final loc = AppLocalizations.of(context);
+                final result =
+                    await Navigator.of(context).push(BarcodeScanScreen.route(
+                  titleText: loc.scanQrCodeTitle,
+                  formats: [BarcodeFormat.qrCode],
+                ));
                 if (result case ScanResultValid(barcode: final barcode)) {
                   _controller.text = barcode.text;
                   await _load();
