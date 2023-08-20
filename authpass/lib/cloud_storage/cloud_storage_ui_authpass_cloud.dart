@@ -1,6 +1,7 @@
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/ui/screens/barcodescan_screen.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/async/retry_future_builder.dart';
@@ -12,7 +13,6 @@ import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
-import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -392,11 +392,10 @@ class _ShareCodeInputDialogState extends State<ShareCodeInputDialog>
           children: [
             TextButton.icon(
               onPressed: () async {
-                final result = await barcode.BarcodeScanner.scan(
-                    options: const barcode.ScanOptions(
-                        restrictFormat: [barcode.BarcodeFormat.qr]));
-                if (result.type == barcode.ResultType.Barcode) {
-                  _controller.text = result.rawContent;
+                final result = await Navigator.of(context).push(
+                    BarcodeScanScreen.route(formats: [BarcodeFormat.qrCode]));
+                if (result case ScanResultValid(barcode: final barcode)) {
+                  _controller.text = barcode.text;
                   await _load();
                 }
               },

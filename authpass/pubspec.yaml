@@ -28,14 +28,7 @@ dependencies:
 
   synchronized: ^3.0.0
   base32: ^2.1.1
-#  file_picker: ^1.6.2
-  file_picker_writable: ^2.0.2-dev.1
-  #  file_picker_writable:
-#    path: /Users/herbert/dev/file_picker_writable
-#  file_picker_writable:
-#    git:
-#      url: https://github.com/hpoul/file_picker_writable.git
-#      ref: fc45c929361d9ace37e5f7b2fae756b98e85b223
+  file_picker_writable: ^2.1.0+1
   json_annotation: ^4.5.0
   freezed_annotation: ^2.0.3
   built_value: ^8.0.6
@@ -76,11 +69,9 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_speed_dial: ^7.0.0
   flutter_email_sender: ^6.0.1
-  flutter_store_listing: ^0.2.2
+  flutter_store_listing: ^0.3.0
 
-  biometric_storage: ^5.0.0+1
-#  biometric_storage:
-#    path: ../deps/biometric_storage
+  biometric_storage: ^5.0.0+2
   uuid: ^3.0.1
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0
@@ -150,9 +141,24 @@ dependencies:
 #    git:
 #      url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git
 #      ref: 85cfc7efee91c3444d24435486cf292a32f04499
-  barcode_scan2: ^4.1.3
-  open_file: ^3.2.1
-  flutter_windowmanager: ^0.2.0
+#  barcode_scan2: ^4.1.3
+  # https://github.com/khoren93/flutter_zxing/pull/104
+  flutter_zxing: ^1.3.0
+#  flutter_zxing:
+#    git:
+#      url: https://github.com/authpass/flutter_zxing.git
+#      ref: fff490f1944299ab4a9e6a5fced93ae8d8645c66
+  # https://github.com/crazecoder/open_file/pull/258
+#  open_file: ^3.2.1
+  open_file:
+    git:
+      url: https://github.com/kishormainali/open_file.git
+      ref: d74d15121ede2e5739df314cae2525a595f5cde0
+#  flutter_windowmanager: ^0.2.0
+  flutter_windowmanager:
+    git:
+      url: https://github.com/authpass/flutter_windowmanager.git
+      ref: 6f84b2edd3ef1760ffe4d96aec13317e4a252612
 
   mime: ^1.0.0
   ffi: ^2.1.0

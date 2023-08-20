@@ -120,8 +120,6 @@
                 android:value="Autofill with AuthPass" />
         </service>
 
-        <activity android:name="com.apptreesoftware.barcodescan.BarcodeScannerActivity"/>
-
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

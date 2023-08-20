@@ -13,11 +13,11 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -25,7 +25,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -35,6 +35,19 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(':app')
+    if (project.path == ":file_picker_writable" || project.path == ":flutter_email_sender") {
+        apply plugin: 'com.android.library'
+        apply plugin: 'kotlin-android'
+        kotlin {
+            jvmToolchain(17)
+        }
+    }
+    if (project.path == ":flutter_zxing") {
+        apply plugin: 'com.android.library'
+        android {
+            namespace "com.markosyan.flutter_zxing"
+        }
+    }
 }
 
 tasks.register("clean", Delete) {

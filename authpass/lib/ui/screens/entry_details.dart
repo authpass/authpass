@@ -12,6 +12,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/common_fields.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
+import 'package:authpass/ui/screens/barcodescan_screen.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/screens/entry_totp.dart';
 import 'package:authpass/ui/screens/group_list.dart';
@@ -33,7 +34,6 @@ import 'package:authpass/utils/password_generator.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/theme_utils.dart';
-import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -815,9 +815,14 @@ class _EntryDetailsState extends State<EntryDetails>
 //        final barcode = await FlutterBarcodeScanner.scanBarcode(
 //            '#ff6666', 'Cancel', true, ScanMode.QR);
 
-        final barcodeResult = await barcode.BarcodeScanner.scan();
-        if (barcodeResult.type == barcode.ResultType.Barcode) {
-          return cleanOtpCodeCode(barcodeResult.rawContent);
+        final barcodeResult =
+            await Navigator.of(context).push(BarcodeScanScreen.route(formats: [
+          BarcodeFormat.qrCode,
+          BarcodeFormat.microQRCode,
+        ]));
+
+        if (barcodeResult case ScanResultValid(barcode: final barcode)) {
+          return cleanOtpCodeCode(barcode.text);
         }
 
 //        final scanResult = await barcode.BarcodeScanner.scan();

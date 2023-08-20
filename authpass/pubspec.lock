@@ -135,14 +135,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  barcode_scan2:
-    dependency: "direct main"
-    description:
-      name: barcode_scan2
-      sha256: "0b0625d27841a21e36e896195d86b2aada335e3c486f63647cce701495718e16"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.4"
   base32:
     dependency: "direct main"
     description:
@@ -163,10 +155,10 @@ packages:
     dependency: "direct main"
     description:
       name: biometric_storage
-      sha256: ea5652e99efc9c6aa2ff4f08a70461915208f0547dd21d6caa9579c9a0835e00
+      sha256: fcba030b69e3a7effea1ca3c4c9829ba2dd1279c7bb573381247874720f5f1c0
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0+1"
+    version: "5.0.0+2"
   boolean_selector:
     dependency: transitive
     description:
@@ -271,6 +263,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  camera:
+    dependency: transitive
+    description:
+      name: camera
+      sha256: b4cede7c66f44fa476272d21bfe143d5f32e75de1ea56f737e3eaf982da23bab
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.5+3"
+  camera_android:
+    dependency: transitive
+    description:
+      name: camera_android
+      sha256: "61d62676708f187fb89fb14b371f87470343ba3cb26d08fc358e4f8a18e13150"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.8+6"
+  camera_avfoundation:
+    dependency: transitive
+    description:
+      name: camera_avfoundation
+      sha256: "332747f20cf911980e38c8442108102d4456752711781108fda237635baf362c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.13+3"
+  camera_platform_interface:
+    dependency: transitive
+    description:
+      name: camera_platform_interface
+      sha256: "60fa0bb62a4f3bf3a7c413e31e4cd01b69c779ccc8e4668904a24581b86c316b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.1"
+  camera_web:
+    dependency: transitive
+    description:
+      name: camera_web
+      sha256: "894df2a4e9ddd77ffecee9553d5980eeabb8bf09d98e53934859e67dc367933b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2+1"
   characters:
     dependency: transitive
     description:
@@ -315,10 +347,10 @@ packages:
     dependency: transitive
     description:
       name: cli_util
-      sha256: b8db3080e59b2503ca9e7922c3df2072cf13992354d5e944074ffa836fba43b7
+      sha256: "66f86e916d285c1a93d3b79587d94bd71984a66aac4ff74e524cfa7877f1395c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.3.5"
   clock:
     dependency: "direct main"
     description:
@@ -531,10 +563,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker_writable
-      sha256: "6baddc61674748992b30b82662afa92a8ebc5444b517dff59735acdb8f3844be"
+      sha256: bb7ad0ec8b7f0cc1df668538114319a5bcd6be506dce60a54b87ad64fbdbb6ab
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "2.1.0+1"
   file_selector:
     dependency: "direct main"
     description:
@@ -710,6 +742,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.17+1"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: "950e77c2bbe1692bc0874fc7fb491b96a4dc340457f4ea1641443d0a6c1ea360"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.15"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -722,10 +762,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_store_listing
-      sha256: "91ce6b9c28ad8cad44c3e5df8efb03c7e4405bbf96d0241f8e9257b3f73059bc"
+      sha256: "0459fef02fbf75a046270cd3b2d95f446962658b289082068b45e3f5a5baf101"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.2"
+    version: "0.3.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -763,11 +803,20 @@ packages:
   flutter_windowmanager:
     dependency: "direct main"
     description:
-      name: flutter_windowmanager
-      sha256: b4d0bc06f6777952b729c0cdb7ce9ad1ecabd8b8b1cb0acb57a36621457dab1b
+      path: "."
+      ref: "6f84b2edd3ef1760ffe4d96aec13317e4a252612"
+      resolved-ref: "6f84b2edd3ef1760ffe4d96aec13317e4a252612"
+      url: "https://github.com/authpass/flutter_windowmanager.git"
+    source: git
+    version: "0.3.0"
+  flutter_zxing:
+    dependency: "direct main"
+    description:
+      name: flutter_zxing
+      sha256: "84fd339d1cc4163591362b4c98f5c5300611290fe36637b1338de2127c2848dd"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "1.3.0"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -953,10 +1002,74 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
+      sha256: "8e9d133755c3e84c73288363e6343157c383a0c6c56fc51afcc5d4d7180306d6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.17"
+    version: "3.3.0"
+  image_picker:
+    dependency: transitive
+    description:
+      name: image_picker
+      sha256: "841837258e0b42c80946c43443054fc726f5e8aa84a97f363eb9ef0d45b33c14"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  image_picker_android:
+    dependency: transitive
+    description:
+      name: image_picker_android
+      sha256: "8179b54039b50eee561676232304f487602e2950ffb3e8995ed9034d6505ca34"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.7+4"
+  image_picker_for_web:
+    dependency: transitive
+    description:
+      name: image_picker_for_web
+      sha256: "8b6c160cdbe572199103a091c783685b236110e4a0fd7a4947f32ff5b7da8765"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  image_picker_ios:
+    dependency: transitive
+    description:
+      name: image_picker_ios
+      sha256: b3e2f21feb28b24dd73a35d7ad6e83f568337c70afab5eabac876e23803f264b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.8"
+  image_picker_linux:
+    dependency: transitive
+    description:
+      name: image_picker_linux
+      sha256: "02cbc21fe1706b97942b575966e5fbbeaac535e76deef70d3a242e4afb857831"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
+  image_picker_macos:
+    dependency: transitive
+    description:
+      name: image_picker_macos
+      sha256: cee2aa86c56780c13af2c77b5f2f72973464db204569e1ba2dd744459a065af4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
+  image_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: image_picker_platform_interface
+      sha256: c1134543ae2187e85299996d21c526b2f403854994026d575ae4cf30d7bb2a32
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.0"
+  image_picker_windows:
+    dependency: transitive
+    description:
+      name: image_picker_windows
+      sha256: c3066601ea42113922232c7b7b3330a2d86f029f685bba99d82c30e799914952
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -1134,10 +1247,10 @@ packages:
     dependency: "direct dev"
     description:
       name: msix
-      sha256: "76c87b8207323803169626a55afd78bbb8413c984df349a76598b9fbf9224677"
+      sha256: e3de4d9f52543ad6e4b0f534991e1303cbd379d24be28dd241ac60bd9439a201
       url: "https://pub.dev"
     source: hosted
-    version: "3.16.1"
+    version: "3.7.0"
   nested:
     dependency: transitive
     description:
@@ -1182,10 +1295,11 @@ packages:
   open_file:
     dependency: "direct main"
     description:
-      name: open_file
-      sha256: a5a32d44acb7c899987d0999e1e3cbb0a0f1adebbf41ac813ec6d2d8faa0af20
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: d74d15121ede2e5739df314cae2525a595f5cde0
+      resolved-ref: d74d15121ede2e5739df314cae2525a595f5cde0
+      url: "https://github.com/kishormainali/open_file.git"
+    source: git
     version: "3.3.2"
   openapi_base:
     dependency: "direct main"
