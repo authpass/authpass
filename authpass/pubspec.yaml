@@ -14,7 +14,7 @@ dependencies:
   kdbx: ^2.4.0
 #  kdbx:
 #    path: ../deps/kdbx.dart
-  argon2_ffi: ^1.0.0
+  argon2_ffi: ^1.0.0+1
   simple_form_field_validator: ^1.0.0
 #    git:
 #      url: https://github.com/hpoul/flutter_utils.git

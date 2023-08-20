@@ -9,7 +9,7 @@ if (System.getProperty("design.codeux.ndkVersion") == null) {
 println("ndkVersion: ${System.getProperty("design.codeux.ndkVersion")}")
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.8.10'
 
     repositories {
         google()
@@ -17,7 +17,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

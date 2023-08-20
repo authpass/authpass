@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: argon2_ffi
-      sha256: "7d3bc26ab6856f538038904e53140942b9f57fd8bb462313b3439c16f4fc8643"
+      sha256: "78137a38af5cc58e0e740d0131339d8ce88f1715cc7958883b12f8b0c656c61c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.0+1"
   argon2_ffi_base:
     dependency: transitive
     description:
@@ -126,7 +126,7 @@ packages:
       path: "../deps/autofill_service"
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.1.1"
   badges:
     dependency: "direct main"
     description:

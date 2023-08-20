@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="design.codeux.authpass">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- the following permission is required for samsung store.. no idea why though.
     https://stackoverflow.com/a/25907671/109219

@@ -37,6 +37,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace 'design.codeux.authpass'
     compileSdkVersion 33
 //    buildToolsVersion "29.0.2"
     ndkVersion System.getProperty("design.codeux.ndkVersion", "21.0.6113669")
