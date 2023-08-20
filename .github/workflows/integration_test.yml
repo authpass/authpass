@@ -11,13 +11,13 @@ jobs:
 
   drive_ios:
 
-    runs-on: macos-latest
+    runs-on: macos-13
 
     strategy:
       matrix:
         device:
 #          - "iPhone 8 (13.1)"
-          - "iPhone 12 Pro Max "
+          - "iPhone 14 Pro Max "
 
       fail-fast: true
 
