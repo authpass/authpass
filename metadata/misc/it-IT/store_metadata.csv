@@ -77,7 +77,7 @@ Questo è un progetto open source che è ancora in fase di intenso sviluppo per 
 Unisciti anche alla community nel nostro canale discord su https://authpass.app/go/discord
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","Password Manager, Password, Manage, Keystore, Keysafe,Keepass,Kdbx,webdav,icloud,nextcloud,onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
-
+"","","","",""
 "microsoft-store-windows","Tieni traccia di tutte le tue password in modo semplice e sicuro!
 
 AuthPass è un gestore di password standalone con supporto per il famoso e collaudato formato KeePass (kdbx 3. E kdbx 4.x 🎉). 

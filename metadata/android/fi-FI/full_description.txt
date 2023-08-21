@@ -1,16 +1,16 @@
-<p>Easily and securely keep track of all your Passwords!</p>
+<p>Pidä kirjaa kaikista salasanoistasi helposti ja turvallisesti!</p>
 
-<p>AuthPass is a stand alone password manager with support for the popular and proven Keepass (kdbx) format. 
-Store your passwords, share across all your devices and easily find them whenever you need to login.</p>
+<p>AuthPass on erillinen salasanojen hallintaohjelma, joka tukee suosittua ja hyväksi havaittua Keepass (kdbx) muotoa. 
+Tallenna salasanasi, jaa ne kaikkien laitteidesi kesken ja löydä ne helposti aina, kun sinun on kirjauduttava sisään.</p>
 
 <ul>
-<li>All your passwords in one place.<li>
-<li>Generate secure random passwords for each of your accounts.</li>
-<li>Quick Unlock secured with biometric lock (android only right now)</li>
-<li>Keep track of your accounts across the web.</li>
-<li>App available for Mac, iOS, Android, Linux and Windows.</li>
-<li>Open Source available on https://github.com/authpass/authpass/</li>
-<li>Contributions welcome and encouraged ;-) (Always looking for developers, translators, documentation writers, UI designer, etcc. :) ), just join our discord channel.</li>
+<li>Kaikki salasanasi yhdessä paikassa.<li>
+<li>Luo turvalliset satunnaiset salasanat jokaiselle tilillesi.</li>
+<li>Nopea lukitus suojattu biometrisellä lukolla (vain Android tällä hetkellä)</li>
+<li>Pidä kirjaa tileistäsi verkossa.</li>
+<li>Sovellus on saatavilla Macille, iOS:lle, Androidille, Linuxille ja Windowsille.</li>
+<li>Avoin lähdekoodi on saatavilla https://github.com/authpass/authpass/</li>
+<li>Lahjoitukset ovat tervetulleita ja kannustavia ;-) (Aina etsitään kehittäjiä, kääntäjiä, dokumenttien kirjoittajia, UI suunnittelijoita jne. :) ), joten liity meidän discord kanavallemme.</li>
 </ul>
 
-<p>Join our discord channel at https://authpass.app/go/discord - In case of any Problems, Feedback, etc. or just to hang out.</p>
+<p>Liity discord kanavallemme osoitteessa https://authpass.app/go/discord - Jos sinulla on sovelluksessa ongelmia, tai annat palautetta, jne. Tai haluat vain viettää aikaa.</p>

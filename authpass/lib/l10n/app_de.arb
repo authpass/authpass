@@ -1,1742 +1,1743 @@
 {
-    "@@locale": "de",
-    "fieldUserName": "Benutzer",
-    "@fieldUserName": {},
-    "fieldPassword": "Passwort",
-    "@fieldPassword": {},
-    "fieldWebsite": "Webseite",
-    "@fieldWebsite": {},
-    "fieldTitle": "Titel",
-    "@fieldTitle": {},
-    "fieldTotp": "Einmalpasswort (Zeitbasiert)",
-    "@fieldTotp": {
-        "description": "Label for fields of TOTP (Time based one time passwords)"
-    },
-    "english": "Englisch",
-    "@english": {
-        "description": "language switcher subtitle"
-    },
-    "german": "Deutsch",
-    "@german": {
-        "description": "language switcher subtitle"
-    },
-    "russian": "Russisch",
-    "@russian": {
-        "description": "language switcher subtitle"
-    },
-    "ukrainian": "Ukrainisch",
-    "@ukrainian": {
-        "description": "language switcher subtitle"
-    },
-    "lithuanian": "Litauisch",
-    "@lithuanian": {
-        "description": "language switcher subtitle"
-    },
-    "french": "Französisch",
-    "@french": {
-        "description": "language switcher subtitle"
-    },
-    "spanish": "Spanisch",
-    "@spanish": {
-        "description": "language switcher subtitle"
-    },
-    "indonesian": "Indonesisch",
-    "@indonesian": {
-        "description": "language switcher subtitle"
-    },
-    "turkish": "Türkisch",
-    "@turkish": {
-        "description": "Language switcher subtitle"
-    },
-    "hebrew": "Hebräisch",
-    "@hebrew": {
-        "description": "Language switcher subtitle"
-    },
-    "italian": "Italienisch",
-    "@italian": {
-        "description": "Language switcher subtitle"
-    },
-    "chineseSimplified": "Vereinfachtes Chinesisch",
-    "@chineseSimplified": {
-        "description": "Language switcher subtitle"
-    },
-    "chineseTraditional": "Traditionelles Chinesisch",
-    "@chineseTraditional": {
-        "description": "Language switcher subtitle"
-    },
-    "portugueseBrazilian": "Portugiesisch, Brasilianisch",
-    "@portugueseBrazilian": {
-        "description": "Language switcher subtitle"
-    },
-    "slovak": "Slowakisch",
-    "@slovak": {
-        "description": "Language switcher subtitle"
-    },
-    "dutch": "Niederländisch",
-    "@dutch": {
-        "description": "Language switcher subtitle"
-    },
-    "selectItem": "Auswählen",
-    "@selectItem": {
-        "description": "semantic label for checkboxes to select item."
-    },
-    "selectKeepassFile": "AuthPass - Wähle eine KeePass Datei",
-    "@selectKeepassFile": {
-        "context": "appbar title - select file screen"
-    },
-    "selectKeepassFileLabel": "Bitte wähle eine KeePass (.kdbx) Datei.",
-    "@selectKeepassFileLabel": {
-        "context": "select file screen, used as label."
-    },
-    "createNewFile": "Datei Erstellen",
-    "@createNewFile": {
-        "description": "button on select file screen to create a new password database."
-    },
-    "openLocalFile": "Öffne\nLokale Datei",
-    "@openLocalFile": {
-        "context": "select file screen, big button open local file."
-    },
-    "openFile": "Datei öffnen",
-    "@openFile": {
-        "description": "Displayed as placeholder in password list when no file is open."
-    },
-    "loadFromDropdownMenu": "Lade von …",
-    "@loadFromDropdownMenu": {
-        "description": "label for dropdown menu which shows more cloud storage options."
-    },
-    "quickUnlockingFiles": "Dateien schnell entsperren …",
-    "@quickUnlockingFiles": {
-        "description": "Status shown while we are loading files and trying to unlock them."
-    },
-    "openFileProgress": "Öffne {fileName} … ({current} / {totalCount})",
-    "@openFileProgress": {
-        "description": "Progress shown while files are loaded during quick unlock.",
-        "placeholders": {
-            "fileName": {
-                "description": "Name of the file that is currently loaded."
-            },
-            "current": {
-                "description": "The index/number of file currently loading."
-            },
-            "totalCount": {
-                "description": "Total number of files which are loading."
-            }
-        }
-    },
-    "loadFrom": "Lade von {cloudStorageName}",
-    "@loadFrom": {
-        "placeholders": {
-            "cloudStorageName": {
-                "type": "String",
-                "example": "Dropbox"
-            }
-        }
-    },
-    "loadFromRemoteUrl": "Lade von URL",
-    "@loadFromRemoteUrl": {
-        "description": "Overflow menu option to load KeePass file from URL."
-    },
-    "createNewKeepass": "KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen",
-    "@createNewKeepass": {
-        "description": "deprecated"
-    },
-    "labelLastOpenFiles": "Zuletzt geöffnete Dateien:",
-    "@labelLastOpenFiles": {},
-    "noFilesHaveBeenOpenYet": "Keine Dateien bisher geöffnet.",
-    "@noFilesHaveBeenOpenYet": {},
-    "preferenceSelectLanguage": "Sprache wählen",
-    "@preferenceSelectLanguage": {},
-    "preferenceLanguage": "Sprache",
-    "@preferenceLanguage": {},
-    "preferenceTextScaleFactor": "Text Skalierung",
-    "@preferenceTextScaleFactor": {},
-    "preferenceVisualDensity": "Visuelle Dichte",
-    "@preferenceVisualDensity": {},
-    "preferenceTheme": "Theme",
-    "@preferenceTheme": {},
-    "preferenceThemeLight": "Hell",
-    "@preferenceThemeLight": {},
-    "preferenceThemeDark": "Dunkel",
-    "@preferenceThemeDark": {},
-    "preferenceSystemDefault": "Geräte Standardeinstellung",
-    "@preferenceSystemDefault": {},
-    "preferenceDefault": "Standard",
-    "@preferenceDefault": {},
-    "lockAllFiles": "Alle offenen Dateien schließen",
-    "@lockAllFiles": {},
-    "preferenceAllowScreenshots": "Screenshots der App zulassen",
-    "@preferenceAllowScreenshots": {},
-    "preferenceEnableAutoFill": "Autofill aktivieren",
-    "@preferenceEnableAutoFill": {},
-    "enableAutofillSuggestionBanner": "Sie können das Feld einer anderen Anwendung ausfüllen, indem Sie Autofill aktivieren!",
-    "@enableAutofillSuggestionBanner": {
-        "description": "This text will shown as a banner on top of password list"
-    },
-    "dismissAutofillSuggestionBannerButton": "Schließen",
-    "@dismissAutofillSuggestionBannerButton": {
-        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
-    },
-    "enableAutofillSuggestionBannerButton": "Aktivieren!",
-    "@enableAutofillSuggestionBannerButton": {
-        "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
-    },
-    "preferenceAutoFillDescription": "Wird nur auf ab Android Oreo (8.0) unterstützt.",
-    "@preferenceAutoFillDescription": {},
-    "preferenceTitle": "Einstellungen",
-    "@preferenceTitle": {},
-    "preferenceEnableSystemWideShortcuts": "Aktiviere Systemweite Verknüpfungen",
-    "@preferenceEnableSystemWideShortcuts": {
-        "description": ""
-    },
-    "preferenceEnableSystemWideShortcutsHelp": "Registriert Strg+alt+f als systemweite Verknüpfung um die Suche zu öffnen.",
-    "@preferenceEnableSystemWideShortcutsHelp": {
-        "description": ""
-    },
-    "preferencesSearchFields": "Suchfelder anpassen",
-    "@preferencesSearchFields": {
-        "description": ""
-    },
-    "preferencesSearchFieldPromptTitle": "Suchfeld",
-    "@preferencesSearchFieldPromptTitle": {
-        "description": ""
-    },
-    "preferencesSearchFieldPromptLabel": "Kommagetrennte Liste von Feldern, die in der Passwortlistensuche verwendet werden sollen.",
-    "@preferencesSearchFieldPromptLabel": {
-        "description": ""
-    },
-    "preferencesSearchFieldPromptHelp": "Verwende {wildCardCharacter} für alle, lasse leer für Standard ({defaultSearchFields})",
-    "@preferencesSearchFieldPromptHelp": {
-        "description": "",
-        "placeholders": {
-            "wildCardCharacter": {},
-            "defaultSearchFields": {}
-        }
-    },
-    "aboutAppName": "AuthPass",
-    "@aboutAppName": {},
-    "aboutLinkFeedback": "Wir freuen uns über jede Art von Feedback!",
-    "@aboutLinkFeedback": {},
-    "aboutLinkVisitWebsite": "Besuchen Sie auch unsere Website",
-    "@aboutLinkVisitWebsite": {},
-    "aboutLinkGitHub": "Und Open Source Projekt",
-    "@aboutLinkGitHub": {},
-    "aboutLogFile": "Log-Datei: {logFilePath}",
-    "aboutLinkContributors": "Mitwirkende anzeigen",
-    "@aboutLinkContributors": {},
-    "@aboutLogFile": {
-        "placeholders": {
-            "logFilePath": {
-                "type": "String",
-                "example": "/Users/mustermann/log.txt"
-            }
-        }
-    },
-    "unableToLaunchUrlTitle": "Kann URL nicht öffnen",
-    "@unableToLaunchUrlTitle": {
-        "description": ""
-    },
-    "unableToLaunchUrlDescription": "Fehler beim öffnen von {url}: {openError}",
-    "@unableToLaunchUrlDescription": {
-        "description": "",
-        "placeholders": {
-            "url": {
-                "description": "URL which we tried to open."
-            },
-            "openError": {
-                "description": "Information about the error"
-            }
-        }
-    },
-    "unableToLaunchUrlNoHandler": "Keine App für die URL gefunden.",
-    "@unableToLaunchUrlNoHandler": {
-        "description": ""
-    },
-    "launchedUrl": "URL {url} geöffnet",
-    "@launchedUrl": {
-        "description": "snackbar confirmation after opening a url externally",
-        "placeholders": {
-            "url": {
-                "description": "URL which was just launched."
-            }
-        }
-    },
-    "menuItemGeneratePassword": "Passwort generieren",
-    "@menuItemGeneratePassword": {},
-    "menuItemPreferences": "Einstellungen",
-    "@menuItemPreferences": {},
-    "menuItemOpenAnotherFile": "Weitere Datei öffnen",
-    "@menuItemOpenAnotherFile": {},
-    "menuItemCheckForUpdates": "Nach Updates suchen",
-    "@menuItemCheckForUpdates": {},
-    "menuItemSupport": "Protokolle senden",
-    "@menuItemSupport": {},
-    "menuItemSupportSubtitle": "Protokolle per E-Mail senden",
-    "@menuItemSupportSubtitle": {},
-    "menuItemForum": "Support Forum",
-    "@menuItemForum": {},
-    "menuItemForumSubtitle": "Melde Probleme und erhalte Hilfe",
-    "@menuItemForumSubtitle": {},
-    "menuItemHelp": "Hilfe",
-    "@menuItemHelp": {},
-    "menuItemHelpSubtitle": "Dokumentation anzeigen",
-    "@menuItemHelpSubtitle": {},
-    "menuItemAbout": "Über AuthPass",
-    "@menuItemAbout": {},
-    "actionOpenUrl": "URL Öffnen",
-    "@actionOpenUrl": {
-        "description": "tooltip for button to open URL/Website of an entry."
-    },
-    "passwordPlainText": "Passwort anzeigen",
-    "@passwordPlainText": {
-        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
-    },
-    "generatorPassword": "Passwort",
-    "@generatorPassword": {
-        "description": "Label for generated password"
-    },
-    "generatePassword": "Passwort generieren",
-    "@generatePassword": {
-        "description": "screen title for password generator"
-    },
-    "doneButtonLabel": "Fertig",
-    "@doneButtonLabel": {
-        "description": "generic button label for 'Done' action."
-    },
-    "useAsDefault": "Als Standard speichern",
-    "@useAsDefault": {
-        "description": "Button Label for Password generator settings: use as defaults",
-        "context": "Password generator"
-    },
-    "characterSetLowerCase": "Kleinbuchstaben (a-z)",
-    "@characterSetLowerCase": {
-        "context": "Password generator"
-    },
-    "characterSetUpperCase": "Großbuchstaben (A-Z)",
-    "@characterSetUpperCase": {
-        "context": "Password generator"
-    },
-    "characterSetNumeric": "Ziffern (0-9)",
-    "@characterSetNumeric": {
-        "context": "Password generator"
-    },
-    "characterSetUmlauts": "Umlaute (äöü)",
-    "@characterSetUmlauts": {
-        "context": "Password generator"
-    },
-    "characterSetSpecial": "Sonderzeichen (@%+)",
-    "@characterSetSpecial": {
-        "context": "Password generator"
-    },
-    "length": "Länge",
-    "@length": {
-        "description": "Length of password",
-        "context": "Password generator"
-    },
-    "customLength": "Andere Länge",
-    "@customLength": {
-        "description": "Label for custom length field",
-        "context": "Password generator"
-    },
-    "customLengthHelperText": "Nur für > {customMinLength} verwendet",
-    "@customLengthHelperText": {
-        "description": "Help text for custom length field",
-        "context": "Password generator",
-        "placeholders": {
-            "customMinLength": {
-                "example": "40"
-            }
-        }
-    },
-    "savedFiles": "{numFiles, plural, =1 {Eine Datei gespeichert: {files}} other {{numFiles} Dateien gespeichert: {files}}}",
-    "@savedFiles": {
-        "description": "Message displayed when files were saved. (One or more).",
-        "context": "Password list",
-        "placeholders": {
-            "numFiles": {
-                "description": "Number of files that have been saved (at least 1)",
-                "type": "int",
-                "format": "compactLong"
-            },
-            "files": {
-                "description": "Comma separated list of vault names."
-            }
-        }
-    },
-    "manageGroups": "Gruppen verwalten",
-    "@manageGroups": {
-        "description": ""
-    },
-    "lockFiles": "Dateien sperren/schließen",
-    "@lockFiles": {
-        "description": "Close all files and return to start screen."
-    },
-    "searchHint": "Suchen",
-    "@searchHint": {
-        "description": "Placeholder in the password list search box"
-    },
-    "searchButtonLabel": "Suchen",
-    "@searchButtonLabel": {
-        "description": "search button tooltip/semantic label"
-    },
-    "filterButtonLabel": "Nach Gruppe filtern",
-    "@filterButtonLabel": {
-        "description": "tooltip/semantic label for filter app bar icon."
-    },
-    "clear": "Löschen",
-    "@clear": {
-        "description": "Remove existing group filter from password list"
-    },
-    "autofillFilterPrefix": "Filter:",
-    "@autofillFilterPrefix": {
-        "description": "Label displayed for android auto fill"
-    },
-    "autofillPrompt": "Wähle einen Passwort-Eintrag für Autofill.",
-    "@autofillPrompt": {
-        "description": ""
-    },
-    "copiedToClipboard": "In die Zwischenablage kopiert.",
-    "@copiedToClipboard": {
-        "description": "Snackbar text when copying text to clipboard."
-    },
-    "noTitle": "(kein Titel)",
-    "@noTitle": {
-        "description": "Text to display in place of a title, when password entry has no name assigned."
-    },
-    "noUsername": "(kein Benutzername)",
-    "@noUsername": {
-        "description": "Text to display in place of a user name in the password list if none is defined."
-    },
-    "filterCustomize": "Anpassen …",
-    "@filterCustomize": {
-        "description": "Customize filter in password list"
-    },
-    "swipeCopyPassword": "Passwort kopieren",
-    "@swipeCopyPassword": {
-        "description": "swipe action in password list to copy password"
-    },
-    "swipeCopyUsername": "Benutzername kopieren",
-    "@swipeCopyUsername": {
-        "description": "swipe action in password list to copy username"
-    },
-    "copyUsernameNotExists": "Eintrag hat keinen Benutzernamen.",
-    "@copyUsernameNotExists": {
-        "description": "Error message when trying to copy username from an entry which has none."
-    },
-    "copyPasswordNotExists": "Eintrag hat kein Passwort definiert.",
-    "@copyPasswordNotExists": {
-        "description": "Error message when trying to copy password from an entry which has none."
-    },
-    "doneCopiedPassword": "Passwort in die Zwischenablage kopiert.",
-    "@doneCopiedPassword": {
-        "description": "snackbar confirmation that password was copied."
-    },
-    "doneCopiedUsername": "Benutzername in die Zwischenablage kopiert.",
-    "@doneCopiedUsername": {
-        "description": "snackbar confirmation that username was copied."
-    },
-    "doneCopiedField": "Kopiert.",
-    "@doneCopiedField": {
-        "description": ""
-    },
-    "copiedFieldToClipboard": "{fieldName} kopiert.",
-    "@copiedFieldToClipboard": {
-        "description": "",
-        "placeholders": {
-            "fieldName": {}
-        }
-    },
-    "copiedFieldEmpty": "{fieldName} ist leer.",
-    "@copiedFieldEmpty": {
-        "description": "Displayed when user wants to copy a field which is empty or not defined.",
-        "placeholders": {
-            "fieldName": {}
-        }
-    },
-    "emptyPasswordVaultPlaceholder": "Du hast noch keine Passworter in deiner Datenbank.",
-    "@emptyPasswordVaultPlaceholder": {
-        "description": "Placeholder text shown when a user opens an empty password file."
-    },
-    "emptyPasswordVaultButtonLabel": "Erstelle dein erstes Passwort",
-    "@emptyPasswordVaultButtonLabel": {
-        "description": "Button shown under placeholder text when password database is empty"
-    },
-    "loading": "Wird geladen",
-    "@loading": {
-        "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
-    },
-    "loadingFile": "Datei wird geladen …",
-    "@loadingFile": {
-        "description": "credential screen while unlocking file."
-    },
-    "internalFile": "Interne Dateien",
-    "@internalFile": {
-        "description": "Choose a file previously created in AuthPass app sandbox",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "internalFileSubtitle": "Datenbank zuvor mit AuthPass erstellt",
-    "@internalFileSubtitle": {
-        "description": "Choose a file previously created in AuthPass app sandbox",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "filePicker": "File Picker",
-    "@filePicker": {
-        "description": "Choose a file with the system's file picker. (ios/android)",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "filePickerSubtitle": "Datei vom lokalen Gerät öffnen.",
-    "@filePickerSubtitle": {
-        "description": "Choose a file with the system's file picker. (ios/android)",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "credentialsAppBarTitle": "Entschlüsselung",
-    "@credentialsAppBarTitle": {
-        "description": "Credential screen to enter master password when opening kdbx file.",
-        "context": "credential screen"
-    },
-    "credentialLabel": "Passwort eingeben für:",
-    "@credentialLabel": {
-        "description": "Label for the file/database being opened",
-        "context": "credential screen"
-    },
-    "masterPasswordInputLabel": "Passwort",
-    "@masterPasswordInputLabel": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "masterPasswordEmptyValidator": "Bitte gib dein Passwort ein.",
-    "@masterPasswordEmptyValidator": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "masterPasswordIncorrectValidator": "Ungültiges Passwort",
-    "@masterPasswordIncorrectValidator": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "useKeyFile": "Schlüsseldatei verwenden",
-    "@useKeyFile": {
-        "description": "label for a key file in combination with mater password",
-        "context": "credential screen"
-    },
-    "saveMasterPasswordBiometric": "Passwort sicher speichern (mit biometrischen Schutz)?",
-    "@saveMasterPasswordBiometric": {
-        "description": "Label for the checkbox to save master password for quick unlock.",
-        "context": "credential screen"
-    },
-    "close": "Schließen",
-    "@close": {
-        "description": "Tooltip/semantic label for close button"
-    },
-    "addNewPassword": "Neues Passwort hinzufügen",
-    "@addNewPassword": {
-        "description": "Tooltip for adding new password button (floating action button)"
-    },
-    "errorOpenFileInvalidFileStructureTitle": "Es wurde versucht, einen ungültigen Dateityp zu öffnen",
-    "@errorOpenFileInvalidFileStructureTitle": {
-        "description": "Title of error dialog when trying to open an invalid/unsupported file type"
-    },
-    "errorOpenFileInvalidFileStructureBody": "Die Datei ({fileName}) scheint keine gültige KDBX-Datei zu sein. Bitte wählen Sie entweder eine gültige KDBX-Datei oder erstellen Sie eine neue Passwortdatenbank.",
-    "@errorOpenFileInvalidFileStructureBody": {
-        "description": "Body of error dialog when trying to open an invalid/unsupported file type",
-        "placeholders": {
-            "fileName": {}
-        }
-    },
-    "errorOpenFileAlreadyOpenTitle": "Datei schon geöffnet",
-    "@errorOpenFileAlreadyOpenTitle": {
-        "description": "Trying to open a database from a second file source which is already open.",
-        "context": "credential screen"
-    },
-    "errorOpenFileAlreadyOpenBody": "Die Datenbank {databaseName} ist bereits von {openFileSource} aus geöffnet. (Versuchte {newFileSource} zu öffnen)",
-    "@errorOpenFileAlreadyOpenBody": {
-        "description": "Trying to open a database from a second file source which is already open.",
-        "context": "credential screen",
-        "placeholders": {
-            "databaseName": {},
-            "openFileSource": {},
-            "newFileSource": {}
-        }
-    },
-    "loadFromUrl": "Von der url herunterladen",
-    "@loadFromUrl": {
-        "description": ""
-    },
-    "loadFromUrlEnterUrl": "URL eingeben",
-    "@loadFromUrlEnterUrl": {
-        "description": "label for input box to enter url."
-    },
-    "loadFromUrlErrorEnterFullUrl": "Bitte geben Sie die vollständige URL ein, beginnend mit http:// oder https://",
-    "@loadFromUrlErrorEnterFullUrl": {
-        "description": "validator error message when user does not enter a absolute url."
-    },
-    "loadFromUrlErrorInvalidUrl": "Bitte eine gültige URL eingeben.",
-    "@loadFromUrlErrorInvalidUrl": {
-        "description": "validator error message hwen user enters a url which could not be parsed."
-    },
-    "linuxAppArmorWarning": "AuthPass benötigt die Berechtigung, mit dem Geheimdienst zu kommunizieren, um Anmeldedaten für den Cloud-Speicher zu speichern.\nBitte führen Sie den folgenden Befehl aus:",
-    "@linuxAppArmorWarning": {
-        "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
-    },
-    "cancel": "Abbrechen",
-    "@cancel": {
-        "description": "button label for cancelling an action."
-    },
-    "errorLoadFileFromSourceTitle": "Fehler beim öffnen der Datei.",
-    "@errorLoadFileFromSourceTitle": {
-        "description": "error title when user selects a file which can't be downloaded."
-    },
-    "errorLoadFileFromSourceBody": "{source} konnte nicht geöffnet werden.\n{error}",
-    "@errorLoadFileFromSourceBody": {
-        "description": "error body when user selects a file which can't be downloaded.",
-        "placeholders": {
-            "source": {},
-            "error": {}
-        }
-    },
-    "errorUnlockFileTitle": "Datei kann nicht geöffnet werden",
-    "@errorUnlockFileTitle": {
-        "description": "generic error when opening a file (dialog title)",
-        "context": "credential screen"
-    },
-    "errorUnlockFileBody": "Unbekannter Fehler beim Öffnen der Datei. {error}",
-    "@errorUnlockFileBody": {
-        "description": "generic error when opening a file (description)",
-        "context": "credential screen",
-        "placeholders": {
-            "error": {
-                "description": "Error details."
-            }
-        }
-    },
-    "dialogContinue": "Weiter",
-    "@dialogContinue": {
-        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "dialogSendErrorReport": "Fehlerbericht senden",
-    "@dialogSendErrorReport": {
-        "description": "action button in error dialogs to send email to support with log file.",
-        "context": "error dialog"
-    },
-    "dialogReportErrorForum": "Fehler im Forum melden/Hilfe",
-    "@dialogReportErrorForum": {
-        "description": "action button in error dialog to open forum and create new topic."
-    },
-    "groupFilterDescription": "Wähle Gruppen die (rekursiv) angezeigt werden sollen",
-    "@groupFilterDescription": {
-        "description": "Description shown in the group list for filtering (e.g. app drawer)",
-        "context": "group filter"
-    },
-    "groupFilterSelectAll": "Alles auswählen",
-    "@groupFilterSelectAll": {
-        "context": "group filter"
-    },
-    "groupFilterDeselectAll": "Auswahl aufheben",
-    "@groupFilterDeselectAll": {
-        "context": "group filter"
-    },
-    "createSubgroup": "Untergruppe erstellen",
-    "@createSubgroup": {
-        "description": "menu action: create nested group inside another group"
-    },
-    "editAction": "Bearbeiten",
-    "@editAction": {
-        "description": "menu action: edit item (e.g. delete a group)"
-    },
-    "mailboxEnableLabel": "(erneut) aktivieren",
-    "@mailboxEnableLabel": {
-        "description": ""
-    },
-    "mailboxEnableHint": "E-Mails weiterhin empfangen",
-    "@mailboxEnableHint": {
-        "description": ""
-    },
-    "mailboxDisableLabel": "Deaktivieren",
-    "@mailboxDisableLabel": {
-        "description": ""
-    },
-    "mailboxDisableHint": "Keine weiteren E-Mails empfangen",
-    "@mailboxDisableHint": {
-        "description": ""
-    },
-    "mailListNoMail": "Sie haben noch keine Emails erhalten.",
-    "@mailListNoMail": {
-        "description": ""
-    },
-    "mailboxLabelPrefixForEntry": "Eintrag: {entryLabel}",
-    "@mailboxLabelPrefixForEntry": {
-        "description": "when a mailbox was created for a (password) entry.",
-        "placeholders": {
-            "entryLabel": {
-                "description": "The label of the entry this mailbox was created for"
-            }
-        }
-    },
-    "mailboxLabelPrefixUnknownEntry": "Unbekannter Eintrag: {entryUuid}",
-    "@mailboxLabelPrefixUnknownEntry": {
-        "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
-        "placeholders": {
-            "entryUuid": {
-                "description": "The internal id of the entry which was no tfound"
-            }
-        }
-    },
-    "mailboxLabelPrefixCreatedAt": "Erstellt am: {dateTime}",
-    "@mailboxLabelPrefixCreatedAt": {
-        "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
-        "placeholders": {
-            "dateTime": {}
-        }
-    },
-    "masterPasswordDescription": "Das Master-Passwort wird verwendet, um Ihre Passwortdatenbank sicher zu verschlüsseln. Denken Sie daran, bei Verlust ihres Master-Passwort können ihre Daten nicht wiederhergestellt werden.",
-    "@masterPasswordDescription": {
-        "description": ""
-    },
-    "unsavedChangesWarningTitle": "Nicht gespeicherte Änderungen",
-    "@unsavedChangesWarningTitle": {
-        "description": ""
-    },
-    "unsavedChangesWarningBody": "Es gibt noch ungespeicherte Änderungen. Möchten Sie die Änderungen verwerfen?",
-    "@unsavedChangesWarningBody": {
-        "description": ""
-    },
-    "unsavedChangesDiscardActionLabel": "Änderungen verwerfen",
-    "@unsavedChangesDiscardActionLabel": {
-        "description": ""
-    },
-    "deletePermanentlyAction": "Dauerhaft löschen",
-    "@deletePermanentlyAction": {
-        "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
-    },
-    "restoreFromRecycleBinAction": "Wiederherstellen",
-    "@restoreFromRecycleBinAction": {
-        "description": "menu action: restore an entry/group which was moved into the recycle bin."
-    },
-    "deleteAction": "Löschen",
-    "@deleteAction": {
-        "description": "menu action: delete item (e.g. delete a group)"
-    },
-    "deletedEntry": "Eintrag gelöscht.",
-    "@deletedEntry": {
-        "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
-    },
-    "successfullyDeletedGroup": "Gruppe gelöscht.",
-    "@successfullyDeletedGroup": {
-        "description": "snackbar after deleting a group."
-    },
-    "undoButtonLabel": "Rückgängig",
-    "@undoButtonLabel": {
-        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
-    },
-    "saveButtonLabel": "Speichern",
-    "@saveButtonLabel": {
-        "description": "save file, for example button displayed in entry details"
-    },
-    "webDavSettings": "WebDAV Einstellungen",
-    "@webDavSettings": {
-        "description": "dialog title for entering WebDAV settings."
-    },
-    "webDavUrlLabel": "URL",
-    "@webDavUrlLabel": {
-        "description": ""
-    },
-    "webDavUrlHelperText": "Basis-URL zu Ihrem WebDAV-Service.",
-    "@webDavUrlHelperText": {
-        "description": ""
-    },
-    "webDavUrlValidatorError": "Bitte eine URL eingeben",
-    "@webDavUrlValidatorError": {
-        "description": ""
-    },
-    "webDavUrlValidatorInvalidUrlError": "Bitte geben Sie eine gültige URL mit http:// oder https:// ein",
-    "@webDavUrlValidatorInvalidUrlError": {
-        "description": ""
-    },
-    "webDavAuthUser": "Benutzername",
-    "@webDavAuthUser": {
-        "description": ""
-    },
-    "webDavAuthPassword": "Passwort",
-    "@webDavAuthPassword": {
-        "description": ""
-    },
-    "mergeSuccessDialogTitle": "Passwortdatenbank erfolgreich verbunden",
-    "@mergeSuccessDialogTitle": {
-        "description": ""
-    },
-    "mergeSuccessDialogMessage": "Konflikt beim Speichern von {fileName} erkannt, wurde erfolgreich mit der entfernten Datei verbunden: \n\n{mergeSummary}",
-    "@mergeSuccessDialogMessage": {
-        "description": "",
-        "placeholders": {
-            "fileName": {},
-            "mergeSummary": {}
-        }
-    },
-    "forDetailsVisitUrl": "Für weitere Informationen besuchen Sie {url}",
-    "@forDetailsVisitUrl": {
-        "description": "",
-        "placeholders": {
-            "url": {}
-        }
-    },
-    "authPassCloudAuthEmailInputLabel": "Geben Sie die E-Mail-Adresse ein, um sich zu registrieren oder anzumelden.",
-    "@authPassCloudAuthEmailInputLabel": {
-        "description": ""
-    },
-    "authPassCloudAuthEmailInvalid": "Bitte geben sie ein gültige Email-Adresse an.",
-    "@authPassCloudAuthEmailInvalid": {
-        "description": ""
-    },
-    "authPassCloudAuthConfirmEmailButtonLabel": "Adresse Bestätigen",
-    "@authPassCloudAuthConfirmEmailButtonLabel": {
-        "description": ""
-    },
-    "authPassCloudAuthConfirmEmail": "Bitte überprüfen sie ihre Email-Adresse um diese zu bestätigen.",
-    "@authPassCloudAuthConfirmEmail": {
-        "description": ""
-    },
-    "authPassCloudAuthConfirmEmailExplain": "Bitte schließen Sie nicht diese Seite bevor Sie denn Link geöffnet haben den wir ihnen per Email geschickt haben.",
-    "@authPassCloudAuthConfirmEmailExplain": {
-        "description": ""
-    },
-    "authPassCloudAuthResendExplain": "Falls sie noch keine Email von uns geschickt bekommen haben, dann kontrollieren Sie ihren Spam Ordner. Andernfalls können sie versuchen einen neuen Bestätigungslink anzufordern.",
-    "@authPassCloudAuthResendExplain": {
-        "description": ""
-    },
-    "authPassCloudAuthResendButtonLabel": "Einen neuen Bestätigungslink anfordern",
-    "@authPassCloudAuthResendButtonLabel": {
-        "description": ""
-    },
-    "permanentlyDeleteEntryConfirm": "Das führt zur permanenten Löschung des Passwordeintrag {title}. Dies kann nicht Rückgänging gemacht werden. Wollen sie trotzdem fortfahren?",
-    "@permanentlyDeleteEntryConfirm": {
-        "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
-        "placeholders": {
-            "title": {}
-        }
-    },
-    "permanentlyDeletedEntrySnackBar": "Eintrag würde gelöscht.",
-    "@permanentlyDeletedEntrySnackBar": {
-        "description": "snackbar confirming that the entry was deleted."
-    },
-    "initialNewGroupName": "Neue Gruppe",
-    "@initialNewGroupName": {
-        "description": "initial name of groups when user creates a new one."
-    },
-    "deleteGroupErrorTitle": "Gruppe kann nicht gelöscht werden",
-    "@deleteGroupErrorTitle": {
-        "description": "Title of error dialog when group could not be deleted."
-    },
-    "deleteGroupErrorBodyContainsGroup": "Diese Gruppe enthält noch andere Gruppen. Sie können derzeit nur leere Gruppen löschen.",
-    "@deleteGroupErrorBodyContainsGroup": {
-        "description": "Body of error dialog when a group can't be deleted because it is not empty."
-    },
-    "deleteGroupErrorBodyContainsEntries": "Diese Gruppe enthält noch Passwort-Einträge. Sie können derzeit nur leere Gruppen löschen.",
-    "@deleteGroupErrorBodyContainsEntries": {
-        "description": "Body of error dialog when a group can't be deleted because it is not empty."
-    },
-    "groupListAppBarTitle": "Gruppen",
-    "@groupListAppBarTitle": {
-        "description": "title in the app bar for the groups list"
-    },
-    "groupListFilterAppbarTitle": "Nach Gruppen filtern",
-    "@groupListFilterAppbarTitle": {
-        "description": "title in the app bar for group lists when displayed for filtering password list"
-    },
-    "clearQuickUnlock": "Biometrischen Speicher löschen",
-    "@clearQuickUnlock": {
-        "description": ""
-    },
-    "clearQuickUnlockSubtitle": "Lösche gespeicherte master Passwörter",
-    "@clearQuickUnlockSubtitle": {
-        "description": ""
-    },
-    "unlock": "Dateien entsperren",
-    "@unlock": {
-        "description": ""
-    },
-    "closePasswordFiles": "schliesse Passwortdateien",
-    "@closePasswordFiles": {
-        "description": "delete quick unlock (passwords stored in biometric storage)"
-    },
-    "clearQuickUnlockSuccess": "Lösche gespeicherte master Passwörter vom biometrischen Speicher.",
-    "@clearQuickUnlockSuccess": {
-        "description": ""
-    },
-    "diacOptIn": "In-App Neuigkeiten und Umfragen erhalten.",
-    "@diacOptIn": {},
-    "diacOptInSubtitle": "Kann gelegentlich Internetanfragen um Neuigkeiten zu sammeln verursachen.",
-    "@diacOptInSubtitle": {},
-    "enableAutofillDebug": "AutoFill: Debugging aktivieren",
-    "@enableAutofillDebug": {
-        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
-    },
-    "enableAutofillDebugSubtitle": "Zeigt informationen für jedes Eingabefeld in einem overlay",
-    "@enableAutofillDebugSubtitle": {
-        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
-    },
-    "createPasswordDatabase": "Erstelle Passwort Datenbank",
-    "@createPasswordDatabase": {
-        "description": ""
-    },
-    "nameNewPasswordDatabase": "Name der neuen Datenbank",
-    "@nameNewPasswordDatabase": {
-        "description": "creating new kdbx file, prompt"
-    },
-    "validatorNameMissing": "Bitte gib den namen der neuen Datenbank an",
-    "@validatorNameMissing": {
-        "description": "Error message when no password database name is given."
-    },
-    "masterPasswordHelpText": "Gib ein sicheres master Passwort an.",
-    "@masterPasswordHelpText": {
-        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
-    },
-    "inputMasterPasswordText": "Master Passwort",
-    "@inputMasterPasswordText": {
-        "description": "Creating new file: input field for master password"
-    },
-    "masterPasswordMissingCreate": "Bitte gib ein sicheres Passwort an.",
-    "@masterPasswordMissingCreate": {
-        "description": "Text displayed when master password is empty while creating new password database"
-    },
-    "createDatabaseAction": "Erstelle Datenbank",
-    "@createDatabaseAction": {
-        "description": "Label for button to create new database"
-    },
-    "databaseExistsError": "Datei exisiert bereits",
-    "@databaseExistsError": {
-        "description": "dialog title for error message when creating a new database with a name which already exists."
-    },
-    "databaseExistsErrorDescription": "Fehler beim versuch die Datenbank zu erstellen: {filePath}. Die Datei exisitert bereits. Bitte wähle einen anderen Namen.",
-    "@databaseExistsErrorDescription": {
-        "description": "dialog body for error message when creating a new database with a name which already exists.",
-        "placeholders": {
-            "filePath": {
-                "description": "file path which already existed."
-            }
-        }
-    },
-    "databaseCreateDefaultName": "PersönlichePasswörter",
-    "@databaseCreateDefaultName": {
-        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
-    },
-    "preferenceDynamicLoadIcons": "Dynamisch Website icons laden",
-    "@preferenceDynamicLoadIcons": {
-        "description": "preferences: dynamically load website icons"
-    },
-    "preferenceDynamicLoadIconsSubtitle": "Macht abfragen auf {urlFieldName} um Dynamisch Icons zu suchen.",
-    "@preferenceDynamicLoadIconsSubtitle": {
-        "description": "preferences: dynamically load website icons help text.",
-        "placeholders": {
-            "urlFieldName": {
-                "example": "Website"
-            }
-        }
-    },
-    "passwordScore": "Stärke: {score} von 4",
-    "@passwordScore": {
-        "description": "choosing a master password - calculated password strength.",
-        "placeholders": {
-            "score": {
-                "description": "integer of the score.",
-                "example": "3"
-            }
-        }
-    },
-    "entryInfoFile": "Datei:",
-    "@entryInfoFile": {
-        "description": ""
-    },
-    "entryInfoGroup": "Gruppe:",
-    "@entryInfoGroup": {
-        "description": ""
-    },
-    "entryInfoLastModified": "Letzte Änderung:",
-    "@entryInfoLastModified": {
-        "description": ""
-    },
-    "movedEntryToGroup": "Eintrag verschoben nach {groupName}",
-    "@movedEntryToGroup": {
-        "description": "",
-        "placeholders": {
-            "groupName": {
-                "description": "Name of the group the entry was moved to."
-            }
-        }
-    },
-    "sizeBytesStoredAuthPassCloud": "{count} Bytes, in der AuthPass Cloud gespeichert",
-    "@sizeBytesStoredAuthPassCloud": {
-        "description": "",
-        "placeholders": {
-            "count": {
-                "description": "file size in bytes",
-                "example": "123"
-            }
-        }
-    },
-    "sizeBytes": "{count} Bytes",
-    "@sizeBytes": {
-        "description": "",
-        "placeholders": {
-            "count": {
-                "description": "file size in bytes",
-                "example": "123"
-            }
-        }
-    },
-    "entryAddAttachment": "Anhang anfügen",
-    "@entryAddAttachment": {
-        "description": ""
-    },
-    "entryAttachmentSizeWarning": "Anhänge werden in der Passwort Datei gespeichert. Dies kann die Zeit zum öffnen der Passwörter stark erhöhen!",
-    "@entryAttachmentSizeWarning": {
-        "description": ""
-    },
-    "iconPngSizeWarning": "Benutzerdefinierte Symbole werden in die Passwortdatei gespeichert. Dies kann die Zeit zum Öffnen und Speichern von Passwörtern erheblich erhöhen.",
-    "@iconPngSizeWarning": {
-        "description": "Warning shown when user selects a large png file as custom icon."
-    },
-    "notPngError": "Die gewählte Datei ist kein PNG.",
-    "@notPngError": {
-        "description": "Error when user selects an unsupported file as custom icon."
-    },
-    "entryAddField": "Feld hinzufügen",
-    "@entryAddField": {
-        "description": ""
-    },
-    "entryCustomField": "Benutzerdefiniertes Feld",
-    "@entryCustomField": {
-        "description": ""
-    },
-    "entryCustomFieldTitle": "Füge neues Benutzerdefiniertes Feld hinzu",
-    "@entryCustomFieldTitle": {
-        "description": ""
-    },
-    "entryCustomFieldInputLabel": "Namen für Feld eingeben",
-    "@entryCustomFieldInputLabel": {
-        "description": ""
-    },
-    "swipeCopyField": "Feld kopieren",
-    "@swipeCopyField": {
-        "description": ""
-    },
-    "fieldRename": "Umbenennen",
-    "@fieldRename": {
-        "description": ""
-    },
-    "fieldGeneratePassword": "Passwort generieren …",
-    "@fieldGeneratePassword": {
-        "description": ""
-    },
-    "fieldProtect": "Geschützter Wert",
-    "@fieldProtect": {
-        "description": ""
-    },
-    "fieldUnprotect": "Ungeschützter Wert",
-    "@fieldUnprotect": {
-        "description": ""
-    },
-    "fieldPresent": "Präsentieren",
-    "@fieldPresent": {
-        "description": ""
-    },
-    "fieldGenerateEmail": "Email generieren",
-    "@fieldGenerateEmail": {
-        "description": ""
-    },
-    "onboardingBackToOnboarding": "Führung",
-    "@onboardingBackToOnboarding": {
-        "description": "Context menu entry which reverts to onboarding"
-    },
-    "onboardingBackToOnboardingSubtitle": "App tour neu erleben 😅️",
-    "@onboardingBackToOnboardingSubtitle": {
-        "description": "Context menu entry which reverts to onboarding"
-    },
-    "onboardingHeadline": "Lass uns deine Passwörter sicher machen!",
-    "@onboardingHeadline": {
-        "description": ""
-    },
-    "onboardingQuestion": "Hast du schon einen Passwort Manager benutzt?",
-    "@onboardingQuestion": {
-        "description": ""
-    },
-    "onboardingYesOpenPasswords": "Ja, öffne meine Passwörter",
-    "@onboardingYesOpenPasswords": {
-        "description": ""
-    },
-    "onboardingNoCreate": "Ich bin neu. Lass uns loslegen!",
-    "@onboardingNoCreate": {
-        "description": ""
-    },
-    "backupButton": "IN DER CLOUD SPEICHERN",
-    "@backupButton": {
-        "description": "Button that is displayed in backup warnings"
-    },
-    "dismissBackupButton": "Schließen",
-    "@dismissBackupButton": {
-        "description": "Button that is displayed in backup warnings to dismiss the warning"
-    },
-    "backupWarningMessage": "Ihre Passwörter in {databasename} sind nur lokal gespeichert!",
-    "@backupWarningMessage": {
-        "description": "Warning message that is displayed in backup warnings",
-        "placeholders": {
-            "databasename": {
-                "example": "PasswordDatabase"
-            }
-        }
-    },
-    "saveAs": "Speichern in...",
-    "@saveAs": {
-        "description": "Save as text"
-    },
-    "saving": "Speichere",
-    "@saving": {
-        "description": "Saving text"
-    },
-    "increaseValue": "Vergrößern",
-    "@increaseValue": {
-        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
-    },
-    "decreaseValue": "Verkleinern",
-    "@decreaseValue": {
-        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
-    },
-    "resetValue": "Zurücksetzen",
-    "@resetValue": {
-        "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
-    },
-    "cloudStorageAppBarTitle": "Cloud-Speicher - {cloudStorageName}",
-    "@cloudStorageAppBarTitle": {
-        "description": "app bar title for opening/saving to cloud storage.",
-        "placeholders": {
-            "cloudStorageName": {
-                "example": "Dropbox"
-            }
-        }
-    },
-    "cloudStorageLogInCaption": "Sie werden weitergeleitet, um AuthPass zu authentifizieren, um auf Ihre Daten zuzugreifen.",
-    "@cloudStorageLogInCaption": {
-        "description": ""
-    },
-    "cloudStorageLogInCode": "Code eingeben",
-    "@cloudStorageLogInCode": {
-        "description": "for oauth authentication user has to enter auth code - this is the label for the text field."
-    },
-    "launchUrlError": "Url kann nicht gestartet werden. Bitte besuchen Sie {url}",
-    "@launchUrlError": {
-        "description": "",
-        "placeholders": {
-            "url": {}
-        }
-    },
-    "cloudStorageLogInActionLabel": "Anmelden bei {cloudStorageName}",
-    "@cloudStorageLogInActionLabel": {
-        "description": "when the user has not authenticated yet, he will see this button to start the login flow of a cloud storage backend.",
-        "placeholders": {
-            "cloudStorageName": {
-                "example": "Dropbox"
-            }
-        }
-    },
-    "cloudStorageAuthCodeDialogTitle": "{cloudStorageName} Authentifizierung",
-    "@cloudStorageAuthCodeDialogTitle": {
-        "description": "",
-        "placeholders": {
-            "cloudStorageName": {
-                "example": "Dropbox"
-            }
-        }
-    },
-    "cloudStorageAuthCodeLabel": "Authentifizierungs-Code",
-    "@cloudStorageAuthCodeLabel": {
-        "description": ""
-    },
-    "cloudStorageAuthErrorTitle": "Fehler während der Authentifizierung",
-    "@cloudStorageAuthErrorTitle": {
-        "description": ""
-    },
-    "cloudStorageAuthErrorMessage": "Fehler beim Versuch, sich bei {cloudStorageName} zu authentifizieren: {errorMessage}",
-    "@cloudStorageAuthErrorMessage": {
-        "description": "",
-        "placeholders": {
-            "cloudStorageName": {
-                "example": "Dropbox"
-            },
-            "errorMessage": {}
-        }
-    },
-    "cloudStorageSearchBoxLabel": "Suchanfrage",
-    "@cloudStorageSearchBoxLabel": {
-        "description": ""
-    },
-    "cloudStorageItemsInFolder": "{itemCount} Einträge in diesem Ordner.",
-    "@cloudStorageItemsInFolder": {
-        "description": "",
-        "placeholders": {
-            "itemCount": {}
-        }
-    },
-    "mailSubject": "Betreff",
-    "@mailSubject": {
-        "description": ""
-    },
-    "mailFrom": "Von",
-    "@mailFrom": {
-        "description": ""
-    },
-    "mailDate": "Datum",
-    "@mailDate": {
-        "description": ""
-    },
-    "mailMailbox": "Postfach",
-    "@mailMailbox": {
-        "description": ""
-    },
-    "mailNoData": "Keine Daten",
-    "@mailNoData": {
-        "description": "Message shown when email text body is empty (or can't be decoded)"
-    },
-    "mailMailboxesTitle": "Postfächer",
-    "@mailMailboxesTitle": {
-        "description": "Title of the screen showing all available mailboxes."
-    },
-    "mailboxCreateButtonLabel": "Erstellen",
-    "@mailboxCreateButtonLabel": {
-        "description": "FAB label to create a new mailbox."
-    },
-    "mailboxNameInputDialogTitle": "Optionale Bezeichnung für neue Postfach",
-    "@mailboxNameInputDialogTitle": {
-        "description": "title of the dialog asking for a mailbox label/name"
-    },
-    "mailboxNameInputLabel": "(interne) Bezeichnung",
-    "@mailboxNameInputLabel": {
-        "description": "Label for the text field asking for a label for a mailbox, while creating it."
-    },
-    "mailScreenTitle": "AuthPass E-Mail",
-    "@mailScreenTitle": {
-        "description": "title for the screen showing available emails"
-    },
-    "mailTabBarTitleMailbox": "Postfach",
-    "@mailTabBarTitleMailbox": {
-        "description": "title for the tab showing list of mailboxes."
-    },
-    "mailTabBarTitleMail": "E-Mail",
-    "@mailTabBarTitleMail": {
-        "description": "title for the tab showing list of mails."
-    },
-    "mailMailboxListEmpty": "Sie haben noch keine Postfächer.",
-    "@mailMailboxListEmpty": {
-        "description": ""
-    },
-    "mailMailboxAddressCopied": "Mailbox-Adresse wurde in die Zwischenablage kopiert: {mailboxAddress}",
-    "@mailMailboxAddressCopied": {
-        "description": "Success message when mailbox email address was copied to clipboard.",
-        "placeholders": {
-            "mailboxAddress": {
-                "example": "dkasdfiasdfi@mail.authpass.app"
-            }
-        }
-    },
-    "errorWhileSavingTitle": "Fehler beim Speichern",
-    "@errorWhileSavingTitle": {
-        "description": "title for error dialog shown when an error occurs while saving"
-    },
-    "errorWhileSavingBody": "Datei konnte nicht gespeichert werden: {errorMessage}",
-    "@errorWhileSavingBody": {
-        "description": "",
-        "placeholders": {
-            "errorMessage": {}
-        }
-    },
-    "databaseDoesNotSupportSaving": "Entschuldigung, diese Datenbank unterstützt das Speichern nicht. Bitte öffnen Sie eine lokale Datenbankdatei. Oder verwenden Sie \"Speichern unter\".",
-    "@databaseDoesNotSupportSaving": {
-        "description": "keepass files loaded through a URL can't be saved."
-    },
-    "otpInvalidKeyTitle": "Ungültiger Schlüssel",
-    "@otpInvalidKeyTitle": {
-        "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
-    },
-    "otpInvalidKeyBody": "Die angegebene Eingabe ist kein gültiger Base32 TOTP-Code. Bitte überprüfen Sie Ihre Eingabe.",
-    "@otpInvalidKeyBody": {
-        "description": ""
-    },
-    "otpPromptTitle": "Zeitbasierte Authentifizierung",
-    "@otpPromptTitle": {
-        "description": ""
-    },
-    "otpPromptHelperText": "Bitte geben Sie einen zeitbasierten Schlüssel ein.",
-    "@otpPromptHelperText": {
-        "description": ""
-    },
-    "otpErrorMessageGeneration": "Fehler beim Generieren des Einladungscodes: {errorMessage}",
-    "@otpErrorMessageGeneration": {
-        "description": "",
-        "placeholders": {
-            "errorMessage": {}
-        }
-    },
-    "otpCopySecretActionLabel": "Geheimnis kopieren",
-    "@otpCopySecretActionLabel": {
-        "description": ""
-    },
-    "otpEntryLabel": "Einmal-Token",
-    "@otpEntryLabel": {
-        "description": "The label for entries which show a one time token for a TOTP"
-    },
-    "entryFieldProtected": "Geschütztes Feld. Klicken, um zu enthüllen.",
-    "@entryFieldProtected": {
-        "description": ""
-    },
-    "entryFieldActionRevealField": "Geschütztes Feld anzeigen",
-    "@entryFieldActionRevealField": {
-        "description": ""
-    },
-    "entryAttachmentOpenActionLabel": "Öffnen",
-    "@entryAttachmentOpenActionLabel": {
-        "description": ""
-    },
-    "entryAttachmentShareActionLabel": "Teilen",
-    "@entryAttachmentShareActionLabel": {
-        "description": ""
-    },
-    "entryAttachmentShareSubject": "Anhang",
-    "@entryAttachmentShareSubject": {
-        "description": "the 'subject' passed to the system when sharing an attachment. "
-    },
-    "entryAttachmentSaveActionLabel": "Auf Gerät speichern",
-    "@entryAttachmentSaveActionLabel": {
-        "description": ""
-    },
-    "entryAttachmentRemoveActionLabel": "Entfernen",
-    "@entryAttachmentRemoveActionLabel": {
-        "description": ""
-    },
-    "entryAttachmentRemoveConfirm": "Wollen Sie {attachmentLabel} wirklich löschen?",
-    "@entryAttachmentRemoveConfirm": {
-        "description": "",
-        "placeholders": {
-            "attachmentLabel": {}
-        }
-    },
-    "entryRenameFieldPromptTitle": "Feld umbenennen",
-    "@entryRenameFieldPromptTitle": {
-        "description": ""
-    },
-    "removerecentfile": "Verstecken",
-    "@removerecentfile": {
-        "description": ""
-    },
-    "entryRenameFieldPromptLabel": "Neuen Namen für das Feld eingeben",
-    "@entryRenameFieldPromptLabel": {
-        "description": ""
-    },
-    "promptDialogPasteActionTooltip": "Einfügen von der Zwischenablage",
-    "@promptDialogPasteActionTooltip": {
-        "description": ""
-    },
-    "promptDialogPasteHint": "Hinweis: Wenn sie etwas einfügen wollen, versuchen sie den Knopf zu ihrer linken ;-)",
-    "@promptDialogPasteHint": {
-        "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
-    },
-    "genericErrorDialogTitle": "Fehler beim ausführen der Aktion",
-    "@genericErrorDialogTitle": {
-        "description": ""
-    },
-    "genericErrorDialogBody": "Es ist ein unerwarteter Fehler aufgetreten. {errorMessage}",
-    "@genericErrorDialogBody": {
-        "description": "",
-        "placeholders": {
-            "errorMessage": {}
-        }
-    },
-    "saveAsEntryLocalFile": "Speichern als Lokale Datei",
-    "@saveAsEntryLocalFile": {
-        "description": "menu entry in the 'save as' dialog for saving as local file."
-    },
-    "fileTypePngs": "Bilder (png)",
-    "@fileTypePngs": {
-        "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
-    },
-    "selectIconDialogAction": "WÄHLE ICON",
-    "@selectIconDialogAction": {
-        "description": ""
-    },
-    "retryDialogActionLabel": "Erneut versuchen",
-    "@retryDialogActionLabel": {
-        "description": ""
-    },
-    "errorDuringNetworkCall": "Fehler beim Api-Abfrage. {errorMessage}",
-    "@errorDuringNetworkCall": {
-        "description": "",
-        "placeholders": {
-            "errorMessage": {}
-        }
-    },
-    "passwordFilterHideDeleted": "Gelöschte Einträge ausblenden",
-    "@passwordFilterHideDeleted": {
-        "description": "filter name to show only password entries which are not deleted"
-    },
-    "passwordFilterOnlyDeleted": "Gelöschte Einträge",
-    "@passwordFilterOnlyDeleted": {
-        "description": "filter name to show only deleted password entries"
-    },
-    "passwordFilterPrefixForOneGroup": "Gruppe: {groupName}",
-    "@passwordFilterPrefixForOneGroup": {
-        "description": "The label for a password filter for one specific group",
-        "placeholders": {
-            "groupName": {}
-        }
-    },
-    "passwordFilterPrefixForMultipleGroups": "Eigener Filter ({groupCount} Gruppen)",
-    "@passwordFilterPrefixForMultipleGroups": {
-        "description": "The label for a password filter for multiple groups",
-        "placeholders": {
-            "groupCount": {}
-        }
-    },
-    "menuItemAuthPassCloudAuthenticate": "Mit AuthPass Cloud authentifizieren",
-    "@menuItemAuthPassCloudAuthenticate": {
-        "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
-    },
-    "menuItemAuthPassCloudMailboxes": "AuthPass Postfächer",
-    "@menuItemAuthPassCloudMailboxes": {
-        "description": ""
-    },
-    "changesWithoutSaving": "Sie haben Änderungen in \"{fileName}\", die das Schreiben von Änderungen nicht unterstützen.",
-    "@changesWithoutSaving": {
-        "description": "",
-        "placeholders": {
-            "fileName": {}
-        }
-    },
-    "changesSaveLocally": "Lokal speichern",
-    "@changesSaveLocally": {
-        "description": ""
-    },
-    "clearColor": "Farbe löschen",
-    "@clearColor": {
-        "description": "Action to remove a selected color and reset to default."
-    },
-    "databaseRenameInputLabel": "Datenbank-Name eingeben",
-    "@databaseRenameInputLabel": {
-        "description": ""
-    },
-    "databasePath": "Pfad",
-    "@databasePath": {
-        "description": ""
-    },
-    "databaseColor": "Farbe",
-    "@databaseColor": {
-        "description": ""
-    },
-    "databaseColorChoose": "Wählen Sie eine Farbe um zwischen Dateien zu unterscheiden.",
-    "@databaseColorChoose": {
-        "description": ""
-    },
-    "databaseKdbxVersion": "KDBX Datei-Version",
-    "@databaseKdbxVersion": {
-        "description": ""
-    },
-    "databaseKdbxUpgradeVersion": "Upgrade auf {versionName}",
-    "@databaseKdbxUpgradeVersion": {
-        "description": "",
-        "placeholders": {
-            "versionName": {}
-        }
-    },
-    "databaseKdbxUpgradeSuccessful": "Datei erfolgreich aktualisiert und gespeichert.",
-    "@databaseKdbxUpgradeSuccessful": {
-        "description": ""
-    },
-    "databaseReload": "Neuladen und Zusammenführen",
-    "@databaseReload": {
-        "description": ""
-    },
-    "progressStatus": "Status: {statusProgress}",
-    "@progressStatus": {
-        "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
-        "placeholders": {
-            "statusProgress": {}
-        }
-    },
-    "finishedMerge": "Zusammenführung beendet {status}",
-    "@finishedMerge": {
-        "description": "",
-        "placeholders": {
-            "status": {}
-        }
-    },
-    "closeAndLockFile": "Schließen/Sperren",
-    "@closeAndLockFile": {
-        "description": ""
-    },
-    "authPassHomeScreenTagline": "password manager, open source, verfügbar auf allen Plattformen.",
-    "@authPassHomeScreenTagline": {
-        "description": ""
-    },
-    "addNewPasswordButtonLabel": "Neues Passwort hinzufügen",
-    "@addNewPasswordButtonLabel": {
-        "description": ""
-    },
-    "unnamedEntryPlaceholder": "(Unbenannt)",
-    "@unnamedEntryPlaceholder": {
-        "description": "displayed instead of entry label, if entry has no name or it is blank."
-    },
-    "unnamedGroupPlaceholder": "(Unbenannt)",
-    "@unnamedGroupPlaceholder": {
-        "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
-    },
-    "unnamedFilePlaceholder": "(Unbenannt)",
-    "@unnamedFilePlaceholder": {
-        "description": ""
-    },
-    "editGroupScreenTitle": "Gruppe bearbeiten",
-    "@editGroupScreenTitle": {
-        "description": ""
-    },
-    "editGroupGroupNameLabel": "Name der Gruppe",
-    "@editGroupGroupNameLabel": {
-        "description": ""
-    },
-    "files": "Dateien",
-    "@files": {
-        "description": ""
-    },
-    "newGroupDialogTitle": "Neue Gruppe",
-    "@newGroupDialogTitle": {
-        "description": ""
-    },
-    "newGroupDialogInputLabel": "Name für die neue Gruppe",
-    "@newGroupDialogInputLabel": {
-        "description": ""
-    },
-    "groupActionShowPasswords": "Passwörter anzeigen",
-    "@groupActionShowPasswords": {
-        "description": ""
-    },
-    "groupActionDelete": "Löschen",
-    "@groupActionDelete": {
-        "description": ""
-    },
-    "logoutTooltip": "Abmelden",
-    "@logoutTooltip": {
-        "description": "Tooltip for logging out of a cloud storage provider."
-    },
-    "successfullyDeletedFileCloudStorage": "Datei erfolgreich gelöscht.",
-    "@successfullyDeletedFileCloudStorage": {
-        "description": "deleted file from cloud storage."
-    },
-    "shareDialogTitle": "Freigabe-Optionen für {fileName}",
-    "@shareDialogTitle": {
-        "description": "",
-        "placeholders": {
-            "fileName": {}
-        }
-    },
-    "shareFileActionLabel": "Teilen …",
-    "@shareFileActionLabel": {
-        "description": ""
-    },
-    "shareTokenListEmptyScreenPlaceholder": "Datei noch nicht freigegeben.",
-    "@shareTokenListEmptyScreenPlaceholder": {
-        "description": ""
-    },
-    "shareTokenNoLabel": "Keine Beschriftung",
-    "@shareTokenNoLabel": {
-        "description": "User did not specify a description for a given share code."
-    },
-    "shareTokenReadWrite": "Lesen/Schreiben",
-    "@shareTokenReadWrite": {
-        "description": "Share Code allows reading and writing"
-    },
-    "shareTokenReadOnly": "Nur Lesen",
-    "@shareTokenReadOnly": {
-        "description": "Share code only allows reading."
-    },
-    "shareCreateTokenDialogTitle": "Datei teilen",
-    "@shareCreateTokenDialogTitle": {
-        "description": ""
-    },
-    "shareCreateTokenReadOnly": "Nur lesen",
-    "@shareCreateTokenReadOnly": {
-        "description": "switch between read only and read/write"
-    },
-    "shareCreateTokenReadOnlyHelpText": "Speichern von Änderungen nicht zulassen",
-    "@shareCreateTokenReadOnlyHelpText": {
-        "description": "help text for the switch between read only and read/write"
-    },
-    "shareCreateTokenLabelText": "Beschreibung",
-    "@shareCreateTokenLabelText": {
-        "description": "Allows users to add a description/label to a share code."
-    },
-    "shareCreateTokenLabelHint": "Für meinen Freund freigeben",
-    "@shareCreateTokenLabelHint": {
-        "description": "the placeholder/hint text displayed when the user has not yet entered a label"
-    },
-    "shareCreateTokenLabelHelp": "Optionales Label zur Differenzierung von Share Code.",
-    "@shareCreateTokenLabelHelp": {
-        "description": ""
-    },
-    "shareCreateTokenSuccess": "Freigabecode erfolgreich erstellt.",
-    "@shareCreateTokenSuccess": {
-        "description": "snackbar when share code was created successfully."
-    },
-    "sharePresentDialogTitle": "Datei mit geheimem Freigabecode teilen",
-    "@sharePresentDialogTitle": {
-        "description": ""
-    },
-    "sharePresentDialogHelp": "Benutzer des folgenden Freigabecodes können auf die Passwortdatei zugreifen. Sie benötigen zum Öffnen das Passwort und/oder die Schlüsseldatei.",
-    "@sharePresentDialogHelp": {
-        "description": ""
-    },
-    "sharePresentToken": "Code teilen",
-    "@sharePresentToken": {
-        "description": ""
-    },
-    "sharePresentCopied": "Code wurde in die Zwischenablage kopiert.",
-    "@sharePresentCopied": {
-        "description": ""
-    },
-    "authPassCloudOpenWithShareCodeTooltip": "Mit Freigabecode öffnen",
-    "@authPassCloudOpenWithShareCodeTooltip": {
-        "description": "Allows users to open cloud files using a share code/token."
-    },
-    "authPassCloudShareFileActionLabel": "Teilen",
-    "@authPassCloudShareFileActionLabel": {
-        "description": ""
-    },
-    "preferenceAuthPassCloudAttachmentTitle": "AuthPass Cloud-Anhänge verwenden",
-    "@preferenceAuthPassCloudAttachmentTitle": {
-        "description": ""
-    },
-    "preferenceAuthPassCloudAttachmentSubtitle": "Anhänge speichern, die in AuthPass Cloud separat verschlüsselt werden.",
-    "@preferenceAuthPassCloudAttachmentSubtitle": {
-        "description": ""
-    },
-    "shareCodeInputDialogTitle": "Geheime Freigabe-Code eingeben",
-    "@shareCodeInputDialogTitle": {
-        "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
-    },
-    "shareCodeInputDialogScan": "Scan QR Code",
-    "@shareCodeInputDialogScan": {
-        "description": "button label for triggering QR code scanner"
-    },
-    "shareCodeInputLabel": "Geheime Freigabe-Code",
-    "@shareCodeInputLabel": {
-        "description": ""
-    },
-    "shareCodeInputHelperText": "Wenn Sie einen Teilcode erhalten haben, fügen Sie ihn bitte oben ein.",
-    "@shareCodeInputHelperText": {
-        "description": ""
-    },
-    "shareCodeOpen": "Freigabecode für AuthPass Cloud erhalten?",
-    "@shareCodeOpen": {
-        "description": ""
-    },
-    "shareCodeOpenScreenTitle": "Datei mit Freigabecode wird geladen",
-    "@shareCodeOpenScreenTitle": {
-        "description": ""
-    },
-    "shareCodeLoadingProgress": "Datei wird geladen …",
-    "@shareCodeLoadingProgress": {
-        "description": ""
-    },
-    "shareCodeOpenFileButtonLabel": "Öffnen",
-    "@shareCodeOpenFileButtonLabel": {
-        "description": ""
-    },
-    "shareCodeOpenInstallAppCaption": "Möchten Sie diese Datei stattdessen mit einer unserer nativen Apps öffnen?",
-    "@shareCodeOpenInstallAppCaption": {
-        "description": ""
-    },
-    "shareCodeOpenAnotherAppCaption": "Möchten Sie diese Datei auf einem anderen Gerät öffnen?",
-    "@shareCodeOpenAnotherAppCaption": {
-        "description": ""
-    },
-    "shareCodeOpenInstallAppButtonLabel": "App installieren",
-    "@shareCodeOpenInstallAppButtonLabel": {
-        "description": ""
-    },
-    "shareCodeOpenShowCodeButtonLabel": "Freigabecode anzeigen",
-    "@shareCodeOpenShowCodeButtonLabel": {
-        "description": ""
-    },
-    "changeMasterPasswordActionLabel": "Master-Passwort ändern",
-    "@changeMasterPasswordActionLabel": {
-        "description": "label for the button to show the dialog for changing master password."
-    },
-    "changeMasterPasswordFormSubmit": "Mit neuem Passwort speichern",
-    "@changeMasterPasswordFormSubmit": {
-        "description": ""
-    },
-    "changeMasterPasswordSuccess": "Master-Passwort erfolgreich gespeichert.",
-    "@changeMasterPasswordSuccess": {
-        "description": ""
-    },
-    "changeMasterPasswordScreenTitle": "Master-Passwort ändern",
-    "@changeMasterPasswordScreenTitle": {
-        "description": "app bar title for change password screen."
-    },
-    "authPassCloudAuthClickedLink": "Ich habe eine Email erhalten und klickte auf denn Link",
-    "@authPassCloudAuthClickedLink": {
-        "description": ""
-    },
-    "authPassCloudAuthNotConfirmed": "Die E-Mail-Adresse wurde noch nicht bestätigt. Bitte klicken Sie auf den Link in der erhaltenen E-Mail und lösen Sie das Captcha, um Ihre E-Mail-Adresse zu bestätigen.",
-    "@authPassCloudAuthNotConfirmed": {
-        "description": ""
-    },
-    "getHelpButton": "Erhalte Hilfe im Forum",
-    "@getHelpButton": {
-        "description": ""
-    },
-    "shortcutCopyUsername": "Benutzername kopieren",
-    "@shortcutCopyUsername": {
-        "description": ""
-    },
-    "shortcutCopyPassword": "Passwort kopieren",
-    "@shortcutCopyPassword": {
-        "description": ""
-    },
-    "shortcutCopyTotp": "TOTP kopieren",
-    "@shortcutCopyTotp": {
-        "description": ""
-    },
-    "shortcutMoveUp": "Vorheriges Passwort auswählen",
-    "@shortcutMoveUp": {
-        "description": ""
-    },
-    "shortcutMoveDown": "Wählen Sie das nächste Passwort",
-    "@shortcutMoveDown": {
-        "description": ""
-    },
-    "shortcutGeneratePassword": "Passwort generieren",
-    "@shortcutGeneratePassword": {
-        "description": ""
-    },
-    "shortcutCopyUrl": "URL kopieren",
-    "@shortcutCopyUrl": {
-        "description": ""
-    },
-    "shortcutOpenUrl": "URL Öffnen",
-    "@shortcutOpenUrl": {
-        "description": ""
-    },
-    "shortcutCancelSearch": "Suche abbrechen",
-    "@shortcutCancelSearch": {
-        "description": ""
-    },
-    "shortcutShortcutHelp": "Hilfe zu dennTastenkombinationen",
-    "@shortcutShortcutHelp": {
-        "description": ""
-    },
-    "shortcutHelpTitle": "Tastenkombinationen",
-    "@shortcutHelpTitle": {
-        "description": "title of dialog showing keyboard shortcuts."
-    },
-    "unexpectedError": "Unerwarteter Fehler: {error}",
-    "@unexpectedError": {
-        "placeholders": {
-            "error": {
-                "type": "String"
-            }
-        }
+  "@@locale": "de",
+  "fieldUserName": "Benutzer",
+  "@fieldUserName": {},
+  "fieldPassword": "Passwort",
+  "@fieldPassword": {},
+  "fieldWebsite": "Webseite",
+  "@fieldWebsite": {},
+  "fieldTitle": "Titel",
+  "@fieldTitle": {},
+  "fieldTotp": "Einmalpasswort (Zeitbasiert)",
+  "@fieldTotp": {
+    "description": "Label for fields of TOTP (Time based one time passwords)"
+  },
+  "english": "Englisch",
+  "@english": {
+    "description": "language switcher subtitle"
+  },
+  "german": "Deutsch",
+  "@german": {
+    "description": "language switcher subtitle"
+  },
+  "russian": "Russisch",
+  "@russian": {
+    "description": "language switcher subtitle"
+  },
+  "ukrainian": "Ukrainisch",
+  "@ukrainian": {
+    "description": "language switcher subtitle"
+  },
+  "lithuanian": "Litauisch",
+  "@lithuanian": {
+    "description": "language switcher subtitle"
+  },
+  "french": "Französisch",
+  "@french": {
+    "description": "language switcher subtitle"
+  },
+  "spanish": "Spanisch",
+  "@spanish": {
+    "description": "language switcher subtitle"
+  },
+  "indonesian": "Indonesisch",
+  "@indonesian": {
+    "description": "language switcher subtitle"
+  },
+  "turkish": "Türkisch",
+  "@turkish": {
+    "description": "Language switcher subtitle"
+  },
+  "hebrew": "Hebräisch",
+  "@hebrew": {
+    "description": "Language switcher subtitle"
+  },
+  "italian": "Italienisch",
+  "@italian": {
+    "description": "Language switcher subtitle"
+  },
+  "chineseSimplified": "Vereinfachtes Chinesisch",
+  "@chineseSimplified": {
+    "description": "Language switcher subtitle"
+  },
+  "chineseTraditional": "Traditionelles Chinesisch",
+  "@chineseTraditional": {
+    "description": "Language switcher subtitle"
+  },
+  "portugueseBrazilian": "Portugiesisch, Brasilianisch",
+  "@portugueseBrazilian": {
+    "description": "Language switcher subtitle"
+  },
+  "slovak": "Slowakisch",
+  "@slovak": {
+    "description": "Language switcher subtitle"
+  },
+  "dutch": "Niederländisch",
+  "@dutch": {
+    "description": "Language switcher subtitle"
+  },
+  "selectItem": "Auswählen",
+  "@selectItem": {
+    "description": "semantic label for checkboxes to select item."
+  },
+  "selectKeepassFile": "AuthPass - Wähle eine KeePass Datei",
+  "@selectKeepassFile": {
+    "context": "appbar title - select file screen"
+  },
+  "selectKeepassFileLabel": "Bitte wähle eine KeePass (.kdbx) Datei.",
+  "@selectKeepassFileLabel": {
+    "context": "select file screen, used as label."
+  },
+  "createNewFile": "Datei Erstellen",
+  "@createNewFile": {
+    "description": "button on select file screen to create a new password database."
+  },
+  "openLocalFile": "Öffne\nLokale Datei",
+  "@openLocalFile": {
+    "context": "select file screen, big button open local file."
+  },
+  "openFile": "Datei öffnen",
+  "@openFile": {
+    "description": "Displayed as placeholder in password list when no file is open."
+  },
+  "loadFromDropdownMenu": "Lade von …",
+  "@loadFromDropdownMenu": {
+    "description": "label for dropdown menu which shows more cloud storage options."
+  },
+  "quickUnlockingFiles": "Dateien schnell entsperren …",
+  "@quickUnlockingFiles": {
+    "description": "Status shown while we are loading files and trying to unlock them."
+  },
+  "openFileProgress": "Öffne {fileName} … ({current} / {totalCount})",
+  "@openFileProgress": {
+    "description": "Progress shown while files are loaded during quick unlock.",
+    "placeholders": {
+      "fileName": {
+        "description": "Name of the file that is currently loaded."
+      },
+      "current": {
+        "description": "The index/number of file currently loading."
+      },
+      "totalCount": {
+        "description": "Total number of files which are loading."
+      }
     }
+  },
+  "loadFrom": "Lade von {cloudStorageName}",
+  "@loadFrom": {
+    "placeholders": {
+      "cloudStorageName": {
+        "type": "String",
+        "example": "Dropbox"
+      }
+    }
+  },
+  "loadFromRemoteUrl": "Lade von URL",
+  "@loadFromRemoteUrl": {
+    "description": "Overflow menu option to load KeePass file from URL."
+  },
+  "createNewKeepass": "KeePass noch nie verwendet?\nJetzt neue Passwort Datenbank erstellen",
+  "@createNewKeepass": {
+    "description": "deprecated"
+  },
+  "labelLastOpenFiles": "Zuletzt geöffnete Dateien:",
+  "@labelLastOpenFiles": {},
+  "noFilesHaveBeenOpenYet": "Keine Dateien bisher geöffnet.",
+  "@noFilesHaveBeenOpenYet": {},
+  "preferenceSelectLanguage": "Sprache wählen",
+  "@preferenceSelectLanguage": {},
+  "preferenceLanguage": "Sprache",
+  "@preferenceLanguage": {},
+  "preferenceTextScaleFactor": "Text Skalierung",
+  "@preferenceTextScaleFactor": {},
+  "preferenceVisualDensity": "Visuelle Dichte",
+  "@preferenceVisualDensity": {},
+  "preferenceTheme": "Theme",
+  "@preferenceTheme": {},
+  "preferenceThemeLight": "Hell",
+  "@preferenceThemeLight": {},
+  "preferenceThemeDark": "Dunkel",
+  "@preferenceThemeDark": {},
+  "preferenceSystemDefault": "Geräte Standardeinstellung",
+  "@preferenceSystemDefault": {},
+  "preferenceDefault": "Standard",
+  "@preferenceDefault": {},
+  "lockAllFiles": "Alle offenen Dateien schließen",
+  "@lockAllFiles": {},
+  "preferenceAllowScreenshots": "Screenshots der App zulassen",
+  "@preferenceAllowScreenshots": {},
+  "preferenceEnableAutoFill": "Autofill aktivieren",
+  "@preferenceEnableAutoFill": {},
+  "enableAutofillSuggestionBanner": "Sie können das Feld einer anderen Anwendung ausfüllen, indem Sie Autofill aktivieren!",
+  "@enableAutofillSuggestionBanner": {
+    "description": "This text will shown as a banner on top of password list"
+  },
+  "dismissAutofillSuggestionBannerButton": "Schließen",
+  "@dismissAutofillSuggestionBannerButton": {
+    "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+  },
+  "enableAutofillSuggestionBannerButton": "Aktivieren!",
+  "@enableAutofillSuggestionBannerButton": {
+    "description": "Button that is displayed in autofill suggestion warnings to enable autofill"
+  },
+  "preferenceAutoFillDescription": "Wird nur auf ab Android Oreo (8.0) unterstützt.",
+  "@preferenceAutoFillDescription": {},
+  "preferenceTitle": "Einstellungen",
+  "@preferenceTitle": {},
+  "preferenceEnableSystemWideShortcuts": "Aktiviere Systemweite Verknüpfungen",
+  "@preferenceEnableSystemWideShortcuts": {
+    "description": ""
+  },
+  "preferenceEnableSystemWideShortcutsHelp": "Registriert Strg+alt+f als systemweite Verknüpfung um die Suche zu öffnen.",
+  "@preferenceEnableSystemWideShortcutsHelp": {
+    "description": ""
+  },
+  "preferencesSearchFields": "Suchfelder anpassen",
+  "@preferencesSearchFields": {
+    "description": ""
+  },
+  "preferencesSearchFieldPromptTitle": "Suchfeld",
+  "@preferencesSearchFieldPromptTitle": {
+    "description": ""
+  },
+  "preferencesSearchFieldPromptLabel": "Kommagetrennte Liste von Feldern, die in der Passwortlistensuche verwendet werden sollen.",
+  "@preferencesSearchFieldPromptLabel": {
+    "description": ""
+  },
+  "preferencesSearchFieldPromptHelp": "Verwende {wildCardCharacter} für alle, lasse leer für Standard ({defaultSearchFields})",
+  "@preferencesSearchFieldPromptHelp": {
+    "description": "",
+    "placeholders": {
+      "wildCardCharacter": {},
+      "defaultSearchFields": {}
+    }
+  },
+  "aboutAppName": "AuthPass",
+  "@aboutAppName": {},
+  "aboutLinkFeedback": "Wir freuen uns über jede Art von Feedback!",
+  "@aboutLinkFeedback": {},
+  "aboutLinkVisitWebsite": "Besuchen Sie auch unsere Website",
+  "@aboutLinkVisitWebsite": {},
+  "aboutLinkGitHub": "Und Open Source Projekt",
+  "@aboutLinkGitHub": {},
+  "aboutLogFile": "Log-Datei: {logFilePath}",
+  "aboutLinkContributors": "Mitwirkende anzeigen",
+  "@aboutLinkContributors": {},
+  "@aboutLogFile": {
+    "placeholders": {
+      "logFilePath": {
+        "type": "String",
+        "example": "/Users/mustermann/log.txt"
+      }
+    }
+  },
+  "unableToLaunchUrlTitle": "Kann URL nicht öffnen",
+  "@unableToLaunchUrlTitle": {
+    "description": ""
+  },
+  "unableToLaunchUrlDescription": "Fehler beim öffnen von {url}: {openError}",
+  "@unableToLaunchUrlDescription": {
+    "description": "",
+    "placeholders": {
+      "url": {
+        "description": "URL which we tried to open."
+      },
+      "openError": {
+        "description": "Information about the error"
+      }
+    }
+  },
+  "unableToLaunchUrlNoHandler": "Keine App für die URL gefunden.",
+  "@unableToLaunchUrlNoHandler": {
+    "description": ""
+  },
+  "launchedUrl": "URL {url} geöffnet",
+  "@launchedUrl": {
+    "description": "snackbar confirmation after opening a url externally",
+    "placeholders": {
+      "url": {
+        "description": "URL which was just launched."
+      }
+    }
+  },
+  "menuItemGeneratePassword": "Passwort generieren",
+  "@menuItemGeneratePassword": {},
+  "menuItemPreferences": "Einstellungen",
+  "@menuItemPreferences": {},
+  "menuItemOpenAnotherFile": "Weitere Datei öffnen",
+  "@menuItemOpenAnotherFile": {},
+  "menuItemCheckForUpdates": "Nach Updates suchen",
+  "@menuItemCheckForUpdates": {},
+  "menuItemSupport": "Protokolle senden",
+  "@menuItemSupport": {},
+  "menuItemSupportSubtitle": "Protokolle per E-Mail senden",
+  "@menuItemSupportSubtitle": {},
+  "menuItemForum": "Support Forum",
+  "@menuItemForum": {},
+  "menuItemForumSubtitle": "Melde Probleme und erhalte Hilfe",
+  "@menuItemForumSubtitle": {},
+  "menuItemHelp": "Hilfe",
+  "@menuItemHelp": {},
+  "menuItemHelpSubtitle": "Dokumentation anzeigen",
+  "@menuItemHelpSubtitle": {},
+  "menuItemAbout": "Über AuthPass",
+  "@menuItemAbout": {},
+  "actionOpenUrl": "URL Öffnen",
+  "@actionOpenUrl": {
+    "description": "tooltip for button to open URL/Website of an entry."
+  },
+  "passwordPlainText": "Passwort anzeigen",
+  "@passwordPlainText": {
+    "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+  },
+  "generatorPassword": "Passwort",
+  "@generatorPassword": {
+    "description": "Label for generated password"
+  },
+  "generatePassword": "Passwort generieren",
+  "@generatePassword": {
+    "description": "screen title for password generator"
+  },
+  "doneButtonLabel": "Fertig",
+  "@doneButtonLabel": {
+    "description": "generic button label for 'Done' action."
+  },
+  "useAsDefault": "Als Standard speichern",
+  "@useAsDefault": {
+    "description": "Button Label for Password generator settings: use as defaults",
+    "context": "Password generator"
+  },
+  "characterSetLowerCase": "Kleinbuchstaben (a-z)",
+  "@characterSetLowerCase": {
+    "context": "Password generator"
+  },
+  "characterSetUpperCase": "Großbuchstaben (A-Z)",
+  "@characterSetUpperCase": {
+    "context": "Password generator"
+  },
+  "characterSetNumeric": "Ziffern (0-9)",
+  "@characterSetNumeric": {
+    "context": "Password generator"
+  },
+  "characterSetUmlauts": "Umlaute (äöü)",
+  "@characterSetUmlauts": {
+    "context": "Password generator"
+  },
+  "characterSetSpecial": "Sonderzeichen (@%+)",
+  "@characterSetSpecial": {
+    "context": "Password generator"
+  },
+  "length": "Länge",
+  "@length": {
+    "description": "Length of password",
+    "context": "Password generator"
+  },
+  "customLength": "Andere Länge",
+  "@customLength": {
+    "description": "Label for custom length field",
+    "context": "Password generator"
+  },
+  "customLengthHelperText": "Nur für > {customMinLength} verwendet",
+  "@customLengthHelperText": {
+    "description": "Help text for custom length field",
+    "context": "Password generator",
+    "placeholders": {
+      "customMinLength": {
+        "example": "40"
+      }
+    }
+  },
+  "savedFiles": "{numFiles, plural, =1 {Eine Datei gespeichert: {files}} other {{numFiles} Dateien gespeichert: {files}}}",
+  "@savedFiles": {
+    "description": "Message displayed when files were saved. (One or more).",
+    "context": "Password list",
+    "placeholders": {
+      "numFiles": {
+        "description": "Number of files that have been saved (at least 1)",
+        "type": "int",
+        "format": "compactLong"
+      },
+      "files": {
+        "description": "Comma separated list of vault names."
+      }
+    }
+  },
+  "manageGroups": "Gruppen verwalten",
+  "@manageGroups": {
+    "description": ""
+  },
+  "lockFiles": "Dateien sperren/schließen",
+  "@lockFiles": {
+    "description": "Close all files and return to start screen."
+  },
+  "searchHint": "Suchen",
+  "@searchHint": {
+    "description": "Placeholder in the password list search box"
+  },
+  "searchButtonLabel": "Suchen",
+  "@searchButtonLabel": {
+    "description": "search button tooltip/semantic label"
+  },
+  "filterButtonLabel": "Nach Gruppe filtern",
+  "@filterButtonLabel": {
+    "description": "tooltip/semantic label for filter app bar icon."
+  },
+  "clear": "Löschen",
+  "@clear": {
+    "description": "Remove existing group filter from password list"
+  },
+  "autofillFilterPrefix": "Filter:",
+  "@autofillFilterPrefix": {
+    "description": "Label displayed for android auto fill"
+  },
+  "autofillPrompt": "Wähle einen Passwort-Eintrag für Autofill.",
+  "@autofillPrompt": {
+    "description": ""
+  },
+  "copiedToClipboard": "In die Zwischenablage kopiert.",
+  "@copiedToClipboard": {
+    "description": "Snackbar text when copying text to clipboard."
+  },
+  "noTitle": "(kein Titel)",
+  "@noTitle": {
+    "description": "Text to display in place of a title, when password entry has no name assigned."
+  },
+  "noUsername": "(kein Benutzername)",
+  "@noUsername": {
+    "description": "Text to display in place of a user name in the password list if none is defined."
+  },
+  "filterCustomize": "Anpassen …",
+  "@filterCustomize": {
+    "description": "Customize filter in password list"
+  },
+  "swipeCopyPassword": "Passwort kopieren",
+  "@swipeCopyPassword": {
+    "description": "swipe action in password list to copy password"
+  },
+  "swipeCopyUsername": "Benutzername kopieren",
+  "@swipeCopyUsername": {
+    "description": "swipe action in password list to copy username"
+  },
+  "copyUsernameNotExists": "Eintrag hat keinen Benutzernamen.",
+  "@copyUsernameNotExists": {
+    "description": "Error message when trying to copy username from an entry which has none."
+  },
+  "copyPasswordNotExists": "Eintrag hat kein Passwort definiert.",
+  "@copyPasswordNotExists": {
+    "description": "Error message when trying to copy password from an entry which has none."
+  },
+  "doneCopiedPassword": "Passwort in die Zwischenablage kopiert.",
+  "@doneCopiedPassword": {
+    "description": "snackbar confirmation that password was copied."
+  },
+  "doneCopiedUsername": "Benutzername in die Zwischenablage kopiert.",
+  "@doneCopiedUsername": {
+    "description": "snackbar confirmation that username was copied."
+  },
+  "doneCopiedField": "Kopiert.",
+  "@doneCopiedField": {
+    "description": ""
+  },
+  "copiedFieldToClipboard": "{fieldName} kopiert.",
+  "@copiedFieldToClipboard": {
+    "description": "",
+    "placeholders": {
+      "fieldName": {}
+    }
+  },
+  "copiedFieldEmpty": "{fieldName} ist leer.",
+  "@copiedFieldEmpty": {
+    "description": "Displayed when user wants to copy a field which is empty or not defined.",
+    "placeholders": {
+      "fieldName": {}
+    }
+  },
+  "emptyPasswordVaultPlaceholder": "Du hast noch keine Passworter in deiner Datenbank.",
+  "@emptyPasswordVaultPlaceholder": {
+    "description": "Placeholder text shown when a user opens an empty password file."
+  },
+  "emptyPasswordVaultButtonLabel": "Erstelle dein erstes Passwort",
+  "@emptyPasswordVaultButtonLabel": {
+    "description": "Button shown under placeholder text when password database is empty"
+  },
+  "loading": "Wird geladen",
+  "@loading": {
+    "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
+  },
+  "loadingFile": "Datei wird geladen …",
+  "@loadingFile": {
+    "description": "credential screen while unlocking file."
+  },
+  "internalFile": "Interne Dateien",
+  "@internalFile": {
+    "description": "Choose a file previously created in AuthPass app sandbox",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "internalFileSubtitle": "Datenbank zuvor mit AuthPass erstellt",
+  "@internalFileSubtitle": {
+    "description": "Choose a file previously created in AuthPass app sandbox",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "filePicker": "File Picker",
+  "@filePicker": {
+    "description": "Choose a file with the system's file picker. (ios/android)",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "filePickerSubtitle": "Datei vom lokalen Gerät öffnen.",
+  "@filePickerSubtitle": {
+    "description": "Choose a file with the system's file picker. (ios/android)",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "credentialsAppBarTitle": "Entschlüsselung",
+  "@credentialsAppBarTitle": {
+    "description": "Credential screen to enter master password when opening kdbx file.",
+    "context": "credential screen"
+  },
+  "credentialLabel": "Passwort eingeben für:",
+  "@credentialLabel": {
+    "description": "Label for the file/database being opened",
+    "context": "credential screen"
+  },
+  "masterPasswordInputLabel": "Passwort",
+  "@masterPasswordInputLabel": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "masterPasswordEmptyValidator": "Bitte gib dein Passwort ein.",
+  "@masterPasswordEmptyValidator": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "masterPasswordIncorrectValidator": "Ungültiges Passwort",
+  "@masterPasswordIncorrectValidator": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "useKeyFile": "Schlüsseldatei verwenden",
+  "@useKeyFile": {
+    "description": "label for a key file in combination with mater password",
+    "context": "credential screen"
+  },
+  "saveMasterPasswordBiometric": "Passwort sicher speichern (mit biometrischen Schutz)?",
+  "@saveMasterPasswordBiometric": {
+    "description": "Label for the checkbox to save master password for quick unlock.",
+    "context": "credential screen"
+  },
+  "close": "Schließen",
+  "@close": {
+    "description": "Tooltip/semantic label for close button"
+  },
+  "addNewPassword": "Neues Passwort hinzufügen",
+  "@addNewPassword": {
+    "description": "Tooltip for adding new password button (floating action button)"
+  },
+  "errorOpenFileInvalidFileStructureTitle": "Es wurde versucht, einen ungültigen Dateityp zu öffnen",
+  "@errorOpenFileInvalidFileStructureTitle": {
+    "description": "Title of error dialog when trying to open an invalid/unsupported file type"
+  },
+  "errorOpenFileInvalidFileStructureBody": "Die Datei ({fileName}) scheint keine gültige KDBX-Datei zu sein. Bitte wählen Sie entweder eine gültige KDBX-Datei oder erstellen Sie eine neue Passwortdatenbank.",
+  "@errorOpenFileInvalidFileStructureBody": {
+    "description": "Body of error dialog when trying to open an invalid/unsupported file type",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "errorOpenFileAlreadyOpenTitle": "Datei schon geöffnet",
+  "@errorOpenFileAlreadyOpenTitle": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen"
+  },
+  "errorOpenFileAlreadyOpenBody": "Die Datenbank {databaseName} ist bereits von {openFileSource} aus geöffnet. (Versuchte {newFileSource} zu öffnen)",
+  "@errorOpenFileAlreadyOpenBody": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen",
+    "placeholders": {
+      "databaseName": {},
+      "openFileSource": {},
+      "newFileSource": {}
+    }
+  },
+  "loadFromUrl": "Von der url herunterladen",
+  "@loadFromUrl": {
+    "description": ""
+  },
+  "loadFromUrlEnterUrl": "URL eingeben",
+  "@loadFromUrlEnterUrl": {
+    "description": "label for input box to enter url."
+  },
+  "loadFromUrlErrorEnterFullUrl": "Bitte geben Sie die vollständige URL ein, beginnend mit http:// oder https://",
+  "@loadFromUrlErrorEnterFullUrl": {
+    "description": "validator error message when user does not enter a absolute url."
+  },
+  "loadFromUrlErrorInvalidUrl": "Bitte eine gültige URL eingeben.",
+  "@loadFromUrlErrorInvalidUrl": {
+    "description": "validator error message hwen user enters a url which could not be parsed."
+  },
+  "linuxAppArmorWarning": "AuthPass benötigt die Berechtigung, mit dem Geheimdienst zu kommunizieren, um Anmeldedaten für den Cloud-Speicher zu speichern.\nBitte führen Sie den folgenden Befehl aus:",
+  "@linuxAppArmorWarning": {
+    "description": "On linux when user has not given AuthPass permission to connect to secret service he has to execute a command on the console."
+  },
+  "cancel": "Abbrechen",
+  "@cancel": {
+    "description": "button label for cancelling an action."
+  },
+  "errorLoadFileFromSourceTitle": "Fehler beim öffnen der Datei.",
+  "@errorLoadFileFromSourceTitle": {
+    "description": "error title when user selects a file which can't be downloaded."
+  },
+  "errorLoadFileFromSourceBody": "{source} konnte nicht geöffnet werden.\n{error}",
+  "@errorLoadFileFromSourceBody": {
+    "description": "error body when user selects a file which can't be downloaded.",
+    "placeholders": {
+      "source": {},
+      "error": {}
+    }
+  },
+  "errorUnlockFileTitle": "Datei kann nicht geöffnet werden",
+  "@errorUnlockFileTitle": {
+    "description": "generic error when opening a file (dialog title)",
+    "context": "credential screen"
+  },
+  "errorUnlockFileBody": "Unbekannter Fehler beim Öffnen der Datei. {error}",
+  "@errorUnlockFileBody": {
+    "description": "generic error when opening a file (description)",
+    "context": "credential screen",
+    "placeholders": {
+      "error": {
+        "description": "Error details."
+      }
+    }
+  },
+  "dialogContinue": "Weiter",
+  "@dialogContinue": {
+    "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+  },
+  "dialogSendErrorReport": "Fehlerbericht senden",
+  "@dialogSendErrorReport": {
+    "description": "action button in error dialogs to send email to support with log file.",
+    "context": "error dialog"
+  },
+  "dialogReportErrorForum": "Fehler im Forum melden/Hilfe",
+  "@dialogReportErrorForum": {
+    "description": "action button in error dialog to open forum and create new topic."
+  },
+  "groupFilterDescription": "Wähle Gruppen die (rekursiv) angezeigt werden sollen",
+  "@groupFilterDescription": {
+    "description": "Description shown in the group list for filtering (e.g. app drawer)",
+    "context": "group filter"
+  },
+  "groupFilterSelectAll": "Alles auswählen",
+  "@groupFilterSelectAll": {
+    "context": "group filter"
+  },
+  "groupFilterDeselectAll": "Auswahl aufheben",
+  "@groupFilterDeselectAll": {
+    "context": "group filter"
+  },
+  "createSubgroup": "Untergruppe erstellen",
+  "@createSubgroup": {
+    "description": "menu action: create nested group inside another group"
+  },
+  "editAction": "Bearbeiten",
+  "@editAction": {
+    "description": "menu action: edit item (e.g. delete a group)"
+  },
+  "mailboxEnableLabel": "(erneut) aktivieren",
+  "@mailboxEnableLabel": {
+    "description": ""
+  },
+  "mailboxEnableHint": "E-Mails weiterhin empfangen",
+  "@mailboxEnableHint": {
+    "description": ""
+  },
+  "mailboxDisableLabel": "Deaktivieren",
+  "@mailboxDisableLabel": {
+    "description": ""
+  },
+  "mailboxDisableHint": "Keine weiteren E-Mails empfangen",
+  "@mailboxDisableHint": {
+    "description": ""
+  },
+  "mailListNoMail": "Sie haben noch keine Emails erhalten.",
+  "@mailListNoMail": {
+    "description": ""
+  },
+  "mailboxLabelPrefixForEntry": "Eintrag: {entryLabel}",
+  "@mailboxLabelPrefixForEntry": {
+    "description": "when a mailbox was created for a (password) entry.",
+    "placeholders": {
+      "entryLabel": {
+        "description": "The label of the entry this mailbox was created for"
+      }
+    }
+  },
+  "mailboxLabelPrefixUnknownEntry": "Unbekannter Eintrag: {entryUuid}",
+  "@mailboxLabelPrefixUnknownEntry": {
+    "description": "when a mailbox was created for password entry which has been deleted or is otherwise not in the currently opened password files.",
+    "placeholders": {
+      "entryUuid": {
+        "description": "The internal id of the entry which was no tfound"
+      }
+    }
+  },
+  "mailboxLabelPrefixCreatedAt": "Erstellt am: {dateTime}",
+  "@mailboxLabelPrefixCreatedAt": {
+    "description": "When a mailbox was not created for an entry and has no label, the creation date is shown.",
+    "placeholders": {
+      "dateTime": {}
+    }
+  },
+  "masterPasswordDescription": "Das Master-Passwort wird verwendet, um Ihre Passwortdatenbank sicher zu verschlüsseln. Denken Sie daran, bei Verlust ihres Master-Passwort können ihre Daten nicht wiederhergestellt werden.",
+  "@masterPasswordDescription": {
+    "description": ""
+  },
+  "unsavedChangesWarningTitle": "Nicht gespeicherte Änderungen",
+  "@unsavedChangesWarningTitle": {
+    "description": ""
+  },
+  "unsavedChangesWarningBody": "Es gibt noch ungespeicherte Änderungen. Möchten Sie die Änderungen verwerfen?",
+  "@unsavedChangesWarningBody": {
+    "description": ""
+  },
+  "unsavedChangesDiscardActionLabel": "Änderungen verwerfen",
+  "@unsavedChangesDiscardActionLabel": {
+    "description": ""
+  },
+  "deletePermanentlyAction": "Dauerhaft löschen",
+  "@deletePermanentlyAction": {
+    "description": "menu action: delete an item permanently from the file (only shown for entries/groups already in the recycle bin."
+  },
+  "restoreFromRecycleBinAction": "Wiederherstellen",
+  "@restoreFromRecycleBinAction": {
+    "description": "menu action: restore an entry/group which was moved into the recycle bin."
+  },
+  "deleteAction": "Löschen",
+  "@deleteAction": {
+    "description": "menu action: delete item (e.g. delete a group)"
+  },
+  "deletedEntry": "Eintrag gelöscht.",
+  "@deletedEntry": {
+    "description": "Confirmation when a password entry was deleted (ie. moved to recycle bin)"
+  },
+  "successfullyDeletedGroup": "Gruppe gelöscht.",
+  "@successfullyDeletedGroup": {
+    "description": "snackbar after deleting a group."
+  },
+  "undoButtonLabel": "Rückgängig",
+  "@undoButtonLabel": {
+    "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+  },
+  "saveButtonLabel": "Speichern",
+  "@saveButtonLabel": {
+    "description": "save file, for example button displayed in entry details"
+  },
+  "webDavSettings": "WebDAV Einstellungen",
+  "@webDavSettings": {
+    "description": "dialog title for entering WebDAV settings."
+  },
+  "webDavUrlLabel": "URL",
+  "@webDavUrlLabel": {
+    "description": ""
+  },
+  "webDavUrlHelperText": "Basis-URL zu Ihrem WebDAV-Service.",
+  "@webDavUrlHelperText": {
+    "description": ""
+  },
+  "webDavUrlValidatorError": "Bitte eine URL eingeben",
+  "@webDavUrlValidatorError": {
+    "description": ""
+  },
+  "webDavUrlValidatorInvalidUrlError": "Bitte geben Sie eine gültige URL mit http:// oder https:// ein",
+  "@webDavUrlValidatorInvalidUrlError": {
+    "description": ""
+  },
+  "webDavAuthUser": "Benutzername",
+  "@webDavAuthUser": {
+    "description": ""
+  },
+  "webDavAuthPassword": "Passwort",
+  "@webDavAuthPassword": {
+    "description": ""
+  },
+  "mergeSuccessDialogTitle": "Passwortdatenbank erfolgreich verbunden",
+  "@mergeSuccessDialogTitle": {
+    "description": ""
+  },
+  "mergeSuccessDialogMessage": "Konflikt beim Speichern von {fileName} erkannt, wurde erfolgreich mit der entfernten Datei verbunden: \n\n{mergeSummary}",
+  "@mergeSuccessDialogMessage": {
+    "description": "",
+    "placeholders": {
+      "fileName": {},
+      "mergeSummary": {}
+    }
+  },
+  "forDetailsVisitUrl": "Für weitere Informationen besuchen Sie {url}",
+  "@forDetailsVisitUrl": {
+    "description": "",
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "authPassCloudAuthEmailInputLabel": "Geben Sie die E-Mail-Adresse ein, um sich zu registrieren oder anzumelden.",
+  "@authPassCloudAuthEmailInputLabel": {
+    "description": ""
+  },
+  "authPassCloudAuthEmailInvalid": "Bitte geben sie ein gültige Email-Adresse an.",
+  "@authPassCloudAuthEmailInvalid": {
+    "description": ""
+  },
+  "authPassCloudAuthConfirmEmailButtonLabel": "Adresse Bestätigen",
+  "@authPassCloudAuthConfirmEmailButtonLabel": {
+    "description": ""
+  },
+  "authPassCloudAuthConfirmEmail": "Bitte überprüfen sie ihre Email-Adresse um diese zu bestätigen.",
+  "@authPassCloudAuthConfirmEmail": {
+    "description": ""
+  },
+  "authPassCloudAuthConfirmEmailExplain": "Bitte schließen Sie nicht diese Seite bevor Sie denn Link geöffnet haben den wir ihnen per Email geschickt haben.",
+  "@authPassCloudAuthConfirmEmailExplain": {
+    "description": ""
+  },
+  "authPassCloudAuthResendExplain": "Falls sie noch keine Email von uns geschickt bekommen haben, dann kontrollieren Sie ihren Spam Ordner. Andernfalls können sie versuchen einen neuen Bestätigungslink anzufordern.",
+  "@authPassCloudAuthResendExplain": {
+    "description": ""
+  },
+  "authPassCloudAuthResendButtonLabel": "Einen neuen Bestätigungslink anfordern",
+  "@authPassCloudAuthResendButtonLabel": {
+    "description": ""
+  },
+  "permanentlyDeleteEntryConfirm": "Das führt zur permanenten Löschung des Passwordeintrag {title}. Dies kann nicht Rückgänging gemacht werden. Wollen sie trotzdem fortfahren?",
+  "@permanentlyDeleteEntryConfirm": {
+    "description": "shown to force user to acknowledge delete before a entry will be permanently deleted.",
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "permanentlyDeletedEntrySnackBar": "Eintrag würde gelöscht.",
+  "@permanentlyDeletedEntrySnackBar": {
+    "description": "snackbar confirming that the entry was deleted."
+  },
+  "initialNewGroupName": "Neue Gruppe",
+  "@initialNewGroupName": {
+    "description": "initial name of groups when user creates a new one."
+  },
+  "deleteGroupErrorTitle": "Gruppe kann nicht gelöscht werden",
+  "@deleteGroupErrorTitle": {
+    "description": "Title of error dialog when group could not be deleted."
+  },
+  "deleteGroupErrorBodyContainsGroup": "Diese Gruppe enthält noch andere Gruppen. Sie können derzeit nur leere Gruppen löschen.",
+  "@deleteGroupErrorBodyContainsGroup": {
+    "description": "Body of error dialog when a group can't be deleted because it is not empty."
+  },
+  "deleteGroupErrorBodyContainsEntries": "Diese Gruppe enthält noch Passwort-Einträge. Sie können derzeit nur leere Gruppen löschen.",
+  "@deleteGroupErrorBodyContainsEntries": {
+    "description": "Body of error dialog when a group can't be deleted because it is not empty."
+  },
+  "groupListAppBarTitle": "Gruppen",
+  "@groupListAppBarTitle": {
+    "description": "title in the app bar for the groups list"
+  },
+  "groupListFilterAppbarTitle": "Nach Gruppen filtern",
+  "@groupListFilterAppbarTitle": {
+    "description": "title in the app bar for group lists when displayed for filtering password list"
+  },
+  "clearQuickUnlock": "Biometrischen Speicher löschen",
+  "@clearQuickUnlock": {
+    "description": ""
+  },
+  "clearQuickUnlockSubtitle": "Lösche gespeicherte master Passwörter",
+  "@clearQuickUnlockSubtitle": {
+    "description": ""
+  },
+  "unlock": "Dateien entsperren",
+  "@unlock": {
+    "description": ""
+  },
+  "closePasswordFiles": "schliesse Passwortdateien",
+  "@closePasswordFiles": {
+    "description": "delete quick unlock (passwords stored in biometric storage)"
+  },
+  "clearQuickUnlockSuccess": "Lösche gespeicherte master Passwörter vom biometrischen Speicher.",
+  "@clearQuickUnlockSuccess": {
+    "description": ""
+  },
+  "diacOptIn": "In-App Neuigkeiten und Umfragen erhalten.",
+  "@diacOptIn": {},
+  "diacOptInSubtitle": "Kann gelegentlich Internetanfragen um Neuigkeiten zu sammeln verursachen.",
+  "@diacOptInSubtitle": {},
+  "enableAutofillDebug": "AutoFill: Debugging aktivieren",
+  "@enableAutofillDebug": {
+    "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+  },
+  "enableAutofillDebugSubtitle": "Zeigt informationen für jedes Eingabefeld in einem overlay",
+  "@enableAutofillDebugSubtitle": {
+    "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+  },
+  "createPasswordDatabase": "Erstelle Passwort Datenbank",
+  "@createPasswordDatabase": {
+    "description": ""
+  },
+  "nameNewPasswordDatabase": "Name der neuen Datenbank",
+  "@nameNewPasswordDatabase": {
+    "description": "creating new kdbx file, prompt"
+  },
+  "validatorNameMissing": "Bitte gib den namen der neuen Datenbank an",
+  "@validatorNameMissing": {
+    "description": "Error message when no password database name is given."
+  },
+  "masterPasswordHelpText": "Gib ein sicheres master Passwort an.",
+  "@masterPasswordHelpText": {
+    "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+  },
+  "inputMasterPasswordText": "Master Passwort",
+  "@inputMasterPasswordText": {
+    "description": "Creating new file: input field for master password"
+  },
+  "masterPasswordMissingCreate": "Bitte gib ein sicheres Passwort an.",
+  "@masterPasswordMissingCreate": {
+    "description": "Text displayed when master password is empty while creating new password database"
+  },
+  "createDatabaseAction": "Erstelle Datenbank",
+  "@createDatabaseAction": {
+    "description": "Label for button to create new database"
+  },
+  "databaseExistsError": "Datei exisiert bereits",
+  "@databaseExistsError": {
+    "description": "dialog title for error message when creating a new database with a name which already exists."
+  },
+  "databaseExistsErrorDescription": "Fehler beim versuch die Datenbank zu erstellen: {filePath}. Die Datei exisitert bereits. Bitte wähle einen anderen Namen.",
+  "@databaseExistsErrorDescription": {
+    "description": "dialog body for error message when creating a new database with a name which already exists.",
+    "placeholders": {
+      "filePath": {
+        "description": "file path which already existed."
+      }
+    }
+  },
+  "databaseCreateDefaultName": "PersönlichePasswörter",
+  "@databaseCreateDefaultName": {
+    "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+  },
+  "preferenceDynamicLoadIcons": "Dynamisch Website icons laden",
+  "@preferenceDynamicLoadIcons": {
+    "description": "preferences: dynamically load website icons"
+  },
+  "preferenceDynamicLoadIconsSubtitle": "Macht abfragen auf {urlFieldName} um Dynamisch Icons zu suchen.",
+  "@preferenceDynamicLoadIconsSubtitle": {
+    "description": "preferences: dynamically load website icons help text.",
+    "placeholders": {
+      "urlFieldName": {
+        "example": "Website"
+      }
+    }
+  },
+  "passwordScore": "Stärke: {score} von 4",
+  "@passwordScore": {
+    "description": "choosing a master password - calculated password strength.",
+    "placeholders": {
+      "score": {
+        "description": "integer of the score.",
+        "example": "3"
+      }
+    }
+  },
+  "entryInfoFile": "Datei:",
+  "@entryInfoFile": {
+    "description": ""
+  },
+  "entryInfoGroup": "Gruppe:",
+  "@entryInfoGroup": {
+    "description": ""
+  },
+  "entryInfoLastModified": "Letzte Änderung:",
+  "@entryInfoLastModified": {
+    "description": ""
+  },
+  "movedEntryToGroup": "Eintrag verschoben nach {groupName}",
+  "@movedEntryToGroup": {
+    "description": "",
+    "placeholders": {
+      "groupName": {
+        "description": "Name of the group the entry was moved to."
+      }
+    }
+  },
+  "sizeBytesStoredAuthPassCloud": "{count} Bytes, in der AuthPass Cloud gespeichert",
+  "@sizeBytesStoredAuthPassCloud": {
+    "description": "",
+    "placeholders": {
+      "count": {
+        "description": "file size in bytes",
+        "example": "123"
+      }
+    }
+  },
+  "sizeBytes": "{count} Bytes",
+  "@sizeBytes": {
+    "description": "",
+    "placeholders": {
+      "count": {
+        "description": "file size in bytes",
+        "example": "123"
+      }
+    }
+  },
+  "entryAddAttachment": "Anhang anfügen",
+  "@entryAddAttachment": {
+    "description": ""
+  },
+  "entryAttachmentSizeWarning": "Anhänge werden in der Passwort Datei gespeichert. Dies kann die Zeit zum öffnen der Passwörter stark erhöhen!",
+  "@entryAttachmentSizeWarning": {
+    "description": ""
+  },
+  "iconPngSizeWarning": "Benutzerdefinierte Symbole werden in die Passwortdatei gespeichert. Dies kann die Zeit zum Öffnen und Speichern von Passwörtern erheblich erhöhen.",
+  "@iconPngSizeWarning": {
+    "description": "Warning shown when user selects a large png file as custom icon."
+  },
+  "notPngError": "Die gewählte Datei ist kein PNG.",
+  "@notPngError": {
+    "description": "Error when user selects an unsupported file as custom icon."
+  },
+  "entryAddField": "Feld hinzufügen",
+  "@entryAddField": {
+    "description": ""
+  },
+  "entryCustomField": "Benutzerdefiniertes Feld",
+  "@entryCustomField": {
+    "description": ""
+  },
+  "entryCustomFieldTitle": "Füge neues Benutzerdefiniertes Feld hinzu",
+  "@entryCustomFieldTitle": {
+    "description": ""
+  },
+  "entryCustomFieldInputLabel": "Namen für Feld eingeben",
+  "@entryCustomFieldInputLabel": {
+    "description": ""
+  },
+  "swipeCopyField": "Feld kopieren",
+  "@swipeCopyField": {
+    "description": ""
+  },
+  "fieldRename": "Umbenennen",
+  "@fieldRename": {
+    "description": ""
+  },
+  "fieldGeneratePassword": "Passwort generieren …",
+  "@fieldGeneratePassword": {
+    "description": ""
+  },
+  "fieldProtect": "Geschützter Wert",
+  "@fieldProtect": {
+    "description": ""
+  },
+  "fieldUnprotect": "Ungeschützter Wert",
+  "@fieldUnprotect": {
+    "description": ""
+  },
+  "fieldPresent": "Präsentieren",
+  "@fieldPresent": {
+    "description": ""
+  },
+  "fieldGenerateEmail": "Email generieren",
+  "@fieldGenerateEmail": {
+    "description": ""
+  },
+  "onboardingBackToOnboarding": "Führung",
+  "@onboardingBackToOnboarding": {
+    "description": "Context menu entry which reverts to onboarding"
+  },
+  "onboardingBackToOnboardingSubtitle": "App tour neu erleben 😅️",
+  "@onboardingBackToOnboardingSubtitle": {
+    "description": "Context menu entry which reverts to onboarding"
+  },
+  "onboardingHeadline": "Lass uns deine Passwörter sicher machen!",
+  "@onboardingHeadline": {
+    "description": ""
+  },
+  "onboardingQuestion": "Hast du schon einen Passwort Manager benutzt?",
+  "@onboardingQuestion": {
+    "description": ""
+  },
+  "onboardingYesOpenPasswords": "Ja, öffne meine Passwörter",
+  "@onboardingYesOpenPasswords": {
+    "description": ""
+  },
+  "onboardingNoCreate": "Ich bin neu. Lass uns loslegen!",
+  "@onboardingNoCreate": {
+    "description": ""
+  },
+  "backupButton": "IN DER CLOUD SPEICHERN",
+  "@backupButton": {
+    "description": "Button that is displayed in backup warnings"
+  },
+  "dismissBackupButton": "Schließen",
+  "@dismissBackupButton": {
+    "description": "Button that is displayed in backup warnings to dismiss the warning"
+  },
+  "backupWarningMessage": "Ihre Passwörter in {databasename} sind nur lokal gespeichert!",
+  "@backupWarningMessage": {
+    "description": "Warning message that is displayed in backup warnings",
+    "placeholders": {
+      "databasename": {
+        "example": "PasswordDatabase"
+      }
+    }
+  },
+  "saveAs": "Speichern in...",
+  "@saveAs": {
+    "description": "Save as text"
+  },
+  "saving": "Speichere",
+  "@saving": {
+    "description": "Saving text"
+  },
+  "increaseValue": "Vergrößern",
+  "@increaseValue": {
+    "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+  },
+  "decreaseValue": "Verkleinern",
+  "@decreaseValue": {
+    "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+  },
+  "resetValue": "Zurücksetzen",
+  "@resetValue": {
+    "description": "Preferences value modifier (Text Scale Factor/Visual Density)"
+  },
+  "cloudStorageAppBarTitle": "Cloud-Speicher - {cloudStorageName}",
+  "@cloudStorageAppBarTitle": {
+    "description": "app bar title for opening/saving to cloud storage.",
+    "placeholders": {
+      "cloudStorageName": {
+        "example": "Dropbox"
+      }
+    }
+  },
+  "cloudStorageLogInCaption": "Sie werden weitergeleitet, um AuthPass zu authentifizieren, um auf Ihre Daten zuzugreifen.",
+  "@cloudStorageLogInCaption": {
+    "description": ""
+  },
+  "cloudStorageLogInCode": "Code eingeben",
+  "@cloudStorageLogInCode": {
+    "description": "for oauth authentication user has to enter auth code - this is the label for the text field."
+  },
+  "launchUrlError": "Url kann nicht gestartet werden. Bitte besuchen Sie {url}",
+  "@launchUrlError": {
+    "description": "",
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "cloudStorageLogInActionLabel": "Anmelden bei {cloudStorageName}",
+  "@cloudStorageLogInActionLabel": {
+    "description": "when the user has not authenticated yet, he will see this button to start the login flow of a cloud storage backend.",
+    "placeholders": {
+      "cloudStorageName": {
+        "example": "Dropbox"
+      }
+    }
+  },
+  "cloudStorageAuthCodeDialogTitle": "{cloudStorageName} Authentifizierung",
+  "@cloudStorageAuthCodeDialogTitle": {
+    "description": "",
+    "placeholders": {
+      "cloudStorageName": {
+        "example": "Dropbox"
+      }
+    }
+  },
+  "cloudStorageAuthCodeLabel": "Authentifizierungs-Code",
+  "@cloudStorageAuthCodeLabel": {
+    "description": ""
+  },
+  "cloudStorageAuthErrorTitle": "Fehler während der Authentifizierung",
+  "@cloudStorageAuthErrorTitle": {
+    "description": ""
+  },
+  "cloudStorageAuthErrorMessage": "Fehler beim Versuch, sich bei {cloudStorageName} zu authentifizieren: {errorMessage}",
+  "@cloudStorageAuthErrorMessage": {
+    "description": "",
+    "placeholders": {
+      "cloudStorageName": {
+        "example": "Dropbox"
+      },
+      "errorMessage": {}
+    }
+  },
+  "cloudStorageSearchBoxLabel": "Suchanfrage",
+  "@cloudStorageSearchBoxLabel": {
+    "description": ""
+  },
+  "cloudStorageItemsInFolder": "{itemCount} Einträge in diesem Ordner.",
+  "@cloudStorageItemsInFolder": {
+    "description": "",
+    "placeholders": {
+      "itemCount": {}
+    }
+  },
+  "mailSubject": "Betreff",
+  "@mailSubject": {
+    "description": ""
+  },
+  "mailFrom": "Von",
+  "@mailFrom": {
+    "description": ""
+  },
+  "mailDate": "Datum",
+  "@mailDate": {
+    "description": ""
+  },
+  "mailMailbox": "Postfach",
+  "@mailMailbox": {
+    "description": ""
+  },
+  "mailNoData": "Keine Daten",
+  "@mailNoData": {
+    "description": "Message shown when email text body is empty (or can't be decoded)"
+  },
+  "mailMailboxesTitle": "Postfächer",
+  "@mailMailboxesTitle": {
+    "description": "Title of the screen showing all available mailboxes."
+  },
+  "mailboxCreateButtonLabel": "Erstellen",
+  "@mailboxCreateButtonLabel": {
+    "description": "FAB label to create a new mailbox."
+  },
+  "mailboxNameInputDialogTitle": "Optionale Bezeichnung für neue Postfach",
+  "@mailboxNameInputDialogTitle": {
+    "description": "title of the dialog asking for a mailbox label/name"
+  },
+  "mailboxNameInputLabel": "(interne) Bezeichnung",
+  "@mailboxNameInputLabel": {
+    "description": "Label for the text field asking for a label for a mailbox, while creating it."
+  },
+  "mailScreenTitle": "AuthPass E-Mail",
+  "@mailScreenTitle": {
+    "description": "title for the screen showing available emails"
+  },
+  "mailTabBarTitleMailbox": "Postfach",
+  "@mailTabBarTitleMailbox": {
+    "description": "title for the tab showing list of mailboxes."
+  },
+  "mailTabBarTitleMail": "E-Mail",
+  "@mailTabBarTitleMail": {
+    "description": "title for the tab showing list of mails."
+  },
+  "mailMailboxListEmpty": "Sie haben noch keine Postfächer.",
+  "@mailMailboxListEmpty": {
+    "description": ""
+  },
+  "mailMailboxAddressCopied": "Mailbox-Adresse wurde in die Zwischenablage kopiert: {mailboxAddress}",
+  "@mailMailboxAddressCopied": {
+    "description": "Success message when mailbox email address was copied to clipboard.",
+    "placeholders": {
+      "mailboxAddress": {
+        "example": "dkasdfiasdfi@mail.authpass.app"
+      }
+    }
+  },
+  "errorWhileSavingTitle": "Fehler beim Speichern",
+  "@errorWhileSavingTitle": {
+    "description": "title for error dialog shown when an error occurs while saving"
+  },
+  "errorWhileSavingBody": "Datei konnte nicht gespeichert werden: {errorMessage}",
+  "@errorWhileSavingBody": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "databaseDoesNotSupportSaving": "Entschuldigung, diese Datenbank unterstützt das Speichern nicht. Bitte öffnen Sie eine lokale Datenbankdatei. Oder verwenden Sie \"Speichern unter\".",
+  "@databaseDoesNotSupportSaving": {
+    "description": "keepass files loaded through a URL can't be saved."
+  },
+  "otpInvalidKeyTitle": "Ungültiger Schlüssel",
+  "@otpInvalidKeyTitle": {
+    "description": "dialog title for an invalid key of a one time password (OTP/TOTP)"
+  },
+  "otpInvalidKeyBody": "Die angegebene Eingabe ist kein gültiger Base32 TOTP-Code. Bitte überprüfen Sie Ihre Eingabe.",
+  "@otpInvalidKeyBody": {
+    "description": ""
+  },
+  "otpPromptTitle": "Zeitbasierte Authentifizierung",
+  "@otpPromptTitle": {
+    "description": ""
+  },
+  "otpPromptHelperText": "Bitte geben Sie einen zeitbasierten Schlüssel ein.",
+  "@otpPromptHelperText": {
+    "description": ""
+  },
+  "otpErrorMessageGeneration": "Fehler beim Generieren des Einladungscodes: {errorMessage}",
+  "@otpErrorMessageGeneration": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "otpCopySecretActionLabel": "Geheimnis kopieren",
+  "@otpCopySecretActionLabel": {
+    "description": ""
+  },
+  "otpEntryLabel": "Einmal-Token",
+  "@otpEntryLabel": {
+    "description": "The label for entries which show a one time token for a TOTP"
+  },
+  "entryFieldProtected": "Geschütztes Feld. Klicken, um zu enthüllen.",
+  "@entryFieldProtected": {
+    "description": ""
+  },
+  "entryFieldActionRevealField": "Geschütztes Feld anzeigen",
+  "@entryFieldActionRevealField": {
+    "description": ""
+  },
+  "entryAttachmentOpenActionLabel": "Öffnen",
+  "@entryAttachmentOpenActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentShareActionLabel": "Teilen",
+  "@entryAttachmentShareActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentShareSubject": "Anhang",
+  "@entryAttachmentShareSubject": {
+    "description": "the 'subject' passed to the system when sharing an attachment. "
+  },
+  "entryAttachmentSaveActionLabel": "Auf Gerät speichern",
+  "@entryAttachmentSaveActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentRemoveActionLabel": "Entfernen",
+  "@entryAttachmentRemoveActionLabel": {
+    "description": ""
+  },
+  "entryAttachmentRemoveConfirm": "Wollen Sie {attachmentLabel} wirklich löschen?",
+  "@entryAttachmentRemoveConfirm": {
+    "description": "",
+    "placeholders": {
+      "attachmentLabel": {}
+    }
+  },
+  "entryRenameFieldPromptTitle": "Feld umbenennen",
+  "@entryRenameFieldPromptTitle": {
+    "description": ""
+  },
+  "removerecentfile": "Verstecken",
+  "@removerecentfile": {
+    "description": ""
+  },
+  "entryRenameFieldPromptLabel": "Neuen Namen für das Feld eingeben",
+  "@entryRenameFieldPromptLabel": {
+    "description": ""
+  },
+  "promptDialogPasteActionTooltip": "Einfügen von der Zwischenablage",
+  "@promptDialogPasteActionTooltip": {
+    "description": ""
+  },
+  "promptDialogPasteHint": "Hinweis: Wenn sie etwas einfügen wollen, versuchen sie den Knopf zu ihrer linken ;-)",
+  "@promptDialogPasteHint": {
+    "description": "sometimes the paste shortcut is not working properly, so tell users they can use the paste button from the UI"
+  },
+  "genericErrorDialogTitle": "Fehler beim ausführen der Aktion",
+  "@genericErrorDialogTitle": {
+    "description": ""
+  },
+  "genericErrorDialogBody": "Es ist ein unerwarteter Fehler aufgetreten. {errorMessage}",
+  "@genericErrorDialogBody": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "saveAsEntryLocalFile": "Speichern als Lokale Datei",
+  "@saveAsEntryLocalFile": {
+    "description": "menu entry in the 'save as' dialog for saving as local file."
+  },
+  "fileTypePngs": "Bilder (png)",
+  "@fileTypePngs": {
+    "description": "When selecting custom icons, users can choose a png image. This is the name of the 'file group'"
+  },
+  "selectIconDialogAction": "WÄHLE ICON",
+  "@selectIconDialogAction": {
+    "description": ""
+  },
+  "retryDialogActionLabel": "Erneut versuchen",
+  "@retryDialogActionLabel": {
+    "description": ""
+  },
+  "errorDuringNetworkCall": "Fehler beim Api-Abfrage. {errorMessage}",
+  "@errorDuringNetworkCall": {
+    "description": "",
+    "placeholders": {
+      "errorMessage": {}
+    }
+  },
+  "passwordFilterHideDeleted": "Gelöschte Einträge ausblenden",
+  "@passwordFilterHideDeleted": {
+    "description": "filter name to show only password entries which are not deleted"
+  },
+  "passwordFilterOnlyDeleted": "Gelöschte Einträge",
+  "@passwordFilterOnlyDeleted": {
+    "description": "filter name to show only deleted password entries"
+  },
+  "passwordFilterPrefixForOneGroup": "Gruppe: {groupName}",
+  "@passwordFilterPrefixForOneGroup": {
+    "description": "The label for a password filter for one specific group",
+    "placeholders": {
+      "groupName": {}
+    }
+  },
+  "passwordFilterPrefixForMultipleGroups": "Eigener Filter ({groupCount} Gruppen)",
+  "@passwordFilterPrefixForMultipleGroups": {
+    "description": "The label for a password filter for multiple groups",
+    "placeholders": {
+      "groupCount": {}
+    }
+  },
+  "menuItemAuthPassCloudAuthenticate": "Mit AuthPass Cloud authentifizieren",
+  "@menuItemAuthPassCloudAuthenticate": {
+    "description": "menu entry in password list to allow users to authenticate with AuthPass Cloud"
+  },
+  "menuItemAuthPassCloudMailboxes": "AuthPass Postfächer",
+  "@menuItemAuthPassCloudMailboxes": {
+    "description": ""
+  },
+  "changesWithoutSaving": "Sie haben Änderungen in \"{fileName}\", die das Schreiben von Änderungen nicht unterstützen.",
+  "@changesWithoutSaving": {
+    "description": "",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "changesSaveLocally": "Lokal speichern",
+  "@changesSaveLocally": {
+    "description": ""
+  },
+  "clearColor": "Farbe löschen",
+  "@clearColor": {
+    "description": "Action to remove a selected color and reset to default."
+  },
+  "databaseRenameInputLabel": "Datenbank-Name eingeben",
+  "@databaseRenameInputLabel": {
+    "description": ""
+  },
+  "databasePath": "Pfad",
+  "@databasePath": {
+    "description": ""
+  },
+  "databaseColor": "Farbe",
+  "@databaseColor": {
+    "description": ""
+  },
+  "databaseColorChoose": "Wählen Sie eine Farbe um zwischen Dateien zu unterscheiden.",
+  "@databaseColorChoose": {
+    "description": ""
+  },
+  "databaseKdbxVersion": "KDBX Datei-Version",
+  "@databaseKdbxVersion": {
+    "description": ""
+  },
+  "databaseKdbxUpgradeVersion": "Upgrade auf {versionName}",
+  "@databaseKdbxUpgradeVersion": {
+    "description": "",
+    "placeholders": {
+      "versionName": {}
+    }
+  },
+  "databaseKdbxUpgradeSuccessful": "Datei erfolgreich aktualisiert und gespeichert.",
+  "@databaseKdbxUpgradeSuccessful": {
+    "description": ""
+  },
+  "databaseReload": "Neuladen und Zusammenführen",
+  "@databaseReload": {
+    "description": ""
+  },
+  "progressStatus": "Status: {statusProgress}",
+  "@progressStatus": {
+    "description": "While an action is running this is displayed as status message. Don't worry too much, users should typically not see this for too long (if at all)",
+    "placeholders": {
+      "statusProgress": {}
+    }
+  },
+  "finishedMerge": "Zusammenführung beendet {status}",
+  "@finishedMerge": {
+    "description": "",
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "closeAndLockFile": "Schließen/Sperren",
+  "@closeAndLockFile": {
+    "description": ""
+  },
+  "authPassHomeScreenTagline": "password manager, open source, verfügbar auf allen Plattformen.",
+  "@authPassHomeScreenTagline": {
+    "description": ""
+  },
+  "addNewPasswordButtonLabel": "Neues Passwort hinzufügen",
+  "@addNewPasswordButtonLabel": {
+    "description": ""
+  },
+  "unnamedEntryPlaceholder": "(Unbenannt)",
+  "@unnamedEntryPlaceholder": {
+    "description": "displayed instead of entry label, if entry has no name or it is blank."
+  },
+  "unnamedGroupPlaceholder": "(Unbenannt)",
+  "@unnamedGroupPlaceholder": {
+    "description": "displayed instead of a groups name, it is unnamed or it's name is empty"
+  },
+  "unnamedFilePlaceholder": "(Unbenannt)",
+  "@unnamedFilePlaceholder": {
+    "description": ""
+  },
+  "editGroupScreenTitle": "Gruppe bearbeiten",
+  "@editGroupScreenTitle": {
+    "description": ""
+  },
+  "editGroupGroupNameLabel": "Name der Gruppe",
+  "@editGroupGroupNameLabel": {
+    "description": ""
+  },
+  "files": "Dateien",
+  "@files": {
+    "description": ""
+  },
+  "newGroupDialogTitle": "Neue Gruppe",
+  "@newGroupDialogTitle": {
+    "description": ""
+  },
+  "newGroupDialogInputLabel": "Name für die neue Gruppe",
+  "@newGroupDialogInputLabel": {
+    "description": ""
+  },
+  "groupActionShowPasswords": "Passwörter anzeigen",
+  "@groupActionShowPasswords": {
+    "description": ""
+  },
+  "groupActionDelete": "Löschen",
+  "@groupActionDelete": {
+    "description": ""
+  },
+  "logoutTooltip": "Abmelden",
+  "@logoutTooltip": {
+    "description": "Tooltip for logging out of a cloud storage provider."
+  },
+  "successfullyDeletedFileCloudStorage": "Datei erfolgreich gelöscht.",
+  "@successfullyDeletedFileCloudStorage": {
+    "description": "deleted file from cloud storage."
+  },
+  "shareDialogTitle": "Freigabe-Optionen für {fileName}",
+  "@shareDialogTitle": {
+    "description": "",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "shareFileActionLabel": "Teilen …",
+  "@shareFileActionLabel": {
+    "description": ""
+  },
+  "shareTokenListEmptyScreenPlaceholder": "Datei noch nicht freigegeben.",
+  "@shareTokenListEmptyScreenPlaceholder": {
+    "description": ""
+  },
+  "shareTokenNoLabel": "Keine Beschriftung",
+  "@shareTokenNoLabel": {
+    "description": "User did not specify a description for a given share code."
+  },
+  "shareTokenReadWrite": "Lesen/Schreiben",
+  "@shareTokenReadWrite": {
+    "description": "Share Code allows reading and writing"
+  },
+  "shareTokenReadOnly": "Nur Lesen",
+  "@shareTokenReadOnly": {
+    "description": "Share code only allows reading."
+  },
+  "shareCreateTokenDialogTitle": "Datei teilen",
+  "@shareCreateTokenDialogTitle": {
+    "description": ""
+  },
+  "shareCreateTokenReadOnly": "Nur lesen",
+  "@shareCreateTokenReadOnly": {
+    "description": "switch between read only and read/write"
+  },
+  "shareCreateTokenReadOnlyHelpText": "Speichern von Änderungen nicht zulassen",
+  "@shareCreateTokenReadOnlyHelpText": {
+    "description": "help text for the switch between read only and read/write"
+  },
+  "shareCreateTokenLabelText": "Beschreibung",
+  "@shareCreateTokenLabelText": {
+    "description": "Allows users to add a description/label to a share code."
+  },
+  "shareCreateTokenLabelHint": "Für meinen Freund freigeben",
+  "@shareCreateTokenLabelHint": {
+    "description": "the placeholder/hint text displayed when the user has not yet entered a label"
+  },
+  "shareCreateTokenLabelHelp": "Optionales Label zur Differenzierung von Share Code.",
+  "@shareCreateTokenLabelHelp": {
+    "description": ""
+  },
+  "shareCreateTokenSuccess": "Freigabecode erfolgreich erstellt.",
+  "@shareCreateTokenSuccess": {
+    "description": "snackbar when share code was created successfully."
+  },
+  "sharePresentDialogTitle": "Datei mit geheimem Freigabecode teilen",
+  "@sharePresentDialogTitle": {
+    "description": ""
+  },
+  "sharePresentDialogHelp": "Benutzer des folgenden Freigabecodes können auf die Passwortdatei zugreifen. Sie benötigen zum Öffnen das Passwort und/oder die Schlüsseldatei.",
+  "@sharePresentDialogHelp": {
+    "description": ""
+  },
+  "sharePresentToken": "Code teilen",
+  "@sharePresentToken": {
+    "description": ""
+  },
+  "sharePresentCopied": "Code wurde in die Zwischenablage kopiert.",
+  "@sharePresentCopied": {
+    "description": ""
+  },
+  "authPassCloudOpenWithShareCodeTooltip": "Mit Freigabecode öffnen",
+  "@authPassCloudOpenWithShareCodeTooltip": {
+    "description": "Allows users to open cloud files using a share code/token."
+  },
+  "authPassCloudShareFileActionLabel": "Teilen",
+  "@authPassCloudShareFileActionLabel": {
+    "description": ""
+  },
+  "preferenceAuthPassCloudAttachmentTitle": "AuthPass Cloud-Anhänge verwenden",
+  "@preferenceAuthPassCloudAttachmentTitle": {
+    "description": ""
+  },
+  "preferenceAuthPassCloudAttachmentSubtitle": "Anhänge speichern, die in AuthPass Cloud separat verschlüsselt werden.",
+  "@preferenceAuthPassCloudAttachmentSubtitle": {
+    "description": ""
+  },
+  "shareCodeInputDialogTitle": "Geheime Freigabe-Code eingeben",
+  "@shareCodeInputDialogTitle": {
+    "description": "input dialog for inputting secret share code to access password file in AuthPassCloud"
+  },
+  "shareCodeInputDialogScan": "Scan QR Code",
+  "@shareCodeInputDialogScan": {
+    "description": "button label for triggering QR code scanner"
+  },
+  "shareCodeInputLabel": "Geheime Freigabe-Code",
+  "@shareCodeInputLabel": {
+    "description": ""
+  },
+  "shareCodeInputHelperText": "Wenn Sie einen Teilcode erhalten haben, fügen Sie ihn bitte oben ein.",
+  "@shareCodeInputHelperText": {
+    "description": ""
+  },
+  "shareCodeOpen": "Freigabecode für AuthPass Cloud erhalten?",
+  "@shareCodeOpen": {
+    "description": ""
+  },
+  "shareCodeOpenScreenTitle": "Datei mit Freigabecode wird geladen",
+  "@shareCodeOpenScreenTitle": {
+    "description": ""
+  },
+  "shareCodeLoadingProgress": "Datei wird geladen …",
+  "@shareCodeLoadingProgress": {
+    "description": ""
+  },
+  "shareCodeOpenFileButtonLabel": "Öffnen",
+  "@shareCodeOpenFileButtonLabel": {
+    "description": ""
+  },
+  "shareCodeOpenInstallAppCaption": "Möchten Sie diese Datei stattdessen mit einer unserer nativen Apps öffnen?",
+  "@shareCodeOpenInstallAppCaption": {
+    "description": ""
+  },
+  "shareCodeOpenAnotherAppCaption": "Möchten Sie diese Datei auf einem anderen Gerät öffnen?",
+  "@shareCodeOpenAnotherAppCaption": {
+    "description": ""
+  },
+  "shareCodeOpenInstallAppButtonLabel": "App installieren",
+  "@shareCodeOpenInstallAppButtonLabel": {
+    "description": ""
+  },
+  "shareCodeOpenShowCodeButtonLabel": "Freigabecode anzeigen",
+  "@shareCodeOpenShowCodeButtonLabel": {
+    "description": ""
+  },
+  "changeMasterPasswordActionLabel": "Master-Passwort ändern",
+  "@changeMasterPasswordActionLabel": {
+    "description": "label for the button to show the dialog for changing master password."
+  },
+  "changeMasterPasswordFormSubmit": "Mit neuem Passwort speichern",
+  "@changeMasterPasswordFormSubmit": {
+    "description": ""
+  },
+  "changeMasterPasswordSuccess": "Master-Passwort erfolgreich gespeichert.",
+  "@changeMasterPasswordSuccess": {
+    "description": ""
+  },
+  "changeMasterPasswordScreenTitle": "Master-Passwort ändern",
+  "@changeMasterPasswordScreenTitle": {
+    "description": "app bar title for change password screen."
+  },
+  "authPassCloudAuthClickedLink": "Ich habe eine Email erhalten und klickte auf denn Link",
+  "@authPassCloudAuthClickedLink": {
+    "description": ""
+  },
+  "authPassCloudAuthNotConfirmed": "Die E-Mail-Adresse wurde noch nicht bestätigt. Bitte klicken Sie auf den Link in der erhaltenen E-Mail und lösen Sie das Captcha, um Ihre E-Mail-Adresse zu bestätigen.",
+  "@authPassCloudAuthNotConfirmed": {
+    "description": ""
+  },
+  "getHelpButton": "Erhalte Hilfe im Forum",
+  "@getHelpButton": {
+    "description": ""
+  },
+  "shortcutCopyUsername": "Benutzername kopieren",
+  "@shortcutCopyUsername": {
+    "description": ""
+  },
+  "shortcutCopyPassword": "Passwort kopieren",
+  "@shortcutCopyPassword": {
+    "description": ""
+  },
+  "shortcutCopyTotp": "TOTP kopieren",
+  "@shortcutCopyTotp": {
+    "description": ""
+  },
+  "shortcutMoveUp": "Vorheriges Passwort auswählen",
+  "@shortcutMoveUp": {
+    "description": ""
+  },
+  "shortcutMoveDown": "Wählen Sie das nächste Passwort",
+  "@shortcutMoveDown": {
+    "description": ""
+  },
+  "shortcutGeneratePassword": "Passwort generieren",
+  "@shortcutGeneratePassword": {
+    "description": ""
+  },
+  "shortcutCopyUrl": "URL kopieren",
+  "@shortcutCopyUrl": {
+    "description": ""
+  },
+  "shortcutOpenUrl": "URL Öffnen",
+  "@shortcutOpenUrl": {
+    "description": ""
+  },
+  "shortcutCancelSearch": "Suche abbrechen",
+  "@shortcutCancelSearch": {
+    "description": ""
+  },
+  "shortcutShortcutHelp": "Hilfe zu dennTastenkombinationen",
+  "@shortcutShortcutHelp": {
+    "description": ""
+  },
+  "shortcutHelpTitle": "Tastenkombinationen",
+  "@shortcutHelpTitle": {
+    "description": "title of dialog showing keyboard shortcuts."
+  },
+  "unexpectedError": "Unerwarteter Fehler: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "scanQrCodeTitle": "QR-Code Scannen."
 }

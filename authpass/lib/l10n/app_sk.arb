@@ -1,790 +1,790 @@
 {
-    "@@locale": "sk",
-    "fieldUserName": "Používateľ",
-    "@fieldUserName": {},
-    "fieldPassword": "Heslo",
-    "@fieldPassword": {},
-    "fieldWebsite": "Web",
-    "@fieldWebsite": {},
-    "fieldTitle": "Názov",
-    "@fieldTitle": {},
-    "fieldTotp": "Jednorázové heslo (podľa času)",
-    "@fieldTotp": {
-        "description": "Label for fields of TOTP (Time based one time passwords)"
-    },
-    "english": "Angličtina",
-    "@english": {
-        "description": "language switcher subtitle"
-    },
-    "german": "Nemčina",
-    "@german": {
-        "description": "language switcher subtitle"
-    },
-    "russian": "Ruština",
-    "@russian": {
-        "description": "language switcher subtitle"
-    },
-    "ukrainian": "Ukrajinčina",
-    "@ukrainian": {
-        "description": "language switcher subtitle"
-    },
-    "lithuanian": "Litovčina",
-    "@lithuanian": {
-        "description": "language switcher subtitle"
-    },
-    "french": "Francúzština",
-    "@french": {
-        "description": "language switcher subtitle"
-    },
-    "spanish": "Španielčina",
-    "@spanish": {
-        "description": "language switcher subtitle"
-    },
-    "indonesian": "Indonézčina",
-    "@indonesian": {
-        "description": "language switcher subtitle"
-    },
-    "turkish": "Turčina",
-    "@turkish": {
-        "description": "Language switcher subtitle"
-    },
-    "hebrew": "Hebrejčina",
-    "@hebrew": {
-        "description": "Language switcher subtitle"
-    },
-    "italian": "taliančina",
-    "@italian": {
-        "description": "Language switcher subtitle"
-    },
-    "chineseSimplified": "Zjednodušená Čínština",
-    "@chineseSimplified": {
-        "description": "Language switcher subtitle"
-    },
-    "chineseTraditional": "Tradičná Čínština",
-    "@chineseTraditional": {
-        "description": "Language switcher subtitle"
-    },
-    "portugueseBrazilian": "Portugalčina",
-    "@portugueseBrazilian": {
-        "description": "Language switcher subtitle"
-    },
-    "selectKeepassFile": "AuthPass - Zvoľte KeePass Súbor",
-    "@selectKeepassFile": {
-        "context": "appbar title - select file screen"
-    },
-    "selectKeepassFileLabel": "Prosím zvoľte KeePass (.kdbx) súbor.",
-    "@selectKeepassFileLabel": {
-        "context": "select file screen, used as label."
-    },
-    "createNewFile": "Vytvoriť nový súbor",
-    "@createNewFile": {
-        "description": "button on select file screen to create a new password database."
-    },
-    "openLocalFile": "Otvoriť lokálny súbor",
-    "@openLocalFile": {
-        "context": "select file screen, big button open local file."
-    },
-    "openFile": "Otvoriť súbor",
-    "@openFile": {
-        "description": "Displayed as placeholder in password list when no file is open."
-    },
-    "loadFrom": "Načítať z {cloudStorageName}",
-    "@loadFrom": {
-        "placeholders": {
-            "cloudStorageName": {
-                "type": "String",
-                "example": "Dropbox"
-            }
-        }
-    },
-    "loadFromRemoteUrl": "Otvoriť. kdbx súbor z URL",
-    "@loadFromRemoteUrl": {
-        "description": "Overflow menu option to load KeePass file from URL."
-    },
-    "createNewKeepass": "Nový použivateľ služby KeePass?\nZaložte si novú heslovú databázu",
-    "@createNewKeepass": {
-        "description": "deprecated"
-    },
-    "labelLastOpenFiles": "Naposledy otvorené súbory:",
-    "@labelLastOpenFiles": {},
-    "noFilesHaveBeenOpenYet": "Zatiaľ neboli otvorené žiadne súbory.",
-    "@noFilesHaveBeenOpenYet": {},
-    "preferenceSelectLanguage": "Zvoľte Jazyk",
-    "@preferenceSelectLanguage": {},
-    "preferenceLanguage": "Jazyk",
-    "@preferenceLanguage": {},
-    "preferenceTextScaleFactor": "Faktor mierky textu",
-    "@preferenceTextScaleFactor": {},
-    "preferenceVisualDensity": "Vizuálna hustota",
-    "@preferenceVisualDensity": {},
-    "preferenceTheme": "Téma",
-    "@preferenceTheme": {},
-    "preferenceThemeLight": "Svetlá",
-    "@preferenceThemeLight": {},
-    "preferenceThemeDark": "Tmavá",
-    "@preferenceThemeDark": {},
-    "preferenceSystemDefault": "Predvolená Systémová",
-    "@preferenceSystemDefault": {},
-    "preferenceDefault": "Predvolená",
-    "@preferenceDefault": {},
-    "lockAllFiles": "Zamknúť všetky otvorené súbory",
-    "@lockAllFiles": {},
-    "preferenceAllowScreenshots": "Povoliť snímky obrazovky v aplikácii",
-    "@preferenceAllowScreenshots": {},
-    "preferenceEnableAutoFill": "Povoliť automatické doplňovanie",
-    "@preferenceEnableAutoFill": {},
-    "dismissAutofillSuggestionBannerButton": "ZRUŠIŤ",
-    "@dismissAutofillSuggestionBannerButton": {
-        "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
-    },
-    "preferenceAutoFillDescription": "Podporované iba v systéme Android Oreo (8.0) alebo novšom.",
-    "@preferenceAutoFillDescription": {},
-    "preferenceTitle": "Predvoľby",
-    "@preferenceTitle": {},
-    "aboutAppName": "AuthPass",
-    "@aboutAppName": {},
-    "aboutLinkFeedback": "Uvítame akýkoľvek druh spätnej väzby!",
-    "@aboutLinkFeedback": {},
-    "aboutLinkVisitWebsite": "Nezabudnite tiež navštíviť našu webovú stránku",
-    "@aboutLinkVisitWebsite": {},
-    "aboutLinkGitHub": "Open Source Projekt",
-    "@aboutLinkGitHub": {},
-    "aboutLogFile": "Log Súbor: {logFilePath}",
-    "@aboutLogFile": {
-        "placeholders": {
-            "logFilePath": {
-                "type": "String",
-                "example": "/Users/mustermann/log.txt"
-            }
-        }
-    },
-    "unableToLaunchUrlTitle": "Nepodarilo sa otvoriť URL",
-    "@unableToLaunchUrlTitle": {
-        "description": ""
-    },
-    "unableToLaunchUrlDescription": "Nepodarilo sa otvoriť Url: {url}: {openError}",
-    "@unableToLaunchUrlDescription": {
-        "description": "",
-        "placeholders": {
-            "url": {
-                "description": "URL which we tried to open."
-            },
-            "openError": {
-                "description": "Information about the error"
-            }
-        }
-    },
-    "unableToLaunchUrlNoHandler": "Pre adresu URL nie je k dispozícii žiadna aplikácia.",
-    "@unableToLaunchUrlNoHandler": {
-        "description": ""
-    },
-    "launchedUrl": "Otvorená URL adresa: {url}",
-    "@launchedUrl": {
-        "description": "snackbar confirmation after opening a url externally",
-        "placeholders": {
-            "url": {
-                "description": "URL which was just launched."
-            }
-        }
-    },
-    "menuItemGeneratePassword": "Generovať Heslo",
-    "@menuItemGeneratePassword": {},
-    "menuItemPreferences": "Predvoľby",
-    "@menuItemPreferences": {},
-    "menuItemOpenAnotherFile": "Otvoriť iný súbor",
-    "@menuItemOpenAnotherFile": {},
-    "menuItemCheckForUpdates": "Skontrolovať aktualizácie",
-    "@menuItemCheckForUpdates": {},
-    "menuItemHelp": "Pomoc",
-    "@menuItemHelp": {},
-    "menuItemHelpSubtitle": "Zobraziť dokumentáciu",
-    "@menuItemHelpSubtitle": {},
-    "menuItemAbout": "O nás",
-    "@menuItemAbout": {},
-    "actionOpenUrl": "Otvoriť URL",
-    "@actionOpenUrl": {
-        "description": "tooltip for button to open URL/Website of an entry."
-    },
-    "passwordPlainText": "Odhaliť heslo",
-    "@passwordPlainText": {
-        "description": "Master password input: show password as plain text during input. (shown as tooltip)"
-    },
-    "generatorPassword": "Heslo",
-    "@generatorPassword": {
-        "description": "Label for generated password"
-    },
-    "generatePassword": "Generovať heslo",
-    "@generatePassword": {
-        "description": "screen title for password generator"
-    },
-    "doneButtonLabel": "Hotovo",
-    "@doneButtonLabel": {
-        "description": "generic button label for 'Done' action."
-    },
-    "useAsDefault": "Použiť ako predvolené heslo",
-    "@useAsDefault": {
-        "description": "Button Label for Password generator settings: use as defaults",
-        "context": "Password generator"
-    },
-    "characterSetLowerCase": "Malé písmená (a-z)",
-    "@characterSetLowerCase": {
-        "context": "Password generator"
-    },
-    "characterSetUpperCase": "Veľké písmená (A-Z)",
-    "@characterSetUpperCase": {
-        "context": "Password generator"
-    },
-    "characterSetNumeric": "Číslice (0-9)",
-    "@characterSetNumeric": {
-        "context": "Password generator"
-    },
-    "characterSetUmlauts": "Prehlásky (ä)",
-    "@characterSetUmlauts": {
-        "context": "Password generator"
-    },
-    "characterSetSpecial": "Špeciálne znaky (@%+)",
-    "@characterSetSpecial": {
-        "context": "Password generator"
-    },
-    "length": "Dĺžka",
-    "@length": {
-        "description": "Length of password",
-        "context": "Password generator"
-    },
-    "customLength": "Vlastná Dĺžka",
-    "@customLength": {
-        "description": "Label for custom length field",
-        "context": "Password generator"
-    },
-    "customLengthHelperText": "Používa sa dĺžka > {customMinLength}",
-    "@customLengthHelperText": {
-        "description": "Help text for custom length field",
-        "context": "Password generator",
-        "placeholders": {
-            "customMinLength": {
-                "example": "40"
-            }
-        }
-    },
-    "savedFiles": "{numFiles, plural, =1 {Jeden súbor uložený: {files}} other {{numFiles} súborov uložených: {files}}}",
-    "@savedFiles": {
-        "description": "Message displayed when files were saved. (One or more).",
-        "context": "Password list",
-        "placeholders": {
-            "numFiles": {
-                "description": "Number of files that have been saved (at least 1)",
-                "type": "int",
-                "format": "compactLong"
-            },
-            "files": {
-                "description": "Comma separated list of vault names."
-            }
-        }
-    },
-    "manageGroups": "Spravovať Skupiny",
-    "@manageGroups": {
-        "description": ""
-    },
-    "lockFiles": "Zamknúť súbory",
-    "@lockFiles": {
-        "description": "Close all files and return to start screen."
-    },
-    "searchHint": "Hľadať",
-    "@searchHint": {
-        "description": "Placeholder in the password list search box"
-    },
-    "searchButtonLabel": "Hľadať",
-    "@searchButtonLabel": {
-        "description": "search button tooltip/semantic label"
-    },
-    "clear": "Vyčistiť",
-    "@clear": {
-        "description": "Remove existing group filter from password list"
-    },
-    "autofillFilterPrefix": "Filter:",
-    "@autofillFilterPrefix": {
-        "description": "Label displayed for android auto fill"
-    },
-    "autofillPrompt": "Vyberte zadanie hesla pre automatické dopĺňanie.",
-    "@autofillPrompt": {
-        "description": ""
-    },
-    "copiedToClipboard": "Skopírované do schránky.",
-    "@copiedToClipboard": {
-        "description": "Snackbar text when copying text to clipboard."
-    },
-    "noTitle": "(žiadny nadpis)",
-    "@noTitle": {
-        "description": "Text to display in place of a title, when password entry has no name assigned."
-    },
-    "noUsername": "(žiadne meno)",
-    "@noUsername": {
-        "description": "Text to display in place of a user name in the password list if none is defined."
-    },
-    "filterCustomize": "Prispôsobiť …",
-    "@filterCustomize": {
-        "description": "Customize filter in password list"
-    },
-    "swipeCopyPassword": "Kopírovať Heslo",
-    "@swipeCopyPassword": {
-        "description": "swipe action in password list to copy password"
-    },
-    "swipeCopyUsername": "Kopírovať používateľské meno",
-    "@swipeCopyUsername": {
-        "description": "swipe action in password list to copy username"
-    },
-    "doneCopiedPassword": "Heslo bolo skopírované do schránky.",
-    "@doneCopiedPassword": {
-        "description": "snackbar confirmation that password was copied."
-    },
-    "doneCopiedUsername": "Skopírované používateľské meno do schránky.",
-    "@doneCopiedUsername": {
-        "description": "snackbar confirmation that username was copied."
-    },
-    "doneCopiedField": "Skopírované.",
-    "@doneCopiedField": {
-        "description": ""
-    },
-    "emptyPasswordVaultPlaceholder": "Zatiaľ nemáte vo svojej databáze žiadne heslo.",
-    "@emptyPasswordVaultPlaceholder": {
-        "description": "Placeholder text shown when a user opens an empty password file."
-    },
-    "emptyPasswordVaultButtonLabel": "Vytvorte si svoje prvé heslo",
-    "@emptyPasswordVaultButtonLabel": {
-        "description": "Button shown under placeholder text when password database is empty"
-    },
-    "loadingFile": "Načítavam súbor …",
-    "@loadingFile": {
-        "description": "credential screen while unlocking file."
-    },
-    "internalFile": "Interný súbor",
-    "@internalFile": {
-        "description": "Choose a file previously created in AuthPass app sandbox",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "internalFileSubtitle": "Databáza predtým vytvorená pomocou aplikácie AuthPass",
-    "@internalFileSubtitle": {
-        "description": "Choose a file previously created in AuthPass app sandbox",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "filePicker": "Výber Súborov",
-    "@filePicker": {
-        "description": "Choose a file with the system's file picker. (ios/android)",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "filePickerSubtitle": "Otvoriť súbor z tohto zariadenia.",
-    "@filePickerSubtitle": {
-        "description": "Choose a file with the system's file picker. (ios/android)",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "credentialsAppBarTitle": "Prihlasovacie údaje",
-    "@credentialsAppBarTitle": {
-        "description": "Credential screen to enter master password when opening kdbx file.",
-        "context": "credential screen"
-    },
-    "credentialLabel": "Zadajte heslo pre:",
-    "@credentialLabel": {
-        "description": "Label for the file/database being opened",
-        "context": "credential screen"
-    },
-    "masterPasswordInputLabel": "Heslo",
-    "@masterPasswordInputLabel": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "masterPasswordEmptyValidator": "Prosím vložte heslo.",
-    "@masterPasswordEmptyValidator": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "masterPasswordIncorrectValidator": "Nesprávne heslo",
-    "@masterPasswordIncorrectValidator": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "useKeyFile": "Použiť súbor s kľúčom",
-    "@useKeyFile": {
-        "description": "label for a key file in combination with mater password",
-        "context": "credential screen"
-    },
-    "saveMasterPasswordBiometric": "Uložiť heslo pomocou biometrických kľúčov?",
-    "@saveMasterPasswordBiometric": {
-        "description": "Label for the checkbox to save master password for quick unlock.",
-        "context": "credential screen"
-    },
-    "errorOpenFileAlreadyOpenTitle": "Súbor je už otvorený",
-    "@errorOpenFileAlreadyOpenTitle": {
-        "description": "Trying to open a database from a second file source which is already open.",
-        "context": "credential screen"
-    },
-    "errorOpenFileAlreadyOpenBody": "Vybraná databáza {databaseName} je už otvorená z {openFileSource} (pokus o otvorenie z {newFileSource})",
-    "@errorOpenFileAlreadyOpenBody": {
-        "description": "Trying to open a database from a second file source which is already open.",
-        "context": "credential screen",
-        "placeholders": {
-            "databaseName": {},
-            "openFileSource": {},
-            "newFileSource": {}
-        }
-    },
-    "errorUnlockFileTitle": "Súbor sa nepodarilo otvoriť",
-    "@errorUnlockFileTitle": {
-        "description": "generic error when opening a file (dialog title)",
-        "context": "credential screen"
-    },
-    "errorUnlockFileBody": "Neznáma chyba pri otvárani súboruor. {error}",
-    "@errorUnlockFileBody": {
-        "description": "generic error when opening a file (description)",
-        "context": "credential screen",
-        "placeholders": {
-            "error": {
-                "description": "Error details."
-            }
-        }
-    },
-    "dialogContinue": "Pokračovať",
-    "@dialogContinue": {
-        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "groupFilterDescription": "Vyberte, ktoré skupiny sa majú zobrazovať (rekurzívne)",
-    "@groupFilterDescription": {
-        "description": "Description shown in the group list for filtering (e.g. app drawer)",
-        "context": "group filter"
-    },
-    "groupFilterSelectAll": "Označiť všetko",
-    "@groupFilterSelectAll": {
-        "context": "group filter"
-    },
-    "groupFilterDeselectAll": "Odznačiť všetko",
-    "@groupFilterDeselectAll": {
-        "context": "group filter"
-    },
-    "createSubgroup": "Vytvoriť podskupinu",
-    "@createSubgroup": {
-        "description": "menu action: create nested group inside another group"
-    },
-    "editAction": "Editovať",
-    "@editAction": {
-        "description": "menu action: edit item (e.g. delete a group)"
-    },
-    "deleteAction": "Zmazať",
-    "@deleteAction": {
-        "description": "menu action: delete item (e.g. delete a group)"
-    },
-    "successfullyDeletedGroup": "Zmazať skupinu.",
-    "@successfullyDeletedGroup": {
-        "description": "snackbar after deleting a group."
-    },
-    "undoButtonLabel": "Vrátiť",
-    "@undoButtonLabel": {
-        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
-    },
-    "saveButtonLabel": "Uložiť",
-    "@saveButtonLabel": {
-        "description": "save file, for example button displayed in entry details"
-    },
-    "webDavAuthPassword": "Heslo",
-    "@webDavAuthPassword": {
-        "description": ""
-    },
-    "initialNewGroupName": "Nová Skupina",
-    "@initialNewGroupName": {
-        "description": "initial name of groups when user creates a new one."
-    },
-    "deleteGroupErrorTitle": "Nepodarilo sa zmazať skupinu",
-    "@deleteGroupErrorTitle": {
-        "description": "Title of error dialog when group could not be deleted."
-    },
-    "deleteGroupErrorBodyContainsGroup": "Táto skupina stále obsahuje ďalšie skupiny. Momentálne môžete mazať iba prázdne skupiny.",
-    "@deleteGroupErrorBodyContainsGroup": {
-        "description": "Body of error dialog when a group can't be deleted because it is not empty."
-    },
-    "deleteGroupErrorBodyContainsEntries": "Táto skupina stále obsahuje heslá. Momentálne môžete mazať iba prázdne skupiny.",
-    "@deleteGroupErrorBodyContainsEntries": {
-        "description": "Body of error dialog when a group can't be deleted because it is not empty."
-    },
-    "groupListAppBarTitle": "Skupiny",
-    "@groupListAppBarTitle": {
-        "description": "title in the app bar for the groups list"
-    },
-    "groupListFilterAppbarTitle": "Filtrovať podľa skupín",
-    "@groupListFilterAppbarTitle": {
-        "description": "title in the app bar for group lists when displayed for filtering password list"
-    },
-    "clearQuickUnlock": "Vyčistiť biometrické úložisko",
-    "@clearQuickUnlock": {
-        "description": ""
-    },
-    "clearQuickUnlockSubtitle": "Odstrániť hlavné heslá",
-    "@clearQuickUnlockSubtitle": {
-        "description": ""
-    },
-    "unlock": "Odomknúť súbory",
-    "@unlock": {
-        "description": ""
-    },
-    "closePasswordFiles": "zavrieť súbory s heslom",
-    "@closePasswordFiles": {
-        "description": "delete quick unlock (passwords stored in biometric storage)"
-    },
-    "clearQuickUnlockSuccess": "Uložené heslá boli odstránené z biometrického úložiska.",
-    "@clearQuickUnlockSuccess": {
-        "description": ""
-    },
-    "diacOptIn": "Prihlásiť sa k odberu noviniek a prieskumov v aplikácii.",
-    "@diacOptIn": {},
-    "diacOptInSubtitle": "Príležitostne pošle požiadavku na sieť na získanie noviniek.",
-    "@diacOptInSubtitle": {},
-    "enableAutofillDebug": "Automatické dopĺňanie: Povoliť ladenie",
-    "@enableAutofillDebug": {
-        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
-    },
-    "enableAutofillDebugSubtitle": "Zobrazuje informačné vrstvy pre každé vstupné pole",
-    "@enableAutofillDebugSubtitle": {
-        "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
-    },
-    "createPasswordDatabase": "Vytvoriť heslovú databázu",
-    "@createPasswordDatabase": {
-        "description": ""
-    },
-    "nameNewPasswordDatabase": "Meno vašej novej databázy",
-    "@nameNewPasswordDatabase": {
-        "description": "creating new kdbx file, prompt"
-    },
-    "validatorNameMissing": "Zadajte názov svojej novej databázy.",
-    "@validatorNameMissing": {
-        "description": "Error message when no password database name is given."
-    },
-    "masterPasswordHelpText": "Vyberte zabezpečené hlavné heslo. Určite si to pamätajte.",
-    "@masterPasswordHelpText": {
-        "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
-    },
-    "inputMasterPasswordText": "Hlavné Heslo",
-    "@inputMasterPasswordText": {
-        "description": "Creating new file: input field for master password"
-    },
-    "masterPasswordMissingCreate": "Zadajte bezpečné, nezabudnuteľné heslo.",
-    "@masterPasswordMissingCreate": {
-        "description": "Text displayed when master password is empty while creating new password database"
-    },
-    "createDatabaseAction": "Vytvoriť Databázu",
-    "@createDatabaseAction": {
-        "description": "Label for button to create new database"
-    },
-    "databaseExistsError": "Súbor existuje",
-    "@databaseExistsError": {
-        "description": "dialog title for error message when creating a new database with a name which already exists."
-    },
-    "databaseExistsErrorDescription": "Chyba pri pokuse o vytvorenie databázy {filePath}. Súbor už existuje. Vyberte iné meno.",
-    "@databaseExistsErrorDescription": {
-        "description": "dialog body for error message when creating a new database with a name which already exists.",
-        "placeholders": {
-            "filePath": {
-                "description": "file path which already existed."
-            }
-        }
-    },
-    "databaseCreateDefaultName": "Osobné heslá",
-    "@databaseCreateDefaultName": {
-        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
-    },
-    "preferenceDynamicLoadIcons": "Dynamické načítanie ikon",
-    "@preferenceDynamicLoadIcons": {
-        "description": "preferences: dynamically load website icons"
-    },
-    "preferenceDynamicLoadIconsSubtitle": "Vykoná žiadosti Http s hodnotou v poli {urlFieldName}, aby sa načítali ikony webových stránok.",
-    "@preferenceDynamicLoadIconsSubtitle": {
-        "description": "preferences: dynamically load website icons help text.",
-        "placeholders": {
-            "urlFieldName": {
-                "example": "Website"
-            }
-        }
-    },
-    "passwordScore": "Sila: {score} z 4",
-    "@passwordScore": {
-        "description": "choosing a master password - calculated password strength.",
-        "placeholders": {
-            "score": {
-                "description": "integer of the score.",
-                "example": "3"
-            }
-        }
-    },
-    "entryInfoFile": "Súbor:",
-    "@entryInfoFile": {
-        "description": ""
-    },
-    "entryInfoGroup": "Skupina:",
-    "@entryInfoGroup": {
-        "description": ""
-    },
-    "entryInfoLastModified": "Naposledy Upravené:",
-    "@entryInfoLastModified": {
-        "description": ""
-    },
-    "movedEntryToGroup": "Položka bola presunutá do skupiny {groupName}",
-    "@movedEntryToGroup": {
-        "description": "",
-        "placeholders": {
-            "groupName": {
-                "description": "Name of the group the entry was moved to."
-            }
-        }
-    },
-    "sizeBytes": "{count} bajtov",
-    "@sizeBytes": {
-        "description": "",
-        "placeholders": {
-            "count": {
-                "description": "file size in bytes",
-                "example": "123"
-            }
-        }
-    },
-    "entryAddAttachment": "Pridať Prílohu",
-    "@entryAddAttachment": {
-        "description": ""
-    },
-    "entryAttachmentSizeWarning": "Priložené súbory budú vložené do súboru s heslom. To môže výrazne predĺžiť čas potrebný na otvorenie/uloženie hesiel.",
-    "@entryAttachmentSizeWarning": {
-        "description": ""
-    },
-    "iconPngSizeWarning": "Vlastné ikony budú vložené do súboru s heslom. To môže výrazne predĺžiť čas potrebný na otvorenie/uloženie hesiel.",
-    "@iconPngSizeWarning": {
-        "description": "Warning shown when user selects a large png file as custom icon."
-    },
-    "notPngError": "Zvolený súbor nieje PNG.",
-    "@notPngError": {
-        "description": "Error when user selects an unsupported file as custom icon."
-    },
-    "entryAddField": "Pridať Pole",
-    "@entryAddField": {
-        "description": ""
-    },
-    "entryCustomField": "Vlastné Pole",
-    "@entryCustomField": {
-        "description": ""
-    },
-    "entryCustomFieldTitle": "Pridáva sa nové vlastné Pole",
-    "@entryCustomFieldTitle": {
-        "description": ""
-    },
-    "entryCustomFieldInputLabel": "Zadajte meno pre pole",
-    "@entryCustomFieldInputLabel": {
-        "description": ""
-    },
-    "swipeCopyField": "Kopírovať pole",
-    "@swipeCopyField": {
-        "description": ""
-    },
-    "fieldRename": "Premenovať",
-    "@fieldRename": {
-        "description": ""
-    },
-    "fieldGeneratePassword": "Generovať heslo…",
-    "@fieldGeneratePassword": {
-        "description": ""
-    },
-    "fieldProtect": "Chrániť hodnotu",
-    "@fieldProtect": {
-        "description": ""
-    },
-    "fieldUnprotect": "Zrušiť ochranu hodnoty",
-    "@fieldUnprotect": {
-        "description": ""
-    },
-    "fieldPresent": "Prezentovať",
-    "@fieldPresent": {
-        "description": ""
-    },
-    "fieldGenerateEmail": "Generovať Email",
-    "@fieldGenerateEmail": {
-        "description": ""
-    },
-    "onboardingBackToOnboarding": "Prehliadka",
-    "@onboardingBackToOnboarding": {
-        "description": "Context menu entry which reverts to onboarding"
-    },
-    "onboardingBackToOnboardingSubtitle": "Zažite prvý beh 😅️",
-    "@onboardingBackToOnboardingSubtitle": {
-        "description": "Context menu entry which reverts to onboarding"
-    },
-    "onboardingHeadline": "Poďme urobiť vaše heslo bezpečným!",
-    "@onboardingHeadline": {
-        "description": ""
-    },
-    "onboardingQuestion": "Už ste predtým používali správcu hesiel?",
-    "@onboardingQuestion": {
-        "description": ""
-    },
-    "onboardingYesOpenPasswords": "Áno, otvorte moje heslá",
-    "@onboardingYesOpenPasswords": {
-        "description": ""
-    },
-    "onboardingNoCreate": "Som úplne nový! Ukáž mi ako.",
-    "@onboardingNoCreate": {
-        "description": ""
-    },
-    "backupButton": "ULOŽIŤ DO CLOUDU",
-    "@backupButton": {
-        "description": "Button that is displayed in backup warnings"
-    },
-    "dismissBackupButton": "ZRUŠIŤ",
-    "@dismissBackupButton": {
-        "description": "Button that is displayed in backup warnings to dismiss the warning"
-    },
-    "backupWarningMessage": "Vaše heslá v databáze {databasename} su uložené iba lokálne!",
-    "@backupWarningMessage": {
-        "description": "Warning message that is displayed in backup warnings",
-        "placeholders": {
-            "databasename": {
-                "example": "PasswordDatabase"
-            }
-        }
-    },
-    "saveAs": "Uložiť v...",
-    "@saveAs": {
-        "description": "Save as text"
-    },
-    "saving": "Ukladám",
-    "@saving": {
-        "description": "Saving text"
-    },
-    "newGroupDialogTitle": "Nová Skupina",
-    "@newGroupDialogTitle": {
-        "description": ""
-    },
-    "groupActionDelete": "Zmazať",
-    "@groupActionDelete": {
-        "description": ""
-    },
-    "shareCodeLoadingProgress": "Načítavam súbor …",
-    "@shareCodeLoadingProgress": {
-        "description": ""
-    },
-    "shortcutCopyUsername": "Kopírovať používateľské meno",
-    "@shortcutCopyUsername": {
-        "description": ""
-    },
-    "shortcutCopyPassword": "Kopírovať Heslo",
-    "@shortcutCopyPassword": {
-        "description": ""
-    },
-    "shortcutGeneratePassword": "Generovať heslo",
-    "@shortcutGeneratePassword": {
-        "description": ""
-    },
-    "shortcutOpenUrl": "Otvoriť URL",
-    "@shortcutOpenUrl": {
-        "description": ""
-    },
-    "unexpectedError": "Neočakávaná chyba: {error}",
-    "@unexpectedError": {
-        "placeholders": {
-            "error": {
-                "type": "String"
-            }
-        }
+  "@@locale": "sk",
+  "fieldUserName": "Používateľ",
+  "@fieldUserName": {},
+  "fieldPassword": "Heslo",
+  "@fieldPassword": {},
+  "fieldWebsite": "Web",
+  "@fieldWebsite": {},
+  "fieldTitle": "Názov",
+  "@fieldTitle": {},
+  "fieldTotp": "Jednorázové heslo (podľa času)",
+  "@fieldTotp": {
+    "description": "Label for fields of TOTP (Time based one time passwords)"
+  },
+  "english": "Angličtina",
+  "@english": {
+    "description": "language switcher subtitle"
+  },
+  "german": "Nemčina",
+  "@german": {
+    "description": "language switcher subtitle"
+  },
+  "russian": "Ruština",
+  "@russian": {
+    "description": "language switcher subtitle"
+  },
+  "ukrainian": "Ukrajinčina",
+  "@ukrainian": {
+    "description": "language switcher subtitle"
+  },
+  "lithuanian": "Litovčina",
+  "@lithuanian": {
+    "description": "language switcher subtitle"
+  },
+  "french": "Francúzština",
+  "@french": {
+    "description": "language switcher subtitle"
+  },
+  "spanish": "Španielčina",
+  "@spanish": {
+    "description": "language switcher subtitle"
+  },
+  "indonesian": "Indonézčina",
+  "@indonesian": {
+    "description": "language switcher subtitle"
+  },
+  "turkish": "Turčina",
+  "@turkish": {
+    "description": "Language switcher subtitle"
+  },
+  "hebrew": "Hebrejčina",
+  "@hebrew": {
+    "description": "Language switcher subtitle"
+  },
+  "italian": "taliančina",
+  "@italian": {
+    "description": "Language switcher subtitle"
+  },
+  "chineseSimplified": "Zjednodušená Čínština",
+  "@chineseSimplified": {
+    "description": "Language switcher subtitle"
+  },
+  "chineseTraditional": "Tradičná Čínština",
+  "@chineseTraditional": {
+    "description": "Language switcher subtitle"
+  },
+  "portugueseBrazilian": "Portugalčina",
+  "@portugueseBrazilian": {
+    "description": "Language switcher subtitle"
+  },
+  "selectKeepassFile": "AuthPass - Zvoľte KeePass Súbor",
+  "@selectKeepassFile": {
+    "context": "appbar title - select file screen"
+  },
+  "selectKeepassFileLabel": "Prosím zvoľte KeePass (.kdbx) súbor.",
+  "@selectKeepassFileLabel": {
+    "context": "select file screen, used as label."
+  },
+  "createNewFile": "Vytvoriť nový súbor",
+  "@createNewFile": {
+    "description": "button on select file screen to create a new password database."
+  },
+  "openLocalFile": "Otvoriť lokálny súbor",
+  "@openLocalFile": {
+    "context": "select file screen, big button open local file."
+  },
+  "openFile": "Otvoriť súbor",
+  "@openFile": {
+    "description": "Displayed as placeholder in password list when no file is open."
+  },
+  "loadFrom": "Načítať z {cloudStorageName}",
+  "@loadFrom": {
+    "placeholders": {
+      "cloudStorageName": {
+        "type": "String",
+        "example": "Dropbox"
+      }
     }
+  },
+  "loadFromRemoteUrl": "Otvoriť. kdbx súbor z URL",
+  "@loadFromRemoteUrl": {
+    "description": "Overflow menu option to load KeePass file from URL."
+  },
+  "createNewKeepass": "Nový použivateľ služby KeePass?\nZaložte si novú heslovú databázu",
+  "@createNewKeepass": {
+    "description": "deprecated"
+  },
+  "labelLastOpenFiles": "Naposledy otvorené súbory:",
+  "@labelLastOpenFiles": {},
+  "noFilesHaveBeenOpenYet": "Zatiaľ neboli otvorené žiadne súbory.",
+  "@noFilesHaveBeenOpenYet": {},
+  "preferenceSelectLanguage": "Zvoľte Jazyk",
+  "@preferenceSelectLanguage": {},
+  "preferenceLanguage": "Jazyk",
+  "@preferenceLanguage": {},
+  "preferenceTextScaleFactor": "Faktor mierky textu",
+  "@preferenceTextScaleFactor": {},
+  "preferenceVisualDensity": "Vizuálna hustota",
+  "@preferenceVisualDensity": {},
+  "preferenceTheme": "Téma",
+  "@preferenceTheme": {},
+  "preferenceThemeLight": "Svetlá",
+  "@preferenceThemeLight": {},
+  "preferenceThemeDark": "Tmavá",
+  "@preferenceThemeDark": {},
+  "preferenceSystemDefault": "Predvolená Systémová",
+  "@preferenceSystemDefault": {},
+  "preferenceDefault": "Predvolená",
+  "@preferenceDefault": {},
+  "lockAllFiles": "Zamknúť všetky otvorené súbory",
+  "@lockAllFiles": {},
+  "preferenceAllowScreenshots": "Povoliť snímky obrazovky v aplikácii",
+  "@preferenceAllowScreenshots": {},
+  "preferenceEnableAutoFill": "Povoliť automatické doplňovanie",
+  "@preferenceEnableAutoFill": {},
+  "dismissAutofillSuggestionBannerButton": "ZRUŠIŤ",
+  "@dismissAutofillSuggestionBannerButton": {
+    "description": "Button that is displayed in autofill suggestion warnings to dismiss the warning"
+  },
+  "preferenceAutoFillDescription": "Podporované iba v systéme Android Oreo (8.0) alebo novšom.",
+  "@preferenceAutoFillDescription": {},
+  "preferenceTitle": "Predvoľby",
+  "@preferenceTitle": {},
+  "aboutAppName": "AuthPass",
+  "@aboutAppName": {},
+  "aboutLinkFeedback": "Uvítame akýkoľvek druh spätnej väzby!",
+  "@aboutLinkFeedback": {},
+  "aboutLinkVisitWebsite": "Nezabudnite tiež navštíviť našu webovú stránku",
+  "@aboutLinkVisitWebsite": {},
+  "aboutLinkGitHub": "Open Source Projekt",
+  "@aboutLinkGitHub": {},
+  "aboutLogFile": "Log Súbor: {logFilePath}",
+  "@aboutLogFile": {
+    "placeholders": {
+      "logFilePath": {
+        "type": "String",
+        "example": "/Users/mustermann/log.txt"
+      }
+    }
+  },
+  "unableToLaunchUrlTitle": "Nepodarilo sa otvoriť URL",
+  "@unableToLaunchUrlTitle": {
+    "description": ""
+  },
+  "unableToLaunchUrlDescription": "Nepodarilo sa otvoriť Url: {url}: {openError}",
+  "@unableToLaunchUrlDescription": {
+    "description": "",
+    "placeholders": {
+      "url": {
+        "description": "URL which we tried to open."
+      },
+      "openError": {
+        "description": "Information about the error"
+      }
+    }
+  },
+  "unableToLaunchUrlNoHandler": "Pre adresu URL nie je k dispozícii žiadna aplikácia.",
+  "@unableToLaunchUrlNoHandler": {
+    "description": ""
+  },
+  "launchedUrl": "Otvorená URL adresa: {url}",
+  "@launchedUrl": {
+    "description": "snackbar confirmation after opening a url externally",
+    "placeholders": {
+      "url": {
+        "description": "URL which was just launched."
+      }
+    }
+  },
+  "menuItemGeneratePassword": "Generovať Heslo",
+  "@menuItemGeneratePassword": {},
+  "menuItemPreferences": "Predvoľby",
+  "@menuItemPreferences": {},
+  "menuItemOpenAnotherFile": "Otvoriť iný súbor",
+  "@menuItemOpenAnotherFile": {},
+  "menuItemCheckForUpdates": "Skontrolovať aktualizácie",
+  "@menuItemCheckForUpdates": {},
+  "menuItemHelp": "Pomoc",
+  "@menuItemHelp": {},
+  "menuItemHelpSubtitle": "Zobraziť dokumentáciu",
+  "@menuItemHelpSubtitle": {},
+  "menuItemAbout": "O nás",
+  "@menuItemAbout": {},
+  "actionOpenUrl": "Otvoriť URL",
+  "@actionOpenUrl": {
+    "description": "tooltip for button to open URL/Website of an entry."
+  },
+  "passwordPlainText": "Odhaliť heslo",
+  "@passwordPlainText": {
+    "description": "Master password input: show password as plain text during input. (shown as tooltip)"
+  },
+  "generatorPassword": "Heslo",
+  "@generatorPassword": {
+    "description": "Label for generated password"
+  },
+  "generatePassword": "Generovať heslo",
+  "@generatePassword": {
+    "description": "screen title for password generator"
+  },
+  "doneButtonLabel": "Hotovo",
+  "@doneButtonLabel": {
+    "description": "generic button label for 'Done' action."
+  },
+  "useAsDefault": "Použiť ako predvolené heslo",
+  "@useAsDefault": {
+    "description": "Button Label for Password generator settings: use as defaults",
+    "context": "Password generator"
+  },
+  "characterSetLowerCase": "Malé písmená (a-z)",
+  "@characterSetLowerCase": {
+    "context": "Password generator"
+  },
+  "characterSetUpperCase": "Veľké písmená (A-Z)",
+  "@characterSetUpperCase": {
+    "context": "Password generator"
+  },
+  "characterSetNumeric": "Číslice (0-9)",
+  "@characterSetNumeric": {
+    "context": "Password generator"
+  },
+  "characterSetUmlauts": "Prehlásky (ä)",
+  "@characterSetUmlauts": {
+    "context": "Password generator"
+  },
+  "characterSetSpecial": "Špeciálne znaky (@%+)",
+  "@characterSetSpecial": {
+    "context": "Password generator"
+  },
+  "length": "Dĺžka",
+  "@length": {
+    "description": "Length of password",
+    "context": "Password generator"
+  },
+  "customLength": "Vlastná Dĺžka",
+  "@customLength": {
+    "description": "Label for custom length field",
+    "context": "Password generator"
+  },
+  "customLengthHelperText": "Používa sa dĺžka > {customMinLength}",
+  "@customLengthHelperText": {
+    "description": "Help text for custom length field",
+    "context": "Password generator",
+    "placeholders": {
+      "customMinLength": {
+        "example": "40"
+      }
+    }
+  },
+  "savedFiles": "{numFiles, plural, =1 {Jeden súbor uložený: {files}} other {{numFiles} súborov uložených: {files}}}",
+  "@savedFiles": {
+    "description": "Message displayed when files were saved. (One or more).",
+    "context": "Password list",
+    "placeholders": {
+      "numFiles": {
+        "description": "Number of files that have been saved (at least 1)",
+        "type": "int",
+        "format": "compactLong"
+      },
+      "files": {
+        "description": "Comma separated list of vault names."
+      }
+    }
+  },
+  "manageGroups": "Spravovať Skupiny",
+  "@manageGroups": {
+    "description": ""
+  },
+  "lockFiles": "Zamknúť súbory",
+  "@lockFiles": {
+    "description": "Close all files and return to start screen."
+  },
+  "searchHint": "Hľadať",
+  "@searchHint": {
+    "description": "Placeholder in the password list search box"
+  },
+  "searchButtonLabel": "Hľadať",
+  "@searchButtonLabel": {
+    "description": "search button tooltip/semantic label"
+  },
+  "clear": "Vyčistiť",
+  "@clear": {
+    "description": "Remove existing group filter from password list"
+  },
+  "autofillFilterPrefix": "Filter:",
+  "@autofillFilterPrefix": {
+    "description": "Label displayed for android auto fill"
+  },
+  "autofillPrompt": "Vyberte zadanie hesla pre automatické dopĺňanie.",
+  "@autofillPrompt": {
+    "description": ""
+  },
+  "copiedToClipboard": "Skopírované do schránky.",
+  "@copiedToClipboard": {
+    "description": "Snackbar text when copying text to clipboard."
+  },
+  "noTitle": "(žiadny nadpis)",
+  "@noTitle": {
+    "description": "Text to display in place of a title, when password entry has no name assigned."
+  },
+  "noUsername": "(žiadne meno)",
+  "@noUsername": {
+    "description": "Text to display in place of a user name in the password list if none is defined."
+  },
+  "filterCustomize": "Prispôsobiť …",
+  "@filterCustomize": {
+    "description": "Customize filter in password list"
+  },
+  "swipeCopyPassword": "Kopírovať Heslo",
+  "@swipeCopyPassword": {
+    "description": "swipe action in password list to copy password"
+  },
+  "swipeCopyUsername": "Kopírovať používateľské meno",
+  "@swipeCopyUsername": {
+    "description": "swipe action in password list to copy username"
+  },
+  "doneCopiedPassword": "Heslo bolo skopírované do schránky.",
+  "@doneCopiedPassword": {
+    "description": "snackbar confirmation that password was copied."
+  },
+  "doneCopiedUsername": "Skopírované používateľské meno do schránky.",
+  "@doneCopiedUsername": {
+    "description": "snackbar confirmation that username was copied."
+  },
+  "doneCopiedField": "Skopírované.",
+  "@doneCopiedField": {
+    "description": ""
+  },
+  "emptyPasswordVaultPlaceholder": "Zatiaľ nemáte vo svojej databáze žiadne heslo.",
+  "@emptyPasswordVaultPlaceholder": {
+    "description": "Placeholder text shown when a user opens an empty password file."
+  },
+  "emptyPasswordVaultButtonLabel": "Vytvorte si svoje prvé heslo",
+  "@emptyPasswordVaultButtonLabel": {
+    "description": "Button shown under placeholder text when password database is empty"
+  },
+  "loadingFile": "Načítavam súbor …",
+  "@loadingFile": {
+    "description": "credential screen while unlocking file."
+  },
+  "internalFile": "Interný súbor",
+  "@internalFile": {
+    "description": "Choose a file previously created in AuthPass app sandbox",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "internalFileSubtitle": "Databáza predtým vytvorená pomocou aplikácie AuthPass",
+  "@internalFileSubtitle": {
+    "description": "Choose a file previously created in AuthPass app sandbox",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "filePicker": "Výber Súborov",
+  "@filePicker": {
+    "description": "Choose a file with the system's file picker. (ios/android)",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "filePickerSubtitle": "Otvoriť súbor z tohto zariadenia.",
+  "@filePickerSubtitle": {
+    "description": "Choose a file with the system's file picker. (ios/android)",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "credentialsAppBarTitle": "Prihlasovacie údaje",
+  "@credentialsAppBarTitle": {
+    "description": "Credential screen to enter master password when opening kdbx file.",
+    "context": "credential screen"
+  },
+  "credentialLabel": "Zadajte heslo pre:",
+  "@credentialLabel": {
+    "description": "Label for the file/database being opened",
+    "context": "credential screen"
+  },
+  "masterPasswordInputLabel": "Heslo",
+  "@masterPasswordInputLabel": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "masterPasswordEmptyValidator": "Prosím vložte heslo.",
+  "@masterPasswordEmptyValidator": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "masterPasswordIncorrectValidator": "Nesprávne heslo",
+  "@masterPasswordIncorrectValidator": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "useKeyFile": "Použiť súbor s kľúčom",
+  "@useKeyFile": {
+    "description": "label for a key file in combination with mater password",
+    "context": "credential screen"
+  },
+  "saveMasterPasswordBiometric": "Uložiť heslo pomocou biometrických kľúčov?",
+  "@saveMasterPasswordBiometric": {
+    "description": "Label for the checkbox to save master password for quick unlock.",
+    "context": "credential screen"
+  },
+  "errorOpenFileAlreadyOpenTitle": "Súbor je už otvorený",
+  "@errorOpenFileAlreadyOpenTitle": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen"
+  },
+  "errorOpenFileAlreadyOpenBody": "Vybraná databáza {databaseName} je už otvorená z {openFileSource} (pokus o otvorenie z {newFileSource})",
+  "@errorOpenFileAlreadyOpenBody": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen",
+    "placeholders": {
+      "databaseName": {},
+      "openFileSource": {},
+      "newFileSource": {}
+    }
+  },
+  "errorUnlockFileTitle": "Súbor sa nepodarilo otvoriť",
+  "@errorUnlockFileTitle": {
+    "description": "generic error when opening a file (dialog title)",
+    "context": "credential screen"
+  },
+  "errorUnlockFileBody": "Neznáma chyba pri otvárani súboruor. {error}",
+  "@errorUnlockFileBody": {
+    "description": "generic error when opening a file (description)",
+    "context": "credential screen",
+    "placeholders": {
+      "error": {
+        "description": "Error details."
+      }
+    }
+  },
+  "dialogContinue": "Pokračovať",
+  "@dialogContinue": {
+    "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+  },
+  "groupFilterDescription": "Vyberte, ktoré skupiny sa majú zobrazovať (rekurzívne)",
+  "@groupFilterDescription": {
+    "description": "Description shown in the group list for filtering (e.g. app drawer)",
+    "context": "group filter"
+  },
+  "groupFilterSelectAll": "Označiť všetko",
+  "@groupFilterSelectAll": {
+    "context": "group filter"
+  },
+  "groupFilterDeselectAll": "Odznačiť všetko",
+  "@groupFilterDeselectAll": {
+    "context": "group filter"
+  },
+  "createSubgroup": "Vytvoriť podskupinu",
+  "@createSubgroup": {
+    "description": "menu action: create nested group inside another group"
+  },
+  "editAction": "Editovať",
+  "@editAction": {
+    "description": "menu action: edit item (e.g. delete a group)"
+  },
+  "deleteAction": "Zmazať",
+  "@deleteAction": {
+    "description": "menu action: delete item (e.g. delete a group)"
+  },
+  "successfullyDeletedGroup": "Zmazať skupinu.",
+  "@successfullyDeletedGroup": {
+    "description": "snackbar after deleting a group."
+  },
+  "undoButtonLabel": "Vrátiť",
+  "@undoButtonLabel": {
+    "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+  },
+  "saveButtonLabel": "Uložiť",
+  "@saveButtonLabel": {
+    "description": "save file, for example button displayed in entry details"
+  },
+  "webDavAuthPassword": "Heslo",
+  "@webDavAuthPassword": {
+    "description": ""
+  },
+  "initialNewGroupName": "Nová Skupina",
+  "@initialNewGroupName": {
+    "description": "initial name of groups when user creates a new one."
+  },
+  "deleteGroupErrorTitle": "Nepodarilo sa zmazať skupinu",
+  "@deleteGroupErrorTitle": {
+    "description": "Title of error dialog when group could not be deleted."
+  },
+  "deleteGroupErrorBodyContainsGroup": "Táto skupina stále obsahuje ďalšie skupiny. Momentálne môžete mazať iba prázdne skupiny.",
+  "@deleteGroupErrorBodyContainsGroup": {
+    "description": "Body of error dialog when a group can't be deleted because it is not empty."
+  },
+  "deleteGroupErrorBodyContainsEntries": "Táto skupina stále obsahuje heslá. Momentálne môžete mazať iba prázdne skupiny.",
+  "@deleteGroupErrorBodyContainsEntries": {
+    "description": "Body of error dialog when a group can't be deleted because it is not empty."
+  },
+  "groupListAppBarTitle": "Skupiny",
+  "@groupListAppBarTitle": {
+    "description": "title in the app bar for the groups list"
+  },
+  "groupListFilterAppbarTitle": "Filtrovať podľa skupín",
+  "@groupListFilterAppbarTitle": {
+    "description": "title in the app bar for group lists when displayed for filtering password list"
+  },
+  "clearQuickUnlock": "Vyčistiť biometrické úložisko",
+  "@clearQuickUnlock": {
+    "description": ""
+  },
+  "clearQuickUnlockSubtitle": "Odstrániť hlavné heslá",
+  "@clearQuickUnlockSubtitle": {
+    "description": ""
+  },
+  "unlock": "Odomknúť súbory",
+  "@unlock": {
+    "description": ""
+  },
+  "closePasswordFiles": "zavrieť súbory s heslom",
+  "@closePasswordFiles": {
+    "description": "delete quick unlock (passwords stored in biometric storage)"
+  },
+  "clearQuickUnlockSuccess": "Uložené heslá boli odstránené z biometrického úložiska.",
+  "@clearQuickUnlockSuccess": {
+    "description": ""
+  },
+  "diacOptIn": "Prihlásiť sa k odberu noviniek a prieskumov v aplikácii.",
+  "@diacOptIn": {},
+  "diacOptInSubtitle": "Príležitostne pošle požiadavku na sieť na získanie noviniek.",
+  "@diacOptInSubtitle": {},
+  "enableAutofillDebug": "Automatické dopĺňanie: Povoliť ladenie",
+  "@enableAutofillDebug": {
+    "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+  },
+  "enableAutofillDebugSubtitle": "Zobrazuje informačné vrstvy pre každé vstupné pole",
+  "@enableAutofillDebugSubtitle": {
+    "description": "only visible in debug build. Preference to enable Auto-Fill Debugging."
+  },
+  "createPasswordDatabase": "Vytvoriť heslovú databázu",
+  "@createPasswordDatabase": {
+    "description": ""
+  },
+  "nameNewPasswordDatabase": "Meno vašej novej databázy",
+  "@nameNewPasswordDatabase": {
+    "description": "creating new kdbx file, prompt"
+  },
+  "validatorNameMissing": "Zadajte názov svojej novej databázy.",
+  "@validatorNameMissing": {
+    "description": "Error message when no password database name is given."
+  },
+  "masterPasswordHelpText": "Vyberte zabezpečené hlavné heslo. Určite si to pamätajte.",
+  "@masterPasswordHelpText": {
+    "description": "DEPRECATED FOR NOW help text for master password when creating new password database"
+  },
+  "inputMasterPasswordText": "Hlavné Heslo",
+  "@inputMasterPasswordText": {
+    "description": "Creating new file: input field for master password"
+  },
+  "masterPasswordMissingCreate": "Zadajte bezpečné, nezabudnuteľné heslo.",
+  "@masterPasswordMissingCreate": {
+    "description": "Text displayed when master password is empty while creating new password database"
+  },
+  "createDatabaseAction": "Vytvoriť Databázu",
+  "@createDatabaseAction": {
+    "description": "Label for button to create new database"
+  },
+  "databaseExistsError": "Súbor existuje",
+  "@databaseExistsError": {
+    "description": "dialog title for error message when creating a new database with a name which already exists."
+  },
+  "databaseExistsErrorDescription": "Chyba pri pokuse o vytvorenie databázy {filePath}. Súbor už existuje. Vyberte iné meno.",
+  "@databaseExistsErrorDescription": {
+    "description": "dialog body for error message when creating a new database with a name which already exists.",
+    "placeholders": {
+      "filePath": {
+        "description": "file path which already existed."
+      }
+    }
+  },
+  "databaseCreateDefaultName": "Osobné heslá",
+  "@databaseCreateDefaultName": {
+    "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+  },
+  "preferenceDynamicLoadIcons": "Dynamické načítanie ikon",
+  "@preferenceDynamicLoadIcons": {
+    "description": "preferences: dynamically load website icons"
+  },
+  "preferenceDynamicLoadIconsSubtitle": "Vykoná žiadosti Http s hodnotou v poli {urlFieldName}, aby sa načítali ikony webových stránok.",
+  "@preferenceDynamicLoadIconsSubtitle": {
+    "description": "preferences: dynamically load website icons help text.",
+    "placeholders": {
+      "urlFieldName": {
+        "example": "Website"
+      }
+    }
+  },
+  "passwordScore": "Sila: {score} z 4",
+  "@passwordScore": {
+    "description": "choosing a master password - calculated password strength.",
+    "placeholders": {
+      "score": {
+        "description": "integer of the score.",
+        "example": "3"
+      }
+    }
+  },
+  "entryInfoFile": "Súbor:",
+  "@entryInfoFile": {
+    "description": ""
+  },
+  "entryInfoGroup": "Skupina:",
+  "@entryInfoGroup": {
+    "description": ""
+  },
+  "entryInfoLastModified": "Naposledy Upravené:",
+  "@entryInfoLastModified": {
+    "description": ""
+  },
+  "movedEntryToGroup": "Položka bola presunutá do skupiny {groupName}",
+  "@movedEntryToGroup": {
+    "description": "",
+    "placeholders": {
+      "groupName": {
+        "description": "Name of the group the entry was moved to."
+      }
+    }
+  },
+  "sizeBytes": "{count} bajtov",
+  "@sizeBytes": {
+    "description": "",
+    "placeholders": {
+      "count": {
+        "description": "file size in bytes",
+        "example": "123"
+      }
+    }
+  },
+  "entryAddAttachment": "Pridať Prílohu",
+  "@entryAddAttachment": {
+    "description": ""
+  },
+  "entryAttachmentSizeWarning": "Priložené súbory budú vložené do súboru s heslom. To môže výrazne predĺžiť čas potrebný na otvorenie/uloženie hesiel.",
+  "@entryAttachmentSizeWarning": {
+    "description": ""
+  },
+  "iconPngSizeWarning": "Vlastné ikony budú vložené do súboru s heslom. To môže výrazne predĺžiť čas potrebný na otvorenie/uloženie hesiel.",
+  "@iconPngSizeWarning": {
+    "description": "Warning shown when user selects a large png file as custom icon."
+  },
+  "notPngError": "Zvolený súbor nieje PNG.",
+  "@notPngError": {
+    "description": "Error when user selects an unsupported file as custom icon."
+  },
+  "entryAddField": "Pridať Pole",
+  "@entryAddField": {
+    "description": ""
+  },
+  "entryCustomField": "Vlastné Pole",
+  "@entryCustomField": {
+    "description": ""
+  },
+  "entryCustomFieldTitle": "Pridáva sa nové vlastné Pole",
+  "@entryCustomFieldTitle": {
+    "description": ""
+  },
+  "entryCustomFieldInputLabel": "Zadajte meno pre pole",
+  "@entryCustomFieldInputLabel": {
+    "description": ""
+  },
+  "swipeCopyField": "Kopírovať pole",
+  "@swipeCopyField": {
+    "description": ""
+  },
+  "fieldRename": "Premenovať",
+  "@fieldRename": {
+    "description": ""
+  },
+  "fieldGeneratePassword": "Generovať heslo…",
+  "@fieldGeneratePassword": {
+    "description": ""
+  },
+  "fieldProtect": "Chrániť hodnotu",
+  "@fieldProtect": {
+    "description": ""
+  },
+  "fieldUnprotect": "Zrušiť ochranu hodnoty",
+  "@fieldUnprotect": {
+    "description": ""
+  },
+  "fieldPresent": "Prezentovať",
+  "@fieldPresent": {
+    "description": ""
+  },
+  "fieldGenerateEmail": "Generovať Email",
+  "@fieldGenerateEmail": {
+    "description": ""
+  },
+  "onboardingBackToOnboarding": "Prehliadka",
+  "@onboardingBackToOnboarding": {
+    "description": "Context menu entry which reverts to onboarding"
+  },
+  "onboardingBackToOnboardingSubtitle": "Zažite prvý beh 😅️",
+  "@onboardingBackToOnboardingSubtitle": {
+    "description": "Context menu entry which reverts to onboarding"
+  },
+  "onboardingHeadline": "Poďme urobiť vaše heslo bezpečným!",
+  "@onboardingHeadline": {
+    "description": ""
+  },
+  "onboardingQuestion": "Už ste predtým používali správcu hesiel?",
+  "@onboardingQuestion": {
+    "description": ""
+  },
+  "onboardingYesOpenPasswords": "Áno, otvorte moje heslá",
+  "@onboardingYesOpenPasswords": {
+    "description": ""
+  },
+  "onboardingNoCreate": "Som úplne nový! Ukáž mi ako.",
+  "@onboardingNoCreate": {
+    "description": ""
+  },
+  "backupButton": "ULOŽIŤ DO CLOUDU",
+  "@backupButton": {
+    "description": "Button that is displayed in backup warnings"
+  },
+  "dismissBackupButton": "ZRUŠIŤ",
+  "@dismissBackupButton": {
+    "description": "Button that is displayed in backup warnings to dismiss the warning"
+  },
+  "backupWarningMessage": "Vaše heslá v databáze {databasename} su uložené iba lokálne!",
+  "@backupWarningMessage": {
+    "description": "Warning message that is displayed in backup warnings",
+    "placeholders": {
+      "databasename": {
+        "example": "PasswordDatabase"
+      }
+    }
+  },
+  "saveAs": "Uložiť v...",
+  "@saveAs": {
+    "description": "Save as text"
+  },
+  "saving": "Ukladám",
+  "@saving": {
+    "description": "Saving text"
+  },
+  "newGroupDialogTitle": "Nová Skupina",
+  "@newGroupDialogTitle": {
+    "description": ""
+  },
+  "groupActionDelete": "Zmazať",
+  "@groupActionDelete": {
+    "description": ""
+  },
+  "shareCodeLoadingProgress": "Načítavam súbor …",
+  "@shareCodeLoadingProgress": {
+    "description": ""
+  },
+  "shortcutCopyUsername": "Kopírovať používateľské meno",
+  "@shortcutCopyUsername": {
+    "description": ""
+  },
+  "shortcutCopyPassword": "Kopírovať Heslo",
+  "@shortcutCopyPassword": {
+    "description": ""
+  },
+  "shortcutGeneratePassword": "Generovať heslo",
+  "@shortcutGeneratePassword": {
+    "description": ""
+  },
+  "shortcutOpenUrl": "Otvoriť URL",
+  "@shortcutOpenUrl": {
+    "description": ""
+  },
+  "unexpectedError": "Neočakávaná chyba: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

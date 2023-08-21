@@ -1,305 +1,366 @@
 {
-    "@@locale": "si",
-    "fieldUserName": "පරිශීලක",
-    "@fieldUserName": {},
-    "fieldPassword": "මුරපදය",
-    "@fieldPassword": {},
-    "fieldWebsite": "වියමන අඩවිය",
-    "@fieldWebsite": {},
-    "fieldTitle": "මාතෘකාව",
-    "@fieldTitle": {},
-    "english": "ඉංග්‍රීසි",
-    "@english": {
-        "description": "language switcher subtitle"
-    },
-    "german": "ජර්මානු",
-    "@german": {
-        "description": "language switcher subtitle"
-    },
-    "russian": "රුසියානු",
-    "@russian": {
-        "description": "language switcher subtitle"
-    },
-    "french": "ප්‍රංශ",
-    "@french": {
-        "description": "language switcher subtitle"
-    },
-    "spanish": "ස්පාඤ්ඤ",
-    "@spanish": {
-        "description": "language switcher subtitle"
-    },
-    "indonesian": "ඉන්දුනීසියානු",
-    "@indonesian": {
-        "description": "language switcher subtitle"
-    },
-    "turkish": "තුර්කි",
-    "@turkish": {
-        "description": "Language switcher subtitle"
-    },
-    "italian": "ඉතාලි",
-    "@italian": {
-        "description": "Language switcher subtitle"
-    },
-    "chineseSimplified": "සරල චීන",
-    "@chineseSimplified": {
-        "description": "Language switcher subtitle"
-    },
-    "chineseTraditional": "සාම්ප්‍රදායික චීන",
-    "@chineseTraditional": {
-        "description": "Language switcher subtitle"
-    },
-    "selectItem": "තෝරන්න",
-    "@selectItem": {
-        "description": "semantic label for checkboxes to select item."
-    },
-    "createNewFile": "නව ගොනුවක් සාදන්න",
-    "@createNewFile": {
-        "description": "button on select file screen to create a new password database."
-    },
-    "openLocalFile": "ස්ථානීය ගොනුවක් \nවිවෘත කරන්න",
-    "@openLocalFile": {
-        "context": "select file screen, big button open local file."
-    },
-    "openFile": "ගොනුව විවෘත කරන්න",
-    "@openFile": {
-        "description": "Displayed as placeholder in password list when no file is open."
-    },
-    "loadFrom": "{cloudStorageName} වෙතින් පුරන්න",
-    "@loadFrom": {
-        "placeholders": {
-            "cloudStorageName": {
-                "type": "String",
-                "example": "Dropbox"
-            }
-        }
-    },
-    "labelLastOpenFiles": "අවසන්වරට විවෘත කළ ගොනු:",
-    "@labelLastOpenFiles": {},
-    "preferenceSelectLanguage": "භාෂාව තෝරන්න",
-    "@preferenceSelectLanguage": {},
-    "preferenceLanguage": "භාෂාව",
-    "@preferenceLanguage": {},
-    "preferenceTheme": "තේමාව",
-    "@preferenceTheme": {},
-    "preferenceThemeDark": "අඳුරු",
-    "@preferenceThemeDark": {},
-    "lockAllFiles": "සියලුම විවෘත ගොනු අගුලුලන්න",
-    "@lockAllFiles": {},
-    "aboutLinkGitHub": "සහ විවෘත මූලාශ්‍ර ව්‍යාපෘතියකි",
-    "@aboutLinkGitHub": {},
-    "launchedUrl": "විවෘත කළ ඒ.ස.නි.: {url}",
-    "@launchedUrl": {
-        "description": "snackbar confirmation after opening a url externally",
-        "placeholders": {
-            "url": {
-                "description": "URL which was just launched."
-            }
-        }
-    },
-    "menuItemHelp": "උදව්",
-    "@menuItemHelp": {},
-    "menuItemAbout": "පිළිබඳව",
-    "@menuItemAbout": {},
-    "generatorPassword": "මුරපදය",
-    "@generatorPassword": {
-        "description": "Label for generated password"
-    },
-    "doneButtonLabel": "අවසන්",
-    "@doneButtonLabel": {
-        "description": "generic button label for 'Done' action."
-    },
-    "searchHint": "සොයන්න",
-    "@searchHint": {
-        "description": "Placeholder in the password list search box"
-    },
-    "searchButtonLabel": "සොයන්න",
-    "@searchButtonLabel": {
-        "description": "search button tooltip/semantic label"
-    },
-    "filterButtonLabel": "සමූහය අනුව පෙරන්න",
-    "@filterButtonLabel": {
-        "description": "tooltip/semantic label for filter app bar icon."
-    },
-    "clear": "හිස් කරන්න",
-    "@clear": {
-        "description": "Remove existing group filter from password list"
-    },
-    "autofillFilterPrefix": "පෙරහන:",
-    "@autofillFilterPrefix": {
-        "description": "Label displayed for android auto fill"
-    },
-    "noTitle": "(මාතෘකාවක් නැත)",
-    "@noTitle": {
-        "description": "Text to display in place of a title, when password entry has no name assigned."
-    },
-    "noUsername": "(පරිශීලක නාමයක් නැත)",
-    "@noUsername": {
-        "description": "Text to display in place of a user name in the password list if none is defined."
-    },
-    "swipeCopyPassword": "මුරපදය පිටපත්",
-    "@swipeCopyPassword": {
-        "description": "swipe action in password list to copy password"
-    },
-    "swipeCopyUsername": "පරිශීලක නාමය පිටපත්",
-    "@swipeCopyUsername": {
-        "description": "swipe action in password list to copy username"
-    },
-    "loadingFile": "ගොනුව පූරණය වෙමින්…",
-    "@loadingFile": {
-        "description": "credential screen while unlocking file."
-    },
-    "internalFile": "අභ්‍යන්තර ගොනුව",
-    "@internalFile": {
-        "description": "Choose a file previously created in AuthPass app sandbox",
-        "context": "open file picker: internal file vs. file picker"
-    },
-    "masterPasswordInputLabel": "මුරපදය",
-    "@masterPasswordInputLabel": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "masterPasswordEmptyValidator": "ඔබගේ මුරපදය ඇතුළත් කරන්න.",
-    "@masterPasswordEmptyValidator": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "masterPasswordIncorrectValidator": "වලංගු නොවන මුරපදයකි",
-    "@masterPasswordIncorrectValidator": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "useKeyFile": "යතුරු ගොනුව භාවිතා කරන්න",
-    "@useKeyFile": {
-        "description": "label for a key file in combination with mater password",
-        "context": "credential screen"
-    },
-    "close": "වසන්න",
-    "@close": {
-        "description": "Tooltip/semantic label for close button"
-    },
-    "addNewPassword": "නව මුරපදයක් එකතු කරන්න",
-    "@addNewPassword": {
-        "description": "Tooltip for adding new password button (floating action button)"
-    },
-    "errorOpenFileAlreadyOpenTitle": "ගොනුව දැනටමත් විවෘතයි",
-    "@errorOpenFileAlreadyOpenTitle": {
-        "description": "Trying to open a database from a second file source which is already open.",
-        "context": "credential screen"
-    },
-    "dialogContinue": "ඉදිරියට",
-    "@dialogContinue": {
-        "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
-    },
-    "groupFilterSelectAll": "සියල්ල තෝරන්න",
-    "@groupFilterSelectAll": {
-        "context": "group filter"
-    },
-    "editAction": "සංස්කරණය",
-    "@editAction": {
-        "description": "menu action: edit item (e.g. delete a group)"
-    },
-    "undoButtonLabel": "පෙරසේ",
-    "@undoButtonLabel": {
-        "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
-    },
-    "saveButtonLabel": "සුරකින්න",
-    "@saveButtonLabel": {
-        "description": "save file, for example button displayed in entry details"
-    },
-    "webDavAuthPassword": "මුරපදය",
-    "@webDavAuthPassword": {
-        "description": ""
-    },
-    "initialNewGroupName": "නව සමූහය",
-    "@initialNewGroupName": {
-        "description": "initial name of groups when user creates a new one."
-    },
-    "groupListAppBarTitle": "සමූහ",
-    "@groupListAppBarTitle": {
-        "description": "title in the app bar for the groups list"
-    },
-    "groupListFilterAppbarTitle": "සමූහ අනුව පෙරන්න",
-    "@groupListFilterAppbarTitle": {
-        "description": "title in the app bar for group lists when displayed for filtering password list"
-    },
-    "closePasswordFiles": "මුරපද ගොනු වසන්න",
-    "@closePasswordFiles": {
-        "description": "delete quick unlock (passwords stored in biometric storage)"
-    },
-    "createPasswordDatabase": "මුරපද දත්තසමුදායක් සාදන්න",
-    "@createPasswordDatabase": {
-        "description": ""
-    },
-    "nameNewPasswordDatabase": "ඔබගේ නව දත්තසමුදාය නම් කරන්න",
-    "@nameNewPasswordDatabase": {
-        "description": "creating new kdbx file, prompt"
-    },
-    "validatorNameMissing": "ඔබගේ නව දත්තසමුදාය සඳහා නමක් ඇතුළත් කරන්න.",
-    "@validatorNameMissing": {
-        "description": "Error message when no password database name is given."
-    },
-    "createDatabaseAction": "දත්තසමුදාය සාදන්න",
-    "@createDatabaseAction": {
-        "description": "Label for button to create new database"
-    },
-    "databaseExistsError": "ගොනුව පවතී",
-    "@databaseExistsError": {
-        "description": "dialog title for error message when creating a new database with a name which already exists."
-    },
-    "databaseCreateDefaultName": "පුද්ගලික මුරපද",
-    "@databaseCreateDefaultName": {
-        "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
-    },
-    "entryInfoFile": "ගොනුව:",
-    "@entryInfoFile": {
-        "description": ""
-    },
-    "entryInfoGroup": "සමූහය:",
-    "@entryInfoGroup": {
-        "description": ""
-    },
-    "entryAddAttachment": "ඇමුණුම එකතු කරන්න",
-    "@entryAddAttachment": {
-        "description": ""
-    },
-    "fieldRename": "යලි නම් කරන්න",
-    "@fieldRename": {
-        "description": ""
-    },
-    "onboardingYesOpenPasswords": "ඔව්, මාගේ මුරපද විවෘත කරන්න",
-    "@onboardingYesOpenPasswords": {
-        "description": ""
-    },
-    "backupButton": "මේඝයට සුරකින්න",
-    "@backupButton": {
-        "description": "Button that is displayed in backup warnings"
-    },
-    "saving": "සුරකිමින්",
-    "@saving": {
-        "description": "Saving text"
-    },
-    "newGroupDialogTitle": "නව සමූහය",
-    "@newGroupDialogTitle": {
-        "description": ""
-    },
-    "shareCodeLoadingProgress": "ගොනුව පූරණය වෙමින්…",
-    "@shareCodeLoadingProgress": {
-        "description": ""
-    },
-    "shortcutCopyUsername": "පරිශීලක නාමය පිටපත්",
-    "@shortcutCopyUsername": {
-        "description": ""
-    },
-    "shortcutCopyPassword": "මුරපදය පිටපත්",
-    "@shortcutCopyPassword": {
-        "description": ""
-    },
-    "unexpectedError": "අනපේක්ෂිත දෝෂයකි: {error}",
-    "@unexpectedError": {
-        "placeholders": {
-            "error": {
-                "type": "String"
-            }
-        }
+  "@@locale": "si",
+  "fieldUserName": "පරිශීලක",
+  "@fieldUserName": {},
+  "fieldPassword": "මුරපදය",
+  "@fieldPassword": {},
+  "fieldWebsite": "වියමන අඩවිය",
+  "@fieldWebsite": {},
+  "fieldTitle": "මාතෘකාව",
+  "@fieldTitle": {},
+  "english": "ඉංග්‍රීසි",
+  "@english": {
+    "description": "language switcher subtitle"
+  },
+  "german": "ජර්මානු",
+  "@german": {
+    "description": "language switcher subtitle"
+  },
+  "russian": "රුසියානු",
+  "@russian": {
+    "description": "language switcher subtitle"
+  },
+  "french": "ප්‍රංශ",
+  "@french": {
+    "description": "language switcher subtitle"
+  },
+  "spanish": "ස්පාඤ්ඤ",
+  "@spanish": {
+    "description": "language switcher subtitle"
+  },
+  "indonesian": "ඉන්දුනීසියානු",
+  "@indonesian": {
+    "description": "language switcher subtitle"
+  },
+  "turkish": "තුර්කි",
+  "@turkish": {
+    "description": "Language switcher subtitle"
+  },
+  "italian": "ඉතාලි",
+  "@italian": {
+    "description": "Language switcher subtitle"
+  },
+  "chineseSimplified": "සරල චීන",
+  "@chineseSimplified": {
+    "description": "Language switcher subtitle"
+  },
+  "chineseTraditional": "සාම්ප්‍රදායික චීන",
+  "@chineseTraditional": {
+    "description": "Language switcher subtitle"
+  },
+  "selectItem": "තෝරන්න",
+  "@selectItem": {
+    "description": "semantic label for checkboxes to select item."
+  },
+  "createNewFile": "නව ගොනුවක් සාදන්න",
+  "@createNewFile": {
+    "description": "button on select file screen to create a new password database."
+  },
+  "openLocalFile": "ස්ථානීය ගොනුවක් \nවිවෘත කරන්න",
+  "@openLocalFile": {
+    "context": "select file screen, big button open local file."
+  },
+  "openFile": "ගොනුව විවෘත කරන්න",
+  "@openFile": {
+    "description": "Displayed as placeholder in password list when no file is open."
+  },
+  "loadFrom": "{cloudStorageName} වෙතින් පුරන්න",
+  "@loadFrom": {
+    "placeholders": {
+      "cloudStorageName": {
+        "type": "String",
+        "example": "Dropbox"
+      }
     }
+  },
+  "labelLastOpenFiles": "අවසන්වරට විවෘත කළ ගොනු:",
+  "@labelLastOpenFiles": {},
+  "preferenceSelectLanguage": "භාෂාව තෝරන්න",
+  "@preferenceSelectLanguage": {},
+  "preferenceLanguage": "භාෂාව",
+  "@preferenceLanguage": {},
+  "preferenceTheme": "තේමාව",
+  "@preferenceTheme": {},
+  "preferenceThemeLight": "දීප්ත",
+  "@preferenceThemeLight": {},
+  "preferenceThemeDark": "අඳුරු",
+  "@preferenceThemeDark": {},
+  "preferenceSystemDefault": "පද්ධතියේ පෙරනිමි",
+  "@preferenceSystemDefault": {},
+  "preferenceDefault": "පෙරනිමි",
+  "@preferenceDefault": {},
+  "lockAllFiles": "සියලුම විවෘත ගොනු අගුලුලන්න",
+  "@lockAllFiles": {},
+  "preferenceTitle": "අභිප්‍රේත",
+  "@preferenceTitle": {},
+  "aboutAppName": "AuthPass",
+  "@aboutAppName": {},
+  "aboutLinkGitHub": "සහ විවෘත මූලාශ්‍ර ව්‍යාපෘතියකි",
+  "@aboutLinkGitHub": {},
+  "launchedUrl": "විවෘත කළ ඒ.ස.නි.: {url}",
+  "@launchedUrl": {
+    "description": "snackbar confirmation after opening a url externally",
+    "placeholders": {
+      "url": {
+        "description": "URL which was just launched."
+      }
+    }
+  },
+  "menuItemPreferences": "අභිප්‍රේත",
+  "@menuItemPreferences": {},
+  "menuItemSupport": "සටහන් යවන්න",
+  "@menuItemSupport": {},
+  "menuItemForum": "සහාය සංසදය",
+  "@menuItemForum": {},
+  "menuItemHelp": "උදව්",
+  "@menuItemHelp": {},
+  "menuItemAbout": "පිළිබඳව",
+  "@menuItemAbout": {},
+  "generatorPassword": "මුරපදය",
+  "@generatorPassword": {
+    "description": "Label for generated password"
+  },
+  "doneButtonLabel": "අවසන්",
+  "@doneButtonLabel": {
+    "description": "generic button label for 'Done' action."
+  },
+  "characterSetSpecial": "විශේෂ (@%+)",
+  "@characterSetSpecial": {
+    "context": "Password generator"
+  },
+  "searchHint": "සොයන්න",
+  "@searchHint": {
+    "description": "Placeholder in the password list search box"
+  },
+  "searchButtonLabel": "සොයන්න",
+  "@searchButtonLabel": {
+    "description": "search button tooltip/semantic label"
+  },
+  "filterButtonLabel": "සමූහය අනුව පෙරන්න",
+  "@filterButtonLabel": {
+    "description": "tooltip/semantic label for filter app bar icon."
+  },
+  "clear": "හිස් කරන්න",
+  "@clear": {
+    "description": "Remove existing group filter from password list"
+  },
+  "autofillFilterPrefix": "පෙරහන:",
+  "@autofillFilterPrefix": {
+    "description": "Label displayed for android auto fill"
+  },
+  "noTitle": "(මාතෘකාවක් නැත)",
+  "@noTitle": {
+    "description": "Text to display in place of a title, when password entry has no name assigned."
+  },
+  "noUsername": "(පරිශීලක නාමයක් නැත)",
+  "@noUsername": {
+    "description": "Text to display in place of a user name in the password list if none is defined."
+  },
+  "filterCustomize": "රිසිකරණය …",
+  "@filterCustomize": {
+    "description": "Customize filter in password list"
+  },
+  "swipeCopyPassword": "මුරපදය පිටපත්",
+  "@swipeCopyPassword": {
+    "description": "swipe action in password list to copy password"
+  },
+  "swipeCopyUsername": "පරිශීලක නාමය පිටපත්",
+  "@swipeCopyUsername": {
+    "description": "swipe action in password list to copy username"
+  },
+  "emptyPasswordVaultButtonLabel": "ඔබගේ පළමු මුරපදය සාදන්න",
+  "@emptyPasswordVaultButtonLabel": {
+    "description": "Button shown under placeholder text when password database is empty"
+  },
+  "loading": "පූරණය වෙමින්",
+  "@loading": {
+    "description": "generic loading indicator displayed during network request (e.g. when loading file list from cloud storage)"
+  },
+  "loadingFile": "ගොනුව පූරණය වෙමින්…",
+  "@loadingFile": {
+    "description": "credential screen while unlocking file."
+  },
+  "internalFile": "අභ්‍යන්තර ගොනුව",
+  "@internalFile": {
+    "description": "Choose a file previously created in AuthPass app sandbox",
+    "context": "open file picker: internal file vs. file picker"
+  },
+  "credentialsAppBarTitle": "අක්තපත්‍ර",
+  "@credentialsAppBarTitle": {
+    "description": "Credential screen to enter master password when opening kdbx file.",
+    "context": "credential screen"
+  },
+  "masterPasswordInputLabel": "මුරපදය",
+  "@masterPasswordInputLabel": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "masterPasswordEmptyValidator": "ඔබගේ මුරපදය ඇතුළත් කරන්න.",
+  "@masterPasswordEmptyValidator": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "masterPasswordIncorrectValidator": "වලංගු නොවන මුරපදයකි",
+  "@masterPasswordIncorrectValidator": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "useKeyFile": "යතුරු ගොනුව භාවිතා කරන්න",
+  "@useKeyFile": {
+    "description": "label for a key file in combination with mater password",
+    "context": "credential screen"
+  },
+  "close": "වසන්න",
+  "@close": {
+    "description": "Tooltip/semantic label for close button"
+  },
+  "addNewPassword": "නව මුරපදයක් එකතු කරන්න",
+  "@addNewPassword": {
+    "description": "Tooltip for adding new password button (floating action button)"
+  },
+  "errorOpenFileAlreadyOpenTitle": "ගොනුව දැනටමත් විවෘතයි",
+  "@errorOpenFileAlreadyOpenTitle": {
+    "description": "Trying to open a database from a second file source which is already open.",
+    "context": "credential screen"
+  },
+  "loadFromUrl": "ඒ.ස.නි. වෙතින් බාගන්න",
+  "@loadFromUrl": {
+    "description": ""
+  },
+  "loadFromUrlEnterUrl": "ඒ.ස.නි. යොදන්න",
+  "@loadFromUrlEnterUrl": {
+    "description": "label for input box to enter url."
+  },
+  "dialogContinue": "ඉදිරියට",
+  "@dialogContinue": {
+    "description": "Dialog action to continue to next step (e.g. credential screen when finished with master password)"
+  },
+  "groupFilterSelectAll": "සියල්ල තෝරන්න",
+  "@groupFilterSelectAll": {
+    "context": "group filter"
+  },
+  "groupFilterDeselectAll": "සියල්ල නොතෝරන්න",
+  "@groupFilterDeselectAll": {
+    "context": "group filter"
+  },
+  "editAction": "සංස්කරණය",
+  "@editAction": {
+    "description": "menu action: edit item (e.g. delete a group)"
+  },
+  "mailboxDisableLabel": "අබල කරන්න",
+  "@mailboxDisableLabel": {
+    "description": ""
+  },
+  "undoButtonLabel": "පෙරසේ",
+  "@undoButtonLabel": {
+    "description": "undo action label (e.g. in a snackbar after deleting a group, or some other action)"
+  },
+  "saveButtonLabel": "සුරකින්න",
+  "@saveButtonLabel": {
+    "description": "save file, for example button displayed in entry details"
+  },
+  "webDavAuthPassword": "මුරපදය",
+  "@webDavAuthPassword": {
+    "description": ""
+  },
+  "initialNewGroupName": "නව සමූහය",
+  "@initialNewGroupName": {
+    "description": "initial name of groups when user creates a new one."
+  },
+  "groupListAppBarTitle": "සමූහ",
+  "@groupListAppBarTitle": {
+    "description": "title in the app bar for the groups list"
+  },
+  "groupListFilterAppbarTitle": "සමූහ අනුව පෙරන්න",
+  "@groupListFilterAppbarTitle": {
+    "description": "title in the app bar for group lists when displayed for filtering password list"
+  },
+  "closePasswordFiles": "මුරපද ගොනු වසන්න",
+  "@closePasswordFiles": {
+    "description": "delete quick unlock (passwords stored in biometric storage)"
+  },
+  "createPasswordDatabase": "මුරපද දත්තසමුදායක් සාදන්න",
+  "@createPasswordDatabase": {
+    "description": ""
+  },
+  "nameNewPasswordDatabase": "ඔබගේ නව දත්තසමුදාය නම් කරන්න",
+  "@nameNewPasswordDatabase": {
+    "description": "creating new kdbx file, prompt"
+  },
+  "validatorNameMissing": "ඔබගේ නව දත්තසමුදාය සඳහා නමක් ඇතුළත් කරන්න.",
+  "@validatorNameMissing": {
+    "description": "Error message when no password database name is given."
+  },
+  "createDatabaseAction": "දත්තසමුදාය සාදන්න",
+  "@createDatabaseAction": {
+    "description": "Label for button to create new database"
+  },
+  "databaseExistsError": "ගොනුව පවතී",
+  "@databaseExistsError": {
+    "description": "dialog title for error message when creating a new database with a name which already exists."
+  },
+  "databaseCreateDefaultName": "පුද්ගලික මුරපද",
+  "@databaseCreateDefaultName": {
+    "description": "Default database name when creating a new database file. (WITHOUT .kdbx extension)"
+  },
+  "entryInfoFile": "ගොනුව:",
+  "@entryInfoFile": {
+    "description": ""
+  },
+  "entryInfoGroup": "සමූහය:",
+  "@entryInfoGroup": {
+    "description": ""
+  },
+  "entryAddAttachment": "ඇමුණුම එකතු කරන්න",
+  "@entryAddAttachment": {
+    "description": ""
+  },
+  "fieldRename": "යලි නම් කරන්න",
+  "@fieldRename": {
+    "description": ""
+  },
+  "onboardingYesOpenPasswords": "ඔව්, මාගේ මුරපද විවෘත කරන්න",
+  "@onboardingYesOpenPasswords": {
+    "description": ""
+  },
+  "backupButton": "මේඝයට සුරකින්න",
+  "@backupButton": {
+    "description": "Button that is displayed in backup warnings"
+  },
+  "saving": "සුරකිමින්",
+  "@saving": {
+    "description": "Saving text"
+  },
+  "newGroupDialogTitle": "නව සමූහය",
+  "@newGroupDialogTitle": {
+    "description": ""
+  },
+  "shareCodeLoadingProgress": "ගොනුව පූරණය වෙමින්…",
+  "@shareCodeLoadingProgress": {
+    "description": ""
+  },
+  "shortcutCopyUsername": "පරිශීලක නාමය පිටපත්",
+  "@shortcutCopyUsername": {
+    "description": ""
+  },
+  "shortcutCopyPassword": "මුරපදය පිටපත්",
+  "@shortcutCopyPassword": {
+    "description": ""
+  },
+  "shortcutShortcutHelp": "යතුරුපුවරුවේ කෙටිමං උදව්",
+  "@shortcutShortcutHelp": {
+    "description": ""
+  },
+  "shortcutHelpTitle": "යතුරුපුවරුවේ කෙටිමං",
+  "@shortcutHelpTitle": {
+    "description": "title of dialog showing keyboard shortcuts."
+  },
+  "unexpectedError": "අනපේක්ෂිත දෝෂයකි: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -72,7 +72,7 @@ AuthPass מאחסן את כל הסיסמאות שלך בתצורת Keepass בד�
 ניתן להצטרף לקהילה שלנו דרך ערוץ ה־discord בכתובת https://authpass.app/go/discord
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","מנהל סיסמאות,מנהל ססמאות,סיסמה,סיסמאות,ססמה,ססמאות,סיסמא,ססמא,מפתחות,הצפנה,מפתח,אחסון מפתחות,חשבונות","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
-
+"","","","",""
 "microsoft-store-windows","עקוב אחרי כל הסיסמאות שלך בצורה קלה ובטוחה!
 
 AuthPass הוא מנהל סיסמאות שתומך בפורמט KeePass המוכר והפופולרי (kdbx 3.x , kdbx 4.x 🎉️) . שמור את הסיסמאות שלך, שתף אותם בין כל המכשירים ופלטפורמות שלך, ומצא אותם בקלות כשאתה צריך להתחבר לשרות.

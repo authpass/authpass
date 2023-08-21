@@ -73,7 +73,7 @@ AuthPass，是一个密码管理器，它使用广受欢迎且久经考验的 Ke
 欢迎加入我们的 Discord 频道https://authpass.app/go/discord
 ","apple-appstore-description --- see my comment, this is essentially the same as the playstore_full_description just slight modifications for apple.","4000",""
 "apple-appstore-keywords","密码管理器、密码、管理、密钥库、密钥安全、Keepass、Kdbx、webdav、icloud、nextcloud、onedrive","apple-appstore-keywords - Keywords used for searching in the apple app store. Does not have to be a 1:1 translation, choose keywords that mak sense.","100",""
-
+"","","","",""
 "microsoft-store-windows","轻松、安全地跟踪您的所有密码 ！
 
 AuthPass，是一个密码管理器，它使用广受欢迎且久经考验的 KeePass 格式。您可以保存您的密码，轻松地分享到其他设备，随时随地找到您需要的密码。

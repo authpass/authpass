@@ -1,22 +1,22 @@
 {
-    "@@locale": "pa",
-    "fieldUserName": "User",
-    "@fieldUserName": {},
-    "fieldPassword": "ਪਾਸਵਰਡ",
-    "@fieldPassword": {},
-    "aboutAppName": "Authpass",
-    "@aboutAppName": {},
-    "generatorPassword": "ਪਾਸਵਰਡ",
-    "@generatorPassword": {
-        "description": "Label for generated password"
-    },
-    "masterPasswordInputLabel": "ਪਾਸਵਰਡ",
-    "@masterPasswordInputLabel": {
-        "description": "",
-        "context": "credential screen"
-    },
-    "webDavAuthPassword": "ਪਾਸਵਰਡ",
-    "@webDavAuthPassword": {
-        "description": ""
-    }
+  "@@locale": "pa",
+  "fieldUserName": "User",
+  "@fieldUserName": {},
+  "fieldPassword": "ਪਾਸਵਰਡ",
+  "@fieldPassword": {},
+  "aboutAppName": "Authpass",
+  "@aboutAppName": {},
+  "generatorPassword": "ਪਾਸਵਰਡ",
+  "@generatorPassword": {
+    "description": "Label for generated password"
+  },
+  "masterPasswordInputLabel": "ਪਾਸਵਰਡ",
+  "@masterPasswordInputLabel": {
+    "description": "",
+    "context": "credential screen"
+  },
+  "webDavAuthPassword": "ਪਾਸਵਰਡ",
+  "@webDavAuthPassword": {
+    "description": ""
+  }
 }

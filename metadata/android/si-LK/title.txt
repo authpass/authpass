@@ -1,1 +1,1 @@
-AuthPass - KeePass compatible Password Manager
+AuthPass - කීපාස් සඳහා ද අනුකූල මුරපද කළමනාකරු
