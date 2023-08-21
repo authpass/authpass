@@ -23,7 +23,11 @@ jobs:
       - name: ci-install-deps
         env:
           BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: "./authpass/_tools/ci-install-deps.sh ios"
-      - run: "./authpass/_tools/ci-release.sh ios"
+      - name: 'ci-releaes ios'
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: "./authpass/_tools/ci-release.sh ios"
 
 

@@ -15,6 +15,8 @@
 
 default_platform(:ios)
 
+keychain_password = SecureRandom.base64
+
   platform :ios do
     desc "Description of what the lane does"
     lane :beta do
@@ -30,7 +32,7 @@ default_platform(:ios)
       # https://docs.travis-ci.com/user/common-build-problems/#fastlane
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
-      password: ENV["MATCH_PASSWORD"],
+      password: keychain_password,
       default_keychain: true,
       unlock: true,
       timeout: 3600,
@@ -40,7 +42,7 @@ default_platform(:ios)
     match(
       type: "appstore",
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
-      keychain_password: ENV["MATCH_PASSWORD"],
+      keychain_password: keychain_password,
       readonly: true
     )
 
