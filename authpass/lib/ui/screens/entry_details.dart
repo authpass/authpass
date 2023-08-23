@@ -816,14 +816,14 @@ class _EntryDetailsState extends State<EntryDetails>
 //            '#ff6666', 'Cancel', true, ScanMode.QR);
 
         final loc = AppLocalizations.of(context);
-        final barcodeResult =
-            await Navigator.of(context).push(BarcodeScanScreen.route(
+        final barcodeResult = await BarcodeScanHelper.scanBarcode(
+          context,
           titleText: loc.scanQrCodeTitle,
           formats: [
             BarcodeFormat.qrCode,
             BarcodeFormat.microQRCode,
           ],
-        ));
+        );
 
         if (barcodeResult case ScanResultValid(barcode: final barcode)) {
           return cleanOtpCodeCode(barcode.text);
