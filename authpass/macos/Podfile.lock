@@ -23,6 +23,8 @@ PODS:
     - FlutterMacOS
   - macos_secure_bookmarks (0.0.3):
     - FlutterMacOS
+  - open_file (0.0.1):
+    - FlutterMacOS
   - package_info_plus (0.0.1):
     - FlutterMacOS
   - path_provider_foundation (0.0.1):
@@ -51,6 +53,7 @@ DEPENDENCIES:
   - hotkey_manager (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos`)
   - just_audio (from `Flutter/ephemeral/.symlinks/plugins/just_audio/macos`)
   - macos_secure_bookmarks (from `Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos`)
+  - open_file (from `Flutter/ephemeral/.symlinks/plugins/open_file/macos`)
   - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
@@ -85,6 +88,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/just_audio/macos
   macos_secure_bookmarks:
     :path: Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos
+  open_file:
+    :path: Flutter/ephemeral/.symlinks/plugins/open_file/macos
   package_info_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
   path_provider_foundation:
@@ -113,6 +118,7 @@ SPEC CHECKSUMS:
   hotkey_manager: c32bf0bfe8f934b7bc17ab4ad5c4c142960b023c
   just_audio: 9b67ca7b97c61cfc9784ea23cd8cc55eb226d489
   macos_secure_bookmarks: cff041c4b377fa00941bb901aaec4d27fac5edf2
+  open_file: ec718d1cd8c570d8e1ca8f6996d413fab0bf92a4
   package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   share_plus: 76dd39142738f7a68dd57b05093b5e8193f220f7
