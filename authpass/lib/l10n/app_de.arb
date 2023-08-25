@@ -1258,6 +1258,13 @@
   "@otpInvalidKeyBody": {
     "description": ""
   },
+  "otpUnsupportedMigrationTitle": "Nicht unterstützt",
+  "otpUnsupportedMigrationBody": "Momentan unterstützen wir nur Migration einzelner Tokens. Enthalten sind {uriCount}",
+  "@otpUnsupportedMigrationBody": {
+    "placeholders": {
+      "uriCount": {}
+    }
+  },
   "otpPromptTitle": "Zeitbasierte Authentifizierung",
   "@otpPromptTitle": {
     "description": ""
