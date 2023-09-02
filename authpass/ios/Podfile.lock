@@ -5,9 +5,11 @@ PODS:
     - Flutter
   - autofill_service (0.0.1):
     - Flutter
-  - biometric_storage (0.0.1):
+  - barcode_scan2 (0.0.1):
     - Flutter
-  - camera_avfoundation (0.0.1):
+    - MTBBarcodeScanner
+    - SwiftProtobuf
+  - biometric_storage (0.0.1):
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
@@ -20,17 +22,14 @@ PODS:
     - Flutter
   - flutter_store_listing (0.0.1):
     - Flutter
-  - flutter_zxing (0.0.1):
-    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - image_picker_ios (0.0.1):
-    - Flutter
   - integration_test (0.0.1):
     - Flutter
   - just_audio (0.0.1):
     - Flutter
+  - MTBBarcodeScanner (5.0.11)
   - open_file (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
@@ -43,6 +42,7 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
+  - SwiftProtobuf (1.22.1)
   - url_launcher_ios (0.0.1):
     - Flutter
   - video_player_avfoundation (0.0.1):
@@ -56,16 +56,14 @@ DEPENDENCIES:
   - argon2_ffi (from `.symlinks/plugins/argon2_ffi/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
+  - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
-  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - file_selector_ios (from `.symlinks/plugins/file_selector_ios/ios`)
   - Flutter (from `Flutter`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_store_listing (from `.symlinks/plugins/flutter_store_listing/ios`)
-  - flutter_zxing (from `.symlinks/plugins/flutter_zxing/ios`)
-  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
@@ -81,6 +79,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - FMDB
+    - MTBBarcodeScanner
+    - SwiftProtobuf
 
 EXTERNAL SOURCES:
   argon2_ffi:
@@ -89,10 +89,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   autofill_service:
     :path: ".symlinks/plugins/autofill_service/ios"
+  barcode_scan2:
+    :path: ".symlinks/plugins/barcode_scan2/ios"
   biometric_storage:
     :path: ".symlinks/plugins/biometric_storage/ios"
-  camera_avfoundation:
-    :path: ".symlinks/plugins/camera_avfoundation/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker_writable:
@@ -105,10 +105,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_email_sender/ios"
   flutter_store_listing:
     :path: ".symlinks/plugins/flutter_store_listing/ios"
-  flutter_zxing:
-    :path: ".symlinks/plugins/flutter_zxing/ios"
-  image_picker_ios:
-    :path: ".symlinks/plugins/image_picker_ios/ios"
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
   just_audio:
@@ -136,24 +132,24 @@ SPEC CHECKSUMS:
   argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
+  barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
-  camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   file_selector_ios: 8c25d700d625e1dcdd6599f2d927072f2254647b
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_store_listing: 8a8514f63b41943433de5d684204ebf1edcbbfe4
-  flutter_zxing: 19a866d17c8a87ee1026d68521c69d2f008635f6
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   integration_test: 13825b8a9334a850581300559b8839134b124670
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  open_file: 2b95472e6ba492308fc6f297d9588286d40b22f2
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47

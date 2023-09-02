@@ -1184,11 +1184,10 @@ packages:
   open_file:
     dependency: "direct main"
     description:
-      path: "."
-      ref: d74d15121ede2e5739df314cae2525a595f5cde0
-      resolved-ref: d74d15121ede2e5739df314cae2525a595f5cde0
-      url: "https://github.com/kishormainali/open_file.git"
-    source: git
+      name: open_file
+      sha256: a5a32d44acb7c899987d0999e1e3cbb0a0f1adebbf41ac813ec6d2d8faa0af20
+      url: "https://pub.dev"
+    source: hosted
     version: "3.3.2"
   openapi_base:
     dependency: "direct main"

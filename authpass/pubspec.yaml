@@ -153,11 +153,12 @@ dependencies:
 #      url: https://github.com/authpass/flutter_zxing.git
 #      ref: 036c3e387d32d3c8b2f5b3a3ebedb55c6eb69c30
   # https://github.com/crazecoder/open_file/pull/258
-#  open_file: ^3.2.1
-  open_file:
-    git:
-      url: https://github.com/kishormainali/open_file.git
-      ref: d74d15121ede2e5739df314cae2525a595f5cde0
+  # TODO: If update is available, remove namespace workaround from build.gradle
+  open_file: ^3.3.2
+#  open_file:
+#    git:
+#      url: https://github.com/kishormainali/open_file.git
+#      ref: d74d15121ede2e5739df314cae2525a595f5cde0
 #  flutter_windowmanager: ^0.2.0
   flutter_windowmanager:
     git:

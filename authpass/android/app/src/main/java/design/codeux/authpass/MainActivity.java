@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.flutter.embedding.android.FlutterFragmentActivity;
-import io.flutter.embedding.android.SplashScreen;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -28,11 +27,6 @@ public class MainActivity extends FlutterFragmentActivity {
     }
 
     @Override
-    public SplashScreen provideSplashScreen() {
-        return null;
-    }
-
-    @Override
     public void configureFlutterEngine(@NotNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler((call, result) -> {
@@ -43,21 +37,4 @@ public class MainActivity extends FlutterFragmentActivity {
             result.notImplemented();
         });
     }
-
-//    no longer required, handled by FilePickerWritable plugin.
-//    @NonNull
-//    @Override
-//    protected String getInitialRoute() {
-//        Uri data = getIntent().getData();
-//        if (data != null) {
-//            String filePath = FileUtils.getPath(data, this);
-//            if (filePath == null) {
-//                filePath = FileUtils.getUriFromRemote(this, data);
-//            }
-//            String initialRoute = "/openFile?file=" + Uri.encode(filePath);
-//            Log.i(TAG, "Got intent data: " + data + ", initialRoute: " + initialRoute);
-//            return initialRoute;
-//        }
-//        return super.getInitialRoute();
-//    }
 }
