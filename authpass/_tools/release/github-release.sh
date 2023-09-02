@@ -14,6 +14,11 @@ mkdir -p "${tmpdir}"
 pushd "${tmpdir}"
 
 repo="authpass/authpass"
+
+# https://github.com/settings/tokens?type=beta
+# create fine grained access token, with read/write access to code:
+# Contents 
+#    Repository contents, commits, branches, downloads, releases, and merges
 github_api_token=$(cat ~/.authpass_github_api_token)
 
 curl https://data.authpass.app/data/artifact.download/.fosshub > files.json
