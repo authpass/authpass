@@ -1,4 +1,4 @@
-# 1.9.9 - 2022-08-21
+# 1.9.9 - 2022-09-02
 
 * Support for importing TOTP codes from Google Authenticator using export QR codes.
 * Fix preventing screenshots on Android #320
