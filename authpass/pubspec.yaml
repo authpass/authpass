@@ -35,7 +35,7 @@ dependencies:
   built_collection: ^5.1.1
   simple_json_persistence: ^2.0.1
   provider: ^6.0.0
-  flutter_hooks: ^0.18.0
+  flutter_hooks: ^0.20.1
   http: '>=0.13.0 <2.0.0'
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.1.0
@@ -192,6 +192,7 @@ dependencies:
 
   hotkey_manager: ^0.1.0
 #  window_manager: ^0.0.3
+  xdg_directories: ^1.0.3
   window_manager:
     git:
       url: https://github.com/authpass/window_manager.git
@@ -219,7 +220,6 @@ dev_dependencies:
   string_literal_finder: ^1.1.0+2
   archive: ^3.1.2
   flutter_lints: ^2.0.1
-  xdg_directories: ^0.2.0+1
 
 dependency_overrides:
 #  ffi: ^2.0.0
