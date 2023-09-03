@@ -29,6 +29,7 @@ class EnvSecrets with _$EnvSecrets {
   const factory EnvSecrets({
     @nullable required String? analyticsAmplitudeApiKey,
     @nullable required String? analyticsGoogleAnalyticsId,
+    @nullable required ({String siteId, String url})? analyticsMatomo,
     @nullable required String? googleClientId,
     @nullable required String? googleClientSecret,
     @nullable required String? dropboxKey,
@@ -40,6 +41,7 @@ class EnvSecrets with _$EnvSecrets {
   static const nullSecrets = EnvSecrets(
     analyticsAmplitudeApiKey: null,
     analyticsGoogleAnalyticsId: null,
+    analyticsMatomo: null,
     googleClientId: null,
     googleClientSecret: null,
     dropboxKey: null,

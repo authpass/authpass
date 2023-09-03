@@ -21,6 +21,9 @@ mixin _$EnvSecrets {
   @nullable
   String? get analyticsGoogleAnalyticsId => throw _privateConstructorUsedError;
   @nullable
+  ({String siteId, String url})? get analyticsMatomo =>
+      throw _privateConstructorUsedError;
+  @nullable
   String? get googleClientId => throw _privateConstructorUsedError;
   @nullable
   String? get googleClientSecret => throw _privateConstructorUsedError;
@@ -47,6 +50,7 @@ abstract class $EnvSecretsCopyWith<$Res> {
   $Res call(
       {@nullable String? analyticsAmplitudeApiKey,
       @nullable String? analyticsGoogleAnalyticsId,
+      @nullable ({String siteId, String url})? analyticsMatomo,
       @nullable String? googleClientId,
       @nullable String? googleClientSecret,
       @nullable String? dropboxKey,
@@ -70,6 +74,7 @@ class _$EnvSecretsCopyWithImpl<$Res, $Val extends EnvSecrets>
   $Res call({
     Object? analyticsAmplitudeApiKey = freezed,
     Object? analyticsGoogleAnalyticsId = freezed,
+    Object? analyticsMatomo = freezed,
     Object? googleClientId = freezed,
     Object? googleClientSecret = freezed,
     Object? dropboxKey = freezed,
@@ -86,6 +91,10 @@ class _$EnvSecretsCopyWithImpl<$Res, $Val extends EnvSecrets>
           ? _value.analyticsGoogleAnalyticsId
           : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
               as String?,
+      analyticsMatomo: freezed == analyticsMatomo
+          ? _value.analyticsMatomo
+          : analyticsMatomo // ignore: cast_nullable_to_non_nullable
+              as ({String siteId, String url})?,
       googleClientId: freezed == googleClientId
           ? _value.googleClientId
           : googleClientId // ignore: cast_nullable_to_non_nullable
@@ -125,6 +134,7 @@ abstract class _$$_EnvSecretsCopyWith<$Res>
   $Res call(
       {@nullable String? analyticsAmplitudeApiKey,
       @nullable String? analyticsGoogleAnalyticsId,
+      @nullable ({String siteId, String url})? analyticsMatomo,
       @nullable String? googleClientId,
       @nullable String? googleClientSecret,
       @nullable String? dropboxKey,
@@ -146,6 +156,7 @@ class __$$_EnvSecretsCopyWithImpl<$Res>
   $Res call({
     Object? analyticsAmplitudeApiKey = freezed,
     Object? analyticsGoogleAnalyticsId = freezed,
+    Object? analyticsMatomo = freezed,
     Object? googleClientId = freezed,
     Object? googleClientSecret = freezed,
     Object? dropboxKey = freezed,
@@ -162,6 +173,10 @@ class __$$_EnvSecretsCopyWithImpl<$Res>
           ? _value.analyticsGoogleAnalyticsId
           : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
               as String?,
+      analyticsMatomo: freezed == analyticsMatomo
+          ? _value.analyticsMatomo
+          : analyticsMatomo // ignore: cast_nullable_to_non_nullable
+              as ({String siteId, String url})?,
       googleClientId: freezed == googleClientId
           ? _value.googleClientId
           : googleClientId // ignore: cast_nullable_to_non_nullable
@@ -196,6 +211,7 @@ class _$_EnvSecrets implements _EnvSecrets {
   const _$_EnvSecrets(
       {@nullable required this.analyticsAmplitudeApiKey,
       @nullable required this.analyticsGoogleAnalyticsId,
+      @nullable required this.analyticsMatomo,
       @nullable required this.googleClientId,
       @nullable required this.googleClientSecret,
       @nullable required this.dropboxKey,
@@ -209,6 +225,9 @@ class _$_EnvSecrets implements _EnvSecrets {
   @override
   @nullable
   final String? analyticsGoogleAnalyticsId;
+  @override
+  @nullable
+  final ({String siteId, String url})? analyticsMatomo;
   @override
   @nullable
   final String? googleClientId;
@@ -230,7 +249,7 @@ class _$_EnvSecrets implements _EnvSecrets {
 
   @override
   String toString() {
-    return 'EnvSecrets(analyticsAmplitudeApiKey: $analyticsAmplitudeApiKey, analyticsGoogleAnalyticsId: $analyticsGoogleAnalyticsId, googleClientId: $googleClientId, googleClientSecret: $googleClientSecret, dropboxKey: $dropboxKey, dropboxSecret: $dropboxSecret, microsoftClientId: $microsoftClientId, microsoftClientSecret: $microsoftClientSecret)';
+    return 'EnvSecrets(analyticsAmplitudeApiKey: $analyticsAmplitudeApiKey, analyticsGoogleAnalyticsId: $analyticsGoogleAnalyticsId, analyticsMatomo: $analyticsMatomo, googleClientId: $googleClientId, googleClientSecret: $googleClientSecret, dropboxKey: $dropboxKey, dropboxSecret: $dropboxSecret, microsoftClientId: $microsoftClientId, microsoftClientSecret: $microsoftClientSecret)';
   }
 
   @override
@@ -245,6 +264,8 @@ class _$_EnvSecrets implements _EnvSecrets {
                     analyticsGoogleAnalyticsId) ||
                 other.analyticsGoogleAnalyticsId ==
                     analyticsGoogleAnalyticsId) &&
+            (identical(other.analyticsMatomo, analyticsMatomo) ||
+                other.analyticsMatomo == analyticsMatomo) &&
             (identical(other.googleClientId, googleClientId) ||
                 other.googleClientId == googleClientId) &&
             (identical(other.googleClientSecret, googleClientSecret) ||
@@ -264,6 +285,7 @@ class _$_EnvSecrets implements _EnvSecrets {
       runtimeType,
       analyticsAmplitudeApiKey,
       analyticsGoogleAnalyticsId,
+      analyticsMatomo,
       googleClientId,
       googleClientSecret,
       dropboxKey,
@@ -282,6 +304,7 @@ abstract class _EnvSecrets implements EnvSecrets {
   const factory _EnvSecrets(
       {@nullable required final String? analyticsAmplitudeApiKey,
       @nullable required final String? analyticsGoogleAnalyticsId,
+      @nullable required final ({String siteId, String url})? analyticsMatomo,
       @nullable required final String? googleClientId,
       @nullable required final String? googleClientSecret,
       @nullable required final String? dropboxKey,
@@ -295,6 +318,9 @@ abstract class _EnvSecrets implements EnvSecrets {
   @override
   @nullable
   String? get analyticsGoogleAnalyticsId;
+  @override
+  @nullable
+  ({String siteId, String url})? get analyticsMatomo;
   @override
   @nullable
   String? get googleClientId;

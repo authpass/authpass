@@ -46,11 +46,12 @@ dependencies:
 
   flutter_async_utils: ^1.0.0+1
   flutter_svg: ^2.0.0
-  #usage: ^3.4.1
-  usage:
-    git:
-      url: https://github.com/hpoul/usage.git
-      ref: custom-user-agent-rebased
+  matomo_tracker: ^4.0.0
+#  #usage: ^3.4.1
+#  usage:
+#    git:
+#      url: https://github.com/hpoul/usage.git
+#      ref: custom-user-agent-rebased
   package_info_plus: ^4.0.2
 #  package_info: ^0.4.0+13
 #  package_info_macos:
@@ -124,7 +125,7 @@ dependencies:
     #path: /Users/herbert/dev/patches/oauth2
     git:
       url: https://github.com/authpass/oauth2.git
-      ref: 595e5829bd3a36a69999a99473d3aad6fd8febc8
+      ref: 929d54361d5849575bd6558d32bf0051cf593156
 
   # FDE
   file_selector: ^1.0.0
@@ -225,6 +226,8 @@ dependency_overrides:
 #  ffi: ^2.0.0
   # enough_mail still has 0.17 pinned. remove this once enough_mail is updated.
   intl: ^0.18.0
+  # Just enforce http 1.0.0 until all dependencies are updated.
+  http: ^1.0.0
   # https://github.com/creativecreatorormaybenot/wakelock/pull/203
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen

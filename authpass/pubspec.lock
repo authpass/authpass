@@ -61,10 +61,10 @@ packages:
     dependency: "direct dev"
     description:
       name: archive
-      sha256: "0c8368c9b3f0abbc193b9d6133649a614204b528982bebc7026372d61677ce3a"
+      sha256: "49b1fad315e57ab0bbc15bcbb874e83116a1d78f77ebd500a4af6c9407d6b28e"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.7"
+    version: "3.3.8"
   argon2_ffi:
     dependency: "direct main"
     description:
@@ -915,10 +915,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_auth:
     dependency: "direct main"
     description:
@@ -1100,6 +1100,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  matomo_tracker:
+    dependency: "direct main"
+    description:
+      name: matomo_tracker
+      sha256: "851d45c900a24f093cadf71a92c16e5d878701ecb0833fe435284e19023d187f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   meta:
     dependency: "direct main"
     description:
@@ -1152,11 +1160,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "595e5829bd3a36a69999a99473d3aad6fd8febc8"
-      resolved-ref: "595e5829bd3a36a69999a99473d3aad6fd8febc8"
+      ref: "929d54361d5849575bd6558d32bf0051cf593156"
+      resolved-ref: "929d54361d5849575bd6558d32bf0051cf593156"
       url: "https://github.com/authpass/oauth2.git"
     source: git
-    version: "2.0.0"
+    version: "2.0.2"
   octo_image:
     dependency: transitive
     description:
@@ -1185,10 +1193,10 @@ packages:
     dependency: "direct main"
     description:
       name: openapi_base
-      sha256: "62720fae618ad6b468358b30d8930db4403a12d464537be947be39da05207d32"
+      sha256: "99c7f3bb935e1bfd863fcbecfcd28af6a9e5937bbd5f083de4b71b3aab6a3ddf"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0+2"
+    version: "1.1.0+3"
   otp:
     dependency: "direct main"
     description:
@@ -1454,6 +1462,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  shared_preferences:
+    dependency: transitive
+    description:
+      name: shared_preferences
+      sha256: b7f41bad7e521d205998772545de63ff4e6c97714775902c199353f8bf1511ac
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  shared_preferences_android:
+    dependency: transitive
+    description:
+      name: shared_preferences_android
+      sha256: "8568a389334b6e83415b6aae55378e158fbc2314e074983362d20c562780fb06"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  shared_preferences_foundation:
+    dependency: transitive
+    description:
+      name: shared_preferences_foundation
+      sha256: "7bf53a9f2d007329ee6f3df7268fd498f8373602f943c975598bbb34649b62a7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.4"
+  shared_preferences_linux:
+    dependency: transitive
+    description:
+      name: shared_preferences_linux
+      sha256: c2eb5bf57a2fe9ad6988121609e47d3e07bb3bdca5b6f8444e4cf302428a128a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
+  shared_preferences_platform_interface:
+    dependency: transitive
+    description:
+      name: shared_preferences_platform_interface
+      sha256: d4ec5fc9ebb2f2e056c617112aa75dcf92fc2e4faaf2ae999caa297473f75d8a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
+  shared_preferences_web:
+    dependency: transitive
+    description:
+      name: shared_preferences_web
+      sha256: d762709c2bbe80626ecc819143013cc820fa49ca5e363620ee20a8b15a3e3daf
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  shared_preferences_windows:
+    dependency: transitive
+    description:
+      name: shared_preferences_windows
+      sha256: f763a101313bd3be87edffe0560037500967de9c394a714cd598d945517f694f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
   shelf:
     dependency: transitive
     description:
@@ -1788,15 +1852,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.8"
-  usage:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: custom-user-agent-rebased
-      resolved-ref: "2c4fd200d60c6f722988d342bfe0e587f18eb8ec"
-      url: "https://github.com/hpoul/usage.git"
-    source: git
-    version: "4.0.2"
   uuid:
     dependency: "direct main"
     description:

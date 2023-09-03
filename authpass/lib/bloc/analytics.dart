@@ -1,27 +1,22 @@
 import 'package:analytics_event/analytics_event.dart';
-import 'package:authpass/bloc/analytics_io.dart'
-    if (dart.library.html) 'package:authpass/bloc/analytics_html.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+import 'package:matomo_tracker/matomo_tracker.dart' as matomo;
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
-import 'package:usage/usage.dart' as usage;
 
 part 'analytics.g.dart';
 part 'analytics_ua.dart';
 
 final _logger = Logger('analytics');
 
-/// user agent
-const _sessionParamUa = 'ua'; // NON-NLS
-/// application id
-const _sessionParamAid = 'aid'; // NON-NLS
 const _propertyMappingPlatform = 'platform'; // NON-NLS
 
 class Analytics {
@@ -29,28 +24,36 @@ class Analytics {
     _init();
   }
 
+  @NonNls
   static void trackError(@NonNls String description, bool fatal) {
-    _errorGa?.sendException(description, fatal: fatal);
+    final e =
+        matomo.EventInfo(category: 'log', action: 'error', name: description);
+    _errorMatomo?.trackEvent(eventInfo: e);
   }
 
   final Env env;
   final AnalyticsEvents events = _$AnalyticsEvents();
 
-  usage.Analytics? _ga;
-  final List<VoidCallback> _gaQ = [];
+  matomo.MatomoTracker? _matomo;
+  final List<void Function(matomo.MatomoTracker m)> _gaQ = [];
   String? _dbg;
+  bool _gaQDisable = false;
 
   /// global analytics tracker we use for error reporting.
-  static usage.Analytics? _errorGa;
+  static matomo.MatomoTracker? _errorMatomo;
   static const _gaPropertyMapping = <String, String>{
     _propertyMappingPlatform: 'cd1', // NON-NLS
     'userType': 'cd2', // NON-NLS
     'device': 'cd3', // NON-NLS
     'systemBrightness': 'cd4', // NON-NLS
   };
+  static const _matomoPropertyMapping = <String, String>{
+    _propertyMappingPlatform: 'dimension1', // NON-NLS
+  };
 
   Future<void> _init() async {
-    if (env.secrets!.analyticsGoogleAnalyticsId != null) {
+    final matomoConfig = env.secrets?.analyticsMatomo;
+    if (matomoConfig != null) {
       if (AuthPassPlatform.isAndroid) {
         const miscChannel = MethodChannel('app.authpass/misc');
         final isFirebaseTestLab = await miscChannel
@@ -62,52 +65,42 @@ class Analytics {
         }
       }
 
-      final info = await env.getAppInfo();
-
-      String? platformVersion;
-      String? deviceInfo;
-      if (AuthPassPlatform.isAndroid) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        platformVersion = androidInfo.version.release;
-        deviceInfo = androidInfo.model;
-      } else if (AuthPassPlatform.isIOS) {
-        final iosInfo = await DeviceInfoPlugin().iosInfo;
-        platformVersion = iosInfo.systemVersion;
-      }
-      final userAgent = _createUserAgent(
-          platformVersion: platformVersion, deviceInfo: deviceInfo);
-      _logger.fine(
-          'Got PackageInfo: ${info.appName}, ${info.buildNumber}, ${info.packageName} - '
-          'UserAgent: $userAgent');
-
       _dbg = '(ga)'; // NON-NLS
-      _ga = await analyticsCreate(
-        env.secrets!.analyticsGoogleAnalyticsId!,
-        info.appName,
-        [info.version, CharConstants.plus, info.buildNumber].join(),
-        userAgent: userAgent,
+      final matomoTracker = matomo.MatomoTracker.instance;
+      await matomoTracker.initialize(
+        siteId: matomoConfig.siteId.toInt(),
+        url: matomoConfig.url,
       );
+      _matomo = matomoTracker;
+      // _ga = await analyticsCreate(
+      //   env.secrets!.analyticsGoogleAnalyticsId!,
+      //   info.appName,
+      //   [info.version, CharConstants.plus, info.buildNumber].join(),
+      //   userAgent: userAgent,
+      // );
 //      _ga.onSend.listen((event) {
 //        _logger.finer('analytics send: $event');
 //      });
-      _ga!.setSessionValue(_sessionParamUa, userAgent);
-      _errorGa = _ga;
-      _ga!.setSessionValue(_gaPropertyMapping[_propertyMappingPlatform]!,
-          AuthPassPlatform.operatingSystem);
-      // set application id to package name.
-      _ga!.setSessionValue(_sessionParamAid, info.packageName);
+//       _ga!.setSessionValue(_sessionParamUa, userAgent);
+      _errorMatomo = _matomo;
+      matomoTracker.trackDimensions(dimensions: {
+        _matomoPropertyMapping[_propertyMappingPlatform]!:
+            AuthPassPlatform.operatingSystem,
+      });
+      for (final cb in _gaQ) {
+        cb(matomoTracker);
+      }
+      _gaQ.clear();
     } else {
+      _gaQDisable = true;
+      _gaQ.clear();
       _logger.info('No analytics Id defined. Not tracking anything.');
-      _errorGa = _ga = usage.AnalyticsMock();
+      // _errorMatomo = _matomo = usage.AnalyticsMock();
       _dbg = '(noop)'; // NON-NLS
     }
 
-    for (final cb in _gaQ) {
-      cb();
-    }
-    _gaQ.clear();
-
-    _logger.finest('$_dbg Registering analytics tracker. ${_ga!.clientId}');
+    _logger
+        .finest('$_dbg Registering analytics tracker. ${_matomo?.visitor.id}');
     events.registerTracker(nonNls((final action, params) {
       final eventParams = <String, String?>{};
       int? value;
@@ -149,8 +142,8 @@ class Analytics {
   }
 
   void trackScreen(@NonNls String screenName) {
-    _requireGa((ga) {
-      ga!.sendScreenView(screenName);
+    _requireMatomo((matomo) {
+      matomo.trackPageViewWithName(actionName: screenName);
       _logger.finer('$_dbg screen($screenName)');
     });
   }
@@ -170,32 +163,43 @@ class Analytics {
         parameters: parameters,
       );
 
+  @NonNls
   void trackTiming(
     @NonNls String variableName,
     int timeMs, {
     @NonNls String? category,
     @NonNls String? label,
   }) {
-    _requireGa((ga) {
-      ga!.sendTiming(variableName, timeMs, category: category, label: label);
+    _requireMatomo((m) {
+      m.trackEvent(
+          eventInfo: matomo.EventInfo(
+        category: 'timing',
+        action: category ?? '',
+        name: label == null ? variableName : '$variableName.$label',
+        value: timeMs,
+      ));
       _logger.finest('$_dbg timing($variableName, $timeMs, '
           'category: $category, label: $label)');
     });
   }
 
-  void _sendEvent(String? category, String? action,
+  void _sendEvent(String category, String action,
       {String? label, int? value, Map<String, String?>? parameters}) {
-    _requireGa((ga) {
-      ga!.sendEvent(category!, action!,
-          label: label,
+    _requireMatomo((m) {
+      m.trackEvent(
+        eventInfo: matomo.EventInfo(
+          category: category,
+          action: action,
+          name: label,
           value: value,
-          parameters: parameters?.map(
-              (key, value) => MapEntry(key, value ?? CharConstants.empty)));
-      _logger.finer(
-          '$_dbg event($category, $action, $label, $value) - parameters: $parameters');
+        ),
+      );
     });
+    _logger.finer(
+        '$_dbg event($category, $action, $label, $value) - parameters: $parameters');
   }
 
+  @NonNls
   void updateSizes({
     double? viewportSizeWidth,
     double? viewportSizeHeight,
@@ -203,21 +207,35 @@ class Analytics {
     double? displaySizeHeight,
     double? devicePixelRatio,
   }) {
-    _requireGa(nonNls((ga) {
-      ga!.setSessionValue(
-          'vp', '${viewportSizeWidth!.round()}x${viewportSizeHeight!.round()}');
+    _requireMatomo((m) {
+      m.trackEvent(
+          eventInfo: matomo.EventInfo(
+        category: 'sizes',
+        action: 'viewport',
+        name: '${viewportSizeWidth!.round()}x${viewportSizeHeight!.round()}',
+      ));
+
       final sr = [displaySizeWidth, displaySizeHeight]
           .map((e) => (e! / devicePixelRatio!).round())
           .join('x');
-      ga.setSessionValue('sr', sr);
-    }));
+      m.trackEvent(
+          eventInfo: matomo.EventInfo(
+        category: 'sizes',
+        action: 'display',
+        name: sr,
+      ));
+    });
   }
 
-  void _requireGa(void Function(usage.Analytics? ga) callback) {
-    if (_ga == null) {
-      _gaQ.add(() => callback(_ga));
+  void _requireMatomo(void Function(matomo.MatomoTracker matomo) callback) {
+    if (_gaQDisable) {
+      return;
+    }
+    final m = _matomo;
+    if (m == null) {
+      _gaQ.add(callback);
     } else {
-      callback(_ga);
+      callback(m);
     }
   }
 }

@@ -10,6 +10,7 @@ class FDroid extends EnvAppBase {
   EnvSecrets get secrets => const EnvSecrets(
         analyticsAmplitudeApiKey: null,
         analyticsGoogleAnalyticsId: null,
+        analyticsMatomo: null,
         googleClientId: null,
         googleClientSecret: null,
         dropboxKey: null,
