@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 part 'analytics.g.dart';
-part 'analytics_ua.dart';
 
 final _logger = Logger('analytics');
 
