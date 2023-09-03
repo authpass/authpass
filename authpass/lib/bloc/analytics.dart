@@ -183,9 +183,13 @@ class Analytics {
     });
   }
 
+  @NonNls
   void _sendEvent(String category, String action,
       {String? label, int? value, Map<String, String?>? parameters}) {
     _requireMatomo((m) {
+      if (label == null || label == '') {
+        label = 'unknown';
+      }
       m.trackEvent(
         eventInfo: matomo.EventInfo(
           category: category,
@@ -233,9 +237,19 @@ class Analytics {
     }
     final m = _matomo;
     if (m == null) {
-      _gaQ.add(callback);
+      _gaQ.add((m) {
+        try {
+          callback(m);
+        } catch (e, stackTrace) {
+          _logger.warning('Error during analytics.', e, stackTrace);
+        }
+      });
     } else {
-      callback(m);
+      try {
+        callback(m);
+      } catch (e, stackTrace) {
+        _logger.warning('Error during analytics.', e, stackTrace);
+      }
     }
   }
 }
