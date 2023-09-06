@@ -125,7 +125,7 @@ dependencies:
     #path: /Users/herbert/dev/patches/oauth2
     git:
       url: https://github.com/authpass/oauth2.git
-      ref: 929d54361d5849575bd6558d32bf0051cf593156
+      ref: 0ed21e7c572bff503cccab926814209a8189dd45
 
   # FDE
   file_selector: ^1.0.0
