@@ -532,55 +532,216 @@ class _EntryDetailsState extends State<EntryDetails>
           child: Column(
             children: <Widget>[
               const SizedBox(height: 16),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(width: 16),
-                  EntryIcon(
-                    vm: vm,
-                    size: 64,
-                    fallback: (context) => IconSelectorFormField(
-                      initialValue: SelectedIcon.fromObject(entry),
-                      onSaved: (icon) {
-                        // TODO is it possible for icon to be null here?!
-                        icon?.when(predefined: (predefined) {
-                          entry.customIcon = null;
-                          entry.icon.set(predefined);
-                        }, custom: (custom) {
-                          entry.customIcon = custom;
-                        });
-                      },
-                      kdbxFile: entry.file,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(height: 16),
-                        EntryMetaInfo(
-                          label: loc.entryInfoFile,
-                          value: entry.file.body.meta.databaseName.get(),
-                        ),
-                        EntryMetaInfo(
-                          label: loc.entryInfoGroup,
-                          value: vm.groupNames.join(' » '), // NON-NLS
-                          onTap: () async {
-                            await _showMoveToGroup(loc, vm.entry);
-                          },
-                        ),
-                        EntryMetaInfo(
-                          label: loc.entryInfoLastModified,
-                          value: formatUtils.formatDateFull(
-                              vm.entry.times.lastModificationTime.get()!),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                  ),
-                ],
+              Container(
+                decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 2)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                     Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 90,
+                            child: EntryIcon(
+                              vm: vm,
+                              size: 64,
+                              fallback: (context) => IconSelectorFormField(
+                                initialValue: SelectedIcon.fromObject(entry),
+                                onSaved: (icon) {
+                                  icon?.when(predefined: (predefined) {
+                                    entry.customIcon = null;
+                                    entry.icon.set(predefined);
+                                  }, custom: (custom) {
+                                    entry.customIcon = custom;
+                                  });
+                                },
+                                kdbxFile: entry.file,
+                              ),
+                            ),
+                          ),
+                          Text('username'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('password'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(height: 20, child: Text('Strength')),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('Website'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('Notes'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('tags'),
+                          SizedBox(
+                            height: 157,
+                          ),
+                          Text('last modified'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('created'),
+                        ],
+                      ),
+
+                    // const SizedBox(width: 16),
+                    // EntryIcon(
+                    //   vm: vm,
+                    //   size: 64,
+                    //   fallback: (context) => IconSelectorFormField(
+                    //     initialValue: SelectedIcon.fromObject(entry),
+                    //     onSaved: (icon) {
+                    //       // TODO is it possible for icon to be null here?!
+                    //       icon?.when(predefined: (predefined) {
+                    //         entry.customIcon = null;
+                    //         entry.icon.set(predefined);
+                    //       }, custom: (custom) {
+                    //         entry.customIcon = custom;
+                    //       });
+                    //     },
+                    //     kdbxFile: entry.file,
+                    //   ),
+                    // ),
+                    const SizedBox(width: 20),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 90,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  entry.file.body.meta.databaseName.get()!,
+                                  style: TextStyle(
+                                      fontSize: 19.5,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Icon(Icons.star),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          Text(widget.entry.label!),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('******'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          // PercentageIndicator2(
+                          //   percent: 70,
+                          // ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          
+                          Text(widget.entry.website!),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                              'You can use this login to sign in to your account on 1password.com.'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {}, child: Text("Starter Kit")),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(
+                                        Colors.white),
+                              ),
+                              child: Text(
+                                "Show Web Form Details",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(
+                                        Colors.white),
+                              ),
+                              child: Text(
+                                "View Sharing History",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(
+                                        Colors.white),
+                              ),
+                              child: Text(
+                                "View Item History",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text("September 26, 2023 4:55 PM"),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text("September 25, 2023 1:47 PM")
+                        ],
+                      ),
+                    // Expanded(
+                    //   child: Column(
+                    //     mainAxisSize: MainAxisSize.min,
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: <Widget>[
+                    //       const SizedBox(height: 16),
+                    //       EntryMetaInfo(
+                    //         label: loc.entryInfoFile,
+                    //         value: entry.file.body.meta.databaseName.get(),
+                    //       ),
+                    //       EntryMetaInfo(
+                    //         label: loc.entryInfoGroup,
+                    //         value: vm.groupNames.join(' » '), // NON-NLS
+                    //         onTap: () async {
+                    //           await _showMoveToGroup(loc, vm.entry);
+                    //         },
+                    //       ),
+                    //       EntryMetaInfo(
+                    //         label: loc.entryInfoLastModified,
+                    //         value: formatUtils.formatDateFull(
+                    //             vm.entry.times.lastModificationTime.get()!),
+                    //       ),
+                    //       const SizedBox(height: 16),
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
               const SizedBox(height: 32),
               ..._fieldKeys!
