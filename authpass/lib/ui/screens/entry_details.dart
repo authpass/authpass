@@ -626,9 +626,6 @@ class _EntryDetailsState extends State<EntryDetails>
                           SizedBox(
                             height: 20,
                           ),
-                          SizedBox(
-                            height: 20,
-                            child: Text('created', style: TextStyle(color: Colors.black),)),
                         ],
                       ),
 
@@ -662,19 +659,20 @@ class _EntryDetailsState extends State<EntryDetails>
                                 SizedBox(
                                   height: 20,
                                 ),
-                                // Text(
-                                //   entry.file.body.meta.databaseName.get()!,
-                                //   style: TextStyle(
-                                //       fontSize: 19.5,
-                                //       fontWeight: FontWeight.w600),
-                                // ),
-                                Icon(Icons.star),
+                                Text(
+                                  entry.file.body.meta.databaseName.get()!,
+                                  style: TextStyle(
+                                      fontSize: 19.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                                Icon(Icons.star, color: Colors.black,),
                               ],
                             ),
                           ),
                           SizedBox(
                             height: 20,
-                            //child:  Text(widget.entry.label!),
+                            child:  Text(vm.label != null? vm.label! : "No name", style: TextStyle(color: Colors.black),),
                             ),
                           SizedBox(
                             height: 20,
@@ -696,7 +694,7 @@ class _EntryDetailsState extends State<EntryDetails>
                           
                           SizedBox(
                             height: 30,
-                            // child: // Text(widget.entry.website!),
+                            child: Text(vm.website != null? vm.website! : "No website", style: TextStyle(color: Colors.black),),
                           ),
                           SizedBox(
                             height: 20,
@@ -704,7 +702,7 @@ class _EntryDetailsState extends State<EntryDetails>
                           SizedBox(
                             height: 40,
                             child: Text(
-                                'You can use this login to sign in to your account on 1password.com.', style: TextStyle(color: Colors.black),),
+                                'You can use this login to sign in to your account on ' + (vm.website != null? vm.website! + "." : "your account."), style: TextStyle(color: Colors.black),),
                           ),
                           SizedBox(
                             height: 20,
@@ -770,13 +768,11 @@ class _EntryDetailsState extends State<EntryDetails>
                           ),
                           SizedBox(
                             height: 20,
-                            child: Text("September 26, 2023 4:55 PM", style: TextStyle(color: Colors.black),)),
+                            child: Text(formatUtils.formatDateFull(
+                                vm.entry.times.lastModificationTime.get()!), style: TextStyle(color: Colors.black),)),
                           SizedBox(
                             height: 20,
                           ),
-                          SizedBox(
-                            height: 20,
-                            child: Text("September 25, 2023 1:47 PM", style: TextStyle(color: Colors.black),))
                         ],
                       ),
                     // Expanded(
