@@ -534,9 +534,13 @@ class _EntryDetailsState extends State<EntryDetails>
               const SizedBox(height: 16),
               Container(
                 decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 2)),
+                      border: Border.all(color: Colors.white, width: 2),
+                      color: Color.fromARGB(250,250,250,255)
+                      ),
+                      
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                      Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -560,35 +564,71 @@ class _EntryDetailsState extends State<EntryDetails>
                               ),
                             ),
                           ),
-                          Text('username'),
+                          SizedBox(
+                            height: 20,
+                            child: Text('username', style: TextStyle(color: Colors.black),)
+                            ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text('password'),
+                          SizedBox(
+                            height: 20,
+                            child: Text('password', style: TextStyle(color: Colors.black),)),
                           SizedBox(
                             height: 20,
                           ),
-                          Container(height: 20, child: Text('Strength')),
+                          Container(
+                            height: 20, 
+                            child: Text('Strength', style: TextStyle(color: Colors.black),)
+                            ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text('Website'),
+                          SizedBox(
+                            height: 30,
+                            child: Text('Website', style: TextStyle(color: Colors.black),)),
                           SizedBox(
                             height: 20,
                           ),
-                          Text('Notes'),
+                          SizedBox(
+                            height: 40,
+                            child: Text('Notes', style: TextStyle(color: Colors.black),)),
                           SizedBox(
                             height: 20,
                           ),
-                          Text('tags'),
                           SizedBox(
-                            height: 157,
+                            height: 30,
+                            child: Text('tags', style: TextStyle(color: Colors.black),)),
+                          SizedBox(
+                            height: 15,
                           ),
-                          Text('last modified'),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text('created'),
+                          SizedBox(
+                            height: 20,
+                            child: Text('last modified',style: TextStyle(color: Colors.black),)),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            height: 20,
+                            child: Text('created', style: TextStyle(color: Colors.black),)),
                         ],
                       ),
 
@@ -622,96 +662,121 @@ class _EntryDetailsState extends State<EntryDetails>
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
-                                  entry.file.body.meta.databaseName.get()!,
-                                  style: TextStyle(
-                                      fontSize: 19.5,
-                                      fontWeight: FontWeight.w600),
-                                ),
+                                // Text(
+                                //   entry.file.body.meta.databaseName.get()!,
+                                //   style: TextStyle(
+                                //       fontSize: 19.5,
+                                //       fontWeight: FontWeight.w600),
+                                // ),
                                 Icon(Icons.star),
                               ],
                             ),
                           ),
-                          SizedBox(height: 10,),
-                          Text(widget.entry.label!),
+                          SizedBox(
+                            height: 20,
+                            //child:  Text(widget.entry.label!),
+                            ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text('******'),
+                          SizedBox(
+                            height: 20,
+                            child: Text('******', style: TextStyle(color: Colors.black),)),
                           SizedBox(
                             height: 20,
                           ),
                           SizedBox(
                             height: 20,
+                            // child: strength indicator here,
                           ),
-                          // PercentageIndicator2(
-                          //   percent: 70,
-                          // ),
                           SizedBox(
                             height: 20,
                           ),
                           
-                          Text(widget.entry.website!),
+                          
+                          SizedBox(
+                            height: 30,
+                            // child: // Text(widget.entry.website!),
+                          ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text(
-                              'You can use this login to sign in to your account on 1password.com.'),
+                          SizedBox(
+                            height: 40,
+                            child: Text(
+                                'You can use this login to sign in to your account on 1password.com.', style: TextStyle(color: Colors.black),),
+                          ),
                           SizedBox(
                             height: 20,
                           ),
-                          ElevatedButton(
-                              onPressed: () {}, child: Text("Starter Kit")),
+                          SizedBox(
+                            height: 30,
+                            child: ElevatedButton(
+                                onPressed: () {}, child: Text("Starter Kit",style: TextStyle(color: Colors.black),)),
+                          ),
                           SizedBox(
                             height: 15,
                           ),
-                          ElevatedButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll<Color>(
-                                        Colors.white),
-                              ),
-                              child: Text(
-                                "Show Web Form Details",
-                                style: TextStyle(color: Colors.black),
-                              )),
+                          SizedBox(
+                            height: 25,
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(
+                                          Colors.white),
+                                ),
+                                child: Text(
+                                  "Show Web Form Details",
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                          ),
                           SizedBox(
                             height: 15,
                           ),
-                          ElevatedButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll<Color>(
-                                        Colors.white),
-                              ),
-                              child: Text(
-                                "View Sharing History",
-                                style: TextStyle(color: Colors.black),
-                              )),
+                          SizedBox(
+                            height: 25,
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(
+                                          Colors.white),
+                                ),
+                                child: Text(
+                                  "View Sharing History",
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                          ),
                           SizedBox(
                             height: 15,
                           ),
-                          ElevatedButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll<Color>(
-                                        Colors.white),
-                              ),
-                              child: Text(
-                                "View Item History",
-                                style: TextStyle(color: Colors.black),
-                              )),
+                          SizedBox(
+                            height: 25,
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(
+                                          Colors.white),
+                                ),
+                                child: Text(
+                                  "View Item History",
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                          ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text("September 26, 2023 4:55 PM"),
+                          SizedBox(
+                            height: 20,
+                            child: Text("September 26, 2023 4:55 PM", style: TextStyle(color: Colors.black),)),
                           SizedBox(
                             height: 20,
                           ),
-                          Text("September 25, 2023 1:47 PM")
+                          SizedBox(
+                            height: 20,
+                            child: Text("September 25, 2023 1:47 PM", style: TextStyle(color: Colors.black),))
                         ],
                       ),
                     // Expanded(
