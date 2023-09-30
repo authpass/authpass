@@ -19,11 +19,14 @@ import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/password_list.dart';
+import 'package:authpass/ui/widgets/custom_button.dart';
+import 'package:authpass/ui/widgets/custom_icon_button.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
+import 'package:authpass/ui/widgets/strength_indicator.dart';
 import 'package:authpass/utils/base32utils.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -523,286 +526,340 @@ class _EntryDetailsState extends State<EntryDetails>
     final theme = Theme.of(context);
     final loc = AppLocalizations.of(context);
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+    return Container(
+      color: const Color.fromRGBO(255, 255, 255, 1),
+      child: SingleChildScrollView(
         child: SafeArea(
           top: false,
           left: false,
           child: Column(
             children: <Widget>[
-              const SizedBox(height: 16),
               Container(
-                decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 2),
-                      color: Color.fromARGB(250,250,250,255)
-                      ),
-                      
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                     Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 90,
-                            child: EntryIcon(
-                              vm: vm,
-                              size: 64,
-                              fallback: (context) => IconSelectorFormField(
-                                initialValue: SelectedIcon.fromObject(entry),
-                                onSaved: (icon) {
-                                  icon?.when(predefined: (predefined) {
-                                    entry.customIcon = null;
-                                    entry.icon.set(predefined);
-                                  }, custom: (custom) {
-                                    entry.customIcon = custom;
-                                  });
-                                },
-                                kdbxFile: entry.file,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child: Text('username', style: TextStyle(color: Colors.black),)
-                            ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child: Text('password', style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 20, 
-                            child: Text('Strength', style: TextStyle(color: Colors.black),)
-                            ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: Text('Website', style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: Text('Notes', style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: Text('tags', style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child: Text('last modified',style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-
-                    // const SizedBox(width: 16),
-                    // EntryIcon(
-                    //   vm: vm,
-                    //   size: 64,
-                    //   fallback: (context) => IconSelectorFormField(
-                    //     initialValue: SelectedIcon.fromObject(entry),
-                    //     onSaved: (icon) {
-                    //       // TODO is it possible for icon to be null here?!
-                    //       icon?.when(predefined: (predefined) {
-                    //         entry.customIcon = null;
-                    //         entry.icon.set(predefined);
-                    //       }, custom: (custom) {
-                    //         entry.customIcon = custom;
-                    //       });
-                    //     },
-                    //     kdbxFile: entry.file,
-                    //   ),
-                    // ),
-                    const SizedBox(width: 20),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 90,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  entry.file.body.meta.databaseName.get()!,
-                                  style: TextStyle(
-                                      fontSize: 19.5,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
-                                Icon(Icons.star, color: Colors.black,),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child:  Text(vm.label != null? vm.label! : "No name", style: TextStyle(color: Colors.black),),
-                            ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child: Text('******', style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 20,
-                            // child: strength indicator here,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          
-                          
-                          SizedBox(
-                            height: 30,
-                            child: Text(vm.website != null? vm.website! : "No website", style: TextStyle(color: Colors.black),),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: Text(
-                                'You can use this login to sign in to your account on ' + (vm.website != null? vm.website! + "." : "your account."), style: TextStyle(color: Colors.black),),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                onPressed: () {}, child: Text("Starter Kit",style: TextStyle(color: Colors.black),)),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 25,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll<Color>(
-                                          Colors.white),
-                                ),
-                                child: Text(
-                                  "Show Web Form Details",
-                                  style: TextStyle(color: Colors.black),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 25,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll<Color>(
-                                          Colors.white),
-                                ),
-                                child: Text(
-                                  "View Sharing History",
-                                  style: TextStyle(color: Colors.black),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 25,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll<Color>(
-                                          Colors.white),
-                                ),
-                                child: Text(
-                                  "View Item History",
-                                  style: TextStyle(color: Colors.black),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child: Text(formatUtils.formatDateFull(
-                                vm.entry.times.lastModificationTime.get()!), style: TextStyle(color: Colors.black),)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    // Expanded(
-                    //   child: Column(
-                    //     mainAxisSize: MainAxisSize.min,
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: <Widget>[
-                    //       const SizedBox(height: 16),
-                    //       EntryMetaInfo(
-                    //         label: loc.entryInfoFile,
-                    //         value: entry.file.body.meta.databaseName.get(),
-                    //       ),
-                    //       EntryMetaInfo(
-                    //         label: loc.entryInfoGroup,
-                    //         value: vm.groupNames.join(' » '), // NON-NLS
-                    //         onTap: () async {
-                    //           await _showMoveToGroup(loc, vm.entry);
-                    //         },
-                    //       ),
-                    //       EntryMetaInfo(
-                    //         label: loc.entryInfoLastModified,
-                    //         value: formatUtils.formatDateFull(
-                    //             vm.entry.times.lastModificationTime.get()!),
-                    //       ),
-                    //       const SizedBox(height: 16),
-                    //     ],
-                    //   ),
-                    // ),
+                height: 49.6,
+                decoration: const BoxDecoration(
+                  color: const Color.fromRGBO(255, 255, 255, 1),
+                  border: Border(
+                      bottom: BorderSide(
+                          color: Color.fromRGBO(0, 0, 0, .15), width: 1.0)),
+                ),
+                child: Stack(
+                  children: [
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: CustomButton()),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: CustomIconButton())
                   ],
                 ),
+              ),
+              const SizedBox(height: 70),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 90,
+                        child: EntryIcon(
+                          vm: vm,
+                          size: 64,
+                          fallback: (context) => IconSelectorFormField(
+                            initialValue: SelectedIcon.fromObject(entry),
+                            onSaved: (icon) {
+                              icon?.when(predefined: (predefined) {
+                                entry.customIcon = null;
+                                entry.icon.set(predefined);
+                              }, custom: (custom) {
+                                entry.customIcon = custom;
+                              });
+                            },
+                            kdbxFile: entry.file,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                          height: 20,
+                          child: Text(
+                            'username',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const SizedBox(
+                          height: 20,
+                          child: Text(
+                            'password',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          height: 20,
+                          child: Text(
+                            'Strength',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 30,
+                          child: Text(
+                            'Website',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 40,
+                          child: Text(
+                            'Notes',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 30,
+                          child: Text(
+                            'tags',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 20,
+                          child: Text(
+                            'last modified',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+
+                  // const SizedBox(width: 16),
+                  // EntryIcon(
+                  //   vm: vm,
+                  //   size: 64,
+                  //   fallback: (context) => IconSelectorFormField(
+                  //     initialValue: SelectedIcon.fromObject(entry),
+                  //     onSaved: (icon) {
+                  //       // TODO is it possible for icon to be null here?!
+                  //       icon?.when(predefined: (predefined) {
+                  //         entry.customIcon = null;
+                  //         entry.icon.set(predefined);
+                  //       }, custom: (custom) {
+                  //         entry.customIcon = custom;
+                  //       });
+                  //     },
+                  //     kdbxFile: entry.file,
+                  //   ),
+                  // ),
+                  const SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 90,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              entry.file.body.meta.databaseName.get()!,
+                              style: TextStyle(
+                                  fontSize: 19.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                        child: Text(
+                          vm.label != null ? vm.label! : "No name",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 20,
+                          child: Text(
+                            '******',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 20,
+                        child: PercentageIndicator2(percent: 70),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          vm.website != null ? vm.website! : "No website",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 40,
+                        child: Text(
+                          'You can use this login to sign in to your account on ' +
+                              (vm.website != null
+                                  ? vm.website! + "."
+                                  : "your account."),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Color.fromRGBO(0, 0, 0, .15), width: 1.0 )
+
+                          ),
+                          padding: EdgeInsets.all(3),
+                          child: Text('starter kit',
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(Colors.white),
+                            ),
+                            child: Text(
+                              "Show Web Form Details",
+                              style: TextStyle(color: Colors.black),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(Colors.white),
+                            ),
+                            child: Text(
+                              "View Sharing History",
+                              style: TextStyle(color: Colors.black),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(Colors.white),
+                            ),
+                            child: Text(
+                              "View Item History",
+                              style: TextStyle(color: Colors.black),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 20,
+                          child: Text(
+                            formatUtils.formatDateFull(
+                                vm.entry.times.lastModificationTime.get()!),
+                            style: TextStyle(color: Colors.black),
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                  // Expanded(
+                  //   child: Column(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: <Widget>[
+                  //       const SizedBox(height: 16),
+                  //       EntryMetaInfo(
+                  //         label: loc.entryInfoFile,
+                  //         value: entry.file.body.meta.databaseName.get(),
+                  //       ),
+                  //       EntryMetaInfo(
+                  //         label: loc.entryInfoGroup,
+                  //         value: vm.groupNames.join(' » '), // NON-NLS
+                  //         onTap: () async {
+                  //           await _showMoveToGroup(loc, vm.entry);
+                  //         },
+                  //       ),
+                  //       EntryMetaInfo(
+                  //         label: loc.entryInfoLastModified,
+                  //         value: formatUtils.formatDateFull(
+                  //             vm.entry.times.lastModificationTime.get()!),
+                  //       ),
+                  //       const SizedBox(height: 16),
+                  //     ],
+                  //   ),
+                  // ),
+                ],
               ),
               const SizedBox(height: 32),
               ..._fieldKeys!
