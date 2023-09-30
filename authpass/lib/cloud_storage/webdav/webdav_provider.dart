@@ -169,7 +169,8 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final cloudStorageEntities = nonNls(entities
         .map((entity) {
           final hrefEls = entity.findAllElements('href', namespace: 'DAV:');
-          final href = hrefEls.isEmpty ? null : hrefEls.first.value;
+          // Note: using `hrefEls.first.value` in the following lines breaks webdav
+          final href = hrefEls.isEmpty ? null : hrefEls.first.text;
           final resourcetype =
               entity.findAllElements('resourcetype', namespace: 'DAV:').first;
           final isFolder = resourcetype
