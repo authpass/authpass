@@ -810,7 +810,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final theme = Theme.of(context);
     if (theme.brightness == Brightness.light) {
       return theme.copyWith(
-        primaryColor: Colors.white,
+        primaryColor: Colors.grey,
         primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
 //      primaryColorBrightness: Brightness.light,
         primaryTextTheme: theme.textTheme,
@@ -838,40 +838,46 @@ class _PasswordListContentState extends State<PasswordListContent>
   AppBar _buildFilterAppBar(BuildContext context) {
     final theme = filterAppBarTheme(context);
     final loc = AppLocalizations.of(context);
+    double width = MediaQuery.of(context).size.width;
+
+    // Search Part
     return AppBar(
-      backgroundColor: theme.primaryColor,
+      toolbarHeight: width * 0.04,
+      backgroundColor: Colors.transparent,
       iconTheme: theme.primaryIconTheme,
       toolbarTextStyle: theme.primaryTextTheme.bodyMedium,
-      titleTextStyle: theme.primaryTextTheme.titleLarge,
+      titleTextStyle: theme.primaryTextTheme.titleSmall,
       // old deprecated value:
       // textTheme: theme.primaryTextTheme,
       // brightness: theme.primaryColorBrightness,
       systemOverlayStyle: theme.brightness == Brightness.dark
           ? SystemUiOverlayStyle.light
           : SystemUiOverlayStyle.dark,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          _cancelFilter();
-        },
-      ),
+        automaticallyImplyLeading: false,
+     
       title: Theme(
         data: theme,
-        child: TextField(
-          style: theme.textTheme.titleLarge,
-          // we also want the same cursorColor for mac/ios
-          cursorColor: theme.textSelectionTheme.cursorColor,
-          focusNode: _filterFocusNode,
-          controller: _filterTextEditingController,
-          onChanged: (newQuery) async {
-            _logger.info('query changed to $newQuery');
-            _updateFilterQuery(newQuery);
-          },
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: loc.searchHint,
-            border: InputBorder.none,
-            hintStyle: theme.inputDecorationTheme.hintStyle,
+        child: SizedBox(
+          height: width  * 0.022,
+          child: TextField(
+            textAlignVertical: TextAlignVertical.bottom,
+            style: theme.textTheme.titleSmall,
+            // we also want the same cursorColor for mac/ios
+            cursorColor: theme.textSelectionTheme.cursorColor,
+            focusNode: _filterFocusNode,
+            controller: _filterTextEditingController,
+            onChanged: (newQuery) async {
+              _logger.info('query changed to $newQuery');
+              _updateFilterQuery(newQuery);
+            },
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: loc.searchHint,
+              border: OutlineInputBorder(borderSide: const BorderSide(color: Color.fromARGB(201, 158, 158, 158)), borderRadius: BorderRadius.circular(width * 0.01)),
+              focusedBorder: OutlineInputBorder(borderSide:  BorderSide(color: Color.fromARGB(219, 146, 193, 247), width: width * 0.0025), borderRadius: BorderRadius.circular(width * 0.02)),
+              hintStyle: theme.inputDecorationTheme.hintStyle,
+        
+            ),
           ),
         ),
       ),
@@ -1090,9 +1096,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         SearchIntent: SearchAction(this),
       },
       child: Scaffold(
-        appBar: _filteredEntries == null
-            ? _buildDefaultAppBar(context)
-            : _buildFilterAppBar(context),
+        appBar: _buildFilterAppBar(context),
         drawer: Drawer(
           child: PasswordListDrawer(
             initialSelection: _groupFilter.groups.map((e) => e.group).toSet(),

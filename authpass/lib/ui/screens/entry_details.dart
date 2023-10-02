@@ -115,6 +115,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     final analytics = context.watch<Analytics>();
     return Scaffold(
       appBar: AppBar(
+        
+        automaticallyImplyLeading: false ,
+        
         title: Text(vm.label?.takeUnlessBlank() ?? loc.noTitle),
         actions: <Widget>[
           ...?!isDirty
@@ -218,10 +221,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
           )
         ],
       ),
-//      floatingActionButton: FloatingActionButton(
-//        child: Icon(Icons.add),
-//        onPressed: () {},
-//      ),
+    
       body: WillPopScope(
         onWillPop: () async {
           if (!isFormDirty) {
@@ -546,7 +546,11 @@ class _EntryDetailsState extends State<EntryDetails>
                   children: [
                     Align(
                         alignment: Alignment.centerRight,
-                        child: CustomButton()),
+                        child: GestureDetector(
+                          onTap: () {
+                            
+                          },
+                          child: CustomButton())),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: CustomIconButton())
@@ -833,6 +837,8 @@ class _EntryDetailsState extends State<EntryDetails>
                       ),
                     ],
                   ),
+
+                  //Deprecated view entry detail 
                   // Expanded(
                   //   child: Column(
                   //     mainAxisSize: MainAxisSize.min,
