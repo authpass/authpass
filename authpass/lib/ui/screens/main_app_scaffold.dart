@@ -120,66 +120,142 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          width: 384,
-          child: Navigator(
-            onGenerateRoute: (settings) {
-              assert(settings.name == Navigator.defaultRouteName);
-              return MaterialPageRoute<void>(
-                settings: settings,
-                builder: (context) => PasswordList(
-                  selectedEntry: _selectedEntry,
-                  onEntrySelected: (entry, type) {
-                    if (_selectedEntry != entry) {
-                      final Future<dynamic> push;
-                      if (type == EntrySelectionType.passiveHighlight) {
-                        push = _navigatorKey.currentState!.pushAndRemoveUntil(
-                          FocusWorkaroundPageRoute<void>(
-                              focusNode: WidgetsBinding
-                                  .instance.focusManager.primaryFocus,
-                              settings: const RouteSettings(name: '/entry'),
-                              builder: (context) => EntryDetailsScreen(
-                                    entry: entry,
-                                  )),
-                          (route) => route.isFirst,
-                        );
-                      } else {
-                        push = _navigatorKey.currentState!.pushAndRemoveUntil(
-                          EntryDetailsScreen.route(entry: entry),
-                          (route) => route.isFirst,
-                        );
-                      }
-                      push.then((dynamic value) {
-                        _logger.finer('entry route was popped.');
-                        if (entry == _selectedEntry && mounted) {
-                          setState(() => _selectedEntry = null);
-                        }
-                      });
-                      setState(() {
-                        _selectedEntry = entry;
-                      });
-                    }
+    double width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding:  EdgeInsets.all(width * 0.001),
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: width * 0.05,
+          elevation: width * 0.002,
+          backgroundColor: Colors.white,
+          leading: Image.asset(AssetConstants.logoIcon),
+          centerTitle: true,
+          title: Center(
+              child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                AssetConstants.logoIcon,
+                width: 30,
+                height: 30,
+              ),
+              SizedBox(width: width * 0.005),
+              const Text(
+                'Personal',
+                style: TextStyle(
+                    fontFamily: "Segoe UI",
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
+              ),
+              GestureDetector(
+                  onTap: () {},
+                  child: const Icon(Icons.keyboard_arrow_down_outlined))
+            ],
+          )),
+          actions: [
+            Icon(Icons.notifications_none_sharp),
+            VerticalDivider()
+          ],
+        ),
+        body: Row(
+          children: <Widget>[
+
+            Expanded(
+              flex: 1,
+              child: ListView(
+                children: const  [
+                  ListTile(
+                    leading: Icon(Icons.line_style_rounded),
+                    title: Text("All Items"),
+                
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.star),
+                    title: Text("Favorites"),
+
+                  ),
+                  SizedBox(height: 10,),
+                  ListTile(title: Text("CATEGORIES") ,)
+                  ,
+                  ListTile(leading: Icon(Icons.login_outlined),
+                  title: Text("Logins"),),
+                  ListTile(leading: Icon(Icons.perm_identity_outlined), title: Text("Identities")),
+                  SizedBox(height: 10,),
+
+                  ListTile(title: Text("TAGS"),),
+                  ListTile(leading: Icon(Icons.book), title: Text("Starter Kit") ,)
+
+
+
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: SizedBox(
+                width: 384,
+                child: Navigator(
+                  onGenerateRoute: (settings) {
+                    assert(settings.name == Navigator.defaultRouteName);
+                    return MaterialPageRoute<void>(
+                      settings: settings,
+                      builder: (context) => PasswordList(
+                        selectedEntry: _selectedEntry,
+                        onEntrySelected: (entry, type) {
+                          if (_selectedEntry != entry) {
+                            final Future<dynamic> push;
+                            if (type == EntrySelectionType.passiveHighlight) {
+                              push =
+                                  _navigatorKey.currentState!.pushAndRemoveUntil(
+                                FocusWorkaroundPageRoute<void>(
+                                    focusNode: WidgetsBinding
+                                        .instance.focusManager.primaryFocus,
+                                    settings: const RouteSettings(name: '/entry'),
+                                    builder: (context) => EntryDetailsScreen(
+                                          entry: entry,
+                                        )),
+                                (route) => route.isFirst,
+                              );
+                            } else {
+                              push =
+                                  _navigatorKey.currentState!.pushAndRemoveUntil(
+                                EntryDetailsScreen.route(entry: entry),
+                                (route) => route.isFirst,
+                              );
+                            }
+                            push.then((dynamic value) {
+                              _logger.finer('entry route was popped.');
+                              if (entry == _selectedEntry && mounted) {
+                                setState(() => _selectedEntry = null);
+                              }
+                            });
+                            setState(() {
+                              _selectedEntry = entry;
+                            });
+                          }
+                        },
+                      ),
+                    );
                   },
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Navigator(
+                key: _navigatorKey,
+                onGenerateRoute: (settings) {
+                  assert(settings.name == Navigator.defaultRouteName);
+                  return MaterialPageRoute<void>(
+                    settings: settings,
+                    builder: (context) => EmptyStateInitialRoute(),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: Navigator(
-            key: _navigatorKey,
-            onGenerateRoute: (settings) {
-              assert(settings.name == Navigator.defaultRouteName);
-              return MaterialPageRoute<void>(
-                settings: settings,
-                builder: (context) => EmptyStateInitialRoute(),
-              );
-            },
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
