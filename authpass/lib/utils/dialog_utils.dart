@@ -185,7 +185,7 @@ class LogViewerDialog extends StatelessWidget {
               builder: (context, snapshot) {
                 return Text(
                   log.toString(),
-                  textScaleFactor: 0.5,
+                  textScaler: const TextScaler.linear(0.5),
                 );
               }),
         ),

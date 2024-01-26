@@ -219,18 +219,22 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 //        child: Icon(Icons.add),
 //        onPressed: () {},
 //      ),
-      body: WillPopScope(
-        onWillPop: () async {
-          if (!isFormDirty) {
-            return true;
+      body: PopScope(
+        canPop: !isFormDirty,
+        onPopInvoked: (didPop) async {
+          if (didPop) {
+            return;
           }
-          return await DialogUtils.showConfirmDialog(
+          final navigator = Navigator.of(context);
+          if (await DialogUtils.showConfirmDialog(
             context: context,
             params: ConfirmDialogParams(
                 title: loc.unsavedChangesWarningTitle,
                 content: loc.unsavedChangesWarningBody,
                 positiveButtonText: loc.unsavedChangesDiscardActionLabel),
-          );
+          )) {
+            navigator.pop();
+          }
         },
         child: Form(
           key: formKey,

@@ -28,9 +28,9 @@ class _BackButtonNavigatorDelegateState
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return !await _navigatorKey.currentState!.maybePop();
+    return NavigatorPopHandler(
+      onPop: () async {
+        return _navigatorKey.currentState!.pop();
       },
       child: Navigator(
         key: _navigatorKey,

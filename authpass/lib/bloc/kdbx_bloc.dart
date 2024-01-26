@@ -984,7 +984,7 @@ class AttachmentProviderAuthPassCloud extends AttachmentProvider {
       entry.createBinary(
         isProtected: false,
         name: fileName,
-        bytes: utf8.encode(info) as Uint8List,
+        bytes: utf8.encode(info),
       );
       return true;
     } catch (e, stackTrace) {

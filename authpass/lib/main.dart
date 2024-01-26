@@ -409,7 +409,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
                 duration: const Duration(milliseconds: 100),
                 builder: (context, value, child) {
                   return MediaQuery(
-                    data: mq.copyWith(textScaleFactor: value),
+                    data: mq.copyWith(textScaler: TextScaler.linear(value)),
                     child: ret,
                   );
                 });

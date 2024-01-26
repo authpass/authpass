@@ -71,7 +71,7 @@ class CloudStorageAuthentication extends StatelessWidget {
               },
               child: Text(
                 loc.cloudStorageLogInCode,
-                textScaleFactor: 0.75,
+                textScaler: const TextScaler.linear(0.75),
               ),
             ),
           ]

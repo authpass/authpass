@@ -20,9 +20,9 @@ void simpleCloudStorageTestSuite({
   late String uuid;
   late CloudStorageProvider provider;
 
-  final saveString1 = utf8.encode('Lorem Ipsum') as Uint8List;
-  final saveString2 = utf8.encode('Lorem Ipsum New Content') as Uint8List;
-  final saveString3 = utf8.encode('Lorem Ipsum Another Content') as Uint8List;
+  final saveString1 = utf8.encode('Lorem Ipsum');
+  final saveString2 = utf8.encode('Lorem Ipsum New Content');
+  final saveString3 = utf8.encode('Lorem Ipsum Another Content');
   final saveStrings = [saveString1, saveString2, saveString3];
 
   int findString(Uint8List bytes) {
