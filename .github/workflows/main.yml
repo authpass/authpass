@@ -56,7 +56,7 @@ jobs:
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
     - name: install ndk
 #      run: 'yes | sdkmanager "ndk;21.0.6113669"'
-      run: echo "y" | sudo ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
+      run: echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
     - name: ci-install-deps
       run: "./authpass/_tools/ci-install-deps.sh android"
     - name: build ${{ matrix.flavor }} apk
