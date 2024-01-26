@@ -52,7 +52,8 @@ jobs:
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
       with:
         ruby-version: '2.6'
-    - run: gem install bundler
+    # The last version of bundler (>= 0) to support your Ruby & RubyGems was 2.4.22.
+    - run: gem install bundler -v 2.4.22
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
     - name: install ndk
 #      run: 'yes | sdkmanager "ndk;21.0.6113669"'
