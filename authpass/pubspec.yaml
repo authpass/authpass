@@ -169,7 +169,7 @@ dependencies:
   mime: ^1.0.0
   ffi: ^2.1.0
   # AuthPass Cloud email deps
-  enough_mail: ^2.1.1
+  enough_mail: ^2.1.6
   flutter_widget_from_html: ^0.10.1
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
@@ -177,8 +177,8 @@ dependencies:
 #      ref: 957c9f833e70d6a74ae7969d6d7e341d765046d6
   flutter_linkify: ^6.0.0
 #  openapi_base: ^0.1.5+5
-  flutter_cache_manager: ^3.0.0-nullsafety.1
-  cached_network_image: ^3.0.0-nullsafety
+  flutter_cache_manager: ^3.3.1
+  cached_network_image: ^3.3.1
   authpass_cloud_shared:
     path: ../deps/authpass-cloud/packages/authpass_cloud_shared
   # windows updater

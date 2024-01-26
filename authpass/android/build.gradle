@@ -62,6 +62,13 @@ subprojects {
             namespace "com.crazecoder.openfile"
         }
     }
+    if (project.path == ":open_file") {
+        apply plugin: 'com.android.library'
+        android {
+            namespace "com.crazecoder.openfile"
+        }
+    }
+
 }
 
 tasks.register("clean", Delete) {
