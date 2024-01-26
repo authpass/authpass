@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AuthPassAppTheme" parent="Theme.AppCompat.NoActionBar" />
+    <style name="AuthPassAppTheme" parent="@android:style/Theme.Light.NoTitleBar" />
 
-    <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <!-- Show a splash screen on the activity. Automatically removed when
              Flutter draws its first frame -->
         <item name="android:windowBackground">@drawable/launch_background</item>
 
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
-<!--        <item name="android:windowFullscreen">true</item>-->
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowActionBar">false</item>-->
+<!--&lt;!&ndash;        <item name="android:windowDrawsSystemBarBackgrounds">true</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:windowFullscreen">true</item>&ndash;&gt;-->
+<!--        <item name="android:windowContentOverlay">@null</item>-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
     </style>
 </resources>
