@@ -181,7 +181,7 @@ case "${flavor}" in
         git checkout -- pubspec.lock
         $FLT pub run msix:create --version "${version}.0"
 
-        outputdir="build/windows/runner/Release"
+        outputdir="build/windows/x64/runner/Release"
 
         outputfilename="authpass-${version}_${buildnumber}.msix"
         outputpath="${outputdir}/${outputfilename}"
