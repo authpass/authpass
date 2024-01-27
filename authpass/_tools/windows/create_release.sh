@@ -44,7 +44,7 @@ VS_REDIST=`dirname "${VS_REDIST}"`
 echo "USING $VS_REDIST"
 
 TARGET=build/_authpass/windows/release/authpass
-SOURCE=build/windows/runner/Release
+SOURCE=build/windows/x64/runner/Release
 
 dir="${0%/*}"
 basedir="${dir}/../../"
