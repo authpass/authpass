@@ -29,7 +29,7 @@ parts:
 apps:
   authpass:
     command: authpass
-    extensions: [gnome-3-28]
+    extensions: [gnome]
     plugs:
       - opengl
       - home
