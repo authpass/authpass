@@ -79,11 +79,11 @@ class _$EmailViewModelCopyWithImpl<$Res, $Val extends EmailViewModel>
 }
 
 /// @nodoc
-abstract class _$$_EmailViewModelCopyWith<$Res>
+abstract class _$$EmailViewModelImplCopyWith<$Res>
     implements $EmailViewModelCopyWith<$Res> {
-  factory _$$_EmailViewModelCopyWith(
-          _$_EmailViewModel value, $Res Function(_$_EmailViewModel) then) =
-      __$$_EmailViewModelCopyWithImpl<$Res>;
+  factory _$$EmailViewModelImplCopyWith(_$EmailViewModelImpl value,
+          $Res Function(_$EmailViewModelImpl) then) =
+      __$$EmailViewModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -94,11 +94,11 @@ abstract class _$$_EmailViewModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_EmailViewModelCopyWithImpl<$Res>
-    extends _$EmailViewModelCopyWithImpl<$Res, _$_EmailViewModel>
-    implements _$$_EmailViewModelCopyWith<$Res> {
-  __$$_EmailViewModelCopyWithImpl(
-      _$_EmailViewModel _value, $Res Function(_$_EmailViewModel) _then)
+class __$$EmailViewModelImplCopyWithImpl<$Res>
+    extends _$EmailViewModelCopyWithImpl<$Res, _$EmailViewModelImpl>
+    implements _$$EmailViewModelImplCopyWith<$Res> {
+  __$$EmailViewModelImplCopyWithImpl(
+      _$EmailViewModelImpl _value, $Res Function(_$EmailViewModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -109,7 +109,7 @@ class __$$_EmailViewModelCopyWithImpl<$Res>
     Object? mailbox = freezed,
     Object? kdbxEntry = freezed,
   }) {
-    return _then(_$_EmailViewModel(
+    return _then(_$EmailViewModelImpl(
       emailMessage: null == emailMessage
           ? _value.emailMessage
           : emailMessage // ignore: cast_nullable_to_non_nullable
@@ -132,8 +132,8 @@ class __$$_EmailViewModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EmailViewModel implements _EmailViewModel {
-  const _$_EmailViewModel(
+class _$EmailViewModelImpl implements _EmailViewModel {
+  const _$EmailViewModelImpl(
       {required this.emailMessage,
       this.mimeMessage,
       this.mailbox,
@@ -154,10 +154,10 @@ class _$_EmailViewModel implements _EmailViewModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EmailViewModel &&
+            other is _$EmailViewModelImpl &&
             (identical(other.emailMessage, emailMessage) ||
                 other.emailMessage == emailMessage) &&
             (identical(other.mimeMessage, mimeMessage) ||
@@ -174,8 +174,9 @@ class _$_EmailViewModel implements _EmailViewModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EmailViewModelCopyWith<_$_EmailViewModel> get copyWith =>
-      __$$_EmailViewModelCopyWithImpl<_$_EmailViewModel>(this, _$identity);
+  _$$EmailViewModelImplCopyWith<_$EmailViewModelImpl> get copyWith =>
+      __$$EmailViewModelImplCopyWithImpl<_$EmailViewModelImpl>(
+          this, _$identity);
 }
 
 abstract class _EmailViewModel implements EmailViewModel {
@@ -183,7 +184,7 @@ abstract class _EmailViewModel implements EmailViewModel {
       {required final EmailMessage emailMessage,
       final MimeMessage? mimeMessage,
       final Mailbox? mailbox,
-      final KdbxEntry? kdbxEntry}) = _$_EmailViewModel;
+      final KdbxEntry? kdbxEntry}) = _$EmailViewModelImpl;
 
   @override
   EmailMessage get emailMessage;
@@ -195,6 +196,6 @@ abstract class _EmailViewModel implements EmailViewModel {
   KdbxEntry? get kdbxEntry;
   @override
   @JsonKey(ignore: true)
-  _$$_EmailViewModelCopyWith<_$_EmailViewModel> get copyWith =>
+  _$$EmailViewModelImplCopyWith<_$EmailViewModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

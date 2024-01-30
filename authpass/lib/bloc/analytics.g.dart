@@ -19,6 +19,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         'launch',
         <String, Object?>{'systemBrightness': systemBrightness.toString()},
       );
+
   @override
   void _trackInit({
     required String? userType,
@@ -33,6 +34,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'value': value,
         },
       );
+
   @override
   void trackOnboardingNew({
     String category = 'onboarding',
@@ -47,6 +49,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackOnboardingExisting({
     String category = 'onboarding',
@@ -61,11 +64,13 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackActionPressed({required String action}) => trackEvent(
         'actionPressed',
         <String, Object?>{'action': action},
       );
+
   @override
   void trackCreateFileAt({
     required String cloudStorageId,
@@ -78,16 +83,19 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackCreateFile() => trackEvent(
         'createFile',
         <String, Object?>{},
       );
+
   @override
   void trackOpenFile({required String type}) => trackEvent(
         'openFile',
         <String, Object?>{'type': type},
       );
+
   @override
   void trackOpenFile2({
     required String generator,
@@ -100,51 +108,61 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'version': version,
         },
       );
+
   @override
   void trackSelectEntry({EntrySelectionType? type}) => trackEvent(
         'selectEntry',
         <String, Object?>{'type': type.toString()},
       );
+
   @override
   void trackCopyField({required String key}) => trackEvent(
         'copyField',
         <String, Object?>{'key': key},
       );
+
   @override
   void trackAddField({required String key}) => trackEvent(
         'addField',
         <String, Object?>{'key': key},
       );
+
   @override
   void trackCloseAllFiles({required int count}) => trackEvent(
         'closeAllFiles',
         <String, Object?>{'count': count},
       );
+
   @override
   void trackLockAllFiles({required int count}) => trackEvent(
         'lockAllFiles',
         <String, Object?>{'count': count},
       );
+
   @override
   void trackUserType({String? userType}) => trackEvent(
         'userType',
         <String, Object?>{'userType': userType},
       );
+
   @override
   void trackCloseFile() => trackEvent(
         'closeFile',
         <String, Object?>{},
       );
+
   @override
   void trackPasswordListEmpty() => trackEvent(
         'passwordListEmpty',
         <String, Object?>{},
       );
+
   @override
   void trackQuickUnlock({int? value}) => trackEvent(
         'quickUnlock',
         <String, Object?>{'value': value},
       );
+
   @override
   void trackSave({
     required String type,
@@ -157,6 +175,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'value': value,
         },
       );
+
   @override
   void trackSaveConflict({
     required String type,
@@ -171,6 +190,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'success': success,
         },
       );
+
   @override
   void trackSaveCount({
     required String? generator,
@@ -183,11 +203,13 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'value': value,
         },
       );
+
   @override
   void trackDrawerOpen() => trackEvent(
         'drawerOpen',
         <String, Object?>{},
       );
+
   @override
   void trackAttachmentAction(
     String action, {
@@ -200,6 +222,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackAttachmentAdd(
     AttachmentAddType action,
@@ -216,6 +239,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackCloudAuth(
     CloudAuthAction action, {
@@ -230,6 +254,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackGroupDelete(
     GroupDeleteResult result, {
@@ -242,11 +267,13 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackGroupCreate({String category = 'group'}) => trackEvent(
         'groupCreate',
         <String, Object?>{'category': category},
       );
+
   @override
   void trackPermanentlyDeleteEntry({
     String category = 'entry',
@@ -261,6 +288,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackPermanentlyDeleteEntryCancel({
     String category = 'entry',
@@ -275,6 +303,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackPermanentlyDeleteGroup({
     String category = 'group',
@@ -289,6 +318,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackPermanentlyDeleteGroupCancel({
     String category = 'group',
@@ -303,6 +333,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void _trackPreferences({
     required String action,
@@ -317,6 +348,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackAutofillFilter({
     required String filter,
@@ -333,6 +365,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'value': value,
         },
       );
+
   @override
   void trackAutofillSelect({
     String category = 'autofill',
@@ -345,6 +378,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'action': action,
         },
       );
+
   @override
   void trackTryUnlock({
     required TryUnlockResult action,
@@ -361,6 +395,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'category': category,
         },
       );
+
   @override
   void trackCopyPassword({
     String category = 'copyClipboard',
@@ -375,6 +410,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackCopyUsername({
     String category = 'copyClipboard',
@@ -389,6 +425,7 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'label': label,
         },
       );
+
   @override
   void trackEntryAction(
     EntryActionType label, {
@@ -401,11 +438,13 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
           'action': action,
         },
       );
+
   @override
   void trackBackupBanner(BannerAction action) => trackEvent(
         'backupBanner',
         <String, Object?>{'action': action.toString()},
       );
+
   @override
   void trackAutofillBanner(BannerAction action) => trackEvent(
         'autofillBanner',

@@ -175,16 +175,15 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final metadata = _FileMetadata.fromJson(previousMetadata);
     final response = await c.filecloudFilePut(bytes,
         fileToken: file.id, versionToken: metadata.versionToken);
-    late Map<String, dynamic> ret;
-    response.map(on200: (r) {
-      ret = _FileMetadata(
-        name: metadata.name,
-        fileToken: file.id,
-        versionToken: r.body.versionToken,
-      ).toJsonSimple();
-    }, on409: (error) {
-      throw StorageConflictException('Conflict while trying to save file.');
-    });
+    final ret = response.map(
+        on200: (r) => _FileMetadata(
+              name: metadata.name,
+              fileToken: file.id,
+              versionToken: r.body.versionToken,
+            ).toJsonSimple(),
+        on409: (error) {
+          throw StorageConflictException('Conflict while trying to save file.');
+        });
     return ret;
   }
 

@@ -2,7 +2,6 @@ import 'package:analytics_event/analytics_event.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/ui/screens/password_list.dart';
 import 'package:authpass/utils/constants.dart';
-import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class Analytics {
       _dbg = '(ga)'; // NON-NLS
       final matomoTracker = matomo.MatomoTracker.instance;
       await matomoTracker.initialize(
-        siteId: matomoConfig.siteId.toInt(),
+        siteId: matomoConfig.siteId,
         url: matomoConfig.url,
       );
       _matomo = matomoTracker;

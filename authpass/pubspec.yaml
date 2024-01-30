@@ -1,7 +1,7 @@
 name: authpass
 description: Password Manager with support for kdbx 3.x and 4.x
 publish_to: none
-version: 1.9.9+164
+version: 1.9.10+164
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  kdbx: ^2.4.0
+  kdbx: ^2.4.1
 #  kdbx:
 #    path: ../deps/kdbx.dart
   argon2_ffi: ^1.0.0+1
@@ -46,13 +46,16 @@ dependencies:
 
   flutter_async_utils: ^1.0.0+1
   flutter_svg: ^2.0.0
-  matomo_tracker: ^4.0.0
+  matomo_tracker: #^4.0.0
+    git:
+      url: https://github.com/hpoul/matomo-tracker.git
+      ref: uuid-dep-update
 #  #usage: ^3.4.1
 #  usage:
 #    git:
 #      url: https://github.com/hpoul/usage.git
 #      ref: custom-user-agent-rebased
-  package_info_plus: ^4.0.2
+  package_info_plus: ^5.0.1
 #  package_info: ^0.4.0+13
 #  package_info_macos:
 #    git:
@@ -70,10 +73,10 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_speed_dial: ^7.0.0
   flutter_email_sender: ^6.0.1
-  flutter_store_listing: ^0.3.0
+  flutter_store_listing: ^0.3.0+1
 
   biometric_storage: ^5.0.0+3
-  uuid: ^3.0.1
+  uuid: ^4.3.3
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0
   otp: ^3.0.0-nullsafety.0
@@ -93,7 +96,7 @@ dependencies:
   badges: ^3.1.1
   qr_flutter: ^4.0.0
   another_flushbar: ^1.10.20
-  filesystem_picker: ^3.1.0
+  filesystem_picker: ^4.1.0
   #tinycolor: ^1.0.3
   tinycolor: # null-safety https://github.com/FooStudio/tinycolor/pull/13
     git:
@@ -191,7 +194,10 @@ dependencies:
 
   flutter_markdown: ^0.6.5
 
-  hotkey_manager: ^0.1.0
+  hotkey_manager: #^0.1.8
+    git:
+      url: https://github.com/hpoul/hotkey_manager.git
+      ref: uuid-dep-update
 #  window_manager: ^0.0.3
   xdg_directories: ^1.0.3
   window_manager:
@@ -226,8 +232,8 @@ dependency_overrides:
 #  ffi: ^2.0.0
   # enough_mail still has 0.17 pinned. remove this once enough_mail is updated.
   intl: ^0.18.0
-  # Just enforce http 1.0.0 until all dependencies are updated.
-  http: ^1.0.0
+#  # Just enforce http 1.0.0 until all dependencies are updated.
+#  http: ^1.0.0
   # https://github.com/creativecreatorormaybenot/wakelock/pull/203
 #  analytics_event_gen:
 #    path: /Users/herbert/dev/analytics_events/analytics_event_gen

@@ -1,3 +1,8 @@
+# 1.9.10 - 2023-01-30
+
+* Fix WebDAV Support
+* Android: Fix autofill popup background color in dark mode (on some devices).
+
 # 1.9.9 - 2022-09-02
 
 * Support for importing TOTP codes from Google Authenticator using export QR codes.

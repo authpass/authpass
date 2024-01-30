@@ -124,11 +124,11 @@ class _$EnvSecretsCopyWithImpl<$Res, $Val extends EnvSecrets>
 }
 
 /// @nodoc
-abstract class _$$_EnvSecretsCopyWith<$Res>
+abstract class _$$EnvSecretsImplCopyWith<$Res>
     implements $EnvSecretsCopyWith<$Res> {
-  factory _$$_EnvSecretsCopyWith(
-          _$_EnvSecrets value, $Res Function(_$_EnvSecrets) then) =
-      __$$_EnvSecretsCopyWithImpl<$Res>;
+  factory _$$EnvSecretsImplCopyWith(
+          _$EnvSecretsImpl value, $Res Function(_$EnvSecretsImpl) then) =
+      __$$EnvSecretsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -144,11 +144,11 @@ abstract class _$$_EnvSecretsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_EnvSecretsCopyWithImpl<$Res>
-    extends _$EnvSecretsCopyWithImpl<$Res, _$_EnvSecrets>
-    implements _$$_EnvSecretsCopyWith<$Res> {
-  __$$_EnvSecretsCopyWithImpl(
-      _$_EnvSecrets _value, $Res Function(_$_EnvSecrets) _then)
+class __$$EnvSecretsImplCopyWithImpl<$Res>
+    extends _$EnvSecretsCopyWithImpl<$Res, _$EnvSecretsImpl>
+    implements _$$EnvSecretsImplCopyWith<$Res> {
+  __$$EnvSecretsImplCopyWithImpl(
+      _$EnvSecretsImpl _value, $Res Function(_$EnvSecretsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -164,7 +164,7 @@ class __$$_EnvSecretsCopyWithImpl<$Res>
     Object? microsoftClientId = freezed,
     Object? microsoftClientSecret = freezed,
   }) {
-    return _then(_$_EnvSecrets(
+    return _then(_$EnvSecretsImpl(
       analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey
           ? _value.analyticsAmplitudeApiKey
           : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
@@ -207,8 +207,8 @@ class __$$_EnvSecretsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EnvSecrets implements _EnvSecrets {
-  const _$_EnvSecrets(
+class _$EnvSecretsImpl implements _EnvSecrets {
+  const _$EnvSecretsImpl(
       {@nullable required this.analyticsAmplitudeApiKey,
       @nullable required this.analyticsGoogleAnalyticsId,
       @nullable required this.analyticsMatomo,
@@ -253,10 +253,10 @@ class _$_EnvSecrets implements _EnvSecrets {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EnvSecrets &&
+            other is _$EnvSecretsImpl &&
             (identical(
                     other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) ||
                 other.analyticsAmplitudeApiKey == analyticsAmplitudeApiKey) &&
@@ -296,8 +296,8 @@ class _$_EnvSecrets implements _EnvSecrets {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EnvSecretsCopyWith<_$_EnvSecrets> get copyWith =>
-      __$$_EnvSecretsCopyWithImpl<_$_EnvSecrets>(this, _$identity);
+  _$$EnvSecretsImplCopyWith<_$EnvSecretsImpl> get copyWith =>
+      __$$EnvSecretsImplCopyWithImpl<_$EnvSecretsImpl>(this, _$identity);
 }
 
 abstract class _EnvSecrets implements EnvSecrets {
@@ -310,7 +310,8 @@ abstract class _EnvSecrets implements EnvSecrets {
       @nullable required final String? dropboxKey,
       @nullable required final String? dropboxSecret,
       @nullable required final String? microsoftClientId,
-      @nullable required final String? microsoftClientSecret}) = _$_EnvSecrets;
+      @nullable
+      required final String? microsoftClientSecret}) = _$EnvSecretsImpl;
 
   @override
   @nullable
@@ -341,6 +342,6 @@ abstract class _EnvSecrets implements EnvSecrets {
   String? get microsoftClientSecret;
   @override
   @JsonKey(ignore: true)
-  _$$_EnvSecretsCopyWith<_$_EnvSecrets> get copyWith =>
+  _$$EnvSecretsImplCopyWith<_$EnvSecretsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
