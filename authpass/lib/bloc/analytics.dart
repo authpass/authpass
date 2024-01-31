@@ -141,7 +141,10 @@ class Analytics {
 
   void trackScreen(@NonNls String screenName) {
     _requireMatomo((matomo) {
-      matomo.trackPageViewWithName(actionName: screenName);
+      matomo.trackPageViewWithName(
+        actionName: screenName,
+        path: screenName,
+      );
       _logger.finer('$_dbg screen($screenName)');
     });
   }
