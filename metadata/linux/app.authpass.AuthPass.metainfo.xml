@@ -13,6 +13,12 @@
         <metadata_license>MIT</metadata_license>
         <project_license>GPL-3.0-or-later</project_license>
 
+        <developer_name>Herbert Poul</developer_name>
+        <developer id="codeux.design">
+                <name>Herbert Poul</name>
+                <url>https://codeux.design/</url>
+        </developer>
+
         <supports>
                 <control>pointing</control>
                 <control>keyboard</control>
