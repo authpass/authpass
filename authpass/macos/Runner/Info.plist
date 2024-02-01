@@ -32,6 +32,17 @@
 				<string>authpass</string>
 			</array>
 		</dict>
+        <!-- Google Sign-in Section -->
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+                <string>com.googleusercontent.apps.1078031902260-rneivb666d05qffv5u3el1ap7laquh1k</string>
+            </array>
+        </dict>
+        <!-- End of the Google Sign-in Section -->
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -45,6 +56,8 @@
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>GIDClientID</key>
+	<string>1078031902260-rneivb666d05qffv5u3el1ap7laquh1k.apps.googleusercontent.com</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

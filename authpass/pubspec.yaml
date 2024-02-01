@@ -4,7 +4,7 @@ publish_to: none
 version: 1.9.11+165
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -121,6 +121,8 @@ dependencies:
   # google drive
   googleapis: ^11.4.0
   googleapis_auth: ^1.0.0
+  google_sign_in: ^6.2.1
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
 
   # dropbox
   #oauth2: ^1.3.0

@@ -1,17 +1,24 @@
+import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui_adapt.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_models.dart';
+import 'package:authpass/cloud_storage/google_drive/login_widget.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
@@ -19,11 +26,33 @@ final _logger = Logger('authpass.google_drive_bloc');
 @NonNls
 const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 
-class GoogleDriveProvider
-    extends CloudStorageProviderClientBase<oauth2.Client> {
+class GoogleDriveProvider extends CloudStorageProvider
+    implements CloudStorageCustomLoginButtonAdapter {
   GoogleDriveProvider(
       {required this.env, required CloudStorageHelperBase helper})
-      : super(helper: helper);
+      : super(helper: helper) {
+    googleSignIn.onCurrentUserChanged
+        .listen((final account) => _checkAuthentication());
+  }
+
+  Future<void> _checkAuthentication() async {
+    final account = googleSignIn.currentUser;
+    _logger.fine('_checkAuthentication: (${account?.id})');
+    if (account == null) {
+      isAuthorized = false;
+      return;
+    }
+    if (await googleSignIn.canAccessScopes(_scopes)) {
+      isAuthorized = true;
+    }
+    _logger.fine('_checkAuthentication:  canAccessScopes: $isAuthorized');
+  }
+
+  late final googleSignIn = GoogleSignIn(
+    clientId: env.secrets?.googleClientId?.call(),
+    scopes: _scopes,
+    forceCodeForRefreshToken: true,
+  );
 
   @NonNls
   @override
@@ -31,68 +60,15 @@ class GoogleDriveProvider
 
   final Env env;
 
-  static const _oauthEndpoint =
-      'https://accounts.google.com/o/oauth2/v2/auth'; // NON-NLS
-  static const _oauthToken = 'https://oauth2.googleapis.com/token'; // NON-NLS
+  // static const _oauthEndpoint =
+  //     'https://accounts.google.com/o/oauth2/v2/auth'; // NON-NLS
+  // static const _oauthToken = 'https://oauth2.googleapis.com/token'; // NON-NLS
 
   static const _scopes = [DriveApi.driveScope];
+  static const scopes = _scopes;
 
-  String get _clientId => env.secrets!.googleClientId!;
-  String get _clientSecret => env.secrets!.googleClientSecret!;
-
-  @override
-  Future<oauth2.Client?> clientFromAuthenticationFlow<
-      TF extends UserAuthenticationPromptResult,
-      UF extends UserAuthenticationPromptData<TF>>(prompt) async {
-    final grant = oauth2.AuthorizationCodeGrant(
-      _clientId,
-      Uri.parse(_oauthEndpoint),
-      Uri.parse(_oauthToken),
-      secret: _clientSecret,
-      onCredentialsRefreshed: _onCredentialsRefreshed,
-    );
-//    final authUrl = grant.getAuthorizationUrl(null);
-    final authUrl = grant.getAuthorizationUrl(
-        env.oauthRedirectUri != null ? Uri.parse(env.oauthRedirectUri!) : null);
-    @NonNls
-    final params = <String, String>{
-      ...authUrl.queryParameters,
-      'scope': _scopes.join(','),
-      'access_type': 'offline',
-    }; //..remove('redirect_uri');
-    final url = authUrl.replace(queryParameters: params);
-    final code =
-        await oAuthTokenPrompt(prompt as PromptUserForCode, url.toString());
-    if (code == null) {
-      _logger.warning('User cancelled authorization. (did not provide code)');
-      return null;
-    }
-    final client = await grant.handleAuthorizationCode(code);
-    _onCredentialsRefreshed(client.credentials);
-    return client;
-  }
-
-  void _onCredentialsRefreshed(oauth2.Credentials credentials) {
-    _logger.fine('Received new credentials from oauth.');
-    storeCredentials(credentials.toJson());
-    helper.analytics.trackGenericEvent(
-      'googledrive',
-      'credentialRefreshed',
-      label: 'refresh:${credentials.refreshToken?.length},'
-          'endpoint:${credentials.tokenEndpoint != null}',
-    );
-  }
-
-  @override
-  oauth2.Client clientWithStoredCredentials(String stored) {
-    final credentials = oauth2.Credentials.fromJson(stored);
-    return oauth2.Client(
-      credentials,
-      identifier: env.secrets!.dropboxKey,
-      secret: env.secrets!.dropboxSecret,
-      onCredentialsRefreshed: _onCredentialsRefreshed,
-    );
-  }
+  // String get _clientId => env.secrets!.googleClientId!;
+  // String get _clientSecret => env.secrets!.googleClientSecret!;
 
   @override
   bool get supportSearch => true;
@@ -225,6 +201,55 @@ class GoogleDriveProvider
         _METADATA_KEY_GOOGLE_DRIVE_DATA:
             GoogleDriveMetadata.fromMetadata(metadata).toJson(),
       };
+
+  bool isAuthorized = false;
+
+  @override
+  bool get isAuthenticated => isAuthorized;
+
+  @override
+  Future<bool> loadSavedAuth() async {
+    return await googleSignIn.isSignedIn();
+  }
+
+  @override
+  Future<void> logout() {
+    return googleSignIn.disconnect();
+  }
+
+  @override
+  Future<bool> startAuth<RESULT extends UserAuthenticationPromptResult,
+          DATA extends UserAuthenticationPromptData<RESULT>>(
+      PromptUserForCode<RESULT, DATA> prompt) async {
+    final user = await googleSignIn.signIn();
+    _logger.finer('Authenticated user: $user');
+    return user != null;
+  }
+
+  Future<Client> requireAuthenticatedClient() async {
+    _logger.fine('Getting authenticated client from googleSignIn');
+    final authClient = await googleSignIn.authenticatedClient();
+    if (authClient == null) {
+      throw LoadFileException(
+          'Unable to use google sign in for authenticated client.');
+    }
+    return authClient;
+  }
+
+  @override
+  Widget getCustomLoginWidget({
+    required VoidCallback onSuccess,
+    required Widget defaultWidget,
+  }) {
+    return GoogleLoginWidget(
+      onSuccess: () async {
+        await _checkAuthentication();
+        onSuccess();
+      },
+      googleDriveProvider: this,
+      defaultWidget: defaultWidget,
+    );
+  }
 }
 
 abstract class SearchQueryAtom {

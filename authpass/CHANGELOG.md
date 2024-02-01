@@ -1,4 +1,8 @@
-# 1.9.10 - 2023-01-30
+# 1.9.11 - xxxx
+
+* Switch Google Drive integration to using Google SignIn plugin.
+
+# 1.9.10 - 2024-01-30
 
 * Fix WebDAV Support
 * Android: Fix autofill popup background color in dark mode (on some devices).

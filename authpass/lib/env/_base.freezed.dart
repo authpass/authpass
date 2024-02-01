@@ -24,7 +24,7 @@ mixin _$EnvSecrets {
   ({String siteId, String url})? get analyticsMatomo =>
       throw _privateConstructorUsedError;
   @nullable
-  String? get googleClientId => throw _privateConstructorUsedError;
+  String? Function()? get googleClientId => throw _privateConstructorUsedError;
   @nullable
   String? get googleClientSecret => throw _privateConstructorUsedError;
   @nullable
@@ -51,7 +51,7 @@ abstract class $EnvSecretsCopyWith<$Res> {
       {@nullable String? analyticsAmplitudeApiKey,
       @nullable String? analyticsGoogleAnalyticsId,
       @nullable ({String siteId, String url})? analyticsMatomo,
-      @nullable String? googleClientId,
+      @nullable String? Function()? googleClientId,
       @nullable String? googleClientSecret,
       @nullable String? dropboxKey,
       @nullable String? dropboxSecret,
@@ -98,7 +98,7 @@ class _$EnvSecretsCopyWithImpl<$Res, $Val extends EnvSecrets>
       googleClientId: freezed == googleClientId
           ? _value.googleClientId
           : googleClientId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String? Function()?,
       googleClientSecret: freezed == googleClientSecret
           ? _value.googleClientSecret
           : googleClientSecret // ignore: cast_nullable_to_non_nullable
@@ -135,7 +135,7 @@ abstract class _$$EnvSecretsImplCopyWith<$Res>
       {@nullable String? analyticsAmplitudeApiKey,
       @nullable String? analyticsGoogleAnalyticsId,
       @nullable ({String siteId, String url})? analyticsMatomo,
-      @nullable String? googleClientId,
+      @nullable String? Function()? googleClientId,
       @nullable String? googleClientSecret,
       @nullable String? dropboxKey,
       @nullable String? dropboxSecret,
@@ -180,7 +180,7 @@ class __$$EnvSecretsImplCopyWithImpl<$Res>
       googleClientId: freezed == googleClientId
           ? _value.googleClientId
           : googleClientId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String? Function()?,
       googleClientSecret: freezed == googleClientSecret
           ? _value.googleClientSecret
           : googleClientSecret // ignore: cast_nullable_to_non_nullable
@@ -230,7 +230,7 @@ class _$EnvSecretsImpl implements _EnvSecrets {
   final ({String siteId, String url})? analyticsMatomo;
   @override
   @nullable
-  final String? googleClientId;
+  final String? Function()? googleClientId;
   @override
   @nullable
   final String? googleClientSecret;
@@ -305,7 +305,7 @@ abstract class _EnvSecrets implements EnvSecrets {
       {@nullable required final String? analyticsAmplitudeApiKey,
       @nullable required final String? analyticsGoogleAnalyticsId,
       @nullable required final ({String siteId, String url})? analyticsMatomo,
-      @nullable required final String? googleClientId,
+      @nullable required final String? Function()? googleClientId,
       @nullable required final String? googleClientSecret,
       @nullable required final String? dropboxKey,
       @nullable required final String? dropboxSecret,
@@ -324,7 +324,7 @@ abstract class _EnvSecrets implements EnvSecrets {
   ({String siteId, String url})? get analyticsMatomo;
   @override
   @nullable
-  String? get googleClientId;
+  String? Function()? get googleClientId;
   @override
   @nullable
   String? get googleClientSecret;

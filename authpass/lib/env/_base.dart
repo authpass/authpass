@@ -30,7 +30,7 @@ class EnvSecrets with _$EnvSecrets {
     @nullable required String? analyticsAmplitudeApiKey,
     @nullable required String? analyticsGoogleAnalyticsId,
     @nullable required ({String siteId, String url})? analyticsMatomo,
-    @nullable required String? googleClientId,
+    @nullable required String? Function()? googleClientId,
     @nullable required String? googleClientSecret,
     @nullable required String? dropboxKey,
     @nullable required String? dropboxSecret,

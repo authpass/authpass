@@ -1,5 +1,6 @@
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
+import 'package:authpass/cloud_storage/cloud_storage_ui_adapt.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui_authpass_cloud.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -18,29 +19,34 @@ class CloudStorageAuthentication extends StatelessWidget {
   const CloudStorageAuthentication({
     Key? key,
     required this.provider,
-    this.onSuccess,
+    required this.onSuccess,
   }) : super(key: key);
 
-  final CloudStorageProvider? provider;
-  final void Function()? onSuccess;
+  final CloudStorageProvider provider;
+  final void Function() onSuccess;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final provider = this.provider;
+    final defaultLoginWidget = PrimaryButton(
+      icon: const Icon(FontAwesomeIcons.rightToBracket),
+      onPressed: () async {
+        await _startLoginFlow(context);
+      },
+      child: Text(loc.cloudStorageLogInActionLabel(provider.displayName)),
+    );
+    final loginWidget = provider is CloudStorageCustomLoginButtonAdapter
+        ? provider.getCustomLoginWidget(
+            onSuccess: onSuccess, defaultWidget: defaultLoginWidget)
+        : defaultLoginWidget;
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          PrimaryButton(
-            icon: const Icon(FontAwesomeIcons.rightToBracket),
-            onPressed: () async {
-              await _startLoginFlow(context);
-            },
-            child:
-                Text(loc.cloudStorageLogInActionLabel(provider!.displayName)),
-          ),
+          loginWidget,
           const SizedBox(height: 16),
           Text(
             loc.cloudStorageLogInCaption,
@@ -84,7 +90,7 @@ class CloudStorageAuthentication extends StatelessWidget {
       {bool forceNoOpenUrl = false}) async {
     final loc = AppLocalizations.of(context);
     try {
-      final auth = await provider!.startAuth((final prompt) async {
+      final auth = await provider.startAuth((final prompt) async {
         if (prompt is UserAuthenticationPrompt<OAuthTokenResult,
             OAuthTokenFlowPromptData>) {
           final promptData = prompt.data;
@@ -109,7 +115,7 @@ class CloudStorageAuthentication extends StatelessWidget {
           }
           // ignore: use_build_context_synchronously
           final code = await SimpleAuthCodePromptDialog(
-            title: loc.cloudStorageAuthCodeDialogTitle(provider!.displayName),
+            title: loc.cloudStorageAuthCodeDialogTitle(provider.displayName),
             labelText: loc.cloudStorageAuthCodeLabel,
           ).show(context);
           prompt.result(OAuthTokenResult(code));
@@ -134,7 +140,7 @@ class CloudStorageAuthentication extends StatelessWidget {
         return;
       }
       await DialogUtils.showErrorDialog(context, loc.cloudStorageAuthErrorTitle,
-          loc.cloudStorageAuthErrorMessage(provider!.displayName, e));
+          loc.cloudStorageAuthErrorMessage(provider.displayName, e));
     }
   }
 }
