@@ -45,6 +45,7 @@ class PreferencesScreen extends StatelessWidget {
 
 class LocaleInfo {
   LocaleInfo(@NonNls this.locale, @NonNls this.nativeName, this.translatedName);
+
   final String? locale;
   final String nativeName;
   final String? translatedName;
@@ -64,6 +65,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
 
   late AppDataBloc _appDataBloc;
   AppData? _appData;
+
   Analytics get _analytics => context.read<Analytics>();
 
   @override
@@ -101,7 +103,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
 
   @override
   Widget build(BuildContext context) {
-    if (_appData == null) {
+    final appData = _appData;
+    if (appData == null) {
       return const Text('loading'); // NON-NLS
     }
     final loc = AppLocalizations.of(context);
@@ -172,7 +175,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 SwitchListTile(
                   secondary: const Icon(Icons.camera_alt),
                   title: Text(loc.preferenceAllowScreenshots),
-                  value: !_appData!.secureWindowOrDefault,
+                  value: !appData.secureWindowOrDefault,
                   onChanged: (value) {
                     _appDataBloc.update(
                         (builder, data) => builder.secureWindow = !value);
@@ -186,15 +189,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
             FontAwesomeIcons.lightbulb,
           ),
           title: Text(loc.preferenceTheme),
-          trailing: _appData?.theme == null
+          trailing: appData.theme == null
               ? Text(loc.preferenceSystemDefault)
-              : _appData?.theme == AppDataTheme.light
+              : appData.theme == AppDataTheme.light
                   ? Text(loc.preferenceThemeLight)
                   : Text(loc.preferenceThemeDark),
           onTap: () async {
-            if (_appData == null) {
-              return;
-            }
             final newTheme = await _appDataBloc.updateNextTheme();
             _analytics.events
                 .trackPreferences(setting: 'theme', to: '$newTheme');
@@ -209,7 +209,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             _analytics.events
                 .trackPreferences(setting: 'themeVisualDensity', to: '$value');
           },
-          value: _appData!.themeVisualDensity,
+          value: appData.themeVisualDensity,
           minValue: -4,
           maxValue: 4,
           steps: 16,
@@ -223,7 +223,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             _analytics.events
                 .trackPreferences(setting: 'themeFontSizeFactor', to: '$value');
           },
-          value: _appData!.themeFontSizeFactor,
+          value: appData.themeFontSizeFactor,
           minValue: 0.5,
           maxValue: 2,
           valueForNull: 1,
@@ -235,7 +235,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
                 SwitchListTile(
                     title: Text(loc.diacOptIn),
                     subtitle: Text(loc.diacOptInSubtitle),
-                    value: _appData!.diacOptIn == true,
+                    value: appData.diacOptIn == true,
                     onChanged: (value) {
                       _appDataBloc
                           .update((builder, data) => builder.diacOptIn = value);
@@ -244,13 +244,13 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ListTile(
           leading: const FaIcon(FontAwesomeIcons.language),
           title: Text(loc.preferenceLanguage),
-          trailing: Text(locales[_appData!.localeOverride]!.nativeName),
+          trailing: Text(locales[appData.localeOverride]!.nativeName),
           onTap: () async {
             final result = await showDialog<LocaleInfo>(
                 context: context,
                 builder: (_) => SelectLanguageDialog(
                       locales: localeInfo,
-                      localeOverride: _appData!.localeOverride,
+                      localeOverride: appData.localeOverride,
                     ));
             if (result != null) {
               await _appDataBloc.update(
@@ -262,7 +262,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         CheckboxListTile(
           secondary: const FaIcon(FontAwesomeIcons.download),
-          value: _appData!.fetchWebsiteIcons ??
+          value: appData.fetchWebsiteIcons ??
               env.featureFetchWebsiteIconEnabledByDefault,
           title: Text(loc.preferenceDynamicLoadIcons),
           subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
@@ -279,8 +279,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ),
         CheckboxListTile(
           secondary: const FaIcon(AuthPassIcons.AuthPassLogo),
-          value: _appData!.authPassCloudAttachments ??
-              _appData!.authPassCloudAttachmentsOrDefault,
+          value: appData.authPassCloudAttachments ??
+              appData.authPassCloudAttachmentsOrDefault,
           title: Text(loc.preferenceAuthPassCloudAttachmentTitle),
           subtitle: Text(loc.preferenceAuthPassCloudAttachmentSubtitle),
           // subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
@@ -298,7 +298,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         if (KeyboardHandler.supportsSystemWideShortcuts) ...[
           CheckboxListTile(
             secondary: const Icon(Icons.desktop_mac),
-            value: _appData!.systemWideShortcuts,
+            value: appData.systemWideShortcuts,
             title: Text(loc.preferenceEnableSystemWideShortcuts),
             subtitle: Text(loc.preferenceEnableSystemWideShortcutsHelp),
             isThreeLine: true,
@@ -315,7 +315,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ListTile(
           leading: const Icon(Icons.search),
           title: Text(loc.preferencesSearchFields),
-          subtitle: _appData?.searchFields?.let((it) => Text(it)) ??
+          subtitle: appData.searchFields?.let((it) => Text(it)) ??
               Text(CommonFields.defaultSearchFields
                   .map((e) => e.key)
                   .join(CharConstants.comma)),
@@ -323,7 +323,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
             final value = (await SimplePromptDialog(
               title: loc.preferencesSearchFieldPromptTitle,
               labelText: loc.preferencesSearchFieldPromptLabel,
-              initialValue: _appData?.searchFields ?? CharConstants.empty,
+              initialValue: appData.searchFields ?? CharConstants.empty,
               helperText: loc.preferencesSearchFieldPromptHelp(
                 CharConstants.star,
                 CommonFields.defaultSearchFields
