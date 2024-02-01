@@ -5959,6 +5959,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 cross_file
+extension_google_sign_in_as_googleapis_auth
 file_selector
 file_selector_android
 file_selector_ios
@@ -5969,6 +5970,12 @@ file_selector_web
 file_selector_windows
 flutter_lints
 flutter_markdown
+google_identity_services_web
+google_sign_in
+google_sign_in_android
+google_sign_in_ios
+google_sign_in_platform_interface
+google_sign_in_web
 path_provider
 path_provider_android
 path_provider_foundation
