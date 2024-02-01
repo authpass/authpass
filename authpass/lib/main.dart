@@ -178,12 +178,12 @@ void _setTargetPlatformForDesktop() {
 
 class AuthPassApp extends StatefulWidget {
   const AuthPassApp({
-    Key? key,
+    super.key,
     required this.env,
     required this.navigatorKey,
     required this.deps,
     required this.isFirstRun,
-  }) : super(key: key);
+  });
 
   final Env env;
   final Deps deps;

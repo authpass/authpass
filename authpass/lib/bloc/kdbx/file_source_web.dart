@@ -10,14 +10,10 @@ import 'package:authpass/utils/constants.dart';
 
 class FileSourceWeb extends FileSource {
   FileSourceWeb({
-    required String databaseName,
-    required String uuid,
-    FileContent? initialCachedContent,
-  }) : super(
-          databaseName: databaseName,
-          uuid: uuid,
-          initialCachedContent: initialCachedContent,
-        );
+    required String super.databaseName,
+    required super.uuid,
+    super.initialCachedContent,
+  });
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => FileSourceWeb(

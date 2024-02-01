@@ -26,8 +26,7 @@ class WebDavClient extends NegotiateAuthClient {
 }
 
 class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
-  WebDavProvider({required CloudStorageHelperBase helper})
-      : super(helper: helper);
+  WebDavProvider({required super.helper});
 
   @NonNls
   @override

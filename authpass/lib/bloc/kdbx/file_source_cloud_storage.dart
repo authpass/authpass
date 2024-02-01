@@ -53,13 +53,10 @@ class FileSourceCloudStorage extends FileSource {
   FileSourceCloudStorage({
     required this.provider,
     required this.fileInfo,
-    String? databaseName,
-    required String uuid,
-    FileContent? initialCachedContent,
-  }) : super(
-            databaseName: databaseName,
-            uuid: uuid,
-            initialCachedContent: initialCachedContent);
+    super.databaseName,
+    required super.uuid,
+    super.initialCachedContent,
+  });
 
   static Directory? _cacheDir;
 

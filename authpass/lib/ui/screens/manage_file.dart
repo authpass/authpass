@@ -21,8 +21,7 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 final _logger = Logger('manage_file');
 
 class ManageFileScreen extends StatefulWidget {
-  const ManageFileScreen({Key? key, required this.fileSource})
-      : super(key: key);
+  const ManageFileScreen({super.key, required this.fileSource});
 
   final FileSource fileSource;
 
@@ -81,10 +80,10 @@ class _ManageFileScreenState extends State<ManageFileScreen>
 
 class ManageFile extends StatefulWidget {
   const ManageFile({
-    Key? key,
+    super.key,
     required this.fileSource,
     required this.onFileSourceChanged,
-  }) : super(key: key);
+  });
 
   final FileSource fileSource;
   final void Function(FileSource newFileSource) onFileSourceChanged;
@@ -325,11 +324,11 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
 
 class CircleColor extends StatelessWidget {
   const CircleColor({
-    Key? key,
+    super.key,
     this.color,
     this.elevation,
     this.circleSize,
-  }) : super(key: key);
+  });
 
   static const double _kColorElevation = 4.0;
   final Color? color;
@@ -351,7 +350,7 @@ class CircleColor extends StatelessWidget {
 }
 
 class ColorPickerDialog extends StatefulWidget {
-  const ColorPickerDialog({Key? key, this.initialColor}) : super(key: key);
+  const ColorPickerDialog({super.key, this.initialColor});
 
   final Color? initialColor;
 

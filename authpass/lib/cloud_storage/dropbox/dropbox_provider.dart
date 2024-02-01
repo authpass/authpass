@@ -26,8 +26,7 @@ const _METADATA_KEY_DROPBOX_DATA = 'dropbox.file_metadata';
 const _HEADER_DOWNLOAD_METADATA = 'Dropbox-API-Result';
 
 class DropboxProvider extends CloudStorageProviderClientBase<oauth2.Client> {
-  DropboxProvider({required this.env, required CloudStorageHelperBase helper})
-      : super(helper: helper);
+  DropboxProvider({required this.env, required super.helper});
 
   @NonNls
   @override

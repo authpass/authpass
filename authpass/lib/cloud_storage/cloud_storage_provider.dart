@@ -29,7 +29,7 @@ class LoadFileException implements Exception {
 }
 
 class LoadFileNotFoundException extends LoadFileException {
-  LoadFileNotFoundException(String message) : super(message);
+  LoadFileNotFoundException(super.message);
 
   @NonNls
   @override
@@ -248,8 +248,7 @@ abstract class CloudStorageHelperBase {
 
 abstract class CloudStorageProviderClientBase<CLIENT>
     extends CloudStorageProvider {
-  CloudStorageProviderClientBase({required CloudStorageHelperBase helper})
-      : super(helper: helper);
+  CloudStorageProviderClientBase({required super.helper});
 
   CLIENT? _client;
 

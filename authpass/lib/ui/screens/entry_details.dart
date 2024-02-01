@@ -59,7 +59,7 @@ import 'package:tuple/tuple.dart';
 final _logger = Logger('entry_details');
 
 class EntryDetailsScreen extends StatefulWidget {
-  const EntryDetailsScreen({Key? key, required this.entry}) : super(key: key);
+  const EntryDetailsScreen({super.key, required this.entry});
 
   static Route<void> route({required KdbxEntry entry}) => MaterialPageRoute(
       settings: const RouteSettings(name: '/entry'),
@@ -336,8 +336,7 @@ enum FieldType {
 
 class EntryDetails extends StatefulWidget {
   const EntryDetails(
-      {Key? key, required this.entry, required this.onSavedPressed})
-      : super(key: key);
+      {super.key, required this.entry, required this.onSavedPressed});
 
   final EntryViewModel entry;
   final VoidCallback? onSavedPressed;
@@ -858,10 +857,10 @@ class _EntryDetailsState extends State<EntryDetails>
 
 class AttachmentBottomSheet extends StatelessWidget {
   const AttachmentBottomSheet({
-    Key? key,
+    super.key,
     required this.entry,
     required this.attachment,
-  }) : super(key: key);
+  });
 
   final KdbxEntry entry;
   final MapEntry<KdbxKey, KdbxBinary> attachment;
@@ -970,11 +969,11 @@ class AttachmentBottomSheet extends StatelessWidget {
 
 class EntryMetaInfo extends StatelessWidget {
   const EntryMetaInfo({
-    Key? key,
+    super.key,
     this.label,
     this.value,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String? label;
   final String? value;
@@ -1020,7 +1019,7 @@ class EntryMetaInfo extends StatelessWidget {
 }
 
 class AddFieldButton extends StatefulWidget {
-  const AddFieldButton({Key? key, required this.onAddField}) : super(key: key);
+  const AddFieldButton({super.key, required this.onAddField});
 
   final void Function(KdbxKey key) onAddField;
 
@@ -1091,13 +1090,13 @@ class _AddFieldButtonState extends State<AddFieldButton> {
 
 class EntryField extends StatefulWidget {
   const EntryField({
-    Key? key,
+    super.key,
     required this.fieldType,
     required this.entry,
     required this.fieldKey,
     this.commonField,
     required this.onChangedMetadata,
-  }) : super(key: key);
+  });
 
   final FieldType fieldType;
   final KdbxEntry entry;
@@ -1731,12 +1730,12 @@ class _OtpEntryFieldState extends _EntryFieldState {
 
 class ObscuredEntryFieldEditor extends StatelessWidget {
   const ObscuredEntryFieldEditor({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.onShowPressed,
     required this.commonField,
     required this.fieldKey,
-  }) : super(key: key);
+  });
 
   final CommonField? commonField;
   final KdbxKey fieldKey;
@@ -1813,7 +1812,7 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
 
 class StringEntryFieldEditor extends StatelessWidget {
   const StringEntryFieldEditor({
-    Key? key,
+    super.key,
     required this.onSaved,
     required this.controller,
     required this.formFieldKey,
@@ -1821,7 +1820,7 @@ class StringEntryFieldEditor extends StatelessWidget {
     required this.commonField,
     required this.fieldKey,
     required this.delegate,
-  }) : super(key: key);
+  });
 
   final Key formFieldKey;
   final FocusNode focusNode;
@@ -1881,8 +1880,7 @@ class StringEntryFieldEditor extends StatelessWidget {
 }
 
 class HighlightWidget extends StatefulWidget {
-  const HighlightWidget({Key? key, this.child, this.childOnHighlight})
-      : super(key: key);
+  const HighlightWidget({super.key, this.child, this.childOnHighlight});
 
   final Widget? child;
   final Widget? childOnHighlight;

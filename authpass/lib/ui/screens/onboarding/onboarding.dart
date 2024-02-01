@@ -35,7 +35,7 @@ class OnboardingScreen extends StatelessWidget {
 }
 
 class ExpandToFitScreen extends StatelessWidget {
-  const ExpandToFitScreen({Key? key, this.child}) : super(key: key);
+  const ExpandToFitScreen({super.key, this.child});
 
   final Widget? child;
 
@@ -58,10 +58,10 @@ class ExpandToFitScreen extends StatelessWidget {
 
 class OnboardingContent extends StatelessWidget {
   const OnboardingContent({
-    Key? key,
+    super.key,
     required this.loc,
     required this.theme,
-  }) : super(key: key);
+  });
 
   final AppLocalizations loc;
   final ThemeData theme;
@@ -138,11 +138,11 @@ class OnboardingContent extends StatelessWidget {
 
 class OnboardingButton extends StatelessWidget {
   const OnboardingButton({
-    Key? key,
+    super.key,
     required this.image,
     required this.labelText,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final Image image;
   final String labelText;

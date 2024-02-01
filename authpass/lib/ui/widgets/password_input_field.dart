@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 /// a suffix icon to change it to make it visible.
 class PasswordInputField extends StatefulWidget {
   const PasswordInputField({
-    Key? key,
+    super.key,
     required this.labelText,
     this.autofocus = true,
     this.focusNode,
@@ -16,7 +16,7 @@ class PasswordInputField extends StatefulWidget {
     this.onChanged,
     this.controller,
     this.autovalidateMode,
-  }) : super(key: key);
+  });
 
   final FocusNode? focusNode;
   final bool autofocus;

@@ -27,8 +27,7 @@ const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 class GoogleDriveProvider extends CloudStorageProvider
     implements CloudStorageCustomLoginButtonAdapter {
   GoogleDriveProvider(
-      {required this.env, required CloudStorageHelperBase helper})
-      : super(helper: helper) {
+      {required this.env, required super.helper}) {
     googleSignIn.onCurrentUserChanged
         .listen((final account) => _checkAuthentication());
   }

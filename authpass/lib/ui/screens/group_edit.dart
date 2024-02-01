@@ -10,7 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 
 class GroupEditScreen extends StatefulWidget {
-  const GroupEditScreen({Key? key, required this.group}) : super(key: key);
+  const GroupEditScreen({super.key, required this.group});
 
   static MaterialPageRoute<void> route(KdbxGroup group) =>
       MaterialPageRoute<void>(
@@ -67,8 +67,7 @@ class _GroupEditScreenState extends State<GroupEditScreen>
 }
 
 class GroupEdit extends StatefulWidget {
-  const GroupEdit({Key? key, required this.group, this.formKey})
-      : super(key: key);
+  const GroupEdit({super.key, required this.group, this.formKey});
 
   final KdbxGroup group;
   final GlobalKey<FormState>? formKey;

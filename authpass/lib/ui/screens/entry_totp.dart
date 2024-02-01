@@ -4,11 +4,11 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class OtpFieldEntryEditor extends StatelessWidget {
   const OtpFieldEntryEditor({
-    Key? key,
+    super.key,
     required this.otpCode,
     required this.elapsed,
     required this.period,
-  }) : super(key: key);
+  });
 
   final String otpCode;
   final int elapsed;

@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 /// Wraps a navigator to send pop signals from the parent navigator to the child navigator.
 class BackButtonNavigatorDelegate extends StatefulWidget {
   const BackButtonNavigatorDelegate({
-    Key? key,
+    super.key,
     this.observers,
     required this.onGenerateRoute,
     this.onGenerateInitialRoutes,
-  }) : super(key: key);
+  });
 
   /// A list of observers for this navigator.
   final List<NavigatorObserver>? observers;

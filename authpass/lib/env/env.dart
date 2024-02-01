@@ -22,7 +22,7 @@ const _DEFAULT_PACKAGE_NAME = String.fromEnvironment('AUTHPASS_PACKAGE_NAME',
     defaultValue: 'design.codeux.authpass.dev');
 
 abstract class EnvAppBase extends Env {
-  EnvAppBase(EnvType type) : super(type);
+  EnvAppBase(super.type);
 
   @NonNls
   static const _ENV_STORAGE_NAMESPACE = 'AUTHPASS_STORAGE_NAMESPACE';

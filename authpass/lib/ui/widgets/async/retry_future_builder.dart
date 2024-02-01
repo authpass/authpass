@@ -13,11 +13,11 @@ typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
 class RetryFutureBuilder<T> extends StatefulWidget {
   const RetryFutureBuilder({
-    Key? key,
+    super.key,
     required this.produceFuture,
     required this.builder,
     this.scaffoldBuilder = defaultScaffoldBuilder,
-  }) : super(key: key);
+  });
 
   final FutureProducer<T> produceFuture;
   final DataWidgetBuilder<T> builder;
@@ -111,13 +111,13 @@ class RetryFutureBuilderState<T> extends State<RetryFutureBuilder<T>> {
 
 class RetryStreamBuilder<T> extends StatefulWidget {
   const RetryStreamBuilder({
-    Key? key,
+    super.key,
     required this.stream,
     this.retry,
     required this.builder,
     this.scaffoldBuilder = RetryFutureBuilder.defaultScaffoldBuilder,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   final StreamProducer<T> stream;
   final T? initialValue;

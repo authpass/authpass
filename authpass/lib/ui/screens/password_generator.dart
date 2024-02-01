@@ -18,8 +18,7 @@ enum FinishButtonStyle {
 }
 
 class PasswordGeneratorScreen extends StatelessWidget {
-  const PasswordGeneratorScreen({Key? key, this.finishButton})
-      : super(key: key);
+  const PasswordGeneratorScreen({super.key, this.finishButton});
 
   static Route<String> route({required FinishButtonStyle finishButton}) =>
       MaterialPageRoute(
@@ -52,11 +51,11 @@ class PasswordGeneratorScreen extends StatelessWidget {
 
 class GeneratePassword extends StatefulWidget {
   const GeneratePassword({
-    Key? key,
+    super.key,
     this.doneButtonIcon,
     required this.doneButtonLabel,
     this.doneButtonOnPressed,
-  }) : super(key: key);
+  });
 
   final Icon? doneButtonIcon;
   final String doneButtonLabel;
@@ -278,10 +277,10 @@ class _GeneratePasswordState extends State<GeneratePassword> {
 
 class SimpleGridWidget extends StatelessWidget {
   const SimpleGridWidget({
-    Key? key,
+    super.key,
     this.columns = 2,
     required this.children,
-  }) : super(key: key);
+  });
 
   final int columns;
   final List<Widget> children;
@@ -307,11 +306,11 @@ class SimpleGridWidget extends StatelessWidget {
 
 class OptionToggleTile extends StatelessWidget {
   const OptionToggleTile({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final String label;
   final bool value;

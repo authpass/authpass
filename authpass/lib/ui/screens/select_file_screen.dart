@@ -56,8 +56,7 @@ import '../../theme.dart';
 final _logger = Logger('authpass.select_file_screen');
 
 class SelectFileScreen extends StatelessWidget {
-  const SelectFileScreen({Key? key, this.skipQuickUnlock = false})
-      : super(key: key);
+  const SelectFileScreen({super.key, this.skipQuickUnlock = false});
 
   static Route<Object> route({bool skipQuickUnlock = false}) =>
       MaterialPageRoute(
@@ -134,8 +133,7 @@ class SelectFileScreen extends StatelessWidget {
 }
 
 class ProgressOverlay extends StatelessWidget {
-  const ProgressOverlay({Key? key, required this.child, this.task})
-      : super(key: key);
+  const ProgressOverlay({super.key, required this.child, this.task});
 
   final FutureTask? task;
   final Widget child;
@@ -199,9 +197,9 @@ class ProgressOverlay extends StatelessWidget {
 
 class SelectFileWidget extends StatefulWidget {
   const SelectFileWidget({
-    Key? key,
+    super.key,
     this.skipQuickUnlock = false,
-  }) : super(key: key);
+  });
 
   final bool skipQuickUnlock;
 
@@ -616,9 +614,9 @@ class _SelectFileWidgetState extends State<SelectFileWidget>
 
 class OpenFileBottomSheet extends StatelessWidget {
   const OpenFileBottomSheet({
-    Key? key,
+    super.key,
     required this.openFilePickerWritable,
-  }) : super(key: key);
+  });
 
   final Future<void> Function() openFilePickerWritable;
 
@@ -673,12 +671,12 @@ class OpenFileBottomSheet extends StatelessWidget {
 
 class OpenedFileTile extends StatelessWidget {
   const OpenedFileTile({
-    Key? key,
+    super.key,
     required this.openedFile,
     this.onPressed,
     this.onLongPressed,
     required this.color,
-  }) : super(key: key);
+  });
 
   final FileSource openedFile;
   final VoidCallback? onPressed;
@@ -745,10 +743,10 @@ class OpenedFileTile extends StatelessWidget {
 
 class SelectFileActionChrome extends StatelessWidget {
   const SelectFileActionChrome({
-    Key? key,
+    super.key,
     this.backgroundColor,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final Color? backgroundColor;
@@ -777,12 +775,12 @@ class SelectFileActionChrome extends StatelessWidget {
 
 class SelectFileAction extends StatelessWidget {
   const SelectFileAction({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.onPressed,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final String label;
@@ -803,10 +801,10 @@ class SelectFileAction extends StatelessWidget {
 
 class SelectFileActionContent extends StatelessWidget {
   const SelectFileActionContent({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final String label;
@@ -917,8 +915,7 @@ class _SelectUrlDialogState extends State<SelectUrlDialog> {
 }
 
 class CredentialsScreen extends StatefulWidget {
-  const CredentialsScreen({Key? key, required this.kdbxFilePath})
-      : super(key: key);
+  const CredentialsScreen({super.key, required this.kdbxFilePath});
 
   static Route<void> route(FileSource kdbxFilePath) => MaterialPageRoute<void>(
         settings: const RouteSettings(name: '/credentials'),
@@ -1042,7 +1039,7 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       : AutovalidateMode.onUserInteraction,
                   validator: SValidator.invalidValue(
                       invalidValue: () => _invalidPassword,
-                      message: loc.masterPasswordIncorrectValidator),
+                      message: loc.masterPasswordIncorrectValidator).call,
                   onEditingComplete: () async {
                     FocusScope.of(context).unfocus();
 

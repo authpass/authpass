@@ -135,7 +135,7 @@ class _CloudMailboxTabScreenState extends State<CloudMailboxTabScreen>
 }
 
 class CloudMailboxList extends StatelessWidget {
-  const CloudMailboxList({Key? key, required this.bloc}) : super(key: key);
+  const CloudMailboxList({super.key, required this.bloc});
 
   final AuthPassCloudBloc bloc;
 
@@ -278,7 +278,7 @@ class MailboxViewModel {
 }
 
 class CloudMailList extends StatelessWidget {
-  const CloudMailList({Key? key, required this.bloc}) : super(key: key);
+  const CloudMailList({super.key, required this.bloc});
 
   final AuthPassCloudBloc bloc;
 
@@ -324,8 +324,7 @@ class CloudMailList extends StatelessWidget {
 }
 
 class MailListTile extends StatelessWidget {
-  const MailListTile({Key? key, required this.message, this.onTap})
-      : super(key: key);
+  const MailListTile({super.key, required this.message, this.onTap});
 
   final EmailMessage message;
   final VoidCallback? onTap;

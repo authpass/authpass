@@ -68,8 +68,7 @@ class _FileMetadata {
 
 class AuthPassCloudProvider extends CloudStorageProvider
     with AuthPassCloudClientConsumer {
-  AuthPassCloudProvider({required CloudStorageHelperBase helper})
-      : super(helper: helper);
+  AuthPassCloudProvider({required super.helper});
 
   /// will be injected later - pretty bad workaround..
   /// have to change it one day to be properly injected upfront.

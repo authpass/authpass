@@ -27,10 +27,10 @@ final _logger = Logger('cloud_mail_read');
 
 class EmailReadScreen extends StatefulWidget {
   const EmailReadScreen({
-    Key? key,
+    super.key,
     required this.bloc,
     required this.emailMessage,
-  }) : super(key: key);
+  });
 
   static MaterialPageRoute<void> route(
           AuthPassCloudBloc bloc, EmailMessage emailMessage) =>
@@ -173,11 +173,11 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
 
 class EmailRead extends StatelessWidget {
   const EmailRead({
-    Key? key,
+    super.key,
     required this.bloc,
     required this.vm,
     this.forcePlainText = false,
-  }) : super(key: key);
+  });
   final AuthPassCloudBloc bloc;
   final EmailViewModel vm;
   final bool forcePlainText;

@@ -23,8 +23,7 @@ final _logger = Logger('authpass.cloud_storage_ui');
 
 class CloudStorageSelector extends StatefulWidget {
   const CloudStorageSelector(
-      {Key? key, required this.provider, this.browserConfig})
-      : super(key: key);
+      {super.key, required this.provider, this.browserConfig});
 
   final CloudStorageProvider provider;
   final CloudStorageSelectorConfig? browserConfig;
@@ -150,8 +149,7 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
 }
 
 class CloudStorageSearch extends StatefulWidget {
-  const CloudStorageSearch({Key? key, required this.provider})
-      : super(key: key);
+  const CloudStorageSearch({super.key, required this.provider});
 
   final CloudStorageProvider provider;
 
@@ -240,11 +238,11 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
 
 class SearchResultListView extends StatelessWidget {
   const SearchResultListView({
-    Key? key,
+    super.key,
     required this.response,
     required this.onTap,
     this.provider,
-  }) : super(key: key);
+  });
 
   final SearchResponse response;
   final void Function(CloudStorageEntity entity) onTap;
@@ -328,11 +326,11 @@ class CloudStorageBrowserConfig
 
 class CloudStorageBrowser extends StatefulWidget {
   const CloudStorageBrowser({
-    Key? key,
+    super.key,
     required this.provider,
     required this.config,
     required this.onFolderChanged,
-  }) : super(key: key);
+  });
   final CloudStorageProvider provider;
   final CloudStorageBrowserConfig config;
   final void Function(CloudStorageEntity? folder) onFolderChanged;

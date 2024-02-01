@@ -64,7 +64,7 @@ class AuthPassCloudAuth extends StatelessWidget {
 }
 
 class _EnterEmailAddress extends StatefulWidget {
-  const _EnterEmailAddress({Key? key, required this.bloc}) : super(key: key);
+  const _EnterEmailAddress({required this.bloc});
   final AuthPassCloudBloc bloc;
 
   @override
@@ -113,8 +113,8 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
               _submitCallback()?.call();
             },
             validator:
-                SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
-                    SValidator.email(msg: loc.authPassCloudAuthEmailInvalid),
+                (SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
+                    SValidator.email(msg: loc.authPassCloudAuthEmailInvalid)).call,
           ),
           const SizedBox(height: 8),
           ElevatedButton(
@@ -138,7 +138,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
 }
 
 class _ConfirmEmailAddress extends StatefulWidget {
-  const _ConfirmEmailAddress({Key? key, required this.bloc}) : super(key: key);
+  const _ConfirmEmailAddress({required this.bloc});
 
   final AuthPassCloudBloc bloc;
 

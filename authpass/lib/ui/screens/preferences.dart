@@ -344,8 +344,7 @@ class _PreferencesBodyState extends State<PreferencesBody>
 }
 
 class SelectLanguageDialog extends StatelessWidget {
-  const SelectLanguageDialog({Key? key, this.locales, this.localeOverride})
-      : super(key: key);
+  const SelectLanguageDialog({super.key, this.locales, this.localeOverride});
 
   final List<LocaleInfo>? locales;
   final String? localeOverride;
@@ -375,7 +374,7 @@ class SelectLanguageDialog extends StatelessWidget {
 
 class ValueSelectorTile extends StatelessWidget {
   const ValueSelectorTile({
-    Key? key,
+    super.key,
     required this.value,
     required this.minValue,
     required this.maxValue,
@@ -384,7 +383,7 @@ class ValueSelectorTile extends StatelessWidget {
     this.icon,
     this.title,
     this.valueForNull = 0,
-  }) : super(key: key);
+  });
 
   final Widget? icon;
   final Widget? title;
@@ -464,13 +463,13 @@ class ValueSelectorTile extends StatelessWidget {
 
 class SliderSelector extends StatefulWidget {
   const SliderSelector({
-    Key? key,
+    super.key,
     required this.initialValue,
     required this.minValue,
     required this.maxValue,
     required this.steps,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final double initialValue;
   final double minValue;

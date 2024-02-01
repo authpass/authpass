@@ -138,8 +138,7 @@ abstract class FileSource {
 }
 
 class FileSourceUrl extends FileSource {
-  FileSourceUrl(this.url, {String? databaseName, required String uuid})
-      : super(databaseName: databaseName, uuid: uuid);
+  FileSourceUrl(this.url, {super.databaseName, required super.uuid});
 
   @NonNls
   static const _webCorsProxy = 'https://cors-anywhere.herokuapp.com/';

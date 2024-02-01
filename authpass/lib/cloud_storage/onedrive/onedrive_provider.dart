@@ -17,8 +17,7 @@ import 'package:string_literal_finder_annotations/string_literal_finder_annotati
 final _logger = Logger('onedrive_provider');
 
 class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
-  OneDriveProvider({required this.env, required CloudStorageHelperBase helper})
-      : super(helper: helper);
+  OneDriveProvider({required this.env, required super.helper});
 
   @NonNls
   @override

@@ -17,10 +17,10 @@ final _logger = Logger('cloud_storage_ui_auth');
 
 class CloudStorageAuthentication extends StatelessWidget {
   const CloudStorageAuthentication({
-    Key? key,
+    super.key,
     required this.provider,
     required this.onSuccess,
-  }) : super(key: key);
+  });
 
   final CloudStorageProvider provider;
   final void Function() onSuccess;
@@ -184,9 +184,9 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
                 hintText: nonNls('https://my.nextcloud.com/webdav'),
               ),
               autocorrect: false,
-              validator: SValidator.notEmpty(msg: loc.webDavUrlValidatorError) +
+              validator: (SValidator.notEmpty(msg: loc.webDavUrlValidatorError) +
                   SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
-                      loc.webDavUrlValidatorInvalidUrlError),
+                      loc.webDavUrlValidatorInvalidUrlError)).call,
             ),
             TextFormField(
               controller: _username,

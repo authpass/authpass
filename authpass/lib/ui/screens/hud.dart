@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class FullScreenHud extends StatelessWidget {
-  const FullScreenHud({Key? key, required this.value}) : super(key: key);
+  const FullScreenHud({super.key, required this.value});
 
   final String value;
 

@@ -17,10 +17,10 @@ final _logger = Logger('keyboard_handler');
 
 class KeyboardHandler extends StatefulWidget {
   const KeyboardHandler({
-    Key? key,
+    super.key,
     required this.systemWideShortcuts,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final bool systemWideShortcuts;

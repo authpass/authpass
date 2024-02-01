@@ -50,7 +50,7 @@ enum GroupListLongPressAction {
 }
 
 class GroupList extends StatelessWidget {
-  const GroupList({Key? key, this.parent}) : super(key: key);
+  const GroupList({super.key, this.parent});
 
   static Route<KdbxGroup> route(KdbxGroup? parent) => MaterialPageRoute(
         settings:
@@ -248,11 +248,11 @@ extension on GroupListMode {
 
 class GroupListFlat extends StatelessWidget {
   const GroupListFlat({
-    Key? key,
+    super.key,
     this.initialSelection,
     this.groupListMode = GroupListMode.multiSelectForFilter,
     this.rootGroup,
-  }) : super(key: key);
+  });
 
   static MaterialPageRoute<Set<KdbxGroup>> route(
     Set<KdbxGroup> selection, {
@@ -289,8 +289,7 @@ class GroupListFlat extends StatelessWidget {
 }
 
 class GroupListBuilder extends StatelessWidget {
-  const GroupListBuilder({Key? key, this.rootGroup, required this.builder})
-      : super(key: key);
+  const GroupListBuilder({super.key, this.rootGroup, required this.builder});
 
   /// if defined only groups within this group will be shown,
   /// otherwise all groups in all files are shown.
@@ -409,11 +408,11 @@ class GroupFilter {
 
 class GroupListFlatContent extends StatefulWidget {
   const GroupListFlatContent({
-    Key? key,
+    super.key,
     required this.groups,
     required this.initialSelection,
     required this.groupListMode,
-  }) : super(key: key);
+  });
 
   final Set<KdbxGroup?> initialSelection;
   final List<_GroupViewModel> groups;
@@ -567,13 +566,13 @@ enum GroupAction {
 
 class GroupListFlatList extends StatelessWidget {
   const GroupListFlatList({
-    Key? key,
+    super.key,
     required this.groupFilter,
     required this.groups,
     required this.groupListMode,
     required this.onChanged,
     required this.onChangedAll,
-  }) : super(key: key);
+  });
 
   final GroupFilter? groupFilter;
   final List<_GroupViewModel>? groups;
@@ -767,11 +766,11 @@ class GroupListFlatList extends StatelessWidget {
 
 class GroupFilterFlatList extends StatefulWidget {
   const GroupFilterFlatList({
-    Key? key,
+    super.key,
     required this.initialSelection,
     required this.selectionChanged,
     required this.groups,
-  }) : super(key: key);
+  });
 
   final List<_GroupViewModel> groups;
   final Set<KdbxGroup?> initialSelection;
@@ -842,14 +841,14 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
 
 class GroupListTile extends StatelessWidget {
   const GroupListTile({
-    Key? key,
+    super.key,
     required this.group,
     required this.isSelected,
     required this.isSelectedInherited,
     required this.groupListMode,
     required this.onChanged,
     this.onLongPress,
-  }) : super(key: key);
+  });
 
   static const _levelIndent = 16.0;
 

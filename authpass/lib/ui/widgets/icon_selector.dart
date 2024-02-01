@@ -22,8 +22,7 @@ part 'icon_selector.freezed.dart';
 final _logger = Logger('authpass.icon_selector');
 
 class IconSelectorDialog extends StatefulWidget {
-  const IconSelectorDialog({Key? key, this.initialSelection, this.kdbxFile})
-      : super(key: key);
+  const IconSelectorDialog({super.key, this.initialSelection, this.kdbxFile});
 
   final SelectedIcon? initialSelection;
   final KdbxFile? kdbxFile;
@@ -76,8 +75,7 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
 
 class IconSelector extends StatefulWidget {
   const IconSelector(
-      {Key? key, required this.initialSelection, required this.kdbxFile})
-      : super(key: key);
+      {super.key, required this.initialSelection, required this.kdbxFile});
 
   final SelectedIcon? initialSelection;
   final KdbxFile? kdbxFile;
@@ -204,11 +202,11 @@ class _IconSelectorState extends State<IconSelector> {
 
 class IconSelectorIcon extends StatelessWidget {
   const IconSelectorIcon({
-    Key? key,
+    super.key,
     this.iconData,
     this.isSelected,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final IconData? iconData;
   final bool? isSelected;
@@ -229,11 +227,11 @@ class IconSelectorIcon extends StatelessWidget {
 
 class IconSelectorCustomIcon extends StatelessWidget {
   const IconSelectorCustomIcon({
-    Key? key,
+    super.key,
     this.iconData,
     this.isSelected,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Uint8List? iconData;
   final bool? isSelected;
@@ -278,12 +276,12 @@ class SelectedIcon with _$SelectedIcon {
 
 class IconSelectorFormField extends StatelessWidget {
   const IconSelectorFormField({
-    Key? key,
+    super.key,
     required this.initialValue,
     required this.onSaved,
     required this.kdbxFile,
     this.onChanged,
-  }) : super(key: key);
+  });
   final SelectedIcon initialValue;
   final KdbxFile? kdbxFile;
   final void Function(SelectedIcon? icon) onSaved;

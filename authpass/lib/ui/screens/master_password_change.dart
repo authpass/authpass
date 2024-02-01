@@ -15,9 +15,9 @@ import 'package:zxcvbn/zxcvbn.dart';
 
 class MasterPasswordChangeScreen extends StatelessWidget {
   const MasterPasswordChangeScreen({
-    Key? key,
+    super.key,
     required this.fileSource,
-  }) : super(key: key);
+  });
 
   static Route<void> route({
     required FileSource fileSource,
@@ -49,10 +49,10 @@ class MasterPasswordChangeScreen extends StatelessWidget {
 
 class MasterPasswordChangeForm extends StatefulWidget {
   const MasterPasswordChangeForm({
-    Key? key,
+    super.key,
     required this.fileSource,
     required this.file,
-  }) : super(key: key);
+  });
 
   final FileSource fileSource;
   final KdbxFile file;

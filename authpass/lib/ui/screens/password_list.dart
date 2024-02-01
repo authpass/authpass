@@ -119,8 +119,7 @@ typedef OnEntrySelected = void Function(
 
 class PasswordList extends StatelessWidget {
   const PasswordList(
-      {Key? key, required this.onEntrySelected, this.selectedEntry})
-      : super(key: key);
+      {super.key, required this.onEntrySelected, this.selectedEntry});
 
   static const routeSettings = RouteSettings(name: '/passwordList');
 
@@ -192,7 +191,7 @@ enum EntrySelectionType {
 
 class PasswordListContent extends StatefulWidget {
   const PasswordListContent({
-    Key? key,
+    super.key,
     required this.appData,
     required this.kdbxBloc,
     required this.openedKdbxFiles,
@@ -200,8 +199,7 @@ class PasswordListContent extends StatefulWidget {
         onEntrySelected,
     required this.isAutofillSelector,
     this.selectedEntry,
-  })  : _onEntrySelected = onEntrySelected,
-        super(key: key);
+  })  : _onEntrySelected = onEntrySelected;
 
   final AppData appData;
   final KdbxBloc kdbxBloc;
@@ -1293,14 +1291,13 @@ class SearchAction extends Action<SearchIntent> {
 
 class PasswordEntryListTileWrapper extends StatelessWidget {
   const PasswordEntryListTileWrapper({
-    Key? key,
+    super.key,
     required this.entry,
     required this.selectedEntry,
     required this.fileColor,
     required String? filterQuery,
     required this.onEntrySelected,
-  })  : _filterQuery = filterQuery,
-        super(key: key);
+  })  : _filterQuery = filterQuery;
 
   final EntryViewModel entry;
   final KdbxEntry? selectedEntry;
@@ -1435,10 +1432,10 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
 
 class NoPasswordsEmptyView extends StatelessWidget {
   const NoPasswordsEmptyView({
-    Key? key,
+    super.key,
     this.onPrimaryButtonPressed,
     this.listPrefix,
-  }) : super(key: key);
+  });
 
   final List<Widget>? listPrefix;
   final VoidCallback? onPrimaryButtonPressed;
@@ -1484,7 +1481,7 @@ class NoPasswordsEmptyView extends StatelessWidget {
 }
 
 class UnsupportedWrite extends StatelessWidget {
-  const UnsupportedWrite({Key? key, required this.source}) : super(key: key);
+  const UnsupportedWrite({super.key, required this.source});
 
   final FileSource source;
 
@@ -1538,12 +1535,12 @@ class UnsupportedWrite extends StatelessWidget {
 
 class PasswordEntryTile extends StatelessWidget {
   const PasswordEntryTile({
-    Key? key,
+    super.key,
     required this.vm,
     required this.isSelected,
     required this.filterQuery,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final EntryViewModel vm;
   final bool isSelected;
@@ -1672,11 +1669,11 @@ class PasswordEntryTile extends StatelessWidget {
 
 class EntryIcon extends StatelessWidget {
   const EntryIcon({
-    Key? key,
+    super.key,
     required this.vm,
     required this.fallback,
     required this.size,
-  }) : super(key: key);
+  });
 
   final EntryViewModel vm;
   final double size;

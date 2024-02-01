@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 class LinkButton extends StatelessWidget {
   const LinkButton(
-      {Key? key,
+      {super.key,
       required this.child,
       this.onPressed,
       this.icon,
       this.padding,
-      this.materialTapTargetSize})
-      : super(key: key);
+      this.materialTapTargetSize});
 
   final Widget child;
   final VoidCallback? onPressed;

@@ -23,16 +23,12 @@ const fileSystem = LocalFileSystem();
 class FileSourceLocal extends FileSource {
   FileSourceLocal(
     this.file, {
-    String? databaseName,
-    required String uuid,
+    super.databaseName,
+    required super.uuid,
     this.macOsSecureBookmark,
     this.filePickerIdentifier,
-    FileContent? initialCachedContent,
-  }) : super(
-          databaseName: databaseName,
-          uuid: uuid,
-          initialCachedContent: initialCachedContent,
-        );
+    super.initialCachedContent,
+  });
 
   static File localFile(String path) => (const LocalFileSystem()).file(path);
 

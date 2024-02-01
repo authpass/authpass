@@ -166,7 +166,7 @@ class DialogUtils {
 }
 
 class LogViewerDialog extends StatelessWidget {
-  const LogViewerDialog({Key? key, this.title, this.log}) : super(key: key);
+  const LogViewerDialog({super.key, this.title, this.log});
 
   final String? title;
   final StringBufferWrapper? log;
@@ -240,7 +240,7 @@ class ConfirmDialogParams {
 }
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({Key? key, required this.params}) : super(key: key);
+  const ConfirmDialog({super.key, required this.params});
   final ConfirmDialogParams params;
 
   @override
@@ -276,12 +276,12 @@ mixin DialogMixin<T> on Widget {
 class SimpleAuthCodePromptDialog extends StatefulWidget
     with DialogMixin<String> {
   const SimpleAuthCodePromptDialog({
-    Key? key,
+    super.key,
     this.title,
     this.labelText,
     this.helperText,
     this.initialValue = CharConstants.empty,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String? labelText;
@@ -342,12 +342,12 @@ class _SimpleAuthCodePromptDialogState
 
 class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
   const SimplePromptDialog({
-    Key? key,
+    super.key,
     this.title,
     this.labelText,
     this.initialValue = CharConstants.empty,
     this.helperText,
-  }) : super(key: key);
+  });
   final String? title;
   final String? labelText;
   final String? helperText;

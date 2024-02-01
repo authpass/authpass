@@ -198,8 +198,8 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
 }
 
 class PasswordStrengthDisplay extends ImplicitlyAnimatedWidget {
-  const PasswordStrengthDisplay({Key? key, this.strength})
-      : super(key: key, duration: const Duration(milliseconds: 500));
+  const PasswordStrengthDisplay({super.key, this.strength})
+      : super(duration: const Duration(milliseconds: 500));
 
   final Result? strength;
 

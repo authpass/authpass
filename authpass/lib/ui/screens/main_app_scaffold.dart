@@ -62,13 +62,10 @@ class MainAppTabletScaffold extends StatefulWidget {
 /// https://github.com/flutter/flutter/issues/53441
 class FocusWorkaroundPageRoute<T> extends MaterialPageRoute<T> {
   FocusWorkaroundPageRoute({
-    RouteSettings? settings,
-    required WidgetBuilder builder,
+    super.settings,
+    required super.builder,
     this.focusNode,
-  }) : super(
-          settings: settings,
-          builder: builder,
-        );
+  });
 
   final FocusNode? focusNode;
 

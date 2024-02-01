@@ -24,7 +24,7 @@ const _contributorsImageMapping = {
 };
 
 class AuthPassAboutDialog extends StatelessWidget {
-  const AuthPassAboutDialog({Key? key, required this.env}) : super(key: key);
+  const AuthPassAboutDialog({super.key, required this.env});
 
   final Env env;
 
@@ -159,8 +159,7 @@ class AuthPassAboutDialog extends StatelessWidget {
 }
 
 class UrlLink extends StatelessWidget {
-  const UrlLink({Key? key, required this.caption, @NonNls required this.url})
-      : super(key: key);
+  const UrlLink({super.key, required this.caption, @NonNls required this.url});
 
   final String caption;
   final String url;

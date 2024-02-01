@@ -29,10 +29,10 @@ final _logger = Logger('cloud_storage_ui_authpass_cloud');
 
 class ShareFileScreen extends StatefulWidget {
   const ShareFileScreen({
-    Key? key,
+    super.key,
     required this.provider,
     required this.entity,
-  }) : super(key: key);
+  });
 
   static Route<void> route({
     required AuthPassCloudProvider provider,
@@ -100,9 +100,9 @@ class _ShareFileScreenState extends State<ShareFileScreen> {
 
 class ShareFileBody extends StatelessWidget {
   const ShareFileBody({
-    Key? key,
+    super.key,
     required this.tokens,
-  }) : super(key: key);
+  });
 
   final List<FileTokenInfo> tokens;
 
@@ -138,10 +138,10 @@ class ShareFileBody extends StatelessWidget {
 
 class ShareCreateDialog extends StatefulWidget {
   const ShareCreateDialog({
-    Key? key,
+    super.key,
     required this.provider,
     required this.entity,
-  }) : super(key: key);
+  });
 
   final AuthPassCloudProvider provider;
   final CloudStorageEntity entity;
@@ -225,9 +225,9 @@ class ShareTokenPresentArgs {
 
 class ShareTokenPresent extends StatelessWidget {
   ShareTokenPresent({
-    Key? key,
+    super.key,
     required this.tokenInfo,
-  }) : super(key: key);
+  });
 
   final ShareTokenPresentArgs tokenInfo;
 
@@ -352,9 +352,9 @@ class ShareTokenPresent extends StatelessWidget {
 
 class ShareCodeInputDialog extends StatefulWidget {
   const ShareCodeInputDialog({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final AuthPassCloudProvider provider;
 
@@ -486,9 +486,9 @@ class _ShareCodeInputDialogState extends State<ShareCodeInputDialog>
 /// Launch screen when deep linking to token.
 class AuthPassCloudLoadFileLaunch extends StatefulWidget {
   const AuthPassCloudLoadFileLaunch({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   static Route<void> route({required String token}) => MaterialPageRoute(
         builder: (context) => AuthPassCloudLoadFileLaunch(token: token),
