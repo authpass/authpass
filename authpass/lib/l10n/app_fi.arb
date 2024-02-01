@@ -347,7 +347,7 @@
       }
     }
   },
-  "savedFiles": "{numFiles, plural, one {}=1 {Yksi tiedosto tallennettu: {files}} other {{numFiles} tiedostot tallennettu: {files}}}",
+  "savedFiles": "{numFiles, plural, =1 {Yksi tiedosto tallennettu: {files}} other {{numFiles} tiedostot tallennettu: {files}}}",
   "@savedFiles": {
     "description": "Message displayed when files were saved. (One or more).",
     "context": "Password list",
