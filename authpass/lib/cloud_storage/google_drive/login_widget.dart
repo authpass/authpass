@@ -1,7 +1,7 @@
 import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
 
@@ -65,13 +65,15 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
       }
       return widget.defaultWidget;
     }
+    final loc = AppLocalizations.of(context);
     if (_canAccessScopes == false) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // The user has NOT Authorized all required scopes.
           // (Mobile users may never see this button!)
-          const Text('Additional permissions needed to access Google Drive.'),
+          Text(loc.googleDriveMorePermissionsRequired),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () async {
               final requestResult =
@@ -84,7 +86,7 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
               });
               _logger.fine('Requested scopes. result: $requestResult');
             },
-            child: const Text('REQUEST PERMISSIONS'),
+            child: Text(loc.googleDriveRequestPermissionButtonLabel),
           ),
         ],
       );

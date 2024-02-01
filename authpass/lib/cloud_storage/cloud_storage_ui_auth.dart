@@ -64,7 +64,7 @@ class CloudStorageAuthentication extends StatelessWidget {
               onPressed: () {
                 ShareCodeInputDialog.show(
                   context,
-                  provider: provider as AuthPassCloudProvider,
+                  provider: provider,
                 );
               },
               icon: const Icon(Icons.qr_code_scanner),
@@ -133,7 +133,7 @@ class CloudStorageAuthentication extends StatelessWidget {
         }
       });
       _logger.fine('finished launching. $auth');
-      onSuccess!();
+      onSuccess();
     } catch (e, stackTrace) {
       _logger.severe('Error while authenticating.', e, stackTrace);
       if (!context.mounted) {

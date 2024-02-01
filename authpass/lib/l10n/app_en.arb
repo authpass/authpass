@@ -1749,5 +1749,7 @@
       }
     }
   },
+  "googleDriveMorePermissionsRequired": "Additional permissions needed to access Google Drive.",
+  "googleDriveRequestPermissionButtonLabel": "Request Permissions",
   "scanQrCodeTitle": "Scan QR Code."
 }

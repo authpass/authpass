@@ -175,7 +175,7 @@ dependencies:
   ffi: ^2.1.0
   # AuthPass Cloud email deps
   enough_mail: ^2.1.6
-  flutter_widget_from_html: ^0.10.1
+  flutter_widget_from_html: ^0.14.11
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
 #      url: https://github.com/Sub6Resources/flutter_html.git

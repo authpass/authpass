@@ -1,6 +1,7 @@
 # 1.9.11 - xxxx
 
 * Switch Google Drive integration to using Google SignIn plugin.
+* Update translations.
 
 # 1.9.10 - 2024-01-30
 
