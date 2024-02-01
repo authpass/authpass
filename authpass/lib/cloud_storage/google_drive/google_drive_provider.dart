@@ -10,6 +10,7 @@ import 'package:authpass/cloud_storage/cloud_storage_ui_adapt.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_models.dart';
 import 'package:authpass/cloud_storage/google_drive/login_widget.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -39,10 +40,15 @@ class GoogleDriveProvider extends CloudStorageProvider
       isAuthorized = false;
       return;
     }
-    if (await googleSignIn.canAccessScopes(_scopes)) {
+    if (AuthPassPlatform.isWeb) {
+      // for some reason `canAccessScopes` is only implemented on Web.
+      if (await googleSignIn.canAccessScopes(_scopes)) {
+        isAuthorized = true;
+      }
+    } else {
       isAuthorized = true;
     }
-    _logger.fine('_checkAuthentication:  canAccessScopes: $isAuthorized');
+    _logger.fine('_checkAuthentication:  $isAuthorized');
   }
 
   late final googleSignIn = GoogleSignIn(
@@ -238,6 +244,9 @@ class GoogleDriveProvider extends CloudStorageProvider
     required VoidCallback onSuccess,
     required Widget defaultWidget,
   }) {
+    if (!AuthPassPlatform.isWeb) {
+      return defaultWidget;
+    }
     return GoogleLoginWidget(
       onSuccess: () async {
         await _checkAuthentication();
