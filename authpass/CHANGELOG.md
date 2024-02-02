@@ -1,4 +1,4 @@
-# 1.9.11 - xxxx
+# 1.9.11 - 2024-02-02
 
 * Switch Google Drive integration to using Google SignIn plugin.
 * Update translations.
