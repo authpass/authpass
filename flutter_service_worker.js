@@ -31,8 +31,8 @@ const RESOURCES = {"assets/assets/images/logo_icon.png": "35479aa0e7346455edd778
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "b698a8e676c5b0e37dc2360a5778c62f",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "f2163b9d4e6f1ea52063f498c8878bb9",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1",
-"index.html": "4207a8ac9370c0098c4d916d737e805d",
-"/": "4207a8ac9370c0098c4d916d737e805d",
+"index.html": "1a2477f3757f9480d372f2add8d62ed9",
+"/": "1a2477f3757f9480d372f2add8d62ed9",
 "js/README.md": "20e28da2a4aaa5b4956d794075e1d6a6",
 "js/argon2-bundled.min.js": "6c006c4658c1954a2e78b68130f97ea7",
 "canvaskit/chromium/canvaskit.wasm": "143af6ff368f9cd21c863bfa4274c406",
@@ -46,7 +46,7 @@ const RESOURCES = {"assets/assets/images/logo_icon.png": "35479aa0e7346455edd778
 "icons/authpass-launcher-512.png": "b9ba6d8d7c5a550b37ed6937d5bea4de",
 "favicon.ico": "5e9ecce5608cfbeda2db0b5e8be7fa7d",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"main.dart.js": "ea353d8074c0380e3acb4ae43f7d73ce",
+"main.dart.js": "2a5f631ecda3bfa74428fa7f8a17c00e",
 "flutter.js": "7d69e653079438abfbb24b82a655b0a4",
 "version.json": "32ff7767ab1f612ce06d2832209a1c03"};
 // The application shell files that are downloaded before a service worker can
