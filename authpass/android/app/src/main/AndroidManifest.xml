@@ -102,7 +102,7 @@
                 <data android:scheme="authpass"
                     android:host="*" />
             </intent-filter>
-            <intent-filter android:label="@string/app_name">
+            <intent-filter android:label="@string/app_name" android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
