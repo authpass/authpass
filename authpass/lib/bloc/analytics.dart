@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:matomo_tracker/matomo_tracker.dart' as matomo;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -15,7 +16,10 @@ part 'analytics.g.dart';
 
 final _logger = Logger('analytics');
 
-const _propertyMappingPlatform = 'platform'; // NON-NLS
+@NonNls
+const _propertyMappingPlatform = 'platform';
+@NonNls
+const _propertyMappingBuildNumber = 'buildnumber';
 
 class Analytics {
   Analytics({required this.env}) {
@@ -45,8 +49,10 @@ class Analytics {
     'device': 'cd3', // NON-NLS
     'systemBrightness': 'cd4', // NON-NLS
   };
+  @NonNls
   static const _matomoPropertyMapping = <String, String>{
-    _propertyMappingPlatform: 'dimension1', // NON-NLS
+    _propertyMappingPlatform: 'dimension1',
+    _propertyMappingBuildNumber: 'dimension2',
   };
 
   Future<void> _init() async {
@@ -279,11 +285,19 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   Future<void> trackInit(
           {required String? userType, required int value}) async =>
-      _trackInit(userType: userType, device: await deviceInfo(), value: value);
+      _trackInit(
+        userType: userType,
+        device: await deviceInfo(),
+        value: value,
+        buildnumber: (await PackageInfo.fromPlatform()).buildNumber,
+        platform: AuthPassPlatform.operatingSystem,
+      );
 
   void _trackInit({
     required String? userType,
     required String device,
+    required String platform,
+    required String buildnumber,
     required int value,
   });
 

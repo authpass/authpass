@@ -108,7 +108,7 @@ case "${flavor}" in
         bundle install
         echo "Check if we are in a beta branch ${GITHUB_REF}"
         exitCode=success
-        if [[ "${GITHUB_REF:-}" == *"beta"* ]] ; then
+        if [[ "${GITHUB_REF:-}" == *"beta"* || "${GITHUB_REF:-}" == *"stable"* ]] ; then
           echo "Pushing to beta."
           bundle exec fastlane devbeta || exitCode=$?
         else

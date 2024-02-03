@@ -24,6 +24,8 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
   void _trackInit({
     required String? userType,
     required String device,
+    required String platform,
+    required String buildnumber,
     required int value,
   }) =>
       trackEvent(
@@ -31,6 +33,8 @@ class _$AnalyticsEvents extends AnalyticsEvents with AnalyticsEventStubsImpl {
         <String, Object?>{
           'userType': userType,
           'device': device,
+          'platform': platform,
+          'buildnumber': buildnumber,
           'value': value,
         },
       );
