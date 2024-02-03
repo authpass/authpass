@@ -112,9 +112,10 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             onEditingComplete: () {
               _submitCallback()?.call();
             },
-            validator:
-                (SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
-                    SValidator.email(msg: loc.authPassCloudAuthEmailInvalid)).call,
+            validator: (SValidator.notEmpty(
+                        msg: loc.authPassCloudAuthEmailInvalid) +
+                    SValidator.email(msg: loc.authPassCloudAuthEmailInvalid))
+                .call,
           ),
           const SizedBox(height: 8),
           ElevatedButton(

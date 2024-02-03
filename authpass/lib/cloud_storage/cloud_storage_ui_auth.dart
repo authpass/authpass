@@ -184,9 +184,11 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
                 hintText: nonNls('https://my.nextcloud.com/webdav'),
               ),
               autocorrect: false,
-              validator: (SValidator.notEmpty(msg: loc.webDavUrlValidatorError) +
-                  SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
-                      loc.webDavUrlValidatorInvalidUrlError)).call,
+              validator:
+                  (SValidator.notEmpty(msg: loc.webDavUrlValidatorError) +
+                          SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
+                              loc.webDavUrlValidatorInvalidUrlError))
+                      .call,
             ),
             TextFormField(
               controller: _username,

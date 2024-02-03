@@ -1038,8 +1038,9 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                       ? AutovalidateMode.always
                       : AutovalidateMode.onUserInteraction,
                   validator: SValidator.invalidValue(
-                      invalidValue: () => _invalidPassword,
-                      message: loc.masterPasswordIncorrectValidator).call,
+                          invalidValue: () => _invalidPassword,
+                          message: loc.masterPasswordIncorrectValidator)
+                      .call,
                   onEditingComplete: () async {
                     FocusScope.of(context).unfocus();
 

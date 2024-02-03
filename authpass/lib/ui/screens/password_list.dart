@@ -199,7 +199,7 @@ class PasswordListContent extends StatefulWidget {
         onEntrySelected,
     required this.isAutofillSelector,
     this.selectedEntry,
-  })  : _onEntrySelected = onEntrySelected;
+  }) : _onEntrySelected = onEntrySelected;
 
   final AppData appData;
   final KdbxBloc kdbxBloc;
@@ -1297,7 +1297,7 @@ class PasswordEntryListTileWrapper extends StatelessWidget {
     required this.fileColor,
     required String? filterQuery,
     required this.onEntrySelected,
-  })  : _filterQuery = filterQuery;
+  }) : _filterQuery = filterQuery;
 
   final EntryViewModel entry;
   final KdbxEntry? selectedEntry;
