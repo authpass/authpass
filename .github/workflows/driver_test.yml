@@ -74,7 +74,8 @@ jobs:
       with:
         model: ${{ matrix.device }}
     - name: run test ${{ matrix.flavor }}
-      run: "cd authpass && ~/deps/flutter/bin/flutter drive --target=test_driver/app.dart"
+      # --no-enable-impeller: with impeller screenshots don't seem to work.
+      run: "cd authpass && ~/deps/flutter/bin/flutter drive --no-enable-impeller --target=test_driver/app.dart"
     - uses: actions/upload-artifact@v3
       with:
         name: driver-screenshots
