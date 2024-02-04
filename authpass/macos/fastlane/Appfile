@@ -1,6 +1,5 @@
-# app_identifier("[[APP_IDENTIFIER]]") # The bundle identifier of your app
-# apple_id("[[APPLE_ID]]") # Your Apple email address
+app_identifier("design.codeux.authpass")
+apple_id("herbert.fastlane.uploader@codeux.design") # Your Apple email address
 
-
-# For more information about the Appfile, see:
-#     https://docs.fastlane.tools/advanced/#appfile
+#itc_team_id("827760") # App Store Connect Team ID
+team_id("64ZPC769JY") # Developer Portal Team ID

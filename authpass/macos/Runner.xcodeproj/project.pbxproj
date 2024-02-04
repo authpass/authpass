@@ -661,7 +661,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PROVISIONING_PROFILE_SPECIFIER = "Mac App Store AuthPass Distribution Profile 2021";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "Mac App Store AuthPass Distribution Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "match AppStore design.codeux.authpass macos";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -17,9 +17,6 @@ development_hp.dart
 Runner.app.dSYM.zip
 Runner.ipa
 /flutter
-/authpass/macos/vendor
-/authpass/macos/Gemfile
-/authpass/macos/Gemfile.lock
 
 .flutter-plugins-dependencies
 Flutter.podspec

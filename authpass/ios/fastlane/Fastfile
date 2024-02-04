@@ -33,7 +33,7 @@ keychain_password = SecureRandom.base64
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
       password: keychain_password,
-      default_keychain: true,
+      default_keychain: false,
       unlock: true,
       timeout: 3600,
       add_to_search_list: true

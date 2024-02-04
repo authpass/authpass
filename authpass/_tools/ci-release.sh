@@ -46,8 +46,18 @@ if test "$target_platform" == "ios" ; then
     popd
 fi
 if test "$target_platform" == "macos" ; then
+    eval $(ssh-agent -s)
+    cat _tools/secrets/fastlane_match_certificates_id_rsa | ssh-add -
+    set +x
+    # defines MATCH_PASSWORD and FASTLANE_PASSWORD
+    source _tools/secrets/fastlane_match_password
+    set -x
+
     # make sure cocoapods is up to date.
     pod repo update
+    pushd macos
+    sudo bundle install
+    popd
 #    # upgrade to flutter master channel
 #    flutter channel master
 #    flutter upgrade

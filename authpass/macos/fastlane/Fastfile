@@ -13,17 +13,57 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:ios)
+default_platform(:mac)
 
-platform :ios do
+keychain_password = SecureRandom.base64
+
+platform :mac do
   desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
-  end
+  lane :beta do
 
+    api_key = app_store_connect_api_key(
+      key_id: "S5PTZMY9P8",
+      issuer_id: "0f1ac0c6-ea92-4609-a2f0-c9b239198a75",
+      key_filepath: "./../_tools/secrets/AuthKey_S5PTZMY9P8.p8",
+      duration: 1200, # optional
+      in_house: false, # optional but may be required if using match/sigh
+    )
+
+    # https://docs.travis-ci.com/user/common-build-problems/#fastlane
+    create_keychain(
+      name: ENV["MATCH_KEYCHAIN_NAME"],
+      password: keychain_password,
+      default_keychain: false,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      type: "appstore",
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: keychain_password,
+      additional_cert_types: "mac_installer_distribution",
+      readonly: true
+    )
+#     # 2. Get installer distribution certificate
+#     match(
+#       type: "mac_installer_distribution",
+#       keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+#       keychain_password: keychain_password,
+#       readonly: true,
+#       platform: "macos",
+#       skip_provisioning_profiles: true,
+#     )
+
+    build_mac_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+
+    if ENV["FASTLANE_SKIP_UPLOAD"] == "true"
+      puts "Skipping fastlane upload."
+      next
+    end
+
+    upload_to_testflight(api_key: api_key)
+    end
+    
 end
-
-lane :notarize do
-  notarize(package: '../build/macos/Build/Products/Release/AuthPass.app', bundle_id: 'codeux.design.authpass')
-end
-
