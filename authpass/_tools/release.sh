@@ -67,7 +67,7 @@ $FLT pub get
 case "${flavor}" in
     ios)
         mkdir -p ~/.fastlane/spaceship
-        $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --no-codesign
+        $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --config-only
         cd ios
 #        sudo fastlane run update_fastlane
         bundle exec fastlane beta
