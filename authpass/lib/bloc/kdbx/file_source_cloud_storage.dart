@@ -61,7 +61,7 @@ class FileSourceCloudStorage extends FileSource {
   static Directory? _cacheDir;
 
   Future<Directory> _getCacheDir() => provider.pathUtil
-      .getTemporaryDirectory(subNamespace: 'cloud_storage_cache');
+      .getApplicationSupportDirectory(subNamespace: 'cloud_storage_cache');
 
   final CloudStorageProvider provider;
 
@@ -90,7 +90,7 @@ class FileSourceCloudStorage extends FileSource {
     final metadataFile = _cacheMetadataFile(cacheDir);
     final kdbxFile = _cacheKdbxFile(cacheDir);
     try {
-      if (metadataFile.existsSync()) {
+      if (metadataFile.existsSync() && kdbxFile.existsSync()) {
         final cacheInfo = FileContentCached.fromJson(json
             .decode(await metadataFile.readAsString()) as Map<String, dynamic>);
         final content = await kdbxFile.readAsBytes();
@@ -99,6 +99,8 @@ class FileSourceCloudStorage extends FileSource {
               'cache file. ${content.length} vs $cacheInfo');
         }
         yield FileContent(content, cacheInfo.metadata, FileContentSource.cache);
+      }else{
+        _logger.severe('The cached kdbx file is not available!', );
       }
     } catch (e, stackTrace) {
       _logger.severe('Error while loading cached kdbx file', e, stackTrace);
