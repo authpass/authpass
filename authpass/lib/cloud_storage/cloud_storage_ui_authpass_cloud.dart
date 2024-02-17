@@ -204,7 +204,7 @@ class _ShareCreateDialogState extends State<ShareCreateDialog>
             // TODO show a 'present' dialog.
             _logger.fine('Created share token. ${response.fileToken.length}');
 
-            if (mounted) {
+            if (context.mounted) {
               context.showSnackBar(loc.shareCreateTokenSuccess);
               Navigator.of(context).pop();
             }

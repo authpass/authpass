@@ -221,7 +221,7 @@ class _GroupViewModel {
   Color? get color => file.openedFile.color;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return other is _GroupViewModel && other.group == group;
   }
 

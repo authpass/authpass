@@ -113,7 +113,9 @@ class CloudStorageAuthentication extends StatelessWidget {
               return;
             }
           }
-          // ignore: use_build_context_synchronously
+          if (!context.mounted) {
+            return;
+          }
           final code = await SimpleAuthCodePromptDialog(
             title: loc.cloudStorageAuthCodeDialogTitle(provider.displayName),
             labelText: loc.cloudStorageAuthCodeLabel,

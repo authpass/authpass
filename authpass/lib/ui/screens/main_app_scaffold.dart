@@ -11,7 +11,6 @@ import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/utils/back_button_navigator_delegate.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
@@ -101,17 +100,19 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
   @override
   void initState() {
     super.initState();
-    RawKeyboard.instance.addListener(_debugEvent);
+    // HardwareKeyboard.instance.addHandler(_debugEvent);
+    // RawKeyboard.instance.addListener(_debugEvent);
   }
 
-  void _debugEvent(RawKeyEvent ev) {
-//    final keys = RawKeyboard.instance.keysPressed.map((k) => '${k.keyId} (${k.keyLabel})');
-//    _logger.fine('Got key event. $keys');
-  }
+//   bool _debugEvent(KeyEvent ev) {
+// //    final keys = RawKeyboard.instance.keysPressed.map((k) => '${k.keyId} (${k.keyLabel})');
+// //    _logger.fine('Got key event. $keys');
+//   return false;
+//   }
 
   @override
   void dispose() {
-    RawKeyboard.instance.removeListener(_debugEvent);
+    // HardwareKeyboard.instance.removeHandler(_debugEvent);
     super.dispose();
   }
 

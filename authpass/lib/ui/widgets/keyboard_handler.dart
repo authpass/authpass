@@ -211,7 +211,7 @@ class LoggingShortcutManager extends ShortcutManager {
   LoggingShortcutManager({required super.shortcuts});
 
   @override
-  KeyEventResult handleKeypress(BuildContext context, RawKeyEvent event,
+  KeyEventResult handleKeypress(BuildContext context, KeyEvent event,
       {LogicalKeySet? keysPressed}) {
     final KeyEventResult result = super.handleKeypress(context, event);
     _logger.info('handleKeyPress($event, $keysPressed) result: $result');

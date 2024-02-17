@@ -207,7 +207,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           onPressed: asyncTaskCallback((progress) async {
                             _file!.kdbxFile.upgrade(KdbxVersion.V4.major);
                             await _kdbxBloc.saveFile(_file!.kdbxFile);
-                            if (!mounted) {
+                            if (!context.mounted) {
                               return;
                             }
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -242,10 +242,12 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                           // final log = appender.log.toString();
                           await appender.dispose();
                           // ignore: use_build_context_synchronously
-                          await LogViewerDialog(
-                            title: loc.finishedMerge(lastStatus),
-                            log: appender.log,
-                          ).open(context);
+                          if (context.mounted) {
+                            await LogViewerDialog(
+                              title: loc.finishedMerge(lastStatus),
+                              log: appender.log,
+                            ).open(context);
+                          }
                         }
                       }),
                     ),
