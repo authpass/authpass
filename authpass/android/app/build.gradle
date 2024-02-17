@@ -1,14 +1,15 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
-}
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -31,10 +32,6 @@ if (secretPropertiesFile.exists()) {
 } else {
     System.err.println("secrets not found at ${secretPropertiesFile.absolutePath}")
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 kotlin {
     jvmToolchain(17)
@@ -78,7 +75,7 @@ android {
         }
     }
 
-    flavorDimensions "hpdist"
+    flavorDimensions = ["hpdist"]
 
     productFlavors {
         samsungapps {
@@ -164,16 +161,16 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
 
-    implementation "androidx.appcompat:appcompat:1.4.2"
-    implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.fragment:fragment-ktx:1.6.2"
 
     // logging
-    implementation "org.slf4j:slf4j-api:1.7.30"
+    implementation "org.slf4j:slf4j-api:2.0.7"
     implementation "io.github.microutils:kotlin-logging:1.7.6"
-    implementation "uk.uuid.slf4j:slf4j-android:1.7.28-0"
+    implementation "uk.uuid.slf4j:slf4j-android:2.0.7-0"
 
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
