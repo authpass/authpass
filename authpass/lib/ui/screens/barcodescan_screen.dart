@@ -1,7 +1,8 @@
 import 'package:authpass/utils/constants.dart';
 // import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:flutter/material.dart';
-import 'package:flutter_zxing/flutter_zxing.dart';
+// import 'package:flutter_zxing/flutter_zxing.dart';
+import 'package:zxing_scanner/zxing_scanner.dart' as zxing;
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -85,64 +86,105 @@ class BarcodeScanScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(titleText),
       ),
-      body: ReaderWidget(
-        codeFormat: formats.toIntValue(),
-        scannerOverlay: const DynamicScannerOverlay(
-          cutOutSize: 0.8,
-        ),
-        onScan: (result) {
-          _logger.fine('scanned: $result');
-          if (result.isValid) {
-            final scanResult = ScanResultValid(
-              barcode: (
-                isValid: true,
-                text: result.text ?? CharConstants.empty,
-                format: BarcodeFormat.mapping[result.format ?? 0] ??
-                    BarcodeFormat.unknown,
-              ),
-            );
-            Navigator.of(context).pop(scanResult);
+      body: zxing.ScanView(
+        onResult: (result) {
+          _logger.fine('got result: $result');
+          for (final r in result) {
+            if (r.text.isNotEmpty) {
+              final scanResult = ScanResultValid(
+                barcode: (
+                  isValid: true,
+                  text: r.text,
+                  format: r.barcodeFormat.toMyFormat(),
+                ),
+              );
+              Navigator.of(context).pop(scanResult);
+            }
           }
         },
       ),
+      // body: ReaderWidget(
+      //   codeFormat: formats.toIntValue(),
+      //   scannerOverlay: const DynamicScannerOverlay(
+      //     cutOutSize: 0.8,
+      //   ),
+      //   onScan: (result) {
+      //     _logger.fine('scanned: $result');
+      //     if (result.isValid) {
+      //       final scanResult = ScanResultValid(
+      //         barcode: (
+      //           isValid: true,
+      //           text: result.text ?? CharConstants.empty,
+      //           format: BarcodeFormat.mapping[result.format ?? 0] ??
+      //               BarcodeFormat.unknown,
+      //         ),
+      //       );
+      //       Navigator.of(context).pop(scanResult);
+      //     }
+      //   },
+      // ),
     );
   }
 }
 
-enum BarcodeFormat {
-  unknown(0),
-  aztec(Format.aztec),
-  codabar(Format.codabar),
-  code39(Format.code39),
-  code93(Format.code93),
-  code128(Format.code128),
-  dataBar(Format.dataBar),
-  dataBarExpanded(Format.dataBarExpanded),
-  dataMatrix(Format.dataMatrix),
-  ean8(Format.ean8),
-  ean13(Format.ean13),
-  itf(Format.itf),
-  maxiCode(Format.maxiCode),
-  pdf417(Format.pdf417),
-  qrCode(Format.qrCode),
-  upca(Format.upca),
-  upce(Format.upce),
-  microQRCode(Format.microQRCode),
-  ;
-
-  const BarcodeFormat(this._formatId);
-  final int _formatId;
-  static final mapping = Map.fromIterable(
-    BarcodeFormat.values,
-    key: (e) => e._formatId,
-  );
-  static const any = BarcodeFormat.values;
+extension on zxing.BarcodeFormat {
+  BarcodeFormat toMyFormat() => switch (this) {
+        zxing.BarcodeFormat.aztec => BarcodeFormat.aztec,
+        zxing.BarcodeFormat.codabar => BarcodeFormat.codabar,
+        zxing.BarcodeFormat.code39 => BarcodeFormat.code39,
+        zxing.BarcodeFormat.code93 => BarcodeFormat.code93,
+        zxing.BarcodeFormat.code128 => BarcodeFormat.code128,
+        zxing.BarcodeFormat.dataMatrix => BarcodeFormat.dataMatrix,
+        zxing.BarcodeFormat.ean8 => BarcodeFormat.ean8,
+        zxing.BarcodeFormat.ean13 => BarcodeFormat.ean13,
+        zxing.BarcodeFormat.itf => BarcodeFormat.itf,
+        zxing.BarcodeFormat.maxicode => BarcodeFormat.maxiCode,
+        zxing.BarcodeFormat.pdf417 => BarcodeFormat.pdf417,
+        zxing.BarcodeFormat.qrCode => BarcodeFormat.qrCode,
+        zxing.BarcodeFormat.rss14 =>
+          throw UnimplementedError('Not implemented: $this'),
+        zxing.BarcodeFormat.rssExpanded =>
+          throw UnimplementedError('Not implemented: $this'),
+        zxing.BarcodeFormat.upcA => BarcodeFormat.upca,
+        zxing.BarcodeFormat.upcE => BarcodeFormat.upce,
+        zxing.BarcodeFormat.upcEanExtension => BarcodeFormat.upce,
+      };
 }
 
-extension on List<BarcodeFormat> {
-  int toIntValue() =>
-      fold(0, (previousValue, element) => previousValue | element._formatId);
-}
+// enum BarcodeFormat {
+//   unknown(0),
+//   aztec(Format.aztec),
+//   codabar(Format.codabar),
+//   code39(Format.code39),
+//   code93(Format.code93),
+//   code128(Format.code128),
+//   dataBar(Format.dataBar),
+//   dataBarExpanded(Format.dataBarExpanded),
+//   dataMatrix(Format.dataMatrix),
+//   ean8(Format.ean8),
+//   ean13(Format.ean13),
+//   itf(Format.itf),
+//   maxiCode(Format.maxiCode),
+//   pdf417(Format.pdf417),
+//   qrCode(Format.qrCode),
+//   upca(Format.upca),
+//   upce(Format.upce),
+//   microQRCode(Format.microQRCode),
+//   ;
+//
+//   const BarcodeFormat(this._formatId);
+//   final int _formatId;
+//   static final mapping = Map.fromIterable(
+//     BarcodeFormat.values,
+//     key: (e) => e._formatId,
+//   );
+//   static const any = BarcodeFormat.values;
+// }
+
+// extension on List<BarcodeFormat> {
+//   int toIntValue() =>
+//       fold(0, (previousValue, element) => previousValue | element._formatId);
+// }
 //
 // sealed class ScanResult {}
 //
@@ -160,31 +202,31 @@ extension on List<BarcodeFormat> {
 //   BarcodeFormat format,
 // });
 
-// enum BarcodeFormat {
-//   unknown(),
-//   aztec(),
-//   codabar(),
-//   code39(),
-//   code93(),
-//   code128(),
-//   dataBar(),
-//   dataBarExpanded(),
-//   dataMatrix(),
-//   ean8(),
-//   ean13(),
-//   itf(),
-//   maxiCode(),
-//   pdf417(),
-//   qrCode(),
-//   upca(),
-//   upce(),
-//   microQRCode(),
-//   ;
-//
-//   const BarcodeFormat();
-//
-//   static const any = BarcodeFormat.values;
-// }
+enum BarcodeFormat {
+  unknown(),
+  aztec(),
+  codabar(),
+  code39(),
+  code93(),
+  code128(),
+  dataBar(),
+  dataBarExpanded(),
+  dataMatrix(),
+  ean8(),
+  ean13(),
+  itf(),
+  maxiCode(),
+  pdf417(),
+  qrCode(),
+  upca(),
+  upce(),
+  microQRCode(),
+  ;
+
+  const BarcodeFormat();
+
+  static const any = BarcodeFormat.values;
+}
 
 sealed class ScanResult {}
 

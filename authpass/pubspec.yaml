@@ -153,7 +153,7 @@ dependencies:
 #    git:
 #      url: https://github.com/david-danihel/barcode_scan2.git
 #      ref: 2a3a3b859b254b6fd65031c873e62afea6a4373d
-  flutter_zxing: ^1.5.2
+  zxing_scanner: ^1.0.0
 #  flutter_zxing:
 #    git:
 #      url: https://github.com/authpass/flutter_zxing.git
