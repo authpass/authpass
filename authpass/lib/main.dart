@@ -90,15 +90,17 @@ Future<void> startApp(Env env) async {
     };
   }
 
-  FutureTaskStateMixin.defaultShowErrorDialog = (error) {
-    DialogUtils.showErrorDialog(
-      error.context,
-      error.title,
-      error.message,
-    );
-  };
-
   final navigatorKey = GlobalKey<NavigatorState>();
+
+  FutureTaskStateMixin.defaultShowErrorDialog = (error) {
+    navigatorKey.currentState?.overlay?.context.let((context) {
+      DialogUtils.showErrorDialog(
+        context,
+        error.title,
+        error.message,
+      );
+    });
+  };
 
   await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
