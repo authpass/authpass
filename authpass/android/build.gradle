@@ -3,7 +3,7 @@ if (System.getProperty("design.codeux.ndkVersion") == null) {
     if (rootProject.hasProperty('design.codeux.ndkVersion')) {
         System.setProperty("design.codeux.ndkVersion", rootProject.getProperty("design.codeux.ndkVersion"))
     } else {
-        System.setProperty("design.codeux.ndkVersion", "22.1.7171670")
+        System.setProperty("design.codeux.ndkVersion", "25.1.8937393")
     }
 }
 println("ndkVersion: ${System.getProperty("design.codeux.ndkVersion")}")
