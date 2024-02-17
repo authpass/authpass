@@ -41,7 +41,7 @@ dependencies:
   clock: ^1.1.0
   intl: ^0.18.0
   path: ^1.8.0
-  file: ^6.1.2
+  file: ^7.0.0
 #  clipboard_manager: ^0.0.4
 
   flutter_async_utils: ^1.0.0+1
