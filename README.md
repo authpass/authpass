@@ -71,3 +71,18 @@ If you like AuthPass check out the [website for ways to support us](https://auth
 * Bitcoin: 3NcBacCmJbYWpwxj6rWzpM7sx48etMrPtc
 * GitHub Sponsor: https://github.com/sponsors/hpoul (Or just hit the *Sponsor* button up top).
 
+# License
+
+AuthPass - Password Manager <hello@authpass.app>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the [GNU General Public License](LICENSE) as published by
+the Free Software Foundation **version 3** of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+Contributors must agree to [our CLA](https://cla-assistant.io/authpass/authpass).
+
