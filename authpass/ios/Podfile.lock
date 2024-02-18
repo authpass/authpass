@@ -11,11 +11,9 @@ PODS:
     - Flutter
   - autofill_service (0.0.1):
     - Flutter
-  - barcode_scan2 (0.0.1):
-    - Flutter
-    - MTBBarcodeScanner
-    - SwiftProtobuf
   - biometric_storage (0.0.1):
+    - Flutter
+  - camera_avfoundation (0.0.1):
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
@@ -44,7 +42,6 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
-  - MTBBarcodeScanner (5.0.11)
   - open_file (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
@@ -60,7 +57,6 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FlutterMacOS
-  - SwiftProtobuf (1.22.1)
   - url_launcher_ios (0.0.1):
     - Flutter
   - video_player_avfoundation (0.0.1):
@@ -75,8 +71,8 @@ DEPENDENCIES:
   - argon2_ffi (from `.symlinks/plugins/argon2_ffi/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - autofill_service (from `.symlinks/plugins/autofill_service/ios`)
-  - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - biometric_storage (from `.symlinks/plugins/biometric_storage/ios`)
+  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - file_selector_ios (from `.symlinks/plugins/file_selector_ios/ios`)
@@ -103,8 +99,6 @@ SPEC REPOS:
     - GoogleSignIn
     - GTMAppAuth
     - GTMSessionFetcher
-    - MTBBarcodeScanner
-    - SwiftProtobuf
 
 EXTERNAL SOURCES:
   argon2_ffi:
@@ -113,10 +107,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   autofill_service:
     :path: ".symlinks/plugins/autofill_service/ios"
-  barcode_scan2:
-    :path: ".symlinks/plugins/barcode_scan2/ios"
   biometric_storage:
     :path: ".symlinks/plugins/biometric_storage/ios"
+  camera_avfoundation:
+    :path: ".symlinks/plugins/camera_avfoundation/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker_writable:
@@ -161,28 +155,26 @@ SPEC CHECKSUMS:
   argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
-  barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
+  camera_avfoundation: 759172d1a77ae7be0de08fc104cfb79738b8a59e
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   file_selector_ios: b6a6c6667913d571590169ef946afbafe3b52688
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_store_listing: 8a8514f63b41943433de5d684204ebf1edcbbfe4
-  google_sign_in_ios: 1bfaf6607b44cd1b24c4d4bc39719870440f9ce1
+  google_sign_in_ios: 989eea5abe94af62050782714daf920be883d4a2
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: 8a1b34ad97ebe6f909fb8b9b77fba99943007556
   integration_test: 13825b8a9334a850581300559b8839134b124670
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
   video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47

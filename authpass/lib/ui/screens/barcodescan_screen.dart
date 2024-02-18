@@ -1,10 +1,9 @@
-import 'package:authpass/utils/constants.dart';
 // import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:flutter/material.dart';
-// import 'package:flutter_zxing/flutter_zxing.dart';
-import 'package:zxing_scanner/zxing_scanner.dart' as zxing;
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+// import 'package:flutter_zxing/flutter_zxing.dart';
+import 'package:zxing_scanner/zxing_scanner.dart' as zxing;
 
 final _logger = Logger('barcodescan_screen');
 
