@@ -36,6 +36,7 @@ import 'package:collection/collection.dart';
 import 'package:diac_client/diac_client.dart';
 import 'package:file/local.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -80,6 +81,8 @@ Future<void> startApp(Env env) async {
     }));
   }
 
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   if (env.overrideFlutterOnError) {
     FlutterError.onError = (errorDetails) {
       _logger.shout(
@@ -91,8 +94,6 @@ Future<void> startApp(Env env) async {
     };
   }
 
-  final navigatorKey = GlobalKey<NavigatorState>();
-
   FutureTaskStateMixin.defaultShowErrorDialog = (error) {
     navigatorKey.currentState?.overlay?.context.let((context) {
       DialogUtils.showErrorDialog(
@@ -103,18 +104,7 @@ Future<void> startApp(Env env) async {
     });
   };
 
-  await runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final deps = Deps(env: env);
-    deps.kdbxBloc.delegate = KdbxBlocDelegateHandler(navigatorKey);
-    final appData = await deps.appDataBloc.store.load();
-    runApp(AuthPassApp(
-      env: env,
-      deps: deps,
-      navigatorKey: navigatorKey,
-      isFirstRun: appData.previousFiles.isEmpty,
-    ));
-  }, (dynamic error, StackTrace stackTrace) {
+  PlatformDispatcher.instance.onError = (error, stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     final errorString =
         error is Exception ? error.toStringWithCause() : error.toString();
@@ -128,13 +118,18 @@ Future<void> startApp(Env env) async {
       }
       DialogUtils.showErrorDialog(context, null, message);
     });
-  }, zoneSpecification: ZoneSpecification(
-    fork: (Zone self, ZoneDelegate parent, Zone zone,
-        ZoneSpecification? specification, Map<dynamic, dynamic>? zoneValues) {
-      // ignore: avoid_print
-      print('Forking zone.'); // NON-NLS
-      return parent.fork(zone, specification, zoneValues);
-    },
+    return true;
+  };
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final deps = Deps(env: env);
+  deps.kdbxBloc.delegate = KdbxBlocDelegateHandler(navigatorKey);
+  final appData = await deps.appDataBloc.store.load();
+  runApp(AuthPassApp(
+    env: env,
+    deps: deps,
+    navigatorKey: navigatorKey,
+    isFirstRun: appData.previousFiles.isEmpty,
   ));
 }
 

@@ -228,11 +228,17 @@ class GoogleDriveProvider extends CloudStorageProvider
   }
 
   Future<Client> requireAuthenticatedClient() async {
-    _logger.fine('Getting authenticated client from googleSignIn');
+    _logger.fine(
+        'Getting authenticated client from googleSignIn (currentUser == null: ${googleSignIn.currentUser == null})');
+    if (googleSignIn.currentUser == null) {
+      final signedIn = await googleSignIn.signInSilently();
+      _logger.fine(
+          'signedIn: ${signedIn != null} (currentUser == null: ${googleSignIn.currentUser == null})');
+    }
     final authClient = await googleSignIn.authenticatedClient();
     if (authClient == null) {
       throw LoadFileException(
-          'Unable to use google sign in for authenticated client.');
+          'Unable to (re)sign in to google drive using Google Sign-In.');
     }
     return authClient;
   }
