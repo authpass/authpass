@@ -89,6 +89,7 @@ class FileSourceCloudStorage extends FileSource {
     final cacheDir = _cacheDir ??= await _getCacheDir();
     final metadataFile = _cacheMetadataFile(cacheDir);
     final kdbxFile = _cacheKdbxFile(cacheDir);
+    bool yieldedCachedVersion = false;
     try {
       if (metadataFile.existsSync()) {
         final cacheInfo = FileContentCached.fromJson(json
@@ -99,6 +100,7 @@ class FileSourceCloudStorage extends FileSource {
               'cache file. ${content.length} vs $cacheInfo');
         }
         yield FileContent(content, cacheInfo.metadata, FileContentSource.cache);
+        yieldedCachedVersion = true;
       }
     } catch (e, stackTrace) {
       _logger.severe('Error while loading cached kdbx file', e, stackTrace);
@@ -110,6 +112,12 @@ class FileSourceCloudStorage extends FileSource {
       final freshContent = await provider.loadFile(fileInfo);
       yield freshContent;
       unawaited(_writeCache(freshContent));
+    } on LoadFileException catch (e, stackTrace) {
+      _logger.severe('Error while loading file from provider ${toString()}', e,
+          stackTrace);
+      throw LoadFileException(
+          'Error while loading from cloud storage. Using cached version for ${toStringDisplay()}',
+          cause: (e, stackTrace));
     } catch (e, stackTrace) {
       _logger.severe('Error while loading file from provider ${toString()}', e,
           stackTrace);

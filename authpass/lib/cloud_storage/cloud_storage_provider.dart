@@ -5,6 +5,7 @@ import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -18,14 +19,22 @@ part 'cloud_storage_provider.g.dart';
 
 final _logger = Logger('authpass.cloud_storage_provider');
 
-class LoadFileException implements Exception {
-  LoadFileException(this.message);
+typedef ExceptionCause = (Exception exception, StackTrace stackTrace);
+
+class ExceptionWithCause implements Exception {
+  ExceptionWithCause(this.message, {this.cause});
+
   final String message;
+  final ExceptionCause? cause;
 
   @override
   String toString() {
-    return 'LoadFileException{message: $message}'; // NON-NLS
+    return '$runtimeType{message: $message${cause?.let((c) => ', ${c.$1}')}'; // NON-NLS
   }
+}
+
+class LoadFileException extends ExceptionWithCause implements Exception {
+  LoadFileException(super.message, {super.cause});
 }
 
 class LoadFileNotFoundException extends LoadFileException {

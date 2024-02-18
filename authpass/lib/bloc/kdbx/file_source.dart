@@ -125,6 +125,9 @@ abstract class FileSource {
         'displayPath': displayPath
       };
 
+  @NonNls
+  String toStringDisplay() => '[$displayName]($displayPath)';
+
   @override
   String toString() {
     return toDebugMap().toString();
