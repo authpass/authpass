@@ -27,9 +27,13 @@ class Analytics {
   }
 
   @NonNls
-  static void trackError(@NonNls String description, bool fatal) {
-    final e =
-        matomo.EventInfo(category: 'log', action: 'error', name: description);
+  static void trackError(
+      ErrorSource source, @NonNls String description, bool fatal) {
+    final e = matomo.EventInfo(
+      category: 'log',
+      action: source.eventAction,
+      name: description,
+    );
     _errorMatomo?.trackEvent(eventInfo: e);
   }
 
@@ -512,4 +516,14 @@ enum AttachmentAddType {
 extension ContextEvents on BuildContext {
   AnalyticsEvents get events =>
       Provider.of<Analytics>(this, listen: false).events;
+}
+
+enum ErrorSource {
+  flutter('errorFlutter'),
+  dart('errorDart'),
+  app('errorApp'),
+  ;
+
+  const ErrorSource(@NonNls this.eventAction);
+  final String eventAction;
 }

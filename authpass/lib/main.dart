@@ -90,7 +90,8 @@ Future<void> startApp(Env env) async {
           errorDetails.exception,
           errorDetails.stack);
       _logger.fine(errorDetails.summary.toString());
-      Analytics.trackError(errorDetails.summary.toString(), true);
+      Analytics.trackError(
+          ErrorSource.flutter, errorDetails.summary.toString(), true);
     };
   }
 
@@ -108,7 +109,7 @@ Future<void> startApp(Env env) async {
     _logger.shout('Unhandled error in app.', error, stackTrace);
     final errorString =
         error is Exception ? error.toStringWithCause() : error.toString();
-    Analytics.trackError(error.toString(), true);
+    Analytics.trackError(ErrorSource.dart, error.toString(), true);
     navigatorKey.currentState?.overlay?.context.let((context) {
       String? message = 'Unexpected error: $errorString'; // NON-NLS
       try {
@@ -278,7 +279,8 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         })
         ..registerErrorEventHandler((errorEvent) async {
           _logger.severe('Error received from file picker. $errorEvent');
-          Analytics.trackError('FilePickerWritable: $errorEvent', false);
+          Analytics.trackError(
+              ErrorSource.app, 'FilePickerWritable: $errorEvent', false);
           return true;
         });
     } else {
