@@ -43,6 +43,7 @@ import 'package:flutter_store_listing/flutter_store_listing.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -115,12 +116,13 @@ Future<void> startApp(Env env) async {
     ));
   }, (dynamic error, StackTrace stackTrace) {
     _logger.shout('Unhandled error in app.', error, stackTrace);
+    final errorString =
+        error is Exception ? error.toStringWithCause() : error.toString();
     Analytics.trackError(error.toString(), true);
     navigatorKey.currentState?.overlay?.context.let((context) {
-      String? message = 'Unexpected error: $error'; // NON-NLS
+      String? message = 'Unexpected error: $errorString'; // NON-NLS
       try {
-        message =
-            AppLocalizations.of(context).unexpectedError(error.toString());
+        message = AppLocalizations.of(context).unexpectedError(errorString);
       } catch (e, stackTrace) {
         _logger.fine('Error while localizing error message', e, stackTrace);
       }

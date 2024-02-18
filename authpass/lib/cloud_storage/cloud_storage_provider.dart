@@ -21,20 +21,19 @@ final _logger = Logger('authpass.cloud_storage_provider');
 
 typedef ExceptionCause = (Exception exception, StackTrace stackTrace);
 
-class ExceptionWithCause implements Exception {
-  ExceptionWithCause(this.message, {this.cause});
+class ExceptionWithMessage implements Exception {
+  ExceptionWithMessage(this.message);
 
   final String message;
-  final ExceptionCause? cause;
 
   @override
   String toString() {
-    return '$runtimeType{message: $message${cause?.let((c) => ', ${c.$1}')}'; // NON-NLS
+    return '$runtimeType{message: $message}'; // NON-NLS
   }
 }
 
-class LoadFileException extends ExceptionWithCause implements Exception {
-  LoadFileException(super.message, {super.cause});
+class LoadFileException extends ExceptionWithMessage implements Exception {
+  LoadFileException(super.message);
 }
 
 class LoadFileNotFoundException extends LoadFileException {

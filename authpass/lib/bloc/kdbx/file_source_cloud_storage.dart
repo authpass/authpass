@@ -8,6 +8,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:clock/clock.dart';
 import 'package:file/file.dart';
 import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
 final _logger = Logger('file_source_cloud_storage');
@@ -116,8 +117,8 @@ class FileSourceCloudStorage extends FileSource {
       _logger.severe('Error while loading file from provider ${toString()}', e,
           stackTrace);
       throw LoadFileException(
-          'Error while loading from cloud storage. Using cached version for ${toStringDisplay()}',
-          cause: (e, stackTrace));
+              'Error while loading from cloud storage. Using cached version for ${toStringDisplay()}')
+          .causedBy(e, stackTrace);
     } catch (e, stackTrace) {
       _logger.severe('Error while loading file from provider ${toString()}', e,
           stackTrace);
