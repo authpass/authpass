@@ -5,7 +5,6 @@ import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/env/_base.dart';
-import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/path_util.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';

@@ -117,7 +117,7 @@ class FileSourceCloudStorage extends FileSource {
       _logger.severe('Error while loading file from provider ${toString()}', e,
           stackTrace);
       throw LoadFileException(
-              'Error while loading from cloud storage. Using cached version for ${toStringDisplay()}')
+              'Error while loading from cloud storage. ${toStringDisplay()} ${yieldedCachedVersion ? 'Using cached version!' : ''}')
           .causedBy(e, stackTrace);
     } catch (e, stackTrace) {
       _logger.severe('Error while loading file from provider ${toString()}', e,
