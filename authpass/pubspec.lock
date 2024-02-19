@@ -135,6 +135,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  barcode_scan2:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "2a3a3b859b254b6fd65031c873e62afea6a4373d"
+      resolved-ref: "2a3a3b859b254b6fd65031c873e62afea6a4373d"
+      url: "https://github.com/david-danihel/barcode_scan2.git"
+    source: git
+    version: "4.2.4"
   base32:
     dependency: "direct main"
     description:
@@ -263,46 +272,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  camera:
-    dependency: transitive
-    description:
-      name: camera
-      sha256: "9499cbc2e51d8eb0beadc158b288380037618ce4e30c9acbc4fae1ac3ecb5797"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.5+9"
-  camera_android:
-    dependency: transitive
-    description:
-      name: camera_android
-      sha256: "351429510121d179b9aac5a2e8cb525c3cd6c39f4d709c5f72dfb21726e52371"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.8+16"
-  camera_avfoundation:
-    dependency: transitive
-    description:
-      name: camera_avfoundation
-      sha256: "7d0763dfcbf060f56aa254a68c103210280bee9e97bbe4fdef23e257a4f70ab9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.14"
-  camera_platform_interface:
-    dependency: transitive
-    description:
-      name: camera_platform_interface
-      sha256: fceb2c36038b6392317b1d5790c6ba9e6ca9f1da3031181b8bea03882bf9387a
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.7.3"
-  camera_web:
-    dependency: transitive
-    description:
-      name: camera_web
-      sha256: f18ccfb33b2a7c49a52ad5aa3f07330b7422faaecbdfd9b9fe8e51182f6ad67d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.2+4"
   characters:
     dependency: transitive
     description:
@@ -319,14 +288,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
-  charset:
-    dependency: transitive
-    description:
-      name: charset
-      sha256: "27802032a581e01ac565904ece8c8962564b1070690794f0072f6865958ce8b9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -742,14 +703,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.19"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      sha256: b068ffc46f82a55844acfa4fdbb61fad72fa2aef0905548419d97f0f95c456da
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.17"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -2216,22 +2169,6 @@ packages:
       url: "https://github.com/authpass/zxcvbn-dart.git"
     source: git
     version: "0.0.1"
-  zxing_lib:
-    dependency: transitive
-    description:
-      name: zxing_lib
-      sha256: "870a63610be3f20009ca9201f7ba2d53d7eaefa675c154b3e8c1f6fc55984d04"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.2"
-  zxing_scanner:
-    dependency: "direct main"
-    description:
-      name: zxing_scanner
-      sha256: cbbf7217c5afdb17187041d9bfcb908c5dbc58d926a8dbe326f2796bb9112bdb
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
 sdks:
   dart: ">=3.3.0-279.1.beta <4.0.0"
   flutter: ">=3.16.6"
