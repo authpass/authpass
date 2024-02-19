@@ -531,10 +531,9 @@ packages:
   file_picker_writable:
     dependency: "direct main"
     description:
-      name: file_picker_writable
-      sha256: bb7ad0ec8b7f0cc1df668538114319a5bcd6be506dce60a54b87ad64fbdbb6ab
-      url: "https://pub.dev"
-    source: hosted
+      path: "/Users/herbert/dev/flutter/file_picker_writable"
+      relative: false
+    source: path
     version: "2.1.0+1"
   file_selector:
     dependency: "direct main"

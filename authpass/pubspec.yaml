@@ -28,7 +28,8 @@ dependencies:
 
   synchronized: ^3.0.0
   base32: ^2.1.1
-  file_picker_writable: ^2.1.0+1
+  file_picker_writable: #^2.1.0+1
+    path: /Users/herbert/dev/flutter/file_picker_writable
   json_annotation: ^4.5.0
   freezed_annotation: ^2.0.3
   built_value: ^8.0.6
