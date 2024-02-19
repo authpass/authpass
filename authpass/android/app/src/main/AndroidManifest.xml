@@ -37,10 +37,14 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <!-- enableOnBackInvokedCallback not working with FlutterFragmentActivity
+    https://github.com/flutter/engine/pull/44865
+    https://github.com/flutter/flutter/issues/109558
+    -->
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:enableOnBackInvokedCallback="true"
+        android:enableOnBackInvokedCallback="false"
         android:fullBackupContent="@xml/backup_descriptor"
         tools:targetApi="tiramisu">
         <activity

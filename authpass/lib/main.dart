@@ -417,6 +417,12 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
           }
           return ret;
         },
+        // onNavigationNotification: (notification) {
+        //   _logger.fine(
+        //       'onNavigationNotification: canHandlePop:${notification.canHandlePop} ()');
+        //   SystemNavigator.setFrameworkHandlesBack(notification.canHandlePop);
+        //   return true;
+        // },
         onGenerateInitialRoutes: (initialRoute) {
           _logger.fine('initialRoute: $initialRoute');
           _deps.analytics.trackScreen(initialRoute);
