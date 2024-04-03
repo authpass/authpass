@@ -6,9 +6,11 @@ list(APPEND FLUTTER_PLUGIN_LIST
   argon2_ffi
   biometric_storage
   file_selector_linux
+  flutter_secure_storage_linux
   hotkey_manager
   url_launcher_linux
   window_manager
+  window_to_front
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
