@@ -14,10 +14,13 @@ import 'package:authpass/utils/platform.dart';
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+
+import 'google_sign_in/platform/google_sign_in_platform_windows.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
 
@@ -27,6 +30,10 @@ const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 class GoogleDriveProvider extends CloudStorageProvider
     implements CloudStorageCustomLoginButtonAdapter {
   GoogleDriveProvider({required this.env, required super.helper}) {
+    if(AuthPassPlatform.isWindows
+    || AuthPassPlatform.isLinux){
+      GoogleSignInPlatform.instance = GoogleSignInPlatformWindow(secret: env.secrets!.googleClientSecret!);
+    }
     googleSignIn.onCurrentUserChanged
         .listen((final account) => _checkAuthentication());
   }

@@ -208,6 +208,9 @@ dependencies:
     git:
       url: https://github.com/authpass/window_manager.git
       ref: remove-web
+  flutter_web_auth_2: ^3.1.1
+  google_sign_in_platform_interface: ^2.4.5
+  flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
   integration_test:
