@@ -71,12 +71,12 @@ dependencies:
   autofill_service:
     path: ../deps/autofill_service
 
-  flutter_colorpicker: ^1.0.3
+  flutter_colorpicker: ^1.1.0
   flutter_speed_dial: ^7.0.0
   flutter_email_sender: ^6.0.1
   flutter_store_listing: ^0.3.0+1
 
-  biometric_storage: ^5.0.0+3
+  biometric_storage: ^5.0.1
   uuid: ^4.3.3
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0
