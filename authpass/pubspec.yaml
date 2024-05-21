@@ -48,22 +48,27 @@ dependencies:
 
   flutter_async_utils: ^1.0.0+1
   flutter_svg: ^2.0.0
+#  matomo_tracker: ^5.0.0-dev.2
+
   matomo_tracker: #^4.0.0
     git:
-      url: https://github.com/hpoul/matomo-tracker.git
-      ref: uuid-dep-update
+      url: https://github.com/Floating-Dartists/matomo-tracker.git
+      ref: ff10c2c52d2e7cc2fd4688ab4e87eebb5d3931ae
+#    git:
+#      url: https://github.com/hpoul/matomo-tracker.git
+#      ref: uuid-dep-update
 #  #usage: ^3.4.1
 #  usage:
 #    git:
 #      url: https://github.com/hpoul/usage.git
 #      ref: custom-user-agent-rebased
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.0
 #  package_info: ^0.4.0+13
 #  package_info_macos:
 #    git:
 #      url: https://github.com/authpass/package_info_macos.git
 ##    path: ../deps/package_info_macos
-  device_info_plus: ^9.0.0
+  device_info_plus: ^10.1.0
   path_provider: ^2.0.1
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
@@ -74,8 +79,8 @@ dependencies:
 
   flutter_colorpicker: ^1.1.0
   flutter_speed_dial: ^7.0.0
-  flutter_email_sender: ^6.0.1
-  flutter_store_listing: ^0.3.0+1
+  flutter_email_sender: ^6.0.3
+  flutter_store_listing: ^1.0.0
 
   biometric_storage: ^5.0.1
   uuid: ^4.3.3
@@ -181,7 +186,7 @@ dependencies:
   ffi: ^2.1.0
   # AuthPass Cloud email deps
   enough_mail: ^2.1.6
-  flutter_widget_from_html: ^0.14.11
+  flutter_widget_from_html: ^0.15.0
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
 #      url: https://github.com/Sub6Resources/flutter_html.git
@@ -197,10 +202,10 @@ dependencies:
     git:
       url: https://github.com/authpass/winsparkle_flutter.git
       ref: c5154e337e8cf7091a629b7dcdbaf44aea194374
-  share_plus: ^7.0.2
+  share_plus: ^9.0.0
   collection: ^1.15.0-nullsafety.4
 
-  flutter_markdown: ^0.6.5
+  flutter_markdown: ^0.7.1
 
   hotkey_manager: #^0.1.8
     git:
