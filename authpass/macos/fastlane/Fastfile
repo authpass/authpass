@@ -16,6 +16,7 @@
 default_platform(:mac)
 
 keychain_password = SecureRandom.base64
+keychain_name = ENV["MATCH_KEYCHAIN_NAME"] || "authpasskeychain"
 
 platform :mac do
   desc "Description of what the lane does"
@@ -31,7 +32,7 @@ platform :mac do
 
     # https://docs.travis-ci.com/user/common-build-problems/#fastlane
     create_keychain(
-      name: ENV["MATCH_KEYCHAIN_NAME"],
+      name: keychain_name,
       password: keychain_password,
       default_keychain: false,
       unlock: true,
@@ -41,7 +42,7 @@ platform :mac do
 
     match(
       type: "appstore",
-      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_name: keychain_name,
       keychain_password: keychain_password,
       additional_cert_types: "mac_installer_distribution",
       readonly: true
