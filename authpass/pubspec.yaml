@@ -4,7 +4,7 @@ publish_to: none
 version: 1.9.12+166
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.19.0
   path: ^1.8.0
   file: ^7.0.0
+  web: ^0.5.1
 #  clipboard_manager: ^0.0.4
 
   flutter_async_utils: ^1.0.0+1
@@ -82,7 +83,7 @@ dependencies:
   flutter_email_sender: ^6.0.3
   flutter_store_listing: ^1.0.0
 
-  biometric_storage: ^5.0.1
+  biometric_storage: ^5.1.0-rc.3
   uuid: ^4.3.3
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0

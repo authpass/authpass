@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:argon2_ffi_base/argon2_ffi_base.dart';
@@ -13,8 +14,8 @@ class FlutterArgon2 extends Argon2 {
   @override
   Future<Uint8List> argon2Async(Argon2Arguments args) {
     return argon2BrowserHash(Argon2BrowserOptions(
-      pass: args.key,
-      salt: args.salt,
+      pass: args.key.toJS,
+      salt: args.salt.toJS,
       time: args.iterations,
       mem: args.memory,
       hashLen: args.length,

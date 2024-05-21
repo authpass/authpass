@@ -1,12 +1,11 @@
 import 'dart:convert';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:authpass/bloc/kdbx/file_content.dart';
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:web/web.dart' as web;
 
 class FileSourceWeb extends FileSource {
   FileSourceWeb({
@@ -60,11 +59,11 @@ class _SimpleKeyValueStore {
   void _init() {}
 
   Future<void> write(String key, Uint8List bytes) async {
-    window.localStorage[key] = base64.encode(bytes);
+    web.window.localStorage.setItem(key, base64.encode(bytes));
   }
 
   Future<Uint8List> read(String key) async {
-    final value = window.localStorage[key];
+    final value = web.window.localStorage.getItem(key);
     if (value == null) {
       throw LoadFileNotFoundException('not found.');
     }

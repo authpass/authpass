@@ -1,8 +1,7 @@
 @JS('argon2')
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
-
-import 'package:js/js.dart';
 
 import 'package:logging/logging.dart';
 
@@ -17,31 +16,32 @@ Future<Uint8List> argon2BrowserHash(Argon2BrowserOptions options) {
   _logger.info('calling argon2.');
   final result = argon2BrowserHashInternal(options);
   _logger.info('called.');
-  result.then(allowInterop((Argon2Result result) {
-    _logger.info('got some result ${result.runtimeType}');
-    _logger.info('got some result ${result.hash.runtimeType}');
-    final dynamic hash = result.hash;
-    if (hash is Uint8List) {
-      _logger.info('great, uint8list');
-      completer.complete(hash);
-    } else if (hash is List) {
-      final intList = hash.cast<int>();
-
-      completer.complete(Uint8List.fromList(intList));
-    }
-  }), allowInterop((dynamic error) {
-    _logger.info('got some error.', error);
-    completer.completeError(error as Object);
-  }));
+  result.then(
+      ((Argon2Result result) {
+        _logger.info('got some result ${result.runtimeType}');
+        _logger.info('got some result ${result.hash.runtimeType}');
+        final hash = result.hash.toDart.asUint8List();
+        // if (hash is Uint8List) {
+        //   _logger.info('great, uint8list');
+        //   completer.complete(hash);
+        // } else if (hash is List) {
+        //   final intList = hash.cast<int>();
+        //
+        //   completer.complete(Uint8List.fromList(intList));
+        // }
+        completer.complete(hash);
+      }).toJS,
+      ((JSObject error) {
+        _logger.info('got some error.', error);
+        completer.completeError(error as Object);
+      }).toJS);
   return completer.future;
 }
 
-@JS()
-@anonymous
-class Argon2BrowserOptions {
+extension type Argon2BrowserOptions._(JSObject o) implements JSObject {
   external factory Argon2BrowserOptions({
-    required List<int> pass,
-    required List<int> salt,
+    required JSUint8Array pass,
+    required JSUint8Array salt,
     int time,
     int mem,
     int hashLen,
@@ -49,8 +49,8 @@ class Argon2BrowserOptions {
     int type,
   });
 
-  external List<int> get pass;
-  external List<int> get salt;
+  external JSUint8Array get pass;
+  external JSUint8Array get salt;
   external int get time;
   external int get mem;
   external int get hashLen;
@@ -58,19 +58,17 @@ class Argon2BrowserOptions {
   external int get type;
 }
 
-@JS()
-@anonymous
-class Argon2Result {
-  external dynamic get hash;
-  external dynamic get encoded;
+extension type Argon2Result._(JSObject o) implements JSObject {
+  external JSArrayBuffer get hash;
+  external JSArrayBuffer get encoded;
 }
 
 @JS('Promise')
-class PromiseJsImpl<T> {
-  external PromiseJsImpl(Function resolver);
+extension type PromiseJsImpl<T>._(JSObject _) implements JSObject {
+  external PromiseJsImpl(JSExportedDartFunction resolver);
 
   external PromiseJsImpl<dynamic> then([
-    void Function(T result) onResolve,
-    void Function(dynamic) onReject,
+    JSExportedDartFunction onResolve,
+    JSExportedDartFunction onReject,
   ]);
 }

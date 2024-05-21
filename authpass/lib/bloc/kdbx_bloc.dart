@@ -10,10 +10,10 @@ import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx/file_source_cloud_storage.dart';
 import 'package:authpass/bloc/kdbx/file_source_local.dart';
 import 'package:authpass/bloc/kdbx/file_source_web_none.dart'
-    if (dart.library.html) 'package:authpass/bloc/kdbx/file_source_web.dart';
+    if (dart.library.js_interop) 'package:authpass/bloc/kdbx/file_source_web.dart';
 import 'package:authpass/bloc/kdbx/storage_exception.dart';
 import 'package:authpass/bloc/kdbx_argon2_ffi.dart'
-    if (dart.library.html) 'package:authpass/bloc/kdbx_argon2_web.dart';
+    if (dart.library.js_interop) 'package:authpass/bloc/kdbx_argon2_web.dart';
 import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';

@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
-import 'platform_noop.dart' if (dart.library.html) 'platform_web.dart';
+import 'platform_noop.dart' if (dart.library.js_interop) 'platform_web.dart';
 
 final _logger = Logger('platform');
 
