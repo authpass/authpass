@@ -2,6 +2,8 @@ platform :osx, '10.15'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+# https://github.com/fastlane/fastlane/issues/20919#issuecomment-1344976529
+ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
 
 project 'Runner', {
   'Debug' => :debug,
