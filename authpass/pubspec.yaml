@@ -15,6 +15,7 @@ dependencies:
 #  kdbx:
 #    path: ../deps/kdbx.dart
   argon2_ffi: ^1.0.0+1
+  argon2_ffi_base: ^1.1.1
   simple_form_field_validator: ^1.0.0
 #    git:
 #      url: https://github.com/hpoul/flutter_utils.git
@@ -113,16 +114,19 @@ dependencies:
   # collection utilities:
   flinq: ^2.0.2
   supercharged: ^2.0.0
+  archive: ^3.5.1
 
   string_literal_finder_annotations: ^1.0.0
 
   # WebDAV
   http_auth: ^1.0.0
+  xml: ">=5.5.0 <7.0.0"
 
   # google drive
   googleapis: ^12.0.0
   googleapis_auth: ^1.4.1
   google_sign_in: ^6.2.1
+  google_sign_in_web: ^0.12.3+2
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
 
   # dropbox
@@ -229,8 +233,7 @@ dev_dependencies:
   plugin_platform_interface: ^2.0.0
   msix: ^3.6.2
   string_literal_finder: ^1.1.0+2
-  archive: ^3.1.2
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
 dependency_overrides:
 #  ffi: ^2.0.0

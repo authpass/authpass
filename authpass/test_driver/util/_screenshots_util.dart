@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
+// ignore: depend_on_referenced_packages
 import 'package:yaml/yaml.dart' as yaml;
 
 // ignore_for_file: avoid_print

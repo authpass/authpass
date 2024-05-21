@@ -45,7 +45,6 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_persistence/simple_json_persistence.dart';

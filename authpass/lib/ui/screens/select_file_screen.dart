@@ -45,7 +45,6 @@ import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
-import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';

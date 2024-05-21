@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 

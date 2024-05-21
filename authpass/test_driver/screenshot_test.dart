@@ -1,4 +1,5 @@
 @Timeout(Duration(minutes: 10))
+library;
 
 // example run command:
 // flutter_dev drive -d iPhone --target=test_driver/app.dart --driver=test_driver/screenshot_test.dart
