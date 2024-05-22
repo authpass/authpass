@@ -155,8 +155,8 @@ ThemeData createDarkTheme() {
     colorScheme: colorScheme,
     primarySwatch: AuthPassTheme.primarySwatch,
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
+      fillColor:
+          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
           return null;
         }
@@ -167,8 +167,8 @@ ThemeData createDarkTheme() {
       }),
     ),
     radioTheme: RadioThemeData(
-      fillColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
+      fillColor:
+          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
           return null;
         }
@@ -179,8 +179,8 @@ ThemeData createDarkTheme() {
       }),
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
+      thumbColor:
+          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
           return null;
         }
@@ -189,8 +189,8 @@ ThemeData createDarkTheme() {
         }
         return null;
       }),
-      trackColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
+      trackColor:
+          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
           return null;
         }
