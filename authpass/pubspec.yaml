@@ -172,7 +172,7 @@ dependencies:
 #      ref: 036c3e387d32d3c8b2f5b3a3ebedb55c6eb69c30
   # https://github.com/crazecoder/open_file/pull/258
   # TODO: If update is available, remove namespace workaround from build.gradle
-  open_file: ^3.3.2
+  open_filex: ^4.4.0
 #  open_file:
 #    git:
 #      url: https://github.com/kishormainali/open_file.git

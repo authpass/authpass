@@ -1247,14 +1247,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0+6"
-  open_file:
+  open_filex:
     dependency: "direct main"
     description:
-      name: open_file
-      sha256: a5a32d44acb7c899987d0999e1e3cbb0a0f1adebbf41ac813ec6d2d8faa0af20
+      name: open_filex
+      sha256: "74e2280754cf8161e860746c3181db2c996d6c1909c7057b738ede4a469816b8"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "4.4.0"
   openapi_base:
     dependency: "direct main"
     description:
