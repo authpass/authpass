@@ -23,7 +23,7 @@ jobs:
       - run: |
           cd authpass
           ~/deps/flutter/bin/flutter pub get
-          ~/deps/flutter/bin/flutter analyze
+#          ~/deps/flutter/bin/flutter analyze
           _tools/run_analyse.sh
         id: analyse
 #      - uses: LouisBrunner/checks-action@v0.1.0
