@@ -17,7 +17,7 @@ The actual translations are handled by the crowdin platform at: <https://transla
 
 If you want to contribute new translations:
 
-1. check if your lanuage already exists at: <https://translate.authpass.app/authpass>
+1. check if your language already exists at: <https://translate.authpass.app/authpass>
 2. If not, join [our discord channel and ping @hpoul](https://authpass.app/go/discord)
 
 ## New strings
@@ -38,7 +38,7 @@ If you have never used Flutter before you might [want to walk through a few code
 ## Cloning/Forking
 
 AuthPass makes [heavy use of submodules right now](https://github.com/authpass/authpass/blob/master/.gitmodules). If you fork the repository you might experience a few
-permission denied errors when you clone using ssh. To work around those you might need to add the follwing to your `~/.gitconfig`:
+permission denied errors when you clone using ssh. To work around these SSH permission errors you might need to add the following to your `~/.gitconfig`:
 
 ```
 [url "https://github.com/"]
@@ -84,7 +84,7 @@ flutter run --target=lib/env/development.dart --flavor=playstore
 
 # Code Style
 
-Make sure to follow common Dart coding conventions, and follow all lints provided
+Make sure to follow common Dart coding conventions and follow all lints provided
 by `analysis_options.yaml` and [activate auto-formatting](https://flutter.dev/docs/development/tools/formatting) using `dartfmt`.
 
 # CLA - Contributor License Agreement
