@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../deps/autofill_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../flutter/flutter" vcs="Git" />
   </component>
 </project>
