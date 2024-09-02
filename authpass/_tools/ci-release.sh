@@ -37,8 +37,7 @@ if test "$target_platform" == "ios" ; then
     set -x
 
     # no need for calling fastlane match, will be done during `fastlane beta`
-    # do it, to fail fast if something goes wrong.
-    cd ios && fastlane match appstore --readonly && cd ..
+    #cd ios && fastlane match appstore --readonly && cd ..
 
     # make sure cocoapods is up to date.
     pod repo update
