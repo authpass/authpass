@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.6.2):
-    - AppAuth/Core (= 1.6.2)
-    - AppAuth/ExternalUserAgent (= 1.6.2)
-  - AppAuth/Core (1.6.2)
-  - AppAuth/ExternalUserAgent (1.6.2):
+  - AppAuth (1.7.5):
+    - AppAuth/Core (= 1.7.5)
+    - AppAuth/ExternalUserAgent (= 1.7.5)
+  - AppAuth/Core (1.7.5)
+  - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
   - argon2_ffi (0.0.1):
     - Flutter
@@ -29,23 +29,29 @@ PODS:
   - flutter_store_listing (0.0.1):
     - Flutter
   - google_sign_in_ios (0.0.1):
+    - AppAuth (>= 1.7.4)
     - Flutter
     - FlutterMacOS
-    - GoogleSignIn (~> 7.0)
-  - GoogleSignIn (7.0.0):
-    - AppAuth (~> 1.5)
-    - GTMAppAuth (< 3.0, >= 1.3)
-    - GTMSessionFetcher/Core (< 4.0, >= 1.1)
-  - GTMAppAuth (2.0.0):
-    - AppAuth/Core (~> 1.6)
-    - GTMSessionFetcher/Core (< 4.0, >= 1.5)
-  - GTMSessionFetcher/Core (3.3.1)
+    - GoogleSignIn (~> 7.1)
+    - GTMSessionFetcher (>= 3.4.0)
+  - GoogleSignIn (7.1.0):
+    - AppAuth (< 2.0, >= 1.7.3)
+    - GTMAppAuth (< 5.0, >= 4.1.1)
+    - GTMSessionFetcher/Core (~> 3.3)
+  - GTMAppAuth (4.1.1):
+    - AppAuth/Core (~> 1.7)
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3)
+  - GTMSessionFetcher (3.5.0):
+    - GTMSessionFetcher/Full (= 3.5.0)
+  - GTMSessionFetcher/Core (3.5.0)
+  - GTMSessionFetcher/Full (3.5.0):
+    - GTMSessionFetcher/Core
   - integration_test (0.0.1):
     - Flutter
   - just_audio (0.0.1):
     - Flutter
   - MTBBarcodeScanner (5.0.11)
-  - open_file (0.0.1):
+  - open_filex (0.0.2):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
@@ -60,7 +66,7 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FlutterMacOS
-  - SwiftProtobuf (1.25.2)
+  - SwiftProtobuf (1.28.1)
   - url_launcher_ios (0.0.1):
     - Flutter
   - video_player_avfoundation (0.0.1):
@@ -70,6 +76,7 @@ PODS:
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - argon2_ffi (from `.symlinks/plugins/argon2_ffi/ios`)
@@ -86,7 +93,7 @@ DEPENDENCIES:
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
-  - open_file (from `.symlinks/plugins/open_file/ios`)
+  - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
@@ -95,7 +102,7 @@ DEPENDENCIES:
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
-  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -135,8 +142,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
-  open_file:
-    :path: ".symlinks/plugins/open_file/ios"
+  open_filex:
+    :path: ".symlinks/plugins/open_filex/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
@@ -154,39 +161,39 @@ EXTERNAL SOURCES:
   wakelock_plus:
     :path: ".symlinks/plugins/wakelock_plus/ios"
   webview_flutter_wkwebview:
-    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   argon2_ffi: 995b9260d81aa17f5d2a8a497f2d2763ba4c45f3
-  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+  audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
   autofill_service: b59be6e0dc0e56a49f809512240bf8f93623e6bf
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   biometric_storage: 1400f1382af3a4cc2bf05340e13c3d8de873ceb9
-  device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
+  device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
-  file_selector_ios: b6a6c6667913d571590169ef946afbafe3b52688
+  file_selector_ios: f0670c1064a8c8450e38145d8043160105d0b97c
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
+  flutter_email_sender: 10a22605f92809a11ef52b2f412db806c6082d40
   flutter_store_listing: 8a8514f63b41943433de5d684204ebf1edcbbfe4
-  google_sign_in_ios: 989eea5abe94af62050782714daf920be883d4a2
-  GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
-  GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
-  GTMSessionFetcher: 8a1b34ad97ebe6f909fb8b9b77fba99943007556
-  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
+  google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
+  GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
+  GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
-  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
+  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  share_plus: 8875f4f2500512ea181eef553c3e27dba5135aad
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  SwiftProtobuf: 407a385e97fd206c4fbe880cc84123989167e0d1
-  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
-  video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
-  wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
-  webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
+  SwiftProtobuf: cc47329e2a10c235e35ba4faed831742ae5135ce
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
+  wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
+  webview_flutter_wkwebview: 0982481e3d9c78fd5c6f62a002fcd24fc791f1e4
 
 PODFILE CHECKSUM: 1c2bc432321011096d87cb91a94192618826bc92
 
