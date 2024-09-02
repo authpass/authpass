@@ -45,6 +45,7 @@ platform :mac do
       keychain_name: keychain_name,
       keychain_password: keychain_password,
       additional_cert_types: "mac_installer_distribution",
+      platform: "macos",
       readonly: true
     )
 #     # 2. Get installer distribution certificate
