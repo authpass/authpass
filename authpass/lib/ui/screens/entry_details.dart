@@ -220,7 +220,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 //      ),
       body: PopScope(
         canPop: !isFormDirty,
-        onPopInvoked: (didPop) async {
+        onPopInvokedWithResult: (didPop, result) async {
           if (didPop) {
             return;
           }

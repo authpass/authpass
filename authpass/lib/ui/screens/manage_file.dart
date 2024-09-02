@@ -217,7 +217,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         )
                       : null,
                 ),
-                ButtonBar(
+                OverflowBar(
                   // mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     TextButton.icon(
@@ -268,12 +268,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                       },
                       child: Text(loc.closeAndLockFile),
                     ),
-                  ],
-                ),
-                if (env.isDebug) ...[
-                  ButtonBar(
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
+                    if (env.isDebug) ...[
                       TextButton(
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(
@@ -285,8 +280,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                             'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects.length} dirty)')),
                       ),
                     ],
-                  ),
-                ],
+                  ],
+                ),
               ],
             ),
           ),

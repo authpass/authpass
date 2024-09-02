@@ -6,7 +6,6 @@ import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_cache_manager/src/storage/cache_object.dart';
 import 'package:http/http.dart' as http;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
