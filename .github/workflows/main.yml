@@ -51,7 +51,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
       with:
-        ruby-version: '2.6'
+        ruby-version: '3.3'
     # The last version of bundler (>= 0) to support your Ruby & RubyGems was 2.4.22.
     - run: gem install bundler -v 2.4.22
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
