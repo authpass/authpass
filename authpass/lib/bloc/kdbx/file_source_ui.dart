@@ -20,6 +20,8 @@ extension FileSourceIconUi on FileSourceIcon {
         return FontAwesomeIcons.upRightFromSquare;
       case FileSourceIcon.authPass:
         return AuthPassIcons.AuthPassLogo;
+      case FileSourceIcon.S3:
+        return AuthPassIcons.AuthPassLogo;
     }
     // throw StateError('Invalid icon: $this');
   }

@@ -18,6 +18,7 @@ enum FileSourceIcon {
   webDav,
   oneDrive,
   authPass,
+  S3
 }
 
 abstract class FileSource {

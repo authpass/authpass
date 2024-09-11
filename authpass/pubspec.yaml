@@ -218,6 +218,7 @@ dependencies:
     git:
       url: https://github.com/authpass/window_manager.git
       ref: remove-web
+  aws_client: ^0.6.0
 
 dev_dependencies:
   integration_test:

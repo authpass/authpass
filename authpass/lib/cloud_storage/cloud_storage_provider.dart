@@ -93,11 +93,7 @@ abstract class SearchResponse
   bool get hasMore;
 }
 
-enum PromptType {
-  oauthTokenFlow,
-  urlUsernamePassword,
-  authPassCloudAuth,
-}
+enum PromptType { oauthTokenFlow, urlUsernamePassword, authPassCloudAuth, S3 }
 
 abstract class UserAuthenticationPromptResult {}
 
@@ -111,6 +107,15 @@ class UrlUsernamePasswordResult extends UserAuthenticationPromptResult {
   final String url;
   final String username;
   final String password;
+}
+
+class S3PromptResult extends UserAuthenticationPromptResult {
+  S3PromptResult(
+      this.serviceUrl, this.accessKey, this.secretKey, this.authRegion);
+  final String serviceUrl;
+  final String accessKey;
+  final String secretKey;
+  final String authRegion;
 }
 
 abstract class UserAuthenticationPromptData<
@@ -133,6 +138,13 @@ class UrlUsernamePasswordPromptData
 
   @override
   PromptType get type => PromptType.urlUsernamePassword;
+}
+
+class S3PromptData extends UserAuthenticationPromptData<S3PromptResult> {
+  S3PromptData();
+
+  @override
+  PromptType get type => PromptType.S3;
 }
 
 class UserAuthenticationPrompt<RESULT extends UserAuthenticationPromptResult,

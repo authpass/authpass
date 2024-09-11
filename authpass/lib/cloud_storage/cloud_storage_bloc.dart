@@ -5,6 +5,7 @@ import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/dropbox/dropbox_provider.dart';
 import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
 import 'package:authpass/cloud_storage/onedrive/onedrive_provider.dart';
+import 'package:authpass/cloud_storage/s3/s3_provider.dart';
 import 'package:authpass/cloud_storage/webdav/webdav_provider.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/path_util.dart';
@@ -22,6 +23,7 @@ class CloudStorageBloc {
         DropboxProvider(env: env, helper: _helper),
         GoogleDriveProvider(env: env, helper: _helper),
         OneDriveProvider(env: env, helper: _helper),
+        S3Provider(env: env, helper: _helper),
       }.where((element) => element.isSupported()));
     }
     if (env.featureCloudStorageWebDav) {

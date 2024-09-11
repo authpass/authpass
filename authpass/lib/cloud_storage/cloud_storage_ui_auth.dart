@@ -125,6 +125,10 @@ class CloudStorageAuthentication extends StatelessWidget {
             UrlUsernamePasswordPromptData>) {
           final result = await UrlUsernamePasswordDialog().show(context);
           prompt.result(result);
+        } else if (prompt
+            is UserAuthenticationPrompt<S3PromptResult, S3PromptData>) {
+          final result = await S3Dialog().show(context);
+          prompt.result(result);
         } else if (prompt is UserAuthenticationPrompt<
             DummyUserAuthenticationPromptResult, AuthPassCloudAuthPromptData>) {
           final result = await Navigator.of(context, rootNavigator: true)
@@ -221,6 +225,87 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
             if (_formKey.currentState!.validate()) {
               Navigator.of(context).pop(UrlUsernamePasswordResult(
                   _url.text, _username.text, _password.text));
+            }
+          },
+          child: Text(matLoc.okButtonLabel),
+        ),
+      ],
+    );
+  }
+}
+
+class S3Dialog extends StatefulWidget {
+  Future<S3PromptResult?> show(BuildContext context) =>
+      showDialog<S3PromptResult>(context: context, builder: (_) => this);
+
+  @override
+  _S3DialogState createState() => _S3DialogState();
+}
+
+class _S3DialogState extends State<S3Dialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _serviceUrl = TextEditingController();
+  final TextEditingController _accessKey = TextEditingController();
+  final TextEditingController _secretKey = TextEditingController();
+  final TextEditingController _authRegion = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    final matLoc = MaterialLocalizations.of(context);
+    return AlertDialog(
+      title: const Text('S3 Settings'),
+      scrollable: true,
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextFormField(
+              controller: _serviceUrl,
+              keyboardType: TextInputType.url,
+              decoration: const InputDecoration(
+                labelText: 'Service Url',
+                helperText: 'S3 service url',
+              ),
+              autocorrect: false,
+              validator: (SValidator.notEmpty(msg: 'Please enter an url') +
+                      SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
+                          'Please enter a valid url starting with https://'))
+                  .call,
+            ),
+            TextFormField(
+              controller: _accessKey,
+              decoration: const InputDecoration(
+                labelText: 'Access key',
+              ),
+            ),
+            TextFormField(
+                controller: _secretKey,
+                decoration: const InputDecoration(
+                  labelText: 'Secret key',
+                )),
+            TextFormField(
+              controller: _authRegion,
+              decoration: const InputDecoration(
+                labelText: 'Auth region',
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(matLoc.cancelButtonLabel),
+        ),
+        TextButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              Navigator.of(context).pop(S3PromptResult(_serviceUrl.text,
+                  _accessKey.text, _secretKey.text, _authRegion.text));
             }
           },
           child: Text(matLoc.okButtonLabel),
