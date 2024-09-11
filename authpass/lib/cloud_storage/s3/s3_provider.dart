@@ -50,10 +50,10 @@ class S3Client {
       return List.from(output.contents!
           .where((e) => e.key != null && e.key!.endsWith('.kdbx')) // NON-NLS
           .map((e) => CloudStorageEntity((b) => b
-            ..id = e.key
+            ..id = bucket
             ..type = CloudStorageEntityType.file
             ..name = e.key
-            ..path = bucket)));
+            ..path = e.key)));
     });
   }
 
@@ -129,10 +129,10 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
     final metadata = await client.writeObject(bucket, filename, bytes);
     return toFileSource(
         CloudStorageEntity((b) => b
-          ..id = filename
+          ..id = bucket
           ..type = CloudStorageEntityType.file
           ..name = filename
-          ..path = bucket),
+          ..path = filename),
         uuid: UuidUtil.createUuid(),
         initialCachedContent: FileContent(bytes, metadata));
   }
@@ -169,7 +169,7 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final client = await requireAuthenticatedClient();
-    return client.loadObject(file.path!, file.name!);
+    return client.loadObject(file.id, file.path!);
   }
 
   @override
@@ -177,6 +177,6 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     // TODO: implement saveEntity
     final client = await requireAuthenticatedClient();
-    return client.writeObject(file.path!, file.name!, bytes);
+    return client.writeObject(file.id, file.path!, bytes);
   }
 }
