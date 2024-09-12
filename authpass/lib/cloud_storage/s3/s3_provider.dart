@@ -8,6 +8,8 @@ import 'package:authpass/cloud_storage/s3/s3_models.dart';
 import 'package:authpass/env/_base.dart';
 import 'package:authpass/utils/uuid_util.dart';
 import 'package:aws_client/s3_2006_03_01.dart';
+// ignore: implementation_imports
+import 'package:aws_client/src/shared/shared.dart';
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -28,33 +30,81 @@ class S3Client {
   S3Metadata credentials;
   final S3 api;
 
-  Future<List<CloudStorageEntity>> listBuckets() {
-    return api.listBuckets().then((output) {
-      if (output.buckets == null) {
-        return [];
-      }
-      //api.getBucketAcl(bucket: 'bucket').then((e) => e.grants[0].)
-      return List.from(output.buckets!.map((e) => CloudStorageEntity((b) => b
-        ..id = e.name
-        ..type = CloudStorageEntityType.directory
-        ..name = e.name
-        ..path = e.name)));
-    });
+  bool isReadable(List<Grant>? grants) {
+    if (grants == null || grants.isEmpty) {
+      return false;
+    }
+
+    return List.from(grants.where((g) =>
+        g.permission == Permission.read ||
+        g.permission == Permission.fullControl)).isNotEmpty;
   }
 
-  Future<List<CloudStorageEntity>> listKDBXObjects(String bucket) {
-    return api.listObjects(bucket: bucket).then((output) {
-      if (output.contents == null) {
-        return []; // NON-NLS
+  Future<List<CloudStorageEntity>> listBuckets() async {
+    final output = await api.listBuckets();
+    final List<Bucket> accessibleBuckets = [];
+
+    if (output.buckets == null) {
+      return [];
+    }
+
+    for (final bucket in output.buckets!) {
+      if (bucket.name == null) {
+        continue;
       }
-      return List.from(output.contents!
-          .where((e) => e.key != null && e.key!.endsWith('.kdbx')) // NON-NLS
-          .map((e) => CloudStorageEntity((b) => b
-            ..id = bucket
-            ..type = CloudStorageEntityType.file
-            ..name = e.key
-            ..path = e.key)));
-    });
+
+      try {
+        final bucketAcl = await api.getBucketAcl(bucket: bucket.name!);
+        if (isReadable(bucketAcl.grants)) {
+          accessibleBuckets.add(bucket);
+        }
+      } on GenericAwsException catch (e) {
+        _logger.warning('Cant access bucket ${bucket.name} ACL $e');
+        continue;
+      }
+    }
+    return List.from(accessibleBuckets.map((e) => CloudStorageEntity((b) => b
+      ..id = e.name
+      ..type = CloudStorageEntityType.directory
+      ..name = e.name
+      ..path = e.name)));
+  }
+
+  Future<List<CloudStorageEntity>> listKDBXObjects(String bucket) async {
+    final objects = await api.listObjects(bucket: bucket);
+    final List<Object> kdbxObjects = [];
+
+    if (objects.contents == null) {
+      return [];
+    }
+
+    for (final object in objects.contents!) {
+      if (object.key == null) {
+        continue;
+      }
+
+      if (!object.key!.endsWith('.kdbx' // NON-NLS
+          )) {
+        continue;
+      }
+
+      try {
+        final objectAcl =
+            await api.getObjectAcl(bucket: bucket, key: object.key!);
+        if (isReadable(objectAcl.grants)) {
+          kdbxObjects.add(object);
+        }
+      } on GenericAwsException catch (e) {
+        _logger.warning('Cant access object $bucket//${object.key} ACL ($e)');
+        continue;
+      }
+    }
+
+    return List.from(kdbxObjects.map((e) => CloudStorageEntity((b) => b
+      ..id = bucket
+      ..type = CloudStorageEntityType.file
+      ..name = e.key
+      ..path = e.key)));
   }
 
   Future<FileContent> loadObject(String bucket, String key) {
@@ -134,7 +184,8 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
           ..name = filename
           ..path = filename),
         uuid: UuidUtil.createUuid(),
-        initialCachedContent: FileContent(bytes, metadata));
+        initialCachedContent: FileContent(bytes, metadata),
+        databaseName: bucket);
   }
 
   @override
