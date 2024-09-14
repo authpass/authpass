@@ -251,7 +251,7 @@ class _S3DialogState extends State<S3Dialog> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    //final loc = AppLocalizations.of(context);
     final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
       title: const Text('S3 Settings'),

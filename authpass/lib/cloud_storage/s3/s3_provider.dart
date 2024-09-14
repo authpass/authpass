@@ -95,16 +95,16 @@ class S3Client {
           kdbxObjects.add(object);
         }
       } on GenericAwsException catch (e) {
-        _logger.warning('Cant access object $bucket//${object.key} ACL ($e)');
-        continue;
+        _logger.warning('Cant access object $bucket://${object.key} ACL ($e)');
+        continue; // NON-NLS
       }
     }
 
     return List.from(kdbxObjects.map((e) => CloudStorageEntity((b) => b
-      ..id = bucket
+      ..id = '$bucket://${e.key!}' // NON-NLS
       ..type = CloudStorageEntityType.file
       ..name = e.key
-      ..path = e.key)));
+      ..path = '$bucket://${e.key!}'))); // NON-NLS
   }
 
   Future<FileContent> loadObject(String bucket, String key) {
@@ -176,16 +176,16 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
     }
 
     final client = await requireAuthenticatedClient();
-    final metadata = await client.writeObject(bucket, filename, bytes);
+    final metadata =
+        await client.writeObject(bucket, filename, bytes); // NON-NLS
     return toFileSource(
         CloudStorageEntity((b) => b
-          ..id = bucket
+          ..id = '$bucket://$filename' // NON-NLS
           ..type = CloudStorageEntityType.file
           ..name = filename
-          ..path = filename),
+          ..path = '$bucket://$filename'), // NON-NLS
         uuid: UuidUtil.createUuid(),
-        initialCachedContent: FileContent(bytes, metadata),
-        databaseName: bucket);
+        initialCachedContent: FileContent(bytes, metadata));
   }
 
   @override
@@ -220,7 +220,9 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final client = await requireAuthenticatedClient();
-    return client.loadObject(file.id, file.path!);
+    assert(file.path != null);
+    final splitted = file.path!.split('://'); // NON-NLS
+    return client.loadObject(splitted[0], splitted[1]);
   }
 
   @override
@@ -228,6 +230,8 @@ class S3Provider extends CloudStorageProviderClientBase<S3Client> {
       Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
     // TODO: implement saveEntity
     final client = await requireAuthenticatedClient();
-    return client.writeObject(file.id, file.path!, bytes);
+    assert(file.path != null);
+    final splitted = file.path!.split('://'); // NON-NLS
+    return client.writeObject(splitted[0], splitted[1], bytes);
   }
 }
