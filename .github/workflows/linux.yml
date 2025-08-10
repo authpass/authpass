@@ -52,7 +52,7 @@ jobs:
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
       run: "./authpass/_tools/ci-release.sh ${{ matrix.flavor }}"
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.buildapk.outputs.outputfilename }}
         path: authpass/${{ steps.buildapk.outputs.outputpath }}
@@ -73,7 +73,7 @@ jobs:
         store_login: ${{ secrets.SNAPCRAFT_TOKEN }}
         snap: ${{ steps.snapcraft.outputs.snap }}
         release: edge
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: authpass-${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}-snap
         path: ${{ steps.snapcraft.outputs.snap }}

@@ -43,7 +43,7 @@ jobs:
 #          path: './annotations_first_50.json'
 #          #input: './annotations_first_50.json'
 #          title: 'String Literals (total: ${{ steps.analyse.outputs.total_annotations }})'
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: annotations_github
           path: ./annotations_github.json

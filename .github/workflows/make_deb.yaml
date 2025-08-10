@@ -45,7 +45,7 @@ jobs:
           repository: authpass/debian/stretch
         env:
           PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.build.outputs.outputfilename }}
           path: ${{ steps.build.outputs.outputpath }}
