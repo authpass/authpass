@@ -1,9 +1,9 @@
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';

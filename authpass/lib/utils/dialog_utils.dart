@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/logging_utils.dart';
@@ -10,7 +11,6 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';

@@ -1,3 +1,4 @@
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
 import 'package:authpass/ui/widgets/shortcut/shortcuts.dart';
 import 'package:authpass/utils/constants.dart';
@@ -6,7 +7,6 @@ import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';

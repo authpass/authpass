@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/widgets/centered_icon.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -10,7 +11,6 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kdbx/kdbx.dart';

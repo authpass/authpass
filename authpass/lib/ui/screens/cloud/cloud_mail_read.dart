@@ -1,5 +1,6 @@
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/cloud/cloud_viewmodel.dart';
 import 'package:authpass/ui/screens/password_list.dart';
@@ -14,7 +15,6 @@ import 'package:authpass_cloud_shared/authpass_cloud_shared.dart';
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flinq/flinq.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

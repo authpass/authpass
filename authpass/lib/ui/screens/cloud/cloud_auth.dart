@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/authpass_cloud_bloc.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';

@@ -1,7 +1,7 @@
 import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
 

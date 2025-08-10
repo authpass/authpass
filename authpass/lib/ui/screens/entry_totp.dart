@@ -1,5 +1,5 @@
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class OtpFieldEntryEditor extends StatelessWidget {

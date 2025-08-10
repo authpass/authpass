@@ -1,8 +1,8 @@
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 typedef LabelProvider = String Function(AppLocalizations loc);
 

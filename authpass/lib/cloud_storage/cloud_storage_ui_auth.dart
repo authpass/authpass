@@ -2,12 +2,12 @@ import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dar
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui_adapt.dart';
 import 'package:authpass/cloud_storage/cloud_storage_ui_authpass_cloud.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/cloud/cloud_auth.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:simple_form_field_validator/simple_form_field_validator.dart';

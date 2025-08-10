@@ -1,6 +1,7 @@
 import 'package:authpass/bloc/kdbx/file_source.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/master_password_change.dart';
 import 'package:authpass/ui/screens/select_file_screen.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';

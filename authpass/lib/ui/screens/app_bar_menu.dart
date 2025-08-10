@@ -2,6 +2,7 @@ import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/manage_file.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
@@ -13,7 +14,6 @@ import 'package:authpass/utils/platform.dart';
 import 'package:authpass/utils/winsparkle_init_noop.dart'
     if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';

@@ -323,7 +323,7 @@ class AuthPassCloudProvider extends CloudStorageProvider
           }
           return info.attachmentId;
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
     bloc.analytics.trackTiming('touchAttachments', watch.elapsedMilliseconds);
     if (attachments.isNotEmpty) {

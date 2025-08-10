@@ -18,6 +18,7 @@ import 'package:authpass/cloud_storage/authpasscloud/authpass_cloud_provider.dar
 import 'package:authpass/cloud_storage/cloud_storage_bloc.dart';
 import 'package:authpass/cloud_storage/cloud_storage_provider.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/utils/constants.dart';
@@ -27,7 +28,6 @@ import 'package:authpass/utils/platform.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';

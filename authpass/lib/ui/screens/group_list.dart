@@ -4,6 +4,7 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/group_edit.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
@@ -14,7 +15,6 @@ import 'package:authpass/utils/predefined_icons.dart';
 import 'package:authpass/utils/theme_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';

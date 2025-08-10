@@ -1,10 +1,10 @@
 import 'package:authpass/bloc/deps.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/about.dart';
 import 'package:authpass/ui/screens/preferences.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class PlatformMenuBarWrapper extends StatelessWidget {

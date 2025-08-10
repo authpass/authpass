@@ -1,11 +1,11 @@
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/deps.dart';
 import 'package:authpass/env/_base.dart';
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;

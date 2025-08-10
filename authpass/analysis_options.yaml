@@ -30,6 +30,7 @@ string_literal_finder:
     - 'integration_test/**'
     - 'test/**'
     - '**/*.freezed.dart'
+    - 'lib/l10n-generated/**'
 
 linter:
   rules:

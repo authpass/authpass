@@ -1,3 +1,4 @@
+import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/app_bar_menu.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/group_list.dart';
@@ -6,7 +7,6 @@ import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kdbx/kdbx.dart';
 
 class GroupEditScreen extends StatefulWidget {
