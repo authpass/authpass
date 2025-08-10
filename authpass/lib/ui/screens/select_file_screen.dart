@@ -821,7 +821,8 @@ class SelectFileActionContent extends StatelessWidget {
           children: <Widget>[
             Icon(
               icon,
-              color: theme.primaryTextTheme.bodyMedium!.color!.withOpacity(0.8),
+              color: theme.primaryTextTheme.bodyMedium!.color!
+                  .withValues(alpha: 0.8),
             ),
             const SizedBox(height: 8),
             Text(

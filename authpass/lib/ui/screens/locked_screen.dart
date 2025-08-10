@@ -43,7 +43,7 @@ class LockedScreen extends StatelessWidget {
                 FaIcon(
                   FontAwesomeIcons.lock,
                   size: 128,
-                  color: Theme.of(context).primaryColor.withOpacity(0.5),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.5),
                 ),
                 const SizedBox(height: 16),
                 PrimaryButton(

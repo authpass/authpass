@@ -426,7 +426,7 @@ class KdbxBloc {
   Color? _defaultNextColor() {
     for (final color in AuthPassTheme.defaultColorOrder) {
       if (!openedFiles.values
-          .any((file) => file.openedFile.colorCode == color.value)) {
+          .any((file) => file.openedFile.colorCode == color.toARGB32())) {
         return color;
       }
     }

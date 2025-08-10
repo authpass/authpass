@@ -43,7 +43,6 @@ linter:
     always_declare_return_types: true
     prefer_single_quotes: true
     unawaited_futures: true
-    unsafe_html: true
 
     always_put_control_body_on_new_line: true
     avoid_bool_literals_in_conditional_expressions: true
@@ -55,7 +54,6 @@ linter:
     cancel_subscriptions: true
     directives_ordering: true
     no_adjacent_strings_in_list: true
-    package_api_docs: true
     prefer_asserts_in_initializer_lists: true
     prefer_final_in_for_each: true
     prefer_final_locals: true

@@ -2,5 +2,17 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/analytics_events" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/authpass-cloud" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/authpass-cloud/deps/mailer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/authpass-cloud/deps/openapi_dart" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/authpass-cloud/deps/postgres_utils.dart" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/authpass-cloud/deps/smtpd.dart" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/autofill_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/biometric_storage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/clipboard_plugintest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/diac" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/kdbx.dart" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../deps/package_info_macos" vcs="Git" />
   </component>
 </project>

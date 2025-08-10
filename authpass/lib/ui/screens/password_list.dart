@@ -911,7 +911,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final loc = AppLocalizations.of(context);
     return [
       MaterialBanner(
-        backgroundColor: Colors.lightGreenAccent.withOpacity(0.2),
+        backgroundColor: Colors.lightGreenAccent.withValues(alpha: 0.2),
         content: Text(_groupFilter.name(loc)),
         actions: <Widget>[
           TextButton(
@@ -1492,7 +1492,7 @@ class UnsupportedWrite extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        color: theme.colorScheme.error.withOpacity(0.2),
+        color: theme.colorScheme.error.withValues(alpha: 0.2),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(

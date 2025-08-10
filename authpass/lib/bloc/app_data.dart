@@ -300,8 +300,9 @@ class AppDataBloc {
           Color? defaultColor}) async =>
       await update((b, data) {
         final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
-        final colorCode =
-            recentFile?.colorCode ?? oldFile?.colorCode ?? defaultColor?.value;
+        final colorCode = recentFile?.colorCode ??
+            oldFile?.colorCode ??
+            defaultColor?.toARGB32();
         final openedFile = OpenedFile.fromFileSource(
             file, name, (b) => b..colorCode = colorCode);
         _logger.finest('openedFile: $openedFile');

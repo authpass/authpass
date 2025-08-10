@@ -1756,11 +1756,11 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                 commonField?.icon == null ? null : Icon(commonField!.icon),
             labelText: commonField?.displayName ?? fieldKey.key,
             filled: true,
-            labelStyle: TextStyle(color: color.withOpacity(0.2)),
+            labelStyle: TextStyle(color: color.withValues(alpha: 0.2)),
           ),
           child: Text(
             nonNls('*') * 10,
-            style: TextStyle(color: color.withOpacity(0.2)),
+            style: TextStyle(color: color.withValues(alpha: 0.2)),
           ),
         ),
         Positioned.fill(
@@ -1959,11 +1959,11 @@ class HighlightWidgetState extends State<HighlightWidget>
   void triggerHighlight() {
     final tween = DecorationTween(
       begin: BoxDecoration(
-        color: Colors.green.withOpacity(0.8),
+        color: Colors.green.withValues(alpha: 0.8),
 //        backgroundBlendMode: BlendMode.color,
       ),
       end: BoxDecoration(
-        color: Colors.green.withOpacity(1),
+        color: Colors.green.withValues(alpha: 1),
 //        backgroundBlendMode: BlendMode.color,
       ),
 //      end: const BoxDecoration(color: Color(0xffffffff), backgroundBlendMode: BlendMode.overlay),

@@ -191,7 +191,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     ).show(context);
                     _logger.fine('Selected color $newColor');
                     _file = await _kdbxBloc.updateOpenedFile(
-                        _file!, (b) => b.colorCode = newColor?.value);
+                        _file!, (b) => b.colorCode = newColor?.toARGB32());
                     setState(() {});
                   },
                 ),
@@ -377,7 +377,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
 
   void _init() {
     _selectedColor = AuthPassTheme.defaultFileColors.firstWhereOrNull(
-            (color) => color.value == widget.initialColor?.value) ??
+            (color) => color.toARGB32() == widget.initialColor?.toARGB32()) ??
         widget.initialColor;
   }
 
