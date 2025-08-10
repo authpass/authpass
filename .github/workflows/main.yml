@@ -74,7 +74,7 @@ jobs:
     - name: upload artifact
       if: ${{ steps.buildapk.outputs.outputfilename != null }}
       run: ./authpass/_tools/upload-artifact.sh authpass/${{ steps.buildapk.outputs.outputpath }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ steps.buildapk.outputs.outputfilename != null }}
       with:
         name: ${{ steps.buildapk.outputs.outputfilename }}

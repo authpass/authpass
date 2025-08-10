@@ -58,7 +58,7 @@ jobs:
 #    - shell: bash
 #      run: |
 #        cat authpass/lib/generated_plugin_registrant.dart
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.buildapk.outputs.outputfilename }}
         path: authpass/${{ steps.buildapk.outputs.outputpath }}

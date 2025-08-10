@@ -76,7 +76,7 @@ jobs:
     - name: run test ${{ matrix.flavor }}
       # --no-enable-impeller: with impeller screenshots don't seem to work.
       run: "cd authpass && ~/deps/flutter/bin/flutter drive --no-enable-impeller --target=test_driver/app.dart"
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: driver-screenshots
         path: authpass/build/screenshots
