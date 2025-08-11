@@ -45,6 +45,7 @@ if test -z "$buildnumber" ; then
     echo "=========="
     # cleanup uninteresting changes.
     git checkout -- ../.blackbox
+    git checkout -- lib/l10n-generated
     echo "DEBUG"
     git diff-index HEAD
     echo "diff-index: $?"

@@ -67,3 +67,5 @@ linter:
     unnecessary_statements: true
     unrelated_type_equality_checks: true
 
+formatter:
+  trailing_commas: preserve
