@@ -169,6 +169,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen>
         onDetect: (barcodes) {
           _logger.fine('detected bar code. ${barcodes.barcodes.length}');
           if (barcodes.barcodes.isNotEmpty) {
+            unawaited(controller.stop());
             final barcode = barcodes.barcodes.first;
             final scanResult = ScanResultValid(barcode: (
               isValid: true,
