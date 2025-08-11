@@ -74,10 +74,10 @@ packages:
     dependency: "direct main"
     description:
       name: argon2_ffi
-      sha256: "78137a38af5cc58e0e740d0131339d8ce88f1715cc7958883b12f8b0c656c61c"
+      sha256: abd490816bc12acef943ca3f9c655d7317c09c48e32c83eb8c4d753411cf300c
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0+1"
+    version: "1.0.0+2"
   argon2_ffi_base:
     dependency: "direct main"
     description:
