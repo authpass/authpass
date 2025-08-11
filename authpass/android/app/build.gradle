@@ -39,7 +39,7 @@ kotlin {
 
 android {
     namespace 'design.codeux.authpass'
-    compileSdk 34
+    compileSdk 36
 //    buildToolsVersion "29.0.2"
     ndkVersion System.getProperty("design.codeux.ndkVersion", "25.1.8937393")
 
@@ -47,7 +47,7 @@ android {
     defaultConfig {
         applicationId "design.codeux.authpass"
         minSdk 23
-        targetSdk 34
+        targetSdk 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
