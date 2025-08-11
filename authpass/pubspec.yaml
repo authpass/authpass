@@ -14,7 +14,11 @@ dependencies:
   kdbx: ^2.4.1
 #  kdbx:
 #    path: ../deps/kdbx.dart
-  argon2_ffi: ^1.0.0+2
+#  argon2_ffi: ^1.0.0+2
+  argon2_ffi:
+    git:
+      url: https://github.com/authpass/argon2_ffi.git
+      ref: d47d756cbed5e6a256be24ed2cc5199d37e06356
   argon2_ffi_base: ^1.1.1
   simple_form_field_validator: ^1.0.0
 #    git:

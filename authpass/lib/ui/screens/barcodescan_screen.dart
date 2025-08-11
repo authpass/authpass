@@ -167,6 +167,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen>
       body: scanner.MobileScanner(
         controller: controller,
         onDetect: (barcodes) {
+          _logger.fine('detected bar code. ${barcodes.barcodes.length}');
           if (barcodes.barcodes.isNotEmpty) {
             final barcode = barcodes.barcodes.first;
             final scanResult = ScanResultValid(barcode: (
@@ -176,6 +177,9 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen>
             ));
             Navigator.of(context).pop(scanResult);
           }
+        },
+        onDetectError: (error, stackTrace) {
+          _logger.severe('Error while detrecting barcodes.', error, stackTrace);
         },
       ),
     );

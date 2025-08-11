@@ -73,10 +73,11 @@ packages:
   argon2_ffi:
     dependency: "direct main"
     description:
-      name: argon2_ffi
-      sha256: abd490816bc12acef943ca3f9c655d7317c09c48e32c83eb8c4d753411cf300c
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: d47d756cbed5e6a256be24ed2cc5199d37e06356
+      resolved-ref: d47d756cbed5e6a256be24ed2cc5199d37e06356
+      url: "https://github.com/authpass/argon2_ffi.git"
+    source: git
     version: "1.0.0+2"
   argon2_ffi_base:
     dependency: "direct main"
