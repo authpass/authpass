@@ -20,7 +20,7 @@ Future<Uint8List> argon2BrowserHash(Argon2BrowserOptions options) {
       ((Argon2Result result) {
         _logger.info('got some result ${result.runtimeType}');
         _logger.info('got some result ${result.hash.runtimeType}');
-        final hash = result.hash.toDart.asUint8List();
+        final hash = result.hash.toDart;
         // if (hash is Uint8List) {
         //   _logger.info('great, uint8list');
         //   completer.complete(hash);
@@ -59,7 +59,7 @@ extension type Argon2BrowserOptions._(JSObject o) implements JSObject {
 }
 
 extension type Argon2Result._(JSObject o) implements JSObject {
-  external JSArrayBuffer get hash;
+  external JSUint8Array get hash;
   external JSArrayBuffer get encoded;
 }
 
