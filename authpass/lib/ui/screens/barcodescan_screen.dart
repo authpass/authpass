@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:authpass/utils/constants.dart';
 import 'package:authpass/utils/extension_methods.dart';
-import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
+// import 'package:barcode_scan2/barcode_scan2.dart' as barcode;
 import 'package:flutter/material.dart';
 // import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:logging/logging.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' as scanner;
+import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 // import 'package:zxing_scanner/zxing_scanner.dart' as zxing;
 
 final _logger = Logger('barcodescan_screen');
@@ -13,49 +18,178 @@ class BarcodeScanHelper {
     String? titleText,
     List<BarcodeFormat>? formats,
   }) async {
-    // final ret = await Navigator.of(context).push(BarcodeScanScreen.route(
-    //     titleText: titleText ?? nonNls('Scan Barcode'),
-    //     formats: formats ?? BarcodeFormat.any));
-    // return ret ?? ScanResultInvalid();
-    final scanOptions = barcode.ScanOptions(
-      restrictFormat:
-          formats?.map((e) => _barcodeMapping[e]).whereNotNull().toList() ??
-              const [],
-    );
-    _logger.finer('Scanning ${scanOptions.restrictFormat}');
-
-    final barcodeResult =
-        await barcode.BarcodeScanner.scan(options: scanOptions);
-    if (barcodeResult.type == barcode.ResultType.Barcode) {
-      final format = _toBarcodeFormat(barcodeResult.format);
-      return ScanResultValid(barcode: (
-        text: barcodeResult.rawContent,
-        format: format,
-        isValid: true,
-      ));
-    }
-    return ScanResultInvalid();
+    final ret = await Navigator.of(context).push(BarcodeScanScreen.route(
+        titleText: titleText ?? nonNls('Scan Barcode'),
+        formats: formats ?? BarcodeFormat.any));
+    return ret ?? ScanResultInvalid();
+    // final scanOptions = barcode.ScanOptions(
+    //   restrictFormat:
+    //       formats?.map((e) => _barcodeMapping[e]).whereNotNull().toList() ??
+    //           const [],
+    // );
+    // _logger.finer('Scanning ${scanOptions.restrictFormat}');
+    //
+    // final barcodeResult =
+    //     await barcode.BarcodeScanner.scan(options: scanOptions);
+    // if (barcodeResult.type == barcode.ResultType.Barcode) {
+    //   final format = _toBarcodeFormat(barcodeResult.format);
+    //   return ScanResultValid(barcode: (
+    //     text: barcodeResult.rawContent,
+    //     format: format,
+    //     isValid: true,
+    //   ));
+    // }
+    // return ScanResultInvalid();
   }
 
-  static final _barcodeMapping = Map.fromEntries(barcode.BarcodeFormat.values
+  static final _barcodeMapping = Map.fromEntries(scanner.BarcodeFormat.values
       .map((e) => _toBarcodeFormat(e).let((f) => MapEntry(f, e)))
       .whereNotNull());
 
-  static BarcodeFormat _toBarcodeFormat(barcode.BarcodeFormat format) =>
+  static BarcodeFormat _toBarcodeFormat(scanner.BarcodeFormat format) =>
       switch (format) {
-        barcode.BarcodeFormat.qr => BarcodeFormat.qrCode,
-        barcode.BarcodeFormat.aztec => BarcodeFormat.aztec,
-        barcode.BarcodeFormat.code39 => BarcodeFormat.code39,
-        barcode.BarcodeFormat.code93 => BarcodeFormat.code93,
-        barcode.BarcodeFormat.ean8 => BarcodeFormat.ean8,
-        barcode.BarcodeFormat.ean13 => BarcodeFormat.ean13,
-        barcode.BarcodeFormat.code128 => BarcodeFormat.code128,
-        barcode.BarcodeFormat.dataMatrix => BarcodeFormat.dataMatrix,
-        barcode.BarcodeFormat.interleaved2of5 => BarcodeFormat.itf,
-        barcode.BarcodeFormat.upce => BarcodeFormat.upce,
-        barcode.BarcodeFormat.pdf417 => BarcodeFormat.pdf417,
+        scanner.BarcodeFormat.qrCode => BarcodeFormat.qrCode,
+        scanner.BarcodeFormat.aztec => BarcodeFormat.aztec,
+        scanner.BarcodeFormat.code39 => BarcodeFormat.code39,
+        scanner.BarcodeFormat.code93 => BarcodeFormat.code93,
+        scanner.BarcodeFormat.ean8 => BarcodeFormat.ean8,
+        scanner.BarcodeFormat.ean13 => BarcodeFormat.ean13,
+        scanner.BarcodeFormat.code128 => BarcodeFormat.code128,
+        scanner.BarcodeFormat.dataMatrix => BarcodeFormat.dataMatrix,
+        scanner.BarcodeFormat.itf => BarcodeFormat.itf,
+        scanner.BarcodeFormat.upcE => BarcodeFormat.upce,
+        scanner.BarcodeFormat.pdf417 => BarcodeFormat.pdf417,
         _ => BarcodeFormat.unknown,
       };
+
+  // static final _barcodeMapping = Map.fromEntries(barcode.BarcodeFormat.values
+  //     .map((e) => _toBarcodeFormat(e).let((f) => MapEntry(f, e)))
+  //     .whereNotNull());
+  //
+  // static BarcodeFormat _toBarcodeFormat(barcode.BarcodeFormat format) =>
+  //     switch (format) {
+  //       barcode.BarcodeFormat.qr => BarcodeFormat.qrCode,
+  //       barcode.BarcodeFormat.aztec => BarcodeFormat.aztec,
+  //       barcode.BarcodeFormat.code39 => BarcodeFormat.code39,
+  //       barcode.BarcodeFormat.code93 => BarcodeFormat.code93,
+  //       barcode.BarcodeFormat.ean8 => BarcodeFormat.ean8,
+  //       barcode.BarcodeFormat.ean13 => BarcodeFormat.ean13,
+  //       barcode.BarcodeFormat.code128 => BarcodeFormat.code128,
+  //       barcode.BarcodeFormat.dataMatrix => BarcodeFormat.dataMatrix,
+  //       barcode.BarcodeFormat.interleaved2of5 => BarcodeFormat.itf,
+  //       barcode.BarcodeFormat.upce => BarcodeFormat.upce,
+  //       barcode.BarcodeFormat.pdf417 => BarcodeFormat.pdf417,
+  //       _ => BarcodeFormat.unknown,
+  //     };
+}
+
+class BarcodeScanScreen extends StatefulWidget {
+  const BarcodeScanScreen({
+    super.key,
+    required this.titleText,
+    required this.formats,
+  });
+
+  final String titleText;
+  final List<BarcodeFormat> formats;
+
+  static Route<ScanResult> route({
+    required String titleText,
+    List<BarcodeFormat> formats = BarcodeFormat.any,
+  }) =>
+      MaterialPageRoute(
+        builder: (context) => BarcodeScanScreen(
+          titleText: titleText,
+          formats: formats,
+        ),
+      );
+
+  @override
+  State<BarcodeScanScreen> createState() => _BarcodeScanScreenState();
+}
+
+class _BarcodeScanScreenState extends State<BarcodeScanScreen>
+    with WidgetsBindingObserver {
+  late final scanner.MobileScannerController controller =
+      scanner.MobileScannerController(
+    // cameraResolution: size,
+    // detectionSpeed: detectionSpeed,
+    // detectionTimeoutMs: detectionTimeout,
+    formats: widget.formats
+        .map((e) => BarcodeScanHelper._barcodeMapping[e])
+        .nonNulls
+        .toList(),
+    // returnImage: returnImage,
+    torchEnabled: true,
+    // invertImage: invertImage,
+    // autoZoom: autoZoom,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    // Start listening to lifecycle changes.
+    WidgetsBinding.instance.addObserver(this);
+
+    // Finally, start the scanner itself.
+    unawaited(controller.start());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // If the controller is not ready, do not try to start or stop it.
+    // Permission dialogs can trigger lifecycle changes before the controller is ready.
+    if (!controller.value.hasCameraPermission) {
+      return;
+    }
+
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        return;
+      case AppLifecycleState.resumed:
+        unawaited(controller.start());
+        break;
+      case AppLifecycleState.inactive:
+        // Stop the scanner when the app is paused.
+        // Also stop the barcode events subscription.
+        unawaited(controller.stop());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.titleText),
+      ),
+      body: scanner.MobileScanner(
+        controller: controller,
+        onDetect: (barcodes) {
+          if (barcodes.barcodes.isNotEmpty) {
+            final barcode = barcodes.barcodes.first;
+            final scanResult = ScanResultValid(barcode: (
+              isValid: true,
+              format: BarcodeScanHelper._toBarcodeFormat(barcode.format),
+              text: barcode.displayValue ?? CharConstants.empty,
+            ));
+            Navigator.of(context).pop(scanResult);
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    // Stop listening to lifecycle changes.
+    WidgetsBinding.instance.removeObserver(this);
+    // Dispose the widget itself.
+    super.dispose();
+    // Finally, dispose of the controller.
+    controller.dispose();
+  }
 }
 
 // class BarcodeScanScreen extends StatelessWidget {

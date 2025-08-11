@@ -81,9 +81,9 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   flutter_speed_dial: ^7.0.0
   flutter_email_sender: ^6.0.3
-  flutter_store_listing: ^1.0.0
+  flutter_store_listing: ^1.1.0
 
-  biometric_storage: ^5.1.0-rc.5
+  biometric_storage: ^5.1.1-dev.1
   uuid: ^4.3.3
   url_launcher: ^6.0.2
   font_awesome_flutter: ^10.1.0
@@ -158,11 +158,12 @@ dependencies:
 #    git:
 #      url: https://github.com/RohitKumarMishra/flutter_barcode_reader.git
 #      ref: 85cfc7efee91c3444d24435486cf292a32f04499
-#  barcode_scan2: ^4.1.3
-  barcode_scan2:
-    git:
-      url: https://github.com/david-danihel/barcode_scan2.git
-      ref: 2a3a3b859b254b6fd65031c873e62afea6a4373d
+  mobile_scanner: ^7.0.1
+#  barcode_scan2: ^4.5.1
+#  barcode_scan2:
+#    git:
+#      url: https://github.com/david-danihel/barcode_scan2.git
+#      ref: 2a3a3b859b254b6fd65031c873e62afea6a4373d
 #  zxing_scanner: ^1.0.0
 #  flutter_zxing: ^1.5.2
 #    path: ../deps/flutter_zxing
@@ -181,7 +182,7 @@ dependencies:
   flutter_windowmanager:
     git:
       url: https://github.com/authpass/flutter_windowmanager.git
-      ref: 6f84b2edd3ef1760ffe4d96aec13317e4a252612
+      ref: 3b5405dd3c40a411fab41a951bc435a8dd98cf6d
 
   mime: ^1.0.0
   ffi: ^2.1.0

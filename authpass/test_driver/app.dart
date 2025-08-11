@@ -30,6 +30,8 @@ Future<void> main() async {
 class NoopBiometricStorage extends MethodChannelBiometricStorage
     with MockPlatformInterfaceMixin {
   @override
-  Future<CanAuthenticateResponse> canAuthenticate() async =>
+  Future<CanAuthenticateResponse> canAuthenticate({
+    StorageFileInitOptions? options,
+  }) async =>
       CanAuthenticateResponse.errorHwUnavailable;
 }

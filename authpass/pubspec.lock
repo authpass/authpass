@@ -140,15 +140,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  barcode_scan2:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "2a3a3b859b254b6fd65031c873e62afea6a4373d"
-      resolved-ref: "2a3a3b859b254b6fd65031c873e62afea6a4373d"
-      url: "https://github.com/david-danihel/barcode_scan2.git"
-    source: git
-    version: "4.2.4"
   base32:
     dependency: "direct main"
     description:
@@ -169,10 +160,10 @@ packages:
     dependency: "direct main"
     description:
       name: biometric_storage
-      sha256: "7560bad685c71c8360fa5fc221c1da99336f6d54d3376e262860fe2444408c8f"
+      sha256: "30ff467d6721254846a21e18b8cf6da2fd814d2a7e2585bfe122e40ab05141ef"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0-rc.5"
+    version: "5.1.1-dev.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -736,10 +727,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_store_listing
-      sha256: ca3dc684e4b804c95e6ef69e24ff8458ed177e91996163f37ab758b11514121f
+      sha256: bad4e4c08b26fb25a3715ff8fec57e7a0fa522c22db14040cc46cf02cdad1961
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -778,8 +769,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "6f84b2edd3ef1760ffe4d96aec13317e4a252612"
-      resolved-ref: "6f84b2edd3ef1760ffe4d96aec13317e4a252612"
+      ref: "3b5405dd3c40a411fab41a951bc435a8dd98cf6d"
+      resolved-ref: "3b5405dd3c40a411fab41a951bc435a8dd98cf6d"
       url: "https://github.com/authpass/flutter_windowmanager.git"
     source: git
     version: "0.3.0"
@@ -1219,6 +1210,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  mobile_scanner:
+    dependency: "direct main"
+    description:
+      name: mobile_scanner
+      sha256: "54005bdea7052d792d35b4fef0f84ec5ddc3a844b250ecd48dc192fb9b4ebc95"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.1"
   mockito:
     dependency: "direct dev"
     description:
@@ -2231,5 +2230,5 @@ packages:
     source: git
     version: "0.0.1"
 sdks:
-  dart: ">=3.7.0-0 <4.0.0"
-  flutter: ">=3.24.0"
+  dart: ">=3.7.0 <4.0.0"
+  flutter: ">=3.29.0"
