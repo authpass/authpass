@@ -53,7 +53,7 @@ jobs:
       with:
         ruby-version: '3.3'
     # The last version of bundler (>= 0) to support your Ruby & RubyGems was 2.4.22.
-    - run: gem install bundler -v 2.4.22
+    - run: gem install bundler
       if: ${{ startsWith(matrix.flavor, 'playstore') }}
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
