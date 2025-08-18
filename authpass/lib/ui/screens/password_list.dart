@@ -454,6 +454,8 @@ class _PasswordListContentState extends State<PasswordListContent>
 
   AutofillServiceStatus? _autofillStatus;
   bool? _dismissedAutofillSuggestion;
+  bool? _rememberPassword;
+  bool? _dismissedRememberPassword;
 
   @override
   void initState() {
@@ -467,6 +469,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     _groupFilterNotifier.addListener(_updateAllEntries);
     _updateAutofillPrefs();
     _updateAutofillMetadata();
+    _updateRememberPassword(widget.appData);
     _updateDismissedBanners(widget.appData);
   }
 
@@ -475,6 +478,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     setState(() {
       _dismissedLocalFiles = data.dismissedBackupLocalFiles;
       _dismissedAutofillSuggestion = data.dismissedAutofillSuggestion;
+      _dismissedRememberPassword = data.dismissedRememberPassword;
     });
   }
 
@@ -507,6 +511,33 @@ class _PasswordListContentState extends State<PasswordListContent>
               value: val,
             );
       });
+    }
+  }
+
+  Future<void> _validatePassword() async {
+    final FileSource currentFile =
+        widget.kdbxBloc.openedFilesWithSources.first.key;
+    await Navigator.of(context)
+        .push(CredentialsScreen.route(currentFile, true));
+  }
+
+  Future<void> _updateRememberPassword(AppData data) async {
+    if (data.quickUnlockCounter != null &&
+        widget.kdbxBloc.openedFilesWithSources.isNotEmpty) {
+      final FileSource currentFile =
+          widget.kdbxBloc.openedFilesWithSources.first.key;
+      if (data.quickUnlockCounter![currentFile.uuid] != null) {
+        _rememberPassword = data.quickUnlockCounter![currentFile.uuid]! >= 10;
+      }
+      if (_rememberPassword != null &&
+          _rememberPassword! &&
+          data.dismissedRememberPassword != null &&
+          data.dismissedRememberPassword! &&
+          data.quickUnlockCounter![currentFile.uuid]! % 10 == 0) {
+        await context.read<AppDataBloc>().update((builder, data) {
+          builder.dismissedRememberPassword = false;
+        });
+      }
     }
   }
 
@@ -1060,6 +1091,41 @@ class _PasswordListContentState extends State<PasswordListContent>
     ];
   }
 
+  List<Widget>? _buildRememberPasswordBanners() {
+    if (_rememberPassword == null || _rememberPassword == false) {
+      return null;
+    }
+    if (_dismissedRememberPassword == true) {
+      return null;
+    }
+    final loc = AppLocalizations.of(context);
+    final analytics = context.watch<Analytics>();
+    return [
+      MaterialBanner(
+        content: Text(loc.rememberPasswordBanner),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await context.read<AppDataBloc>().update((builder, data) {
+                builder.dismissedRememberPassword = true;
+              });
+              analytics.events
+                  .trackRememberPasswordBanner(BannerAction.dismissed);
+            },
+            child: Text(loc.dismissRememberPasswordBannerButton),
+          ),
+          TextButton(
+            onPressed: () async {
+              await _validatePassword();
+              analytics.events.trackRememberPasswordBanner(BannerAction.saved);
+            },
+            child: Text(loc.validateRememberPasswordBannerButton),
+          ),
+        ],
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final entries = _filteredEntries ?? _allEntries;
@@ -1067,6 +1133,7 @@ class _PasswordListContentState extends State<PasswordListContent>
       ...?[
         _buildBackupWarningBanners,
         _buildAutofillSuggestBanners,
+        _buildRememberPasswordBanners,
       ].map((e) => e()).whereNotNull().firstOrNull,
       ...?_buildGroupFilterPrefix(),
       ...?_buildAutofillListPrefix(),
