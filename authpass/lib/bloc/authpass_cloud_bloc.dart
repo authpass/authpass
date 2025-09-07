@@ -477,6 +477,9 @@ class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
 
   @override
   T? get valueOrNull => _valueStream.valueOrNull;
+
+  @override
+  StreamNotification<T>? get lastEventOrNull => _valueStream.lastEventOrNull;
 }
 
 class LazyBehaviorSubject<T> {
