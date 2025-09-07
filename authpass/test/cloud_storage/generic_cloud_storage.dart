@@ -15,7 +15,7 @@ final _logger = Logger('generic_cloud_storage');
 void simpleCloudStorageTestSuite({
   required CloudStorageProvider Function() providerCb,
   Future<CloudStorageEntity?>? Function(CloudStorageProvider? provider)?
-      selectParent,
+  selectParent,
 }) {
   late String uuid;
   late CloudStorageProvider provider;
@@ -39,7 +39,9 @@ void simpleCloudStorageTestSuite({
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
     final fileSource = await provider.createEntity(
-        CloudStorageSelectorSaveResult(parent, fileName), saveString1);
+      CloudStorageSelectorSaveResult(parent, fileName),
+      saveString1,
+    );
 
     final content1 = await fileSource.content().last;
     expect(content1.content, saveString1);
@@ -64,7 +66,9 @@ void simpleCloudStorageTestSuite({
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
     final fileSource = await provider.createEntity(
-        CloudStorageSelectorSaveResult(parent, fileName), saveString1);
+      CloudStorageSelectorSaveResult(parent, fileName),
+      saveString1,
+    );
 
     final content1 = await fileSource.content().last;
     expect(content1.content, saveString1);
@@ -74,19 +78,27 @@ void simpleCloudStorageTestSuite({
     await Future<void>.delayed(const Duration(milliseconds: 200));
     await fileSource.contentWrite(saveString2, metadata: null);
 
-    expect(() async {
-      // ignore: invalid_use_of_protected_member
-      await fileSource.write(saveString2, content1.metadata);
-    },
-        throwsA(predicate<dynamic>((dynamic e) =>
-            e is StorageException && e.type == StorageExceptionType.conflict)));
+    expect(
+      () async {
+        // ignore: invalid_use_of_protected_member
+        await fileSource.write(saveString2, content1.metadata);
+      },
+      throwsA(
+        predicate<dynamic>(
+          (dynamic e) =>
+              e is StorageException && e.type == StorageExceptionType.conflict,
+        ),
+      ),
+    );
   });
 
   test('create, conflict', () async {
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
     final fileSource = await provider.createEntity(
-        CloudStorageSelectorSaveResult(parent, fileName), saveString1);
+      CloudStorageSelectorSaveResult(parent, fileName),
+      saveString1,
+    );
     final content1 = fileSource.cached;
     await fileSource.contentWrite(saveString2, metadata: null);
     expect(() async {
@@ -99,18 +111,28 @@ void simpleCloudStorageTestSuite({
     final parent = await selectParent!(provider);
     final fileName = 'authpass_test_$uuid.txt';
     final fileSource = await provider.createEntity(
-        CloudStorageSelectorSaveResult(parent, fileName), saveString1);
+      CloudStorageSelectorSaveResult(parent, fileName),
+      saveString1,
+    );
     if (fileSource is FileSourceCloudStorage) {
       final fileInfo = fileSource.fileInfo;
       {
-        final loadedFile = provider.toFileSourceFromFileInfo(fileInfo,
-            uuid: fileSource.uuid, initialCachedContent: null);
+        final loadedFile = provider.toFileSourceFromFileInfo(
+          fileInfo,
+          uuid: fileSource.uuid,
+          initialCachedContent: null,
+        );
         await loadedFile.content().last;
       }
-      final loadedFile = provider.toFileSourceFromFileInfo(fileInfo,
-          uuid: fileSource.uuid, initialCachedContent: null);
-      expect(await loadedFile.content().map((event) => event.source).toList(),
-          [FileContentSource.cache, FileContentSource.origin]);
+      final loadedFile = provider.toFileSourceFromFileInfo(
+        fileInfo,
+        uuid: fileSource.uuid,
+        initialCachedContent: null,
+      );
+      expect(await loadedFile.content().map((event) => event.source).toList(), [
+        FileContentSource.cache,
+        FileContentSource.origin,
+      ]);
     }
   });
 }

@@ -37,8 +37,10 @@ void main() {
           ..name = 'bar',
       );
       final fakeKdbxOpenedFile = KdbxOpenedFile(
-        fileSource: FileSourceUrl(Uri.parse('https://authpass.app/'),
-            uuid: AppDataBloc.createUuid()),
+        fileSource: FileSourceUrl(
+          Uri.parse('https://authpass.app/'),
+          uuid: AppDataBloc.createUuid(),
+        ),
         openedFile: fakeFile,
         kdbxFile: file,
         kdbxFileContent: FileContent(Uint8List(0)),

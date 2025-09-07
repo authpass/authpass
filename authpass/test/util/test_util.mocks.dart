@@ -38,9 +38,9 @@ class _FakeEnv_0 extends _i1.SmartFake implements _i2.Env {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeAppDataBloc_1 extends _i1.SmartFake implements _i3.AppDataBloc {
@@ -48,9 +48,9 @@ class _FakeAppDataBloc_1 extends _i1.SmartFake implements _i3.AppDataBloc {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeAnalytics_2 extends _i1.SmartFake implements _i4.Analytics {
@@ -58,9 +58,9 @@ class _FakeAnalytics_2 extends _i1.SmartFake implements _i4.Analytics {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeCloudStorageBloc_3 extends _i1.SmartFake
@@ -69,9 +69,9 @@ class _FakeCloudStorageBloc_3 extends _i1.SmartFake
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeQuickUnlockStorage_4 extends _i1.SmartFake
@@ -80,9 +80,9 @@ class _FakeQuickUnlockStorage_4 extends _i1.SmartFake
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeKdbxFormat_5 extends _i1.SmartFake implements _i7.KdbxFormat {
@@ -90,9 +90,9 @@ class _FakeKdbxFormat_5 extends _i1.SmartFake implements _i7.KdbxFormat {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeOpenedKdbxFiles_6 extends _i1.SmartFake
@@ -101,9 +101,9 @@ class _FakeOpenedKdbxFiles_6 extends _i1.SmartFake
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeValueStream_7<T> extends _i1.SmartFake
@@ -112,9 +112,9 @@ class _FakeValueStream_7<T> extends _i1.SmartFake
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeKdbxOpenedFile_8 extends _i1.SmartFake
@@ -123,9 +123,9 @@ class _FakeKdbxOpenedFile_8 extends _i1.SmartFake
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeFileSource_9 extends _i1.SmartFake implements _i9.FileSource {
@@ -133,9 +133,9 @@ class _FakeFileSource_9 extends _i1.SmartFake implements _i9.FileSource {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeKdbxEntry_10 extends _i1.SmartFake implements _i7.KdbxEntry {
@@ -143,9 +143,9 @@ class _FakeKdbxEntry_10 extends _i1.SmartFake implements _i7.KdbxEntry {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeFileContent_11 extends _i1.SmartFake implements _i10.FileContent {
@@ -153,9 +153,9 @@ class _FakeFileContent_11 extends _i1.SmartFake implements _i10.FileContent {
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 class _FakeAttachmentProvider_12 extends _i1.SmartFake
@@ -164,9 +164,9 @@ class _FakeAttachmentProvider_12 extends _i1.SmartFake
     Object parent,
     Invocation parentInvocation,
   ) : super(
-          parent,
-          parentInvocation,
-        );
+        parent,
+        parentInvocation,
+      );
 }
 
 /// A class which mocks [KdbxBloc].
@@ -178,108 +178,126 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
   }
 
   @override
-  _i2.Env get env => (super.noSuchMethod(
-        Invocation.getter(#env),
-        returnValue: _FakeEnv_0(
-          this,
-          Invocation.getter(#env),
-        ),
-      ) as _i2.Env);
+  _i2.Env get env =>
+      (super.noSuchMethod(
+            Invocation.getter(#env),
+            returnValue: _FakeEnv_0(
+              this,
+              Invocation.getter(#env),
+            ),
+          )
+          as _i2.Env);
 
   @override
-  _i3.AppDataBloc get appDataBloc => (super.noSuchMethod(
-        Invocation.getter(#appDataBloc),
-        returnValue: _FakeAppDataBloc_1(
-          this,
-          Invocation.getter(#appDataBloc),
-        ),
-      ) as _i3.AppDataBloc);
+  _i3.AppDataBloc get appDataBloc =>
+      (super.noSuchMethod(
+            Invocation.getter(#appDataBloc),
+            returnValue: _FakeAppDataBloc_1(
+              this,
+              Invocation.getter(#appDataBloc),
+            ),
+          )
+          as _i3.AppDataBloc);
 
   @override
-  _i4.Analytics get analytics => (super.noSuchMethod(
-        Invocation.getter(#analytics),
-        returnValue: _FakeAnalytics_2(
-          this,
-          Invocation.getter(#analytics),
-        ),
-      ) as _i4.Analytics);
+  _i4.Analytics get analytics =>
+      (super.noSuchMethod(
+            Invocation.getter(#analytics),
+            returnValue: _FakeAnalytics_2(
+              this,
+              Invocation.getter(#analytics),
+            ),
+          )
+          as _i4.Analytics);
 
   @override
-  _i5.CloudStorageBloc get cloudStorageBloc => (super.noSuchMethod(
-        Invocation.getter(#cloudStorageBloc),
-        returnValue: _FakeCloudStorageBloc_3(
-          this,
-          Invocation.getter(#cloudStorageBloc),
-        ),
-      ) as _i5.CloudStorageBloc);
+  _i5.CloudStorageBloc get cloudStorageBloc =>
+      (super.noSuchMethod(
+            Invocation.getter(#cloudStorageBloc),
+            returnValue: _FakeCloudStorageBloc_3(
+              this,
+              Invocation.getter(#cloudStorageBloc),
+            ),
+          )
+          as _i5.CloudStorageBloc);
 
   @override
-  _i6.QuickUnlockStorage get quickUnlockStorage => (super.noSuchMethod(
-        Invocation.getter(#quickUnlockStorage),
-        returnValue: _FakeQuickUnlockStorage_4(
-          this,
-          Invocation.getter(#quickUnlockStorage),
-        ),
-      ) as _i6.QuickUnlockStorage);
+  _i6.QuickUnlockStorage get quickUnlockStorage =>
+      (super.noSuchMethod(
+            Invocation.getter(#quickUnlockStorage),
+            returnValue: _FakeQuickUnlockStorage_4(
+              this,
+              Invocation.getter(#quickUnlockStorage),
+            ),
+          )
+          as _i6.QuickUnlockStorage);
 
   @override
-  _i7.KdbxFormat get kdbxFormat => (super.noSuchMethod(
-        Invocation.getter(#kdbxFormat),
-        returnValue: _FakeKdbxFormat_5(
-          this,
-          Invocation.getter(#kdbxFormat),
-        ),
-      ) as _i7.KdbxFormat);
+  _i7.KdbxFormat get kdbxFormat =>
+      (super.noSuchMethod(
+            Invocation.getter(#kdbxFormat),
+            returnValue: _FakeKdbxFormat_5(
+              this,
+              Invocation.getter(#kdbxFormat),
+            ),
+          )
+          as _i7.KdbxFormat);
 
   @override
   set delegate(_i6.KdbxBlocDelegate? _delegate) => super.noSuchMethod(
-        Invocation.setter(
-          #delegate,
-          _delegate,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(
+      #delegate,
+      _delegate,
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   Iterable<MapEntry<_i9.FileSource, _i7.KdbxFile>> get openedFilesWithSources =>
       (super.noSuchMethod(
-        Invocation.getter(#openedFilesWithSources),
-        returnValue: <MapEntry<_i9.FileSource, _i7.KdbxFile>>[],
-      ) as Iterable<MapEntry<_i9.FileSource, _i7.KdbxFile>>);
+            Invocation.getter(#openedFilesWithSources),
+            returnValue: <MapEntry<_i9.FileSource, _i7.KdbxFile>>[],
+          )
+          as Iterable<MapEntry<_i9.FileSource, _i7.KdbxFile>>);
 
   @override
-  _i6.OpenedKdbxFiles get openedFiles => (super.noSuchMethod(
-        Invocation.getter(#openedFiles),
-        returnValue: _FakeOpenedKdbxFiles_6(
-          this,
-          Invocation.getter(#openedFiles),
-        ),
-      ) as _i6.OpenedKdbxFiles);
+  _i6.OpenedKdbxFiles get openedFiles =>
+      (super.noSuchMethod(
+            Invocation.getter(#openedFiles),
+            returnValue: _FakeOpenedKdbxFiles_6(
+              this,
+              Invocation.getter(#openedFiles),
+            ),
+          )
+          as _i6.OpenedKdbxFiles);
 
   @override
-  List<_i7.KdbxFile> get openedFilesKdbx => (super.noSuchMethod(
-        Invocation.getter(#openedFilesKdbx),
-        returnValue: <_i7.KdbxFile>[],
-      ) as List<_i7.KdbxFile>);
+  List<_i7.KdbxFile> get openedFilesKdbx =>
+      (super.noSuchMethod(
+            Invocation.getter(#openedFilesKdbx),
+            returnValue: <_i7.KdbxFile>[],
+          )
+          as List<_i7.KdbxFile>);
 
   @override
   _i8.ValueStream<_i6.OpenedKdbxFiles> get openedFilesChanged =>
       (super.noSuchMethod(
-        Invocation.getter(#openedFilesChanged),
-        returnValue: _FakeValueStream_7<_i6.OpenedKdbxFiles>(
-          this,
-          Invocation.getter(#openedFilesChanged),
-        ),
-      ) as _i8.ValueStream<_i6.OpenedKdbxFiles>);
+            Invocation.getter(#openedFilesChanged),
+            returnValue: _FakeValueStream_7<_i6.OpenedKdbxFiles>(
+              this,
+              Invocation.getter(#openedFilesChanged),
+            ),
+          )
+          as _i8.ValueStream<_i6.OpenedKdbxFiles>);
 
   @override
   void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #dispose,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i11.Future<_i6.KdbxOpenedFile> updateOpenedFile(
@@ -287,25 +305,27 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i6.OpenedFileUpdater? updater,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateOpenedFile,
-          [
-            file,
-            updater,
-          ],
-        ),
-        returnValue:
-            _i11.Future<_i6.KdbxOpenedFile>.value(_FakeKdbxOpenedFile_8(
-          this,
-          Invocation.method(
-            #updateOpenedFile,
-            [
-              file,
-              updater,
-            ],
-          ),
-        )),
-      ) as _i11.Future<_i6.KdbxOpenedFile>);
+            Invocation.method(
+              #updateOpenedFile,
+              [
+                file,
+                updater,
+              ],
+            ),
+            returnValue: _i11.Future<_i6.KdbxOpenedFile>.value(
+              _FakeKdbxOpenedFile_8(
+                this,
+                Invocation.method(
+                  #updateOpenedFile,
+                  [
+                    file,
+                    updater,
+                  ],
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i6.KdbxOpenedFile>);
 
   @override
   _i11.Stream<_i6.OpenFileResult> openFile(
@@ -314,16 +334,17 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     bool? addToQuickUnlock = false,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #openFile,
-          [
-            file,
-            credentials,
-          ],
-          {#addToQuickUnlock: addToQuickUnlock},
-        ),
-        returnValue: _i11.Stream<_i6.OpenFileResult>.empty(),
-      ) as _i11.Stream<_i6.OpenFileResult>);
+            Invocation.method(
+              #openFile,
+              [
+                file,
+                credentials,
+              ],
+              {#addToQuickUnlock: addToQuickUnlock},
+            ),
+            returnValue: _i11.Stream<_i6.OpenFileResult>.empty(),
+          )
+          as _i11.Stream<_i6.OpenFileResult>);
 
   @override
   _i11.Future<void> continueLoadInBackground(
@@ -332,26 +353,29 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     required _i9.FileSource? fileSource,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #continueLoadInBackground,
-          [openIt],
-          {
-            #debugName: debugName,
-            #fileSource: fileSource,
-          },
-        ),
-        returnValue: _i11.Future<void>.value(),
-        returnValueForMissingStub: _i11.Future<void>.value(),
-      ) as _i11.Future<void>);
+            Invocation.method(
+              #continueLoadInBackground,
+              [openIt],
+              {
+                #debugName: debugName,
+                #fileSource: fileSource,
+              },
+            ),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
+          )
+          as _i11.Future<void>);
 
   @override
-  bool hasQuickUnlockOpen() => (super.noSuchMethod(
-        Invocation.method(
-          #hasQuickUnlockOpen,
-          [],
-        ),
-        returnValue: false,
-      ) as bool);
+  bool hasQuickUnlockOpen() =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #hasQuickUnlockOpen,
+              [],
+            ),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   _i11.Future<int> reopenQuickUnlock(
@@ -359,37 +383,41 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i12.TaskProgress? progress,
   ]) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #reopenQuickUnlock,
-          [
-            loc,
-            progress,
-          ],
-        ),
-        returnValue: _i11.Future<int>.value(0),
-      ) as _i11.Future<int>);
+            Invocation.method(
+              #reopenQuickUnlock,
+              [
+                loc,
+                progress,
+              ],
+            ),
+            returnValue: _i11.Future<int>.value(0),
+          )
+          as _i11.Future<int>);
 
   @override
-  _i11.Future<void> close(_i7.KdbxFile? file) => (super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [file],
-        ),
-        returnValue: _i11.Future<void>.value(),
-        returnValueForMissingStub: _i11.Future<void>.value(),
-      ) as _i11.Future<void>);
+  _i11.Future<void> close(_i7.KdbxFile? file) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #close,
+              [file],
+            ),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
+          )
+          as _i11.Future<void>);
 
   @override
   _i11.Future<void> closeAllFiles({required bool? clearQuickUnlock}) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #closeAllFiles,
-          [],
-          {#clearQuickUnlock: clearQuickUnlock},
-        ),
-        returnValue: _i11.Future<void>.value(),
-        returnValueForMissingStub: _i11.Future<void>.value(),
-      ) as _i11.Future<void>);
+            Invocation.method(
+              #closeAllFiles,
+              [],
+              {#clearQuickUnlock: clearQuickUnlock},
+            ),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
+          )
+          as _i11.Future<void>);
 
   @override
   _i11.Future<_i9.FileSource> createFile({
@@ -399,30 +427,33 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i13.CloudStorageSaveTarget? target,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createFile,
-          [],
-          {
-            #password: password,
-            #databaseName: databaseName,
-            #openAfterCreate: openAfterCreate,
-            #target: target,
-          },
-        ),
-        returnValue: _i11.Future<_i9.FileSource>.value(_FakeFileSource_9(
-          this,
-          Invocation.method(
-            #createFile,
-            [],
-            {
-              #password: password,
-              #databaseName: databaseName,
-              #openAfterCreate: openAfterCreate,
-              #target: target,
-            },
-          ),
-        )),
-      ) as _i11.Future<_i9.FileSource>);
+            Invocation.method(
+              #createFile,
+              [],
+              {
+                #password: password,
+                #databaseName: databaseName,
+                #openAfterCreate: openAfterCreate,
+                #target: target,
+              },
+            ),
+            returnValue: _i11.Future<_i9.FileSource>.value(
+              _FakeFileSource_9(
+                this,
+                Invocation.method(
+                  #createFile,
+                  [],
+                  {
+                    #password: password,
+                    #databaseName: databaseName,
+                    #openAfterCreate: openAfterCreate,
+                    #target: target,
+                  },
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i9.FileSource>);
 
   @override
   _i7.KdbxEntry createEntry({
@@ -430,26 +461,27 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i7.KdbxGroup? group,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createEntry,
-          [],
-          {
-            #file: file,
-            #group: group,
-          },
-        ),
-        returnValue: _FakeKdbxEntry_10(
-          this,
-          Invocation.method(
-            #createEntry,
-            [],
-            {
-              #file: file,
-              #group: group,
-            },
-          ),
-        ),
-      ) as _i7.KdbxEntry);
+            Invocation.method(
+              #createEntry,
+              [],
+              {
+                #file: file,
+                #group: group,
+              },
+            ),
+            returnValue: _FakeKdbxEntry_10(
+              this,
+              Invocation.method(
+                #createEntry,
+                [],
+                {
+                  #file: file,
+                  #group: group,
+                },
+              ),
+            ),
+          )
+          as _i7.KdbxEntry);
 
   @override
   _i11.Future<_i10.FileContent> saveFile(
@@ -458,48 +490,56 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i7.Credentials? updateCredentials,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveFile,
-          [file],
-          {
-            #toFileSource: toFileSource,
-            #updateCredentials: updateCredentials,
-          },
-        ),
-        returnValue: _i11.Future<_i10.FileContent>.value(_FakeFileContent_11(
-          this,
-          Invocation.method(
-            #saveFile,
-            [file],
-            {
-              #toFileSource: toFileSource,
-              #updateCredentials: updateCredentials,
-            },
-          ),
-        )),
-      ) as _i11.Future<_i10.FileContent>);
+            Invocation.method(
+              #saveFile,
+              [file],
+              {
+                #toFileSource: toFileSource,
+                #updateCredentials: updateCredentials,
+              },
+            ),
+            returnValue: _i11.Future<_i10.FileContent>.value(
+              _FakeFileContent_11(
+                this,
+                Invocation.method(
+                  #saveFile,
+                  [file],
+                  {
+                    #toFileSource: toFileSource,
+                    #updateCredentials: updateCredentials,
+                  },
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i10.FileContent>);
 
   @override
-  _i6.KdbxOpenedFile fileForKdbxFile(_i7.KdbxFile? file) => (super.noSuchMethod(
-        Invocation.method(
-          #fileForKdbxFile,
-          [file],
-        ),
-        returnValue: _FakeKdbxOpenedFile_8(
-          this,
-          Invocation.method(
-            #fileForKdbxFile,
-            [file],
-          ),
-        ),
-      ) as _i6.KdbxOpenedFile);
+  _i6.KdbxOpenedFile fileForKdbxFile(_i7.KdbxFile? file) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #fileForKdbxFile,
+              [file],
+            ),
+            returnValue: _FakeKdbxOpenedFile_8(
+              this,
+              Invocation.method(
+                #fileForKdbxFile,
+                [file],
+              ),
+            ),
+          )
+          as _i6.KdbxOpenedFile);
 
   @override
   _i6.KdbxOpenedFile? fileForFileSource(_i9.FileSource? fileSource) =>
-      (super.noSuchMethod(Invocation.method(
-        #fileForFileSource,
-        [fileSource],
-      )) as _i6.KdbxOpenedFile?);
+      (super.noSuchMethod(
+            Invocation.method(
+              #fileForFileSource,
+              [fileSource],
+            ),
+          )
+          as _i6.KdbxOpenedFile?);
 
   @override
   _i11.Future<_i6.KdbxOpenedFile> saveAs(
@@ -507,25 +547,27 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i9.FileSource? output,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveAs,
-          [
-            oldFile,
-            output,
-          ],
-        ),
-        returnValue:
-            _i11.Future<_i6.KdbxOpenedFile>.value(_FakeKdbxOpenedFile_8(
-          this,
-          Invocation.method(
-            #saveAs,
-            [
-              oldFile,
-              output,
-            ],
-          ),
-        )),
-      ) as _i11.Future<_i6.KdbxOpenedFile>);
+            Invocation.method(
+              #saveAs,
+              [
+                oldFile,
+                output,
+              ],
+            ),
+            returnValue: _i11.Future<_i6.KdbxOpenedFile>.value(
+              _FakeKdbxOpenedFile_8(
+                this,
+                Invocation.method(
+                  #saveAs,
+                  [
+                    oldFile,
+                    output,
+                  ],
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i6.KdbxOpenedFile>);
 
   @override
   _i11.Future<_i6.KdbxOpenedFile> saveAsNewFile(
@@ -534,101 +576,118 @@ class MockKdbxBloc extends _i1.Mock implements _i6.KdbxBloc {
     _i13.CloudStorageProvider? cs,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveAsNewFile,
-          [
-            oldFile,
-            createFileInfo,
-            cs,
-          ],
-        ),
-        returnValue:
-            _i11.Future<_i6.KdbxOpenedFile>.value(_FakeKdbxOpenedFile_8(
-          this,
-          Invocation.method(
-            #saveAsNewFile,
-            [
-              oldFile,
-              createFileInfo,
-              cs,
-            ],
-          ),
-        )),
-      ) as _i11.Future<_i6.KdbxOpenedFile>);
+            Invocation.method(
+              #saveAsNewFile,
+              [
+                oldFile,
+                createFileInfo,
+                cs,
+              ],
+            ),
+            returnValue: _i11.Future<_i6.KdbxOpenedFile>.value(
+              _FakeKdbxOpenedFile_8(
+                this,
+                Invocation.method(
+                  #saveAsNewFile,
+                  [
+                    oldFile,
+                    createFileInfo,
+                    cs,
+                  ],
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i6.KdbxOpenedFile>);
 
   @override
   _i11.Future<_i9.FileSource> saveLocally(_i9.FileSource? source) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveLocally,
-          [source],
-        ),
-        returnValue: _i11.Future<_i9.FileSource>.value(_FakeFileSource_9(
-          this,
-          Invocation.method(
-            #saveLocally,
-            [source],
-          ),
-        )),
-      ) as _i11.Future<_i9.FileSource>);
+            Invocation.method(
+              #saveLocally,
+              [source],
+            ),
+            returnValue: _i11.Future<_i9.FileSource>.value(
+              _FakeFileSource_9(
+                this,
+                Invocation.method(
+                  #saveLocally,
+                  [source],
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i9.FileSource>);
 
   @override
   _i7.KdbxEntry? findEntryByUuid(String? uuid) =>
-      (super.noSuchMethod(Invocation.method(
-        #findEntryByUuid,
-        [uuid],
-      )) as _i7.KdbxEntry?);
+      (super.noSuchMethod(
+            Invocation.method(
+              #findEntryByUuid,
+              [uuid],
+            ),
+          )
+          as _i7.KdbxEntry?);
 
   @override
   void clearEntryByUuidLookup() => super.noSuchMethod(
-        Invocation.method(
-          #clearEntryByUuidLookup,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #clearEntryByUuidLookup,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i11.Stream<_i6.ReloadStatus> reload(_i6.KdbxOpenedFile? file) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #reload,
-          [file],
-        ),
-        returnValue: _i11.Stream<_i6.ReloadStatus>.empty(),
-      ) as _i11.Stream<_i6.ReloadStatus>);
+            Invocation.method(
+              #reload,
+              [file],
+            ),
+            returnValue: _i11.Stream<_i6.ReloadStatus>.empty(),
+          )
+          as _i11.Stream<_i6.ReloadStatus>);
 
   @override
   _i11.Future<_i6.AttachmentProvider> attachmentProviderForFileSource(
-          _i7.KdbxFile? file) =>
+    _i7.KdbxFile? file,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #attachmentProviderForFileSource,
-          [file],
-        ),
-        returnValue: _i11.Future<_i6.AttachmentProvider>.value(
-            _FakeAttachmentProvider_12(
-          this,
-          Invocation.method(
-            #attachmentProviderForFileSource,
-            [file],
-          ),
-        )),
-      ) as _i11.Future<_i6.AttachmentProvider>);
+            Invocation.method(
+              #attachmentProviderForFileSource,
+              [file],
+            ),
+            returnValue: _i11.Future<_i6.AttachmentProvider>.value(
+              _FakeAttachmentProvider_12(
+                this,
+                Invocation.method(
+                  #attachmentProviderForFileSource,
+                  [file],
+                ),
+              ),
+            ),
+          )
+          as _i11.Future<_i6.AttachmentProvider>);
 
   @override
   _i14.AuthPassExternalAttachment? attachmentInfo(_i7.KdbxBinary? binary) =>
-      (super.noSuchMethod(Invocation.method(
-        #attachmentInfo,
-        [binary],
-      )) as _i14.AuthPassExternalAttachment?);
+      (super.noSuchMethod(
+            Invocation.method(
+              #attachmentInfo,
+              [binary],
+            ),
+          )
+          as _i14.AuthPassExternalAttachment?);
 
   @override
-  bool attachmentIsFromCloud(_i7.KdbxBinary? binary) => (super.noSuchMethod(
-        Invocation.method(
-          #attachmentIsFromCloud,
-          [binary],
-        ),
-        returnValue: false,
-      ) as bool);
+  bool attachmentIsFromCloud(_i7.KdbxBinary? binary) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #attachmentIsFromCloud,
+              [binary],
+            ),
+            returnValue: false,
+          )
+          as bool);
 }

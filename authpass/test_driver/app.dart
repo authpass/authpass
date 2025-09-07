@@ -8,15 +8,17 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   // This line enables the extension.
-  enableFlutterDriverExtension(handler: (message) async {
-    switch (message) {
-      case 'nextTheme':
-        final appDataBloc = AuthPassApp.currentNavigatorKey!.currentContext!
-            .read<AppDataBloc>();
-        return (await appDataBloc.updateNextTheme()).toString();
-    }
-    return 'unknown';
-  });
+  enableFlutterDriverExtension(
+    handler: (message) async {
+      switch (message) {
+        case 'nextTheme':
+          final appDataBloc = AuthPassApp.currentNavigatorKey!.currentContext!
+              .read<AppDataBloc>();
+          return (await appDataBloc.updateNextTheme()).toString();
+      }
+      return 'unknown';
+    },
+  );
 
   BiometricStorage.instance = NoopBiometricStorage();
 
@@ -32,6 +34,5 @@ class NoopBiometricStorage extends MethodChannelBiometricStorage
   @override
   Future<CanAuthenticateResponse> canAuthenticate({
     StorageFileInitOptions? options,
-  }) async =>
-      CanAuthenticateResponse.errorHwUnavailable;
+  }) async => CanAuthenticateResponse.errorHwUnavailable;
 }

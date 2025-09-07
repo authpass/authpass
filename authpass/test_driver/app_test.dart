@@ -18,8 +18,9 @@ void main() {
     Future<void> takeScreenshot() async {
       const basedir = 'build/screenshots';
       await Directory(basedir).create(recursive: true);
-      await File(path.join(basedir, 'test${screenshotCount++}.png'))
-          .writeAsBytes(await driver!.screenshot());
+      await File(
+        path.join(basedir, 'test${screenshotCount++}.png'),
+      ).writeAsBytes(await driver!.screenshot());
     }
 
     // Connect to the Flutter driver before running any tests.
@@ -42,13 +43,14 @@ void main() {
       await driver!.waitUntilNoTransientCallbacks();
 
       await driver!.enterText(
-          'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx');
+        'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx',
+      );
       await takeScreenshot();
       //await find.ancestor(of: find.text('Ok'), matching: find.byType('FlatButton'));
       await driver!.tap(find.text('OK'));
       await takeScreenshot();
-//      await driver.waitUntilNoTransientCallbacks(
-//          timeout: const Duration(seconds: 10));
+      //      await driver.waitUntilNoTransientCallbacks(
+      //          timeout: const Duration(seconds: 10));
       await takeScreenshot();
 
       await driver!.waitUntilNoTransientCallbacks();
@@ -56,9 +58,12 @@ void main() {
       await driver!.enterText('asdf');
       // await driver.tap(find.byType('CheckboxListTile'));
       await driver!.tap(find.text('Continue'));
-      final newEntryTitle = await driver!.getWidgetDiagnostics(find.descendant(
+      final newEntryTitle = await driver!.getWidgetDiagnostics(
+        find.descendant(
           of: find.byType('PasswordListContent'),
-          matching: find.text('new entry')));
+          matching: find.text('new entry'),
+        ),
+      );
       expect(newEntryTitle, isNotNull);
       await takeScreenshot();
     });

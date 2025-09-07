@@ -17,8 +17,11 @@ Future<void> main() async {
 
   final provider = OneDriveProvider(env: env, helper: CloudStorageHelperMock());
   final result = await provider.startAuth((prompt) async {
-    if (prompt is UserAuthenticationPrompt<OAuthTokenResult,
-        OAuthTokenFlowPromptData>) {
+    if (prompt
+        is UserAuthenticationPrompt<
+          OAuthTokenResult,
+          OAuthTokenFlowPromptData
+        >) {
       print('Open URL: ${prompt.data.openUri}');
       print('And enter code:');
       final code = stdin.readLineSync();

@@ -35,16 +35,20 @@ class TestUtil {
   static Future<Env> createEnv() async {
     final secretsFile = filePath('test/_testSecrets.json');
     _logger.fine('Using ${secretsFile.absolute}');
-    final secretJson =
-        secretsFile.existsSync() ? await secretsFile.readAsString() : '{}';
+    final secretJson = secretsFile.existsSync()
+        ? await secretsFile.readAsString()
+        : '{}';
 
-    return TestEnv(EnvSecretsFake.fromJson(
-        json.decode(secretJson) as Map<String, dynamic>));
+    return TestEnv(
+      EnvSecretsFake.fromJson(json.decode(secretJson) as Map<String, dynamic>),
+    );
   }
 
   KdbxFile createFile() {
     return kdbxFormat.create(
-        Credentials(ProtectedValue.fromString('asdf')), 'asdf');
+      Credentials(ProtectedValue.fromString('asdf')),
+      'asdf',
+    );
   }
 }
 
@@ -55,8 +59,8 @@ class MockAnalytics implements Analytics {
 
 class CloudStorageHelperMock implements CloudStorageHelperBase {
   CloudStorageHelperMock();
-//  @override
-//  final Env env;
+  //  @override
+  //  final Env env;
 
   @override
   final Analytics analytics = MockAnalytics();
@@ -68,11 +72,14 @@ class CloudStorageHelperMock implements CloudStorageHelperBase {
         final storage = <String, String>{};
         if (_file.existsSync()) {
           _logger.fine('Loading from $_file');
-          storage.addAll((json.decode(await _file.readAsString()) as Map)
-              .cast<String, String>());
+          storage.addAll(
+            (json.decode(await _file.readAsString()) as Map)
+                .cast<String, String>(),
+          );
         } else {
-          _logger
-              .severe('Unable to find cloud storage file at ${_file.absolute}');
+          _logger.severe(
+            'Unable to find cloud storage file at ${_file.absolute}',
+          );
         }
         return storage;
       })();
@@ -110,7 +117,7 @@ class TestPathUtil extends PathUtil {
 class EnvSecretsFake extends Fake implements EnvSecrets {
   EnvSecretsFake(this.microsoftClientId);
   EnvSecretsFake.fromJson(Map<String, dynamic> map)
-      : microsoftClientId = map['microsoftClientId'] as String?;
+    : microsoftClientId = map['microsoftClientId'] as String?;
 
   @override
   final String? microsoftClientId;
