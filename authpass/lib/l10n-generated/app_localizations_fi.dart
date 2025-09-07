@@ -193,7 +193,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String preferencesSearchFieldPromptHelp(
-      Object wildCardCharacter, Object defaultSearchFields) {
+    Object wildCardCharacter,
+    Object defaultSearchFields,
+  ) {
     return 'Käytä $wildCardCharacter kaikille, jätä tyhjäksi oletukseksi ($defaultSearchFields)';
   }
 
@@ -316,8 +318,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String savedFiles(int numFiles, Object files) {
     final intl.NumberFormat numFilesNumberFormat =
         intl.NumberFormat.compactLong(
-      locale: localeName,
-    );
+          locale: localeName,
+        );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
     String _temp0 = intl.Intl.pluralLogic(
@@ -465,7 +467,10 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String errorOpenFileAlreadyOpenBody(
-      Object databaseName, Object openFileSource, Object newFileSource) {
+    Object databaseName,
+    Object openFileSource,
+    Object newFileSource,
+  ) {
     return 'Valittu tietokanta $databaseName on jo avoinna $openFileSource (Yritettiin avata $newFileSource)';
   }
 
@@ -916,7 +921,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String cloudStorageAuthErrorMessage(
-      Object cloudStorageName, Object errorMessage) {
+    Object cloudStorageName,
+    Object errorMessage,
+  ) {
     return 'Virhe, kun yritetään tunnistautua $cloudStorageName: $errorMessage';
   }
 

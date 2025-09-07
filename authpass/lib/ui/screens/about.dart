@@ -35,104 +35,110 @@ class AuthPassAboutDialog extends StatelessWidget {
     final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return FutureBuilder<AppInfo>(
-        future: env.getAppInfo(),
-        builder: (context, snapshot) {
-          final appInfo = snapshot.data;
-          return AboutDialog(
-            applicationIcon: GestureDetector(
-              onLongPress: () async {
-                final deps = context.read<Deps>();
-                final appData = await deps.appDataBloc.store.load();
-                if (!context.mounted) {
-                  return;
-                }
-                final newData = await SimplePromptDialog(
-                  labelText: 'debug usertype', // NON-NLS
-                  initialValue: appData.manualUserType ?? '', // NON-NLS
-                ).show(context);
-                if (newData != null) {
-                  await deps.appDataBloc
-                      .update((b, _) => b..manualUserType = newData);
-                  deps.analytics.events.trackUserType(userType: newData);
-                }
-              },
-              child: ImageIcon(
-                const AssetImage('assets/images/logo_icon.png'),
-                color: Theme.of(context).primaryColor,
-              ),
+      future: env.getAppInfo(),
+      builder: (context, snapshot) {
+        final appInfo = snapshot.data;
+        return AboutDialog(
+          applicationIcon: GestureDetector(
+            onLongPress: () async {
+              final deps = context.read<Deps>();
+              final appData = await deps.appDataBloc.store.load();
+              if (!context.mounted) {
+                return;
+              }
+              final newData = await SimplePromptDialog(
+                labelText: 'debug usertype', // NON-NLS
+                initialValue: appData.manualUserType ?? '', // NON-NLS
+              ).show(context);
+              if (newData != null) {
+                await deps.appDataBloc.update(
+                  (b, _) => b..manualUserType = newData,
+                );
+                deps.analytics.events.trackUserType(userType: newData);
+              }
+            },
+            child: ImageIcon(
+              const AssetImage('assets/images/logo_icon.png'),
+              color: Theme.of(context).primaryColor,
             ),
-            applicationName: loc.aboutAppName,
-            applicationVersion: appInfo?.versionLabel,
-            applicationLegalese: '© by Herbert Poul, 2019-2021', // NON-NLS
-            children: <Widget>[
-              const SizedBox(height: 32),
-              UrlLink(
-                caption: loc.aboutLinkFeedback,
-                url: 'mailto:hello@authpass.app',
-              ),
-              UrlLink(
-                caption: loc.aboutLinkVisitWebsite,
-                url: 'https://authpass.app/',
-              ),
-              UrlLink(
-                caption: loc.aboutLinkGitHub,
-                url: 'https://github.com/authpass/authpass/',
-              ),
-              const SizedBox(height: 32),
-              FutureBuilder(
-                  future: http.read(Uri.parse(_contributorsUrl)),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.hasData) {
-                      return MarkdownBody(
-                        data: snapshot.requireData,
-                        imageBuilder: (uri, title, alt) {
-                          final icon = _contributorsImageMapping[alt];
-                          if (icon != null) {
-                            return FaIcon(
-                              icon,
-                              size: 12,
-                              color: theme.textTheme.bodyLarge!.color,
-                            );
-                          }
-                          if (alt != null) {
-                            return Text(alt);
-                          }
-                          return const SizedBox.shrink(); // Remove images
-                        },
-                        listItemCrossAxisAlignment:
-                            MarkdownListItemCrossAxisAlignment.start,
-                        onTapLink: (text, url, title) {
-                          if (url != null) {
-                            DialogUtils.openUrl(url);
-                          }
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      return UrlLink(
-                        caption: loc.aboutLinkContributors,
-                        url: _contributorsUrl,
-                      );
-                    }
+          ),
+          applicationName: loc.aboutAppName,
+          applicationVersion: appInfo?.versionLabel,
+          applicationLegalese: '© by Herbert Poul, 2019-2021', // NON-NLS
+          children: <Widget>[
+            const SizedBox(height: 32),
+            UrlLink(
+              caption: loc.aboutLinkFeedback,
+              url: 'mailto:hello@authpass.app',
+            ),
+            UrlLink(
+              caption: loc.aboutLinkVisitWebsite,
+              url: 'https://authpass.app/',
+            ),
+            UrlLink(
+              caption: loc.aboutLinkGitHub,
+              url: 'https://github.com/authpass/authpass/',
+            ),
+            const SizedBox(height: 32),
+            FutureBuilder(
+              future: http.read(Uri.parse(_contributorsUrl)),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.hasData) {
+                  return MarkdownBody(
+                    data: snapshot.requireData,
+                    sizedImageBuilder: (config) {
+                      final icon = _contributorsImageMapping[config.alt];
+                      if (icon != null) {
+                        return FaIcon(
+                          icon,
+                          size: 12,
+                          color: theme.textTheme.bodyLarge!.color,
+                        );
+                      }
+                      if (config.alt case final alt?) {
+                        return Text(alt);
+                      }
+                      return const SizedBox.shrink(); // Remove images
+                    },
+                    listItemCrossAxisAlignment:
+                        MarkdownListItemCrossAxisAlignment.start,
+                    onTapLink: (text, url, title) {
+                      if (url != null) {
+                        DialogUtils.openUrl(url);
+                      }
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return UrlLink(
+                    caption: loc.aboutLinkContributors,
+                    url: _contributorsUrl,
+                  );
+                }
 
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-              const SizedBox(height: 32),
-              TextField(
-                readOnly: true,
-                decoration: const InputDecoration.collapsed(
-                    hintText: CharConstants.empty),
-                controller: TextEditingController(
-                    text: loc.aboutLogFile(logFiles.isEmpty
-                        ? 'No Log File?!' // NON-NLS
-                        : logFiles.first.absolute.path)),
-                style: Theme.of(context).textTheme.bodySmall!,
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+            const SizedBox(height: 32),
+            TextField(
+              readOnly: true,
+              decoration: const InputDecoration.collapsed(
+                hintText: CharConstants.empty,
               ),
-            ],
-          );
-        });
+              controller: TextEditingController(
+                text: loc.aboutLogFile(
+                  logFiles.isEmpty
+                      ? 'No Log File?!' // NON-NLS
+                      : logFiles.first.absolute.path,
+                ),
+              ),
+              style: Theme.of(context).textTheme.bodySmall!,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   static void openDialog(BuildContext context) {
@@ -171,7 +177,8 @@ class UrlLink extends StatelessWidget {
     final theme = Theme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-          border: Border(bottom: Divider.createBorderSide(context))),
+        border: Border(bottom: Divider.createBorderSide(context)),
+      ),
       child: InkWell(
         onTap: () {
           DialogUtils.openUrl(url);
@@ -193,8 +200,8 @@ class UrlLink extends StatelessWidget {
                     .apply(color: theme.primaryColor, fontSizeFactor: 0.95)
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-//            const Divider(),
-//        const SizedBox(height: 16),
+              //            const Divider(),
+              //        const SizedBox(height: 16),
             ],
           ),
         ),
