@@ -411,7 +411,6 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     _logger.finest('selectedColor:$_selectedColor');
-    final loc = AppLocalizations.of(context);
     final matLoc = MaterialLocalizations.of(context);
     return AlertDialog(
       contentPadding: const EdgeInsets.all(6.0),
@@ -428,15 +427,6 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
                   _selectedColor = color;
                 });
               },
-            ),
-            RadioListTile<Color?>(
-              value: null,
-              groupValue: _selectedColor,
-              onChanged: (value) {
-                _selectedColor = null;
-              },
-              title: Text(loc.clearColor),
-              dense: true,
             ),
           ],
         ),

@@ -479,7 +479,9 @@ class _ShareCodeInputDialogState extends State<ShareCodeInputDialog>
       final loadedToken = await widget.provider.loadFromShareToken(
         token: token,
       );
-      // ignore: use_build_context_synchronously
+      if (!mounted) {
+        return;
+      }
       await Navigator.of(
         context,
       ).pushReplacement(CredentialsScreen.route(loadedToken.fileSource));

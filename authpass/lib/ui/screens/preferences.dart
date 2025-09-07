@@ -382,33 +382,71 @@ class _PreferencesBodyState extends State<PreferencesBody>
 }
 
 class SelectLanguageDialog extends StatelessWidget {
-  const SelectLanguageDialog({super.key, this.locales, this.localeOverride});
+  const SelectLanguageDialog({
+    super.key,
+    required this.locales,
+    this.localeOverride,
+  });
 
-  final List<LocaleInfo>? locales;
+  final List<LocaleInfo> locales;
   final String? localeOverride;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    return SimpleDialog(
+
+    return AlertDialog(
       title: Text(loc.preferenceSelectLanguage),
-      children: locales!
-          .map(
-            (LocaleInfo e) => RadioListTile<String?>(
-              title: Text(e.nativeName),
-              subtitle: e.translatedName
-                  ?.takeIf((n) => n != e.nativeName)
-                  ?.let((name) => Text(e.translatedName!)),
-              secondary: e.locale?.let((locale) => Text(locale)),
-              value: e.locale,
-              groupValue: localeOverride,
-              onChanged: (value) {
-                Navigator.of(context).pop(e);
-              },
+      content: Scrollbar(
+        trackVisibility: true,
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          child: RadioGroup<String?>(
+            groupValue: localeOverride,
+            onChanged: (value) {
+              Navigator.of(context).pop(value);
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...locales.map(
+                  (e) => RadioListTile<String?>(
+                    value: e.locale,
+                    title: Text(e.nativeName),
+                    subtitle: e.translatedName
+                        ?.takeIf((n) => n != e.nativeName)
+                        ?.let(
+                          (name) => Text(name),
+                        ),
+                    secondary: e.locale?.let((locale) => Text(locale)),
+                    enabled: true,
+                  ),
+                ),
+              ],
             ),
-          )
-          .toList(),
+          ),
+        ),
+      ),
     );
+    // return SimpleDialog(
+    //   title: Text(loc.preferenceSelectLanguage),
+    //   children: locales
+    //       .map(
+    //         (LocaleInfo e) => RadioListTile<String?>(
+    //           title: Text(e.nativeName),
+    //           subtitle: e.translatedName
+    //               ?.takeIf((n) => n != e.nativeName)
+    //               ?.let((name) => Text(e.translatedName!)),
+    //           secondary: e.locale?.let((locale) => Text(locale)),
+    //           value: e.locale,
+    //           groupValue: localeOverride,
+    //           onChanged: (value) {
+    //             Navigator.of(context).pop(e);
+    //           },
+    //         ),
+    //       )
+    //       .toList(),
+    // );
   }
 }
 
@@ -584,7 +622,9 @@ class PreferencesOverflowMenuAction extends HookWidget {
             PopupMenuItem(
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: false);
-                // ignore: use_build_context_synchronously
+                if (!context.mounted) {
+                  return;
+                }
                 await Navigator.of(
                   context,
                   rootNavigator: true,

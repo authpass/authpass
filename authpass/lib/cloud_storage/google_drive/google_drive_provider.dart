@@ -106,7 +106,7 @@ class GoogleSignInWrapper {
       scopes,
     );
     if (auths == null) {
-      final ret = await authenticate.authorizationClient.authorizeScopes(
+      await authenticate.authorizationClient.authorizeScopes(
         scopes,
       );
     }
