@@ -23,45 +23,51 @@ void _testTotp(
   required String expectCode,
   String? totpFieldName,
 }) {
-  totpFieldName ??=
-      fields.containsKey('TOTP Secret') ? 'TOTP Secret' : fields.keys.first;
+  totpFieldName ??= fields.containsKey('TOTP Secret')
+      ? 'TOTP Secret'
+      : fields.keys.first;
   testWidgets(description, (WidgetTester tester) async {
     // Build our app and trigger a frame.
     final file = KdbxFormat().create(
-        Credentials.composite(ProtectedValue.fromString('asdf'), null), 'test');
+      Credentials.composite(ProtectedValue.fromString('asdf'), null),
+      'test',
+    );
     final entry = KdbxEntry.create(file, file.body.rootGroup);
     _createFields(entry, fields);
     await withClock(
-        Clock(
-            () => DateTime.utc(2020, 1, 1).subtract(const Duration(hours: 1))),
-        () async {
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales:
-            const [Locale('en')] + AppLocalizations.supportedLocales,
-        home: Scaffold(
-          body: MultiProvider(
-            providers: [
-              Provider.value(value: CommonFields(AppLocalizationsEn()))
-            ],
-            child: EntryField(
-                fieldType: FieldType.otp,
-                entry: entry,
-                fieldKey: KdbxKey(totpFieldName!),
-                onChangedMetadata: () {}),
+      Clock(() => DateTime.utc(2020, 1, 1).subtract(const Duration(hours: 1))),
+      () async {
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales:
+                const [Locale('en')] + AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: MultiProvider(
+                providers: [
+                  Provider.value(value: CommonFields(AppLocalizationsEn())),
+                ],
+                child: EntryField(
+                  fieldType: FieldType.otp,
+                  entry: entry,
+                  fieldKey: KdbxKey(totpFieldName!),
+                  onChangedMetadata: () {},
+                ),
+              ),
+            ),
           ),
-        ),
-      ));
-      final w = find
-          .descendant(
-            of: find.byType(EntryField),
-            matching: find.byType(Text),
-          )
-          .first;
-      expect(w, findsOneWidget);
-      final otpCode = w.evaluate().single.widget as Text;
-      expect(otpCode.data, expectCode);
-    });
+        );
+        final w = find
+            .descendant(
+              of: find.byType(EntryField),
+              matching: find.byType(Text),
+            )
+            .first;
+        expect(w, findsOneWidget);
+        final otpCode = w.evaluate().single.widget as Text;
+        expect(otpCode.data, expectCode);
+      },
+    );
   });
 }
 

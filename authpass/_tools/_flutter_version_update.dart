@@ -29,18 +29,21 @@ Future<void> main() async {
   for (final platform in platforms) {
     // final url = 'https://storage.googleapis.com/flutter_infra/'
     //     'releases/releases_$platform.json';
-    final url = 'https://storage.googleapis.com/flutter_infra_release/'
+    final url =
+        'https://storage.googleapis.com/flutter_infra_release/'
         'releases/releases_$platform.json';
     final response = await get(Uri.parse(url));
     if (response.statusCode != 200) {
       throw StateError(
-          'Unsuccessful fetching release json. ${response.statusCode} - ${response.body}');
+        'Unsuccessful fetching release json. ${response.statusCode} - ${response.body}',
+      );
     }
     final releases = parseReleases(response.body);
     final release = releases.firstWhere(
-        (release) => release.version == FLUTTER_VERSION,
-        orElse: (() => throw StateError(
-            'No such version found $FLUTTER_VERSION at $url')));
+      (release) => release.version == FLUTTER_VERSION,
+      orElse: (() =>
+          throw StateError('No such version found $FLUTTER_VERSION at $url')),
+    );
     output['FLUTTER_${platform.toUpperCase()}_VERSION'] = FLUTTER_VERSION;
     output['FLUTTER_${platform.toUpperCase()}_ARCHIVE'] = release.archive;
     output['FLUTTER_${platform.toUpperCase()}_SHA256'] = release.sha256;
@@ -57,7 +60,8 @@ Iterable<Release> parseReleases(String body) {
   final platformConfig = json.decode(body) as Map<String, dynamic>;
 
   return (platformConfig['releases'] as List).map(
-      (dynamic release) => Release.fromJson(release as Map<String, dynamic>));
+    (dynamic release) => Release.fromJson(release as Map<String, dynamic>),
+  );
 }
 
 class Release {
@@ -70,12 +74,12 @@ class Release {
   });
 
   factory Release.fromJson(Map<String, dynamic> map) => Release(
-        hash: map['hash'] as String?,
-        channel: map['channel'] as String?,
-        version: map['version'] as String?,
-        archive: map['archive'] as String?,
-        sha256: map['sha256'] as String?,
-      );
+    hash: map['hash'] as String?,
+    channel: map['channel'] as String?,
+    version: map['version'] as String?,
+    archive: map['archive'] as String?,
+    sha256: map['sha256'] as String?,
+  );
 
   final String? hash;
   final String? channel;

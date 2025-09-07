@@ -11,10 +11,14 @@ import 'package:yaml/yaml.dart' as yaml;
 // ignore_for_file: avoid_print
 
 /// Called by integration test to capture images.
-Future<void> screenshot(final FlutterDriver? driver, Config config, String name,
-    {Duration timeout = const Duration(seconds: 30),
-    bool silent = false,
-    bool waitUntilNoTransientCallbacks = true}) async {
+Future<void> screenshot(
+  final FlutterDriver? driver,
+  Config config,
+  String name, {
+  Duration timeout = const Duration(seconds: 30),
+  bool silent = false,
+  bool waitUntilNoTransientCallbacks = true,
+}) async {
   if (config.isScreenShotsAvailable) {
     // todo: auto-naming scheme
     if (waitUntilNoTransientCallbacks) {
@@ -23,8 +27,9 @@ Future<void> screenshot(final FlutterDriver? driver, Config config, String name,
 
     final pixels = await driver!.screenshot();
     final testDir = '${config.stagingDir}/$kTestScreenshotsDir';
-    final file =
-        await File('$testDir/$name.$kImageExtension').create(recursive: true);
+    final file = await File(
+      '$testDir/$name.$kImageExtension',
+    ).create(recursive: true);
     await file.writeAsBytes(pixels);
     print('Screenshot $name created');
   } else {
@@ -52,9 +57,11 @@ class Config {
           _configInfo = parseYamlFile(envConfigPath);
         }
       } else {
-        stdout.writeln('Warning: screenshots not available.\n'
-            '\tTo enable set $kEnvConfigPath environment variable\n'
-            '\tor create $kConfigFileName.');
+        stdout.writeln(
+          'Warning: screenshots not available.\n'
+          '\tTo enable set $kEnvConfigPath environment variable\n'
+          '\tor create $kConfigFileName.',
+        );
       }
     }
   }

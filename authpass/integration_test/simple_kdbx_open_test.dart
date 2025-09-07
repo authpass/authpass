@@ -25,7 +25,8 @@ void main() {
     await tester.pumpAndSettle();
 
     tester.testTextInput.enterText(
-        'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx');
+      'https://github.com/authpass/kdbx.dart/raw/master/test/kdbx4_keeweb.kdbx',
+    );
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('OK'));
