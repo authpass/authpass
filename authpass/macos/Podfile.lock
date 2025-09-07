@@ -50,7 +50,7 @@ PODS:
   - GTMSessionFetcher/Full (3.5.0):
     - GTMSessionFetcher/Core
   - HotKey (0.2.1)
-  - hotkey_manager (0.0.1):
+  - hotkey_manager_macos (0.0.1):
     - FlutterMacOS
     - HotKey
   - just_audio (0.0.1):
@@ -97,7 +97,7 @@ DEPENDENCIES:
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - google_sign_in_ios (from `Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin`)
-  - hotkey_manager (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos`)
+  - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
   - just_audio (from `Flutter/ephemeral/.symlinks/plugins/just_audio/darwin`)
   - macos_secure_bookmarks (from `Flutter/ephemeral/.symlinks/plugins/macos_secure_bookmarks/macos`)
   - mobile_scanner (from `Flutter/ephemeral/.symlinks/plugins/mobile_scanner/darwin`)
@@ -140,8 +140,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral
   google_sign_in_ios:
     :path: Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin
-  hotkey_manager:
-    :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos
+  hotkey_manager_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos
   just_audio:
     :path: Flutter/ephemeral/.symlinks/plugins/just_audio/darwin
   macos_secure_bookmarks:
@@ -185,7 +185,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   HotKey: 400beb7caa29054ea8d864c96f5ba7e5b4852277
-  hotkey_manager: b443f35f4d772162937aa73fd8995e579f8ac4e2
+  hotkey_manager_macos: a4317849af96d2430fa89944d3c58977ca089fbe
   just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
   macos_secure_bookmarks: e096d8ec49de2d25ea47e1061b85e5f2f1520fef
   mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93

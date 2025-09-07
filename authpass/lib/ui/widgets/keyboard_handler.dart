@@ -6,6 +6,7 @@ import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logging/logging.dart';
@@ -52,8 +53,8 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     super.initState();
 
     _hotKey = HotKey(
-      KeyCode.keyF,
-      modifiers: [KeyModifier.control, KeyModifier.alt],
+      key: LogicalKeyboardKey.keyF,
+      modifiers: [HotKeyModifier.control, HotKeyModifier.alt],
       scope: HotKeyScope.system, // Set as system-wide hotkey.
     );
 

@@ -26,7 +26,7 @@ AuthPassExternalAttachment _$AuthPassExternalAttachmentFromJson(
   attachmentId: json['id'] as String,
   secret: json['secret'] as String,
   format: $enumDecode(_$AttachmentFormatEnumMap, json['format']),
-  size: json['size'] as int,
+  size: (json['size'] as num).toInt(),
 );
 
 Map<String, dynamic> _$AuthPassExternalAttachmentToJson(

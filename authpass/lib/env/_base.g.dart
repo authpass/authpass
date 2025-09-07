@@ -17,34 +17,20 @@ class _$AppInfo extends AppInfo {
   final String packageName;
 
   factory _$AppInfo([void Function(AppInfoBuilder)? updates]) =>
-      (new AppInfoBuilder()..update(updates))._build();
+      (AppInfoBuilder()..update(updates))._build();
 
   _$AppInfo._({
     required this.appName,
     required this.version,
     required this.buildNumber,
     required this.packageName,
-  }) : super._() {
-    BuiltValueNullFieldError.checkNotNull(appName, r'AppInfo', 'appName');
-    BuiltValueNullFieldError.checkNotNull(version, r'AppInfo', 'version');
-    BuiltValueNullFieldError.checkNotNull(
-      buildNumber,
-      r'AppInfo',
-      'buildNumber',
-    );
-    BuiltValueNullFieldError.checkNotNull(
-      packageName,
-      r'AppInfo',
-      'packageName',
-    );
-  }
-
+  }) : super._();
   @override
   AppInfo rebuild(void Function(AppInfoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  AppInfoBuilder toBuilder() => new AppInfoBuilder()..replace(this);
+  AppInfoBuilder toBuilder() => AppInfoBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -113,7 +99,6 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
 
   @override
   void replace(AppInfo other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AppInfo;
   }
 
@@ -128,7 +113,7 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
   _$AppInfo _build() {
     final _$result =
         _$v ??
-        new _$AppInfo._(
+        _$AppInfo._(
           appName: BuiltValueNullFieldError.checkNotNull(
             appName,
             r'AppInfo',
@@ -162,16 +147,15 @@ class _$FeatureFlags extends FeatureFlags {
   final String? authpassCloudUri;
 
   factory _$FeatureFlags([void Function(FeatureFlagsBuilder)? updates]) =>
-      (new FeatureFlagsBuilder()..update(updates))._build();
+      (FeatureFlagsBuilder()..update(updates))._build();
 
   _$FeatureFlags._({this.authpassCloud, this.authpassCloudUri}) : super._();
-
   @override
   FeatureFlags rebuild(void Function(FeatureFlagsBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  FeatureFlagsBuilder toBuilder() => new FeatureFlagsBuilder()..replace(this);
+  FeatureFlagsBuilder toBuilder() => FeatureFlagsBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -227,7 +211,6 @@ class FeatureFlagsBuilder
 
   @override
   void replace(FeatureFlags other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$FeatureFlags;
   }
 
@@ -242,7 +225,7 @@ class FeatureFlagsBuilder
   _$FeatureFlags _build() {
     final _$result =
         _$v ??
-        new _$FeatureFlags._(
+        _$FeatureFlags._(
           authpassCloud: authpassCloud,
           authpassCloudUri: authpassCloudUri,
         );
