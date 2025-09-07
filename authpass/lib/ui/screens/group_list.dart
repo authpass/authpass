@@ -610,18 +610,18 @@ class GroupListFlatList extends StatelessWidget {
     required this.onChangedAll,
   });
 
-  final GroupFilter? groupFilter;
+  final GroupFilter groupFilter;
   final List<_GroupViewModel>? groups;
   final GroupListMode groupListMode;
   final void Function(_GroupViewModel group, bool selected) onChanged;
   final void Function(bool selected) onChangedAll;
 
-  bool get _allSelected => groupFilter!.groupFilter.length == groups!.length;
+  bool get _allSelected => groupFilter.groupFilter.length == groups!.length;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    return Scrollbar(
+    final child = Scrollbar(
       child: ListView.builder(
         itemBuilder: (context, index) {
           if (index == 0) {
@@ -630,8 +630,8 @@ class GroupListFlatList extends StatelessWidget {
           final group = groups![index - 1];
           return GroupListTile(
             group: group,
-            isSelected: groupFilter!.groupFilter.contains(group),
-            isSelectedInherited: groupFilter!.groupFilterRecursive.contains(
+            isSelected: groupFilter.groupFilter.contains(group),
+            isSelectedInherited: groupFilter.groupFilterRecursive.contains(
               group,
             ),
             groupListMode: groupListMode,
@@ -781,6 +781,23 @@ class GroupListFlatList extends StatelessWidget {
         itemCount: groups!.length + 1,
       ),
     );
+    if (groupListMode == GroupListMode.singleSelect) {
+      final selected = groupFilter.groupFilter.firstOrNull;
+      return RadioGroup(
+        onChanged: (value) {
+          if (value == null) {
+            if (selected != null) {
+              onChanged(selected, false);
+            }
+          } else {
+            onChanged(value, true);
+          }
+        },
+        groupValue: selected,
+        child: child,
+      );
+    }
+    return child;
   }
 
   Widget _listHeader(AppLocalizations? loc) {
@@ -829,33 +846,23 @@ class GroupFilterFlatList extends StatefulWidget {
 
 class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
   //  List<_GroupViewModel> _groups;
-  GroupFilter? _groupFilter;
+  late GroupFilter _groupFilter = GroupFilter(
+    groups: widget.groups,
+    groupFilter: widget.groups
+        .where(
+          (element) => widget.initialSelection.contains(element.group),
+        )
+        .toSet(),
+  );
 
   void _initViewModels() {
-    if (_groupFilter == null) {
-      _groupFilter = GroupFilter(groups: widget.groups);
-      _groupFilter!.addAll(
-        widget.groups.where(
-          (element) => widget.initialSelection.contains(element.group),
-        ),
-      );
-    } else {
-      final oldGroupFilter = _groupFilter!.groupFilter
-          .map((e) => e.group)
-          .toSet();
-      _groupFilter = GroupFilter(groups: widget.groups);
-      _groupFilter!.addAll(
-        widget.groups.where(
-          (element) => oldGroupFilter.contains(element.group),
-        ),
-      );
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _initViewModels();
+    final oldGroupFilter = _groupFilter.groupFilter.map((e) => e.group).toSet();
+    _groupFilter = GroupFilter(groups: widget.groups);
+    _groupFilter.addAll(
+      widget.groups.where(
+        (element) => oldGroupFilter.contains(element.group),
+      ),
+    );
   }
 
   @override
@@ -872,23 +879,23 @@ class _GroupFilterFlatListState extends State<GroupFilterFlatList> {
       groupListMode: GroupListMode.multiSelectForFilter,
       onChanged: (group, value) {
         if (value) {
-          _groupFilter!.add(group);
+          _groupFilter.add(group);
         } else {
-          _groupFilter!.remove(group);
+          _groupFilter.remove(group);
         }
         widget.selectionChanged(
-          _groupFilter!.groupFilter.map((e) => e.group).toSet(),
+          _groupFilter.groupFilter.map((e) => e.group).toSet(),
         );
       },
       onChangedAll: (value) {
         _logger.fine('changedAll: $value');
         if (value) {
-          _groupFilter!.addAll(widget.groups);
+          _groupFilter.addAll(widget.groups);
         } else {
-          _groupFilter!.clear();
+          _groupFilter.clear();
         }
         widget.selectionChanged(
-          _groupFilter!.groupFilter.map((e) => e.group).toSet(),
+          _groupFilter.groupFilter.map((e) => e.group).toSet(),
         );
         setState(() {});
       },
@@ -999,10 +1006,6 @@ class GroupListTile extends StatelessWidget {
         return [
           Radio<_GroupViewModel>(
             value: group,
-            groupValue: isSelected ? group : null,
-            onChanged: (val) {
-              onChanged(true);
-            },
           ),
         ];
       case GroupListMode.manage:
