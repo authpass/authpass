@@ -41,10 +41,10 @@ class FileContentCached {
   final int? cacheSize;
 
   Map<String, Object?> toJson() => {
-        _jsonMetadata: metadata,
-        _jsonCacheDate: cacheDate.millisecond,
-        _jsonCacheSize: cacheSize,
-      };
+    _jsonMetadata: metadata,
+    _jsonCacheDate: cacheDate.millisecond,
+    _jsonCacheSize: cacheSize,
+  };
 
   @override
   String toString() => toJson().toString();
@@ -61,8 +61,9 @@ class FileSourceCloudStorage extends FileSource {
 
   static Directory? _cacheDir;
 
-  Future<Directory> _getCacheDir() => provider.pathUtil
-      .getTemporaryDirectory(subNamespace: 'cloud_storage_cache');
+  Future<Directory> _getCacheDir() => provider.pathUtil.getTemporaryDirectory(
+    subNamespace: 'cloud_storage_cache',
+  );
 
   final CloudStorageProvider provider;
 
@@ -93,12 +94,16 @@ class FileSourceCloudStorage extends FileSource {
     bool yieldedCachedVersion = false;
     try {
       if (metadataFile.existsSync()) {
-        final cacheInfo = FileContentCached.fromJson(json
-            .decode(await metadataFile.readAsString()) as Map<String, dynamic>);
+        final cacheInfo = FileContentCached.fromJson(
+          json.decode(await metadataFile.readAsString())
+              as Map<String, dynamic>,
+        );
         final content = await kdbxFile.readAsBytes();
         if (content.length != cacheInfo.cacheSize) {
-          throw StateError('Cached size does not match size in '
-              'cache file. ${content.length} vs $cacheInfo');
+          throw StateError(
+            'Cached size does not match size in '
+            'cache file. ${content.length} vs $cacheInfo',
+          );
         }
         yield FileContent(content, cacheInfo.metadata, FileContentSource.cache);
         yieldedCachedVersion = true;
@@ -114,14 +119,20 @@ class FileSourceCloudStorage extends FileSource {
       yield freshContent;
       unawaited(_writeCache(freshContent));
     } on LoadFileException catch (e, stackTrace) {
-      _logger.severe('Error while loading file from provider ${toString()}', e,
-          stackTrace);
+      _logger.severe(
+        'Error while loading file from provider ${toString()}',
+        e,
+        stackTrace,
+      );
       throw LoadFileException(
-              'Error while loading from cloud storage. ${toStringDisplay()} ${yieldedCachedVersion ? 'Using cached version!' : ''}')
-          .causedBy(e, stackTrace);
+        'Error while loading from cloud storage. ${toStringDisplay()} ${yieldedCachedVersion ? 'Using cached version!' : ''}',
+      ).causedBy(e, stackTrace);
     } catch (e, stackTrace) {
-      _logger.severe('Error while loading file from provider ${toString()}', e,
-          stackTrace);
+      _logger.severe(
+        'Error while loading file from provider ${toString()}',
+        e,
+        stackTrace,
+      );
       rethrow;
     }
   }
@@ -138,8 +149,10 @@ class FileSourceCloudStorage extends FileSource {
         cacheSize: freshContent.content.length,
       );
       _logger.finer('Writing cache ${metadataFile.path}');
-      await metadataFile.writeAsString(json.encode(cacheInfo.toJson()),
-          flush: true);
+      await metadataFile.writeAsString(
+        json.encode(cacheInfo.toJson()),
+        flush: true,
+      );
       await kdbxFile.writeAsBytes(freshContent.content);
       _logger.finer('Done: Written cache ${metadataFile.path}');
     } catch (e, stackTrace) {
@@ -152,7 +165,9 @@ class FileSourceCloudStorage extends FileSource {
 
   @override
   Future<Map<String, dynamic>> write(
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     final metadata = await provider.saveFile(fileInfo, bytes, previousMetadata);
     await _writeCache(FileContent(bytes, metadata));
     return metadata;

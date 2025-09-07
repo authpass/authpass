@@ -46,10 +46,11 @@ class _PasswordListDrawerState extends State<PasswordListDrawer> {
         Material(
           color: theme.primaryColor,
           elevation: 2,
-//          decoration: BoxDecoration(color: theme.primaryColor),
-//          padding: const EdgeInsets.all(16),
+          //          decoration: BoxDecoration(color: theme.primaryColor),
+          //          padding: const EdgeInsets.all(16),
           child: Container(
-            padding: const EdgeInsets.all(16) +
+            padding:
+                const EdgeInsets.all(16) +
                 MediaQuery.of(context).padding.onlyTop,
             alignment: Alignment.bottomLeft,
             child: Text(

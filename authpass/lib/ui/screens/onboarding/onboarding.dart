@@ -11,9 +11,9 @@ final _logger = Logger('onboarding');
 
 class OnboardingScreen extends StatelessWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute(
-        settings: const RouteSettings(name: '/onboarding'),
-        builder: (context) => OnboardingScreen(),
-      );
+    settings: const RouteSettings(name: '/onboarding'),
+    builder: (context) => OnboardingScreen(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +41,20 @@ class ExpandToFitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
+            ),
+            child: IntrinsicHeight(
+              child: child,
+            ),
           ),
-          child: IntrinsicHeight(
-            child: child,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
@@ -77,8 +79,9 @@ class OnboardingContent extends StatelessWidget {
       _logger.fine('height: ${mq.size.height}');
       if (mq.size.height < 600) {
         imageScaleFactor *= 0.5;
-        onboardingHeadlineStyle =
-            onboardingHeadlineStyle!.apply(fontSizeFactor: 0.5);
+        onboardingHeadlineStyle = onboardingHeadlineStyle!.apply(
+          fontSizeFactor: 0.5,
+        );
       }
     }
     return Column(
@@ -107,8 +110,9 @@ class OnboardingContent extends StatelessWidget {
         Text(
           loc.onboardingQuestion,
           textAlign: TextAlign.center,
-          style: theme.textTheme.titleMedium!
-              .copyWith(fontWeight: FontWeight.bold),
+          style: theme.textTheme.titleMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         // Expanded(child: const SizedBox(height: 32)),
@@ -160,7 +164,7 @@ class OnboardingButton extends StatelessWidget {
         Shadow(
           color: Colors.black38,
           blurRadius: 4,
-        )
+        ),
       ],
     );
     if (mq.size.width < 400) {

@@ -61,10 +61,11 @@ class EntryDetailsScreen extends StatefulWidget {
   const EntryDetailsScreen({super.key, required this.entry});
 
   static Route<void> route({required KdbxEntry entry}) => MaterialPageRoute(
-      settings: const RouteSettings(name: '/entry'),
-      builder: (context) => EntryDetailsScreen(
-            entry: entry,
-          ));
+    settings: const RouteSettings(name: '/entry'),
+    builder: (context) => EntryDetailsScreen(
+      entry: entry,
+    ),
+  );
 
   final KdbxEntry entry;
 
@@ -93,11 +94,13 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     final kdbxBloc = context.watch<KdbxBloc>();
     if (entryViewModel == null) {
       entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
-      handleSubscription(widget.entry.file.dirtyObjectsChanged.listen((event) {
-        setState(() {
-          entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
-        });
-      }));
+      handleSubscription(
+        widget.entry.file.dirtyObjectsChanged.listen((event) {
+          setState(() {
+            entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
+          });
+        }),
+      );
     }
   }
 
@@ -132,7 +135,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                       context: context,
                       params: ConfirmDialogParams(
                         content: loc.permanentlyDeleteEntryConfirm(
-                            e.label ?? CharConstants.empty),
+                          e.label ?? CharConstants.empty,
+                        ),
                       ),
                     );
                     if (!result) {
@@ -144,8 +148,11 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                     Navigator.of(context).pop();
                     entry.file.deletePermanently(entry);
                     analytics.events.trackPermanentlyDeleteEntry();
-                    scaffoldManager.showSnackBar(SnackBar(
-                        content: Text(loc.permanentlyDeletedEntrySnackBar)));
+                    scaffoldManager.showSnackBar(
+                      SnackBar(
+                        content: Text(loc.permanentlyDeletedEntrySnackBar),
+                      ),
+                    );
                   },
                   child: ListTile(
                     leading: const Icon(Icons.delete_forever),
@@ -154,9 +161,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 ),
                 PopupMenuItem(
                   value: () async {
-                    final previousParent = entry.previousParentGroup
-                        .get()
-                        ?.let((that) => entry.file.findGroupByUuid(that));
+                    final previousParent = entry.previousParentGroup.get()?.let(
+                      (that) => entry.file.findGroupByUuid(that),
+                    );
                     final entryDetails = entryDetailsKey.currentState;
                     if (entryDetails == null) {
                       return;
@@ -164,7 +171,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                     await entryDetails._showMoveToGroup(
                       loc,
                       vm.entry,
-                      toGroup: previousParent == null ||
+                      toGroup:
+                          previousParent == null ||
                               previousParent.isInRecycleBin() ||
                               previousParent == entry.file.recycleBin
                           ? null
@@ -181,14 +189,17 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                   value: () {
                     final oldGroup = entry.parent;
                     entry.file.deleteEntry(entry);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(loc.deletedEntry),
-                      action: SnackBarAction(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(loc.deletedEntry),
+                        action: SnackBarAction(
                           label: loc.undoButtonLabel,
                           onPressed: () {
                             entry.file.move(entry, oldGroup!);
-                          }),
-                    ));
+                          },
+                        ),
+                      ),
+                    );
                   },
                   child: ListTile(
                     leading: const Icon(Icons.delete),
@@ -201,23 +212,26 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                   : [
                       PopupMenuItem(
                         value: () {
-                          Clipboard.setData(ClipboardData(
-                              text: entry.toXml().toXmlString(pretty: true)));
+                          Clipboard.setData(
+                            ClipboardData(
+                              text: entry.toXml().toXmlString(pretty: true),
+                            ),
+                          );
                         },
                         child: ListTile(
                           leading: const Icon(Icons.bug_report),
                           title: Text(nonNls('Debug: Copy XML')),
                         ),
                       ),
-                    ]
+                    ],
             ],
-          )
+          ),
         ],
       ),
-//      floatingActionButton: FloatingActionButton(
-//        child: Icon(Icons.add),
-//        onPressed: () {},
-//      ),
+      //      floatingActionButton: FloatingActionButton(
+      //        child: Icon(Icons.add),
+      //        onPressed: () {},
+      //      ),
       body: PopScope(
         canPop: !isFormDirty,
         onPopInvokedWithResult: (didPop, result) async {
@@ -228,9 +242,10 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
           if (await DialogUtils.showConfirmDialog(
             context: context,
             params: ConfirmDialogParams(
-                title: loc.unsavedChangesWarningTitle,
-                content: loc.unsavedChangesWarningBody,
-                positiveButtonText: loc.unsavedChangesDiscardActionLabel),
+              title: loc.unsavedChangesWarningTitle,
+              content: loc.unsavedChangesWarningBody,
+              positiveButtonText: loc.unsavedChangesDiscardActionLabel,
+            ),
           )) {
             navigator.pop();
           }
@@ -280,52 +295,61 @@ mixin KdbxObjectSavableStateMixin<T extends StatefulWidget>
 
   void _registerListener() {
     subscriptions.cancelSubscriptions();
-    handleSubscription(kdbxObject.changes.listen((change) {
-      _logger.finer(
-          '_isObjectDirty = ${change.isDirty} (before: $_isObjectDirty / formDirty: $isFormDirty');
-      setState(() {
-        _isObjectDirty = change.isDirty;
-      });
-    }));
+    handleSubscription(
+      kdbxObject.changes.listen((change) {
+        _logger.finer(
+          '_isObjectDirty = ${change.isDirty} (before: $_isObjectDirty / formDirty: $isFormDirty',
+        );
+        setState(() {
+          _isObjectDirty = change.isDirty;
+        });
+      }),
+    );
   }
 
   @protected
   VoidCallback? get saveCallback => asyncTaskCallback(() async {
-        final loc = AppLocalizations.of(context);
-        final form = formKey.currentState;
-        if (form == null) {
+    final loc = AppLocalizations.of(context);
+    final form = formKey.currentState;
+    if (form == null) {
+      return;
+    }
+    if (form.validate()) {
+      form.save();
+      setState(() => isFormDirty = false);
+      final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+      if (kdbxBloc.fileForKdbxFile(file).fileSource.supportsWrite) {
+        try {
+          await kdbxBloc.saveFile(file);
+        } on StorageException catch (e, stackTrace) {
+          _logger.warning('Error while saving database.', e, stackTrace);
+          await DialogUtils.showErrorDialog(
+            context,
+            loc.errorWhileSavingTitle,
+            loc.errorWhileSavingBody(e),
+          );
           return;
-        }
-        if (form.validate()) {
-          form.save();
-          setState(() => isFormDirty = false);
-          final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-          if (kdbxBloc.fileForKdbxFile(file).fileSource.supportsWrite) {
-            try {
-              await kdbxBloc.saveFile(file);
-            } on StorageException catch (e, stackTrace) {
-              _logger.warning('Error while saving database.', e, stackTrace);
-              await DialogUtils.showErrorDialog(context,
-                  loc.errorWhileSavingTitle, loc.errorWhileSavingBody(e));
-              return;
-            } catch (e, stackTrace) {
-              _logger.severe('Error while saving database.', e, stackTrace);
-              if (mounted) {
-                await DialogUtils.showErrorDialog(context,
-                    loc.errorWhileSavingTitle, loc.errorWhileSavingBody(e));
-              }
-              rethrow;
-            }
-          } else {
-            await DialogUtils.showSimpleAlertDialog(
+        } catch (e, stackTrace) {
+          _logger.severe('Error while saving database.', e, stackTrace);
+          if (mounted) {
+            await DialogUtils.showErrorDialog(
               context,
-              null,
-              loc.databaseDoesNotSupportSaving,
-              routeAppend: 'databaseNoSupportSaving',
+              loc.errorWhileSavingTitle,
+              loc.errorWhileSavingBody(e),
             );
           }
+          rethrow;
         }
-      });
+      } else {
+        await DialogUtils.showSimpleAlertDialog(
+          context,
+          null,
+          loc.databaseDoesNotSupportSaving,
+          routeAppend: 'databaseNoSupportSaving',
+        );
+      }
+    }
+  });
 }
 
 enum FieldType {
@@ -334,8 +358,11 @@ enum FieldType {
 }
 
 class EntryDetails extends StatefulWidget {
-  const EntryDetails(
-      {super.key, required this.entry, required this.onSavedPressed});
+  const EntryDetails({
+    super.key,
+    required this.entry,
+    required this.onSavedPressed,
+  });
 
   final EntryViewModel entry;
   final VoidCallback? onSavedPressed;
@@ -357,64 +384,77 @@ class _EntryDetailsState extends State<EntryDetails>
   }
 
   void _initShortcutListener(
-      KeyboardShortcutEvents events, CommonFields commonFields) {
+    KeyboardShortcutEvents events,
+    CommonFields commonFields,
+  ) {
     _shortcutRegistration?.dispose();
     _shortcutRegistration = events.registerActions({
-      CopyPasswordIntent: CallbackAction(onInvoke: (_) {
-        final context = FocusManager.instance.primaryFocus?.context;
-        if (context != null) {
-          _logger.fine('context: $context');
-          if (context.widget is EditableText) {
-            final ctrl = (context.widget as EditableText).controller;
-            if (!ctrl.selection.isCollapsed && ctrl.selection.isNormalized) {
-              final data = ctrl.selection.textInside(ctrl.text);
-              if (data.isNotEmpty) {
-                Clipboard.setData(ClipboardData(text: data));
-                if (mounted) {
-                  final loc = AppLocalizations.of(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(loc.copiedToClipboard)));
+      CopyPasswordIntent: CallbackAction(
+        onInvoke: (_) {
+          final context = FocusManager.instance.primaryFocus?.context;
+          if (context != null) {
+            _logger.fine('context: $context');
+            if (context.widget is EditableText) {
+              final ctrl = (context.widget as EditableText).controller;
+              if (!ctrl.selection.isCollapsed && ctrl.selection.isNormalized) {
+                final data = ctrl.selection.textInside(ctrl.text);
+                if (data.isNotEmpty) {
+                  Clipboard.setData(ClipboardData(text: data));
+                  if (mounted) {
+                    final loc = AppLocalizations.of(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(loc.copiedToClipboard)),
+                    );
+                  }
+                  return;
                 }
-                return;
               }
+            }
+
+            final entryFieldState = context
+                .findAncestorStateOfType<_EntryFieldState>();
+            if (entryFieldState != null) {
+              entryFieldState.copyValue();
+              return;
+            }
+            if (widget is EditableText) {
+              return;
             }
           }
 
-          final entryFieldState =
-              context.findAncestorStateOfType<_EntryFieldState>();
-          if (entryFieldState != null) {
-            entryFieldState.copyValue();
-            return;
-          }
-          if (widget is EditableText) {
-            return;
-          }
-        }
-
-        _copyField([commonFields.password]);
-        return null;
-      }),
-      CopyUsernameIntent: CallbackAction(onInvoke: (_) {
-        _copyField([commonFields.userName]);
-        return null;
-      }),
-      CopyTotpIntent: CallbackAction(onInvoke: (_) {
-        _logger.fine('Copying ${commonFields.otpAuth}');
-        _copyField([
-          commonFields.otpAuth,
-          commonFields.otpAuthCompat2,
-          commonFields.otpAuthCompat1,
-        ]);
-        return null;
-      }),
-      OpenUrlIntent: CallbackAction(onInvoke: (_) {
-        _fieldStateFor(commonFields.url)?.openUrl();
-        return null;
-      }),
-      CopyUrlIntent: CallbackAction(onInvoke: (_) {
-        _fieldStateFor(commonFields.url)?.copyValue();
-        return null;
-      }),
+          _copyField([commonFields.password]);
+          return null;
+        },
+      ),
+      CopyUsernameIntent: CallbackAction(
+        onInvoke: (_) {
+          _copyField([commonFields.userName]);
+          return null;
+        },
+      ),
+      CopyTotpIntent: CallbackAction(
+        onInvoke: (_) {
+          _logger.fine('Copying ${commonFields.otpAuth}');
+          _copyField([
+            commonFields.otpAuth,
+            commonFields.otpAuthCompat2,
+            commonFields.otpAuthCompat1,
+          ]);
+          return null;
+        },
+      ),
+      OpenUrlIntent: CallbackAction(
+        onInvoke: (_) {
+          _fieldStateFor(commonFields.url)?.openUrl();
+          return null;
+        },
+      ),
+      CopyUrlIntent: CallbackAction(
+        onInvoke: (_) {
+          _fieldStateFor(commonFields.url)?.copyValue();
+          return null;
+        },
+      ),
       // DismissIntent: CallbackAction(onInvoke: (_) {
       //   FocusManager.instance.primaryFocus?.unfocus();
       // }),
@@ -438,9 +478,11 @@ class _EntryDetailsState extends State<EntryDetails>
       }
     }
     final loc = AppLocalizations.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(loc.copiedFieldEmpty(commonFields.first.displayName)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(loc.copiedFieldEmpty(commonFields.first.displayName)),
+      ),
+    );
     return false;
   }
 
@@ -459,38 +501,52 @@ class _EntryDetailsState extends State<EntryDetails>
       return false;
     }
     await Clipboard.setData(
-        ClipboardData(text: value.getText() ?? CharConstants.empty));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
-    ));
+      ClipboardData(text: value.getText() ?? CharConstants.empty),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(loc.copiedFieldToClipboard(commonField.displayName)),
+      ),
+    );
     return true;
   }
 
   void _initFields(CommonFields commonFields) {
     final entry = widget.entry.entry;
-    final nonCommonKeys =
-        entry.stringEntries.where((str) => !commonFields.isCommon(str.key));
+    final nonCommonKeys = entry.stringEntries.where(
+      (str) => !commonFields.isCommon(str.key),
+    );
     final oldKeys = _fieldKeys == null
         ? <KdbxKey, GlobalKey<_EntryFieldState>>{}
         : Map.fromEntries(_fieldKeys!.map((e) => MapEntry(e.item2, e.item1)));
     _fieldKeys = commonFields.fields
         .where((f) => f.showByDefault || entry.getString(f.key) != null)
-        .map((f) => Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>(
+        .map(
+          (f) => Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>(
             oldKeys[f.key] ??
                 GlobalKey<_EntryFieldState>(debugLabel: f.key.toString()),
             f.key,
-            f))
-        .followedBy(nonCommonKeys.map((f) => Tuple3(
-            oldKeys[f.key] ??
-                GlobalKey<_EntryFieldState>(debugLabel: f.key.toString()),
-            f.key,
-            null)))
+            f,
+          ),
+        )
+        .followedBy(
+          nonCommonKeys.map(
+            (f) => Tuple3(
+              oldKeys[f.key] ??
+                  GlobalKey<_EntryFieldState>(debugLabel: f.key.toString()),
+              f.key,
+              null,
+            ),
+          ),
+        )
         .toList();
     _logger.fine('Listing on changes for ${widget.entry.label}');
-    handleSubscription(entry.changes.listen((event) {
-      _logger.fine('Widget entry changed.');
-      setState(() {});
-    }));
+    handleSubscription(
+      entry.changes.listen((event) {
+        _logger.fine('Widget entry changed.');
+        setState(() {});
+      }),
+    );
   }
 
   @override
@@ -500,8 +556,10 @@ class _EntryDetailsState extends State<EntryDetails>
     if (_fieldKeys == null) {
       subscriptions.cancelSubscriptions();
       _initFields(Provider.of<CommonFields>(context));
-      _initShortcutListener(Provider.of<KeyboardShortcutEvents>(context),
-          Provider.of<CommonFields>(context));
+      _initShortcutListener(
+        Provider.of<KeyboardShortcutEvents>(context),
+        Provider.of<CommonFields>(context),
+      );
     }
   }
 
@@ -545,12 +603,15 @@ class _EntryDetailsState extends State<EntryDetails>
                       initialValue: SelectedIcon.fromObject(entry),
                       onSaved: (icon) {
                         // TODO is it possible for icon to be null here?!
-                        icon?.when(predefined: (predefined) {
-                          entry.customIcon = null;
-                          entry.icon.set(predefined);
-                        }, custom: (custom) {
-                          entry.customIcon = custom;
-                        });
+                        icon?.when(
+                          predefined: (predefined) {
+                            entry.customIcon = null;
+                            entry.icon.set(predefined);
+                          },
+                          custom: (custom) {
+                            entry.customIcon = custom;
+                          },
+                        );
                       },
                       kdbxFile: entry.file,
                     ),
@@ -576,7 +637,8 @@ class _EntryDetailsState extends State<EntryDetails>
                         EntryMetaInfo(
                           label: loc.entryInfoLastModified,
                           value: formatUtils.formatDateFull(
-                              vm.entry.times.lastModificationTime.get()!),
+                            vm.entry.times.lastModificationTime.get()!,
+                          ),
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -597,7 +659,8 @@ class _EntryDetailsState extends State<EntryDetails>
                       commonField: f.item3,
                       onChangedMetadata: () => setState(() {
                         _initFields(
-                            Provider.of<CommonFields>(context, listen: false));
+                          Provider.of<CommonFields>(context, listen: false),
+                        );
                       }),
                     ),
                   )
@@ -611,20 +674,25 @@ class _EntryDetailsState extends State<EntryDetails>
                       return;
                     }
                     _logger.finer('Got otp auth: $secret');
-                    entry.setString(key,
-                        ProtectedValue.fromString(secret.toUri().toString()));
+                    entry.setString(
+                      key,
+                      ProtectedValue.fromString(secret.toUri().toString()),
+                    );
                   } else {
                     entry.setString(
-                        key,
-                        cf?.protect == true
-                            ? ProtectedValue.fromString(CharConstants.empty)
-                            : PlainValue(CharConstants.empty));
+                      key,
+                      cf?.protect == true
+                          ? ProtectedValue.fromString(CharConstants.empty)
+                          : PlainValue(CharConstants.empty),
+                    );
                   }
-                  Provider.of<Analytics>(context, listen: false)
-                      .events
-                      .trackAddField(key: key.key);
+                  Provider.of<Analytics>(
+                    context,
+                    listen: false,
+                  ).events.trackAddField(key: key.key);
                   _initFields(
-                      Provider.of<CommonFields>(context, listen: false));
+                    Provider.of<CommonFields>(context, listen: false),
+                  );
                   setState(() {});
                 },
               ),
@@ -634,11 +702,12 @@ class _EntryDetailsState extends State<EntryDetails>
                 return InkWell(
                   onTap: () async {
                     await showModalBottomSheet<void>(
-                        context: context,
-                        builder: (context) => AttachmentBottomSheet(
-                              entry: entry,
-                              attachment: e,
-                            ));
+                      context: context,
+                      builder: (context) => AttachmentBottomSheet(
+                        entry: entry,
+                        attachment: e,
+                      ),
+                    );
                   },
                   child: Container(
                     constraints: const BoxConstraints(minWidth: 500),
@@ -657,16 +726,22 @@ class _EntryDetailsState extends State<EntryDetails>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Text(e.key.key,
-                                  style: theme.textTheme.titleMedium),
+                              Text(
+                                e.key.key,
+                                style: theme.textTheme.titleMedium,
+                              ),
                               const SizedBox(height: 2),
                               info == null
-                                  ? Text(loc.sizeBytes(e.value.value.length),
-                                      style: theme.textTheme.bodySmall)
+                                  ? Text(
+                                      loc.sizeBytes(e.value.value.length),
+                                      style: theme.textTheme.bodySmall,
+                                    )
                                   : Text(
                                       loc.sizeBytesStoredAuthPassCloud(
-                                          info.size),
-                                      style: theme.textTheme.bodySmall),
+                                        info.size,
+                                      ),
+                                      style: theme.textTheme.bodySmall,
+                                    ),
                             ],
                           ),
                         ),
@@ -693,16 +768,21 @@ class _EntryDetailsState extends State<EntryDetails>
     );
   }
 
-  Future<KdbxGroup?> _showMoveToGroup(AppLocalizations loc, KdbxEntry entry,
-      {final KdbxGroup? toGroup}) async {
+  Future<KdbxGroup?> _showMoveToGroup(
+    AppLocalizations loc,
+    KdbxEntry entry, {
+    final KdbxGroup? toGroup,
+  }) async {
     final file = entry.file;
-    final newGroup = toGroup ??
-        (await Navigator.of(context).push(GroupListFlat.route(
-          {entry.parent!},
-          groupListMode: GroupListMode.singleSelect,
-          rootGroup: entry.file.body.rootGroup,
-        )))
-            ?.firstOrNull;
+    final newGroup =
+        toGroup ??
+        (await Navigator.of(context).push(
+          GroupListFlat.route(
+            {entry.parent!},
+            groupListMode: GroupListMode.singleSelect,
+            rootGroup: entry.file.body.rootGroup,
+          ),
+        ))?.firstOrNull;
     if (newGroup != null) {
       final oldGroup = entry.parent;
       file.move(entry, newGroup);
@@ -710,10 +790,11 @@ class _EntryDetailsState extends State<EntryDetails>
         SnackBar(
           content: Text(loc.movedEntryToGroup(newGroup.name.get()!)),
           action: SnackBarAction(
-              label: loc.undoButtonLabel,
-              onPressed: () {
-                file.move(entry, oldGroup!);
-              }),
+            label: loc.undoButtonLabel,
+            onPressed: () {
+              file.move(entry, oldGroup!);
+            },
+          ),
         ),
       );
     }
@@ -743,8 +824,9 @@ class _EntryDetailsState extends State<EntryDetails>
     final loc = AppLocalizations.of(context);
     final kdbxBloc = widget.entry.kdbxBloc;
 
-    final attachmentProvider =
-        await kdbxBloc.attachmentProviderForFileSource(widget.entry.entry.file);
+    final attachmentProvider = await kdbxBloc.attachmentProviderForFileSource(
+      widget.entry.entry.file,
+    );
 
     if (attachmentProvider is! AttachmentProviderAuthPassCloud &&
         bytes.lengthInBytes > 10 * 1024) {
@@ -814,8 +896,8 @@ class _EntryDetailsState extends State<EntryDetails>
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       try {
         _logger.finer('Opening barcode scanner.');
-//        final barcode = await FlutterBarcodeScanner.scanBarcode(
-//            '#ff6666', 'Cancel', true, ScanMode.QR);
+        //        final barcode = await FlutterBarcodeScanner.scanBarcode(
+        //            '#ff6666', 'Cancel', true, ScanMode.QR);
 
         final loc = AppLocalizations.of(context);
         final barcodeResult = await BarcodeScanHelper.scanBarcode(
@@ -831,13 +913,13 @@ class _EntryDetailsState extends State<EntryDetails>
           return cleanOtpCodeCode(barcode.text);
         }
 
-//        final scanResult = await barcode.BarcodeScanner.scan();
-//        _logger.fine('Got scan result of type ${scanResult.type} -'
-//            ' ${scanResult.format} (${scanResult.formatNote})');
-//        if (scanResult != null &&
-//            scanResult.type == barcode.ResultType.Barcode) {
-//          return _cleanOtpCodeCode(scanResult.rawContent);
-//        }
+        //        final scanResult = await barcode.BarcodeScanner.scan();
+        //        _logger.fine('Got scan result of type ${scanResult.type} -'
+        //            ' ${scanResult.format} (${scanResult.formatNote})');
+        //        if (scanResult != null &&
+        //            scanResult.type == barcode.ResultType.Barcode) {
+        //          return _cleanOtpCodeCode(scanResult.rawContent);
+        //        }
       } catch (e, stackTrace) {
         _logger.warning('Error during barcode scanning.', e, stackTrace);
       }
@@ -878,12 +960,18 @@ class AttachmentBottomSheet extends StatelessWidget {
             analytics.events.trackAttachmentAction('open');
             Navigator.of(context).pop();
             final kdbxBloc = context.read<KdbxBloc>();
-            final provider =
-                await kdbxBloc.attachmentProviderForFileSource(entry.file);
+            final provider = await kdbxBloc.attachmentProviderForFileSource(
+              entry.file,
+            );
             final bytes = await provider.readAttachmentBytes(
-                entry.file, attachment.value);
-            final f = await PathUtils().saveToTempDirectory(bytes,
-                dirPrefix: 'openbinary', fileName: attachment.key.key);
+              entry.file,
+              attachment.value,
+            );
+            final f = await PathUtils().saveToTempDirectory(
+              bytes,
+              dirPrefix: 'openbinary',
+              fileName: attachment.key.key,
+            );
             _logger.fine('Opening ${f.path}');
             final result = await OpenFilex.open(f.path);
             _logger.fine('finished opening $result');
@@ -896,15 +984,21 @@ class AttachmentBottomSheet extends StatelessWidget {
             onTap: () async {
               analytics.events.trackAttachmentAction('share');
               final kdbxBloc = context.read<KdbxBloc>();
-              final provider =
-                  await kdbxBloc.attachmentProviderForFileSource(entry.file);
+              final provider = await kdbxBloc.attachmentProviderForFileSource(
+                entry.file,
+              );
               final bytes = await provider.readAttachmentBytes(
-                  entry.file, attachment.value);
+                entry.file,
+                attachment.value,
+              );
               final mimeType = lookupMimeType(
                 attachment.key.key,
                 headerBytes: bytes.length > defaultMagicNumbersMaxLength
                     ? Uint8List.sublistView(
-                        bytes, 0, defaultMagicNumbersMaxLength)
+                        bytes,
+                        0,
+                        defaultMagicNumbersMaxLength,
+                      )
                     : null,
               )!;
               _logger.fine('Opening attachment with mimeType $mimeType');
@@ -914,8 +1008,9 @@ class AttachmentBottomSheet extends StatelessWidget {
               await f.writeAsBytes(bytes);
 
               try {
-                await Share.shareXFiles([XFile(f.path, mimeType: mimeType)],
-                    subject: loc.entryAttachmentShareSubject);
+                await Share.shareXFiles([
+                  XFile(f.path, mimeType: mimeType),
+                ], subject: loc.entryAttachmentShareSubject);
               } finally {
                 unawaited(f.delete());
               }
@@ -933,16 +1028,20 @@ class AttachmentBottomSheet extends StatelessWidget {
               analytics.events.trackAttachmentAction('saveToDevice');
               Navigator.of(context).pop();
               final kdbxBloc = context.read<KdbxBloc>();
-              final provider =
-                  await kdbxBloc.attachmentProviderForFileSource(entry.file);
+              final provider = await kdbxBloc.attachmentProviderForFileSource(
+                entry.file,
+              );
               final bytes = await provider.readAttachmentBytes(
-                  entry.file, attachment.value);
+                entry.file,
+                attachment.value,
+              );
               await FilePickerWritable().openFileForCreate(
-                  fileName: attachment.key.key,
-                  writer: (file) async {
-                    _logger.fine('Opening ${file.path}');
-                    await file.writeAsBytes(bytes);
-                  });
+                fileName: attachment.key.key,
+                writer: (file) async {
+                  _logger.fine('Opening ${file.path}');
+                  await file.writeAsBytes(bytes);
+                },
+              );
             },
           ),
         ListTile(
@@ -952,10 +1051,11 @@ class AttachmentBottomSheet extends StatelessWidget {
             analytics.events.trackAttachmentAction('remove');
             Navigator.of(context).pop();
             final confirm = await DialogUtils.showConfirmDialog(
-                context: context,
-                params: ConfirmDialogParams(
-                    content:
-                        loc.entryAttachmentRemoveConfirm(attachment.key.key)));
+              context: context,
+              params: ConfirmDialogParams(
+                content: loc.entryAttachmentRemoveConfirm(attachment.key.key),
+              ),
+            );
             if (confirm) {
               entry.removeBinary(attachment.key);
             }
@@ -986,7 +1086,7 @@ class EntryMetaInfo extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(
-//          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             ...?onTap == null
@@ -1003,8 +1103,9 @@ class EntryMetaInfo extends StatelessWidget {
                   Text(label!, style: theme.textTheme.bodySmall),
                   Text(
                     value!,
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: theme.textTheme.bodySmall!.color),
+                    style: theme.textTheme.bodyLarge!.copyWith(
+                      color: theme.textTheme.bodySmall!.color,
+                    ),
                     maxLines: 2,
                   ),
                 ],
@@ -1039,8 +1140,10 @@ class _AddFieldButtonState extends State<AddFieldButton> {
         final position = RelativeRect.fromRect(
           Rect.fromPoints(
             rb.localToGlobal(Offset.zero, ancestor: overlay),
-            rb.localToGlobal(rb.size.bottomRight(Offset.zero),
-                ancestor: overlay),
+            rb.localToGlobal(
+              rb.size.bottomRight(Offset.zero),
+              ancestor: overlay,
+            ),
           ),
           Offset.zero & overlay.size,
         );
@@ -1049,12 +1152,17 @@ class _AddFieldButtonState extends State<AddFieldButton> {
           displayName: loc.entryCustomField,
           key: KdbxKey('__custom'), // NON-NLS
         );
-        final fields = commonFields.fields.followedBy([custom]).map(
-          (f) => PopupMenuItem(
-            value: f.key,
-            child: ListTile(leading: Icon(f.icon), title: Text(f.displayName)),
-          ),
-        );
+        final fields = commonFields.fields
+            .followedBy([custom])
+            .map(
+              (f) => PopupMenuItem(
+                value: f.key,
+                child: ListTile(
+                  leading: Icon(f.icon),
+                  title: Text(f.displayName),
+                ),
+              ),
+            );
         final key = await showMenu<KdbxKey>(
           context: context,
           position: position,
@@ -1169,7 +1277,8 @@ class _EntryFieldState extends State<EntryField>
       _controller = TextEditingController();
     } else {
       _controller = TextEditingController(
-          text: _fieldValue?.getText() ?? CharConstants.empty);
+        text: _fieldValue?.getText() ?? CharConstants.empty,
+      );
     }
   }
 
@@ -1191,7 +1300,8 @@ class _EntryFieldState extends State<EntryField>
       return;
     }
     _logger.info(
-        'Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})');
+      'Focus changed to ${_focusNode.hasFocus} (primary: ${_focusNode.hasPrimaryFocus})',
+    );
     if (!_focusNode.hasFocus) {
       setState(() {
         _fieldValue = ProtectedValue.fromString(_controller.text);
@@ -1224,26 +1334,28 @@ class _EntryFieldState extends State<EntryField>
         ),
       ),
       confirmDismiss: (direction) async {
-//        await ClipboardManager.copyToClipBoard(_value.getText());
+        //        await ClipboardManager.copyToClipBoard(_value.getText());
         await copyValue();
         return false;
       },
       child: HighlightWidget(
         key: _highlightWidgetKey,
-        childOnHighlight: Text(loc.doneCopiedField,
-            style: theme.textTheme.bodyMedium!
-                .copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: const [
-                    Shadow(
-                      color: Colors.black,
-                      blurRadius: 1,
-                    )
-                  ],
-                  letterSpacing: 1,
-                )
-                .apply(fontSizeFactor: 1.2)),
+        childOnHighlight: Text(
+          loc.doneCopiedField,
+          style: theme.textTheme.bodyMedium!
+              .copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                shadows: const [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 1,
+                  ),
+                ],
+                letterSpacing: 1,
+              )
+              .apply(fontSizeFactor: 1.2),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -1272,13 +1384,13 @@ class _EntryFieldState extends State<EntryField>
                       : CrossFadeState.showSecond,
                 ),
               ),
-//            IconButton(
-//              icon: Icon(Icons.content_copy),
-//              tooltip: 'Copy to clipboard',
-//              onPressed: () {
-//                ClipboardManager.copyToClipBoard(_value.getText());
-//              },
-//            ),
+              //            IconButton(
+              //              icon: Icon(Icons.content_copy),
+              //              tooltip: 'Copy to clipboard',
+              //              onPressed: () {
+              //                ClipboardManager.copyToClipBoard(_value.getText());
+              //              },
+              //            ),
             ],
           ),
         ),
@@ -1316,9 +1428,11 @@ class _EntryFieldState extends State<EntryField>
             _isValueObscured = false;
           } else {
             _logger.fine(
-                'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent');
-            _fieldValue =
-                ProtectedValue.fromString(_valueCurrent ?? CharConstants.empty);
+              'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent',
+            );
+            _fieldValue = ProtectedValue.fromString(
+              _valueCurrent ?? CharConstants.empty,
+            );
             _isValueObscured = true;
           }
           _initController();
@@ -1342,8 +1456,9 @@ class _EntryFieldState extends State<EntryField>
           await Navigator.of(context).push(AuthPassCloudAuthScreen.route());
         } else {
           await asyncRunTask(() async {
-            final address =
-                await bloc.createMailbox(entryUuid: widget.entry.uuid.uuid);
+            final address = await bloc.createMailbox(
+              entryUuid: widget.entry.uuid.uuid,
+            );
             setState(() {
               _isValueObscured = false;
               _controller.text = address!;
@@ -1379,7 +1494,7 @@ class _EntryFieldState extends State<EntryField>
         child: ListTile(
           leading: const Icon(FontAwesomeIcons.shuffle),
           title: Text(loc.generatePassword),
-//            subtitle: null,
+          //            subtitle: null,
         ),
       ),
       ...?_buildMenuEntriesAuthPassCloud(context),
@@ -1387,7 +1502,8 @@ class _EntryFieldState extends State<EntryField>
         value: EntryAction.protect,
         child: ListTile(
           leading: Icon(
-              _isProtected ? Icons.no_encryption : Icons.enhanced_encryption),
+            _isProtected ? Icons.no_encryption : Icons.enhanced_encryption,
+          ),
           title: Text(_isProtected ? loc.fieldUnprotect : loc.fieldProtect),
         ),
       ),
@@ -1401,7 +1517,7 @@ class _EntryFieldState extends State<EntryField>
       PopupMenuItem(
         value: EntryAction.show,
         child: ListTile(
-//                    leading: Icon(Icons.present_to_all),
+          //                    leading: Icon(Icons.present_to_all),
           leading: const Icon(FontAwesomeIcons.qrcode),
           title: Text(loc.fieldPresent),
         ),
@@ -1422,8 +1538,9 @@ class _EntryFieldState extends State<EntryField>
       }
       _logger.finer('Opening url $url ($parsed)');
       if (await DialogUtils.openUrl(parsed.toString())) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(loc.launchedUrl(url))));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(loc.launchedUrl(url))));
       } else {
         openError = loc.unableToLaunchUrlNoHandler;
       }
@@ -1432,8 +1549,11 @@ class _EntryFieldState extends State<EntryField>
       _logger.severe('Unable to open url, $url', e, stackTrace);
     }
     if (openError != null) {
-      await DialogUtils.showErrorDialog(context, loc.unableToLaunchUrlTitle,
-          loc.unableToLaunchUrlDescription(url, openError));
+      await DialogUtils.showErrorDialog(
+        context,
+        loc.unableToLaunchUrlTitle,
+        loc.unableToLaunchUrlDescription(url, openError),
+      );
     }
   }
 
@@ -1442,10 +1562,13 @@ class _EntryFieldState extends State<EntryField>
 
   Future<void> _generatePassword() async {
     context.events.trackEntryAction(EntryActionType.generatePassword);
-    final appData =
-        await Provider.of<AppDataBloc>(context, listen: false).store.load();
+    final appData = await Provider.of<AppDataBloc>(
+      context,
+      listen: false,
+    ).store.load();
     final characterSets = CharacterSet.characterSetFromIds(
-        appData.passwordGeneratorCharacterSets);
+      appData.passwordGeneratorCharacterSets,
+    );
     if (characterSets.isEmpty) {
       characterSets.addAll([CharacterSet.alphaNumeric, CharacterSet.numeric]);
     }
@@ -1459,8 +1582,9 @@ class _EntryFieldState extends State<EntryField>
   }
 
   Future<void> _launchPasswordGenerator() async {
-    final password = await Navigator.of(context).push(
-        PasswordGeneratorScreen.route(finishButton: FinishButtonStyle.done));
+    final password = await Navigator.of(
+      context,
+    ).push(PasswordGeneratorScreen.route(finishButton: FinishButtonStyle.done));
     if (password != null) {
       setState(() {
         _generatedPassword(password);
@@ -1473,8 +1597,10 @@ class _EntryFieldState extends State<EntryField>
       _isValueObscured = false;
       _controller.text = password;
       _fieldValue = ProtectedValue.fromString(_controller.text);
-      _controller.selection =
-          TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      _controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: _controller.text.length,
+      );
       _focusNode.requestFocus();
     });
     copyValue();
@@ -1482,18 +1608,20 @@ class _EntryFieldState extends State<EntryField>
 
   Future<bool> copyValue() async {
     _highlightWidgetKey.currentState!.triggerHighlight();
-    Provider.of<Analytics>(context, listen: false)
-        .events
-        .trackCopyField(key: widget.fieldKey.key);
+    Provider.of<Analytics>(
+      context,
+      listen: false,
+    ).events.trackCopyField(key: widget.fieldKey.key);
     await Clipboard.setData(
-        ClipboardData(text: _valueCurrent ?? CharConstants.empty));
+      ClipboardData(text: _valueCurrent ?? CharConstants.empty),
+    );
     return true;
   }
 
   Widget _buildEntryFieldEditor() =>
       _isValueObscured && _valueCurrent?.isEmpty == false
-          ? _buildObscuredEntryFieldEditor()
-          : _buildStringEntryFieldEditor();
+      ? _buildObscuredEntryFieldEditor()
+      : _buildStringEntryFieldEditor();
 
   Widget _buildObscuredEntryFieldEditor() {
     return ObscuredEntryFieldEditor(
@@ -1501,7 +1629,9 @@ class _EntryFieldState extends State<EntryField>
         setState(() {
           _controller.text = _valueCurrent ?? CharConstants.empty;
           _controller.selection = TextSelection(
-              baseOffset: 0, extentOffset: _controller.text.length);
+            baseOffset: 0,
+            extentOffset: _controller.text.length,
+          );
           _isValueObscured = false;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _focusNode.requestFocus();
@@ -1540,8 +1670,9 @@ class _EntryFieldState extends State<EntryField>
 
   @override
   void dispose() {
-    _logger
-        .fine('EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})');
+    _logger.fine(
+      'EntryFieldState.dispose() - ${widget.key} (${widget.fieldKey})',
+    );
     _keyboardRegistration?.dispose();
     _controller.dispose();
     _focusNode.dispose();
@@ -1549,7 +1680,8 @@ class _EntryFieldState extends State<EntryField>
   }
 
   List<PopupMenuEntry<EntryAction>>? _buildMenuEntriesAuthPassCloud(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     final authPassCloud = context.read<AuthPassCloudBloc>();
     if (authPassCloud.featureFlags.authpassCloud != true) {
       return null;
@@ -1560,12 +1692,13 @@ class _EntryFieldState extends State<EntryField>
     final loc = AppLocalizations.of(context);
     return [
       PopupMenuItem(
-          value: EntryAction.generateEmail,
-          child: ListTile(
-            leading: const Icon(Icons.cloud),
-            title: Text(loc.fieldGenerateEmail),
-            subtitle: const Text(Env.AuthPassCloud),
-          )),
+        value: EntryAction.generateEmail,
+        child: ListTile(
+          leading: const Icon(Icons.cloud),
+          title: Text(loc.fieldGenerateEmail),
+          subtitle: const Text(Env.AuthPassCloud),
+        ),
+      ),
     ];
   }
 }
@@ -1605,7 +1738,7 @@ class _OtpEntryFieldState extends _EntryFieldState {
       final binarySecret = base32Decode(value);
       final settings =
           _commonFields.otpAuthCompat1Settings.stringValue(widget.entry) ??
-              CharConstants.empty;
+          CharConstants.empty;
       final settingsOptions = settings.isEmpty
           ? <String>[]
           : settings.split(CharConstants.semiColon);
@@ -1647,8 +1780,11 @@ class _OtpEntryFieldState extends _EntryFieldState {
         _errorMessage = null;
       });
     } on FormatException catch (e, stackTrace) {
-      _logger.severe('Error while decoding otpauth url for ${widget.fieldKey}.',
-          e, stackTrace);
+      _logger.severe(
+        'Error while decoding otpauth url for ${widget.fieldKey}.',
+        e,
+        stackTrace,
+      );
       final loc = AppLocalizations.of(context);
       setState(() {
         _currentOtp = CharConstants.empty;
@@ -1679,9 +1815,10 @@ class _OtpEntryFieldState extends _EntryFieldState {
   Future<bool> copyValue() async {
     _logger.finer('Copying OTP value.');
     _highlightWidgetKey.currentState!.triggerHighlight();
-    Provider.of<Analytics>(context, listen: false)
-        .events
-        .trackCopyField(key: widget.fieldKey.key);
+    Provider.of<Analytics>(
+      context,
+      listen: false,
+    ).events.trackCopyField(key: widget.fieldKey.key);
     await Clipboard.setData(ClipboardData(text: _currentOtp));
     return true;
   }
@@ -1709,21 +1846,24 @@ class _OtpEntryFieldState extends _EntryFieldState {
     final loc = AppLocalizations.of(context);
     return super
         ._buildMenuEntries(context)
-        .where((item) =>
-            item is PopupMenuItem &&
-            const [
-              EntryAction.delete,
-              EntryAction.copy,
-            ].contains((item as PopupMenuItem).value))
+        .where(
+          (item) =>
+              item is PopupMenuItem &&
+              const [
+                EntryAction.delete,
+                EntryAction.copy,
+              ].contains((item as PopupMenuItem).value),
+        )
         .followedBy([
-      PopupMenuItem(
-        value: EntryAction.copyRawData,
-        child: ListTile(
-          leading: const Icon(Icons.code),
-          title: Text(loc.otpCopySecretActionLabel),
-        ),
-      )
-    ]).toList();
+          PopupMenuItem(
+            value: EntryAction.copyRawData,
+            child: ListTile(
+              leading: const Icon(Icons.code),
+              title: Text(loc.otpCopySecretActionLabel),
+            ),
+          ),
+        ])
+        .toList();
   }
 }
 
@@ -1752,8 +1892,9 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
       children: [
         InputDecorator(
           decoration: InputDecoration(
-            prefixIcon:
-                commonField?.icon == null ? null : Icon(commonField!.icon),
+            prefixIcon: commonField?.icon == null
+                ? null
+                : Icon(commonField!.icon),
             labelText: commonField?.displayName ?? fieldKey.key,
             filled: true,
             labelStyle: TextStyle(color: color.withValues(alpha: 0.2)),
@@ -1782,14 +1923,16 @@ class ObscuredEntryFieldEditor extends StatelessWidget {
                   child: Text(
                     loc.entryFieldProtected,
                     style: TextStyle(
-                      color:
-                          theme.isDarkTheme ? Colors.white : theme.primaryColor,
+                      color: theme.isDarkTheme
+                          ? Colors.white
+                          : theme.primaryColor,
                       shadows: [
                         Shadow(
-                            color: theme.isDarkTheme
-                                ? Colors.black87
-                                : Colors.white,
-                            blurRadius: 5)
+                          color: theme.isDarkTheme
+                              ? Colors.black87
+                              : Colors.white,
+                          blurRadius: 5,
+                        ),
                       ],
                     ),
                   ),
@@ -1834,47 +1977,54 @@ class StringEntryFieldEditor extends StatelessWidget {
     final commonFields = Provider.of<CommonFields>(context);
     final loc = AppLocalizations.of(context);
     final color = ThemeUtil.iconColor(Theme.of(context), null);
-    return Stack(alignment: Alignment.centerRight, children: [
-      TextFormField(
-        key: formFieldKey,
-        maxLines: null,
-        focusNode: focusNode,
-        decoration: InputDecoration(
-          filled: true,
-          prefixIcon:
-              commonField?.icon == null ? null : Icon(commonField!.icon),
-          labelText: commonField?.displayName ?? fieldKey.key,
+    return Stack(
+      alignment: Alignment.centerRight,
+      children: [
+        TextFormField(
+          key: formFieldKey,
+          maxLines: null,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            filled: true,
+            prefixIcon: commonField?.icon == null
+                ? null
+                : Icon(commonField!.icon),
+            labelText: commonField?.displayName ?? fieldKey.key,
+          ),
+          keyboardType: commonField?.keyboardType,
+          autocorrect: commonField?.autocorrect ?? true,
+          enableSuggestions: commonField?.enableSuggestions ?? true,
+          textCapitalization:
+              commonField?.textCapitalization ?? TextCapitalization.sentences,
+          controller: controller,
+          onSaved: onSaved,
         ),
-        keyboardType: commonField?.keyboardType,
-        autocorrect: commonField?.autocorrect ?? true,
-        enableSuggestions: commonField?.enableSuggestions ?? true,
-        textCapitalization:
-            commonField?.textCapitalization ?? TextCapitalization.sentences,
-        controller: controller,
-        onSaved: onSaved,
-      ),
-      ValueListenableBuilder<TextEditingValue>(
-        valueListenable: controller!,
-        builder: (context, value, child) {
-          if (fieldKey == commonFields.password.key &&
-              controller!.text.isEmpty) {
-            return IconButton(
+        ValueListenableBuilder<TextEditingValue>(
+          valueListenable: controller!,
+          builder: (context, value, child) {
+            if (fieldKey == commonFields.password.key &&
+                controller!.text.isEmpty) {
+              return IconButton(
                 tooltip: '${loc.menuItemGeneratePassword} (cmd+g)', // NON-NLS
                 icon: const Icon(Icons.refresh),
                 onPressed: delegate.generatePassword,
-                color: color);
-          }
-          if (fieldKey == commonFields.url.key && controller!.text.isNotEmpty) {
-            return IconButton(
+                color: color,
+              );
+            }
+            if (fieldKey == commonFields.url.key &&
+                controller!.text.isNotEmpty) {
+              return IconButton(
                 tooltip: '${loc.actionOpenUrl} (shift+cmd+U)', // NON-NLS
                 icon: const Icon(Icons.open_in_new),
                 onPressed: delegate.openUrl,
-                color: color);
-          }
-          return const SizedBox();
-        },
-      ),
-    ]);
+                color: color,
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -1948,8 +2098,9 @@ class HighlightWidgetState extends State<HighlightWidget>
                 child: FadeTransition(
                   opacity: _opacity,
                   child: DecoratedBoxTransition(
-                      decoration: _decorationAnimation!,
-                      child: Center(child: widget.childOnHighlight)),
+                    decoration: _decorationAnimation!,
+                    child: Center(child: widget.childOnHighlight),
+                  ),
                 ),
               ),
             ],
@@ -1960,20 +2111,23 @@ class HighlightWidgetState extends State<HighlightWidget>
     final tween = DecorationTween(
       begin: BoxDecoration(
         color: Colors.green.withValues(alpha: 0.8),
-//        backgroundBlendMode: BlendMode.color,
+        //        backgroundBlendMode: BlendMode.color,
       ),
       end: BoxDecoration(
         color: Colors.green.withValues(alpha: 1),
-//        backgroundBlendMode: BlendMode.color,
+        //        backgroundBlendMode: BlendMode.color,
       ),
-//      end: const BoxDecoration(color: Color(0xffffffff), backgroundBlendMode: BlendMode.overlay),
+      //      end: const BoxDecoration(color: Color(0xffffffff), backgroundBlendMode: BlendMode.overlay),
     );
     setState(() {
-      _decorationAnimation =
-          CurvedAnimation(parent: _controller, curve: Curves.easeOut)
-              .drive(tween);
-      _opacity = CurvedAnimation(parent: _controller, curve: Curves.easeIn)
-          .drive(Tween(begin: 1, end: 0));
+      _decorationAnimation = CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOut,
+      ).drive(tween);
+      _opacity = CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeIn,
+      ).drive(Tween(begin: 1, end: 0));
       _controller.forward(from: 0);
     });
   }

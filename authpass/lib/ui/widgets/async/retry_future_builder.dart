@@ -7,8 +7,12 @@ final _logger = Logger('retry_future_builder');
 
 typedef FutureProducer<T> = Future<T> Function(BuildContext context);
 typedef StreamProducer<T> = Stream<T> Function(BuildContext context);
-typedef ScaffoldBuilder<T> = Widget Function(
-    BuildContext context, Widget body, AsyncSnapshot<T> snapshot);
+typedef ScaffoldBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      Widget body,
+      AsyncSnapshot<T> snapshot,
+    );
 typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
 class RetryFutureBuilder<T> extends StatefulWidget {
@@ -24,8 +28,10 @@ class RetryFutureBuilder<T> extends StatefulWidget {
   final ScaffoldBuilder<T> scaffoldBuilder;
 
   static Widget defaultScaffoldBuilder(
-          BuildContext context, Widget body, dynamic _) =>
-      body;
+    BuildContext context,
+    Widget body,
+    dynamic _,
+  ) => body;
 
   @override
   State<RetryFutureBuilder<T>> createState() => RetryFutureBuilderState<T>();
@@ -140,51 +146,53 @@ class _RetryStreamBuilderState<T> extends State<RetryStreamBuilder<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final valueStream =
-        _stream is ValueStream<T> ? _stream as ValueStream<T>? : null;
+    final valueStream = _stream is ValueStream<T>
+        ? _stream as ValueStream<T>?
+        : null;
     return StreamBuilder<T>(
-        stream: _stream,
-        initialData: valueStream?.valueOrNull ?? widget.initialValue,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return widget.scaffoldBuilder(
-              context,
-              widget.builder(context, snapshot.requireData),
-              snapshot,
-            );
-          }
-          if (snapshot.hasError) {
-            _logger.warning('Error while creating future.', snapshot.error);
-            final loc = AppLocalizations.of(context);
-            return widget.scaffoldBuilder(
-              context,
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(loc.errorDuringNetworkCall(snapshot.error.toString())),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (widget.retry != null) {
-                          widget.retry!();
-                        } else {
-                          _stream = widget.stream(context);
-                        }
-                      });
-                    },
-                    child: Text(loc.retryDialogActionLabel),
-                  ),
-                ],
-              ),
-              snapshot,
-            );
-          } else {
-            return widget.scaffoldBuilder(
-              context,
-              const Center(child: CircularProgressIndicator()),
-              snapshot,
-            );
-          }
-        });
+      stream: _stream,
+      initialData: valueStream?.valueOrNull ?? widget.initialValue,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return widget.scaffoldBuilder(
+            context,
+            widget.builder(context, snapshot.requireData),
+            snapshot,
+          );
+        }
+        if (snapshot.hasError) {
+          _logger.warning('Error while creating future.', snapshot.error);
+          final loc = AppLocalizations.of(context);
+          return widget.scaffoldBuilder(
+            context,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(loc.errorDuringNetworkCall(snapshot.error.toString())),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      if (widget.retry != null) {
+                        widget.retry!();
+                      } else {
+                        _stream = widget.stream(context);
+                      }
+                    });
+                  },
+                  child: Text(loc.retryDialogActionLabel),
+                ),
+              ],
+            ),
+            snapshot,
+          );
+        } else {
+          return widget.scaffoldBuilder(
+            context,
+            const Center(child: CircularProgressIndicator()),
+            snapshot,
+          );
+        }
+      },
+    );
   }
 }

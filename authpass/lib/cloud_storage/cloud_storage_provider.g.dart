@@ -16,19 +16,19 @@ class _$CloudStorageEntity extends CloudStorageEntity {
   @override
   final String? path;
 
-  factory _$CloudStorageEntity(
-          [void Function(CloudStorageEntityBuilder)? updates]) =>
-      (new CloudStorageEntityBuilder()..update(updates))._build();
+  factory _$CloudStorageEntity([
+    void Function(CloudStorageEntityBuilder)? updates,
+  ]) => (new CloudStorageEntityBuilder()..update(updates))._build();
 
   _$CloudStorageEntity._({required this.id, this.type, this.name, this.path})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'CloudStorageEntity', 'id');
   }
 
   @override
   CloudStorageEntity rebuild(
-          void Function(CloudStorageEntityBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(CloudStorageEntityBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   CloudStorageEntityBuilder toBuilder() =>
@@ -115,13 +115,18 @@ class CloudStorageEntityBuilder
   CloudStorageEntity build() => _build();
 
   _$CloudStorageEntity _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$CloudStorageEntity._(
-            id: BuiltValueNullFieldError.checkNotNull(
-                id, r'CloudStorageEntity', 'id'),
-            type: type,
-            name: name,
-            path: path);
+          id: BuiltValueNullFieldError.checkNotNull(
+            id,
+            r'CloudStorageEntity',
+            'id',
+          ),
+          type: type,
+          name: name,
+          path: path,
+        );
     replace(_$result);
     return _$result;
   }
@@ -137,11 +142,17 @@ class _$SearchResponse extends SearchResponse {
       (new SearchResponseBuilder()..update(updates))._build();
 
   _$SearchResponse._({required this.results, required this.hasMore})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        results, r'SearchResponse', 'results');
+      results,
+      r'SearchResponse',
+      'results',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        hasMore, r'SearchResponse', 'hasMore');
+      hasMore,
+      r'SearchResponse',
+      'hasMore',
+    );
   }
 
   @override
@@ -221,11 +232,16 @@ class SearchResponseBuilder
   _$SearchResponse _build() {
     _$SearchResponse _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$SearchResponse._(
-              results: results.build(),
-              hasMore: BuiltValueNullFieldError.checkNotNull(
-                  hasMore, r'SearchResponse', 'hasMore'));
+            results: results.build(),
+            hasMore: BuiltValueNullFieldError.checkNotNull(
+              hasMore,
+              r'SearchResponse',
+              'hasMore',
+            ),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -233,7 +249,10 @@ class SearchResponseBuilder
         results.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'SearchResponse', _$failedField, e.toString());
+          r'SearchResponse',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

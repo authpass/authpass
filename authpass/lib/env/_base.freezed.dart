@@ -12,7 +12,8 @@ part of '_base.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods',
+);
 
 /// @nodoc
 mixin _$EnvSecrets {
@@ -44,19 +45,21 @@ mixin _$EnvSecrets {
 /// @nodoc
 abstract class $EnvSecretsCopyWith<$Res> {
   factory $EnvSecretsCopyWith(
-          EnvSecrets value, $Res Function(EnvSecrets) then) =
-      _$EnvSecretsCopyWithImpl<$Res, EnvSecrets>;
+    EnvSecrets value,
+    $Res Function(EnvSecrets) then,
+  ) = _$EnvSecretsCopyWithImpl<$Res, EnvSecrets>;
   @useResult
-  $Res call(
-      {@nullable String? analyticsAmplitudeApiKey,
-      @nullable String? analyticsGoogleAnalyticsId,
-      @nullable ({String siteId, String url})? analyticsMatomo,
-      @nullable String? Function()? googleClientId,
-      @nullable String? googleClientSecret,
-      @nullable String? dropboxKey,
-      @nullable String? dropboxSecret,
-      @nullable String? microsoftClientId,
-      @nullable String? microsoftClientSecret});
+  $Res call({
+    @nullable String? analyticsAmplitudeApiKey,
+    @nullable String? analyticsGoogleAnalyticsId,
+    @nullable ({String siteId, String url})? analyticsMatomo,
+    @nullable String? Function()? googleClientId,
+    @nullable String? googleClientSecret,
+    @nullable String? dropboxKey,
+    @nullable String? dropboxSecret,
+    @nullable String? microsoftClientId,
+    @nullable String? microsoftClientSecret,
+  });
 }
 
 /// @nodoc
@@ -82,44 +85,47 @@ class _$EnvSecretsCopyWithImpl<$Res, $Val extends EnvSecrets>
     Object? microsoftClientId = freezed,
     Object? microsoftClientSecret = freezed,
   }) {
-    return _then(_value.copyWith(
-      analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey
-          ? _value.analyticsAmplitudeApiKey
-          : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
-              as String?,
-      analyticsGoogleAnalyticsId: freezed == analyticsGoogleAnalyticsId
-          ? _value.analyticsGoogleAnalyticsId
-          : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      analyticsMatomo: freezed == analyticsMatomo
-          ? _value.analyticsMatomo
-          : analyticsMatomo // ignore: cast_nullable_to_non_nullable
-              as ({String siteId, String url})?,
-      googleClientId: freezed == googleClientId
-          ? _value.googleClientId
-          : googleClientId // ignore: cast_nullable_to_non_nullable
-              as String? Function()?,
-      googleClientSecret: freezed == googleClientSecret
-          ? _value.googleClientSecret
-          : googleClientSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dropboxKey: freezed == dropboxKey
-          ? _value.dropboxKey
-          : dropboxKey // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dropboxSecret: freezed == dropboxSecret
-          ? _value.dropboxSecret
-          : dropboxSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      microsoftClientId: freezed == microsoftClientId
-          ? _value.microsoftClientId
-          : microsoftClientId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      microsoftClientSecret: freezed == microsoftClientSecret
-          ? _value.microsoftClientSecret
-          : microsoftClientSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey
+                ? _value.analyticsAmplitudeApiKey
+                : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            analyticsGoogleAnalyticsId: freezed == analyticsGoogleAnalyticsId
+                ? _value.analyticsGoogleAnalyticsId
+                : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            analyticsMatomo: freezed == analyticsMatomo
+                ? _value.analyticsMatomo
+                : analyticsMatomo // ignore: cast_nullable_to_non_nullable
+                      as ({String siteId, String url})?,
+            googleClientId: freezed == googleClientId
+                ? _value.googleClientId
+                : googleClientId // ignore: cast_nullable_to_non_nullable
+                      as String? Function()?,
+            googleClientSecret: freezed == googleClientSecret
+                ? _value.googleClientSecret
+                : googleClientSecret // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            dropboxKey: freezed == dropboxKey
+                ? _value.dropboxKey
+                : dropboxKey // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            dropboxSecret: freezed == dropboxSecret
+                ? _value.dropboxSecret
+                : dropboxSecret // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            microsoftClientId: freezed == microsoftClientId
+                ? _value.microsoftClientId
+                : microsoftClientId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            microsoftClientSecret: freezed == microsoftClientSecret
+                ? _value.microsoftClientSecret
+                : microsoftClientSecret // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -127,20 +133,22 @@ class _$EnvSecretsCopyWithImpl<$Res, $Val extends EnvSecrets>
 abstract class _$$EnvSecretsImplCopyWith<$Res>
     implements $EnvSecretsCopyWith<$Res> {
   factory _$$EnvSecretsImplCopyWith(
-          _$EnvSecretsImpl value, $Res Function(_$EnvSecretsImpl) then) =
-      __$$EnvSecretsImplCopyWithImpl<$Res>;
+    _$EnvSecretsImpl value,
+    $Res Function(_$EnvSecretsImpl) then,
+  ) = __$$EnvSecretsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@nullable String? analyticsAmplitudeApiKey,
-      @nullable String? analyticsGoogleAnalyticsId,
-      @nullable ({String siteId, String url})? analyticsMatomo,
-      @nullable String? Function()? googleClientId,
-      @nullable String? googleClientSecret,
-      @nullable String? dropboxKey,
-      @nullable String? dropboxSecret,
-      @nullable String? microsoftClientId,
-      @nullable String? microsoftClientSecret});
+  $Res call({
+    @nullable String? analyticsAmplitudeApiKey,
+    @nullable String? analyticsGoogleAnalyticsId,
+    @nullable ({String siteId, String url})? analyticsMatomo,
+    @nullable String? Function()? googleClientId,
+    @nullable String? googleClientSecret,
+    @nullable String? dropboxKey,
+    @nullable String? dropboxSecret,
+    @nullable String? microsoftClientId,
+    @nullable String? microsoftClientSecret,
+  });
 }
 
 /// @nodoc
@@ -148,8 +156,9 @@ class __$$EnvSecretsImplCopyWithImpl<$Res>
     extends _$EnvSecretsCopyWithImpl<$Res, _$EnvSecretsImpl>
     implements _$$EnvSecretsImplCopyWith<$Res> {
   __$$EnvSecretsImplCopyWithImpl(
-      _$EnvSecretsImpl _value, $Res Function(_$EnvSecretsImpl) _then)
-      : super(_value, _then);
+    _$EnvSecretsImpl _value,
+    $Res Function(_$EnvSecretsImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -164,60 +173,63 @@ class __$$EnvSecretsImplCopyWithImpl<$Res>
     Object? microsoftClientId = freezed,
     Object? microsoftClientSecret = freezed,
   }) {
-    return _then(_$EnvSecretsImpl(
-      analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey
-          ? _value.analyticsAmplitudeApiKey
-          : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
-              as String?,
-      analyticsGoogleAnalyticsId: freezed == analyticsGoogleAnalyticsId
-          ? _value.analyticsGoogleAnalyticsId
-          : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      analyticsMatomo: freezed == analyticsMatomo
-          ? _value.analyticsMatomo
-          : analyticsMatomo // ignore: cast_nullable_to_non_nullable
-              as ({String siteId, String url})?,
-      googleClientId: freezed == googleClientId
-          ? _value.googleClientId
-          : googleClientId // ignore: cast_nullable_to_non_nullable
-              as String? Function()?,
-      googleClientSecret: freezed == googleClientSecret
-          ? _value.googleClientSecret
-          : googleClientSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dropboxKey: freezed == dropboxKey
-          ? _value.dropboxKey
-          : dropboxKey // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dropboxSecret: freezed == dropboxSecret
-          ? _value.dropboxSecret
-          : dropboxSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      microsoftClientId: freezed == microsoftClientId
-          ? _value.microsoftClientId
-          : microsoftClientId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      microsoftClientSecret: freezed == microsoftClientSecret
-          ? _value.microsoftClientSecret
-          : microsoftClientSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$EnvSecretsImpl(
+        analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey
+            ? _value.analyticsAmplitudeApiKey
+            : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        analyticsGoogleAnalyticsId: freezed == analyticsGoogleAnalyticsId
+            ? _value.analyticsGoogleAnalyticsId
+            : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        analyticsMatomo: freezed == analyticsMatomo
+            ? _value.analyticsMatomo
+            : analyticsMatomo // ignore: cast_nullable_to_non_nullable
+                  as ({String siteId, String url})?,
+        googleClientId: freezed == googleClientId
+            ? _value.googleClientId
+            : googleClientId // ignore: cast_nullable_to_non_nullable
+                  as String? Function()?,
+        googleClientSecret: freezed == googleClientSecret
+            ? _value.googleClientSecret
+            : googleClientSecret // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        dropboxKey: freezed == dropboxKey
+            ? _value.dropboxKey
+            : dropboxKey // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        dropboxSecret: freezed == dropboxSecret
+            ? _value.dropboxSecret
+            : dropboxSecret // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        microsoftClientId: freezed == microsoftClientId
+            ? _value.microsoftClientId
+            : microsoftClientId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        microsoftClientSecret: freezed == microsoftClientSecret
+            ? _value.microsoftClientSecret
+            : microsoftClientSecret // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$EnvSecretsImpl implements _EnvSecrets {
-  const _$EnvSecretsImpl(
-      {@nullable required this.analyticsAmplitudeApiKey,
-      @nullable required this.analyticsGoogleAnalyticsId,
-      @nullable required this.analyticsMatomo,
-      @nullable required this.googleClientId,
-      @nullable required this.googleClientSecret,
-      @nullable required this.dropboxKey,
-      @nullable required this.dropboxSecret,
-      @nullable required this.microsoftClientId,
-      @nullable required this.microsoftClientSecret});
+  const _$EnvSecretsImpl({
+    @nullable required this.analyticsAmplitudeApiKey,
+    @nullable required this.analyticsGoogleAnalyticsId,
+    @nullable required this.analyticsMatomo,
+    @nullable required this.googleClientId,
+    @nullable required this.googleClientSecret,
+    @nullable required this.dropboxKey,
+    @nullable required this.dropboxSecret,
+    @nullable required this.microsoftClientId,
+    @nullable required this.microsoftClientSecret,
+  });
 
   @override
   @nullable
@@ -258,10 +270,14 @@ class _$EnvSecretsImpl implements _EnvSecrets {
         (other.runtimeType == runtimeType &&
             other is _$EnvSecretsImpl &&
             (identical(
-                    other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) ||
+                  other.analyticsAmplitudeApiKey,
+                  analyticsAmplitudeApiKey,
+                ) ||
                 other.analyticsAmplitudeApiKey == analyticsAmplitudeApiKey) &&
-            (identical(other.analyticsGoogleAnalyticsId,
-                    analyticsGoogleAnalyticsId) ||
+            (identical(
+                  other.analyticsGoogleAnalyticsId,
+                  analyticsGoogleAnalyticsId,
+                ) ||
                 other.analyticsGoogleAnalyticsId ==
                     analyticsGoogleAnalyticsId) &&
             (identical(other.analyticsMatomo, analyticsMatomo) ||
@@ -282,16 +298,17 @@ class _$EnvSecretsImpl implements _EnvSecrets {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      analyticsAmplitudeApiKey,
-      analyticsGoogleAnalyticsId,
-      analyticsMatomo,
-      googleClientId,
-      googleClientSecret,
-      dropboxKey,
-      dropboxSecret,
-      microsoftClientId,
-      microsoftClientSecret);
+    runtimeType,
+    analyticsAmplitudeApiKey,
+    analyticsGoogleAnalyticsId,
+    analyticsMatomo,
+    googleClientId,
+    googleClientSecret,
+    dropboxKey,
+    dropboxSecret,
+    microsoftClientId,
+    microsoftClientSecret,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -301,17 +318,17 @@ class _$EnvSecretsImpl implements _EnvSecrets {
 }
 
 abstract class _EnvSecrets implements EnvSecrets {
-  const factory _EnvSecrets(
-      {@nullable required final String? analyticsAmplitudeApiKey,
-      @nullable required final String? analyticsGoogleAnalyticsId,
-      @nullable required final ({String siteId, String url})? analyticsMatomo,
-      @nullable required final String? Function()? googleClientId,
-      @nullable required final String? googleClientSecret,
-      @nullable required final String? dropboxKey,
-      @nullable required final String? dropboxSecret,
-      @nullable required final String? microsoftClientId,
-      @nullable
-      required final String? microsoftClientSecret}) = _$EnvSecretsImpl;
+  const factory _EnvSecrets({
+    @nullable required final String? analyticsAmplitudeApiKey,
+    @nullable required final String? analyticsGoogleAnalyticsId,
+    @nullable required final ({String siteId, String url})? analyticsMatomo,
+    @nullable required final String? Function()? googleClientId,
+    @nullable required final String? googleClientSecret,
+    @nullable required final String? dropboxKey,
+    @nullable required final String? dropboxSecret,
+    @nullable required final String? microsoftClientId,
+    @nullable required final String? microsoftClientSecret,
+  }) = _$EnvSecretsImpl;
 
   @override
   @nullable

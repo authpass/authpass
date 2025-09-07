@@ -30,19 +30,25 @@ enum OpenedFilesSourceType { Local, Url, CloudStorage, LocalWeb }
 class SimpleEnumSerializer<T> extends PrimitiveSerializer<T> {
   SimpleEnumSerializer(this.enumValues);
 
-//  final Type type;
+  //  final Type type;
   final List<T> enumValues;
 
   @override
-  T deserialize(Serializers serializers, Object serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+  T deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     assert(serialized is String);
     return enumValues.singleWhere((val) => val.toString() == serialized);
   }
 
   @override
-  Object serialize(Serializers serializers, T object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Object serialize(
+    Serializers serializers,
+    T object, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     return object.toString();
   }
 
@@ -92,46 +98,51 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
   bool isSameFileAs(OpenedFile other) =>
       other.sourceType == sourceType && other.sourcePath == sourcePath;
 
-  static OpenedFile fromFileSource(FileSource fileSource, String? dbName,
-          [void Function(OpenedFileBuilder b)? customize]) =>
-      OpenedFile(
-        (b) {
-          b.lastOpenedAt = clock.now().toUtc();
-          b.uuid = fileSource.uuid;
-          if (fileSource is FileSourceLocal) {
-            b
-              ..sourceType = OpenedFilesSourceType.Local
-              ..sourcePath = fileSource.file.absolute.path
-              ..macOsSecureBookmark = fileSource.macOsSecureBookmark
-              ..filePickerIdentifier = fileSource.filePickerIdentifier
-              ..name = dbName;
-          } else if (fileSource is FileSourceWeb) {
-            b
-              ..sourceType = OpenedFilesSourceType.LocalWeb
-              ..sourcePath = dbName
-              ..name = dbName;
-          } else if (fileSource is FileSourceUrl) {
-            b
-              ..sourceType = OpenedFilesSourceType.Url
-              ..sourcePath = fileSource.url.toString()
-              ..name = dbName;
-          } else if (fileSource is FileSourceCloudStorage) {
-            b
-              ..sourceType = OpenedFilesSourceType.CloudStorage
-              ..sourcePath = json.encode({
-                SOURCE_CLOUD_STORAGE_ID: fileSource.provider.id,
-                SOURCE_CLOUD_STORAGE_DATA: fileSource.fileInfo,
-              })
-              ..name = dbName;
-          } else {
-            throw ArgumentError.value(fileSource, 'fileSource',
-                'Unsupported file type ${fileSource.runtimeType}');
-          }
-          if (customize != null) {
-            customize(b);
-          }
-        },
-      );
+  static OpenedFile fromFileSource(
+    FileSource fileSource,
+    String? dbName, [
+    void Function(OpenedFileBuilder b)? customize,
+  ]) => OpenedFile(
+    (b) {
+      b.lastOpenedAt = clock.now().toUtc();
+      b.uuid = fileSource.uuid;
+      if (fileSource is FileSourceLocal) {
+        b
+          ..sourceType = OpenedFilesSourceType.Local
+          ..sourcePath = fileSource.file.absolute.path
+          ..macOsSecureBookmark = fileSource.macOsSecureBookmark
+          ..filePickerIdentifier = fileSource.filePickerIdentifier
+          ..name = dbName;
+      } else if (fileSource is FileSourceWeb) {
+        b
+          ..sourceType = OpenedFilesSourceType.LocalWeb
+          ..sourcePath = dbName
+          ..name = dbName;
+      } else if (fileSource is FileSourceUrl) {
+        b
+          ..sourceType = OpenedFilesSourceType.Url
+          ..sourcePath = fileSource.url.toString()
+          ..name = dbName;
+      } else if (fileSource is FileSourceCloudStorage) {
+        b
+          ..sourceType = OpenedFilesSourceType.CloudStorage
+          ..sourcePath = json.encode({
+            SOURCE_CLOUD_STORAGE_ID: fileSource.provider.id,
+            SOURCE_CLOUD_STORAGE_DATA: fileSource.fileInfo,
+          })
+          ..name = dbName;
+      } else {
+        throw ArgumentError.value(
+          fileSource,
+          'fileSource',
+          'Unsupported file type ${fileSource.runtimeType}',
+        );
+      }
+      if (customize != null) {
+        customize(b);
+      }
+    },
+  );
 
   FileSource toFileSource(CloudStorageBloc cloudStorageBloc) {
     switch (sourceType) {
@@ -159,8 +170,10 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
         final storageId = sourceInfo[SOURCE_CLOUD_STORAGE_ID] as String?;
         final provider = cloudStorageBloc.providerById(storageId);
         if (provider == null) {
-          throw StateError('Invalid cloud storage provider id $storageId '
-              '(${cloudStorageBloc.availableCloudStorage.map((e) => e.id).join(',')})');
+          throw StateError(
+            'Invalid cloud storage provider id $storageId '
+            '(${cloudStorageBloc.availableCloudStorage.map((e) => e.id).join(',')})',
+          );
         }
         return provider.toFileSourceFromFileInfo(
           (sourceInfo[SOURCE_CLOUD_STORAGE_DATA] as Map)
@@ -255,12 +268,16 @@ abstract class AppData implements Built<AppData, AppDataBuilder>, HasToJson {
   AppData,
   OpenedFile,
 ])
-Serializers serializers = (_$serializers.toBuilder()
-      ..add(SimpleEnumSerializer<OpenedFilesSourceType>(
-          OpenedFilesSourceType.values))
-      ..add(SimpleEnumSerializer<AppDataTheme>(AppDataTheme.values))
-      ..addPlugin(StandardJsonPlugin()))
-    .build();
+Serializers serializers =
+    (_$serializers.toBuilder()
+          ..add(
+            SimpleEnumSerializer<OpenedFilesSourceType>(
+              OpenedFilesSourceType.values,
+            ),
+          )
+          ..add(SimpleEnumSerializer<AppDataTheme>(AppDataTheme.values))
+          ..addPlugin(StandardJsonPlugin()))
+        .build();
 
 class AppDataBloc {
   AppDataBloc(this.env) {
@@ -275,7 +292,8 @@ class AppDataBloc {
     defaultCreator: () =>
         AppData((b) => b..firstLaunchedAt = clock.now().toUtc()),
     storeBackend: createStoreBackend(
-        () async => (await PathUtils().getAppDataDirectory()).path),
+      () async => (await PathUtils().getAppDataDirectory()).path,
+    ),
   );
 
   static String createUuid() => UuidUtil.createUuid();
@@ -286,34 +304,40 @@ class AppDataBloc {
     final appInfo = await env.getAppInfo();
     if (data.firstLaunchedAt == null ||
         data.lastBuildId != appInfo.buildNumber) {
-      await update((b, data) => b
-        ..lastBuildId = appInfo.buildNumber
-        ..firstLaunchedAt ??= clock.now().toUtc());
+      await update(
+        (b, data) => b
+          ..lastBuildId = appInfo.buildNumber
+          ..firstLaunchedAt ??= clock.now().toUtc(),
+      );
     }
   }
 
   ///
   /// if [oldFile] is defined non-essential data (e.g. colorCode) is copied from it.
-  Future<OpenedFile> openedFile(FileSource file,
-          {required String? name,
-          OpenedFile? oldFile,
-          Color? defaultColor}) async =>
-      await update((b, data) {
-        final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
-        final colorCode = recentFile?.colorCode ??
-            oldFile?.colorCode ??
-            defaultColor?.toARGB32();
-        final openedFile = OpenedFile.fromFileSource(
-            file, name, (b) => b..colorCode = colorCode);
-        _logger.finest('openedFile: $openedFile');
-        // TODO remove potential old storages?
-        b.previousFiles.removeWhere((file) => file.isSameFileAs(openedFile));
-        b.previousFiles.add(openedFile);
-        return openedFile;
-      });
+  Future<OpenedFile> openedFile(
+    FileSource file, {
+    required String? name,
+    OpenedFile? oldFile,
+    Color? defaultColor,
+  }) async => await update((b, data) {
+    final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
+    final colorCode =
+        recentFile?.colorCode ?? oldFile?.colorCode ?? defaultColor?.toARGB32();
+    final openedFile = OpenedFile.fromFileSource(
+      file,
+      name,
+      (b) => b..colorCode = colorCode,
+    );
+    _logger.finest('openedFile: $openedFile');
+    // TODO remove potential old storages?
+    b.previousFiles.removeWhere((file) => file.isSameFileAs(openedFile));
+    b.previousFiles.add(openedFile);
+    return openedFile;
+  });
 
   Future<T> update<T>(
-      T Function(AppDataBuilder builder, AppData data) updater) async {
+    T Function(AppDataBuilder builder, AppData data) updater,
+  ) async {
     final appData = await store.load();
     late T ret;
     final newAppData = appData.rebuild((b) => ret = updater(b, appData));
@@ -326,8 +350,8 @@ class AppDataBloc {
       final nextTheme = data.theme == null
           ? AppDataTheme.light
           : data.theme == AppDataTheme.light
-              ? AppDataTheme.dark
-              : null;
+          ? AppDataTheme.dark
+          : null;
       return builder.theme = nextTheme;
     });
     return updated;

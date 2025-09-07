@@ -44,45 +44,45 @@ class CommonField {
 
 class CommonFields {
   CommonFields(AppLocalizations loc)
-      : fields = [
-          CommonField(
-            key: KdbxKeyCommon.TITLE,
-            displayName: loc.fieldTitle,
-            includeInSearch: true,
-            icon: Icons.label,
-            autocorrect: true,
-            enableSuggestions: true,
-            textCapitalization: TextCapitalization.sentences,
-          ),
-          CommonField(
-            key: KdbxKeyCommon.URL,
-            displayName: loc.fieldWebsite,
-            includeInSearch: true,
-            keyboardType: TextInputType.url,
-            icon: Icons.link,
-          ),
-          CommonField(
-            key: KdbxKeyCommon.USER_NAME,
-            displayName: loc.fieldUserName,
-            includeInSearch: true,
-            keyboardType: TextInputType.emailAddress,
-            icon: Icons.account_circle,
-          ),
-          CommonField(
-            key: KdbxKeyCommon.PASSWORD,
-            displayName: loc.fieldPassword,
-            protect: true,
-            keyboardType: TextInputType.visiblePassword,
-            icon: Icons.lock,
-          ),
-          CommonField(
-            key: KdbxKeyCommon.OTP,
-            displayName: loc.fieldTotp,
-            icon: Icons.watch_later,
-            protect: true,
-            showByDefault: false,
-          ),
-        ] {
+    : fields = [
+        CommonField(
+          key: KdbxKeyCommon.TITLE,
+          displayName: loc.fieldTitle,
+          includeInSearch: true,
+          icon: Icons.label,
+          autocorrect: true,
+          enableSuggestions: true,
+          textCapitalization: TextCapitalization.sentences,
+        ),
+        CommonField(
+          key: KdbxKeyCommon.URL,
+          displayName: loc.fieldWebsite,
+          includeInSearch: true,
+          keyboardType: TextInputType.url,
+          icon: Icons.link,
+        ),
+        CommonField(
+          key: KdbxKeyCommon.USER_NAME,
+          displayName: loc.fieldUserName,
+          includeInSearch: true,
+          keyboardType: TextInputType.emailAddress,
+          icon: Icons.account_circle,
+        ),
+        CommonField(
+          key: KdbxKeyCommon.PASSWORD,
+          displayName: loc.fieldPassword,
+          protect: true,
+          keyboardType: TextInputType.visiblePassword,
+          icon: Icons.lock,
+        ),
+        CommonField(
+          key: KdbxKeyCommon.OTP,
+          displayName: loc.fieldTotp,
+          icon: Icons.watch_later,
+          protect: true,
+          showByDefault: false,
+        ),
+      ] {
     assert(fields.map((f) => f.key).toSet().length == fields.length);
   }
 
@@ -118,8 +118,8 @@ class CommonFields {
   final List<CommonField> fields;
 
   bool isCommon(
-          KdbxKey
-              key) => //fields.firstWhere((f) => f.key == key, orElse: () => null) != null;
+    KdbxKey key,
+  ) => //fields.firstWhere((f) => f.key == key, orElse: () => null) != null;
       this[key] != null;
 
   bool isTotp(KdbxKey key) =>

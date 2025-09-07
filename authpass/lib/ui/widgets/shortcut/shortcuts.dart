@@ -87,23 +87,23 @@ class AuthPassShortcut {
     required Intent intent,
     required LabelProvider label,
   }) : this(
-          mac: SingleActivator(key, meta: true),
-          linux: SingleActivator(key, control: true),
-          windows: SingleActivator(key, control: true),
-          intent: intent,
-          label: label,
-        );
+         mac: SingleActivator(key, meta: true),
+         linux: SingleActivator(key, control: true),
+         windows: SingleActivator(key, control: true),
+         intent: intent,
+         label: label,
+       );
   AuthPassShortcut.all({
     required ShortcutActivator key,
     required Intent intent,
     required LabelProvider label,
   }) : this(
-          mac: key,
-          linux: key,
-          windows: key,
-          intent: intent,
-          label: label,
-        );
+         mac: key,
+         linux: key,
+         windows: key,
+         intent: intent,
+         label: label,
+       );
 
   final ShortcutActivator mac;
   final ShortcutActivator linux;

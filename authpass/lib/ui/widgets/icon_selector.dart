@@ -30,8 +30,11 @@ class IconSelectorDialog extends StatefulWidget {
   @override
   _IconSelectorDialogState createState() => _IconSelectorDialogState();
 
-  static Future<SelectedIcon?> show(BuildContext context,
-      {SelectedIcon? initialSelection, KdbxFile? kdbxFile}) {
+  static Future<SelectedIcon?> show(
+    BuildContext context, {
+    SelectedIcon? initialSelection,
+    KdbxFile? kdbxFile,
+  }) {
     return showDialog<SelectedIcon>(
       context: context,
       builder: (context) => IconSelectorDialog(
@@ -74,8 +77,11 @@ class _IconSelectorDialogState extends State<IconSelectorDialog> {
 }
 
 class IconSelector extends StatefulWidget {
-  const IconSelector(
-      {super.key, required this.initialSelection, required this.kdbxFile});
+  const IconSelector({
+    super.key,
+    required this.initialSelection,
+    required this.kdbxFile,
+  });
 
   final SelectedIcon? initialSelection;
   final KdbxFile? kdbxFile;
@@ -97,7 +103,7 @@ class _IconSelectorState extends State<IconSelector> {
 
   @override
   Widget build(BuildContext context) {
-//    return LayoutBuilder(builder: (context, constraints) {
+    //    return LayoutBuilder(builder: (context, constraints) {
     final mq = MediaQuery.of(context);
     final width = mq.size.width * 0.8;
     return SizedBox(
@@ -112,26 +118,30 @@ class _IconSelectorState extends State<IconSelector> {
             },
             child: const Icon(FontAwesomeIcons.plus),
           ),
-          ..._kdbxFile!.body.meta.customIcons.values
-              .map((value) => IconSelectorCustomIcon(
-                  iconData: value.data,
-                  isSelected: _checkSelected(_selection!, value),
-                  onTap: () {
-                    _logger.fine('Selected custom icon.');
-                    setState(() => _selection = SelectedIcon.custom(value));
-                  })),
-          ...KdbxIcon.values.map((icon) => IconSelectorIcon(
-                iconData: PredefinedIcons.iconFor(icon),
-                isSelected: _checkSelected(_selection!, icon),
-                onTap: () {
-                  _logger.fine('Selected icon $icon');
-                  setState(() => _selection = SelectedIcon.predefined(icon));
-                },
-              )),
+          ..._kdbxFile!.body.meta.customIcons.values.map(
+            (value) => IconSelectorCustomIcon(
+              iconData: value.data,
+              isSelected: _checkSelected(_selection!, value),
+              onTap: () {
+                _logger.fine('Selected custom icon.');
+                setState(() => _selection = SelectedIcon.custom(value));
+              },
+            ),
+          ),
+          ...KdbxIcon.values.map(
+            (icon) => IconSelectorIcon(
+              iconData: PredefinedIcons.iconFor(icon),
+              isSelected: _checkSelected(_selection!, icon),
+              onTap: () {
+                _logger.fine('Selected icon $icon');
+                setState(() => _selection = SelectedIcon.predefined(icon));
+              },
+            ),
+          ),
         ],
       ),
     );
-//    });
+    //    });
   }
 
   bool _checkSelected(SelectedIcon selection, dynamic value) {
@@ -271,7 +281,7 @@ class SelectedIcon with _$SelectedIcon {
 
   factory SelectedIcon.fromObject(KdbxObject object) =>
       (object.customIcon?.let((custom) => SelectedIcon.custom(custom)) ??
-          object.icon.get()?.let((icon) => SelectedIcon.predefined(icon)))!;
+      object.icon.get()?.let((icon) => SelectedIcon.predefined(icon)))!;
 }
 
 class IconSelectorFormField extends StatelessWidget {
@@ -299,8 +309,11 @@ class IconSelectorFormField extends StatelessWidget {
           elevation: 8,
           child: InkWell(
             onTap: () async {
-              final newIcon = await IconSelectorDialog.show(context,
-                  initialSelection: value, kdbxFile: kdbxFile);
+              final newIcon = await IconSelectorDialog.show(
+                context,
+                initialSelection: value,
+                kdbxFile: kdbxFile,
+              );
               if (newIcon != null) {
                 final change = newIcon;
                 formFieldState.didChange(change);

@@ -19,18 +19,24 @@ class _$AppInfo extends AppInfo {
   factory _$AppInfo([void Function(AppInfoBuilder)? updates]) =>
       (new AppInfoBuilder()..update(updates))._build();
 
-  _$AppInfo._(
-      {required this.appName,
-      required this.version,
-      required this.buildNumber,
-      required this.packageName})
-      : super._() {
+  _$AppInfo._({
+    required this.appName,
+    required this.version,
+    required this.buildNumber,
+    required this.packageName,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(appName, r'AppInfo', 'appName');
     BuiltValueNullFieldError.checkNotNull(version, r'AppInfo', 'version');
     BuiltValueNullFieldError.checkNotNull(
-        buildNumber, r'AppInfo', 'buildNumber');
+      buildNumber,
+      r'AppInfo',
+      'buildNumber',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        packageName, r'AppInfo', 'packageName');
+      packageName,
+      r'AppInfo',
+      'packageName',
+    );
   }
 
   @override
@@ -120,16 +126,30 @@ class AppInfoBuilder implements Builder<AppInfo, AppInfoBuilder> {
   AppInfo build() => _build();
 
   _$AppInfo _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$AppInfo._(
-            appName: BuiltValueNullFieldError.checkNotNull(
-                appName, r'AppInfo', 'appName'),
-            version: BuiltValueNullFieldError.checkNotNull(
-                version, r'AppInfo', 'version'),
-            buildNumber: BuiltValueNullFieldError.checkNotNull(
-                buildNumber, r'AppInfo', 'buildNumber'),
-            packageName: BuiltValueNullFieldError.checkNotNull(
-                packageName, r'AppInfo', 'packageName'));
+          appName: BuiltValueNullFieldError.checkNotNull(
+            appName,
+            r'AppInfo',
+            'appName',
+          ),
+          version: BuiltValueNullFieldError.checkNotNull(
+            version,
+            r'AppInfo',
+            'version',
+          ),
+          buildNumber: BuiltValueNullFieldError.checkNotNull(
+            buildNumber,
+            r'AppInfo',
+            'buildNumber',
+          ),
+          packageName: BuiltValueNullFieldError.checkNotNull(
+            packageName,
+            r'AppInfo',
+            'packageName',
+          ),
+        );
     replace(_$result);
     return _$result;
   }
@@ -220,9 +240,12 @@ class FeatureFlagsBuilder
   FeatureFlags build() => _build();
 
   _$FeatureFlags _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$FeatureFlags._(
-            authpassCloud: authpassCloud, authpassCloudUri: authpassCloudUri);
+          authpassCloud: authpassCloud,
+          authpassCloudUri: authpassCloudUri,
+        );
     replace(_$result);
     return _$result;
   }

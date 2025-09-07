@@ -8,16 +8,16 @@ class FDroid extends EnvAppBase {
 
   @override
   EnvSecrets get secrets => const EnvSecrets(
-        analyticsAmplitudeApiKey: null,
-        analyticsGoogleAnalyticsId: null,
-        analyticsMatomo: null,
-        googleClientId: null,
-        googleClientSecret: null,
-        dropboxKey: null,
-        dropboxSecret: null,
-        microsoftClientId: null,
-        microsoftClientSecret: null,
-      );
+    analyticsAmplitudeApiKey: null,
+    analyticsGoogleAnalyticsId: null,
+    analyticsMatomo: null,
+    googleClientId: null,
+    googleClientSecret: null,
+    dropboxKey: null,
+    dropboxSecret: null,
+    microsoftClientId: null,
+    microsoftClientSecret: null,
+  );
 
   @override
   bool get featureFetchWebsiteIconEnabledByDefault => false;

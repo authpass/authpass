@@ -22,8 +22,9 @@ class PathUtilsFromPathProvider extends PathUtilsDefault {
   @override
   Future<Directory> retrieveCacheDirectory() async {
     if (AuthPassPlatform.isLinux) {
-      return fileSystem
-          .directory(path.join(xdg.cacheHome.path, _namespacePath));
+      return fileSystem.directory(
+        path.join(xdg.cacheHome.path, _namespacePath),
+      );
     }
     return fileSystem.directory(await path_provider.getTemporaryDirectory());
   }
@@ -38,12 +39,14 @@ class PathUtilsFromPathProvider extends PathUtilsDefault {
       throw UnsupportedError('Not supported on web.');
     }
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isMacOS) {
-      return fileSystem
-          .directory(await path_provider.getApplicationSupportDirectory());
+      return fileSystem.directory(
+        await path_provider.getApplicationSupportDirectory(),
+      );
     }
     if (AuthPassPlatform.isAndroid) {
-      return fileSystem
-          .directory(await path_provider.getApplicationDocumentsDirectory());
+      return fileSystem.directory(
+        await path_provider.getApplicationDocumentsDirectory(),
+      );
     }
     return await _getDesktopAppDataDirectory();
   }
@@ -51,14 +54,17 @@ class PathUtilsFromPathProvider extends PathUtilsDefault {
   @NonNls
   Future<Directory> _getDesktopAppDataDirectory() async {
     // https://stackoverflow.com/a/32937974/109219
-    final userHome = AuthPassPlatform.environment['HOME'] ??
+    final userHome =
+        AuthPassPlatform.environment['HOME'] ??
         AuthPassPlatform.environment['USERPROFILE']!;
     final dataDir = (() {
-      final inUserHome =
-          fileSystem.directory(path.join(userHome, '.$_namespacePath', 'data'));
+      final inUserHome = fileSystem.directory(
+        path.join(userHome, '.$_namespacePath', 'data'),
+      );
       if (AuthPassPlatform.isLinux && !inUserHome.existsSync()) {
-        return fileSystem
-            .directory(path.join(xdg.configHome.path, _namespacePath, 'data'));
+        return fileSystem.directory(
+          path.join(xdg.configHome.path, _namespacePath, 'data'),
+        );
       }
       return inUserHome;
     })();

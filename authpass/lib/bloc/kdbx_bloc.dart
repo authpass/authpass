@@ -117,10 +117,12 @@ class QuickUnlockStorage {
   }
 
   Future<void> updateQuickUnlockFile(
-      Map<FileSource, Credentials> fileCredentials) async {
+    Map<FileSource, Credentials> fileCredentials,
+  ) async {
     if (!(await supportsBiometricKeyStore())) {
       _logger.severe(
-          'updateQuickUnlockFile must not be called when biometric store is not supported.');
+        'updateQuickUnlockFile must not be called when biometric store is not supported.',
+      );
       return;
     }
     final quickUnlockCredentials = fileCredentials.map(
@@ -128,8 +130,10 @@ class QuickUnlockStorage {
     );
     _logger.fine('Getting storage file.');
     final storage = await _storageFile();
-    _logger.fine('got storage, writing credentials.'
-        ' ${quickUnlockCredentials.length}');
+    _logger.fine(
+      'got storage, writing credentials.'
+      ' ${quickUnlockCredentials.length}',
+    );
     try {
       if (quickUnlockCredentials.isEmpty) {
         _logger.fine('Deleting quick unlock.');
@@ -139,7 +143,10 @@ class QuickUnlockStorage {
       }
     } catch (e, stackTrace) {
       _logger.severe(
-          'Error while writing quick unlock credentials.', e, stackTrace);
+        'Error while writing quick unlock credentials.',
+        e,
+        stackTrace,
+      );
       rethrow;
     } finally {
       _logger.finer('all done.');
@@ -147,7 +154,8 @@ class QuickUnlockStorage {
   }
 
   Future<Map<FileSource, Credentials>> loadQuickUnlockFile(
-      AppDataBloc appDataBloc) async {
+    AppDataBloc appDataBloc,
+  ) async {
     if (!(await supportsBiometricKeyStore())) {
       _logger.fine('Biometric store not supported. no quickunlock.');
       return {};
@@ -160,14 +168,18 @@ class QuickUnlockStorage {
     }
     final map = json.decode(jsonContent) as Map<String, dynamic>;
     final appData = await appDataBloc.store.load();
-    return Map.fromEntries(map.entries.map((entry) {
-      final file = appData.recentFileByUuid(entry.key);
-      if (file == null) {
-        return null;
-      }
-      return MapEntry(file.toFileSource(cloudStorageBloc),
-          HashCredentials(base64.decode(entry.value as String)));
-    }).whereNotNull());
+    return Map.fromEntries(
+      map.entries.map((entry) {
+        final file = appData.recentFileByUuid(entry.key);
+        if (file == null) {
+          return null;
+        }
+        return MapEntry(
+          file.toFileSource(cloudStorageBloc),
+          HashCredentials(base64.decode(entry.value as String)),
+        );
+      }).whereNotNull(),
+    );
   }
 }
 
@@ -197,12 +209,12 @@ class KdbxOpenedFile {
 
 class OpenedKdbxFiles {
   OpenedKdbxFiles(Map<FileSource, KdbxOpenedFile> files)
-      : _files = Map.unmodifiable(files);
+    : _files = Map.unmodifiable(files);
   final Map<FileSource, KdbxOpenedFile> _files;
 
   int get length => _files.length;
 
-//  bool get isNotEmpty => _files.isNotEmpty;
+  //  bool get isNotEmpty => _files.isNotEmpty;
 
   KdbxOpenedFile? operator [](FileSource? fileSource) => _files[fileSource!];
   Iterable<MapEntry<FileSource, KdbxOpenedFile>> get entries => _files.entries;
@@ -210,9 +222,9 @@ class OpenedKdbxFiles {
 
   bool containsKey(FileSource file) => _files.containsKey(file);
 
-//  Map<K2, V2> map<K2, V2>(
-//          MapEntry<K2, V2> Function(FileSource key, KdbxOpenedFile value) f) =>
-//      _files.map(f);
+  //  Map<K2, V2> map<K2, V2>(
+  //          MapEntry<K2, V2> Function(FileSource key, KdbxOpenedFile value) f) =>
+  //      _files.map(f);
 }
 
 /// Result information for [KdbxBloc.openFile] method calls.
@@ -242,15 +254,21 @@ class KdbxBloc {
     required this.analytics,
     required this.cloudStorageBloc,
   }) : quickUnlockStorage = QuickUnlockStorage(
-            cloudStorageBloc: cloudStorageBloc,
-            env: env,
-            analytics: analytics) {
+         cloudStorageBloc: cloudStorageBloc,
+         env: env,
+         analytics: analytics,
+       ) {
     if (AuthPassPlatform.isWeb) {
       KdbxFormat.dartWebWorkaround = true;
     }
     _openedFiles
-        .map((value) => Map.fromEntries(value.entries
-            .map((entry) => MapEntry(entry.value.kdbxFile, entry.value))))
+        .map(
+          (value) => Map.fromEntries(
+            value.entries.map(
+              (entry) => MapEntry(entry.value.kdbxFile, entry.value),
+            ),
+          ),
+        )
         .listen((data) => _openedFilesByKdbxFile = data);
   }
 
@@ -262,14 +280,16 @@ class KdbxBloc {
   late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
-  final _openedFiles =
-      BehaviorSubject<OpenedKdbxFiles>.seeded(OpenedKdbxFiles({}));
+  final _openedFiles = BehaviorSubject<OpenedKdbxFiles>.seeded(
+    OpenedKdbxFiles({}),
+  );
   late Map<KdbxFile, KdbxOpenedFile> _openedFilesByKdbxFile;
   final _openedFilesQuickUnlock = <FileSource>{};
 
   Iterable<MapEntry<FileSource, KdbxFile>> get openedFilesWithSources =>
-      _openedFiles.value.entries
-          .map((entry) => MapEntry(entry.key, entry.value.kdbxFile));
+      _openedFiles.value.entries.map(
+        (entry) => MapEntry(entry.key, entry.value.kdbxFile),
+      );
 
   OpenedKdbxFiles get openedFiles => _openedFiles.value;
   List<KdbxFile> get openedFilesKdbx =>
@@ -280,18 +300,20 @@ class KdbxBloc {
 
   void dispose() {
     _openedFiles.close();
-//    super.dispose();
+    //    super.dispose();
   }
 
   Future<KdbxOpenedFile> updateOpenedFile(
-      KdbxOpenedFile file, OpenedFileUpdater updater) async {
+    KdbxOpenedFile file,
+    OpenedFileUpdater updater,
+  ) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
     await appDataBloc.update((b, data) {
       b.previousFiles.map((f) {
         if (!f.isSameFileAs(file.openedFile)) {
           return f;
         }
-//          return (f.toBuilder()..update(updater)).build();
+        //          return (f.toBuilder()..update(updater)).build();
         return updatedFile;
       });
     });
@@ -301,16 +323,21 @@ class KdbxBloc {
       kdbxFile: file.kdbxFile,
       kdbxFileContent: file.kdbxFileContent,
     );
-    _openedFiles.add(OpenedKdbxFiles({
-      ..._openedFiles.value._files,
-      file.fileSource: newFile,
-    }));
+    _openedFiles.add(
+      OpenedKdbxFiles({
+        ..._openedFiles.value._files,
+        file.fileSource: newFile,
+      }),
+    );
     _logger.info('new values: ${_openedFiles.value}');
     return newFile;
   }
 
-  Stream<OpenFileResult> openFile(FileSource file, Credentials credentials,
-      {bool addToQuickUnlock = false}) async* {
+  Stream<OpenFileResult> openFile(
+    FileSource file,
+    Credentials credentials, {
+    bool addToQuickUnlock = false,
+  }) async* {
     Uint8List? previous;
     late KdbxOpenedFile openedFile;
     await for (final fileContent in file.content()) {
@@ -323,8 +350,10 @@ class KdbxBloc {
         } else {
           if (openedFile.kdbxFile.isDirty) {
             // ooooopsie.
-            throw StateError('File was changed locally while '
-                'loading new file from remote storage.');
+            throw StateError(
+              'File was changed locally while '
+              'loading new file from remote storage.',
+            );
           }
         }
       }
@@ -332,17 +361,23 @@ class KdbxBloc {
       loadStopwatch.stop();
       final unlockStopwatch = Stopwatch()..start();
       openedFile = await _openFileContent(
-          file, credentials, fileContent, addToQuickUnlock);
+        file,
+        credentials,
+        fileContent,
+        addToQuickUnlock,
+      );
       addToQuickUnlock = false;
 
       if (file is FileSourceCloudStorage) {
         final provider = file.provider;
         if (provider is AuthPassCloudProvider) {
-          unawaited((() async {
-            await Future<void>.delayed(const Duration(seconds: 2));
-            _logger.fine('touch files.');
-            await provider.openedFile(this, openedFile);
-          })());
+          unawaited(
+            (() async {
+              await Future<void>.delayed(const Duration(seconds: 2));
+              _logger.fine('touch files.');
+              await provider.openedFile(this, openedFile);
+            })(),
+          );
         }
       }
 
@@ -357,14 +392,15 @@ class KdbxBloc {
   }
 
   Future<KdbxOpenedFile> _openFileContent(
-      FileSource file,
-      Credentials credentials,
-      FileContent fileContent,
-      bool addToQuickUnlock) async {
+    FileSource file,
+    Credentials credentials,
+    FileContent fileContent,
+    bool addToQuickUnlock,
+  ) async {
     final readArgs = KdbxReadArgs(fileContent.content, credentials);
-//    final kdbxReadFile = await compute(
-//        staticReadKdbxFile, readArgs,
-//        debugLabel: 'readKdbxFile');
+    //    final kdbxReadFile = await compute(
+    //        staticReadKdbxFile, readArgs,
+    //        debugLabel: 'readKdbxFile');
     final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
     final kdbxReadFileException = kdbxReadFile.exception;
     if (kdbxReadFileException != null) {
@@ -405,10 +441,12 @@ class KdbxBloc {
       kdbxFile: kdbxFile,
       kdbxFileContent: fileContent,
     );
-    _openedFiles.add(OpenedKdbxFiles({
-      ..._openedFiles.value._files,
-      file: kdbxOpenedFile,
-    }));
+    _openedFiles.add(
+      OpenedKdbxFiles({
+        ..._openedFiles.value._files,
+        file: kdbxOpenedFile,
+      }),
+    );
     analytics.events.trackOpenFile(type: file.typeDebug);
     analytics.events.trackOpenFile2(
       generator: kdbxFile.body.meta.generator.get() ?? 'NULL',
@@ -425,8 +463,9 @@ class KdbxBloc {
 
   Color? _defaultNextColor() {
     for (final color in AuthPassTheme.defaultColorOrder) {
-      if (!openedFiles.values
-          .any((file) => file.openedFile.colorCode == color.toARGB32())) {
+      if (!openedFiles.values.any(
+        (file) => file.openedFile.colorCode == color.toARGB32(),
+      )) {
         return color;
       }
     }
@@ -442,15 +481,19 @@ class KdbxBloc {
     }
     final openedFiles = _openedFiles.value;
     await quickUnlockStorage.updateQuickUnlockFile(
-        Map.fromEntries(_openedFilesQuickUnlock.map((fileSource) {
-      final openedFile = openedFiles[fileSource];
-      if (openedFile == null) {
-        _logger.warning(
-            'File was closed, but was still listed in quick unlock files.');
-        return null;
-      }
-      return MapEntry(fileSource, openedFile.kdbxFile.credentials);
-    }).whereNotNull()));
+      Map.fromEntries(
+        _openedFilesQuickUnlock.map((fileSource) {
+          final openedFile = openedFiles[fileSource];
+          if (openedFile == null) {
+            _logger.warning(
+              'File was closed, but was still listed in quick unlock files.',
+            );
+            return null;
+          }
+          return MapEntry(fileSource, openedFile.kdbxFile.credentials);
+        }).whereNotNull(),
+      ),
+    );
   }
 
   bool _isOpen(FileSource file) => _openedFiles.value.containsKey(file);
@@ -467,10 +510,11 @@ class KdbxBloc {
       }
     } catch (e, stackTrace) {
       _logger.severe(
-          'load:$debugName error while loading subsequent '
-          'data from $fileSource.',
-          e,
-          stackTrace);
+        'load:$debugName error while loading subsequent '
+        'data from $fileSource.',
+        e,
+        stackTrace,
+      );
       rethrow;
     }
     _logger.fine('load:$debugName finished.');
@@ -478,57 +522,68 @@ class KdbxBloc {
 
   bool hasQuickUnlockOpen() => _openedFilesQuickUnlock.isNotEmpty;
 
-  Future<int> reopenQuickUnlock(AppLocalizations loc,
-          [TaskProgress? progress]) =>
-      _quickUnlockCheckRunning ??= (() async {
+  Future<int> reopenQuickUnlock(
+    AppLocalizations loc, [
+    TaskProgress? progress,
+  ]) => _quickUnlockCheckRunning ??= (() async {
+    try {
+      _logger.finer('Checking quick unlock.');
+      final unlockFiles = await quickUnlockStorage.loadQuickUnlockFile(
+        appDataBloc,
+      );
+      var filesOpened = 0;
+      for (final file in unlockFiles.entries.where(
+        (entry) => !_isOpen(entry.key),
+      )) {
         try {
-          _logger.finer('Checking quick unlock.');
-          final unlockFiles =
-              await quickUnlockStorage.loadQuickUnlockFile(appDataBloc);
-          var filesOpened = 0;
-          for (final file
-              in unlockFiles.entries.where((entry) => !_isOpen(entry.key))) {
-            try {
-//              progress.progressLabel = 'Loading $fileLabel';
-//              await file.key.contentPreCache();
-              progress!.progressLabel = loc.openFileProgress(
-                  file.key.displayName, filesOpened + 1, unlockFiles.length);
-              final open = StreamIterator(openFile(file.key, file.value));
-              await open.moveNext();
-              filesOpened++;
-              unawaited(continueLoadInBackground(open,
-                  debugName:
-                      '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})',
-                  fileSource: file.key));
-            } catch (e, stackTrace) {
-              _logger.severe(
-                  'Panic, error while trying to open file from '
-                  'quick unlock. ignoring file for now. ${file.key}',
-                  e,
-                  stackTrace);
-            }
-          }
-          analytics.events.trackQuickUnlock(value: filesOpened);
-          _openedFilesQuickUnlock.clear();
-          _openedFilesQuickUnlock.addAll(unlockFiles.keys);
-          return filesOpened;
-        } on AuthException catch (e, stackTrace) {
-          if (e.code == AuthExceptionCode.userCanceled) {
-            _logger.info('User canceled quick unlock.');
-            return 0;
-          }
-          _logger.severe('Error during quick unlock.', e, stackTrace);
-          return 0;
+          //              progress.progressLabel = 'Loading $fileLabel';
+          //              await file.key.contentPreCache();
+          progress!.progressLabel = loc.openFileProgress(
+            file.key.displayName,
+            filesOpened + 1,
+            unlockFiles.length,
+          );
+          final open = StreamIterator(openFile(file.key, file.value));
+          await open.moveNext();
+          filesOpened++;
+          unawaited(
+            continueLoadInBackground(
+              open,
+              debugName:
+                  '${file.key.displayName} … (${filesOpened + 1} / ${unlockFiles.length})',
+              fileSource: file.key,
+            ),
+          );
+        } catch (e, stackTrace) {
+          _logger.severe(
+            'Panic, error while trying to open file from '
+            'quick unlock. ignoring file for now. ${file.key}',
+            e,
+            stackTrace,
+          );
         }
-      })()
-          .whenComplete(() => _quickUnlockCheckRunning = null);
+      }
+      analytics.events.trackQuickUnlock(value: filesOpened);
+      _openedFilesQuickUnlock.clear();
+      _openedFilesQuickUnlock.addAll(unlockFiles.keys);
+      return filesOpened;
+    } on AuthException catch (e, stackTrace) {
+      if (e.code == AuthExceptionCode.userCanceled) {
+        _logger.info('User canceled quick unlock.');
+        return 0;
+      }
+      _logger.severe('Error during quick unlock.', e, stackTrace);
+      return 0;
+    }
+  })().whenComplete(() => _quickUnlockCheckRunning = null);
 
   Future<void> close(KdbxFile file) async {
     _logger.fine('Close file.');
     analytics.events.trackCloseFile();
     final fileSource = fileForKdbxFile(file).fileSource;
-    _openedFiles.add(OpenedKdbxFiles(
-        Map.from(_openedFiles.value._files)..remove(fileSource)));
+    _openedFiles.add(
+      OpenedKdbxFiles(Map.from(_openedFiles.value._files)..remove(fileSource)),
+    );
     file.dispose();
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
@@ -555,14 +610,17 @@ class KdbxBloc {
   }
 
   static Future<ReadFileResponse> staticReadKdbxFile(
-      KdbxReadArgs readArgs) async {
+    KdbxReadArgs readArgs,
+  ) async {
     initIsolate();
     final kdbxFormat = KdbxFormat(FlutterArgon2());
     return readKdbxFile(kdbxFormat, readArgs);
   }
 
   static Future<ReadFileResponse> readKdbxFile(
-      KdbxFormat kdbxFormat, KdbxReadArgs readArgs) async {
+    KdbxFormat kdbxFormat,
+    KdbxReadArgs readArgs,
+  ) async {
     try {
       _logger.finer('reading kdbx file ...');
       final fileContent = readArgs.content;
@@ -591,8 +649,10 @@ class KdbxBloc {
       databaseName,
       generator: Env.AuthPass,
     );
-    final bytes =
-        await _saveFileToBytes<Uint8List>(kdbxFile, (bytes) async => bytes);
+    final bytes = await _saveFileToBytes<Uint8List>(
+      kdbxFile,
+      (bytes) async => bytes,
+    );
     FileSource fileSource;
     if (target == null) {
       final localSource = await _localFileSourceForDbName(databaseName);
@@ -601,7 +661,9 @@ class KdbxBloc {
     } else {
       final entity = await target.provider.createEntity(
         CloudStorageSelectorSaveResult(
-            target.parent, _fileNameForDbName(databaseName)),
+          target.parent,
+          _fileNameForDbName(databaseName),
+        ),
         bytes,
       );
       fileSource = entity;
@@ -625,8 +687,11 @@ class KdbxBloc {
     }
     final fileName = _fileNameForDbName(databaseName);
     final appDir = await PathUtils().getAppDocDirectory(ensureCreated: true);
-    final localSource = FileSourceLocal(appDir.childFile(fileName),
-        databaseName: databaseName, uuid: AppDataBloc.createUuid());
+    final localSource = FileSourceLocal(
+      appDir.childFile(fileName),
+      databaseName: databaseName,
+      uuid: AppDataBloc.createUuid(),
+    );
     if (localSource.file.existsSync()) {
       throw FileExistsException(path: localSource.file.path);
     }
@@ -658,7 +723,9 @@ class KdbxBloc {
   /// Wrapper around [file.save()], which adds a bit of meta data
   /// before storing it.
   Future<T> _saveFileToBytes<T>(
-      KdbxFile file, FileSaveCallback<T> saveBytes) async {
+    KdbxFile file,
+    FileSaveCallback<T> saveBytes,
+  ) async {
     final generator = file.body.meta.generator.get();
     if (generator == null || generator.isEmpty) {
       file.body.meta.generator.set(nonNls('AuthPass (save)'));
@@ -671,8 +738,11 @@ class KdbxBloc {
     return await file.saveTo(saveBytes);
   }
 
-  Future<FileContent> saveFile(KdbxFile file,
-      {FileSource? toFileSource, Credentials? updateCredentials}) async {
+  Future<FileContent> saveFile(
+    KdbxFile file, {
+    FileSource? toFileSource,
+    Credentials? updateCredentials,
+  }) async {
     final oldCredentials = file.credentials;
     if (updateCredentials != null) {
       file.credentials = updateCredentials;
@@ -699,34 +769,50 @@ class KdbxBloc {
       final ret = await _saveFileToBytes(file, (bytes) async {
         return await fileSource.contentWrite(bytes, metadata: null);
       });
-      analytics.events
-          .trackSave(type: fileSource.typeDebug, value: ret.content.length);
-      analytics.trackTiming('saveFileSize', ret.content.length,
-          category: 'fileSize', label: 'save');
+      analytics.events.trackSave(
+        type: fileSource.typeDebug,
+        value: ret.content.length,
+      );
+      analytics.trackTiming(
+        'saveFileSize',
+        ret.content.length,
+        category: 'fileSize',
+        label: 'save',
+      );
       await updateQuickUnlock();
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
-          'Got conflict while writing file. Trying to merge.', e, stackTrace);
+        'Got conflict while writing file. Trying to merge.',
+        e,
+        stackTrace,
+      );
       final content = await fileSource.content(updateCache: false).last;
       final remoteFile = await kdbxFormat.read(content.content, oldCredentials);
       final mergeResult = file.merge(remoteFile);
       try {
         _logger.fine('mergeResult: $mergeResult');
         final ret = await _saveFileToBytes(
-            file,
-            (bytes) async => await fileSource.contentWrite(bytes,
-                metadata: content.metadata));
+          file,
+          (bytes) async =>
+              await fileSource.contentWrite(bytes, metadata: content.metadata),
+        );
         delegate?.conflictMerged(fileSource, file, mergeResult);
         analytics.events.trackSaveConflict(
           type: fileSource.typeDebug,
           value: mergeResult.totalChanges(),
           success: true,
         );
-        analytics.events
-            .trackSave(type: fileSource.typeDebug, value: ret.content.length);
-        analytics.trackTiming('saveFileSize', ret.content.length,
-            category: 'fileSize', label: 'save');
+        analytics.events.trackSave(
+          type: fileSource.typeDebug,
+          value: ret.content.length,
+        );
+        analytics.trackTiming(
+          'saveFileSize',
+          ret.content.length,
+          category: 'fileSize',
+          label: 'save',
+        );
         await updateQuickUnlock();
         return ret;
       } catch (e) {
@@ -750,13 +836,18 @@ class KdbxBloc {
       _openedFiles.value[fileSource];
 
   Future<KdbxOpenedFile> saveAs(
-      KdbxOpenedFile oldFile, FileSource output) async {
+    KdbxOpenedFile oldFile,
+    FileSource output,
+  ) async {
     final content = await saveFile(oldFile.kdbxFile, toFileSource: output);
     return await _savedAs(oldFile, output, content);
   }
 
-  Future<KdbxOpenedFile> _savedAs(KdbxOpenedFile oldFile, FileSource output,
-      FileContent fileContent) async {
+  Future<KdbxOpenedFile> _savedAs(
+    KdbxOpenedFile oldFile,
+    FileSource output,
+    FileContent fileContent,
+  ) async {
     final oldSource = oldFile.fileSource;
     final databaseName = oldFile.kdbxFile.body.meta.databaseName.get();
     final newOpenedFile = await appDataBloc.openedFile(
@@ -770,11 +861,16 @@ class KdbxBloc {
       kdbxFile: oldFile.kdbxFile,
       kdbxFileContent: fileContent,
     );
-    _openedFiles.add(OpenedKdbxFiles({
-      ...Map.fromEntries(_openedFiles.value._files.entries
-          .where((entry) => entry.key != oldSource)),
-      newFile.fileSource: newFile,
-    }));
+    _openedFiles.add(
+      OpenedKdbxFiles({
+        ...Map.fromEntries(
+          _openedFiles.value._files.entries.where(
+            (entry) => entry.key != oldSource,
+          ),
+        ),
+        newFile.fileSource: newFile,
+      }),
+    );
     // TODO also do not update quick unlock if this file is not in quick unlock.
     if (_openedFilesQuickUnlock.isNotEmpty) {
       try {
@@ -782,9 +878,10 @@ class KdbxBloc {
       } on AuthException catch (e, stackTrace) {
         if (e.code == AuthExceptionCode.userCanceled) {
           _logger.warning(
-              'User cancelled saving quick unlock. ignoring for now.',
-              e,
-              stackTrace);
+            'User cancelled saving quick unlock. ignoring for now.',
+            e,
+            stackTrace,
+          );
         } else {
           rethrow;
         }
@@ -794,9 +891,10 @@ class KdbxBloc {
   }
 
   Future<KdbxOpenedFile> saveAsNewFile(
-      KdbxOpenedFile oldFile,
-      CloudStorageSelectorSaveResult createFileInfo,
-      CloudStorageProvider cs) async {
+    KdbxOpenedFile oldFile,
+    CloudStorageSelectorSaveResult createFileInfo,
+    CloudStorageProvider cs,
+  ) async {
     return await _saveFileToBytes(oldFile.kdbxFile, (bytes) async {
       final entity = await cs.createEntity(createFileInfo, bytes);
       final lastContent = entity.lastContent!;
@@ -819,9 +917,12 @@ class KdbxBloc {
 
   KdbxEntry? findEntryByUuid(String uuid) {
     final entryUuidLookup = _entryUuidLookup ??= Map.fromEntries(
-        openedFilesKdbx.expand((file) => file.body.rootGroup
-            .getAllEntries()
-            .map((e) => MapEntry(e.uuid.uuid, e))));
+      openedFilesKdbx.expand(
+        (file) => file.body.rootGroup.getAllEntries().map(
+          (e) => MapEntry(e.uuid.uuid, e),
+        ),
+      ),
+    );
 
     return entryUuidLookup[uuid];
   }
@@ -846,8 +947,10 @@ class KdbxBloc {
 
       // try loading the new file.
       yield ReloadStatus.decrypting;
-      final readArgs =
-          KdbxReadArgs(reloadedContent.content, file.kdbxFile.credentials);
+      final readArgs = KdbxReadArgs(
+        reloadedContent.content,
+        file.kdbxFile.credentials,
+      );
       final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
 
       _logger.info('\n\n\n===========\n\n\n');
@@ -865,7 +968,8 @@ class KdbxBloc {
   }
 
   Future<AttachmentProvider> attachmentProviderForFileSource(
-      KdbxFile file) async {
+    KdbxFile file,
+  ) async {
     final appData = await appDataBloc.store.load();
     if (!appData.authPassCloudAttachmentsOrDefault) {
       _logger.info('AuthPass Cloud Attachments disabled.');
@@ -891,8 +995,9 @@ class KdbxBloc {
     if (!attachmentIsFromCloud(binary)) {
       return null;
     }
-    final data = binary.value
-        .sublist(AuthPassExternalAttachment.prefixIdentifierBytes.length);
+    final data = binary.value.sublist(
+      AuthPassExternalAttachment.prefixIdentifierBytes.length,
+    );
     final infoJson = json.decode(utf8.decode(data)) as Map<String, dynamic>;
     return AuthPassExternalAttachment.fromJson(infoJson);
   }
@@ -918,7 +1023,9 @@ abstract class AttachmentProvider {
 class AttachmentProviderLocal extends AttachmentProvider {
   @override
   Future<Uint8List> readAttachmentBytes(
-      KdbxFile file, KdbxBinary binary) async {
+    KdbxFile file,
+    KdbxBinary binary,
+  ) async {
     return binary.value;
   }
 
@@ -976,10 +1083,13 @@ class AttachmentProviderAuthPassCloud extends AttachmentProvider {
     _logger.info('Lets try AuthPass Cloud Attachments.');
     try {
       final attachmentInfo = await provider.createAttachment(
-          fileSource: fs, name: fileName, bytes: bytes);
+        fileSource: fs,
+        name: fileName,
+        bytes: bytes,
+      );
       final info = [
         attachmentInfo.identifier,
-        json.encode(attachmentInfo.toJson())
+        json.encode(attachmentInfo.toJson()),
       ].join();
       entry.createBinary(
         isProtected: false,
@@ -995,7 +1105,9 @@ class AttachmentProviderAuthPassCloud extends AttachmentProvider {
 
   @override
   Future<Uint8List> readAttachmentBytes(
-      KdbxFile file, KdbxBinary binary) async {
+    KdbxFile file,
+    KdbxBinary binary,
+  ) async {
     final info = kdbxBloc.attachmentInfo(binary);
     if (info == null) {
       return binary.value;

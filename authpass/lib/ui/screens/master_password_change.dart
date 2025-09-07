@@ -21,12 +21,10 @@ class MasterPasswordChangeScreen extends StatelessWidget {
 
   static Route<void> route({
     required FileSource fileSource,
-  }) =>
-      MaterialPageRoute(
-        builder: (context) =>
-            MasterPasswordChangeScreen(fileSource: fileSource),
-        settings: const RouteSettings(name: 'masterPasswordChange'),
-      );
+  }) => MaterialPageRoute(
+    builder: (context) => MasterPasswordChangeScreen(fileSource: fileSource),
+    settings: const RouteSettings(name: 'masterPasswordChange'),
+  );
 
   final FileSource fileSource;
 
@@ -90,8 +88,10 @@ class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
         child: Theme(
           data: theme.copyWith(
-              inputDecorationTheme:
-                  theme.inputDecorationTheme.copyWith(filled: true)),
+            inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+              filled: true,
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,14 +122,17 @@ class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
                 onFieldSubmitted: (val) => _submitCallback()!(),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onChanged: (value) {
-                  final userInput =
-                      _databaseName.text.pathCase.split(CharConstants.slash);
+                  final userInput = _databaseName.text.pathCase.split(
+                    CharConstants.slash,
+                  );
                   setState(() {
                     if (value.isEmpty) {
                       _strength = null;
                     } else {
-                      _strength =
-                          _zxcvbn.evaluate(value, userInputs: userInput);
+                      _strength = _zxcvbn.evaluate(
+                        value,
+                        userInputs: userInput,
+                      );
                     }
                   });
                 },
@@ -168,22 +171,22 @@ class _MasterPasswordChangeFormState extends State<MasterPasswordChangeForm>
   }
 
   VoidCallback? _submitCallback() => asyncTaskCallback((progress) async {
-        if (_formKey.currentState!.validate()) {
-          final loc = AppLocalizations.of(context);
-          final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-          await kdbxBloc.saveFile(
-            widget.file,
-            updateCredentials: Credentials.composite(
-              ProtectedValue.fromString(_password.text),
-              null,
-            ),
-          );
-          // ignore: use_build_context_synchronously
-          context.showSnackBar(loc.changeMasterPasswordSuccess);
-          if (!mounted) {
-            return;
-          }
-          Navigator.of(context).pop();
-        }
-      });
+    if (_formKey.currentState!.validate()) {
+      final loc = AppLocalizations.of(context);
+      final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+      await kdbxBloc.saveFile(
+        widget.file,
+        updateCredentials: Credentials.composite(
+          ProtectedValue.fromString(_password.text),
+          null,
+        ),
+      );
+      // ignore: use_build_context_synchronously
+      context.showSnackBar(loc.changeMasterPasswordSuccess);
+      if (!mounted) {
+        return;
+      }
+      Navigator.of(context).pop();
+    }
+  });
 }

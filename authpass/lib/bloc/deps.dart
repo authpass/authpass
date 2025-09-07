@@ -34,8 +34,10 @@ class Deps {
   }) {
     Future<void>.delayed(const Duration(milliseconds: 100)).then((value) async {
       final appData = await appDataBloc.store.load();
-      final daysSinceLaunch =
-          appData.firstLaunchedAt!.difference(DateTime.now()).abs().inDays;
+      final daysSinceLaunch = appData.firstLaunchedAt!
+          .difference(DateTime.now())
+          .abs()
+          .inDays;
       await analytics.events.trackInit(
         userType: appData.manualUserType,
         value: daysSinceLaunch,

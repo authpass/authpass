@@ -32,9 +32,10 @@ class PlatformMenuBarWrapper extends StatelessWidget {
                   label: loc.menuItemAbout,
                   onSelected: () {
                     AuthPassAboutDialog.openDialog(
-                        navigatorKey.currentContext!);
+                      navigatorKey.currentContext!,
+                    );
                   },
-                )
+                ),
               ],
             ),
             PlatformMenuItemGroup(
@@ -52,9 +53,11 @@ class PlatformMenuBarWrapper extends StatelessWidget {
               ],
             ),
             if (PlatformProvidedMenuItem.hasMenu(
-                PlatformProvidedMenuItemType.quit)) ...[
+              PlatformProvidedMenuItemType.quit,
+            )) ...[
               const PlatformProvidedMenuItem(
-                  type: PlatformProvidedMenuItemType.quit),
+                type: PlatformProvidedMenuItemType.quit,
+              ),
             ],
           ],
         ),
@@ -68,7 +71,7 @@ class PlatformMenuBarWrapper extends StatelessWidget {
                   onSelected: () {
                     DialogUtils.openUrl(deps.env.forumUrl);
                   },
-                )
+                ),
               ],
             ),
           ],

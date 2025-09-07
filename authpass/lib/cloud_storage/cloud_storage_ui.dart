@@ -22,8 +22,11 @@ import 'package:provider/provider.dart';
 final _logger = Logger('authpass.cloud_storage_ui');
 
 class CloudStorageSelector extends StatefulWidget {
-  const CloudStorageSelector(
-      {super.key, required this.provider, this.browserConfig});
+  const CloudStorageSelector({
+    super.key,
+    required this.provider,
+    this.browserConfig,
+  });
 
   final CloudStorageProvider provider;
   final CloudStorageSelectorConfig? browserConfig;
@@ -32,15 +35,15 @@ class CloudStorageSelector extends StatefulWidget {
   _CloudStorageSelectorState createState() => _CloudStorageSelectorState();
 
   static Route<T> route<T extends CloudStorageSelectorResult>(
-          CloudStorageProvider provider,
-          [CloudStorageSelectorConfig<T>? browserConfig]) =>
-      MaterialPageRoute<T>(
-        settings: RouteSettings(name: '/cloudStorage/selector/${provider.id}'),
-        builder: (context) => CloudStorageSelector(
-          provider: provider,
-          browserConfig: browserConfig,
-        ),
-      );
+    CloudStorageProvider provider, [
+    CloudStorageSelectorConfig<T>? browserConfig,
+  ]) => MaterialPageRoute<T>(
+    settings: RouteSettings(name: '/cloudStorage/selector/${provider.id}'),
+    builder: (context) => CloudStorageSelector(
+      provider: provider,
+      browserConfig: browserConfig,
+    ),
+  );
 }
 
 class _CloudStorageSelectorState extends State<CloudStorageSelector> {
@@ -90,12 +93,14 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                         cloudStorageId: widget.provider.id,
                         category: 'appbar',
                       );
-                      await Navigator.of(context).push(CreateFile.route(
-                        target: CloudStorageSaveTarget(
-                          provider: widget.provider,
-                          parent: _folder,
+                      await Navigator.of(context).push(
+                        CreateFile.route(
+                          target: CloudStorageSaveTarget(
+                            provider: widget.provider,
+                            parent: _folder,
+                          ),
                         ),
-                      ));
+                      );
                     },
                     icon: const Icon(Icons.add),
                   ),
@@ -110,7 +115,8 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                 ),
               ],
       ),
-      floatingActionButton: widget.browserConfig is CloudStorageOpenConfig &&
+      floatingActionButton:
+          widget.browserConfig is CloudStorageOpenConfig &&
               widget.provider.isAuthenticated
           ? FloatingActionButton(
               onPressed: () async {
@@ -118,12 +124,14 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                   cloudStorageId: widget.provider.id,
                   category: 'fab',
                 );
-                await Navigator.of(context).push(CreateFile.route(
-                  target: CloudStorageSaveTarget(
-                    provider: widget.provider,
-                    parent: _folder,
+                await Navigator.of(context).push(
+                  CreateFile.route(
+                    target: CloudStorageSaveTarget(
+                      provider: widget.provider,
+                      parent: _folder,
+                    ),
                   ),
-                ));
+                );
               },
               tooltip: loc.createNewFile,
               child: const Icon(Icons.add),
@@ -132,7 +140,9 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
       body: widget.provider.isAuthenticated != true
           ? Center(
               child: CloudStorageAuthentication(
-                  provider: widget.provider, onSuccess: () => setState(() {})),
+                provider: widget.provider,
+                onSuccess: () => setState(() {}),
+              ),
             )
           : Center(
               child: !_isSearch
@@ -141,7 +151,8 @@ class _CloudStorageSelectorState extends State<CloudStorageSelector> {
                       provider: widget.provider,
                       config: config is CloudStorageBrowserConfig
                           ? config
-                          : CloudStorageBrowserConfig(isSave: false))
+                          : CloudStorageBrowserConfig(isSave: false),
+                    )
                   : CloudStorageSearch(provider: widget.provider),
             ),
     );
@@ -176,7 +187,7 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
       builder: (context, constraints) => ConstrainedBox(
         constraints: constraints.copyWith(maxWidth: 320),
         child: Column(
-//      mainAxisSize: MainAxisSize.min,
+          //      mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -192,29 +203,31 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
                     ),
                   ),
                   IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () => _search()),
+                    icon: const Icon(Icons.search),
+                    onPressed: () => _search(),
+                  ),
                 ],
               ),
             ),
             task != null
                 ? const CircularProgressIndicator()
                 : searchResponse == null
-                    ? Container()
-                    : Expanded(
-                        child: SearchResultListView(
-                          response: searchResponse,
-                          onTap: (entity) {
-                            final source = FileSourceCloudStorage(
-                              provider: widget.provider,
-                              fileInfo: entity.toSimpleFileInfo(),
-                              uuid: AppDataBloc.createUuid(),
-                            );
-                            Navigator.of(context)
-                                .pop(CloudStorageSelectorLoadResult(source));
-                          },
-                        ),
-                      ),
+                ? Container()
+                : Expanded(
+                    child: SearchResultListView(
+                      response: searchResponse,
+                      onTap: (entity) {
+                        final source = FileSourceCloudStorage(
+                          provider: widget.provider,
+                          fileInfo: entity.toSimpleFileInfo(),
+                          uuid: AppDataBloc.createUuid(),
+                        );
+                        Navigator.of(
+                          context,
+                        ).pop(CloudStorageSelectorLoadResult(source));
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
@@ -222,18 +235,19 @@ class _CloudStorageSearchState extends State<CloudStorageSearch>
   }
 
   Future<void> _search() => asyncRunTask(
-        () async {
-          final results =
-              await widget.provider.search(name: _searchController.text);
-          _logger.fine('Got results:');
-          for (final result in results.results) {
-            _logger.fine('${result!.name} (${result.id}');
-          }
-          setState(() {
-            _searchResponse = results;
-          });
-        },
+    () async {
+      final results = await widget.provider.search(
+        name: _searchController.text,
       );
+      _logger.fine('Got results:');
+      for (final result in results.results) {
+        _logger.fine('${result!.name} (${result.id}');
+      }
+      setState(() {
+        _searchResponse = results;
+      });
+    },
+  );
 }
 
 class SearchResultListView extends StatelessWidget {
@@ -259,9 +273,11 @@ class SearchResultListView extends StatelessWidget {
         }
         final entity = response.results[itemId]!;
         return ListTile(
-          leading: Icon(entity.type == CloudStorageEntityType.file
-              ? FontAwesomeIcons.file
-              : FontAwesomeIcons.folder),
+          leading: Icon(
+            entity.type == CloudStorageEntityType.file
+                ? FontAwesomeIcons.file
+                : FontAwesomeIcons.folder,
+          ),
           title: Text(entity.name!),
           trailing: _createMenu(loc, entity),
           subtitle: entity.path == null ? null : Text(entity.path!),
@@ -285,15 +301,16 @@ class SearchResultListView extends StatelessWidget {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-              value: () async {
-                await Navigator.of(context).push(
-                  ShareFileScreen.route(provider: provider, entity: entity),
-                );
-              },
-              child: ListTile(
-                leading: const Icon(Icons.share),
-                title: Text(loc.authPassCloudShareFileActionLabel),
-              )),
+            value: () async {
+              await Navigator.of(context).push(
+                ShareFileScreen.route(provider: provider, entity: entity),
+              );
+            },
+            child: ListTile(
+              leading: const Icon(Icons.share),
+              title: Text(loc.authPassCloudShareFileActionLabel),
+            ),
+          ),
           PopupMenuItem(
             value: () async {
               await provider.delete(entity);
@@ -312,7 +329,8 @@ class SearchResultListView extends StatelessWidget {
 }
 
 abstract class CloudStorageSelectorConfig<
-    T extends CloudStorageSelectorResult> {}
+  T extends CloudStorageSelectorResult
+> {}
 
 class CloudStorageOpenConfig
     extends CloudStorageSelectorConfig<CloudStorageSelectorLoadResult> {}
@@ -368,9 +386,11 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
     await asyncRunTask((progress) async {
       final response = await widget.provider.list(parent: _folder);
       setState(() {
-        _response = response.rebuild((b) => b.results
-          ..where((c) => c!.type != CloudStorageEntityType.unknown)
-          ..sort(_compare));
+        _response = response.rebuild(
+          (b) => b.results
+            ..where((c) => c!.type != CloudStorageEntityType.unknown)
+            ..sort(_compare),
+        );
       });
     }, label: loc.loading);
   }
@@ -402,19 +422,22 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                 icon: const Icon(FontAwesomeIcons.folderOpen),
                 label: const Text(CharConstants.slash),
               ),
-              ..._folderBreadcrumbs.expand((f) => [
-                    const Text(CharConstants.chevronRight),
-                    TextButton.icon(
-                      icon: const Icon(FontAwesomeIcons.folderOpen),
-                      label: Text(f.name!),
-                      onPressed: () {
-                        _folderBreadcrumbs.removeRange(
-                            _folderBreadcrumbs.indexOf(f) + 1,
-                            _folderBreadcrumbs.length);
-                        _listFolder();
-                      },
-                    ),
-                  ]),
+              ..._folderBreadcrumbs.expand(
+                (f) => [
+                  const Text(CharConstants.chevronRight),
+                  TextButton.icon(
+                    icon: const Icon(FontAwesomeIcons.folderOpen),
+                    label: Text(f.name!),
+                    onPressed: () {
+                      _folderBreadcrumbs.removeRange(
+                        _folderBreadcrumbs.indexOf(f) + 1,
+                        _folderBreadcrumbs.length,
+                      );
+                      _listFolder();
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -438,8 +461,9 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                           fileInfo: item.toSimpleFileInfo(),
                           uuid: AppDataBloc.createUuid(),
                         );
-                        Navigator.of(context)
-                            .pop(CloudStorageSelectorLoadResult(source));
+                        Navigator.of(
+                          context,
+                        ).pop(CloudStorageSelectorLoadResult(source));
                       }
                     },
                   )
@@ -465,11 +489,15 @@ class _CloudStorageBrowserState extends State<CloudStorageBrowser>
                   LinkButton(
                     icon: const Icon(FontAwesomeIcons.floppyDisk),
                     onPressed: () {
-                      Navigator.of(context).pop(CloudStorageSelectorSaveResult(
-                          _folder, _fileNameController.text));
+                      Navigator.of(context).pop(
+                        CloudStorageSelectorSaveResult(
+                          _folder,
+                          _fileNameController.text,
+                        ),
+                      );
                     },
                     child: Text(loc.saveButtonLabel),
-                  )
+                  ),
                 ],
               ),
             ),

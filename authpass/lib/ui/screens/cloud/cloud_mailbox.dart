@@ -20,9 +20,9 @@ final _logger = Logger('cloud_mailbox');
 @Deprecated('no longer used, only the tabbed screen is used right now')
 class CloudMailboxScreen extends StatelessWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
-        settings: const RouteSettings(name: '/cloud_mailbox/'),
-        builder: (_) => CloudMailboxScreen(),
-      );
+    settings: const RouteSettings(name: '/cloud_mailbox/'),
+    builder: (_) => CloudMailboxScreen(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +53,9 @@ class CloudMailboxScreen extends StatelessWidget {
 
 class CloudMailboxTabScreen extends StatefulWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
-        settings: const RouteSettings(name: '/cloud_mailbox_tab/'),
-        builder: (_) => CloudMailboxTabScreen(),
-      );
+    settings: const RouteSettings(name: '/cloud_mailbox_tab/'),
+    builder: (_) => CloudMailboxTabScreen(),
+  );
 
   @override
   _CloudMailboxTabScreenState createState() => _CloudMailboxTabScreenState();
@@ -151,98 +151,115 @@ class CloudMailboxList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async => await bloc.mailboxList.reload(),
       child: RetryStreamBuilder<MailboxList>(
-          stream: (context) => bloc.mailboxList,
-          retry: () async => await bloc.mailboxList.reload(),
-          builder: (context, mailboxList) {
-            final data = mailboxList.mailboxes!;
-            if (data.isEmpty) {
-              return Center(
-                child: Text(loc.mailMailboxListEmpty),
+        stream: (context) => bloc.mailboxList,
+        retry: () async => await bloc.mailboxList.reload(),
+        builder: (context, mailboxList) {
+          final data = mailboxList.mailboxes!;
+          if (data.isEmpty) {
+            return Center(
+              child: Text(loc.mailMailboxListEmpty),
+            );
+          }
+          return ListView.builder(
+            itemBuilder: (context, idx) {
+              final mailbox = data[idx];
+              final vm = _labelFor(
+                loc,
+                kdbxBloc,
+                commonFields,
+                formatUtil,
+                mailbox,
               );
-            }
-            return ListView.builder(
-              itemBuilder: (context, idx) {
-                final mailbox = data[idx];
-                final vm =
-                    _labelFor(loc, kdbxBloc, commonFields, formatUtil, mailbox);
-                return ListTile(
-                  leading: Icon(vm.icon,
-                      color: mailbox.isDisabled ? Colors.black12 : null),
-                  title: Text(vm.label),
-                  subtitle: Text(
-                    mailbox.address,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () async {
-                    await Clipboard.setData(
-                        ClipboardData(text: mailbox.address));
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
-                      ..showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              loc.mailMailboxAddressCopied(mailbox.address)),
+              return ListTile(
+                leading: Icon(
+                  vm.icon,
+                  color: mailbox.isDisabled ? Colors.black12 : null,
+                ),
+                title: Text(vm.label),
+                subtitle: Text(
+                  mailbox.address,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: mailbox.address));
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar(reason: SnackBarClosedReason.hide)
+                    ..showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          loc.mailMailboxAddressCopied(mailbox.address),
                         ),
-                      );
-                  },
-                  onLongPress: () async {
-                    final action = await showModalBottomSheet<VoidCallback>(
-                      context: context,
-                      builder: (context) => Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            leading: const Icon(Icons.delete),
-                            title: Text(loc.deleteAction),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              await bloc.deleteMailbox(mailbox);
-                            },
-                          ),
-                          mailbox.isDisabled
-                              ? ListTile(
-                                  leading:
-                                      const Icon(FontAwesomeIcons.volumeHigh),
-                                  title: Text(loc.mailboxEnableLabel),
-                                  subtitle: Text(loc.mailboxEnableHint),
-                                  onTap: () async {
-                                    Navigator.of(context).pop();
-                                    await bloc.updateMailbox(
-                                      mailbox,
-                                      isDisabled: false,
-                                    );
-                                  },
-                                )
-                              : ListTile(
-                                  leading:
-                                      const Icon(FontAwesomeIcons.volumeXmark),
-                                  title: Text(loc.mailboxDisableLabel),
-                                  subtitle: Text(loc.mailboxDisableHint),
-                                  onTap: () async {
-                                    Navigator.of(context).pop();
-                                    await bloc.updateMailbox(mailbox,
-                                        isDisabled: true);
-                                  },
-                                ),
-                        ],
                       ),
                     );
-                    if (action != null) {
-                      action();
-                    }
-                  },
-                );
-              },
-              itemCount: data.length,
-            );
-          }),
+                },
+                onLongPress: () async {
+                  final action = await showModalBottomSheet<VoidCallback>(
+                    context: context,
+                    builder: (context) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.delete),
+                          title: Text(loc.deleteAction),
+                          onTap: () async {
+                            Navigator.of(context).pop();
+                            await bloc.deleteMailbox(mailbox);
+                          },
+                        ),
+                        mailbox.isDisabled
+                            ? ListTile(
+                                leading: const Icon(
+                                  FontAwesomeIcons.volumeHigh,
+                                ),
+                                title: Text(loc.mailboxEnableLabel),
+                                subtitle: Text(loc.mailboxEnableHint),
+                                onTap: () async {
+                                  Navigator.of(context).pop();
+                                  await bloc.updateMailbox(
+                                    mailbox,
+                                    isDisabled: false,
+                                  );
+                                },
+                              )
+                            : ListTile(
+                                leading: const Icon(
+                                  FontAwesomeIcons.volumeXmark,
+                                ),
+                                title: Text(loc.mailboxDisableLabel),
+                                subtitle: Text(loc.mailboxDisableHint),
+                                onTap: () async {
+                                  Navigator.of(context).pop();
+                                  await bloc.updateMailbox(
+                                    mailbox,
+                                    isDisabled: true,
+                                  );
+                                },
+                              ),
+                      ],
+                    ),
+                  );
+                  if (action != null) {
+                    action();
+                  }
+                },
+              );
+            },
+            itemCount: data.length,
+          );
+        },
+      ),
     );
   }
 
-  MailboxViewModel _labelFor(AppLocalizations loc, KdbxBloc kdbxBloc,
-      CommonFields commonFields, FormatUtils formatUtils, Mailbox mailbox) {
+  MailboxViewModel _labelFor(
+    AppLocalizations loc,
+    KdbxBloc kdbxBloc,
+    CommonFields commonFields,
+    FormatUtils formatUtils,
+    Mailbox mailbox,
+  ) {
     if (mailbox.entryUuid.isNotEmpty) {
       final entry = kdbxBloc.findEntryByUuid(mailbox.entryUuid);
 
@@ -265,7 +282,8 @@ class CloudMailboxList extends StatelessWidget {
     return MailboxViewModel(
       FontAwesomeIcons.boxOpen,
       loc.mailboxLabelPrefixCreatedAt(
-          formatUtils.formatDateFull(mailbox.createdAt)),
+        formatUtils.formatDateFull(mailbox.createdAt),
+      ),
     );
   }
 }
@@ -290,35 +308,37 @@ class CloudMailList extends StatelessWidget {
         await bloc.loadMessageListMore(reload: true);
       },
       child: RetryStreamBuilder<EmailMessageList>(
-          stream: (context) => bloc.messageList,
-          retry: () => bloc.loadMessageListMore(),
-          builder: (context, data) {
-            if (data.messages.isEmpty) {
-              if (data.hasMore) {
-                bloc.loadMessageListMore();
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Center(
-                child: Text(loc.mailListNoMail),
-              );
+        stream: (context) => bloc.messageList,
+        retry: () => bloc.loadMessageListMore(),
+        builder: (context, data) {
+          if (data.messages.isEmpty) {
+            if (data.hasMore) {
+              bloc.loadMessageListMore();
+              return const Center(child: CircularProgressIndicator());
             }
-            return ListView.builder(
-              itemCount: data.messages.length,
-              itemBuilder: (context, idx) {
-                if (idx + 1 == data.messages.length) {
-                  bloc.loadMessageListMore();
-                }
-                final message = data.messages[idx];
-                return MailListTile(
-                  message: message,
-                  onTap: () async {
-                    await Navigator.of(context)
-                        .push(EmailReadScreen.route(bloc, message));
-                  },
-                );
-              },
+            return Center(
+              child: Text(loc.mailListNoMail),
             );
-          }),
+          }
+          return ListView.builder(
+            itemCount: data.messages.length,
+            itemBuilder: (context, idx) {
+              if (idx + 1 == data.messages.length) {
+                bloc.loadMessageListMore();
+              }
+              final message = data.messages[idx];
+              return MailListTile(
+                message: message,
+                onTap: () async {
+                  await Navigator.of(
+                    context,
+                  ).push(EmailReadScreen.route(bloc, message));
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -336,7 +356,7 @@ class MailListTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-//        height: 72,
+        //        height: 72,
         constraints: const BoxConstraints(minHeight: 72),
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
@@ -378,8 +398,9 @@ class MailListTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
-                    style: theme.textTheme.bodySmall!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

@@ -52,18 +52,19 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
       controller: widget.controller,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
-          labelText: widget.labelText,
-          suffixIcon: IconButton(
-            icon: _obscureText
-                ? const Icon(FontAwesomeIcons.eye)
-                : const Icon(FontAwesomeIcons.eyeSlash),
-            onPressed: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            tooltip: loc.passwordPlainText,
-          )),
+        labelText: widget.labelText,
+        suffixIcon: IconButton(
+          icon: _obscureText
+              ? const Icon(FontAwesomeIcons.eye)
+              : const Icon(FontAwesomeIcons.eyeSlash),
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+          tooltip: loc.passwordPlainText,
+        ),
+      ),
       autocorrect: false,
       autovalidateMode: widget.autovalidateMode,
       obscureText: _obscureText,

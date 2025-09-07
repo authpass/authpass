@@ -73,7 +73,9 @@ abstract class FileSource {
   /// into [previousMetadata]
   @protected
   Future<Map<String, dynamic>?> write(
-      Uint8List bytes, Map<String, dynamic>? previousMetadata);
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  );
 
   Future<void> contentPreCache() async => await content().last;
 
@@ -86,21 +88,32 @@ abstract class FileSource {
       yield content;
       if (updateCache) {
         _cached = FileContent(
-            content.content, content.metadata, FileContentSource.memoryCache);
+          content.content,
+          content.metadata,
+          FileContentSource.memoryCache,
+        );
       }
     }
   }
 
-  Future<FileContent> contentWrite(Uint8List bytes,
-      {required Map<String, dynamic>? metadata}) async {
+  Future<FileContent> contentWrite(
+    Uint8List bytes, {
+    required Map<String, dynamic>? metadata,
+  }) async {
     _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
     try {
       final newMetadata = await write(bytes, metadata ?? _cached?.metadata);
-      return _cached =
-          FileContent(bytes, newMetadata, FileContentSource.memoryCache);
+      return _cached = FileContent(
+        bytes,
+        newMetadata,
+        FileContentSource.memoryCache,
+      );
     } catch (e, stackTrace) {
-      _logger.severe('Error while writing into $typeDebug ($runtimeType) $this',
-          e, stackTrace);
+      _logger.severe(
+        'Error while writing into $typeDebug ($runtimeType) $this',
+        e,
+        stackTrace,
+      );
       rethrow;
     }
   }
@@ -119,11 +132,11 @@ abstract class FileSource {
   @NonNls
   @protected
   Map<String, String?> toDebugMap() => {
-        'type': runtimeType.toString(),
-        'uuid': uuid,
-        'databaseName': databaseName,
-        'displayPath': displayPath
-      };
+    'type': runtimeType.toString(),
+    'uuid': uuid,
+    'databaseName': databaseName,
+    'displayPath': displayPath,
+  };
 
   @NonNls
   String toStringDisplay() => '[$displayName]($displayPath)';
@@ -133,11 +146,11 @@ abstract class FileSource {
     return toDebugMap().toString();
   }
 
-//  @override
-//  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-//    return 'FileSource{type: $runtimeType, uuid: $uuid, '
-//        'databaseName: $databaseName, displayPath: $displayPath}';
-//  }
+  //  @override
+  //  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  //    return 'FileSource{type: $runtimeType, uuid: $uuid, '
+  //        'databaseName: $databaseName, displayPath: $displayPath}';
+  //  }
 }
 
 class FileSourceUrl extends FileSource {
@@ -150,8 +163,8 @@ class FileSourceUrl extends FileSource {
 
   Uri? get _url =>
       AuthPassPlatform.isWeb && !url.toString().contains(_webCorsProxy)
-          ? Uri.parse([_webCorsProxy, url].join())
-          : url;
+      ? Uri.parse([_webCorsProxy, url].join())
+      : url;
 
   @override
   Stream<FileContent> load() async* {
@@ -161,17 +174,19 @@ class FileSourceUrl extends FileSource {
 
   @override
   String get displayPath => Uri(
-        scheme: url!.scheme,
-        host: url!.host,
-        path: url!.path,
-      ).toString(); //url.replace(queryParameters: <String, dynamic>{}, fragment: '').toString();
+    scheme: url!.scheme,
+    host: url!.host,
+    path: url!.path,
+  ).toString(); //url.replace(queryParameters: <String, dynamic>{}, fragment: '').toString();
 
   @override
   String get displayNameFromPath => path.basenameWithoutExtension(url!.path);
 
   @override
   Future<Map<String, dynamic>> write(
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     throw UnsupportedError('Cannot write to urls.');
   }
 
@@ -183,8 +198,8 @@ class FileSourceUrl extends FileSource {
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => FileSourceUrl(
-        url,
-        uuid: uuid,
-        databaseName: databaseName,
-      );
+    url,
+    uuid: uuid,
+    databaseName: databaseName,
+  );
 }

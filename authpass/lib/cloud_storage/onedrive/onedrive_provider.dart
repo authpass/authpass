@@ -51,22 +51,28 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   @override
   Future<oauth2.Client?> clientFromAuthenticationFlow<
-      TF extends UserAuthenticationPromptResult,
-      UF extends UserAuthenticationPromptData<TF>>(prompt) async {
+    TF extends UserAuthenticationPromptResult,
+    UF extends UserAuthenticationPromptData<TF>
+  >(prompt) async {
     final grant = oauth2.AuthorizationCodeGrant(
       env.secrets!.microsoftClientId!,
       Uri.parse(_oauthEndpoint),
       Uri.parse(_oauthToken),
-//      secret: env.secrets.microsoftClientSecret,
+      //      secret: env.secrets.microsoftClientSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
-    final authUrl = grant.getAuthorizationUrl(Uri.parse(env.oauthRedirectUri!),
-        scopes: _oauthScopes);
+    final authUrl = grant.getAuthorizationUrl(
+      Uri.parse(env.oauthRedirectUri!),
+      scopes: _oauthScopes,
+    );
     final params = Map<String, String>.from(
-        authUrl.queryParameters); //..remove('redirect_uri');
+      authUrl.queryParameters,
+    ); //..remove('redirect_uri');
     final url = authUrl.replace(queryParameters: params);
-    final code =
-        await oAuthTokenPrompt(prompt as PromptUserForCode, url.toString());
+    final code = await oAuthTokenPrompt(
+      prompt as PromptUserForCode,
+      url.toString(),
+    );
     if (code == null) {
       _logger.warning('User cancelled authorization. (did not provide code)');
       return null;
@@ -87,7 +93,7 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     return oauth2.Client(
       credentials,
       identifier: env.secrets!.microsoftClientId,
-//      secret: env.secrets.dropboxSecret,
+      //      secret: env.secrets.dropboxSecret,
       onCredentialsRefreshed: _onCredentialsRefreshed,
     );
   }
@@ -105,20 +111,24 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
 
   void _assertSuccessResponse(Response response) {
     _logger.fine(
-        'response (${response.statusCode}) for request: ${response.request}');
+      'response (${response.statusCode}) for request: ${response.request}',
+    );
     if (response.statusCode >= 300 || response.statusCode < 200) {
-      _logger.severe('Error during call to onedrive endpoint. '
-          '${response.statusCode} ${response.reasonPhrase} (${response.body})');
+      _logger.severe(
+        'Error during call to onedrive endpoint. '
+        '${response.statusCode} ${response.reasonPhrase} (${response.body})',
+      );
       throw Exception(
-          'Error during request. (${response.statusCode} ${response.reasonPhrase})');
+        'Error during request. (${response.statusCode} ${response.reasonPhrase})',
+      );
     }
   }
 
   @override
   Future<SearchResponse> list({CloudStorageEntity? parent}) async {
-    final listUri = _uri(parent == null
-        ? ['root', 'children']
-        : ['items', parent.id, 'children']);
+    final listUri = _uri(
+      parent == null ? ['root', 'children'] : ['items', parent.id, 'children'],
+    );
     final client = await requireAuthenticatedClient();
     final response = await client.get(
       listUri,
@@ -151,8 +161,11 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
   }
 
   @override
-  Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+  Future<Map<String, dynamic>> saveEntity(
+    CloudStorageEntity file,
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     final driveItem = await _upload(
       locationId: file.id,
       cTag: previousMetadata![_METADATA_CTAG] as String?,
@@ -183,16 +196,18 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
         HttpHeaders.contentTypeHeader: ContentType.json.toString(),
         ...?cTag == null ? null : {_headerIfMatch: cTag},
       },
-      body: json.encode(nonNls({
-        'item': fileName == null
-            ? {
-                '@microsoft.graph.conflictBehavior': 'replace',
-              }
-            : {
-                '@microsoft.graph.conflictBehavior': 'fail',
-                'name': fileName,
-              },
-      })),
+      body: json.encode(
+        nonNls({
+          'item': fileName == null
+              ? {
+                  '@microsoft.graph.conflictBehavior': 'replace',
+                }
+              : {
+                  '@microsoft.graph.conflictBehavior': 'fail',
+                  'name': fileName,
+                },
+        }),
+      ),
     );
 
     try {
@@ -200,8 +215,9 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     } catch (e) {
       if (createResponse.statusCode == 412) {
         throw StorageException.conflict(
-            'Conflict while uploading to One Drive.',
-            errorBody: createResponse.body);
+          'Conflict while uploading to One Drive.',
+          errorBody: createResponse.body,
+        );
       }
       rethrow;
     }
@@ -211,14 +227,17 @@ class OneDriveProvider extends CloudStorageProviderClientBase<oauth2.Client> {
     _assertSuccessResponse(uploadResponse);
     _logger.fine('uploadResponse: ${uploadResponse.statusCode}');
     final driveItem = OneDriveItem.fromJson(
-        json.decode(uploadResponse.body) as Map<String, dynamic>);
+      json.decode(uploadResponse.body) as Map<String, dynamic>,
+    );
     _logger.finer('upload: ${driveItem.toJson()}');
     return driveItem;
   }
 
   @override
   Future<FileSource> createEntity(
-      CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
+    CloudStorageSelectorSaveResult saveAs,
+    Uint8List bytes,
+  ) async {
     final driveItem = await _upload(
       locationId: saveAs.parent!.id,
       fileName: saveAs.fileName,

@@ -20,15 +20,16 @@ final _logger = Logger('main_app_scaffold');
 
 class MainAppScaffold extends StatelessWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute(
-        settings: const RouteSettings(name: '/main'),
-        builder: (context) => MainAppScaffold(),
-      );
+    settings: const RouteSettings(name: '/main'),
+    builder: (context) => MainAppScaffold(),
+  );
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final systemWideShortcuts =
-        context.select<AppData, bool>((appData) => appData.systemWideShortcuts);
+    final systemWideShortcuts = context.select<AppData, bool>(
+      (appData) => appData.systemWideShortcuts,
+    );
     _logger.finer('size.width: ${mediaQuery.size.width}');
     if (mediaQuery.size.width >= Breakpoints.TABLET_WIDTH) {
       return KeyboardHandler(
@@ -40,7 +41,7 @@ class MainAppScaffold extends StatelessWidget {
       systemWideShortcuts: systemWideShortcuts,
       child: BackButtonNavigatorDelegate(
         observers: [
-          AnalyticsNavigatorObserver(Provider.of<Analytics>(context))
+          AnalyticsNavigatorObserver(Provider.of<Analytics>(context)),
         ],
         onGenerateRoute: null,
         onGenerateInitialRoutes: (navigator, initialRoute) => [
@@ -77,7 +78,8 @@ class FocusWorkaroundPageRoute<T> extends MaterialPageRoute<T> {
 
   void _changedFocus() {
     _logger.finest(
-        'Changed focus. ${focusNode!.hasFocus} --- isCurrent:$isCurrent');
+      'Changed focus. ${focusNode!.hasFocus} --- isCurrent:$isCurrent',
+    );
     if (!focusNode!.hasFocus) {
       focusNode!.requestFocus();
     }
@@ -104,11 +106,11 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
     // RawKeyboard.instance.addListener(_debugEvent);
   }
 
-//   bool _debugEvent(KeyEvent ev) {
-// //    final keys = RawKeyboard.instance.keysPressed.map((k) => '${k.keyId} (${k.keyLabel})');
-// //    _logger.fine('Got key event. $keys');
-//   return false;
-//   }
+  //   bool _debugEvent(KeyEvent ev) {
+  // //    final keys = RawKeyboard.instance.keysPressed.map((k) => '${k.keyId} (${k.keyLabel})');
+  // //    _logger.fine('Got key event. $keys');
+  //   return false;
+  //   }
 
   @override
   void dispose() {
@@ -135,12 +137,15 @@ class _MainAppTabletScaffoldState extends State<MainAppTabletScaffold> {
                       if (type == EntrySelectionType.passiveHighlight) {
                         push = _navigatorKey.currentState!.pushAndRemoveUntil(
                           FocusWorkaroundPageRoute<void>(
-                              focusNode: WidgetsBinding
-                                  .instance.focusManager.primaryFocus,
-                              settings: const RouteSettings(name: '/entry'),
-                              builder: (context) => EntryDetailsScreen(
-                                    entry: entry,
-                                  )),
+                            focusNode: WidgetsBinding
+                                .instance
+                                .focusManager
+                                .primaryFocus,
+                            settings: const RouteSettings(name: '/entry'),
+                            builder: (context) => EntryDetailsScreen(
+                              entry: entry,
+                            ),
+                          ),
                           (route) => route.isFirst,
                         );
                       } else {
@@ -201,10 +206,14 @@ class EmptyStateInitialRoute extends StatelessWidget {
                   : [
                       const SizedBox(height: 64),
                       Image.asset(AssetConstants.logoIcon),
-                      Text(Env.AuthPass,
-                          style: Theme.of(context).textTheme.displaySmall),
-                      Text(loc.authPassHomeScreenTagline,
-                          style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        Env.AuthPass,
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                      Text(
+                        loc.authPassHomeScreenTagline,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                       const SizedBox(height: 64),
                     ],
               // const Text('Select a password.'),
@@ -212,8 +221,9 @@ class EmptyStateInitialRoute extends StatelessWidget {
               PrimaryButton(
                 onPressed: () {
                   final newEntry = context.read<KdbxBloc>().createEntry();
-                  Navigator.of(context)
-                      .push(EntryDetailsScreen.route(entry: newEntry));
+                  Navigator.of(
+                    context,
+                  ).push(EntryDetailsScreen.route(entry: newEntry));
                 },
                 child: Text(loc.addNewPasswordButtonLabel),
               ),

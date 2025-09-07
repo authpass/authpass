@@ -12,14 +12,20 @@ final _logger = Logger('env');
 
 const _DEFAULT_APP_NAME = AppConstants.authPass;
 @NonNls
-const _DEFAULT_VERSION =
-    String.fromEnvironment('AUTHPASS_VERSION', defaultValue: '1.0.0');
+const _DEFAULT_VERSION = String.fromEnvironment(
+  'AUTHPASS_VERSION',
+  defaultValue: '1.0.0',
+);
 @NonNls
-const _DEFAULT_BUILD_NUMBER =
-    int.fromEnvironment('AUTHPASS_BUILD_NUMBER', defaultValue: 1);
+const _DEFAULT_BUILD_NUMBER = int.fromEnvironment(
+  'AUTHPASS_BUILD_NUMBER',
+  defaultValue: 1,
+);
 @NonNls
-const _DEFAULT_PACKAGE_NAME = String.fromEnvironment('AUTHPASS_PACKAGE_NAME',
-    defaultValue: 'design.codeux.authpass.dev');
+const _DEFAULT_PACKAGE_NAME = String.fromEnvironment(
+  'AUTHPASS_PACKAGE_NAME',
+  defaultValue: 'design.codeux.authpass.dev',
+);
 
 abstract class EnvAppBase extends Env {
   EnvAppBase(super.type);
@@ -30,7 +36,7 @@ abstract class EnvAppBase extends Env {
   @override
   EnvSecrets? get secrets;
 
-//  String get oauthRedirectUri => 'authpass://oauth/code';
+  //  String get oauthRedirectUri => 'authpass://oauth/code';
   @NonNls
   @override
   String? get oauthRedirectUri => oauthRedirectUriSupported
@@ -55,13 +61,17 @@ abstract class EnvAppBase extends Env {
   @override
   Future<AppInfo> getAppInfo() async {
     final pi = await _getPackageInfo();
-    return AppInfo((b) => b
-      ..appName = pi?.appName.nullIfBlank() ?? _DEFAULT_APP_NAME
-      ..version = pi?.version.nullIfBlank() ?? _DEFAULT_VERSION
-      ..buildNumber = int.tryParse(pi?.buildNumber.nullIfBlank() ??
-              _DEFAULT_BUILD_NUMBER.toString()) ??
-          _DEFAULT_BUILD_NUMBER
-      ..packageName = pi?.packageName.nullIfBlank() ?? _DEFAULT_PACKAGE_NAME);
+    return AppInfo(
+      (b) => b
+        ..appName = pi?.appName.nullIfBlank() ?? _DEFAULT_APP_NAME
+        ..version = pi?.version.nullIfBlank() ?? _DEFAULT_VERSION
+        ..buildNumber =
+            int.tryParse(
+              pi?.buildNumber.nullIfBlank() ?? _DEFAULT_BUILD_NUMBER.toString(),
+            ) ??
+            _DEFAULT_BUILD_NUMBER
+        ..packageName = pi?.packageName.nullIfBlank() ?? _DEFAULT_PACKAGE_NAME,
+    );
   }
 
   Future<PackageInfo?> _getPackageInfo() async {

@@ -11,8 +11,9 @@ final _logger = Logger('platform');
 const bool _kIsWeb = authPassIsWeb;
 
 class AuthPassPlatform {
-  static final Map<String, String> environment =
-      _kIsWeb ? const {} : Platform.environment;
+  static final Map<String, String> environment = _kIsWeb
+      ? const {}
+      : Platform.environment;
 
   @NonNls
   static String get version => _kIsWeb ? '0.0' : Platform.version;
@@ -21,7 +22,8 @@ class AuthPassPlatform {
   static bool get isLinux => !_kIsWeb && Platform.isLinux;
   static bool get isWindows => !_kIsWeb && Platform.isWindows;
   @NonNls
-  static final bool isWindowsWinAutoUpdate = isWindows &&
+  static final bool isWindowsWinAutoUpdate =
+      isWindows &&
       const bool.fromEnvironment('AUTHPASS_WIN_AUTOUPDATE', defaultValue: true);
 
   /// Whether this is a "portable" build -
@@ -60,8 +62,9 @@ class AuthPassPlatform {
       'script': handle(() => Platform.script.toFilePath()),
       'executable': handle(() => Platform.executable),
       'resolvedExecutable': handle(() => Platform.resolvedExecutable),
-      'executableArguments':
-          handle(() => Platform.executableArguments.toString()),
+      'executableArguments': handle(
+        () => Platform.executableArguments.toString(),
+      ),
     });
   }
 }

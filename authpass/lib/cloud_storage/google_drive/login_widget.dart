@@ -35,16 +35,19 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
   @override
   void initState() {
     super.initState();
-    handleSubscription(googleSignIn.onCurrentUserChanged.listen((event) async {
-      _logger.fine('onCurrentUserChanged: ${event?.id}');
-      _canAccessScopes =
-          await googleSignIn.canAccessScopes(GoogleDriveProvider.scopes);
-      if (_canAccessScopes == true) {
-        widget.onSuccess();
-      } else {
-        setState(() {});
-      }
-    }));
+    handleSubscription(
+      googleSignIn.onCurrentUserChanged.listen((event) async {
+        _logger.fine('onCurrentUserChanged: ${event?.id}');
+        _canAccessScopes = await googleSignIn.canAccessScopes(
+          GoogleDriveProvider.scopes,
+        );
+        if (_canAccessScopes == true) {
+          widget.onSuccess();
+        } else {
+          setState(() {});
+        }
+      }),
+    );
   }
 
   Future<void> _checkAuthorization() async {
@@ -76,8 +79,9 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () async {
-              final requestResult =
-                  await googleSignIn.requestScopes(GoogleDriveProvider.scopes);
+              final requestResult = await googleSignIn.requestScopes(
+                GoogleDriveProvider.scopes,
+              );
               setState(() {
                 _canAccessScopes = _canAccessScopes;
                 if (requestResult) {
@@ -93,7 +97,8 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
     } else {
       // something is pretty broken.. this state should not happen;
       _logger.severe(
-          'curent user is not null but _canAccessScopes is $_canAccessScopes');
+        'curent user is not null but _canAccessScopes is $_canAccessScopes',
+      );
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _checkAuthorization();
       });

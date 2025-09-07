@@ -13,15 +13,17 @@ class FlutterArgon2 extends Argon2 {
 
   @override
   Future<Uint8List> argon2Async(Argon2Arguments args) {
-    return argon2BrowserHash(Argon2BrowserOptions(
-      pass: args.key.toJS,
-      salt: args.salt.toJS,
-      time: args.iterations,
-      mem: args.memory,
-      hashLen: args.length,
-      parallelism: args.parallelism,
-      type: args.type,
-    ));
+    return argon2BrowserHash(
+      Argon2BrowserOptions(
+        pass: args.key.toJS,
+        salt: args.salt.toJS,
+        time: args.iterations,
+        mem: args.memory,
+        hashLen: args.length,
+        parallelism: args.parallelism,
+        type: args.type,
+      ),
+    );
   }
 
   @override

@@ -14,15 +14,17 @@ import 'package:collection/collection.dart' show IterableExtension;
 /// BloC is definitely the wrong name here...
 class CloudStorageBloc {
   CloudStorageBloc(this.env, PathUtil pathUtil, Analytics analytics)
-      : _helper = CloudStorageHelper(env, pathUtil, analytics),
-        availableCloudStorage = {} {
+    : _helper = CloudStorageHelper(env, pathUtil, analytics),
+      availableCloudStorage = {} {
     availableCloudStorage.add(AuthPassCloudProvider(helper: _helper));
     if (env.featureCloudStorageProprietary) {
-      availableCloudStorage.addAll({
-        DropboxProvider(env: env, helper: _helper),
-        GoogleDriveProvider(env: env, helper: _helper),
-        OneDriveProvider(env: env, helper: _helper),
-      }.where((element) => element.isSupported()));
+      availableCloudStorage.addAll(
+        {
+          DropboxProvider(env: env, helper: _helper),
+          GoogleDriveProvider(env: env, helper: _helper),
+          OneDriveProvider(env: env, helper: _helper),
+        }.where((element) => element.isSupported()),
+      );
     }
     if (env.featureCloudStorageWebDav) {
       availableCloudStorage.add(WebDavProvider(helper: _helper));

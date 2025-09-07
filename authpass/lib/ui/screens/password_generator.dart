@@ -67,12 +67,12 @@ class GeneratePassword extends StatefulWidget {
 
 class _GeneratePasswordState extends State<GeneratePassword> {
   static Map<String, CharacterSet> characterSets(AppLocalizations loc) => {
-        loc.characterSetLowerCase: CharacterSet.alphabetAsciiLowerCase,
-        loc.characterSetUpperCase: CharacterSet.alphabetAsciiUpperCase,
-        loc.characterSetNumeric: CharacterSet.numeric,
-        loc.characterSetUmlauts: CharacterSet.alphabetUmlauts,
-        loc.characterSetSpecial: CharacterSet.specialCharacters,
-      };
+    loc.characterSetLowerCase: CharacterSet.alphabetAsciiLowerCase,
+    loc.characterSetUpperCase: CharacterSet.alphabetAsciiUpperCase,
+    loc.characterSetNumeric: CharacterSet.numeric,
+    loc.characterSetUmlauts: CharacterSet.alphabetUmlauts,
+    loc.characterSetSpecial: CharacterSet.specialCharacters,
+  };
 
   late Map<String, CharacterSet> _characterSets;
 
@@ -88,8 +88,9 @@ class _GeneratePasswordState extends State<GeneratePassword> {
   /// prevent people from crashing the app.
   static const int passwordLengthCustomMax = 10000;
 
-  final Set<CharacterSet?> _selectedCharacterSet =
-      Set.of(_defaultCharacterSets);
+  final Set<CharacterSet?> _selectedCharacterSet = Set.of(
+    _defaultCharacterSets,
+  );
 
   String? _password;
   int? _passwordLength = 20;
@@ -108,8 +109,11 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     if (appData.passwordGeneratorCharacterSets.isNotEmpty) {
       _selectedCharacterSet
         ..clear()
-        ..addAll(CharacterSet.characterSetFromIds(
-            appData.passwordGeneratorCharacterSets));
+        ..addAll(
+          CharacterSet.characterSetFromIds(
+            appData.passwordGeneratorCharacterSets,
+          ),
+        );
     }
     _characterSets = characterSets(AppLocalizations.of(context));
     _generatePassword();
@@ -118,8 +122,9 @@ class _GeneratePasswordState extends State<GeneratePassword> {
   void _generatePassword() {
     setState(() {
       _password = PasswordGenerator.singleton().generatePassword(
-          CharacterSetCollection(_selectedCharacterSet.toList()),
-          _passwordLength!);
+        CharacterSetCollection(_selectedCharacterSet.toList()),
+        _passwordLength!,
+      );
     });
   }
 
@@ -137,11 +142,13 @@ class _GeneratePasswordState extends State<GeneratePassword> {
               child: InkWell(
                 onTap: () {
                   Clipboard.setData(
-                      ClipboardData(text: _password ?? CharConstants.empty));
+                    ClipboardData(text: _password ?? CharConstants.empty),
+                  );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar(reason: SnackBarClosedReason.remove)
                     ..showSnackBar(
-                        SnackBar(content: Text(loc.copiedToClipboard)));
+                      SnackBar(content: Text(loc.copiedToClipboard)),
+                    );
                 },
                 child: InputDecorator(
                   decoration: InputDecoration(
@@ -187,8 +194,10 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                 Text(loc.length),
                 Expanded(
                   child: Slider(
-                    value: min(_passwordLength!.toDouble(),
-                        passwordLengthMax.toDouble()),
+                    value: min(
+                      _passwordLength!.toDouble(),
+                      passwordLengthMax.toDouble(),
+                    ),
                     min: passwordLengthMin.toDouble(),
                     max: passwordLengthMax.toDouble(),
                     divisions: (passwordLengthMax - passwordLengthMin),
@@ -199,8 +208,8 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                         _generatePassword();
                         if (_passwordLength == passwordLengthMax &&
                             _passwordLengthCustom.text.isEmpty) {
-                          _passwordLengthCustom.text =
-                              passwordLengthMax.toString();
+                          _passwordLengthCustom.text = passwordLengthMax
+                              .toString();
                         }
                       });
                     },
@@ -252,21 +261,28 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                     Center(
                       child: PrimaryButton(
                         onPressed: () {
-                          final appDataBloc =
-                              Provider.of<AppDataBloc>(context, listen: false);
-                          appDataBloc.update((b, appData) => b
-                            ..passwordGeneratorLength = _passwordLength
-                            ..passwordGeneratorCharacterSets.replace(
-                                _selectedCharacterSet.map<String>((set) =>
-                                    CharacterSet.characterSetIdFor(set))));
+                          final appDataBloc = Provider.of<AppDataBloc>(
+                            context,
+                            listen: false,
+                          );
+                          appDataBloc.update(
+                            (b, appData) => b
+                              ..passwordGeneratorLength = _passwordLength
+                              ..passwordGeneratorCharacterSets.replace(
+                                _selectedCharacterSet.map<String>(
+                                  (set) => CharacterSet.characterSetIdFor(set),
+                                ),
+                              ),
+                          );
                           widget.doneButtonOnPressed!(_password);
                         },
-                        icon: widget.doneButtonIcon ??
+                        icon:
+                            widget.doneButtonIcon ??
                             const Icon(Icons.check_circle_outline),
                         large: false,
                         child: Text(widget.doneButtonLabel),
                       ),
-                    )
+                    ),
                   ]),
           ],
         ),
@@ -288,19 +304,25 @@ class SimpleGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: iterables
-            .partition(
-                children.followedBy(List.generate(
-                    children.length % columns, (_) => Container())),
-                columns)
-            .map((partition) => Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children:
-                      partition.map((child) => Expanded(child: child)).toList(),
-                ))
-            .toList());
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: iterables
+          .partition(
+            children.followedBy(
+              List.generate(children.length % columns, (_) => Container()),
+            ),
+            columns,
+          )
+          .map(
+            (partition) => Row(
+              mainAxisSize: MainAxisSize.max,
+              children: partition
+                  .map((child) => Expanded(child: child))
+                  .toList(),
+            ),
+          )
+          .toList(),
+    );
   }
 }
 
@@ -329,8 +351,10 @@ class OptionToggleTile extends StatelessWidget {
           children: [
             Checkbox(value: value, onChanged: (value) => onChanged(value!)),
             Expanded(
-              child:
-                  Text(label, style: Theme.of(context).textTheme.titleMedium),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
             // Switch(value: value, onChanged: onChanged),
           ],

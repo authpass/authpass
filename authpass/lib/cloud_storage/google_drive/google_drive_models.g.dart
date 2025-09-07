@@ -16,9 +16,9 @@ GoogleDriveMetadata _$GoogleDriveMetadataFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GoogleDriveMetadataToJson(
-        GoogleDriveMetadata instance) =>
-    <String, dynamic>{
-      'modifiedTime': instance.modifiedTime?.toIso8601String(),
-      'version': instance.version,
-      'size': instance.size,
-    };
+  GoogleDriveMetadata instance,
+) => <String, dynamic>{
+  'modifiedTime': instance.modifiedTime?.toIso8601String(),
+  'version': instance.version,
+  'size': instance.size,
+};

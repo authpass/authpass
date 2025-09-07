@@ -25,8 +25,10 @@ class OtpAuth {
     final p = uri.queryParameters;
 
     return OtpAuth(
-      label: uri.pathSegments
-          .firstWhere((element) => true, orElse: () => CharConstants.empty),
+      label: uri.pathSegments.firstWhere(
+        (element) => true,
+        orElse: () => CharConstants.empty,
+      ),
       secret: base32Decode(p[PARAM_SECRET]!),
       algorithm: algorithmForString(p[PARAM_ALGORITHM]) ?? DEFAULT_ALGORITHM,
       digits: p[PARAM_DIGITS]?.toInt() ?? DEFAULT_DIGITS,
@@ -107,16 +109,16 @@ class OtpAuth {
   final int period;
 
   Uri toUri() => Uri(
-        scheme: SCHEME,
-        host: TYPE_TOTP,
-        pathSegments: [label],
-        queryParameters: <String, String?>{
-          PARAM_SECRET: base32Encode(secret),
-          PARAM_ALGORITHM: algorithms[algorithm],
-          PARAM_DIGITS: digits.toString(),
-          PARAM_PERIOD: period.toString(),
-        },
-      );
+    scheme: SCHEME,
+    host: TYPE_TOTP,
+    pathSegments: [label],
+    queryParameters: <String, String?>{
+      PARAM_SECRET: base32Encode(secret),
+      PARAM_ALGORITHM: algorithms[algorithm],
+      PARAM_DIGITS: digits.toString(),
+      PARAM_PERIOD: period.toString(),
+    },
+  );
 
   @NonNls
   @override

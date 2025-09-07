@@ -86,17 +86,22 @@ class _GroupEditState extends State<GroupEdit> {
   void initState() {
     super.initState();
     _nameController.text = widget.group.name.get()!;
-    _nameController.selection =
-        TextSelection(baseOffset: 0, extentOffset: _nameController.text.length);
+    _nameController.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: _nameController.text.length,
+    );
   }
 
   void _saveIcon(SelectedIcon icon) {
-    icon.when(predefined: (predefined) {
-      widget.group.customIcon = null;
-      widget.group.icon.set(predefined);
-    }, custom: (custom) {
-      widget.group.customIcon = custom;
-    });
+    icon.when(
+      predefined: (predefined) {
+        widget.group.customIcon = null;
+        widget.group.icon.set(predefined);
+      },
+      custom: (custom) {
+        widget.group.customIcon = custom;
+      },
+    );
   }
 
   @override
@@ -122,47 +127,53 @@ class _GroupEditState extends State<GroupEdit> {
             ),
             const SizedBox(height: 8),
             EntryMetaInfo(
-                label: loc.entryInfoGroup,
-                value: _breadcrumbNames().join(CharConstants.chevronRight),
-                onTap: widget.group.parent?.let(
-                  (parent) => () async {
-                    final file = widget.group.file;
-                    final newGroupList = await Navigator.of(context).push(
-                        GroupListFlat.route({parent},
-                            groupListMode: GroupListMode.singleSelect,
-                            rootGroup: file.body.rootGroup));
-                    final newGroup = newGroupList?.first;
-                    if (newGroup != null) {
-                      final oldGroup = parent;
-                      file.move(widget.group, newGroup);
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(loc.movedEntryToGroup(
-                              newGroup.name.get().toString())),
-                          action: SnackBarAction(
-                              label: loc.undoButtonLabel,
-                              onPressed: () {
-                                file.move(widget.group, oldGroup);
-                              }),
+              label: loc.entryInfoGroup,
+              value: _breadcrumbNames().join(CharConstants.chevronRight),
+              onTap: widget.group.parent?.let(
+                (parent) => () async {
+                  final file = widget.group.file;
+                  final newGroupList = await Navigator.of(context).push(
+                    GroupListFlat.route(
+                      {parent},
+                      groupListMode: GroupListMode.singleSelect,
+                      rootGroup: file.body.rootGroup,
+                    ),
+                  );
+                  final newGroup = newGroupList?.first;
+                  if (newGroup != null) {
+                    final oldGroup = parent;
+                    file.move(widget.group, newGroup);
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          loc.movedEntryToGroup(newGroup.name.get().toString()),
                         ),
-                      );
-                    }
-                  },
-                )),
+                        action: SnackBarAction(
+                          label: loc.undoButtonLabel,
+                          onPressed: () {
+                            file.move(widget.group, oldGroup);
+                          },
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
             const SizedBox(height: 8),
             TextFormField(
               maxLines: null,
               controller: _nameController,
               decoration: InputDecoration(
-//        fillColor: const Color(0xfff0f0f0),
+                //        fillColor: const Color(0xfff0f0f0),
                 filled: true,
                 prefixIcon: const Icon(Icons.label),
                 labelText: loc.editGroupGroupNameLabel,
               ),
               keyboardType: TextInputType.text,
-//    controller: controller,
-//    onSaved: onSaved,
+              //    controller: controller,
+              //    onSaved: onSaved,
               autofocus: true,
               onSaved: (value) {
                 widget.group.name.set(value);

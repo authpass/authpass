@@ -35,7 +35,10 @@ class PathUtilsPortable extends PathUtilsDefault {
       }
     } catch (e, stackTrace) {
       _logger.warning(
-          'Unable to get data directory from arguments.', e, stackTrace);
+        'Unable to get data directory from arguments.',
+        e,
+        stackTrace,
+      );
     }
     try {
       final directory = _getAppBaseDirectory();
@@ -44,9 +47,10 @@ class PathUtilsPortable extends PathUtilsDefault {
       return base;
     } catch (e, stackTrace) {
       _logger.warning(
-          'Unable to resolve Data directory through executable. using current directory.',
-          e,
-          stackTrace);
+        'Unable to resolve Data directory through executable. using current directory.',
+        e,
+        stackTrace,
+      );
       throw StateError('Unable to get data directory. $e');
     }
   }
@@ -57,14 +61,20 @@ class PathUtilsPortable extends PathUtilsDefault {
     try {
       return fileSystem.file(Platform.resolvedExecutable).parent.parent.parent;
     } catch (e, stackTrace) {
-      _logger.warning('Unable to resolve Data directory through executable.', e,
-          stackTrace);
+      _logger.warning(
+        'Unable to resolve Data directory through executable.',
+        e,
+        stackTrace,
+      );
     }
     try {
       return fileSystem.file(Platform.script.toFilePath()).parent.parent.parent;
     } catch (e, stackTrace) {
-      _logger.warning('Unable to resolve Data directory through executable.', e,
-          stackTrace);
+      _logger.warning(
+        'Unable to resolve Data directory through executable.',
+        e,
+        stackTrace,
+      );
     }
     return fileSystem.currentDirectory.parent;
   }

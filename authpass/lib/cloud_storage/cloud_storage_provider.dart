@@ -53,9 +53,9 @@ enum CloudStorageEntityType {
 
 abstract class CloudStorageEntity
     implements Built<CloudStorageEntity, CloudStorageEntityBuilder> {
-  factory CloudStorageEntity(
-          [void Function(CloudStorageEntityBuilder b)? updates]) =
-      _$CloudStorageEntity;
+  factory CloudStorageEntity([
+    void Function(CloudStorageEntityBuilder b)? updates,
+  ]) = _$CloudStorageEntity;
   CloudStorageEntity._();
 
   // TODO: make this non-nullable
@@ -67,20 +67,22 @@ abstract class CloudStorageEntity
   String get pathOrBaseName => path ?? name ?? id;
 
   static CloudStorageEntity fromSimpleFileInfo(Map<String, String?> fileInfo) {
-    return nonNls(CloudStorageEntity(
-      (b) => b
-        ..id = fileInfo['id']
-        ..type = CloudStorageEntityType.file
-        ..name = fileInfo['name']
-        ..path = fileInfo['path'],
-    ));
+    return nonNls(
+      CloudStorageEntity(
+        (b) => b
+          ..id = fileInfo['id']
+          ..type = CloudStorageEntityType.file
+          ..name = fileInfo['name']
+          ..path = fileInfo['path'],
+      ),
+    );
   }
 
   Map<String, String?> toSimpleFileInfo() => nonNls({
-        'id': id,
-        'name': name,
-        'path': path,
-      });
+    'id': id,
+    'name': name,
+    'path': path,
+  });
 }
 
 abstract class SearchResponse
@@ -114,7 +116,8 @@ class UrlUsernamePasswordResult extends UserAuthenticationPromptResult {
 }
 
 abstract class UserAuthenticationPromptData<
-    T extends UserAuthenticationPromptResult?> {
+  T extends UserAuthenticationPromptResult?
+> {
   PromptType get type;
 }
 
@@ -135,18 +138,21 @@ class UrlUsernamePasswordPromptData
   PromptType get type => PromptType.urlUsernamePassword;
 }
 
-class UserAuthenticationPrompt<RESULT extends UserAuthenticationPromptResult,
-    U extends UserAuthenticationPromptData<RESULT>> {
+class UserAuthenticationPrompt<
+  RESULT extends UserAuthenticationPromptResult,
+  U extends UserAuthenticationPromptData<RESULT>
+> {
   UserAuthenticationPrompt(this.data, this.result);
   final U data;
   final PromptUserResult<RESULT> result;
 }
 
-typedef PromptUserForCode<T extends UserAuthenticationPromptResult,
-        U extends UserAuthenticationPromptData<T>>
-    = Future<void> Function(UserAuthenticationPrompt<T, U> prompt);
-typedef PromptUserResult<T extends UserAuthenticationPromptResult> = void
-    Function(T? result);
+typedef PromptUserForCode<
+  T extends UserAuthenticationPromptResult,
+  U extends UserAuthenticationPromptData<T>
+> = Future<void> Function(UserAuthenticationPrompt<T, U> prompt);
+typedef PromptUserResult<T extends UserAuthenticationPromptResult> =
+    void Function(T? result);
 
 class CloudStorageSaveTarget {
   CloudStorageSaveTarget({required this.provider, this.parent});
@@ -170,9 +176,10 @@ abstract class CloudStorageProvider {
   FileSourceIcon get displayIcon;
   bool get supportSearch => false;
   Future<bool> loadSavedAuth();
-  Future<bool> startAuth<RESULT extends UserAuthenticationPromptResult,
-          DATA extends UserAuthenticationPromptData<RESULT>>(
-      PromptUserForCode<RESULT, DATA> prompt);
+  Future<bool> startAuth<
+    RESULT extends UserAuthenticationPromptResult,
+    DATA extends UserAuthenticationPromptData<RESULT>
+  >(PromptUserForCode<RESULT, DATA> prompt);
 
   /// make sure to check [supportSearch] before calling this method, otherwise a [UnsupportedError] will be thrown.
   Future<SearchResponse> search({String name = Env.KeePassExtension}) =>
@@ -200,28 +207,26 @@ abstract class CloudStorageProvider {
     required String uuid,
     required FileContent? initialCachedContent,
     String? databaseName,
-  }) =>
-      FileSourceCloudStorage(
-        provider: this,
-        fileInfo: fileInfo,
-        uuid: uuid,
-        databaseName: databaseName,
-        initialCachedContent: initialCachedContent,
-      );
+  }) => FileSourceCloudStorage(
+    provider: this,
+    fileInfo: fileInfo,
+    uuid: uuid,
+    databaseName: databaseName,
+    initialCachedContent: initialCachedContent,
+  );
 
   FileSource toFileSource(
     CloudStorageEntity entity, {
     required String uuid,
     required FileContent? initialCachedContent,
     String? databaseName,
-  }) =>
-      FileSourceCloudStorage(
-        provider: this,
-        fileInfo: entity.toSimpleFileInfo(),
-        uuid: uuid,
-        databaseName: databaseName,
-        initialCachedContent: initialCachedContent,
-      );
+  }) => FileSourceCloudStorage(
+    provider: this,
+    fileInfo: entity.toSimpleFileInfo(),
+    uuid: uuid,
+    databaseName: databaseName,
+    initialCachedContent: initialCachedContent,
+  );
 
   Future<FileContent> loadFile(Map<String, String?> fileInfo) =>
       loadEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo));
@@ -229,16 +234,26 @@ abstract class CloudStorageProvider {
   /// Saves the given bytes into the file source.
   /// [previousMetadata] will contain the metadata returned from the last [load] call.
   /// Can return a new metadata object for the next call.
-  Future<Map<String, dynamic>> saveFile(Map<String, String?> fileInfo,
-          Uint8List bytes, Map<String, dynamic>? previousMetadata) =>
-      saveEntity(CloudStorageEntity.fromSimpleFileInfo(fileInfo), bytes,
-          previousMetadata);
+  Future<Map<String, dynamic>> saveFile(
+    Map<String, String?> fileInfo,
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) => saveEntity(
+    CloudStorageEntity.fromSimpleFileInfo(fileInfo),
+    bytes,
+    previousMetadata,
+  );
 
   Future<FileContent> loadEntity(CloudStorageEntity file);
-  Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic>? previousMetadata);
+  Future<Map<String, dynamic>> saveEntity(
+    CloudStorageEntity file,
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  );
   Future<FileSource> createEntity(
-      CloudStorageSelectorSaveResult saveAs, Uint8List bytes);
+    CloudStorageSelectorSaveResult saveAs,
+    Uint8List bytes,
+  );
 
   Future<void> logout();
 
@@ -274,27 +289,34 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   @protected
   Future<String?> oAuthTokenPrompt(PromptUserForCode prompt, String uri) async {
     final result = await promptUser<OAuthTokenResult, OAuthTokenFlowPromptData>(
-        prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>,
-        OAuthTokenFlowPromptData(uri));
+      prompt as PromptUserForCode<OAuthTokenResult, OAuthTokenFlowPromptData>,
+      OAuthTokenFlowPromptData(uri),
+    );
     return result?.code;
   }
 
-  Future<RESULT?> promptUser<RESULT extends UserAuthenticationPromptResult,
-          U extends UserAuthenticationPromptData<RESULT>>(
-      PromptUserForCode<RESULT, U> prompt, U promptData) {
+  Future<RESULT?> promptUser<
+    RESULT extends UserAuthenticationPromptResult,
+    U extends UserAuthenticationPromptData<RESULT>
+  >(PromptUserForCode<RESULT, U> prompt, U promptData) {
     final completer = Completer<RESULT?>();
-    prompt(UserAuthenticationPrompt(promptData, (result) {
-      completer.complete(result);
-    })).then((_) {
-      if (!completer.isCompleted) {
-        _logger.severe(
-            'prompt callback completed, without calling result code.',
-            null,
-            StackTrace.current);
-      }
-    }).catchError((Object error, StackTrace stackTrace) {
-      completer.completeError(error, stackTrace);
-    });
+    prompt(
+          UserAuthenticationPrompt(promptData, (result) {
+            completer.complete(result);
+          }),
+        )
+        .then((_) {
+          if (!completer.isCompleted) {
+            _logger.severe(
+              'prompt callback completed, without calling result code.',
+              null,
+              StackTrace.current,
+            );
+          }
+        })
+        .catchError((Object error, StackTrace stackTrace) {
+          completer.completeError(error, stackTrace);
+        });
     return completer.future;
   }
 
@@ -311,7 +333,8 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   Future<CLIENT?> _loadStoredCredentials() async {
     final credentialsJson = await loadCredentials();
     _logger.finer(
-        'Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}');
+      'Tried to load auth. ${credentialsJson == null ? 'not found' : 'found'}',
+    );
     if (credentialsJson == null) {
       return null;
     }
@@ -319,9 +342,10 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   }
 
   @override
-  Future<bool> startAuth<RESULT extends UserAuthenticationPromptResult,
-          DATA extends UserAuthenticationPromptData<RESULT>>(
-      PromptUserForCode<RESULT, DATA> prompt) async {
+  Future<bool> startAuth<
+    RESULT extends UserAuthenticationPromptResult,
+    DATA extends UserAuthenticationPromptData<RESULT>
+  >(PromptUserForCode<RESULT, DATA> prompt) async {
     _client = await clientFromAuthenticationFlow(prompt);
     return isAuthenticated;
   }
@@ -329,9 +353,9 @@ abstract class CloudStorageProviderClientBase<CLIENT>
   CLIENT clientWithStoredCredentials(String stored);
 
   Future<CLIENT?> clientFromAuthenticationFlow<
-          TF extends UserAuthenticationPromptResult,
-          UF extends UserAuthenticationPromptData<TF>>(
-      PromptUserForCode<TF, UF> prompt);
+    TF extends UserAuthenticationPromptResult,
+    UF extends UserAuthenticationPromptData<TF>
+  >(PromptUserForCode<TF, UF> prompt);
 
   @override
   Future<bool> loadSavedAuth() async {
