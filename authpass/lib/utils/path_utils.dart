@@ -19,8 +19,8 @@ abstract class PathUtils implements PathUtil {
   static final PathUtils _instance = AuthPassPlatform.isPortable
       ? PathUtilsPortable.internal()
       : AuthPassPlatform.isWeb
-          ? PathUtilsWeb.internal()
-          : PathUtilsFromPathProvider.internal();
+      ? PathUtilsWeb.internal()
+      : PathUtilsFromPathProvider.internal();
   static final Completer<bool> runAppFinished = Completer<bool>();
 
   static Future<bool> get waitForRunAppFinished => runAppFinished.future;
@@ -122,8 +122,9 @@ abstract class PathUtilsDefault extends PathUtils {
   @NonNls
   @override
   Future<Directory> getLogDirectory() async {
-    return _namespaced(await retrieveTemporaryDirectory())
-        .childDirectory('logs');
+    return _namespaced(
+      await retrieveTemporaryDirectory(),
+    ).childDirectory('logs');
   }
 
   @override

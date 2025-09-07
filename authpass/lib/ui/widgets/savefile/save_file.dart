@@ -66,7 +66,8 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
           final result = await _saveAsCloudStorage(widget.cs!);
           if (result != null) {
             widget.onSave(
-                kdbxBloc.saveAsNewFile(widget.file, result, widget.cs!));
+              kdbxBloc.saveAsNewFile(widget.file, result, widget.cs!),
+            );
           }
         }
       },
@@ -76,18 +77,22 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   Future<FileSource?> _selectLocalFileSource() async {
     if (AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid) {
       final fileInfo = await FileSourceLocal.createFileInNewTempDirectory(
-          path.basenameWithoutExtension(widget.file.fileSource.displayPath) +
-              AppConstants.kdbxExtension, (tempFile) async {
-        return await FilePickerWritable().openFileForCreate(
-          fileName: path.basenameWithoutExtension(
-                  widget.file.fileSource.displayPath) +
-              AppConstants.kdbxExtension,
-          writer: (file) async {
-            _logger.fine('Writing placeholder into $file');
-            await file.writeAsString(nonNls('<placeholder>'));
-          },
-        );
-      });
+        path.basenameWithoutExtension(widget.file.fileSource.displayPath) +
+            AppConstants.kdbxExtension,
+        (tempFile) async {
+          return await FilePickerWritable().openFileForCreate(
+            fileName:
+                path.basenameWithoutExtension(
+                  widget.file.fileSource.displayPath,
+                ) +
+                AppConstants.kdbxExtension,
+            writer: (file) async {
+              _logger.fine('Writing placeholder into $file');
+              await file.writeAsString(nonNls('<placeholder>'));
+            },
+          );
+        },
+      );
 
       if (fileInfo == null) {
         _logger.info('User cancelled file picker.');
@@ -126,15 +131,18 @@ class _SaveFileAsState extends State<SaveFileAs> with FutureTaskStateMixin {
   }
 
   Future<CloudStorageSelectorSaveResult?> _saveAsCloudStorage(
-      CloudStorageProvider cs) async {
+    CloudStorageProvider cs,
+  ) async {
     _logger.fine('pushing cloud storage selector.');
-    final createFileInfo =
-        await Navigator.of(context).push(CloudStorageSelector.route(
-      cs,
-      CloudStorageBrowserConfig(
+    final createFileInfo = await Navigator.of(context).push(
+      CloudStorageSelector.route(
+        cs,
+        CloudStorageBrowserConfig(
           defaultFileName: path.basename(widget.file.fileSource.displayPath),
-          isSave: true),
-    ));
+          isSave: true,
+        ),
+      ),
+    );
     _logger.fine('done. $createFileInfo');
     return createFileInfo;
   }

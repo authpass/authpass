@@ -39,7 +39,9 @@ class CloudStorageAuthentication extends StatelessWidget {
     );
     final loginWidget = provider is CloudStorageCustomLoginButtonAdapter
         ? provider.getCustomLoginWidget(
-            onSuccess: onSuccess, defaultWidget: defaultLoginWidget)
+            onSuccess: onSuccess,
+            defaultWidget: defaultLoginWidget,
+          )
         : defaultLoginWidget;
     return Padding(
       padding: const EdgeInsets.all(32.0),
@@ -69,7 +71,7 @@ class CloudStorageAuthentication extends StatelessWidget {
               },
               icon: const Icon(Icons.qr_code_scanner),
               label: Text(loc.authPassCloudOpenWithShareCodeTooltip),
-            )
+            ),
           ] else ...[
             LinkButton(
               onPressed: () async {
@@ -80,19 +82,24 @@ class CloudStorageAuthentication extends StatelessWidget {
                 textScaler: const TextScaler.linear(0.75),
               ),
             ),
-          ]
+          ],
         ],
       ),
     );
   }
 
-  Future<void> _startLoginFlow(BuildContext context,
-      {bool forceNoOpenUrl = false}) async {
+  Future<void> _startLoginFlow(
+    BuildContext context, {
+    bool forceNoOpenUrl = false,
+  }) async {
     final loc = AppLocalizations.of(context);
     try {
       final auth = await provider.startAuth((final prompt) async {
-        if (prompt is UserAuthenticationPrompt<OAuthTokenResult,
-            OAuthTokenFlowPromptData>) {
+        if (prompt
+            is UserAuthenticationPrompt<
+              OAuthTokenResult,
+              OAuthTokenFlowPromptData
+            >) {
           final promptData = prompt.data;
           final uri = promptData.openUri;
           _logger.fine('Launching authentication url $uri');
@@ -121,14 +128,22 @@ class CloudStorageAuthentication extends StatelessWidget {
             labelText: loc.cloudStorageAuthCodeLabel,
           ).show(context);
           prompt.result(OAuthTokenResult(code));
-        } else if (prompt is UserAuthenticationPrompt<UrlUsernamePasswordResult,
-            UrlUsernamePasswordPromptData>) {
+        } else if (prompt
+            is UserAuthenticationPrompt<
+              UrlUsernamePasswordResult,
+              UrlUsernamePasswordPromptData
+            >) {
           final result = await UrlUsernamePasswordDialog().show(context);
           prompt.result(result);
-        } else if (prompt is UserAuthenticationPrompt<
-            DummyUserAuthenticationPromptResult, AuthPassCloudAuthPromptData>) {
-          final result = await Navigator.of(context, rootNavigator: true)
-              .push(AuthPassCloudAuthScreen.route());
+        } else if (prompt
+            is UserAuthenticationPrompt<
+              DummyUserAuthenticationPromptResult,
+              AuthPassCloudAuthPromptData
+            >) {
+          final result = await Navigator.of(
+            context,
+            rootNavigator: true,
+          ).push(AuthPassCloudAuthScreen.route());
           prompt.result(DummyUserAuthenticationPromptResult(result ?? false));
         } else {
           throw StateError('Unsupported prompt: $prompt');
@@ -141,8 +156,11 @@ class CloudStorageAuthentication extends StatelessWidget {
       if (!context.mounted) {
         return;
       }
-      await DialogUtils.showErrorDialog(context, loc.cloudStorageAuthErrorTitle,
-          loc.cloudStorageAuthErrorMessage(provider.displayName, e));
+      await DialogUtils.showErrorDialog(
+        context,
+        loc.cloudStorageAuthErrorTitle,
+        loc.cloudStorageAuthErrorMessage(provider.displayName, e),
+      );
     }
   }
 }
@@ -150,7 +168,9 @@ class CloudStorageAuthentication extends StatelessWidget {
 class UrlUsernamePasswordDialog extends StatefulWidget {
   Future<UrlUsernamePasswordResult?> show(BuildContext context) =>
       showDialog<UrlUsernamePasswordResult>(
-          context: context, builder: (_) => this);
+        context: context,
+        builder: (_) => this,
+      );
 
   @override
   _UrlUsernamePasswordDialogState createState() =>
@@ -188,8 +208,10 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
               autocorrect: false,
               validator:
                   (SValidator.notEmpty(msg: loc.webDavUrlValidatorError) +
-                          SValidator.isTrue((str) => _urlRegex.hasMatch(str!),
-                              loc.webDavUrlValidatorInvalidUrlError))
+                          SValidator.isTrue(
+                            (str) => _urlRegex.hasMatch(str!),
+                            loc.webDavUrlValidatorInvalidUrlError,
+                          ))
                       .call,
             ),
             TextFormField(
@@ -219,8 +241,13 @@ class _UrlUsernamePasswordDialogState extends State<UrlUsernamePasswordDialog> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              Navigator.of(context).pop(UrlUsernamePasswordResult(
-                  _url.text, _username.text, _password.text));
+              Navigator.of(context).pop(
+                UrlUsernamePasswordResult(
+                  _url.text,
+                  _username.text,
+                  _password.text,
+                ),
+              );
             }
           },
           child: Text(matLoc.okButtonLabel),

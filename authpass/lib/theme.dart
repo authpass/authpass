@@ -11,23 +11,25 @@ class AuthPassTheme {
   @NonNls
   static const monoFontFamily = 'JetBrainsMono';
 
-//  static const Color linkColor = Colors.blueAccent;
+  //  static const Color linkColor = Colors.blueAccent;
   static const int _primaryColorValue = 0xFF626bc6;
   static const Color primaryColor = Color(_primaryColorValue);
   static const Color linkColor = primaryColor;
-  static const MaterialColor primarySwatch =
-      MaterialColor(_primaryColorValue, <int, Color>{
-    50: Color(0xFFecedf8),
-    100: Color(0xFFd0d3ee),
-    200: Color(0xffb1b5e3),
-    300: Color(0xFF9197d7),
-    400: Color(0xFF7a81cf),
-    500: Color(0xFF626bc6),
-    600: Color(0xFF5a63c0),
-    700: Color(0xFF5058b9),
-    800: Color(0xFF464eb1),
-    900: Color(0xFF343ca4),
-  });
+  static const MaterialColor primarySwatch = MaterialColor(
+    _primaryColorValue,
+    <int, Color>{
+      50: Color(0xFFecedf8),
+      100: Color(0xFFd0d3ee),
+      200: Color(0xffb1b5e3),
+      300: Color(0xFF9197d7),
+      400: Color(0xFF7a81cf),
+      500: Color(0xFF626bc6),
+      600: Color(0xFF5a63c0),
+      700: Color(0xFF5058b9),
+      800: Color(0xFF464eb1),
+      900: Color(0xFF343ca4),
+    },
+  );
 
   static const defaultFileColors = [
     Colors.red,
@@ -76,8 +78,9 @@ ThemeData _customize(ThemeData base) {
       const FadeUpwardsPageTransitionsBuilder();
   return base.copyWith(
     // androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
-    pageTransitionsTheme:
-        PageTransitionsTheme(builders: pageTransitionBuilders),
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: pageTransitionBuilders,
+    ),
   );
 }
 
@@ -91,8 +94,9 @@ Typography _getTypography() {
       !_isDarwinVersion(minimumMajor: 19, minimumMinor: 0)) {
     if (!_addedInterLicense) {
       LicenseRegistry.addLicense(() async* {
-        final license = await rootBundle
-            .loadString(nonNls('assets/fonts/Inter-LICENSE.txt'));
+        final license = await rootBundle.loadString(
+          nonNls('assets/fonts/Inter-LICENSE.txt'),
+        );
         yield LicenseEntryWithLineBreaks([nonNls('fonts_inter')], license);
       });
       _addedInterLicense = true;
@@ -104,7 +108,8 @@ Typography _getTypography() {
     );
   } else {
     _logger.info(
-        'using default theme $defaultTargetPlatform -- ${AuthPassPlatform.operatingSystemVersion}');
+      'using default theme $defaultTargetPlatform -- ${AuthPassPlatform.operatingSystemVersion}',
+    );
     return Typography.material2021(platform: defaultTargetPlatform);
   }
 }
@@ -112,29 +117,35 @@ Typography _getTypography() {
 final macOsVersionPattern = RegExp(r'Darwin (\d+)\.(\d+)');
 
 bool _isDarwinVersion({required int minimumMajor, required int minimumMinor}) {
-  final match =
-      macOsVersionPattern.firstMatch(AuthPassPlatform.operatingSystemVersion);
+  final match = macOsVersionPattern.firstMatch(
+    AuthPassPlatform.operatingSystemVersion,
+  );
   if (match == null) {
     _logger.severe(
-        'Unable to parse mac os version ${AuthPassPlatform.operatingSystemVersion}');
+      'Unable to parse mac os version ${AuthPassPlatform.operatingSystemVersion}',
+    );
     return false;
   }
   final major = int.parse(match.group(1)!);
   final minor = int.parse(match.group(2)!);
   _logger.info(
-      'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
+    'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor',
+  );
   _logger.finest(
-      'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor');
+    'Parsed ${AuthPassPlatform.operatingSystemVersion} as $major.$minor',
+  );
   return major > minimumMajor ||
       (major == minimumMajor && minor >= minimumMinor);
 }
 
 ThemeData createTheme() {
-  return _customize(ThemeData(
-    primarySwatch: AuthPassTheme.primarySwatch,
-    typography: _getTypography(),
-    useMaterial3: true,
-  ));
+  return _customize(
+    ThemeData(
+      primarySwatch: AuthPassTheme.primarySwatch,
+      typography: _getTypography(),
+      useMaterial3: true,
+    ),
+  );
 }
 
 ThemeData createDarkTheme() {
@@ -143,62 +154,68 @@ ThemeData createDarkTheme() {
     onPrimary: Colors.white,
     secondary: AuthPassTheme.primarySwatch[300]!,
   );
-  return _customize(ThemeData(
-    typography: _getTypography(),
-    primaryColor: colorScheme.primary,
-    useMaterial3: true,
-    textSelectionTheme: TextSelectionThemeData(
-      selectionHandleColor: AuthPassTheme.primarySwatch[800],
-    ),
-//    cursorColor: Colors.red,
-    brightness: Brightness.dark,
-    colorScheme: colorScheme,
-    primarySwatch: AuthPassTheme.primarySwatch,
-    checkboxTheme: CheckboxThemeData(
-      fillColor:
-          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
+  return _customize(
+    ThemeData(
+      typography: _getTypography(),
+      primaryColor: colorScheme.primary,
+      useMaterial3: true,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionHandleColor: AuthPassTheme.primarySwatch[800],
+      ),
+      //    cursorColor: Colors.red,
+      brightness: Brightness.dark,
+      colorScheme: colorScheme,
+      primarySwatch: AuthPassTheme.primarySwatch,
+      checkboxTheme: CheckboxThemeData(
+        fillColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primary;
+          }
           return null;
-        }
-        if (states.contains(WidgetState.selected)) {
-          return colorScheme.primary;
-        }
-        return null;
-      }),
-    ),
-    radioTheme: RadioThemeData(
-      fillColor:
-          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
+        }),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primary;
+          }
           return null;
-        }
-        if (states.contains(WidgetState.selected)) {
-          return colorScheme.primary;
-        }
-        return null;
-      }),
-    ),
-    switchTheme: SwitchThemeData(
-      thumbColor:
-          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
+        }),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primary;
+          }
           return null;
-        }
-        if (states.contains(WidgetState.selected)) {
-          return colorScheme.primary;
-        }
-        return null;
-      }),
-      trackColor:
-          WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
+        }),
+        trackColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primary;
+          }
           return null;
-        }
-        if (states.contains(WidgetState.selected)) {
-          return colorScheme.primary;
-        }
-        return null;
-      }),
+        }),
+      ),
     ),
-  ));
+  );
 }

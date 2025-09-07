@@ -26,7 +26,7 @@ class AppBarMenu {
     BuildContext context,
     OpenedKdbxFiles openedKdbxFiles, {
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
-        secondaryBuilder,
+    secondaryBuilder,
     bool isOnOpenFileScreen = false,
   }) {
     final deps = context.read<Deps>();
@@ -37,8 +37,9 @@ class AppBarMenu {
       PopupMenuItem(
         value: () {
           analytics.events.trackActionPressed(action: 'generatePassword');
-          Navigator.of(context).push(PasswordGeneratorScreen.route(
-              finishButton: FinishButtonStyle.save));
+          Navigator.of(context).push(
+            PasswordGeneratorScreen.route(finishButton: FinishButtonStyle.save),
+          );
         },
         child: ListTile(
           key: const ValueKey('openPasswordGenerator'),
@@ -58,18 +59,23 @@ class AppBarMenu {
       ),
       ...?(openedFiles.isNotEmpty != true
           ? null
-          : (<PopupMenuEntry<VoidCallback>>[const PopupMenuDivider()])
-              .followedBy(
+          : (<PopupMenuEntry<VoidCallback>>[
+              const PopupMenuDivider(),
+            ]).followedBy(
               openedFiles.map(
                 (file) => PopupMenuItem(
                   value: () {
                     analytics.events.trackActionPressed(action: 'manageFile');
-                    Navigator.of(context, rootNavigator: true)
-                        .push(ManageFileScreen.route(file.fileSource));
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(ManageFileScreen.route(file.fileSource));
                   },
                   child: ListTile(
-                    leading: Icon(file.fileSource.displayIcon.iconData,
-                        color: file.openedFile.color),
+                    leading: Icon(
+                      file.fileSource.displayIcon.iconData,
+                      color: file.openedFile.color,
+                    ),
                     title: Text(file.fileSource.displayName),
                     subtitle: Text(
                       file.fileSource.displayPath,
@@ -85,8 +91,10 @@ class AppBarMenu {
         PopupMenuItem(
           value: () {
             analytics.events.trackActionPressed(action: 'openFile');
-            Navigator.of(context, rootNavigator: true)
-                .push(SelectFileScreen.route());
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(SelectFileScreen.route());
           },
           child: ListTile(
             key: const ValueKey('openAnotherFile'),
@@ -121,17 +129,19 @@ class AppBarMenu {
             title: Text(loc.menuItemSupport),
             subtitle: Text(loc.menuItemSupportSubtitle),
           ),
-        )
+        ),
       ],
       PopupMenuItem(
         onTap: () async {
           analytics.events.trackActionPressed(action: 'forum');
           final url = deps.env.forumUrlNewTopic(
-            body: nonNls('\n\n\n'
-                'OS: ${AuthPassPlatform.operatingSystem} '
-                '${AuthPassPlatform.operatingSystemVersion}\n'
-                'App: ${(await deps.env.getAppInfo()).longString}\n'
-                '${await LoggingUtils.getDebugDeviceInfo()}'),
+            body: nonNls(
+              '\n\n\n'
+              'OS: ${AuthPassPlatform.operatingSystem} '
+              '${AuthPassPlatform.operatingSystemVersion}\n'
+              'App: ${(await deps.env.getAppInfo()).longString}\n'
+              '${await LoggingUtils.getDebugDeviceInfo()}',
+            ),
             tags: [nonNls('fromapp')],
           );
           _logger.finer('opening url (${url.length}): $url');
@@ -146,8 +156,10 @@ class AppBarMenu {
       PopupMenuItem(
         value: () async {
           analytics.events.trackActionPressed(action: 'help');
-          await DialogUtils.openUrl('https://authpass.app/docs/?utm_source=app'
-              '&utm_medium=app_help&utm_campaign=app_help#documentation');
+          await DialogUtils.openUrl(
+            'https://authpass.app/docs/?utm_source=app'
+            '&utm_medium=app_help&utm_campaign=app_help#documentation',
+          );
         },
         child: ListTile(
           leading: const Icon(Icons.help),
@@ -163,7 +175,7 @@ class AppBarMenu {
     BuildContext context, {
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)? builder,
     List<PopupMenuItem<VoidCallback>> Function(BuildContext context)?
-        secondaryBuilder,
+    secondaryBuilder,
     bool isOnOpenFileScreen = false,
   }) {
     final openedFiles = Provider.of<OpenedKdbxFiles>(context);

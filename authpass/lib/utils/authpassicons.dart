@@ -14,6 +14,8 @@ class AuthPassIcons {
   @NonNls
   static const String _fontFamily = 'AuthPassIcons';
 
-  static const IconData AuthPassLogo =
-      IconData(0xe900, fontFamily: _fontFamily);
+  static const IconData AuthPassLogo = IconData(
+    0xe900,
+    fontFamily: _fontFamily,
+  );
 }

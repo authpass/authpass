@@ -26,11 +26,11 @@ class ManageFileScreen extends StatefulWidget {
   final FileSource fileSource;
 
   static Route<void> route(FileSource fileSource) => MaterialPageRoute(
-        settings: const RouteSettings(name: '/manageFile'),
-        builder: (context) => ManageFileScreen(
-          fileSource: fileSource,
-        ),
-      );
+    settings: const RouteSettings(name: '/manageFile'),
+    builder: (context) => ManageFileScreen(
+      fileSource: fileSource,
+    ),
+  );
 
   @override
   _ManageFileScreenState createState() => _ManageFileScreenState();
@@ -52,14 +52,16 @@ class _ManageFileScreenState extends State<ManageFileScreen>
     // when changing the database name, we have to refresh the file source.
     final kdbxBloc = Provider.of<KdbxBloc>(context);
     _currentFileSource = widget.fileSource;
-    handleSubscription(kdbxBloc.openedFilesChanged.listen((event) {
-      setState(() {
-        final newFile = kdbxBloc.fileForFileSource(widget.fileSource);
-        if (newFile != null) {
-          _currentFileSource = newFile.fileSource;
-        }
-      });
-    }));
+    handleSubscription(
+      kdbxBloc.openedFilesChanged.listen((event) {
+        setState(() {
+          final newFile = kdbxBloc.fileForFileSource(widget.fileSource);
+          if (newFile != null) {
+            _currentFileSource = newFile.fileSource;
+          }
+        });
+      }),
+    );
   }
 
   @override
@@ -121,7 +123,7 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     _logger.fine('Updating widget. _init()');
     _kdbxBloc = Provider.of<KdbxBloc>(context);
     _file = _kdbxBloc.fileForFileSource(widget.fileSource);
-//    _databaseName.text = _file.kdbxFile.body.meta.databaseName.get();
+    //    _databaseName.text = _file.kdbxFile.body.meta.databaseName.get();
   }
 
   @override
@@ -158,7 +160,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     });
                     await asyncRunTask((progress) async {
                       await Future<void>.delayed(
-                          const Duration(milliseconds: 100));
+                        const Duration(milliseconds: 100),
+                      );
                       await _kdbxBloc.saveAs(
                         _file!,
                         _file!.fileSource.copyWithDatabaseName(newName),
@@ -184,35 +187,46 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   title: Text(loc.databaseColor),
                   subtitle: Text(loc.databaseColorChoose),
                   trailing: CircleColor(
-                      color: _file!.openedFile.color, circleSize: 24),
+                    color: _file!.openedFile.color,
+                    circleSize: 24,
+                  ),
                   onTap: () async {
                     final newColor = await ColorPickerDialog(
                       initialColor: _file!.openedFile.color,
                     ).show(context);
                     _logger.fine('Selected color $newColor');
                     _file = await _kdbxBloc.updateOpenedFile(
-                        _file!, (b) => b.colorCode = newColor?.toARGB32());
+                      _file!,
+                      (b) => b.colorCode = newColor?.toARGB32(),
+                    );
                     setState(() {});
                   },
                 ),
                 ListTile(
                   title: Text(loc.databaseKdbxVersion),
-                  subtitle: Text(_file!.kdbxFile.header.version.toString() +
-                      nonNls(' (${_debugKdfType(_file!.kdbxFile)})')),
+                  subtitle: Text(
+                    _file!.kdbxFile.header.version.toString() +
+                        nonNls(' (${_debugKdfType(_file!.kdbxFile)})'),
+                  ),
                   trailing: _file!.kdbxFile.header.version < KdbxVersion.V4
                       ? IconButton(
                           icon: const Icon(Icons.upgrade),
-                          tooltip:
-                              loc.databaseKdbxUpgradeVersion(KdbxVersion.V4),
+                          tooltip: loc.databaseKdbxUpgradeVersion(
+                            KdbxVersion.V4,
+                          ),
                           onPressed: asyncTaskCallback((progress) async {
                             _file!.kdbxFile.upgrade(KdbxVersion.V4.major);
                             await _kdbxBloc.saveFile(_file!.kdbxFile);
                             if (!context.mounted) {
                               return;
                             }
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text(loc.databaseKdbxUpgradeSuccessful)));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  loc.databaseKdbxUpgradeSuccessful,
+                                ),
+                              ),
+                            );
                           }),
                         )
                       : null,
@@ -238,7 +252,8 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                         } finally {
                           // make sure logs are processed
                           await Future<void>.delayed(
-                              const Duration(milliseconds: 100));
+                            const Duration(milliseconds: 100),
+                          );
                           // final log = appender.log.toString();
                           await appender.dispose();
                           // ignore: use_build_context_synchronously
@@ -254,8 +269,10 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     TextButton.icon(
                       onPressed: () {
                         Navigator.of(context).push(
-                            MasterPasswordChangeScreen.route(
-                                fileSource: widget.fileSource));
+                          MasterPasswordChangeScreen.route(
+                            fileSource: widget.fileSource,
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.lock),
                       label: Text(loc.changeMasterPasswordActionLabel),
@@ -271,13 +288,19 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     if (env.isDebug) ...[
                       TextButton(
                         onPressed: () async {
-                          await Clipboard.setData(ClipboardData(
-                              text: _file!.kdbxFile.body
-                                  .toXml()
-                                  .toXmlString(pretty: true)));
+                          await Clipboard.setData(
+                            ClipboardData(
+                              text: _file!.kdbxFile.body.toXml().toXmlString(
+                                pretty: true,
+                              ),
+                            ),
+                          );
                         },
-                        child: Text(nonNls(
-                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects.length} dirty)')),
+                        child: Text(
+                          nonNls(
+                            'DEBUG: Copy XML (${_file!.kdbxFile.dirtyObjects.length} dirty)',
+                          ),
+                        ),
                       ),
                     ],
                   ],
@@ -294,8 +317,10 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
   String _debugKdfType(KdbxFile file) {
     final cipher = file.header.cipher;
     final cipherName = cipher.toString().split('.').last;
-    final innerEncryption =
-        file.header.innerRandomStreamEncryption.toString().split('.').last;
+    final innerEncryption = file.header.innerRandomStreamEncryption
+        .toString()
+        .split('.')
+        .last;
     var ret = 'Cipher: $cipherName, Inner: $innerEncryption';
     if (file.header.version < KdbxVersion.V4) {
       return '$ret, Kdf: AES, rounds: ${file.header.v3KdfTransformRounds}';
@@ -376,8 +401,10 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   }
 
   void _init() {
-    _selectedColor = AuthPassTheme.defaultFileColors.firstWhereOrNull(
-            (color) => color.toARGB32() == widget.initialColor?.toARGB32()) ??
+    _selectedColor =
+        AuthPassTheme.defaultFileColors.firstWhereOrNull(
+          (color) => color.toARGB32() == widget.initialColor?.toARGB32(),
+        ) ??
         widget.initialColor;
   }
 

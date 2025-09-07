@@ -21,9 +21,9 @@ const _authPassCloudUrlInfoOpen =
 
 class AuthPassCloudAuthScreen extends StatelessWidget {
   static MaterialPageRoute<bool?> route() => MaterialPageRoute<bool?>(
-        settings: const RouteSettings(name: '/auth_pass_cloud_auth/'),
-        builder: (_) => AuthPassCloudAuthScreen(),
-      );
+    settings: const RouteSettings(name: '/auth_pass_cloud_auth/'),
+    builder: (_) => AuthPassCloudAuthScreen(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
               [
                 AppConstants.authPassCloud,
                 CharConstants.newLine,
-                loc.forDetailsVisitUrl(_authPassCloudUrlInfo)
+                loc.forDetailsVisitUrl(_authPassCloudUrlInfo),
               ].join(),
               textAlign: TextAlign.center,
             ),
@@ -111,10 +111,12 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
             onEditingComplete: () {
               _submitCallback()?.call();
             },
-            validator: (SValidator.notEmpty(
-                        msg: loc.authPassCloudAuthEmailInvalid) +
-                    SValidator.email(msg: loc.authPassCloudAuthEmailInvalid))
-                .call,
+            validator:
+                (SValidator.notEmpty(msg: loc.authPassCloudAuthEmailInvalid) +
+                        SValidator.email(
+                          msg: loc.authPassCloudAuthEmailInvalid,
+                        ))
+                    .call,
           ),
           const SizedBox(height: 8),
           ElevatedButton(
@@ -127,14 +129,11 @@ class __EnterEmailAddressState extends State<_EnterEmailAddress>
   }
 
   VoidCallback? _submitCallback() => asyncTaskCallback((progress) async {
-        if (_form.currentState!.validate()) {
-          context
-              .read<Analytics>()
-              .events
-              .trackCloudAuth(CloudAuthAction.authSend);
-          await widget.bloc.authenticate(_email.text);
-        }
-      });
+    if (_form.currentState!.validate()) {
+      context.read<Analytics>().events.trackCloudAuth(CloudAuthAction.authSend);
+      await widget.bloc.authenticate(_email.text);
+    }
+  });
 }
 
 class _ConfirmEmailAddress extends StatefulWidget {
@@ -212,9 +211,10 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
               try {
                 if (!await _checkConfirmed()) {
                   if (!context.mounted) {
-                    _logger
-                        .severe('Widget no longer mounted. not showing dialog. '
-                            'authPassCloudAuthNotConfirmed');
+                    _logger.severe(
+                      'Widget no longer mounted. not showing dialog. '
+                      'authPassCloudAuthNotConfirmed',
+                    );
                     return;
                   }
                   await DialogUtils.showSimpleAlertDialog(
@@ -228,7 +228,7 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
                           DialogUtils.openUrl(UrlConstants.forumUrl);
                         },
                         child: Text(loc.getHelpButton),
-                      )
+                      ),
                     ],
                   );
                 }
@@ -251,10 +251,9 @@ class __ConfirmEmailAddressState extends State<_ConfirmEmailAddress>
           const SizedBox(height: 32),
           TextButton(
             onPressed: () {
-              context
-                  .read<Analytics>()
-                  .events
-                  .trackCloudAuth(CloudAuthAction.authResend);
+              context.read<Analytics>().events.trackCloudAuth(
+                CloudAuthAction.authResend,
+              );
               widget.bloc.clearToken();
             },
             child: Text(loc.authPassCloudAuthResendButtonLabel),

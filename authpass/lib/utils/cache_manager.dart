@@ -38,8 +38,8 @@ class AuthPassCacheManager extends CacheManager {
   }
 
   AuthPassCacheManager._({required this.pathUtils, required Config config})
-      : key = getKey(pathUtils),
-        super(config);
+    : key = getKey(pathUtils),
+      super(config);
 
   @NonNls
   static const _keyBase = 'authpassCachedImageData';

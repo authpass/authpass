@@ -78,7 +78,8 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   @NonNls
   late final imageBaseUrl = Uri.parse(
-      '${ArgumentError.checkNotNull(featureFlags.authpassCloudUri)}website/image');
+    '${ArgumentError.checkNotNull(featureFlags.authpassCloudUri)}website/image',
+  );
 
   late final _cloudStatus = LazyBehaviorSubject<CloudStatus?>(() async {
     if (tokenStatus != TokenStatus.confirmed) {
@@ -126,8 +127,8 @@ class AuthPassCloudBloc with ChangeNotifier {
   TokenStatus get tokenStatus => _storedToken?.isConfirmed == null
       ? TokenStatus.none
       : _storedToken!.isConfirmed
-          ? TokenStatus.confirmed
-          : TokenStatus.created;
+      ? TokenStatus.confirmed
+      : TokenStatus.created;
 
   DateTime? get tokenCreatedAt => _storedToken?.createdAt;
 
@@ -151,7 +152,9 @@ class AuthPassCloudBloc with ChangeNotifier {
       await f.write(json.encode(token.toJson()));
       if (_client != null) {
         SecuritySchemes.authToken.setForClient(
-            _client!, SecuritySchemeHttpData(bearerToken: token.authToken));
+          _client!,
+          SecuritySchemeHttpData(bearerToken: token.authToken),
+        );
       }
       notifyListeners();
       if (token.isConfirmed) {
@@ -172,8 +175,9 @@ class AuthPassCloudBloc with ChangeNotifier {
         if (str == null) {
           return null;
         }
-        _storedToken =
-            _StoredToken.fromJson(json.decode(str) as Map<String, dynamic>);
+        _storedToken = _StoredToken.fromJson(
+          json.decode(str) as Map<String, dynamic>,
+        );
         // TODO: The following should only matter for old stored tokens,
         //       this can probably be removed in the next version.
         ArgumentError.checkNotNull(_storedToken!.authToken);
@@ -181,17 +185,21 @@ class AuthPassCloudBloc with ChangeNotifier {
       } on AuthException catch (e, stackTrace) {
         _storedToken = null;
         _logger.warning(
-            'Unable to load token, due to (known) error'
-            ' from secure storage. ignoring.',
-            e,
-            stackTrace);
+          'Unable to load token, due to (known) error'
+          ' from secure storage. ignoring.',
+          e,
+          stackTrace,
+        );
       } on PlatformException catch (e, stackTrace) {
         _logger.severe('Unable to load cloud storage token', e, stackTrace);
         rethrow;
       } catch (e, stackTrace) {
         _storedToken = null;
         _logger.warning(
-            'Error while loading token. Ignoring stored token.', e, stackTrace);
+          'Error while loading token. Ignoring stored token.',
+          e,
+          stackTrace,
+        );
       }
       _logger.finest('loaded. $tokenStatus --- $_storedToken');
       unawaited(Future<void>.microtask(() => notifyListeners()));
@@ -200,7 +208,8 @@ class AuthPassCloudBloc with ChangeNotifier {
   }
 
   @NonNls
-  static String getUserAgent(AppInfo ai) => '${ai.appName}/${ai.versionLabel} '
+  static String getUserAgent(AppInfo ai) =>
+      '${ai.appName}/${ai.versionLabel} '
       '(${AuthPassPlatform.operatingSystem}) [${ai.packageName}]';
 
   static http.Client getUserAgentClient(AppInfo ai) =>
@@ -210,14 +219,17 @@ class AuthPassCloudBloc with ChangeNotifier {
     return _client ??= await (() async {
       final ai = await env.getAppInfo();
 
-      _requestSender =
-          HttpRequestSender(clientCreator: () => getUserAgentClient(ai));
+      _requestSender = HttpRequestSender(
+        clientCreator: () => getUserAgentClient(ai),
+      );
       final baseUri = Uri.parse(featureFlags.authpassCloudUri!);
       final client = AuthPassCloudClient(baseUri, _requestSender!);
       final token = await _loadToken();
       if (token != null) {
         SecuritySchemes.authToken.setForClient(
-            client, SecuritySchemeHttpData(bearerToken: token.authToken));
+          client,
+          SecuritySchemeHttpData(bearerToken: token.authToken),
+        );
       }
       return client;
     })();
@@ -228,11 +240,13 @@ class AuthPassCloudBloc with ChangeNotifier {
     final response = await client
         .userRegisterPost(RegisterRequest(email: email))
         .requireSuccess();
-    await _saveToken(_StoredToken(
-      authToken: response.authToken,
-      isConfirmed: false,
-      createdAt: null,
-    ));
+    await _saveToken(
+      _StoredToken(
+        authToken: response.authToken,
+        isConfirmed: false,
+        createdAt: null,
+      ),
+    );
   }
 
   Future<bool> checkConfirmed() async {
@@ -255,15 +269,18 @@ class AuthPassCloudBloc with ChangeNotifier {
     return false;
   }
 
-  Future<String?> createMailbox(
-      {String label = CharConstants.empty,
-      String entryUuid = CharConstants.empty}) async {
+  Future<String?> createMailbox({
+    String label = CharConstants.empty,
+    String entryUuid = CharConstants.empty,
+  }) async {
     final client = await _getClient();
     final ret = await client
-        .mailboxCreatePost(MailboxCreatePostSchema(
-          label: label,
-          entryUuid: entryUuid,
-        ))
+        .mailboxCreatePost(
+          MailboxCreatePostSchema(
+            label: label,
+            entryUuid: entryUuid,
+          ),
+        )
         .requireSuccess();
     _logger.finer('Created mail box with ${ret.address}');
     unawaited(_dirtyAll());
@@ -273,8 +290,10 @@ class AuthPassCloudBloc with ChangeNotifier {
   Future<void> deleteMailbox(Mailbox mailbox) async {
     final client = await _getClient();
     await client
-        .mailboxUpdate(MailboxUpdateSchema(isDeleted: true),
-            mailboxAddress: mailbox.address)
+        .mailboxUpdate(
+          MailboxUpdateSchema(isDeleted: true),
+          mailboxAddress: mailbox.address,
+        )
         .requireSuccess();
     unawaited(_dirtyAll());
   }
@@ -282,8 +301,10 @@ class AuthPassCloudBloc with ChangeNotifier {
   Future<void> updateMailbox(Mailbox mailbox, {bool? isDisabled}) async {
     final client = await _getClient();
     await client
-        .mailboxUpdate(MailboxUpdateSchema(isDisabled: isDisabled),
-            mailboxAddress: mailbox.address)
+        .mailboxUpdate(
+          MailboxUpdateSchema(isDisabled: isDisabled),
+          mailboxAddress: mailbox.address,
+        )
         .requireSuccess();
     unawaited(_dirtyAll());
   }
@@ -291,8 +312,9 @@ class AuthPassCloudBloc with ChangeNotifier {
   Future<EmailMessageList>? loadMessageListMore({bool reload = false}) async {
     return _messageListFetch.joinRun(() async {
       final client = await _getClient();
-      final lastMessages =
-          reload ? const EmailMessageList.empty() : _messageList.value;
+      final lastMessages = reload
+          ? const EmailMessageList.empty()
+          : _messageList.value;
       if (!lastMessages.hasMore) {
         return lastMessages;
       }
@@ -331,24 +353,29 @@ class AuthPassCloudBloc with ChangeNotifier {
 
   Future<enough.MimeMessage> loadMail(EmailMessage message) async {
     final client = await _getClient();
-    final body =
-        await client.mailboxMessageGet(messageId: message.id).requireSuccess();
+    final body = await client
+        .mailboxMessageGet(messageId: message.id)
+        .requireSuccess();
     if (!message.isRead) {
-      unawaited((() async {
-        await client
-            .mailboxMessageMarkRead(messageId: message.id)
-            .requireSuccess();
-        await _dirtyAll();
-        _logger.finer('Marked mail as read.');
-      })());
+      unawaited(
+        (() async {
+          await client
+              .mailboxMessageMarkRead(messageId: message.id)
+              .requireSuccess();
+          await _dirtyAll();
+          _logger.finer('Marked mail as read.');
+        })(),
+      );
     }
     return enough.MimeMessage.parseFromText(body);
   }
 
   Future<void> forwardMail(EmailMessage message) async {
     final client = await _getClient();
-    await client.mailboxMessageForward(MailboxMessageForwardSchema(),
-        messageId: message.id);
+    await client.mailboxMessageForward(
+      MailboxMessageForwardSchema(),
+      messageId: message.id,
+    );
   }
 
   Future<void> deleteMail(EmailMessage message) async {
@@ -381,7 +408,7 @@ class EmailMessageList {
     required this.nextPageToken,
   });
   const EmailMessageList.empty()
-      : this(messages: const [], hasMore: true, nextPageToken: null);
+    : this(messages: const [], hasMore: true, nextPageToken: null);
   final List<EmailMessage> messages;
   final bool hasMore;
   final String? nextPageToken;
@@ -420,8 +447,8 @@ class CloudStatus {
 
 class ReloadableValueStream<T> extends StreamView<T> implements ValueStream<T> {
   ReloadableValueStream(this._stream)
-      : _valueStream = _stream._subject.stream,
-        super(_stream._subject.stream);
+    : _valueStream = _stream._subject.stream,
+      super(_stream._subject.stream);
 
   final LazyBehaviorSubject<T> _stream;
   final ValueStream<T> _valueStream;

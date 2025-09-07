@@ -27,8 +27,9 @@ const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
 class GoogleDriveProvider extends CloudStorageProvider
     implements CloudStorageCustomLoginButtonAdapter {
   GoogleDriveProvider({required this.env, required super.helper}) {
-    googleSignIn.onCurrentUserChanged
-        .listen((final account) => _checkAuthentication());
+    googleSignIn.onCurrentUserChanged.listen(
+      (final account) => _checkAuthentication(),
+    );
   }
 
   Future<void> _checkAuthentication() async {
@@ -76,8 +77,13 @@ class GoogleDriveProvider extends CloudStorageProvider
 
   @override
   Future<SearchResponse> search({String name = Env.KeePassExtension}) async {
-    return _search(SearchQueryTerm(const SearchQueryField('name'),
-        QOperator.contains, SearchQueryValueLiteral(name)));
+    return _search(
+      SearchQueryTerm(
+        const SearchQueryField('name'),
+        QOperator.contains,
+        SearchQueryValueLiteral(name),
+      ),
+    );
   }
 
   Future<SearchResponse> _search(SearchQueryTerm search) async {
@@ -87,7 +93,8 @@ class GoogleDriveProvider extends CloudStorageProvider
       q: search.toQuery(),
     );
     _logger.fine(
-        'Got file results (incomplete:${files.incompleteSearch}): ${files.files!.map((f) => '${f.id}: ${f.name} (${f.mimeType})')}');
+      'Got file results (incomplete:${files.incompleteSearch}): ${files.files!.map((f) => '${f.id}: ${f.name} (${f.mimeType})')}',
+    );
     return SearchResponse(
       (srb) => srb
         ..hasMore = files.nextPageToken != null
@@ -96,7 +103,8 @@ class GoogleDriveProvider extends CloudStorageProvider
             (f) => CloudStorageEntity(
               (b) => b
                 ..id = f.id
-                ..type = f.mimeType ==
+                ..type =
+                    f.mimeType ==
                         'application/vnd.google-apps.folder' // NON-NLS
                     ? CloudStorageEntityType.directory
                     : CloudStorageEntityType.file
@@ -109,11 +117,19 @@ class GoogleDriveProvider extends CloudStorageProvider
 
   @override
   Future<SearchResponse> list({CloudStorageEntity? parent}) {
-    return _search(parent == null
-        ? const SearchQueryTerm(SearchQueryValueLiteral('root'), QOperator.in_,
-            SearchQueryField('parents'))
-        : SearchQueryTerm(SearchQueryValueLiteral(parent.id), QOperator.in_,
-            const SearchQueryField('parents')));
+    return _search(
+      parent == null
+          ? const SearchQueryTerm(
+              SearchQueryValueLiteral('root'),
+              QOperator.in_,
+              SearchQueryField('parents'),
+            )
+          : SearchQueryTerm(
+              SearchQueryValueLiteral(parent.id),
+              QOperator.in_,
+              const SearchQueryField('parents'),
+            ),
+    );
   }
 
   @override
@@ -125,13 +141,17 @@ class GoogleDriveProvider extends CloudStorageProvider
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
-    final metadata = (await driveApi.files.get(
+    final metadata =
+        (await driveApi.files.get(
+              file.id,
+              downloadOptions: DownloadOptions.metadata,
+              $fields: GoogleDriveMetadata.fields,
+            ))
+            as File;
+    final dynamic response = await driveApi.files.get(
       file.id,
-      downloadOptions: DownloadOptions.metadata,
-      $fields: GoogleDriveMetadata.fields,
-    )) as File;
-    final dynamic response = await driveApi.files
-        .get(file.id, downloadOptions: DownloadOptions.fullMedia);
+      downloadOptions: DownloadOptions.fullMedia,
+    );
     final media = response as Media;
     final bytes = BytesBuilder(copy: false);
     // ignore: prefer_foreach
@@ -145,34 +165,48 @@ class GoogleDriveProvider extends CloudStorageProvider
   }
 
   @override
-  Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+  Future<Map<String, dynamic>> saveEntity(
+    CloudStorageEntity file,
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final byteStream = ByteStream.fromBytes(bytes);
     if (previousMetadata != null) {
       final compareMetadata = GoogleDriveMetadata.fromJson(
-          previousMetadata[_METADATA_KEY_GOOGLE_DRIVE_DATA]
-              as Map<String, dynamic>);
-      final remoteMetadata = (await driveApi.files.get(file.id,
-          downloadOptions: DownloadOptions.metadata,
-          $fields: GoogleDriveMetadata.fields)) as File;
+        previousMetadata[_METADATA_KEY_GOOGLE_DRIVE_DATA]
+            as Map<String, dynamic>,
+      );
+      final remoteMetadata =
+          (await driveApi.files.get(
+                file.id,
+                downloadOptions: DownloadOptions.metadata,
+                $fields: GoogleDriveMetadata.fields,
+              ))
+              as File;
       if (compareMetadata.version != remoteMetadata.version) {
         final remote = GoogleDriveMetadata.fromMetadata(remoteMetadata);
         throw StorageException.conflict(
-            'Version differs from last loaded version. '
-            'Local: ${compareMetadata.toJson()} Remote: ${remote.toJson()}');
+          'Version differs from last loaded version. '
+          'Local: ${compareMetadata.toJson()} Remote: ${remote.toJson()}',
+        );
       }
     }
-    final updatedFile = await driveApi.files.update(File(), file.id,
-        uploadMedia: Media(byteStream, bytes.lengthInBytes),
-        $fields: GoogleDriveMetadata.fields);
+    final updatedFile = await driveApi.files.update(
+      File(),
+      file.id,
+      uploadMedia: Media(byteStream, bytes.lengthInBytes),
+      $fields: GoogleDriveMetadata.fields,
+    );
     _logger.fine('Successfully saved file ${updatedFile.name}');
     return _metadataForFile(updatedFile);
   }
 
   @override
   Future<FileSource> createEntity(
-      CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
+    CloudStorageSelectorSaveResult saveAs,
+    Uint8List bytes,
+  ) async {
     final driveApi = DriveApi(await requireAuthenticatedClient());
     final metadata = File();
     metadata.name = saveAs.fileName;
@@ -180,28 +214,32 @@ class GoogleDriveProvider extends CloudStorageProvider
       metadata.parents = [saveAs.parent!.id];
     }
     final byteStream = ByteStream.fromBytes(bytes);
-    _logger
-        .fine('Creating google drive entity. bytes.length: ${bytes.length} / '
-            'lengthInBytes: ${bytes.lengthInBytes}');
+    _logger.fine(
+      'Creating google drive entity. bytes.length: ${bytes.length} / '
+      'lengthInBytes: ${bytes.lengthInBytes}',
+    );
     final newFile = await driveApi.files.create(
       metadata,
       uploadMedia: Media(byteStream, bytes.lengthInBytes),
       $fields: GoogleDriveMetadata.fields,
     );
     return toFileSource(
-      CloudStorageEntity((b) => b
-        ..id = newFile.id
-        ..name = newFile.name
-        ..type = CloudStorageEntityType.file),
+      CloudStorageEntity(
+        (b) => b
+          ..id = newFile.id
+          ..name = newFile.name
+          ..type = CloudStorageEntityType.file,
+      ),
       uuid: AppDataBloc.createUuid(),
       initialCachedContent: FileContent(bytes, _metadataForFile(newFile)),
     );
   }
 
   Map<String, dynamic> _metadataForFile(File metadata) => <String, dynamic>{
-        _METADATA_KEY_GOOGLE_DRIVE_DATA:
-            GoogleDriveMetadata.fromMetadata(metadata).toJson(),
-      };
+    _METADATA_KEY_GOOGLE_DRIVE_DATA: GoogleDriveMetadata.fromMetadata(
+      metadata,
+    ).toJson(),
+  };
 
   bool isAuthorized = false;
 
@@ -219,9 +257,10 @@ class GoogleDriveProvider extends CloudStorageProvider
   }
 
   @override
-  Future<bool> startAuth<RESULT extends UserAuthenticationPromptResult,
-          DATA extends UserAuthenticationPromptData<RESULT>>(
-      PromptUserForCode<RESULT, DATA> prompt) async {
+  Future<bool> startAuth<
+    RESULT extends UserAuthenticationPromptResult,
+    DATA extends UserAuthenticationPromptData<RESULT>
+  >(PromptUserForCode<RESULT, DATA> prompt) async {
     final user = await googleSignIn.signIn();
     _logger.finer('Authenticated user: $user');
     return user != null;
@@ -229,16 +268,19 @@ class GoogleDriveProvider extends CloudStorageProvider
 
   Future<Client> requireAuthenticatedClient() async {
     _logger.fine(
-        'Getting authenticated client from googleSignIn (currentUser == null: ${googleSignIn.currentUser == null})');
+      'Getting authenticated client from googleSignIn (currentUser == null: ${googleSignIn.currentUser == null})',
+    );
     if (googleSignIn.currentUser == null) {
       final signedIn = await googleSignIn.signInSilently();
       _logger.fine(
-          'signedIn: ${signedIn != null} (currentUser == null: ${googleSignIn.currentUser == null})');
+        'signedIn: ${signedIn != null} (currentUser == null: ${googleSignIn.currentUser == null})',
+      );
     }
     final authClient = await googleSignIn.authenticatedClient();
     if (authClient == null) {
       throw LoadFileException(
-          'Unable to (re)sign in to google drive using Google Sign-In.');
+        'Unable to (re)sign in to google drive using Google Sign-In.',
+      );
     }
     return authClient;
   }
@@ -295,7 +337,9 @@ class SearchQueryValueLiteral implements SearchQueryAtom {
   String _quoteValues(dynamic value) {
     if (value is String) {
       final escaped = value.replaceAllMapped(
-          RegExp(r'''['\\]'''), (match) => '\\${match.group(0)}'); // NON-NLS
+        RegExp(r'''['\\]'''),
+        (match) => '\\${match.group(0)}',
+      ); // NON-NLS
       return "'$escaped'"; // NON-NLS
     }
     if (value is List) {

@@ -120,10 +120,10 @@ class FileMetadata {
   }
 
   CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
-        (b) => b
-          ..name = name
-          ..id = id
-          ..type = tagType
-          ..path = pathDisplay,
-      );
+    (b) => b
+      ..name = name
+      ..id = id
+      ..type = tagType
+      ..path = pathDisplay,
+  );
 }

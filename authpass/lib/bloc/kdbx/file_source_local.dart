@@ -50,7 +50,8 @@ class FileSourceLocal extends FileSource {
     if (filePickerIdentifier != null &&
         filePickerIdentifier!.startsWith(CharConstants.curlyOpen)) {
       return _filePickerInfo = FileInfo.fromJson(
-          json.decode(filePickerIdentifier!) as Map<String, dynamic>);
+        json.decode(filePickerIdentifier!) as Map<String, dynamic>,
+      );
     }
     return null;
   }
@@ -83,23 +84,27 @@ class FileSourceLocal extends FileSource {
       final oldFileInfo = filePickerInfo;
       final identifier = oldFileInfo?.identifier ?? filePickerIdentifier!;
       return await FilePickerWritable().readFile(
-          identifier: identifier,
-          reader: (fileInfo, file) async {
-            _logger.finest('Got uri: ${fileInfo.uri}');
-            if (fileInfo.identifier != identifier) {
-              _logger.severe(
-                  'Identifier changed. panic. $fileInfo vs $identifier');
-            }
-            return await cb(fileSystem.file(file.path));
-          });
+        identifier: identifier,
+        reader: (fileInfo, file) async {
+          _logger.finest('Got uri: ${fileInfo.uri}');
+          if (fileInfo.identifier != identifier) {
+            _logger.severe(
+              'Identifier changed. panic. $fileInfo vs $identifier',
+            );
+          }
+          return await cb(fileSystem.file(file.path));
+        },
+      );
     } else if (AuthPassPlatform.isMacOS && macOsSecureBookmark != null) {
-      final resolved =
-          await SecureBookmarks().resolveBookmark(macOsSecureBookmark!);
+      final resolved = await SecureBookmarks().resolveBookmark(
+        macOsSecureBookmark!,
+      );
       _logger.finer('Reading from secure  bookmark. ($resolved)');
       if (resolved != file) {
-        _logger
-            .warning('Stored secure bookmark resolves to a different file than'
-                ' we originally opened. $resolved vs. $file');
+        _logger.warning(
+          'Stored secure bookmark resolves to a different file than'
+          ' we originally opened. $resolved vs. $file',
+        );
       }
       final access = await SecureBookmarks()
           .startAccessingSecurityScopedResource(resolved);
@@ -112,19 +117,23 @@ class FileSourceLocal extends FileSource {
     } else if (AuthPassPlatform.isIOS && !file.existsSync()) {
       // On iOS we must not store the absolute path, but since we do, try to
       // load it relative from application support.
-      _logger
-          .fine('iOS file ${file.path} no longer exists, checking new paths');
-      final docDir = (await PathUtils().getAppDocDirectory(ensureCreated: true))
-          .childFile(file.basename);
+      _logger.fine(
+        'iOS file ${file.path} no longer exists, checking new paths',
+      );
+      final docDir = (await PathUtils().getAppDocDirectory(
+        ensureCreated: true,
+      )).childFile(file.basename);
       if (docDir.existsSync()) {
         _logger.fine('${file.path} exists at ${docDir.path}.');
         return cb(docDir);
       }
 
-      final newFile =
-          (await PathUtils().getAppDataDirectory()).childFile(file.basename);
+      final newFile = (await PathUtils().getAppDataDirectory()).childFile(
+        file.basename,
+      );
       _logger.fine(
-          'iOS file ${file.path} no longer exists, checking ${newFile.path}');
+        'iOS file ${file.path} no longer exists, checking ${newFile.path}',
+      );
       if (newFile.existsSync()) {
         _logger.fine('... exists, moving to ${docDir.path}');
         final renamed = newFile.renameSync(docDir.path);
@@ -143,19 +152,25 @@ class FileSourceLocal extends FileSource {
 
   @override
   Future<Map<String, dynamic>?> write(
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     if (filePickerIdentifier != null) {
       _logger.finer('Writing into file with file picker.');
       final identifier = filePickerInfo?.identifier ?? filePickerIdentifier;
       await createFileInNewTempDirectory(
-          [displayNameFromPath, AppConstants.kdbxExtension].join(), (f) async {
-        await f.writeAsBytes(bytes, flush: true);
-        final fileInfo =
-            await FilePickerWritable().writeFileWithIdentifier(identifier!, f);
-        if (fileInfo.identifier != identifier) {
-          _logger.severe('Panic, fileIdentifier changed. must no happen.');
-        }
-      });
+        [displayNameFromPath, AppConstants.kdbxExtension].join(),
+        (f) async {
+          await f.writeAsBytes(bytes, flush: true);
+          final fileInfo = await FilePickerWritable().writeFileWithIdentifier(
+            identifier!,
+            f,
+          );
+          if (fileInfo.identifier != identifier) {
+            _logger.severe('Panic, fileIdentifier changed. must no happen.');
+          }
+        },
+      );
     } else {
       _logger.finer('Writing into file directly.');
       await _accessFile((f) => f.writeAsBytes(bytes));
@@ -164,7 +179,9 @@ class FileSourceLocal extends FileSource {
   }
 
   static Future<T> createFileInNewTempDirectory<T>(
-      String baseName, Future<T> Function(File tempFile) callback) async {
+    String baseName,
+    Future<T> Function(File tempFile) callback,
+  ) async {
     if (baseName.length > 30) {
       baseName = baseName.substring(0, 30);
     }
@@ -175,12 +192,15 @@ class FileSourceLocal extends FileSource {
     try {
       return await callback(tempFile);
     } finally {
-      unawaited(tempDir
-          .delete(recursive: true)
-          .catchError((Object error, StackTrace stackTrace) {
-        _logger.warning('Error while deleting temp dir.', error, stackTrace);
-        throw error;
-      }));
+      unawaited(
+        tempDir.delete(recursive: true).catchError((
+          Object error,
+          StackTrace stackTrace,
+        ) {
+          _logger.warning('Error while deleting temp dir.', error, stackTrace);
+          throw error;
+        }),
+      );
     }
   }
 
@@ -192,19 +212,18 @@ class FileSourceLocal extends FileSource {
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => FileSourceLocal(
-        file,
-        databaseName: databaseName,
-        uuid: uuid,
-        macOsSecureBookmark: macOsSecureBookmark,
-        filePickerIdentifier: filePickerIdentifier,
-      );
+    file,
+    databaseName: databaseName,
+    uuid: uuid,
+    macOsSecureBookmark: macOsSecureBookmark,
+    filePickerIdentifier: filePickerIdentifier,
+  );
 
   @NonNls
   @override
   Map<String, String?> toDebugMap() => {
-        ...super.toDebugMap(),
-        'filePickerIdentifier': filePickerIdentifier,
-        'local':
-            macOsSecureBookmark != null ? 'macOsSecureBookmark' : 'internal',
-      };
+    ...super.toDebugMap(),
+    'filePickerIdentifier': filePickerIdentifier,
+    'local': macOsSecureBookmark != null ? 'macOsSecureBookmark' : 'internal',
+  };
 }

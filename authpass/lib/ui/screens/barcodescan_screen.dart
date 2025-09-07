@@ -18,9 +18,12 @@ class BarcodeScanHelper {
     String? titleText,
     List<BarcodeFormat>? formats,
   }) async {
-    final ret = await Navigator.of(context).push(BarcodeScanScreen.route(
+    final ret = await Navigator.of(context).push(
+      BarcodeScanScreen.route(
         titleText: titleText ?? nonNls('Scan Barcode'),
-        formats: formats ?? BarcodeFormat.any));
+        formats: formats ?? BarcodeFormat.any,
+      ),
+    );
     return ret ?? ScanResultInvalid();
     // final scanOptions = barcode.ScanOptions(
     //   restrictFormat:
@@ -42,9 +45,11 @@ class BarcodeScanHelper {
     // return ScanResultInvalid();
   }
 
-  static final _barcodeMapping = Map.fromEntries(scanner.BarcodeFormat.values
-      .map((e) => _toBarcodeFormat(e).let((f) => MapEntry(f, e)))
-      .whereNotNull());
+  static final _barcodeMapping = Map.fromEntries(
+    scanner.BarcodeFormat.values
+        .map((e) => _toBarcodeFormat(e).let((f) => MapEntry(f, e)))
+        .whereNotNull(),
+  );
 
   static BarcodeFormat _toBarcodeFormat(scanner.BarcodeFormat format) =>
       switch (format) {
@@ -96,13 +101,12 @@ class BarcodeScanScreen extends StatefulWidget {
   static Route<ScanResult> route({
     required String titleText,
     List<BarcodeFormat> formats = BarcodeFormat.any,
-  }) =>
-      MaterialPageRoute(
-        builder: (context) => BarcodeScanScreen(
-          titleText: titleText,
-          formats: formats,
-        ),
-      );
+  }) => MaterialPageRoute(
+    builder: (context) => BarcodeScanScreen(
+      titleText: titleText,
+      formats: formats,
+    ),
+  );
 
   @override
   State<BarcodeScanScreen> createState() => _BarcodeScanScreenState();
@@ -112,18 +116,18 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen>
     with WidgetsBindingObserver {
   late final scanner.MobileScannerController controller =
       scanner.MobileScannerController(
-    // cameraResolution: size,
-    // detectionSpeed: detectionSpeed,
-    // detectionTimeoutMs: detectionTimeout,
-    formats: widget.formats
-        .map((e) => BarcodeScanHelper._barcodeMapping[e])
-        .nonNulls
-        .toList(),
-    // returnImage: returnImage,
-    torchEnabled: true,
-    // invertImage: invertImage,
-    // autoZoom: autoZoom,
-  );
+        // cameraResolution: size,
+        // detectionSpeed: detectionSpeed,
+        // detectionTimeoutMs: detectionTimeout,
+        formats: widget.formats
+            .map((e) => BarcodeScanHelper._barcodeMapping[e])
+            .nonNulls
+            .toList(),
+        // returnImage: returnImage,
+        torchEnabled: true,
+        // invertImage: invertImage,
+        // autoZoom: autoZoom,
+      );
 
   @override
   void initState() {
@@ -171,11 +175,13 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen>
           if (barcodes.barcodes.isNotEmpty) {
             unawaited(controller.stop());
             final barcode = barcodes.barcodes.first;
-            final scanResult = ScanResultValid(barcode: (
-              isValid: true,
-              format: BarcodeScanHelper._toBarcodeFormat(barcode.format),
-              text: barcode.displayValue ?? CharConstants.empty,
-            ));
+            final scanResult = ScanResultValid(
+              barcode: (
+                isValid: true,
+                format: BarcodeScanHelper._toBarcodeFormat(barcode.format),
+                text: barcode.displayValue ?? CharConstants.empty,
+              ),
+            );
             Navigator.of(context).pop(scanResult);
           }
         },
@@ -358,8 +364,7 @@ enum BarcodeFormat {
   qrCode(),
   upca(),
   upce(),
-  microQRCode(),
-  ;
+  microQRCode();
 
   const BarcodeFormat();
 
@@ -376,8 +381,4 @@ class ScanResultValid extends ScanResult {
   final ScanResultBarcode barcode;
 }
 
-typedef ScanResultBarcode = ({
-  bool isValid,
-  String text,
-  BarcodeFormat format,
-});
+typedef ScanResultBarcode = ({bool isValid, String text, BarcodeFormat format});

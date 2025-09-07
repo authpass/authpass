@@ -28,7 +28,10 @@ class Analytics {
 
   @NonNls
   static void trackError(
-      ErrorSource source, @NonNls String description, bool fatal) {
+    ErrorSource source,
+    @NonNls String description,
+    bool fatal,
+  ) {
     final e = matomo.EventInfo(
       category: 'log',
       action: source.eventAction,
@@ -64,11 +67,13 @@ class Analytics {
     if (matomoConfig != null) {
       if (AuthPassPlatform.isAndroid) {
         const miscChannel = MethodChannel('app.authpass/misc');
-        final isFirebaseTestLab = await miscChannel
-            .invokeMethod<bool>('isFirebaseTestLab'); // NON-NLS
+        final isFirebaseTestLab = await miscChannel.invokeMethod<bool>(
+          'isFirebaseTestLab',
+        ); // NON-NLS
         if (isFirebaseTestLab != null && isFirebaseTestLab) {
           _logger.info(
-              'running in firebase test lab. not initializing analytics.');
+            'running in firebase test lab. not initializing analytics.',
+          );
           return;
         }
       }
@@ -86,15 +91,17 @@ class Analytics {
       //   [info.version, CharConstants.plus, info.buildNumber].join(),
       //   userAgent: userAgent,
       // );
-//      _ga.onSend.listen((event) {
-//        _logger.finer('analytics send: $event');
-//      });
-//       _ga!.setSessionValue(_sessionParamUa, userAgent);
+      //      _ga.onSend.listen((event) {
+      //        _logger.finer('analytics send: $event');
+      //      });
+      //       _ga!.setSessionValue(_sessionParamUa, userAgent);
       _errorMatomo = _matomo;
-      matomoTracker.trackDimensions(dimensions: {
-        _matomoPropertyMapping[_propertyMappingPlatform]!:
-            AuthPassPlatform.operatingSystem,
-      });
+      matomoTracker.trackDimensions(
+        dimensions: {
+          _matomoPropertyMapping[_propertyMappingPlatform]!:
+              AuthPassPlatform.operatingSystem,
+        },
+      );
       for (final cb in _gaQ) {
         cb(matomoTracker);
       }
@@ -107,46 +114,49 @@ class Analytics {
       _dbg = '(noop)'; // NON-NLS
     }
 
-    _logger
-        .finest('$_dbg Registering analytics tracker. ${_matomo?.visitor.id}');
-    events.registerTracker(nonNls((final action, params) {
-      final eventParams = <String, String?>{};
-      int? value;
-      String? category;
-      String? actionOverride;
+    _logger.finest(
+      '$_dbg Registering analytics tracker. ${_matomo?.visitor.id}',
+    );
+    events.registerTracker(
+      nonNls((final action, params) {
+        final eventParams = <String, String?>{};
+        int? value;
+        String? category;
+        String? actionOverride;
 
-      final labelParams = <String>[];
-      for (final entry in params.entries) {
-        final customKey = _gaPropertyMapping[entry.key];
-//        _logger.fine('entry.key: ${entry.key} = ${entry.value.runtimeType}');
-        if (entry.key == 'value' && entry.value is int) {
-          value = entry.value as int?;
-        } else if (entry.key == 'category' && entry.value is String) {
-          category = entry.value as String?;
-        } else if (entry.key == 'action' && entry.value is String) {
-          actionOverride = entry.value as String;
-        } else if (customKey == null) {
-          labelParams.add('${entry.key}=${entry.value}');
-        } else {
-          eventParams[customKey] = entry.value?.toString();
+        final labelParams = <String>[];
+        for (final entry in params.entries) {
+          final customKey = _gaPropertyMapping[entry.key];
+          //        _logger.fine('entry.key: ${entry.key} = ${entry.value.runtimeType}');
+          if (entry.key == 'value' && entry.value is int) {
+            value = entry.value as int?;
+          } else if (entry.key == 'category' && entry.value is String) {
+            category = entry.value as String?;
+          } else if (entry.key == 'action' && entry.value is String) {
+            actionOverride = entry.value as String;
+          } else if (customKey == null) {
+            labelParams.add('${entry.key}=${entry.value}');
+          } else {
+            eventParams[customKey] = entry.value?.toString();
+          }
         }
-      }
-      labelParams.sort();
+        labelParams.sort();
 
-      if (actionOverride != null) {
-        category = actionOverride;
-      }
+        if (actionOverride != null) {
+          category = actionOverride;
+        }
 
-      final label = labelParams.join(',');
-//      _amplitude?.logEvent(name: event, properties: params);
-      _sendEvent(
-        category ?? 'track',
-        actionOverride ?? action,
-        label: label,
-        value: value,
-        parameters: eventParams,
-      );
-    }));
+        final label = labelParams.join(',');
+        //      _amplitude?.logEvent(name: event, properties: params);
+        _sendEvent(
+          category ?? 'track',
+          actionOverride ?? action,
+          label: label,
+          value: value,
+          parameters: eventParams,
+        );
+      }),
+    );
   }
 
   void trackScreen(@NonNls String screenName) {
@@ -165,14 +175,13 @@ class Analytics {
     @NonNls String? label,
     int? value,
     @NonNls Map<String, String>? parameters,
-  }) =>
-      _sendEvent(
-        category,
-        action,
-        label: label,
-        value: value,
-        parameters: parameters,
-      );
+  }) => _sendEvent(
+    category,
+    action,
+    label: label,
+    value: value,
+    parameters: parameters,
+  );
 
   @NonNls
   void trackTiming(
@@ -183,20 +192,28 @@ class Analytics {
   }) {
     _requireMatomo((m) {
       m.trackEvent(
-          eventInfo: matomo.EventInfo(
-        category: 'timing',
-        action: category ?? '',
-        name: label == null ? variableName : '$variableName.$label',
-        value: timeMs,
-      ));
-      _logger.finest('$_dbg timing($variableName, $timeMs, '
-          'category: $category, label: $label)');
+        eventInfo: matomo.EventInfo(
+          category: 'timing',
+          action: category ?? '',
+          name: label == null ? variableName : '$variableName.$label',
+          value: timeMs,
+        ),
+      );
+      _logger.finest(
+        '$_dbg timing($variableName, $timeMs, '
+        'category: $category, label: $label)',
+      );
     });
   }
 
   @NonNls
-  void _sendEvent(String category, String action,
-      {String? label, int? value, Map<String, String?>? parameters}) {
+  void _sendEvent(
+    String category,
+    String action, {
+    String? label,
+    int? value,
+    Map<String, String?>? parameters,
+  }) {
     _requireMatomo((m) {
       if (label == null || label == '') {
         label = 'unknown';
@@ -211,7 +228,8 @@ class Analytics {
       );
     });
     _logger.finer(
-        '$_dbg event($category, $action, $label, $value) - parameters: $parameters');
+      '$_dbg event($category, $action, $label, $value) - parameters: $parameters',
+    );
   }
 
   @NonNls
@@ -224,21 +242,24 @@ class Analytics {
   }) {
     _requireMatomo((m) {
       m.trackEvent(
-          eventInfo: matomo.EventInfo(
-        category: 'sizes',
-        action: 'viewport',
-        name: '${viewportSizeWidth!.round()}x${viewportSizeHeight!.round()}',
-      ));
+        eventInfo: matomo.EventInfo(
+          category: 'sizes',
+          action: 'viewport',
+          name: '${viewportSizeWidth!.round()}x${viewportSizeHeight!.round()}',
+        ),
+      );
 
-      final sr = [displaySizeWidth, displaySizeHeight]
-          .map((e) => (e! / devicePixelRatio!).round())
-          .join('x');
+      final sr = [
+        displaySizeWidth,
+        displaySizeHeight,
+      ].map((e) => (e! / devicePixelRatio!).round()).join('x');
       m.trackEvent(
-          eventInfo: matomo.EventInfo(
-        category: 'sizes',
-        action: 'display',
-        name: sr,
-      ));
+        eventInfo: matomo.EventInfo(
+          category: 'sizes',
+          action: 'display',
+          name: sr,
+        ),
+      );
     });
   }
 
@@ -280,22 +301,23 @@ Future<String> deviceInfo() async {
   return [
     _unknown,
     AuthPassPlatform.operatingSystemVersion,
-    AuthPassPlatform.operatingSystem
+    AuthPassPlatform.operatingSystem,
   ].join(CharConstants.space);
 }
 
 abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackLaunch({required Brightness? systemBrightness});
 
-  Future<void> trackInit(
-          {required String? userType, required int value}) async =>
-      _trackInit(
-        userType: userType,
-        device: await deviceInfo(),
-        value: value,
-        buildnumber: (await PackageInfo.fromPlatform()).buildNumber,
-        platform: AuthPassPlatform.operatingSystem,
-      );
+  Future<void> trackInit({
+    required String? userType,
+    required int value,
+  }) async => _trackInit(
+    userType: userType,
+    device: await deviceInfo(),
+    value: value,
+    buildnumber: (await PackageInfo.fromPlatform()).buildNumber,
+    platform: AuthPassPlatform.operatingSystem,
+  );
 
   void _trackInit({
     required String? userType,
@@ -328,8 +350,10 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   void trackOpenFile({@NonNls required String type});
 
-  void trackOpenFile2(
-      {@NonNls required String generator, @NonNls required String version});
+  void trackOpenFile2({
+    @NonNls required String generator,
+    @NonNls required String version,
+  });
 
   void trackSelectEntry({EntrySelectionType? type});
 
@@ -415,8 +439,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackPreferences({
     @NonNls required String setting,
     @NonNls required String to,
-  }) =>
-      _trackPreferences(action: setting, to: to, category: 'preferences');
+  }) => _trackPreferences(action: setting, to: to, category: 'preferences');
   void _trackPreferences({
     required String action,
     required String to,
@@ -521,8 +544,7 @@ extension ContextEvents on BuildContext {
 enum ErrorSource {
   flutter('errorFlutter'),
   dart('errorDart'),
-  app('errorApp'),
-  ;
+  app('errorApp');
 
   const ErrorSource(@NonNls this.eventAction);
   final String eventAction;

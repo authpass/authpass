@@ -28,15 +28,15 @@ abstract class StorageException implements Exception {
 
 class StorageConflictException extends StorageException {
   StorageConflictException(String details, {String? errorBody})
-      : super._(StorageExceptionType.conflict, details, errorBody: errorBody);
+    : super._(StorageExceptionType.conflict, details, errorBody: errorBody);
 }
 
 class AuthenticationException extends StorageException {
   AuthenticationException(String details)
-      : super._(StorageExceptionType.authentication, details);
+    : super._(StorageExceptionType.authentication, details);
 }
 
 class StorageUnknownException extends StorageException {
   StorageUnknownException(String details, {String? errorBody})
-      : super._(StorageExceptionType.unknown, details, errorBody: errorBody);
+    : super._(StorageExceptionType.unknown, details, errorBody: errorBody);
 }

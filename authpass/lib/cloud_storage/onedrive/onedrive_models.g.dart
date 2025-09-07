@@ -7,33 +7,34 @@ part of 'onedrive_models.dart';
 // **************************************************************************
 
 ListChildrenResponse _$ListChildrenResponseFromJson(
-        Map<String, dynamic> json) =>
-    ListChildrenResponse(
-      value: (json['value'] as List<dynamic>)
-          .map((e) => OneDriveItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  Map<String, dynamic> json,
+) => ListChildrenResponse(
+  value: (json['value'] as List<dynamic>)
+      .map((e) => OneDriveItem.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$ListChildrenResponseToJson(
-        ListChildrenResponse instance) =>
-    <String, dynamic>{
-      'value': instance.value,
-    };
+  ListChildrenResponse instance,
+) => <String, dynamic>{
+  'value': instance.value,
+};
 
 OneDriveItem _$OneDriveItemFromJson(Map<String, dynamic> json) => OneDriveItem(
-      id: json['id'] as String?,
-      cTag: json['cTag'] as String?,
-      eTag: json['eTag'] as String?,
-      name: json['name'] as String?,
-      parentReference: OneDriveItemParent.fromJson(
-          json['parentReference'] as Map<String, dynamic>),
-      folder: json['folder'] == null
-          ? null
-          : OneDriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
-      file: json['file'] == null
-          ? null
-          : OneDriveFile.fromJson(json['file'] as Map<String, dynamic>),
-    );
+  id: json['id'] as String?,
+  cTag: json['cTag'] as String?,
+  eTag: json['eTag'] as String?,
+  name: json['name'] as String?,
+  parentReference: OneDriveItemParent.fromJson(
+    json['parentReference'] as Map<String, dynamic>,
+  ),
+  folder: json['folder'] == null
+      ? null
+      : OneDriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
+  file: json['file'] == null
+      ? null
+      : OneDriveFile.fromJson(json['file'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$OneDriveItemToJson(OneDriveItem instance) =>
     <String, dynamic>{
@@ -67,8 +68,8 @@ Map<String, dynamic> _$OneDriveFolderToJson(OneDriveFolder instance) =>
     };
 
 OneDriveFile _$OneDriveFileFromJson(Map<String, dynamic> json) => OneDriveFile(
-      mimeType: json['mimeType'] as String?,
-    );
+  mimeType: json['mimeType'] as String?,
+);
 
 Map<String, dynamic> _$OneDriveFileToJson(OneDriveFile instance) =>
     <String, dynamic>{

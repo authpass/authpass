@@ -52,16 +52,16 @@ class OneDriveItem {
   final OneDriveFile? file;
 
   CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
-        (b) => b
-          ..name = name
-          ..id = id
-          ..type = (folder != null
-              ? CloudStorageEntityType.directory
-              : file != null
-                  ? CloudStorageEntityType.file
-                  : CloudStorageEntityType.unknown)
-          ..path = [parentReference.path, CharConstants.slash, name].join(),
-      );
+    (b) => b
+      ..name = name
+      ..id = id
+      ..type = (folder != null
+          ? CloudStorageEntityType.directory
+          : file != null
+          ? CloudStorageEntityType.file
+          : CloudStorageEntityType.unknown)
+      ..path = [parentReference.path, CharConstants.slash, name].join(),
+  );
 }
 
 @JsonSerializable(nullable: false)

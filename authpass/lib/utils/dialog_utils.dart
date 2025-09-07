@@ -33,23 +33,24 @@ class DialogUtils {
   }) {
     final materialLoc = MaterialLocalizations.of(context);
     return showDialog<dynamic>(
-        context: context,
-        routeSettings: RouteSettings(name: routeName + routeAppend),
-        builder: (context) {
-          return AlertDialog(
-            title: title == null ? null : Text(title),
-            content: Text(content!),
-            actions: <Widget>[
-              ...?moreActions,
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(materialLoc.okButtonLabel),
-              ),
-            ],
-          );
-        });
+      context: context,
+      routeSettings: RouteSettings(name: routeName + routeAppend),
+      builder: (context) {
+        return AlertDialog(
+          title: title == null ? null : Text(title),
+          content: Text(content!),
+          actions: <Widget>[
+            ...?moreActions,
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(materialLoc.okButtonLabel),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   static Future<dynamic> showErrorDialog(
@@ -60,8 +61,9 @@ class DialogUtils {
   }) async {
     if (_errorDialogShown) {
       _logger.warning(
-          'We already show an error dialog. do NOT show another one right away.'
-          '\ntitle $title\ncontent:$content');
+        'We already show an error dialog. do NOT show another one right away.'
+        '\ntitle $title\ncontent:$content',
+      );
       return;
     }
     final loc = AppLocalizations.of(context);
@@ -86,20 +88,21 @@ class DialogUtils {
           ],
           TextButton(
             onPressed: () async {
-              context
-                  .read<Analytics>()
-                  .events
-                  .trackActionPressed(action: 'reportToForum');
+              context.read<Analytics>().events.trackActionPressed(
+                action: 'reportToForum',
+              );
               final env = context.read<Env>();
               final forumUrl = env.forumUrlNewTopic(
                 title: nonNls('Error Dialog: ${title ?? content}'),
-                body: nonNls('\n\n\n'
-                    'title:$title\n'
-                    'content: $content\n'
-                    'OS: ${AuthPassPlatform.operatingSystem} '
-                    '${AuthPassPlatform.operatingSystemVersion}\n'
-                    'App Info: ${(await env.getAppInfo()).longString}\n'
-                    'Device: ${await LoggingUtils.getDebugDeviceInfo()}'),
+                body: nonNls(
+                  '\n\n\n'
+                  'title:$title\n'
+                  'content: $content\n'
+                  'OS: ${AuthPassPlatform.operatingSystem} '
+                  '${AuthPassPlatform.operatingSystemVersion}\n'
+                  'App Info: ${(await env.getAppInfo()).longString}\n'
+                  'Device: ${await LoggingUtils.getDebugDeviceInfo()}',
+                ),
                 category: 11,
                 tags: [nonNls('fromapp')],
               );
@@ -153,9 +156,11 @@ class DialogUtils {
         ? ''
         : '===================\n$errorDescription';
     final email = Email(
-      subject: 'Log file for '
+      subject:
+          'Log file for '
           '${await env.getAppInfo()} (${AuthPassPlatform.operatingSystem})',
-      body: '\n\n\n\n$details\n'
+      body:
+          '\n\n\n\n$details\n'
           '====================Available Log Files:\n$logFileDebug',
       recipients: ['support@authpass.app'],
       // for now just take the current one.
@@ -181,13 +186,14 @@ class LogViewerDialog extends StatelessWidget {
       content: Scrollbar(
         child: SingleChildScrollView(
           child: AnimatedBuilder(
-              animation: log!,
-              builder: (context, snapshot) {
-                return Text(
-                  log.toString(),
-                  textScaler: const TextScaler.linear(0.5),
-                );
-              }),
+            animation: log!,
+            builder: (context, snapshot) {
+              return Text(
+                log.toString(),
+                textScaler: const TextScaler.linear(0.5),
+              );
+            },
+          ),
         ),
       ),
       actions: <Widget>[
@@ -203,9 +209,10 @@ class LogViewerDialog extends StatelessWidget {
   }
 
   Future<void> open(BuildContext context) => showDialog<void>(
-      context: context,
-      builder: (context) => this,
-      routeSettings: const RouteSettings(name: '/dialog/log'));
+    context: context,
+    builder: (context) => this,
+    routeSettings: const RouteSettings(name: '/dialog/log'),
+  );
 }
 
 extension BuildContextError on BuildContext {
@@ -267,10 +274,10 @@ mixin DialogMixin<T> on Widget {
   String get name;
 
   Future<T?> show(BuildContext context) => showDialog<T>(
-        context: context,
-        routeSettings: RouteSettings(name: name),
-        builder: (context) => this,
-      );
+    context: context,
+    routeSettings: RouteSettings(name: name),
+    builder: (context) => this,
+  );
 }
 
 class SimpleAuthCodePromptDialog extends StatefulWidget
@@ -309,7 +316,8 @@ class _SimpleAuthCodePromptDialogState
       _fps?.registerUriHandler(_handleUri);
       if (_fps == null) {
         _logger.warning(
-            'No url handler declared. User will have to manually enter code.');
+          'No url handler declared. User will have to manually enter code.',
+        );
       }
     }
   }
@@ -355,8 +363,9 @@ class SimplePromptDialog extends StatefulWidget with DialogMixin<String> {
 
   @Deprecated('Use [dialog.show] instead.')
   static Future<String?> showPrompt(
-          BuildContext context, SimplePromptDialog dialog) =>
-      dialog.show(context);
+    BuildContext context,
+    SimplePromptDialog dialog,
+  ) => dialog.show(context);
 
   @override
   _SimplePromptDialogState createState() => _SimplePromptDialogState();
@@ -390,8 +399,10 @@ class _SimplePromptDialogState extends State<SimplePromptDialog>
     final text = await getClipboardText();
     if (setIfChanged && text != _previousClipboard && text != null) {
       _controller!.text = text;
-      _controller!.selection =
-          TextSelection(baseOffset: 0, extentOffset: text.length);
+      _controller!.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: text.length,
+      );
     }
     _previousClipboard = text;
   }
@@ -465,9 +476,11 @@ Future<String?> getClipboardText() async {
 
 extension BuildContextSnackBar on BuildContext {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
-      String message) {
+    String message,
+  ) {
     ScaffoldMessenger.of(this).removeCurrentSnackBar();
-    return ScaffoldMessenger.of(this)
-        .showSnackBar(SnackBar(content: Text(message)));
+    return ScaffoldMessenger.of(
+      this,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

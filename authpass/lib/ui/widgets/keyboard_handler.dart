@@ -41,10 +41,10 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 
   final FocusNode _focusNode = FocusNode(
     debugLabel: nonNls('AuthPassKeyboardFocus'),
-//     onKey: (focusNode, rawKeyEvent) {
-// //      _logger.info('got onKey: ($focusNode) $rawKeyEvent');
-//       return KeyEventResult.ignored;
-//     },
+    //     onKey: (focusNode, rawKeyEvent) {
+    // //      _logger.info('got onKey: ($focusNode) $rawKeyEvent');
+    //       return KeyEventResult.ignored;
+    //     },
   );
 
   @override
@@ -65,7 +65,8 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
         if (!mounted) {
           _logger.warning(
-              'Got keyboard shortcut event, but was no longer mounted.');
+            'Got keyboard shortcut event, but was no longer mounted.',
+          );
           return;
         }
         setState(() {
@@ -89,17 +90,20 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
 
   void _registerSystemWideShortcuts() {
     if (KeyboardHandler.supportsSystemWideShortcuts) {
-      HotKeyManager.instance.register(_hotKey, keyDownHandler: (hotKey) {
-        _logger.fine('received global hotkey $hotKey');
-        WindowManager.instance.show();
-        final context = _actionsKey.currentContext;
-        if (context == null) {
-          _logger.warning('Unable to find context to invoke global action.');
-          return;
-        }
-        Actions.maybeInvoke(context, const SearchIntent());
-        // _keyboardShortcutEvents._shortcutEvents.add(searchKeyboardShortcut);
-      });
+      HotKeyManager.instance.register(
+        _hotKey,
+        keyDownHandler: (hotKey) {
+          _logger.fine('received global hotkey $hotKey');
+          WindowManager.instance.show();
+          final context = _actionsKey.currentContext;
+          if (context == null) {
+            _logger.warning('Unable to find context to invoke global action.');
+            return;
+          }
+          Actions.maybeInvoke(context, const SearchIntent());
+          // _keyboardShortcutEvents._shortcutEvents.add(searchKeyboardShortcut);
+        },
+      );
     }
   }
 
@@ -120,24 +124,29 @@ class _KeyboardHandlerState extends State<KeyboardHandler> {
     final s = defaultAuthPassShortcuts;
     final theme = Theme.of(context);
     final shortcuts = Map.fromEntries(
-        s.map((e) => MapEntry(e.triggerForPlatform(theme.platform), e.intent)));
+      s.map((e) => MapEntry(e.triggerForPlatform(theme.platform), e.intent)),
+    );
     final loc = AppLocalizations.of(context);
     final showHelpShortcut = <Type, Action<Intent>>{
-      KeyboardShortcutHelpIntent: CallbackAction(onInvoke: (_) {
-        final descr = s
-            .map((e) => [
+      KeyboardShortcutHelpIntent: CallbackAction(
+        onInvoke: (_) {
+          final descr = s
+              .map(
+                (e) => [
                   e.triggerForPlatform(theme.platform).debugDescribeKeys(),
-                  e.label(loc)
-                ].join(CharConstants.colon + CharConstants.space))
-            .join(CharConstants.newLine);
-        DialogUtils.showSimpleAlertDialog(
-          context,
-          loc.shortcutHelpTitle,
-          descr,
-          routeAppend: 'shortcuts',
-        );
-        return null;
-      })
+                  e.label(loc),
+                ].join(CharConstants.colon + CharConstants.space),
+              )
+              .join(CharConstants.newLine);
+          DialogUtils.showSimpleAlertDialog(
+            context,
+            loc.shortcutHelpTitle,
+            descr,
+            routeAppend: 'shortcuts',
+          );
+          return null;
+        },
+      ),
     };
     return Shortcuts.manager(
       manager: LoggingShortcutManager(shortcuts: shortcuts),
@@ -211,8 +220,11 @@ class LoggingShortcutManager extends ShortcutManager {
   LoggingShortcutManager({required super.shortcuts});
 
   @override
-  KeyEventResult handleKeypress(BuildContext context, KeyEvent event,
-      {LogicalKeySet? keysPressed}) {
+  KeyEventResult handleKeypress(
+    BuildContext context,
+    KeyEvent event, {
+    LogicalKeySet? keysPressed,
+  }) {
     final KeyEventResult result = super.handleKeypress(context, event);
     _logger.info('handleKeyPress($event, $keysPressed) result: $result');
     // if (result == KeyEventResult.handled) {

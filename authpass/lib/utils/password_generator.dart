@@ -14,7 +14,8 @@ class PasswordGenerator {
   String generatePassword(CharacterSet characterSet, int length) {
     final max = characterSet.length;
     return String.fromCharCodes(
-        List.generate(length, (i) => characterSet[_random.nextInt(max)]));
+      List.generate(length, (i) => characterSet[_random.nextInt(max)]),
+    );
   }
 }
 
@@ -27,8 +28,9 @@ abstract class CharacterSet {
   static const alphabetUmlauts = CharacterRange($Agrave, $yuml);
   // CharacterString('äüößÄÜÖ');
   @NonNls
-  static const specialCharacters =
-      CharacterString(r'''@%+\/$'!#$^?:,.(){}[]~-_''');
+  static const specialCharacters = CharacterString(
+    r'''@%+\/$'!#$^?:,.(){}[]~-_''',
+  );
 
   /// keys used for persisting user selection for default password generator.
   @NonNls
@@ -53,10 +55,10 @@ abstract class CharacterSet {
   CharacterSet operator +(CharacterSet other) =>
       CharacterSetCollection([this, other]);
 
-  static String characterSetIdFor(CharacterSet? set) =>
-      selectableCharacterSets.entries
-          .firstWhere((entry) => entry.value == set)
-          .key;
+  static String characterSetIdFor(CharacterSet? set) => selectableCharacterSets
+      .entries
+      .firstWhere((entry) => entry.value == set)
+      .key;
 
   static Set<CharacterSet?> characterSetFromIds(Iterable<String> ids) =>
       ids.map((setId) => CharacterSet.selectableCharacterSets[setId]).toSet();
@@ -94,7 +96,8 @@ class CharacterRange extends CharacterSet {
     final ret = charCodeStart + pos;
     if (ret > charCodeEnd) {
       throw RangeError(
-          'Out of range. $pos (vs. $charCodeStart to $charCodeEnd)');
+        'Out of range. $pos (vs. $charCodeStart to $charCodeEnd)',
+      );
     }
     return ret;
   }

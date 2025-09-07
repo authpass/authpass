@@ -70,8 +70,10 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
           child: Theme(
             data: theme.copyWith(
-                inputDecorationTheme:
-                    theme.inputDecorationTheme.copyWith(filled: true)),
+              inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+                filled: true,
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,10 +85,12 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                       Icon(target.provider.displayIcon.iconData),
                       const SizedBox(width: 16),
                       Text(target.provider.displayName),
-                      ...?target.parent?.let((it) => [
-                            const Text(CharConstants.chevronRight),
-                            Text(it.pathOrBaseName),
-                          ]),
+                      ...?target.parent?.let(
+                        (it) => [
+                          const Text(CharConstants.chevronRight),
+                          Text(it.pathOrBaseName),
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -116,14 +120,17 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
                   onFieldSubmitted: (val) => _submitCallback()?.call(),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (value) {
-                    final userInput =
-                        _databaseName.text.pathCase.split(CharConstants.slash);
+                    final userInput = _databaseName.text.pathCase.split(
+                      CharConstants.slash,
+                    );
                     setState(() {
                       if (value.isEmpty) {
                         _strength = null;
                       } else {
-                        _strength =
-                            _zxcvbn.evaluate(value, userInputs: userInput);
+                        _strength = _zxcvbn.evaluate(
+                          value,
+                          userInputs: userInput,
+                        );
                       }
                     });
                   },
@@ -163,43 +170,44 @@ class _CreateFileState extends State<CreateFile> with FutureTaskStateMixin {
   }
 
   VoidCallback? _submitCallback() => asyncTaskCallback((progress) async {
-        if (_formKey.currentState!.validate()) {
-          final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-          try {
-            final created = await kdbxBloc.createFile(
-              password: _password.text,
-              databaseName: _databaseName.text,
-              openAfterCreate: true,
-              target: widget.target,
-            );
-            _logger.finest('Created file $created');
-            // ignore: use_build_context_synchronously
-            await Navigator.of(context)
-                .pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
-          } on FileExistsException catch (e, stackTrace) {
-            _logger.warning('Showing file exists error dialog.', e, stackTrace);
-            if (!mounted) {
-              _logger.severe('context no longer mounted. not showing dialog.');
-              return;
-            }
-            final loc = AppLocalizations.of(context);
-            await DialogUtils.showSimpleAlertDialog(
-              context,
-              loc.databaseExistsError,
-              loc.databaseExistsErrorDescription(e.path),
-              routeAppend: 'createFileExists',
-            );
-          } catch (e, stackTrace) {
-            _logger.severe('Error while creating file.', e, stackTrace);
-            rethrow;
-          }
+    if (_formKey.currentState!.validate()) {
+      final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+      try {
+        final created = await kdbxBloc.createFile(
+          password: _password.text,
+          databaseName: _databaseName.text,
+          openAfterCreate: true,
+          target: widget.target,
+        );
+        _logger.finest('Created file $created');
+        // ignore: use_build_context_synchronously
+        await Navigator.of(
+          context,
+        ).pushAndRemoveUntil(MainAppScaffold.route(), (route) => false);
+      } on FileExistsException catch (e, stackTrace) {
+        _logger.warning('Showing file exists error dialog.', e, stackTrace);
+        if (!mounted) {
+          _logger.severe('context no longer mounted. not showing dialog.');
+          return;
         }
-      });
+        final loc = AppLocalizations.of(context);
+        await DialogUtils.showSimpleAlertDialog(
+          context,
+          loc.databaseExistsError,
+          loc.databaseExistsErrorDescription(e.path),
+          routeAppend: 'createFileExists',
+        );
+      } catch (e, stackTrace) {
+        _logger.severe('Error while creating file.', e, stackTrace);
+        rethrow;
+      }
+    }
+  });
 }
 
 class PasswordStrengthDisplay extends ImplicitlyAnimatedWidget {
   const PasswordStrengthDisplay({super.key, this.strength})
-      : super(duration: const Duration(milliseconds: 500));
+    : super(duration: const Duration(milliseconds: 500));
 
   final Result? strength;
 
@@ -215,7 +223,7 @@ class _PasswordStrengthDisplayState
     Colors.deepOrange,
     Colors.orange,
     Colors.yellow,
-    Colors.lightGreenAccent
+    Colors.lightGreenAccent,
   ];
 
   Tween<double?>? _scoreTween;
@@ -224,19 +232,27 @@ class _PasswordStrengthDisplayState
 
   @override
   void forEachTween(visitor) {
-    _scoreTween = visitor(
-            _scoreTween,
-            widget.strength?.score?.let((val) => val + 1) ?? 0.0,
-            (dynamic value) => Tween<double>(begin: value as double?))
-        as Tween<double?>?;
-    _colorTween = visitor(
-        _colorTween,
-        _strengthColors[widget.strength?.score?.toInt() ?? 0],
-        (dynamic value) => ColorTween(begin: value as Color?)) as ColorTween?;
-    _backgroundColorTween = visitor(
-        _backgroundColorTween,
-        widget.strength == null ? Colors.redAccent : Colors.grey,
-        (dynamic value) => ColorTween(begin: value as Color?)) as ColorTween?;
+    _scoreTween =
+        visitor(
+              _scoreTween,
+              widget.strength?.score?.let((val) => val + 1) ?? 0.0,
+              (dynamic value) => Tween<double>(begin: value as double?),
+            )
+            as Tween<double?>?;
+    _colorTween =
+        visitor(
+              _colorTween,
+              _strengthColors[widget.strength?.score?.toInt() ?? 0],
+              (dynamic value) => ColorTween(begin: value as Color?),
+            )
+            as ColorTween?;
+    _backgroundColorTween =
+        visitor(
+              _backgroundColorTween,
+              widget.strength == null ? Colors.redAccent : Colors.grey,
+              (dynamic value) => ColorTween(begin: value as Color?),
+            )
+            as ColorTween?;
   }
 
   @override
@@ -244,7 +260,8 @@ class _PasswordStrengthDisplayState
     final strength = widget.strength;
     // final loc = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final feedback = strength?.feedback.warning.takeUnlessBlank() ??
+    final feedback =
+        strength?.feedback.warning.takeUnlessBlank() ??
         // _strength?.feedback?.suggestions?.firstOrNull ??
         ''; // NON-NLS
 
@@ -284,8 +301,9 @@ class _PasswordStrengthDisplayState
         ] else ...[
           LinearProgressIndicator(
             value: _scoreTween!.evaluate(animation)! / 5.0,
-            valueColor:
-                AlwaysStoppedAnimation(_colorTween!.evaluate(animation)),
+            valueColor: AlwaysStoppedAnimation(
+              _colorTween!.evaluate(animation),
+            ),
             backgroundColor: _backgroundColorTween!.evaluate(animation),
           ),
           const SizedBox(height: 4),

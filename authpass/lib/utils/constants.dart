@@ -21,7 +21,8 @@ class AppConstants {
   static const authPassUrl = 'https://$authPassHost';
   static const authPassCloudInfoUrl = '$authPassUrl/docs/authpass-cloud/';
   static final authPassInstall = Uri.parse(
-      'https://authpass.app/docs/getting-started/#installation--getting-started');
+    'https://authpass.app/docs/getting-started/#installation--getting-started',
+  );
   static const authPassWebApp = 'https://web.authpass.app';
   static final authPassWebAppUri = Uri.parse('$authPassWebApp/');
 

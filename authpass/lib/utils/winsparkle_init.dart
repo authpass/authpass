@@ -27,7 +27,7 @@ Future<void> initWinSparkle(Env env) async {
     final name = appInfo.appName.toNativeUtf16();
     final appVersion = appInfo.versionLabel.toNativeUtf16();
     freePointers.addAll([companyName, name, appVersion]);
-//    final
+    //    final
     win_sparkle_set_app_details(companyName, name, appVersion);
 
     final buildVersion = appInfo.buildNumber.toString().toNativeUtf16();
@@ -49,7 +49,10 @@ void cleanupWinSparkle() {
     win_sparkle_cleanup();
   } catch (e, stackTrace) {
     _logger.warning(
-        'Error while calling cleanup for WinSparkle', e, stackTrace);
+      'Error while calling cleanup for WinSparkle',
+      e,
+      stackTrace,
+    );
   }
 }
 

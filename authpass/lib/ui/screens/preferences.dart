@@ -25,9 +25,9 @@ final _logger = Logger('preferences');
 
 class PreferencesScreen extends StatelessWidget {
   static Route<void> route() => MaterialPageRoute(
-        settings: const RouteSettings(name: '/preferences'),
-        builder: (context) => PreferencesScreen(),
-      );
+    settings: const RouteSettings(name: '/preferences'),
+    builder: (context) => PreferencesScreen(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -93,11 +93,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
       _kdbxBloc = Provider.of<KdbxBloc>(context);
       _appDataBloc = Provider.of<AppDataBloc>(context);
       handleSubscription(
-          _appDataBloc.store.onValueChangedAndLoad.listen((appData) {
-        setState(() {
-          _appData = appData;
-        });
-      }));
+        _appDataBloc.store.onValueChangedAndLoad.listen((appData) {
+          setState(() {
+            _appData = appData;
+          });
+        }),
+      );
     }
   }
 
@@ -129,8 +130,9 @@ class _PreferencesBodyState extends State<PreferencesBody>
       LocaleInfo('sk', 'Slovak', loc.slovak),
       LocaleInfo('nl', 'Nederlands', loc.dutch),
     ];
-    final locales =
-        Map.fromEntries(localeInfo.map((e) => MapEntry(e.locale, e)));
+    final locales = Map.fromEntries(
+      localeInfo.map((e) => MapEntry(e.locale, e)),
+    );
     return Column(
       children: <Widget>[
         ...?(_autofillStatus == AutofillServiceStatus.unsupported ||
@@ -144,8 +146,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
                       ? Text(loc.preferenceAutoFillDescription)
                       : null,
                   value: _autofillStatus == AutofillServiceStatus.enabled,
-                  onChanged: _autofillStatus ==
-                          AutofillServiceStatus.unsupported
+                  onChanged:
+                      _autofillStatus == AutofillServiceStatus.unsupported
                       ? null
                       : (val) async {
                           if (val) {
@@ -163,8 +165,9 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   value: _autofillPrefs!.enableDebug,
                   onChanged: (val) async {
                     _logger.fine('Setting debug to $val');
-                    await AutofillService()
-                        .setPreferences(AutofillPreferences(enableDebug: val));
+                    await AutofillService().setPreferences(
+                      AutofillPreferences(enableDebug: val),
+                    );
                     await _doInit();
                   },
                 ),
@@ -178,9 +181,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   value: !appData.secureWindowOrDefault,
                   onChanged: (value) {
                     _appDataBloc.update(
-                        (builder, data) => builder.secureWindow = !value);
+                      (builder, data) => builder.secureWindow = !value,
+                    );
                     _analytics.events.trackPreferences(
-                        setting: 'allowScreenshots', to: '$value');
+                      setting: 'allowScreenshots',
+                      to: '$value',
+                    );
                   },
                 ),
               ],
@@ -192,22 +198,27 @@ class _PreferencesBodyState extends State<PreferencesBody>
           trailing: appData.theme == null
               ? Text(loc.preferenceSystemDefault)
               : appData.theme == AppDataTheme.light
-                  ? Text(loc.preferenceThemeLight)
-                  : Text(loc.preferenceThemeDark),
+              ? Text(loc.preferenceThemeLight)
+              : Text(loc.preferenceThemeDark),
           onTap: () async {
             final newTheme = await _appDataBloc.updateNextTheme();
-            _analytics.events
-                .trackPreferences(setting: 'theme', to: '$newTheme');
+            _analytics.events.trackPreferences(
+              setting: 'theme',
+              to: '$newTheme',
+            );
           },
         ),
         ValueSelectorTile(
           icon: const FaIcon(FontAwesomeIcons.leftRight),
           title: Text(loc.preferenceVisualDensity),
           onChanged: (value) {
-            _appDataBloc
-                .update((builder, data) => builder.themeVisualDensity = value);
-            _analytics.events
-                .trackPreferences(setting: 'themeVisualDensity', to: '$value');
+            _appDataBloc.update(
+              (builder, data) => builder.themeVisualDensity = value,
+            );
+            _analytics.events.trackPreferences(
+              setting: 'themeVisualDensity',
+              to: '$value',
+            );
           },
           value: appData.themeVisualDensity,
           minValue: -4,
@@ -218,10 +229,13 @@ class _PreferencesBodyState extends State<PreferencesBody>
           icon: const FaIcon(FontAwesomeIcons.textHeight),
           title: Text(loc.preferenceTextScaleFactor),
           onChanged: (value) {
-            _appDataBloc
-                .update((builder, data) => builder.themeFontSizeFactor = value);
-            _analytics.events
-                .trackPreferences(setting: 'themeFontSizeFactor', to: '$value');
+            _appDataBloc.update(
+              (builder, data) => builder.themeFontSizeFactor = value,
+            );
+            _analytics.events.trackPreferences(
+              setting: 'themeFontSizeFactor',
+              to: '$value',
+            );
           },
           value: appData.themeFontSizeFactor,
           minValue: 0.5,
@@ -233,13 +247,15 @@ class _PreferencesBodyState extends State<PreferencesBody>
             ? null
             : [
                 SwitchListTile(
-                    title: Text(loc.diacOptIn),
-                    subtitle: Text(loc.diacOptInSubtitle),
-                    value: appData.diacOptIn == true,
-                    onChanged: (value) {
-                      _appDataBloc
-                          .update((builder, data) => builder.diacOptIn = value);
-                    }),
+                  title: Text(loc.diacOptIn),
+                  subtitle: Text(loc.diacOptInSubtitle),
+                  value: appData.diacOptIn == true,
+                  onChanged: (value) {
+                    _appDataBloc.update(
+                      (builder, data) => builder.diacOptIn = value,
+                    );
+                  },
+                ),
               ],
         ListTile(
           leading: const FaIcon(FontAwesomeIcons.language),
@@ -247,39 +263,51 @@ class _PreferencesBodyState extends State<PreferencesBody>
           trailing: Text(locales[appData.localeOverride]!.nativeName),
           onTap: () async {
             final result = await showDialog<LocaleInfo>(
-                context: context,
-                builder: (_) => SelectLanguageDialog(
-                      locales: localeInfo,
-                      localeOverride: appData.localeOverride,
-                    ));
+              context: context,
+              builder: (_) => SelectLanguageDialog(
+                locales: localeInfo,
+                localeOverride: appData.localeOverride,
+              ),
+            );
             if (result != null) {
               await _appDataBloc.update(
-                  (builder, data) => builder.localeOverride = result.locale);
+                (builder, data) => builder.localeOverride = result.locale,
+              );
             }
             _analytics.events.trackPreferences(
-                setting: 'localeOverride', to: result?.locale ?? 'null');
+              setting: 'localeOverride',
+              to: result?.locale ?? 'null',
+            );
           },
         ),
         CheckboxListTile(
           secondary: const FaIcon(FontAwesomeIcons.download),
-          value: appData.fetchWebsiteIcons ??
+          value:
+              appData.fetchWebsiteIcons ??
               env.featureFetchWebsiteIconEnabledByDefault,
           title: Text(loc.preferenceDynamicLoadIcons),
-          subtitle: Text(loc.preferenceDynamicLoadIconsSubtitle(
-              commonFields.url.displayName)),
+          subtitle: Text(
+            loc.preferenceDynamicLoadIconsSubtitle(
+              commonFields.url.displayName,
+            ),
+          ),
           isThreeLine: true,
           onChanged: (value) {
             _logger.fine('Changed to $value');
-            _analytics.events
-                .trackPreferences(setting: 'fetchWebsiteIcons', to: '$value');
-            _appDataBloc
-                .update((builder, data) => builder.fetchWebsiteIcons = value);
+            _analytics.events.trackPreferences(
+              setting: 'fetchWebsiteIcons',
+              to: '$value',
+            );
+            _appDataBloc.update(
+              (builder, data) => builder.fetchWebsiteIcons = value,
+            );
           },
           tristate: false,
         ),
         CheckboxListTile(
           secondary: const FaIcon(AuthPassIcons.AuthPassLogo),
-          value: appData.authPassCloudAttachments ??
+          value:
+              appData.authPassCloudAttachments ??
               appData.authPassCloudAttachmentsOrDefault,
           title: Text(loc.preferenceAuthPassCloudAttachmentTitle),
           subtitle: Text(loc.preferenceAuthPassCloudAttachmentSubtitle),
@@ -289,9 +317,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
           onChanged: (value) {
             _logger.fine('Changed to authPassCloudAttachments: $value');
             _analytics.events.trackPreferences(
-                setting: 'authPassCloudAttachments', to: '$value');
+              setting: 'authPassCloudAttachments',
+              to: '$value',
+            );
             _appDataBloc.update(
-                (builder, data) => builder.authPassCloudAttachments = value);
+              (builder, data) => builder.authPassCloudAttachments = value,
+            );
           },
           tristate: false,
         ),
@@ -305,9 +336,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
             onChanged: (value) {
               _logger.fine('Changed to $value');
               _analytics.events.trackPreferences(
-                  setting: 'systemWideShortcuts', to: '$value');
+                setting: 'systemWideShortcuts',
+                to: '$value',
+              );
               _appDataBloc.update(
-                  (builder, data) => builder.systemWideShortcuts = value);
+                (builder, data) => builder.systemWideShortcuts = value,
+              );
             },
             tristate: false,
           ),
@@ -315,10 +349,13 @@ class _PreferencesBodyState extends State<PreferencesBody>
         ListTile(
           leading: const Icon(Icons.search),
           title: Text(loc.preferencesSearchFields),
-          subtitle: appData.searchFields?.let((it) => Text(it)) ??
-              Text(CommonFields.defaultSearchFields
-                  .map((e) => e.key)
-                  .join(CharConstants.comma)),
+          subtitle:
+              appData.searchFields?.let((it) => Text(it)) ??
+              Text(
+                CommonFields.defaultSearchFields
+                    .map((e) => e.key)
+                    .join(CharConstants.comma),
+              ),
           onTap: () async {
             final value = (await SimplePromptDialog(
               title: loc.preferencesSearchFieldPromptTitle,
@@ -330,11 +367,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
                     .map((e) => e.key)
                     .join(CharConstants.comma),
               ),
-            ).show(context))
-                ?.trim();
+            ).show(context))?.trim();
             if (value != null) {
-              await _appDataBloc.update((builder, data) =>
-                  builder.searchFields = value.isEmpty ? null : value);
+              await _appDataBloc.update(
+                (builder, data) =>
+                    builder.searchFields = value.isEmpty ? null : value,
+              );
             }
           },
         ),
@@ -355,18 +393,20 @@ class SelectLanguageDialog extends StatelessWidget {
     return SimpleDialog(
       title: Text(loc.preferenceSelectLanguage),
       children: locales!
-          .map((LocaleInfo e) => RadioListTile<String?>(
-                title: Text(e.nativeName),
-                subtitle: e.translatedName
-                    ?.takeIf((n) => n != e.nativeName)
-                    ?.let((name) => Text(e.translatedName!)),
-                secondary: e.locale?.let((locale) => Text(locale)),
-                value: e.locale,
-                groupValue: localeOverride,
-                onChanged: (value) {
-                  Navigator.of(context).pop(e);
-                },
-              ))
+          .map(
+            (LocaleInfo e) => RadioListTile<String?>(
+              title: Text(e.nativeName),
+              subtitle: e.translatedName
+                  ?.takeIf((n) => n != e.nativeName)
+                  ?.let((name) => Text(e.translatedName!)),
+              secondary: e.locale?.let((locale) => Text(locale)),
+              value: e.locale,
+              groupValue: localeOverride,
+              onChanged: (value) {
+                Navigator.of(context).pop(e);
+              },
+            ),
+          )
           .toList(),
     );
   }
@@ -414,9 +454,11 @@ class ValueSelectorTile extends StatelessWidget {
                   child: title!,
                 ),
               ),
-              Text(value == null
-                  ? loc.preferenceDefault
-                  : value!.toStringAsFixed(2)),
+              Text(
+                value == null
+                    ? loc.preferenceDefault
+                    : value!.toStringAsFixed(2),
+              ),
             ],
           ),
           Row(
@@ -453,8 +495,9 @@ class ValueSelectorTile extends StatelessWidget {
   void _updateValue(int stepDirection) {
     final v = value ?? valueForNull;
     final valueStep = (maxValue - minValue) / steps;
-    final newValue =
-        (v + valueStep * stepDirection).clamp(minValue, maxValue).toDouble();
+    final newValue = (v + valueStep * stepDirection)
+        .clamp(minValue, maxValue)
+        .toDouble();
     if (value != newValue) {
       onChanged(newValue);
     }
@@ -513,9 +556,9 @@ class PreferencesOverflowMenuAction extends HookWidget {
     final loc = AppLocalizations.of(context);
     final kdbxBloc = context.read<KdbxBloc>();
     final supportsBiometricKeystore = useFuture(
-        kdbxBloc.quickUnlockStorage.supportsBiometricKeyStore(),
-        initialData:
-            kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready);
+      kdbxBloc.quickUnlockStorage.supportsBiometricKeyStore(),
+      initialData: kdbxBloc.quickUnlockStorage.supportsBiometricKeystoreAlready,
+    );
     return PopupMenuButton<VoidCallback>(
       itemBuilder: (context) {
         return [
@@ -525,7 +568,8 @@ class PreferencesOverflowMenuAction extends HookWidget {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: true);
                 // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(loc.clearQuickUnlockSuccess)));
+                  SnackBar(content: Text(loc.clearQuickUnlockSuccess)),
+                );
                 // ignore: use_build_context_synchronously
                 await SelectFileScreen.navigate(context);
               },
@@ -541,8 +585,10 @@ class PreferencesOverflowMenuAction extends HookWidget {
               value: () async {
                 await kdbxBloc.closeAllFiles(clearQuickUnlock: false);
                 // ignore: use_build_context_synchronously
-                await Navigator.of(context, rootNavigator: true)
-                    .pushAndRemoveUntil(LockedScreen.route(), (_) => false);
+                await Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).pushAndRemoveUntil(LockedScreen.route(), (_) => false);
               },
               child: ListTile(
                 leading: const Icon(FontAwesomeIcons.rightFromBracket),

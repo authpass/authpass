@@ -19,20 +19,21 @@ class LoggingUtils {
   static final _instance = LoggingUtils._();
 
   late final AsyncInitializingLogHandler<RotatingFileAppender>?
-      _rotatingFileLogger = AuthPassPlatform.isWeb
-          ? null
-          : AsyncInitializingLogHandler<RotatingFileAppender>(
-              builder: () async {
-              await PathUtils.waitForRunAppFinished;
-              final logsDir = await PathUtils().getLogDirectory();
-              final appLogFile = logsDir.childFile(nonNls('app.log.txt'));
-              await appLogFile.parent.create(recursive: true);
-              _logger.fine('Logging into $appLogFile');
-              return RotatingFileAppender(
-                rotateAtSizeBytes: 10 * 1024 * 1024,
-                baseFilePath: appLogFile.path,
-              );
-            });
+  _rotatingFileLogger = AuthPassPlatform.isWeb
+      ? null
+      : AsyncInitializingLogHandler<RotatingFileAppender>(
+          builder: () async {
+            await PathUtils.waitForRunAppFinished;
+            final logsDir = await PathUtils().getLogDirectory();
+            final appLogFile = logsDir.childFile(nonNls('app.log.txt'));
+            await appLogFile.parent.create(recursive: true);
+            _logger.fine('Logging into $appLogFile');
+            return RotatingFileAppender(
+              rotateAtSizeBytes: 10 * 1024 * 1024,
+              baseFilePath: appLogFile.path,
+            );
+          },
+        );
 
   List<io.File> get rotatingFileLoggerFiles =>
       _rotatingFileLogger?.delegatedLogHandler?.getAllLogFiles() ?? [];
@@ -49,22 +50,31 @@ class LoggingUtils {
     final isolateDebug =
         '${Isolate.current.debugName} (${Isolate.current.hashCode})'; // NON-NLS
     _logger.info(
-        'Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})');
+      'Running in isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode})',
+    );
 
-    Isolate.current.addOnExitListener(RawReceivePort((dynamic val) {
-      // ignore: avoid_print
-      print(nonNls('exiting isolate $isolateDebug'));
-    }).sendPort);
+    Isolate.current.addOnExitListener(
+      RawReceivePort((dynamic val) {
+        // ignore: avoid_print
+        print(nonNls('exiting isolate $isolateDebug'));
+      }).sendPort,
+    );
 
     final exitPort = ReceivePort();
-    exitPort.listen((dynamic data) {
-      _logger.info(
-          'Exiting isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode}');
-    }, onDone: () {
-      _logger.info('Done $isolateDebug');
-    });
-    Isolate.current
-        .addOnExitListener(exitPort.sendPort, response: nonNls('exit'));
+    exitPort.listen(
+      (dynamic data) {
+        _logger.info(
+          'Exiting isolate $isolateDebug ${Isolate.current.debugName} (${Isolate.current.hashCode}',
+        );
+      },
+      onDone: () {
+        _logger.info('Done $isolateDebug');
+      },
+    );
+    Isolate.current.addOnExitListener(
+      exitPort.sendPort,
+      response: nonNls('exit'),
+    );
   }
 
   @NonNls
@@ -89,7 +99,7 @@ class LoggingUtils {
       return (await di.macOsInfo).importantInfo();
     }
     return <String, dynamic>{
-      'unknownPlatform': AuthPassPlatform.operatingSystem
+      'unknownPlatform': AuthPassPlatform.operatingSystem,
     };
   }
 }
@@ -97,77 +107,77 @@ class LoggingUtils {
 extension on AndroidDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'id': id,
-        'tags': tags,
-        'type': type,
-        'model': model,
-        'board': board,
-        'brand': brand,
-        'device': device,
-        'product': product,
-        'display': display,
-        'hardware': hardware,
-        'version': version.importantInfo(),
-        'manufacturer': manufacturer,
-        'isPhysicalDevice': isPhysicalDevice,
-      };
+    'id': id,
+    'tags': tags,
+    'type': type,
+    'model': model,
+    'board': board,
+    'brand': brand,
+    'device': device,
+    'product': product,
+    'display': display,
+    'hardware': hardware,
+    'version': version.importantInfo(),
+    'manufacturer': manufacturer,
+    'isPhysicalDevice': isPhysicalDevice,
+  };
 }
 
 extension on AndroidBuildVersion {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'baseOS': baseOS,
-        'sdkInt': sdkInt,
-        'release': release,
-        'codename': codename,
-        'incremental': incremental,
-        'previewSdkInt': previewSdkInt,
-        'securityPatch': securityPatch,
-      };
+    'baseOS': baseOS,
+    'sdkInt': sdkInt,
+    'release': release,
+    'codename': codename,
+    'incremental': incremental,
+    'previewSdkInt': previewSdkInt,
+    'securityPatch': securityPatch,
+  };
 }
 
 extension on IosDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'name': name,
-        'model': model,
-        'systemName': systemName,
-        'systemVersion': systemVersion,
-        'localizedModel': localizedModel,
-        'utsname': data['utsname'],
-      };
+    'name': name,
+    'model': model,
+    'systemName': systemName,
+    'systemVersion': systemVersion,
+    'localizedModel': localizedModel,
+    'utsname': data['utsname'],
+  };
 }
 
 extension on WebBrowserInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'userAgent': userAgent,
-      };
+    'userAgent': userAgent,
+  };
 }
 
 extension on LinuxDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'name': name,
-        'version': version,
-      };
+    'name': name,
+    'version': version,
+  };
 }
 
 extension on WindowsDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'systemMemoryInMegabytes': systemMemoryInMegabytes,
-      };
+    'systemMemoryInMegabytes': systemMemoryInMegabytes,
+  };
 }
 
 extension on MacOsDeviceInfo {
   @NonNls
   Map<String, dynamic> importantInfo() => <String, dynamic>{
-        'arch': arch,
-        'model': model,
-        'hostName': hostName,
-        'osRelease': osRelease,
-      };
+    'arch': arch,
+    'model': model,
+    'hostName': hostName,
+    'osRelease': osRelease,
+  };
 }
 
 class StringBufferWrapper with ChangeNotifier {
@@ -184,7 +194,7 @@ class StringBufferWrapper with ChangeNotifier {
 
 class MemoryAppender extends BaseLogAppender {
   MemoryAppender({this.minLevel = Level.ALL})
-      : super(const DefaultLogRecordFormatter());
+    : super(const DefaultLogRecordFormatter());
 
   final Level minLevel;
   final StringBufferWrapper log = StringBufferWrapper();

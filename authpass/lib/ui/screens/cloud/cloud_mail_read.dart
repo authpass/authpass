@@ -33,14 +33,15 @@ class EmailReadScreen extends StatefulWidget {
   });
 
   static MaterialPageRoute<void> route(
-          AuthPassCloudBloc bloc, EmailMessage emailMessage) =>
-      MaterialPageRoute<void>(
-        settings: const RouteSettings(name: '/email_read/'),
-        builder: (_) => EmailReadScreen(
-          bloc: bloc,
-          emailMessage: emailMessage,
-        ),
-      );
+    AuthPassCloudBloc bloc,
+    EmailMessage emailMessage,
+  ) => MaterialPageRoute<void>(
+    settings: const RouteSettings(name: '/email_read/'),
+    builder: (_) => EmailReadScreen(
+      bloc: bloc,
+      emailMessage: emailMessage,
+    ),
+  );
 
   final AuthPassCloudBloc bloc;
   final EmailMessage emailMessage;
@@ -60,14 +61,18 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
     return RetryStreamBuilder<EmailViewModel>(
       stream: (context) => (() async* {
         final emailMessage = widget.emailMessage;
-        final mailbox =
-            await widget.bloc.findMailboxByUuid(emailMessage.mailboxEntryUuid);
+        final mailbox = await widget.bloc.findMailboxByUuid(
+          emailMessage.mailboxEntryUuid,
+        );
         if (mailbox == null) {
-          _logger.warning('Unable to find mailbox for '
-              'uuid ${emailMessage.mailboxEntryUuid}');
+          _logger.warning(
+            'Unable to find mailbox for '
+            'uuid ${emailMessage.mailboxEntryUuid}',
+          );
         }
-        final entry =
-            mailbox?.entryUuid.let((uuid) => kdbxBloc.findEntryByUuid(uuid));
+        final entry = mailbox?.entryUuid.let(
+          (uuid) => kdbxBloc.findEntryByUuid(uuid),
+        );
         final vm2 = vm.copyWith(mailbox: mailbox, kdbxEntry: entry);
         yield vm2;
         yield vm2.copyWith(
@@ -84,8 +89,10 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
           hasText =
               snapshot.requireData.mimeMessage?.decodeTextPlainPart() != null;
         }
-        final attachments = snapshot.data?.mimeMessage
-                ?.findContentInfo(disposition: ContentDisposition.attachment) ??
+        final attachments =
+            snapshot.data?.mimeMessage?.findContentInfo(
+              disposition: ContentDisposition.attachment,
+            ) ??
             [];
 
         return Scaffold(
@@ -94,14 +101,15 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
             actions: <Widget>[
               if (hasText && hasHtml) ...[
                 IconButton(
-                    icon: _forcePlainText
-                        ? const Icon(FontAwesomeIcons.html5)
-                        : const Icon(FontAwesomeIcons.textSlash),
-                    onPressed: () {
-                      setState(() {
-                        _forcePlainText = !_forcePlainText;
-                      });
-                    }),
+                  icon: _forcePlainText
+                      ? const Icon(FontAwesomeIcons.html5)
+                      : const Icon(FontAwesomeIcons.textSlash),
+                  onPressed: () {
+                    setState(() {
+                      _forcePlainText = !_forcePlainText;
+                    });
+                  },
+                ),
               ],
               if (attachments.isNotEmpty) ...[
                 PopupMenuButton<VoidCallback>(
@@ -110,12 +118,14 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                       .map(
                         (a) => PopupMenuItem(
                           value: () async {
-                            final part =
-                                snapshot.data!.mimeMessage!.getPart(a.fetchId)!;
+                            final part = snapshot.data!.mimeMessage!.getPart(
+                              a.fetchId,
+                            )!;
                             final f = await PathUtils().saveToTempDirectory(
-                                part.decodeContentBinary()!,
-                                dirPrefix: nonNls('openbinary'),
-                                fileName: a.fileName!);
+                              part.decodeContentBinary()!,
+                              dirPrefix: nonNls('openbinary'),
+                              fileName: a.fileName!,
+                            );
                             _logger.fine('Opening ${f.path}');
                             final result = await OpenFilex.open(f.path);
                             _logger.fine('finished opening $result');
@@ -128,7 +138,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                       )
                       .toList(),
                   onSelected: (item) => item(),
-                )
+                ),
               ],
               if (!_forwarded) ...[
                 IconButton(
@@ -143,12 +153,13 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
               ],
               Builder(
                 builder: (context) => IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      await widget.bloc.deleteMail(widget.emailMessage);
-//                  Scaffold.of(context).
-                    }),
+                  icon: const Icon(Icons.delete),
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    await widget.bloc.deleteMail(widget.emailMessage);
+                    //                  Scaffold.of(context).
+                  },
+                ),
               ),
             ],
           ),
@@ -185,9 +196,9 @@ class EmailRead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(
-          fontFamily: AuthPassTheme.monoFontFamily,
-          height: 1.4,
-        );
+      fontFamily: AuthPassTheme.monoFontFamily,
+      height: 1.4,
+    );
     final loc = AppLocalizations.of(context);
     final formatUtil = context.watch<FormatUtils>();
     final htmlData = vm.mimeMessage?.decodeTextHtmlPart();
@@ -195,42 +206,49 @@ class EmailRead extends StatelessWidget {
     final headers = {
       loc.mailSubject:
           vm.mimeMessage?.decodeHeaderValue(MailConventions.headerSubject) ??
-              vm.emailMessage.subject,
-      loc.mailFrom: vm.mimeMessage
+          vm.emailMessage.subject,
+      loc.mailFrom:
+          vm.mimeMessage
               ?.decodeHeaderMailAddressValue(MailConventions.headerFrom)
               ?.firstOrNull
               ?.toString() ??
           vm.emailMessage.sender,
       loc.mailDate: formatUtil.formatDateFull(
-          vm.mimeMessage?.decodeHeaderDateValue(MailConventions.headerDate) ??
-              vm.emailMessage.createdAt),
+        vm.mimeMessage?.decodeHeaderDateValue(MailConventions.headerDate) ??
+            vm.emailMessage.createdAt,
+      ),
       loc.mailMailbox:
           vm.kdbxEntry?.label ?? vm.mailbox?.label.takeUnlessBlank(),
-//          'To': message.decodeHeaderValue('to'),
+      //          'To': message.decodeHeaderValue('to'),
     };
     final theme = Theme.of(context);
-    final textSpans = headers.entries
-        .where((element) => element.value != null)
-        .expand((e) => [
-              TextSpan(
+    final textSpans =
+        headers.entries
+            .where((element) => element.value != null)
+            .expand(
+              (e) => [
+                TextSpan(
                   text: e.key + CharConstants.colon + CharConstants.space,
-                  style: theme.textTheme.bodySmall),
-              TextSpan(
-                text: e.value,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const TextSpan(text: CharConstants.newLine),
-            ])
-        .toList()
-      ..removeLast();
-    final entryVm = vm.kdbxEntry
-        ?.let((entry) => EntryViewModel(entry, context.watch<KdbxBloc>()));
+                  style: theme.textTheme.bodySmall,
+                ),
+                TextSpan(
+                  text: e.value,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const TextSpan(text: CharConstants.newLine),
+              ],
+            )
+            .toList()
+          ..removeLast();
+    final entryVm = vm.kdbxEntry?.let(
+      (entry) => EntryViewModel(entry, context.watch<KdbxBloc>()),
+    );
     const iconSize = 56.0;
     Icon fallbackIcon(BuildContext context) => Icon(
-          Icons.email,
-          color: theme.iconColor(null),
-          size: iconSize,
-        );
+      Icons.email,
+      color: theme.iconColor(null),
+      size: iconSize,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -246,15 +264,19 @@ class EmailRead extends StatelessWidget {
                     : EntryIcon(
                         vm: entryVm,
                         fallback: (context) => EntryIcon.defaultIcon(
-                            entryVm, null, theme, iconSize),
+                          entryVm,
+                          null,
+                          theme,
+                          iconSize,
+                        ),
                         size: iconSize,
                       ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: RichText(
                     text: TextSpan(children: textSpans, style: textStyle),
-//                'Subject: ${message.decodeHeaderValue('subject')}\n'
-//                'Date: ${formatUtil.formatDateFull(message.decodeHeaderDateValue('date'))}',
+                    //                'Subject: ${message.decodeHeaderValue('subject')}\n'
+                    //                'Date: ${formatUtil.formatDateFull(message.decodeHeaderDateValue('date'))}',
                     maxLines: null,
                   ),
                 ),
@@ -267,13 +289,15 @@ class EmailRead extends StatelessWidget {
               ? const Center(child: CircularProgressIndicator())
               : Scrollbar(
                   child: SingleChildScrollView(
-                    child: htmlData != null &&
+                    child:
+                        htmlData != null &&
                             (!forcePlainText || textData == null)
                         ? Theme(
                             data: authPassLightTheme,
                             child: DecoratedBox(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
                               child: HtmlWidget(
                                 htmlData,
                                 onTapUrl: (link) async {
@@ -291,12 +315,15 @@ class EmailRead extends StatelessWidget {
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: SelectableLinkify(
-//                    child: Linkify(
-                              text: (textData ??
-                                      vm.mimeMessage?.decodeContentText() ??
-                                      loc.mailNoData)
-                                  .replaceAll(
-                                      nonNls('\r'), CharConstants.empty),
+                              //                    child: Linkify(
+                              text:
+                                  (textData ??
+                                          vm.mimeMessage?.decodeContentText() ??
+                                          loc.mailNoData)
+                                      .replaceAll(
+                                        nonNls('\r'),
+                                        CharConstants.empty,
+                                      ),
                               maxLines: null,
                               options: const LinkifyOptions(
                                 humanize: false,

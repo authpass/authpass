@@ -16,10 +16,10 @@ class FileSourceWeb extends FileSource {
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => FileSourceWeb(
-        databaseName: databaseName,
-        uuid: uuid,
-        initialCachedContent: cached,
-      );
+    databaseName: databaseName,
+    uuid: uuid,
+    initialCachedContent: cached,
+  );
 
   @override
   FileSourceIcon get displayIcon => FileSourceIcon.hdd;
@@ -41,7 +41,9 @@ class FileSourceWeb extends FileSource {
 
   @override
   Future<Map<String, dynamic>?> write(
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     await _SimpleKeyValueStore.instance.write(_keyBytes, bytes);
     return <String, dynamic>{};
   }

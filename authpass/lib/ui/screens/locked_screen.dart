@@ -12,9 +12,9 @@ final _logger = Logger('locked_screen');
 
 class LockedScreen extends StatelessWidget {
   static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
-        settings: const RouteSettings(name: '/lock'),
-        builder: (context) => LockedScreen(),
-      );
+    settings: const RouteSettings(name: '/lock'),
+    builder: (context) => LockedScreen(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +57,9 @@ class LockedScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
             alignment: Alignment.center,
             child: TextButton(
               onPressed: () async {
