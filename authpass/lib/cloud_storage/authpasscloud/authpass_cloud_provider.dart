@@ -59,11 +59,11 @@ class _FileMetadata {
   final String versionToken;
 
   CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
-        (b) => b
-          ..id = fileToken
-          ..type = CloudStorageEntityType.file
-          ..name = name,
-      );
+    (b) => b
+      ..id = fileToken
+      ..type = CloudStorageEntityType.file
+      ..name = name,
+  );
 }
 
 class AuthPassCloudProvider extends CloudStorageProvider
@@ -89,7 +89,9 @@ class AuthPassCloudProvider extends CloudStorageProvider
 
   @override
   Future<FileSource> createEntity(
-      CloudStorageSelectorSaveResult saveAs, Uint8List bytes) async {
+    CloudStorageSelectorSaveResult saveAs,
+    Uint8List bytes,
+  ) async {
     final c = await getClient();
     final saved = await c
         .filecloudFilePost(bytes, fileName: saveAs.fileName)
@@ -134,8 +136,9 @@ class AuthPassCloudProvider extends CloudStorageProvider
   @override
   Future<FileContent> loadEntity(CloudStorageEntity file) async {
     final c = await getClient();
-    final response =
-        await c.filecloudFileRetrievePost(FileId(fileToken: file.id));
+    final response = await c.filecloudFileRetrievePost(
+      FileId(fileToken: file.id),
+    );
     final fileContent = response.requireSuccess();
     // FIXME there must be a better solution than to hard code `etag` here.
     const etagHeader = 'etag'; // NON-NLS
@@ -143,8 +146,9 @@ class AuthPassCloudProvider extends CloudStorageProvider
     if (versionToken == null) {
       _logger.warning('response did not contain $etagHeader header.');
       throw StateError(
-          'Missing $etagHeader in response. got: ${response.headers} '
-          '(${response.status})');
+        'Missing $etagHeader in response. got: ${response.headers} '
+        '(${response.status})',
+      );
     }
     final metadata = _FileMetadata(
       name: file.pathOrBaseName,
@@ -165,38 +169,53 @@ class AuthPassCloudProvider extends CloudStorageProvider
   }
 
   @override
-  Future<Map<String, dynamic>> saveEntity(CloudStorageEntity file,
-      Uint8List bytes, Map<String, dynamic>? previousMetadata) async {
+  Future<Map<String, dynamic>> saveEntity(
+    CloudStorageEntity file,
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) async {
     if (previousMetadata == null) {
       throw StateError('Expected previousMetadata.');
     }
     final c = await getClient();
     final metadata = _FileMetadata.fromJson(previousMetadata);
-    final response = await c.filecloudFilePut(bytes,
-        fileToken: file.id, versionToken: metadata.versionToken);
+    final response = await c.filecloudFilePut(
+      bytes,
+      fileToken: file.id,
+      versionToken: metadata.versionToken,
+    );
     final ret = response.map(
-        on200: (r) => _FileMetadata(
-              name: metadata.name,
-              fileToken: file.id,
-              versionToken: r.body.versionToken,
-            ).toJsonSimple(),
-        on409: (error) {
-          throw StorageConflictException('Conflict while trying to save file.');
-        });
+      on200: (r) => _FileMetadata(
+        name: metadata.name,
+        fileToken: file.id,
+        versionToken: r.body.versionToken,
+      ).toJsonSimple(),
+      on409: (error) {
+        throw StorageConflictException('Conflict while trying to save file.');
+      },
+    );
     return ret;
   }
 
   @override
-  Future<bool> startAuth<RESULT extends UserAuthenticationPromptResult,
-          DATA extends UserAuthenticationPromptData<RESULT>>(
-      PromptUserForCode<RESULT, DATA> prompt) async {
-    final p = prompt as PromptUserForCode<DummyUserAuthenticationPromptResult,
-        AuthPassCloudAuthPromptData>;
+  Future<bool> startAuth<
+    RESULT extends UserAuthenticationPromptResult,
+    DATA extends UserAuthenticationPromptData<RESULT>
+  >(PromptUserForCode<RESULT, DATA> prompt) async {
+    final p =
+        prompt
+            as PromptUserForCode<
+              DummyUserAuthenticationPromptResult,
+              AuthPassCloudAuthPromptData
+            >;
     final completer = Completer<bool>();
-    await p(UserAuthenticationPrompt(AuthPassCloudAuthPromptData(),
-        (DummyUserAuthenticationPromptResult? data) {
-      completer.complete(true);
-    }));
+    await p(
+      UserAuthenticationPrompt(AuthPassCloudAuthPromptData(), (
+        DummyUserAuthenticationPromptResult? data,
+      ) {
+        completer.complete(true);
+      }),
+    );
     return completer.future;
   }
 
@@ -223,11 +242,13 @@ class AuthPassCloudProvider extends CloudStorageProvider
   }) async {
     final client = await _client;
     final response = await client
-        .filecloudFileTokenCreatePost(FilecloudFileTokenCreatePostSchema(
-          fileToken: file.id,
-          label: label,
-          readOnly: readOnly,
-        ))
+        .filecloudFileTokenCreatePost(
+          FilecloudFileTokenCreatePostSchema(
+            fileToken: file.id,
+            label: label,
+            readOnly: readOnly,
+          ),
+        )
         .requireSuccess();
     return response;
   }
@@ -262,16 +283,20 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final cipherKey = key.sublist(0, 32);
     final cipherNonce = key.sublist(32);
     final gzipped = _gzipEncode(bytes);
-    _logger
-        .finer('compressed attachment ${gzipped.length} (was ${bytes.length})');
+    _logger.finer(
+      'compressed attachment ${gzipped.length} (was ${bytes.length})',
+    );
     final chaCha = ChaCha7539Engine()
       ..init(true, ParametersWithIV(KeyParameter(cipherKey), cipherNonce));
     final encrypted = chaCha.process(gzipped);
     _logger.finer('encrypted attachment ${encrypted.length} - uploading…');
 
     final response = await client
-        .filecloudAttachmentPost(encrypted,
-            fileName: name, fileToken: fileToken)
+        .filecloudAttachmentPost(
+          encrypted,
+          fileName: name,
+          fileToken: fileToken,
+        )
         .requireSuccess();
     _logger.fine('Successfully uploaded file.');
     return AuthPassExternalAttachment(
@@ -286,7 +311,8 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final client = await _client;
     final data = await client
         .filecloudAttachmentRetrievePost(
-            AttachmentId(attachmentToken: info.attachmentId))
+          AttachmentId(attachmentToken: info.attachmentId),
+        )
         .requireSuccess();
     if (info.format != AttachmentFormat.gzipChaCha7539) {
       throw StateError('Unsupported.');
@@ -294,7 +320,8 @@ class AuthPassCloudProvider extends CloudStorageProvider
     final key = base64.decode(info.secret);
     if (key.length != 32 + 12) {
       throw FormatException(
-          'Expected secret to be 44 bytes. was: ${key.length}');
+        'Expected secret to be 44 bytes. was: ${key.length}',
+      );
     }
     final cipherKey = key.sublist(0, 32);
     final cipherNonce = key.sublist(32);
@@ -361,11 +388,11 @@ class LoadedShareToken {
 
 extension FileInfoCloudStorage on FileInfo {
   CloudStorageEntity toCloudStorageEntity() => CloudStorageEntity(
-        (cse) => cse
-          ..id = fileToken
-          ..name = name
-          ..type = CloudStorageEntityType.file,
-      );
+    (cse) => cse
+      ..id = fileToken
+      ..name = name
+      ..type = CloudStorageEntityType.file,
+  );
 }
 
 @JsonSerializable()
@@ -414,7 +441,7 @@ Uint8List _gzipEncode(Uint8List bytes) {
 
 Uint8List _gzipDecode(Uint8List bytes) {
   if (AuthPassPlatform.isWeb) {
-    return archive.GZipDecoder().decodeBytes(bytes) as Uint8List;
+    return archive.GZipDecoder().decodeBytes(bytes);
   }
   return io.GZipCodec().decode(bytes) as Uint8List;
 }

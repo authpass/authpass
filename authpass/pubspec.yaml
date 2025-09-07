@@ -40,12 +40,12 @@ dependencies:
   built_collection: ^5.1.1
   simple_json_persistence: ^2.0.1
   provider: ^6.0.0
-  flutter_hooks: ^0.20.1
+  flutter_hooks: ^0.21.3
 #  http: '>=0.13.0 <2.0.0'
   http: ^1.2.0
   meta: '>=1.0.0 <2.0.0'
   clock: ^1.1.0
-  intl: ^0.19.0
+  intl: ^0.20.0
   path: ^1.8.0
   file: ^7.0.0
   web: ^1.0.0
@@ -96,12 +96,12 @@ dependencies:
     git:
       url: https://github.com/authpass/otpauth_migration.git
       ref: 56e9e7d64d7fa111924dae72188145c9851b9e17
-  pointycastle: ^3.3.4
-  #zxcvbn: ^0.0.1
-  zxcvbn: # null-safety https://github.com/careapp-inc/zxcvbn-dart/pull/7
-    git:
-      url: https://github.com/authpass/zxcvbn-dart.git
-      ref: 7f000c71c176162bbfc32a45a0800bca47ffb1a0
+  pointycastle: ^4.0.0
+  zxcvbn: ^1.0.0
+#  zxcvbn: # null-safety https://github.com/careapp-inc/zxcvbn-dart/pull/7
+#    git:
+#      url: https://github.com/authpass/zxcvbn-dart.git
+#      ref: 7f000c71c176162bbfc32a45a0800bca47ffb1a0
 
 
   # UI Utilities and Widgets
@@ -124,7 +124,7 @@ dependencies:
   # collection utilities:
   flinq: ^2.0.2
   supercharged: ^2.0.0
-  archive: ^3.5.1
+  archive: ^4.0.0
 
   string_literal_finder_annotations: ^1.0.0
 
@@ -191,8 +191,8 @@ dependencies:
   mime: ^1.0.0
   ffi: ^2.1.0
   # AuthPass Cloud email deps
-  enough_mail: ^2.1.6
-  flutter_widget_from_html: ^0.15.0
+  enough_mail: ^2.1.7
+  flutter_widget_from_html: ^0.17.0
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
 #      url: https://github.com/Sub6Resources/flutter_html.git
@@ -244,12 +244,12 @@ dev_dependencies:
   plugin_platform_interface: ^2.0.0
   msix: ^3.6.2
   string_literal_finder: ^1.1.0+2
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
 dependency_overrides:
 #  ffi: ^2.0.0
   # enough_mail still has 0.17 pinned. remove this once enough_mail is updated.
-  intl: ^0.18.0
+#  intl: ^0.18.0
 #  # Just enforce http 1.0.0 until all dependencies are updated.
 #  http: ^1.0.0
   # https://github.com/creativecreatorormaybenot/wakelock/pull/203

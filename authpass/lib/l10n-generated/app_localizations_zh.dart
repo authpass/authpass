@@ -188,7 +188,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String preferencesSearchFieldPromptHelp(
-      Object wildCardCharacter, Object defaultSearchFields) {
+    Object wildCardCharacter,
+    Object defaultSearchFields,
+  ) {
     return '使用 $wildCardCharacter 代表所有字段，留空则使用默认字段 ($defaultSearchFields)';
   }
 
@@ -309,8 +311,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String savedFiles(int numFiles, Object files) {
     final intl.NumberFormat numFilesNumberFormat =
         intl.NumberFormat.compactLong(
-      locale: localeName,
-    );
+          locale: localeName,
+        );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
     String _temp0 = intl.Intl.pluralLogic(
@@ -453,7 +455,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String errorOpenFileAlreadyOpenBody(
-      Object databaseName, Object openFileSource, Object newFileSource) {
+    Object databaseName,
+    Object openFileSource,
+    Object newFileSource,
+  ) {
     return '所选数据库 $databaseName 已经从 $openFileSource 打开(试图从 $newFileSource 打开)';
   }
 
@@ -884,7 +889,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String cloudStorageAuthErrorMessage(
-      Object cloudStorageName, Object errorMessage) {
+    Object cloudStorageName,
+    Object errorMessage,
+  ) {
     return '尝试认证到 $cloudStorageName 时出错： \n$errorMessage';
   }
 
@@ -1624,8 +1631,8 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String savedFiles(int numFiles, Object files) {
     final intl.NumberFormat numFilesNumberFormat =
         intl.NumberFormat.compactLong(
-      locale: localeName,
-    );
+          locale: localeName,
+        );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
     String _temp0 = intl.Intl.pluralLogic(
@@ -1759,7 +1766,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String errorOpenFileAlreadyOpenBody(
-      Object databaseName, Object openFileSource, Object newFileSource) {
+    Object databaseName,
+    Object openFileSource,
+    Object newFileSource,
+  ) {
     return '您選的資料庫 $databaseName 早已自$openFileSource 開啟（您正試圖從$newFileSource 再度開啟）';
   }
 

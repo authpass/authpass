@@ -194,7 +194,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String preferencesSearchFieldPromptHelp(
-      Object wildCardCharacter, Object defaultSearchFields) {
+    Object wildCardCharacter,
+    Object defaultSearchFields,
+  ) {
     return 'Verwende $wildCardCharacter für alle, lasse leer für Standard ($defaultSearchFields)';
   }
 
@@ -315,8 +317,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String savedFiles(int numFiles, Object files) {
     final intl.NumberFormat numFilesNumberFormat =
         intl.NumberFormat.compactLong(
-      locale: localeName,
-    );
+          locale: localeName,
+        );
     final String numFilesString = numFilesNumberFormat.format(numFiles);
 
     String _temp0 = intl.Intl.pluralLogic(
@@ -463,7 +465,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String errorOpenFileAlreadyOpenBody(
-      Object databaseName, Object openFileSource, Object newFileSource) {
+    Object databaseName,
+    Object openFileSource,
+    Object newFileSource,
+  ) {
     return 'Die Datenbank $databaseName ist bereits von $openFileSource aus geöffnet. (Versuchte $newFileSource zu öffnen)';
   }
 
@@ -915,7 +920,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String cloudStorageAuthErrorMessage(
-      Object cloudStorageName, Object errorMessage) {
+    Object cloudStorageName,
+    Object errorMessage,
+  ) {
     return 'Fehler beim Versuch, sich bei $cloudStorageName zu authentifizieren: $errorMessage';
   }
 
