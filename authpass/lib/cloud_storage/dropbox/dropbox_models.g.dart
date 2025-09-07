@@ -44,9 +44,7 @@ FileSearchMatch _$FileSearchMatchFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$FileSearchMatchToJson(FileSearchMatch instance) =>
-    <String, dynamic>{
-      'metadata': instance.metadata,
-    };
+    <String, dynamic>{'metadata': instance.metadata};
 
 FileMetadataV2 _$FileMetadataV2FromJson(Map<String, dynamic> json) =>
     FileMetadataV2(
@@ -56,9 +54,7 @@ FileMetadataV2 _$FileMetadataV2FromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$FileMetadataV2ToJson(FileMetadataV2 instance) =>
-    <String, dynamic>{
-      'metadata': instance.metadata,
-    };
+    <String, dynamic>{'metadata': instance.metadata};
 
 FileMetadata _$FileMetadataFromJson(Map<String, dynamic> json) => FileMetadata(
   id: json['id'] as String?,

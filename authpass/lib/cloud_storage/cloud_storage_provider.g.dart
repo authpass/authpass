@@ -18,13 +18,10 @@ class _$CloudStorageEntity extends CloudStorageEntity {
 
   factory _$CloudStorageEntity([
     void Function(CloudStorageEntityBuilder)? updates,
-  ]) => (new CloudStorageEntityBuilder()..update(updates))._build();
+  ]) => (CloudStorageEntityBuilder()..update(updates))._build();
 
   _$CloudStorageEntity._({required this.id, this.type, this.name, this.path})
-    : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, r'CloudStorageEntity', 'id');
-  }
-
+    : super._();
   @override
   CloudStorageEntity rebuild(
     void Function(CloudStorageEntityBuilder) updates,
@@ -32,7 +29,7 @@ class _$CloudStorageEntity extends CloudStorageEntity {
 
   @override
   CloudStorageEntityBuilder toBuilder() =>
-      new CloudStorageEntityBuilder()..replace(this);
+      CloudStorageEntityBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -102,7 +99,6 @@ class CloudStorageEntityBuilder
 
   @override
   void replace(CloudStorageEntity other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$CloudStorageEntity;
   }
 
@@ -117,7 +113,7 @@ class CloudStorageEntityBuilder
   _$CloudStorageEntity _build() {
     final _$result =
         _$v ??
-        new _$CloudStorageEntity._(
+        _$CloudStorageEntity._(
           id: BuiltValueNullFieldError.checkNotNull(
             id,
             r'CloudStorageEntity',
@@ -139,29 +135,16 @@ class _$SearchResponse extends SearchResponse {
   final bool hasMore;
 
   factory _$SearchResponse([void Function(SearchResponseBuilder)? updates]) =>
-      (new SearchResponseBuilder()..update(updates))._build();
+      (SearchResponseBuilder()..update(updates))._build();
 
   _$SearchResponse._({required this.results, required this.hasMore})
-    : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-      results,
-      r'SearchResponse',
-      'results',
-    );
-    BuiltValueNullFieldError.checkNotNull(
-      hasMore,
-      r'SearchResponse',
-      'hasMore',
-    );
-  }
-
+    : super._();
   @override
   SearchResponse rebuild(void Function(SearchResponseBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  SearchResponseBuilder toBuilder() =>
-      new SearchResponseBuilder()..replace(this);
+  SearchResponseBuilder toBuilder() => SearchResponseBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -195,7 +178,7 @@ class SearchResponseBuilder
 
   ListBuilder<CloudStorageEntity?>? _results;
   ListBuilder<CloudStorageEntity?> get results =>
-      _$this._results ??= new ListBuilder<CloudStorageEntity?>();
+      _$this._results ??= ListBuilder<CloudStorageEntity?>();
   set results(ListBuilder<CloudStorageEntity?>? results) =>
       _$this._results = results;
 
@@ -217,7 +200,6 @@ class SearchResponseBuilder
 
   @override
   void replace(SearchResponse other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SearchResponse;
   }
 
@@ -234,7 +216,7 @@ class SearchResponseBuilder
     try {
       _$result =
           _$v ??
-          new _$SearchResponse._(
+          _$SearchResponse._(
             results: results.build(),
             hasMore: BuiltValueNullFieldError.checkNotNull(
               hasMore,
@@ -248,7 +230,7 @@ class SearchResponseBuilder
         _$failedField = 'results';
         results.build();
       } catch (e) {
-        throw new BuiltValueNestedFieldError(
+        throw BuiltValueNestedFieldError(
           r'SearchResponse',
           _$failedField,
           e.toString(),

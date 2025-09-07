@@ -25,7 +25,7 @@ abstract class AppInfo implements Built<AppInfo, AppInfoBuilder> {
 }
 
 @freezed
-class EnvSecrets with _$EnvSecrets {
+abstract class EnvSecrets with _$EnvSecrets {
   const factory EnvSecrets({
     required String? analyticsAmplitudeApiKey,
     required String? analyticsGoogleAnalyticsId,

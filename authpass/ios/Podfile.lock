@@ -187,7 +187,7 @@ SPEC CHECKSUMS:
   file_picker_writable: 3a458aa8cdb7c1378cb3e8ec0543ead87a77d0be
   file_selector_ios: f92e583d43608aebc2e4a18daac30b8902845502
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_email_sender: 2397f5e84aaacfb61af569637a963e7c687858d8
+  flutter_email_sender: aa1e9772696691d02cd91fea829856c11efb8e58
   flutter_store_listing: fcddea120a9a9fa1319aebd9764c7f483876c686
   google_sign_in_ios: 205742c688aea0e64db9da03c33121694a365109
   GoogleSignIn: c7f09cfbc85a1abf69187be091997c317cc33b77

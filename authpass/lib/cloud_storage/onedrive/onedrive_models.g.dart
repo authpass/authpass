@@ -16,9 +16,7 @@ ListChildrenResponse _$ListChildrenResponseFromJson(
 
 Map<String, dynamic> _$ListChildrenResponseToJson(
   ListChildrenResponse instance,
-) => <String, dynamic>{
-  'value': instance.value,
-};
+) => <String, dynamic>{'value': instance.value};
 
 OneDriveItem _$OneDriveItemFromJson(Map<String, dynamic> json) => OneDriveItem(
   id: json['id'] as String?,
@@ -48,30 +46,19 @@ Map<String, dynamic> _$OneDriveItemToJson(OneDriveItem instance) =>
     };
 
 OneDriveItemParent _$OneDriveItemParentFromJson(Map<String, dynamic> json) =>
-    OneDriveItemParent(
-      path: json['path'] as String?,
-    );
+    OneDriveItemParent(path: json['path'] as String?);
 
 Map<String, dynamic> _$OneDriveItemParentToJson(OneDriveItemParent instance) =>
-    <String, dynamic>{
-      'path': instance.path,
-    };
+    <String, dynamic>{'path': instance.path};
 
 OneDriveFolder _$OneDriveFolderFromJson(Map<String, dynamic> json) =>
-    OneDriveFolder(
-      childCount: json['childCount'] as int?,
-    );
+    OneDriveFolder(childCount: (json['childCount'] as num?)?.toInt());
 
 Map<String, dynamic> _$OneDriveFolderToJson(OneDriveFolder instance) =>
-    <String, dynamic>{
-      'childCount': instance.childCount,
-    };
+    <String, dynamic>{'childCount': instance.childCount};
 
-OneDriveFile _$OneDriveFileFromJson(Map<String, dynamic> json) => OneDriveFile(
-  mimeType: json['mimeType'] as String?,
-);
+OneDriveFile _$OneDriveFileFromJson(Map<String, dynamic> json) =>
+    OneDriveFile(mimeType: json['mimeType'] as String?);
 
 Map<String, dynamic> _$OneDriveFileToJson(OneDriveFile instance) =>
-    <String, dynamic>{
-      'mimeType': instance.mimeType,
-    };
+    <String, dynamic>{'mimeType': instance.mimeType};

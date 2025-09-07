@@ -7,24 +7,24 @@ part of 'app_data.dart';
 // **************************************************************************
 
 Serializers _$serializers =
-    (new Serializers().toBuilder()
+    (Serializers().toBuilder()
           ..add(AppData.serializer)
           ..add(OpenedFile.serializer)
           ..addBuilderFactory(
             const FullType(BuiltList, const [const FullType(OpenedFile)]),
-            () => new ListBuilder<OpenedFile>(),
+            () => ListBuilder<OpenedFile>(),
           )
           ..addBuilderFactory(
             const FullType(BuiltSet, const [const FullType(String)]),
-            () => new SetBuilder<String>(),
+            () => SetBuilder<String>(),
           )
           ..addBuilderFactory(
             const FullType(BuiltList, const [const FullType(String)]),
-            () => new ListBuilder<String>(),
+            () => ListBuilder<String>(),
           ))
         .build();
-Serializer<OpenedFile> _$openedFileSerializer = new _$OpenedFileSerializer();
-Serializer<AppData> _$appDataSerializer = new _$AppDataSerializer();
+Serializer<OpenedFile> _$openedFileSerializer = _$OpenedFileSerializer();
+Serializer<AppData> _$appDataSerializer = _$AppDataSerializer();
 
 class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
   @override
@@ -102,7 +102,7 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
     Iterable<Object?> serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = new OpenedFileBuilder();
+    final result = OpenedFileBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -351,7 +351,7 @@ class _$AppDataSerializer implements StructuredSerializer<AppData> {
     Iterable<Object?> serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = new AppDataBuilder();
+    final result = AppDataBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -534,7 +534,7 @@ class _$OpenedFile extends OpenedFile {
   final int? colorCode;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder)? updates]) =>
-      (new OpenedFileBuilder()..update(updates))._build();
+      (OpenedFileBuilder()..update(updates))._build();
 
   _$OpenedFile._({
     required this.uuid,
@@ -546,27 +546,13 @@ class _$OpenedFile extends OpenedFile {
     this.macOsSecureBookmark,
     this.filePickerIdentifier,
     this.colorCode,
-  }) : super._() {
-    BuiltValueNullFieldError.checkNotNull(uuid, r'OpenedFile', 'uuid');
-    BuiltValueNullFieldError.checkNotNull(
-      sourceType,
-      r'OpenedFile',
-      'sourceType',
-    );
-    BuiltValueNullFieldError.checkNotNull(
-      sourcePath,
-      r'OpenedFile',
-      'sourcePath',
-    );
-    BuiltValueNullFieldError.checkNotNull(name, r'OpenedFile', 'name');
-  }
-
+  }) : super._();
   @override
   OpenedFile rebuild(void Function(OpenedFileBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  OpenedFileBuilder toBuilder() => new OpenedFileBuilder()..replace(this);
+  OpenedFileBuilder toBuilder() => OpenedFileBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -678,7 +664,6 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
 
   @override
   void replace(OpenedFile other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$OpenedFile;
   }
 
@@ -693,7 +678,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   _$OpenedFile _build() {
     final _$result =
         _$v ??
-        new _$OpenedFile._(
+        _$OpenedFile._(
           uuid: BuiltValueNullFieldError.checkNotNull(
             uuid,
             r'OpenedFile',
@@ -764,7 +749,7 @@ class _$AppData extends AppData {
   final String? searchFields;
 
   factory _$AppData([void Function(AppDataBuilder)? updates]) =>
-      (new AppDataBuilder()..update(updates))._build();
+      (AppDataBuilder()..update(updates))._build();
 
   _$AppData._({
     required this.previousFiles,
@@ -785,30 +770,13 @@ class _$AppData extends AppData {
     this.authPassCloudAttachments,
     required this.systemWideShortcuts,
     this.searchFields,
-  }) : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-      previousFiles,
-      r'AppData',
-      'previousFiles',
-    );
-    BuiltValueNullFieldError.checkNotNull(
-      passwordGeneratorCharacterSets,
-      r'AppData',
-      'passwordGeneratorCharacterSets',
-    );
-    BuiltValueNullFieldError.checkNotNull(
-      systemWideShortcuts,
-      r'AppData',
-      'systemWideShortcuts',
-    );
-  }
-
+  }) : super._();
   @override
   AppData rebuild(void Function(AppDataBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  AppDataBuilder toBuilder() => new AppDataBuilder()..replace(this);
+  AppDataBuilder toBuilder() => AppDataBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -893,7 +861,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
 
   ListBuilder<OpenedFile>? _previousFiles;
   ListBuilder<OpenedFile> get previousFiles =>
-      _$this._previousFiles ??= new ListBuilder<OpenedFile>();
+      _$this._previousFiles ??= ListBuilder<OpenedFile>();
   set previousFiles(ListBuilder<OpenedFile>? previousFiles) =>
       _$this._previousFiles = previousFiles;
 
@@ -904,7 +872,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
 
   SetBuilder<String>? _passwordGeneratorCharacterSets;
   SetBuilder<String> get passwordGeneratorCharacterSets =>
-      _$this._passwordGeneratorCharacterSets ??= new SetBuilder<String>();
+      _$this._passwordGeneratorCharacterSets ??= SetBuilder<String>();
   set passwordGeneratorCharacterSets(
     SetBuilder<String>? passwordGeneratorCharacterSets,
   ) => _$this._passwordGeneratorCharacterSets = passwordGeneratorCharacterSets;
@@ -925,7 +893,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
 
   ListBuilder<String>? _dismissedBackupLocalFiles;
   ListBuilder<String> get dismissedBackupLocalFiles =>
-      _$this._dismissedBackupLocalFiles ??= new ListBuilder<String>();
+      _$this._dismissedBackupLocalFiles ??= ListBuilder<String>();
   set dismissedBackupLocalFiles(
     ListBuilder<String>? dismissedBackupLocalFiles,
   ) => _$this._dismissedBackupLocalFiles = dismissedBackupLocalFiles;
@@ -1014,7 +982,6 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
 
   @override
   void replace(AppData other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AppData;
   }
 
@@ -1031,7 +998,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
     try {
       _$result =
           _$v ??
-          new _$AppData._(
+          _$AppData._(
             previousFiles: previousFiles.build(),
             passwordGeneratorLength: passwordGeneratorLength,
             passwordGeneratorCharacterSets: passwordGeneratorCharacterSets
@@ -1068,7 +1035,7 @@ class AppDataBuilder implements Builder<AppData, AppDataBuilder> {
         _$failedField = 'dismissedBackupLocalFiles';
         _dismissedBackupLocalFiles?.build();
       } catch (e) {
-        throw new BuiltValueNestedFieldError(
+        throw BuiltValueNestedFieldError(
           r'AppData',
           _$failedField,
           e.toString(),

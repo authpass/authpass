@@ -23,11 +23,7 @@ Map<String, dynamic> _$UserNamePasswordCredentialsToJson(
 };
 
 WebDavFileMetadata _$WebDavFileMetadataFromJson(Map<String, dynamic> json) =>
-    WebDavFileMetadata(
-      etag: json['etag'] as String?,
-    );
+    WebDavFileMetadata(etag: json['etag'] as String?);
 
 Map<String, dynamic> _$WebDavFileMetadataToJson(WebDavFileMetadata instance) =>
-    <String, dynamic>{
-      'etag': instance.etag,
-    };
+    <String, dynamic>{'etag': instance.etag};

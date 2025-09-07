@@ -12,7 +12,7 @@ GoogleDriveMetadata _$GoogleDriveMetadataFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['modifiedTime'] as String),
       version: json['version'] as String?,
-      size: json['size'] as int,
+      size: (json['size'] as num).toInt(),
     );
 
 Map<String, dynamic> _$GoogleDriveMetadataToJson(

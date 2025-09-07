@@ -34,7 +34,7 @@ dependencies:
   synchronized: ^3.0.0
   base32: ^2.1.1
   file_picker_writable: ^2.1.0+1
-  json_annotation: ^4.5.0
+  json_annotation: ^4.9.0
   freezed_annotation: ^3.0.0
   built_value: ^8.0.6
   built_collection: ^5.1.1
@@ -84,7 +84,7 @@ dependencies:
 
   flutter_colorpicker: ^1.1.0
   flutter_speed_dial: ^7.0.0
-  flutter_email_sender: ^6.0.3
+  flutter_email_sender: ^7.0.0
   flutter_store_listing: ^1.1.0
 
   biometric_storage: ^5.1.1-dev.1
@@ -134,7 +134,7 @@ dependencies:
 
   # google drive
   googleapis: ^14.0.0
-  googleapis_auth: ^1.4.1
+  googleapis_auth: ^2.0.0
   google_sign_in: ^7.0.0
   google_sign_in_web: ^1.0.0
   extension_google_sign_in_as_googleapis_auth: ^3.0.0
@@ -188,7 +188,7 @@ dependencies:
       url: https://github.com/authpass/flutter_windowmanager.git
       ref: 3b5405dd3c40a411fab41a951bc435a8dd98cf6d
 
-  mime: ^1.0.0
+  mime: ^2.0.0
   ffi: ^2.1.0
   # AuthPass Cloud email deps
   enough_mail: ^2.1.7
@@ -208,15 +208,15 @@ dependencies:
     git:
       url: https://github.com/authpass/winsparkle_flutter.git
       ref: c5154e337e8cf7091a629b7dcdbaf44aea194374
-  share_plus: ^10.0.2
+  share_plus: ^11.1.0
   collection: ^1.15.0-nullsafety.4
 
   flutter_markdown: ^0.7.1
 
-  hotkey_manager: #^0.1.8
-    git:
-      url: https://github.com/hpoul/hotkey_manager.git
-      ref: uuid-dep-update
+  hotkey_manager: ^0.2.3
+#    git:
+#      url: https://github.com/hpoul/hotkey_manager.git
+#      ref: uuid-dep-update
 #  window_manager: ^0.0.3
   xdg_directories: ^1.0.3
   window_manager:
@@ -236,11 +236,11 @@ dev_dependencies:
 #   https://github.com/flutter/flutter/issues/62240
 #  analyzer: ^0.39.17
   json_serializable: ^6.2.0
-  build_runner: ^2.0.2
+  build_runner: ^2.7.0
 #  builder_static_text: ^0.1.0
   built_value_generator: ^8.3.3
   analytics_event_gen: ^1.1.1+1
-  freezed: ^3.0.0
+  freezed: ^3.2.0
   plugin_platform_interface: ^2.0.0
   msix: ^3.6.2
   string_literal_finder: ^1.1.0+2
