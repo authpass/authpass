@@ -41,7 +41,7 @@ _tools/flutter_run.sh pub get
 
 _tools/flutter_run.sh analyze || fail+=('analyze')
 
-_tools/flutter_run.sh dart format --set-exit-if-changed $(find . -name "*.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" \! -path "./lib/l10n-generated/*" | xargs) || fail+=('format')
+_tools/flutter_run.sh dart format --set-exit-if-changed $(find . -name "*.dart"  \! -name "secrets.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" \! -path "./lib/l10n-generated/*" | xargs) || fail+=('format')
 
 if [ ${#fail[@]} -ne 0 ]; then
   echo "Errors: ${fail[*]}"
