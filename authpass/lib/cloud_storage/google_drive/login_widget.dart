@@ -2,7 +2,6 @@ import 'package:authpass/cloud_storage/google_drive/google_drive_provider.dart';
 import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
 
 import 'login_widget/stub.dart'
@@ -28,7 +27,8 @@ class GoogleLoginWidget extends StatefulWidget {
 
 class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
     with StreamSubscriberMixin {
-  GoogleSignIn get googleSignIn => widget.googleDriveProvider.googleSignIn;
+  GoogleSignInWrapper get googleSignIn =>
+      widget.googleDriveProvider.googleSignIn;
 
   bool? _canAccessScopes;
 
@@ -38,9 +38,12 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
     handleSubscription(
       googleSignIn.onCurrentUserChanged.listen((event) async {
         _logger.fine('onCurrentUserChanged: ${event?.id}');
-        _canAccessScopes = await googleSignIn.canAccessScopes(
-          GoogleDriveProvider.scopes,
-        );
+        if (event != null) {
+          final auth = await event.authorizationClient.authorizationForScopes(
+            googleSignIn.scopes,
+          );
+          _canAccessScopes = auth != null;
+        }
         if (_canAccessScopes == true) {
           widget.onSuccess();
         } else {
@@ -51,7 +54,8 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
   }
 
   Future<void> _checkAuthorization() async {
-    if (await googleSignIn.canAccessScopes(GoogleDriveProvider.scopes)) {
+    final c = await googleSignIn.authenticatedClient();
+    if (c != null) {
       widget.onSuccess();
     }
     setState(() {
@@ -79,16 +83,13 @@ class _GoogleLoginWidgetState extends State<GoogleLoginWidget>
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () async {
-              final requestResult = await googleSignIn.requestScopes(
-                GoogleDriveProvider.scopes,
-              );
+              final c = await googleSignIn.authenticatedClient();
               setState(() {
-                _canAccessScopes = _canAccessScopes;
-                if (requestResult) {
+                if (c != null) {
                   widget.onSuccess();
                 }
               });
-              _logger.fine('Requested scopes. result: $requestResult');
+              _logger.fine('Requested scopes. result: $c');
             },
             child: Text(loc.googleDriveRequestPermissionButtonLabel),
           ),

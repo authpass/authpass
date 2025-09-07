@@ -15,14 +15,106 @@ import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sig
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
+import 'package:googleapis_auth/googleapis_auth.dart' show AuthClient;
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:synchronized/synchronized.dart';
 
 final _logger = Logger('authpass.google_drive_bloc');
 
 @NonNls
 const _METADATA_KEY_GOOGLE_DRIVE_DATA = 'googledrive.file_metadata';
+
+class GoogleSignInWrapper {
+  GoogleSignInWrapper({
+    required this.clientId,
+    required this.scopes,
+  }) {
+    _init();
+  }
+
+  GoogleSignInAccount? currentUser;
+  final String? clientId;
+  final List<String> scopes;
+  final _onCurrentUserChanged =
+      StreamController<GoogleSignInAccount?>.broadcast();
+  Stream<GoogleSignInAccount?> get onCurrentUserChanged =>
+      _onCurrentUserChanged.stream;
+
+  final _initLock = Lock();
+  GoogleSignIn? _initialized;
+
+  Future<GoogleSignIn> ensureInitialized() async {
+    return _initialized ??= await _initLock.synchronized<GoogleSignIn>(
+      () async {
+        final googleSignIn = GoogleSignIn.instance;
+        await googleSignIn.initialize(clientId: clientId);
+        return googleSignIn;
+      },
+    );
+  }
+
+  void _init() {
+    ensureInitialized();
+    GoogleSignIn.instance.authenticationEvents.listen((event) {
+      switch (event) {
+        case GoogleSignInAuthenticationEventSignIn():
+          currentUser = event.user;
+          _onCurrentUserChanged.add(currentUser);
+          break;
+        case GoogleSignInAuthenticationEventSignOut():
+          currentUser = null;
+          _onCurrentUserChanged.add(null);
+          break;
+      }
+    });
+  }
+
+  Future<AuthClient?> authenticatedClient() async {
+    final user = currentUser;
+    if (user == null) {
+      return null;
+    }
+    final c = await user.authorizationClient.authorizeScopes(scopes);
+    return c.authClient(scopes: scopes);
+  }
+
+  Future<bool> isSignedIn() async {
+    await ensureInitialized();
+    return currentUser != null;
+  }
+
+  Future<void> disconnect() async {
+    final googleSignIn = await ensureInitialized();
+    await googleSignIn.disconnect();
+    currentUser = null;
+    _onCurrentUserChanged.add(null);
+  }
+
+  Future<GoogleSignInAccount?> signIn() async {
+    final googleSignIn = await ensureInitialized();
+    final authenticate = await googleSignIn.authenticate(
+      scopeHint: scopes,
+    );
+    final auths = await authenticate.authorizationClient.authorizationForScopes(
+      scopes,
+    );
+    if (auths == null) {
+      final ret = await authenticate.authorizationClient.authorizeScopes(
+        scopes,
+      );
+    }
+    return authenticate;
+  }
+
+  Future<GoogleSignInAccount?> signInSilently() async {
+    await ensureInitialized();
+    final result = await GoogleSignIn.instance
+        .attemptLightweightAuthentication();
+    return result;
+  }
+}
 
 class GoogleDriveProvider extends CloudStorageProvider
     implements CloudStorageCustomLoginButtonAdapter {
@@ -39,22 +131,27 @@ class GoogleDriveProvider extends CloudStorageProvider
       isAuthorized = false;
       return;
     }
-    if (AuthPassPlatform.isWeb) {
-      // for some reason `canAccessScopes` is only implemented on Web.
-      if (await googleSignIn.canAccessScopes(_scopes)) {
-        isAuthorized = true;
-      }
-    } else {
-      isAuthorized = true;
-    }
+    // if (AuthPassPlatform.isWeb) {
+    //   for some reason `canAccessScopes` is only implemented on Web.
+    // if (await googleSignIn.canAccessScopes(_scopes)) {
+    //   isAuthorized = true;
+    // }
+    // } else {
+    isAuthorized = true;
+    // }
     _logger.fine('_checkAuthentication:  $isAuthorized');
   }
 
-  late final googleSignIn = GoogleSignIn(
+  late final googleSignIn = GoogleSignInWrapper(
     clientId: env.secrets?.googleClientId?.call(),
     scopes: _scopes,
-    forceCodeForRefreshToken: true,
+    // forceCodeForRefreshToken: true,
   );
+  // GoogleSignIn(
+  //   clientId: env.secrets?.googleClientId?.call(),
+  //   scopes: _scopes,
+  //   forceCodeForRefreshToken: true,
+  // );
 
   @NonNls
   @override
