@@ -60,15 +60,20 @@ class GoogleSignInWrapper {
     GoogleSignIn.instance.authenticationEvents.listen((event) {
       switch (event) {
         case GoogleSignInAuthenticationEventSignIn():
-          currentUser = event.user;
-          _onCurrentUserChanged.add(currentUser);
+          _updateCurrentUser(event.user);
           break;
         case GoogleSignInAuthenticationEventSignOut():
-          currentUser = null;
-          _onCurrentUserChanged.add(null);
+          _updateCurrentUser(null);
           break;
       }
     });
+  }
+
+  void _updateCurrentUser(GoogleSignInAccount? user) {
+    if (user != currentUser) {
+      currentUser = user;
+      _onCurrentUserChanged.add(user);
+    }
   }
 
   Future<AuthClient?> authenticatedClient() async {
@@ -112,6 +117,7 @@ class GoogleSignInWrapper {
     await ensureInitialized();
     final result = await GoogleSignIn.instance
         .attemptLightweightAuthentication();
+    _updateCurrentUser(result);
     return result;
   }
 }
