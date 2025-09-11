@@ -41,12 +41,12 @@ android {
     namespace 'design.codeux.authpass'
     compileSdk 36
 //    buildToolsVersion "29.0.2"
-    ndkVersion System.getProperty("design.codeux.ndkVersion", "25.1.8937393")
+    ndkVersion System.getProperty("design.codeux.ndkVersion", "28.2.13676358")
 
 
     defaultConfig {
         applicationId "design.codeux.authpass"
-        minSdk 23
+        minSdk 24
         targetSdk 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
