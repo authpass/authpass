@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+      - stable
+      - beta
+    tags:
+      - v*
   pull_request:
     branches:
       - main
