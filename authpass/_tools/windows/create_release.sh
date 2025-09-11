@@ -2,17 +2,17 @@
 
 set -xeu
 
-VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2019"
+VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2022"
 VS_REDIST_BASE=$(cygpath "$VS_REDIST_BASE_WIN")
 # find "${VS_REDIST_BASE}"
 
 
-VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC"
+VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC"
 VS_REDIST_BASE=$(cygpath "$VS_REDIST_BASE_WIN")
 
 if ! test -d "${VS_REDIST_BASE}" ; then
 	echo "Not available in ${VS_REDIST_BASE} trying Community."
-	VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC"
+	VS_REDIST_BASE_WIN="C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC"
 	VS_REDIST_BASE=$(cygpath "$VS_REDIST_BASE_WIN")
 fi
 
