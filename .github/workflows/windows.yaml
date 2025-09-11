@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         flavor: ['windows', 'msix', 'windowsportable']
-        os: [windows-2025]
+        # windows-2025 does not contain innosetup https://github.com/actions/runner-images/issues/11349
+        os: [windows-2022]
         vs: [2022]
 
       fail-fast: true
