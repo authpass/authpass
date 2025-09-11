@@ -89,10 +89,7 @@ final _that = this;
 switch (_that) {
 case _SelectedIconPredefined():
 return predefined(_that);case _SelectedIconCustom():
-return custom(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return custom(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -154,10 +151,7 @@ return custom(_that.custom);case _:
 switch (_that) {
 case _SelectedIconPredefined():
 return predefined(_that.icon);case _SelectedIconCustom():
-return custom(_that.custom);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return custom(_that.custom);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
