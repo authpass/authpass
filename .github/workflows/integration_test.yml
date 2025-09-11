@@ -13,13 +13,13 @@ jobs:
 
   drive_ios:
 
-    runs-on: macos-13
+    runs-on: macos-latest
 
     strategy:
       matrix:
         device:
 #          - "iPhone 8 (13.1)"
-          - "iPhone 14 Pro Max "
+          - "iPhone 16 Pro Max "
 
       fail-fast: true
 
@@ -40,7 +40,7 @@ jobs:
         BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
       run: "./authpass/_tools/ci-install-deps.sh ios"
     - name: 'Start Simulator'
-      uses: futureware-tech/simulator-action@v1
+      uses: futureware-tech/simulator-action@v4
       with:
         model: ${{ matrix.device }}
 #    - name: List all simulators
