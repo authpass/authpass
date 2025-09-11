@@ -13,8 +13,8 @@ jobs:
     strategy:
       matrix:
         flavor: ['windows', 'msix', 'windowsportable']
-        os: [windows-2019]
-        vs: [2019]
+        os: [windows-2025]
+        vs: [2022]
 
       fail-fast: true
 
