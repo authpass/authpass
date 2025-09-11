@@ -46,7 +46,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:mime/mime.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 import 'package:otp/otp.dart';
 import 'package:otpauth_migration/otpauth_migration.dart';
 import 'package:path/path.dart' as path;
@@ -973,7 +973,7 @@ class AttachmentBottomSheet extends StatelessWidget {
               fileName: attachment.key.key,
             );
             _logger.fine('Opening ${f.path}');
-            final result = await OpenFilex.open(f.path);
+            final result = await OpenFile.open(f.path);
             _logger.fine('finished opening $result');
           },
         ),

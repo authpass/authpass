@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   biometric_storage
   file_selector_linux
   hotkey_manager_linux
+  open_file_linux
   url_launcher_linux
   window_manager
 )

@@ -19,7 +19,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 
@@ -127,7 +127,7 @@ class _EmailReadScreenState extends State<EmailReadScreen> {
                               fileName: a.fileName!,
                             );
                             _logger.fine('Opening ${f.path}');
-                            final result = await OpenFilex.open(f.path);
+                            final result = await OpenFile.open(f.path);
                             _logger.fine('finished opening $result');
                           },
                           child: ListTile(
