@@ -22,7 +22,7 @@ const RESOURCES = {"flutter.js": "888483df48293866f9f41d3d9274a779",
 "assets/FontManifest.json": "20c3315d1dcb02fe93beb9346fa71359",
 "assets/AssetManifest.bin": "e14bd86b3b8b986ecf590034accf8455",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
-"assets/NOTICES": "82ce9dcd1fdbfaa0a66a8e15cf6c63a9",
+"assets/NOTICES": "b3fe5da376bca2ae82ceaccf1885701a",
 "assets/AssetManifest.json": "968a31d10a0d2512b97952f3ca99b0ee",
 "assets/packages/font_awesome_flutter/lib/fonts/Font%2520Awesome%25207%2520Free-Solid-900.otf": "8813f2c9829325a510df9e996d8f0883",
 "assets/packages/font_awesome_flutter/lib/fonts/Font%2520Awesome%25207%2520Brands-Regular-400.otf": "e9649bfea1ba6a71d5952673cdc20c9e",
@@ -53,7 +53,7 @@ const RESOURCES = {"flutter.js": "888483df48293866f9f41d3d9274a779",
 "index.html": "3c2e85600a7d4ca0151f2ad00a733e65",
 "/": "3c2e85600a7d4ca0151f2ad00a733e65",
 "favicon.png": "0f6bc457452337dff399ad2f7da1786a",
-"main.dart.js": "2d0f6a2891f46aba87e4fb3968fc7ecc",
+"main.dart.js": "ae27a90bcbb4dd807155d39ad6428208",
 "manifest.json": "a55e3e721de6d5444c9dc74af6ebb2c1"};
 // The application shell files that are downloaded before a service worker can
 // start.
