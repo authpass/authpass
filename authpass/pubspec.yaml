@@ -207,7 +207,7 @@ dependencies:
   winsparkle_flutter:
     git:
       url: https://github.com/authpass/winsparkle_flutter.git
-      ref: c5154e337e8cf7091a629b7dcdbaf44aea194374
+      ref: 73224333fa2dfe057a2ad48d2dfb88b56b12c5aa
   share_plus: ^11.1.0
   collection: ^1.15.0-nullsafety.4
 
