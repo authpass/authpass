@@ -79,46 +79,81 @@ List<List<String>> parseCsvContent(String content) {
   if (content.trim().isEmpty) {
     return [];
   }
+  // Normalise CRLF and bare CR to LF so the converter handles all OS exports.
+  final normalised = content.replaceAll(nonNls('\r\n'), nonNls('\n')).replaceAll(nonNls('\r'), nonNls('\n'));
   return const CsvToListConverter(eol: '\n')
-      .convert(content)
+      .convert(normalised)
       .map((row) => row.map((cell) => cell?.toString() ?? '').toList())
       .toList();
 }
 
-/// Returns true if [file] already contains an entry whose title AND username
-/// both match the values in [row] at the columns described by [mappings].
+/// Pre-computes existing entries into lookup sets so duplicate checks during
+/// import are O(1) per row instead of scanning all entries on every check.
 ///
-/// The comparison is case-insensitive and trims whitespace.
-/// A row with neither title nor username mapped is never considered a
-/// duplicate — there is not enough information to identify it.
+/// Instantiate once before the import loop, then call [isDuplicate] per row.
+class DuplicateDetector {
+  DuplicateDetector(KdbxFile file) {
+    for (final entry in file.body.rootGroup.getAllEntries()) {
+      final title = entry
+              .getString(KdbxKeyCommon.TITLE)
+              ?.getText()
+              ?.trim()
+              .toLowerCase() ??
+          '';
+      final username = entry
+              .getString(KdbxKeyCommon.USER_NAME)
+              ?.getText()
+              ?.trim()
+              .toLowerCase() ??
+          '';
+      if (title.isNotEmpty && username.isNotEmpty) {
+        // Tab is not a valid CSV separator so it is safe as a composite key.
+        _titleAndUsername.add('$title\t$username');
+      }
+      if (title.isNotEmpty) {
+        _titlesOnly.add(title);
+      }
+      if (username.isNotEmpty) {
+        _usernamesOnly.add(username);
+      }
+    }
+  }
+
+  final Set<String> _titleAndUsername = {};
+  final Set<String> _titlesOnly = {};
+  final Set<String> _usernamesOnly = {};
+
+  /// Returns true if the database already contains an entry that matches
+  /// [row]'s title and/or username (whichever fields are mapped).
+  ///
+  /// A row with neither field mapped is never considered a duplicate.
+  bool isDuplicate(List<String> row, List<CsvFieldType?> mappings) {
+    final newTitle =
+        _getMappedValue(row, mappings, CsvFieldType.title)?.toLowerCase();
+    final newUsername =
+        _getMappedValue(row, mappings, CsvFieldType.username)?.toLowerCase();
+
+    if (newTitle == null && newUsername == null) {
+      return false;
+    }
+    if (newTitle != null && newUsername != null) {
+      return _titleAndUsername.contains('$newTitle\t$newUsername');
+    }
+    if (newTitle != null) {
+      return _titlesOnly.contains(newTitle);
+    }
+    return _usernamesOnly.contains(newUsername!);
+  }
+}
+
+/// Convenience wrapper for single-row checks. For bulk imports prefer
+/// instantiating [DuplicateDetector] once and reusing it across all rows.
 bool isDuplicate(
   KdbxFile file,
   List<String> row,
   List<CsvFieldType?> mappings,
-) {
-  final newTitle = _getMappedValue(row, mappings, CsvFieldType.title);
-  final newUsername = _getMappedValue(row, mappings, CsvFieldType.username);
-
-  // Can't reliably identify a duplicate without at least one identifying field.
-  if (newTitle == null && newUsername == null) {
-    return false;
-  }
-
-  return file.body.rootGroup.getAllEntries().any((entry) {
-    final existingTitle =
-        entry.getString(KdbxKeyCommon.TITLE)?.getText()?.trim().toLowerCase();
-    final existingUsername =
-        entry.getString(KdbxKeyCommon.USER_NAME)?.getText()?.trim().toLowerCase();
-
-    // Both fields must agree — a different username on the same site is a
-    // separate account, not a duplicate.
-    final titleMatches = newTitle == null ||
-        newTitle.toLowerCase() == (existingTitle ?? '');
-    final usernameMatches = newUsername == null ||
-        newUsername.toLowerCase() == (existingUsername ?? '');
-    return titleMatches && usernameMatches;
-  });
-}
+) =>
+    DuplicateDetector(file).isDuplicate(row, mappings);
 
 /// Scans [row] for the first column mapped to [field] and returns its value,
 /// or null if the column is absent, unmapped, or empty.

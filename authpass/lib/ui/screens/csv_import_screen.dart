@@ -123,13 +123,19 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
     });
     try {
       final kdbxBloc = context.read<KdbxBloc>();
+      if (kdbxBloc.openedFilesKdbx.isEmpty) {
+        _logger.warning(nonNls('No opened database file found.'));
+        return;
+      }
       final file = kdbxBloc.openedFilesKdbx.first;
       var imported = 0;
       var skipped = 0;
 
+      // Build lookup sets once so duplicate checks are O(1) per row.
+      final detector = DuplicateDetector(file);
       for (final row in _dataRows) {
         // Skip rows that already exist in the database (title + username match).
-        if (isDuplicate(file, row, _mappings)) {
+        if (detector.isDuplicate(row, _mappings)) {
           skipped++;
           continue;
         }
