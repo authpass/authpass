@@ -33,6 +33,7 @@ dependencies:
 
   synchronized: ^3.0.0
   base32: ^2.1.1
+  csv: ^6.0.0
   file_picker_writable: ^2.1.0+1
   json_annotation: ^4.9.0
   freezed_annotation: ^3.0.0

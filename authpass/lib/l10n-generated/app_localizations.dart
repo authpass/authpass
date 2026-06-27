@@ -169,6 +169,12 @@ abstract class AppLocalizations {
   /// **'One Time Password (Time Based)'**
   String get fieldTotp;
 
+  /// Label for the Notes field on a password entry
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get fieldNotes;
+
   /// language switcher subtitle
   ///
   /// In en, this message translates to:
@@ -2554,6 +2560,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan QR Code.'**
   String get scanQrCodeTitle;
+
+  /// Menu item to open the CSV import screen
+  ///
+  /// In en, this message translates to:
+  /// **'Import from CSV'**
+  String get csvImportMenuItemTitle;
+
+  /// Title of the CSV import screen
+  ///
+  /// In en, this message translates to:
+  /// **'Import from CSV'**
+  String get csvImportScreenTitle;
+
+  /// Button label to open the file picker for CSV import
+  ///
+  /// In en, this message translates to:
+  /// **'Select CSV File'**
+  String get csvImportSelectFileButton;
+
+  /// Hint text shown before a CSV file is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a .csv file to import password entries'**
+  String get csvImportSelectFileHint;
+
+  /// Section title for the column-mapping step of CSV import
+  ///
+  /// In en, this message translates to:
+  /// **'Map Columns'**
+  String get csvImportMappingTitle;
+
+  /// Subtitle for the column-mapping step
+  ///
+  /// In en, this message translates to:
+  /// **'Assign each CSV column to an AuthPass field'**
+  String get csvImportMappingSubtitle;
+
+  /// Option in the column mapping dropdown to skip/ignore a CSV column
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get csvImportFieldSkip;
+
+  /// Title shown on the preview step of CSV import
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to Import'**
+  String get csvImportPreviewTitle;
+
+  /// Subtitle on the preview step showing how many entries will be created
+  ///
+  /// In en, this message translates to:
+  /// **'{count} entries will be imported'**
+  String csvImportPreviewSubtitle(int count);
+
+  /// Button label to confirm and execute the CSV import
+  ///
+  /// In en, this message translates to:
+  /// **'Import {count} entries'**
+  String csvImportConfirmButton(int count);
+
+  /// Snackbar message shown after a successful CSV import with no duplicates
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully imported {count} entries'**
+  String csvImportSuccessMessage(int count);
+
+  /// Snackbar message when some CSV rows were skipped as duplicates
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {imported} entries, {skipped} duplicates skipped'**
+  String csvImportSuccessWithSkipped(int imported, int skipped);
+
+  /// Error shown when the selected CSV file has no usable data
+  ///
+  /// In en, this message translates to:
+  /// **'The CSV file appears to be empty or has no data rows.'**
+  String get csvImportErrorNoData;
+
+  /// Error shown when the user tries to import without mapping any columns
+  ///
+  /// In en, this message translates to:
+  /// **'Please map at least one column before importing.'**
+  String get csvImportErrorNoMappedFields;
 }
 
 class _AppLocalizationsDelegate

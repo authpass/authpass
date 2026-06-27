@@ -25,7 +25,6 @@
 
 #### project specific ignores below
 
-
 ## original from flutter.
 
 # Miscellaneous
@@ -99,14 +98,11 @@
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
-
-
 **/gradle_home/caches/
 **/gradle_home/daemon/
 **/gradle_home/native/
 **/gradle_home/wrapper/
 **/gradle_home/notifications/
-
 
 flutter_export_environment.sh
 .bundle
@@ -118,3 +114,8 @@ test/_cloudStorageHelper.json
 
 /ios/build
 
+# FVM Version Cache
+.fvm/
+
+# Local test fixtures (not for the repository)
+test_import.csv

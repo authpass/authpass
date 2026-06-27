@@ -12,6 +12,10 @@
   "@fieldTotp": {
     "description": "Label for fields of TOTP (Time based one time passwords)"
   },
+  "fieldNotes": "Notes",
+  "@fieldNotes": {
+    "description": "Label for the Notes field on a password entry"
+  },
   "english": "English",
   "@english": {
     "description": "language switcher subtitle"
@@ -1751,5 +1755,84 @@
   },
   "googleDriveMorePermissionsRequired": "Additional permissions needed to access Google Drive.",
   "googleDriveRequestPermissionButtonLabel": "Request Permissions",
-  "scanQrCodeTitle": "Scan QR Code."
+  "scanQrCodeTitle": "Scan QR Code.",
+  "csvImportMenuItemTitle": "Import from CSV",
+  "@csvImportMenuItemTitle": {
+    "description": "Menu item to open the CSV import screen"
+  },
+  "csvImportScreenTitle": "Import from CSV",
+  "@csvImportScreenTitle": {
+    "description": "Title of the CSV import screen"
+  },
+  "csvImportSelectFileButton": "Select CSV File",
+  "@csvImportSelectFileButton": {
+    "description": "Button label to open the file picker for CSV import"
+  },
+  "csvImportSelectFileHint": "Choose a .csv file to import password entries",
+  "@csvImportSelectFileHint": {
+    "description": "Hint text shown before a CSV file is selected"
+  },
+  "csvImportMappingTitle": "Map Columns",
+  "@csvImportMappingTitle": {
+    "description": "Section title for the column-mapping step of CSV import"
+  },
+  "csvImportMappingSubtitle": "Assign each CSV column to an AuthPass field",
+  "@csvImportMappingSubtitle": {
+    "description": "Subtitle for the column-mapping step"
+  },
+  "csvImportFieldSkip": "Skip",
+  "@csvImportFieldSkip": {
+    "description": "Option in the column mapping dropdown to skip/ignore a CSV column"
+  },
+  "csvImportPreviewTitle": "Ready to Import",
+  "@csvImportPreviewTitle": {
+    "description": "Title shown on the preview step of CSV import"
+  },
+  "csvImportPreviewSubtitle": "{count} entries will be imported",
+  "@csvImportPreviewSubtitle": {
+    "description": "Subtitle on the preview step showing how many entries will be created",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "csvImportConfirmButton": "Import {count} entries",
+  "@csvImportConfirmButton": {
+    "description": "Button label to confirm and execute the CSV import",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "csvImportSuccessMessage": "Successfully imported {count} entries",
+  "@csvImportSuccessMessage": {
+    "description": "Snackbar message shown after a successful CSV import with no duplicates",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "csvImportSuccessWithSkipped": "Imported {imported} entries, {skipped} duplicates skipped",
+  "@csvImportSuccessWithSkipped": {
+    "description": "Snackbar message when some CSV rows were skipped as duplicates",
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "csvImportErrorNoData": "The CSV file appears to be empty or has no data rows.",
+  "@csvImportErrorNoData": {
+    "description": "Error shown when the selected CSV file has no usable data"
+  },
+  "csvImportErrorNoMappedFields": "Please map at least one column before importing.",
+  "@csvImportErrorNoMappedFields": {
+    "description": "Error shown when the user tries to import without mapping any columns"
+  }
 }
