@@ -729,6 +729,16 @@ class AppLocalizationsFr extends AppLocalizations {
       'Envoie occasionnellement une requête réseau pour récupérer les actualités.';
 
   @override
+  String browserAutofillThirdPartyModeTitle(String browserName) {
+    return 'Enable AutoFill in $browserName';
+  }
+
+  @override
+  String browserAutofillThirdPartyModeSubtitle(String browserName) {
+    return '$browserName currently uses its own password manager. Tap to open its settings and select “Autofill using another service”, then restart $browserName.';
+  }
+
+  @override
   String get enableAutofillDebug =>
       'Remplissage automatique : Activer le débogage';
 

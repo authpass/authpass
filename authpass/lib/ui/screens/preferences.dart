@@ -57,11 +57,15 @@ class PreferencesBody extends StatefulWidget {
 }
 
 class _PreferencesBodyState extends State<PreferencesBody>
-    with StreamSubscriberMixin {
+    with StreamSubscriberMixin, WidgetsBindingObserver {
   KdbxBloc? _kdbxBloc;
 
   AutofillServiceStatus? _autofillStatus;
   AutofillPreferences? _autofillPrefs;
+
+  /// Browsers which will not forward anything to us until the user enables
+  /// third party autofill in the browser settings.
+  List<BrowserAutofillStatus> _browsersWithoutAutofill = [];
 
   late AppDataBloc _appDataBloc;
   AppData? _appData;
@@ -71,7 +75,24 @@ class _PreferencesBodyState extends State<PreferencesBody>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _doInit();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // the user might have changed autofill settings of the system or of a
+      // browser while we were in the background.
+      _doInit();
+    }
   }
 
   Future<void> _doInit() async {
@@ -82,6 +103,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
     _autofillStatus = await autofill.status();
     if (_autofillStatus != AutofillServiceStatus.unsupported) {
       _autofillPrefs = await autofill.getPreferences();
+      _browsersWithoutAutofill = (await autofill.getBrowserAutofillStatus())
+          .where((browser) => !browser.thirdPartyModeEnabled)
+          .toList();
+    }
+    if (!mounted) {
+      return;
     }
     setState(() {});
   }
@@ -157,6 +184,23 @@ class _PreferencesBodyState extends State<PreferencesBody>
                           }
                           await _doInit();
                         },
+                ),
+                ..._browsersWithoutAutofill.map(
+                  (browser) => ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.chrome),
+                    title: Text(
+                      loc.browserAutofillThirdPartyModeTitle(browser.label),
+                    ),
+                    subtitle: Text(
+                      loc.browserAutofillThirdPartyModeSubtitle(browser.label),
+                    ),
+                    trailing: const Icon(Icons.open_in_new),
+                    onTap: () async {
+                      await AutofillService().openBrowserAutofillSettings(
+                        browser.packageName,
+                      );
+                    },
+                  ),
                 ),
                 SwitchListTile(
                   secondary: const FaIcon(FontAwesomeIcons.bug),

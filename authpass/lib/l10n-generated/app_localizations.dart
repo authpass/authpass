@@ -1376,6 +1376,18 @@ abstract class AppLocalizations {
   /// **'Will occasionally send a network request to fetch news.'**
   String get diacOptInSubtitle;
 
+  /// Preference which opens the settings of a browser, where the user has to allow third party autofill services.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable AutoFill in {browserName}'**
+  String browserAutofillThirdPartyModeTitle(String browserName);
+
+  /// Explains why autofill does not work inside a browser.
+  ///
+  /// In en, this message translates to:
+  /// **'{browserName} currently uses its own password manager. Tap to open its settings and select “Autofill using another service”, then restart {browserName}.'**
+  String browserAutofillThirdPartyModeSubtitle(String browserName);
+
   /// only visible in debug build. Preference to enable Auto-Fill Debugging.
   ///
   /// In en, this message translates to:

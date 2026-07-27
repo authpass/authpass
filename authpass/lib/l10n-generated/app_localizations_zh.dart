@@ -690,6 +690,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get diacOptInSubtitle => '会偶尔连接网络获取新闻和问卷并在应用内显示';
 
   @override
+  String browserAutofillThirdPartyModeTitle(String browserName) {
+    return 'Enable AutoFill in $browserName';
+  }
+
+  @override
+  String browserAutofillThirdPartyModeSubtitle(String browserName) {
+    return '$browserName currently uses its own password manager. Tap to open its settings and select “Autofill using another service”, then restart $browserName.';
+  }
+
+  @override
   String get enableAutofillDebug => '启用自动填充的调试模式';
 
   @override

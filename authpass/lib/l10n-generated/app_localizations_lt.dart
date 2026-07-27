@@ -715,6 +715,16 @@ class AppLocalizationsLt extends AppLocalizations {
       'Will occasionally send a network request to fetch news.';
 
   @override
+  String browserAutofillThirdPartyModeTitle(String browserName) {
+    return 'Enable AutoFill in $browserName';
+  }
+
+  @override
+  String browserAutofillThirdPartyModeSubtitle(String browserName) {
+    return '$browserName currently uses its own password manager. Tap to open its settings and select “Autofill using another service”, then restart $browserName.';
+  }
+
+  @override
   String get enableAutofillDebug => 'AutoFill: Enable debug';
 
   @override

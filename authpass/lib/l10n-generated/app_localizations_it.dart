@@ -718,6 +718,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'Periodicamente verrà inviata una richiesta alla rete per recuperare notizie.';
 
   @override
+  String browserAutofillThirdPartyModeTitle(String browserName) {
+    return 'Enable AutoFill in $browserName';
+  }
+
+  @override
+  String browserAutofillThirdPartyModeSubtitle(String browserName) {
+    return '$browserName currently uses its own password manager. Tap to open its settings and select “Autofill using another service”, then restart $browserName.';
+  }
+
+  @override
   String get enableAutofillDebug => 'Autocompletamento: Abilita il debug';
 
   @override
