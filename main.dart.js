@@ -75621,8 +75621,8 @@ p=q?s:A.uK(r.c)
 if(p==null)p="1.9.12"
 a.gtS().c=p
 p=q?s:A.uK(r.d)
-p=A.fQ(p==null?B.e.j(2096):p,s)
-if(p==null)p=2096
+p=A.fQ(p==null?B.e.j(2098):p,s)
+if(p==null)p=2098
 a.gtS().d=p
 r=q?s:A.uK(r.b)
 if(r==null)r="design.codeux.authpass.web"
