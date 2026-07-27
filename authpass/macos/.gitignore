@@ -5,3 +5,8 @@
 # Xcode-related
 **/dgph
 **/xcuserdata/
+
+/AuthPass.app*
+/AuthPass.pkg
+
+
