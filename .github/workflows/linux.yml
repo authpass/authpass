@@ -1,11 +1,12 @@
 name: build linux
 
-on: 
+on:
   push:
     branches:
       - 'linux**'
       - 'stable'
       - 'beta'
+  workflow_dispatch:
 
 jobs:
   build:
