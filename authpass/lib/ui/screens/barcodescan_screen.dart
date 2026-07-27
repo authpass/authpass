@@ -61,6 +61,7 @@ class BarcodeScanHelper {
         scanner.BarcodeFormat.ean13 => BarcodeFormat.ean13,
         scanner.BarcodeFormat.code128 => BarcodeFormat.code128,
         scanner.BarcodeFormat.dataMatrix => BarcodeFormat.dataMatrix,
+        // ignore: deprecated_member_use
         scanner.BarcodeFormat.itf => BarcodeFormat.itf,
         scanner.BarcodeFormat.itf14 => BarcodeFormat.itf,
         scanner.BarcodeFormat.upcE => BarcodeFormat.upce,

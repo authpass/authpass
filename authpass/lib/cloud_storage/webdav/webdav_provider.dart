@@ -190,10 +190,11 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final bytes = await response.stream.toBytes();
     final doc = xml.XmlDocument.parse(utf8.decode(bytes));
     //    _logger.finer('Got propfind result: ${doc.toXmlString(pretty: true)}');
+    @NonNls
     final entities = doc.findAllElements(
       'response',
       namespace: 'DAV:',
-    ); // NON-NLS
+    );
     _logger.finer('entities: ${entities.length}');
     final cloudStorageEntities = nonNls(
       entities

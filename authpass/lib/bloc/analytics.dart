@@ -67,9 +67,10 @@ class Analytics {
     if (matomoConfig != null) {
       if (AuthPassPlatform.isAndroid) {
         const miscChannel = MethodChannel('app.authpass/misc');
+        @NonNls
         final isFirebaseTestLab = await miscChannel.invokeMethod<bool>(
           'isFirebaseTestLab',
-        ); // NON-NLS
+        );
         if (isFirebaseTestLab != null && isFirebaseTestLab) {
           _logger.info(
             'running in firebase test lab. not initializing analytics.',
