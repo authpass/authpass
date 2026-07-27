@@ -37,7 +37,7 @@ jobs:
       matrix:
         device:
 #          - "iPhone 8 (13.1)"
-          - "iPhone 16 Pro Max "
+          - "iPhone 17 Pro Max "
 
       fail-fast: true
 

@@ -375,11 +375,13 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
   void trackQuickUnlock({int? value});
 
   void trackSave({required String type, int? value});
+
   void trackSaveConflict({
     required String type,
     int? value,
     required bool success,
   });
+
   void trackSaveCount({required String? generator, required int value});
 
   void trackDrawerOpen();
@@ -407,6 +409,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
 
   @NonNls
   void trackGroupDelete(GroupDeleteResult result, {String category = 'group'});
+
   @NonNls
   void trackGroupCreate({String category = 'group'});
 
@@ -416,18 +419,21 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     String action = 'perm-delete',
     String label = 'confirm',
   });
+
   @NonNls
   void trackPermanentlyDeleteEntryCancel({
     String category = 'entry',
     String action = 'perm-delete',
     String label = 'cancel',
   });
+
   @NonNls
   void trackPermanentlyDeleteGroup({
     String category = 'group',
     String action = 'perm-delete',
     String label = 'confirm',
   });
+
   @NonNls
   void trackPermanentlyDeleteGroupCancel({
     String category = 'group',
@@ -440,6 +446,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     @NonNls required String setting,
     @NonNls required String to,
   }) => _trackPreferences(action: setting, to: to, category: 'preferences');
+
   void _trackPreferences({
     required String action,
     required String to,
@@ -453,6 +460,7 @@ abstract class AnalyticsEvents implements AnalyticsEventStubs {
     String action = 'filter',
     required int value,
   });
+
   @NonNls
   void trackAutofillSelect({
     String category = 'autofill',
@@ -511,6 +519,7 @@ enum TryUnlockResult {
 
 extension TryUnlockResultExt on TryUnlockResult {
   static const DOT_POS = 16;
+
   String get name {
     assert(runtimeType.toString().length == DOT_POS - 1);
     return toString().substring(DOT_POS);
@@ -544,9 +553,9 @@ extension ContextEvents on BuildContext {
 enum ErrorSource {
   flutter('errorFlutter'),
   dart('errorDart'),
-  app('errorApp')
-  ;
+  app('errorApp');
 
   const ErrorSource(@NonNls this.eventAction);
+
   final String eventAction;
 }
