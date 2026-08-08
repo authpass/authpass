@@ -57,6 +57,17 @@ below so it can be added later without a redesign.
    Android autofill (fixes AUDIT 2026-07-28 C1).
 7. The group-container file layer keeps a write-back path in its design even
    while v1 is read-only.
+8. **Extension save path (decided 2026-08-08)**: extension saves reuse the KDF
+   salt (master seed / IV / stream key still rotate, so ciphertext freshness
+   is preserved) and write a `Meta/CustomData` flag
+   (`AUTHPASS_KDF_SALT_REUSED` = salt fingerprint + timestamp) into the file.
+   Any full AuthPass instance that later opens the file re-saves with fresh
+   salts and clears the flag (fingerprint mismatch = someone else already
+   rotated → clear lazily). Auto-rotation save is gated on a writable source
+   with no pending sync conflict. macOS additionally prefers IPC-to-app for
+   writes when the app is running. Rejected: caching the composite hash for
+   extension saves (Argon2 memory + a master-password-equivalent secret) and
+   staged writes (passkey lockout risk).
 
 ## Phases
 
@@ -81,8 +92,10 @@ key/file sharing design — Phases 1, 3, 4 survive unchanged.
 ### Phase 1 — Shared foundations (≈ 2–3 weeks, parallelizable with Phase 0)
 
 - kdbx.dart: export/inject the transformed key (`Credentials` variant carrying
-  a pre-derived key; today internal to `_computeKeysV4`); salt-fingerprint
-  accessor; `KPEX_*` preservation tests.
+  a pre-derived key; today internal to `_computeKeysV4`); save option that
+  skips KDF-salt rotation + the `AUTHPASS_KDF_SALT_REUSED` custom-data flag
+  handling (design decision 8); salt-fingerprint accessor; `KPEX_*`
+  preservation tests.
 - `biometric_storage`: `kSecAttrAccessGroup` support (upstream, own plugin);
   migration for existing quick-unlock items (biometry-bound items cannot be
   moved into a group after the fact — re-create on next unlock).
@@ -166,4 +179,4 @@ prerequisites this plan already provides.
 | Provisioning/match friction (readonly repo, new ids, app group) | do it in Phase 1, not last; it gates everything |
 | biometric_storage migration breaks existing quick-unlock | re-create items lazily on next unlock; namespace new group items |
 | Mirror-copy staleness with cloud-synced vaults | manifest mtime check + clear "open AuthPass" UX; bookmark sharing as follow-up |
-| Save-path salt rotation vs cached key (needed for passkeys later) | decide in Phase 1: save-without-salt-rotation option in kdbx.dart vs routing writes through the app |
+| Save-path salt rotation vs cached key (needed for passkeys later) | decided — design decision 8: salt-reuse saves + in-file rotation flag; rotate on next full-app open |
