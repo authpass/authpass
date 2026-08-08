@@ -1,0 +1,35 @@
+name: authpass_autofill_module
+description: >
+  Headless kdbx reader for the AuthPass credential provider extensions.
+
+  Deliberately tiny: the extension process is capped at roughly 120 MB, and
+  every plugin pulled in here is one more thing that has to work without a
+  UIApplication. The native Swift side owns the OS protocol and the UI; this
+  module only answers "which entries match" and "what is the password".
+
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # No argon2_ffi. The extension never derives a key — it is handed the
+  # post-kdf transformed key by the app, which is the whole reason it fits in
+  # the memory budget.
+  kdbx:
+    path: ../deps/kdbx.dart
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  module:
+    androidX: true
+    androidPackage: design.codeux.authpass_autofill_module
+    iosBundleIdentifier: design.codeux.authpassAutofillModule
