@@ -58,24 +58,42 @@ below so it can be added later without a redesign.
 7. The group-container file layer keeps a write-back path in its design even
    while v1 is read-only.
 8. **Extension write path (decided 2026-08-08, revised same day)**: the
-   extension is **strictly read-only on the kdbx**. New credentials created in
-   the extension (passkey registration; later possibly password saves) are
-   staged out-of-band in the shared keychain — backup-eligible accessibility
-   (`kSecAttrAccessibleWhenUnlocked`, *no* biometry ACL; reads gated by a
-   manual `LAContext` check instead, since ACL-bound items don't survive
-   device migration) — and registered in the identity store so they are
-   immediately assertable. The main app merges staged entries into the kdbx
-   on next open (plus an opportunistic app-scheduled `BGAppRefreshTask`) and
-   saves normally — salts rotate as usual, so no kdbx.dart save changes, no
-   salt reuse, no rotation flag. Timeliness: reminder in the extension UI
-   while staging is pending (KeePassium 2.4 ships exactly this pattern);
-   optional AuthPass Cloud silent push as an accelerator later. macOS
-   additionally prefers IPC-to-app for writes when the app is running.
-   Rejected: in-extension kdbx saves with KDF-salt reuse (machinery + format
-   deviation for a marginal exposure), composite-hash caching for extension
-   saves (Argon2 memory + master-password-equivalent secret), and relying on
-   waking the main app (unsupported for this extension type; BGTask/push are
-   best-effort only).
+   extension is **strictly read-only on the main kdbx**. Credentials created
+   or changed in the extension are staged in a per-vault **staging mini-kdbx**
+   ("update kdbx") in the app-group container, encrypted with a random 256-bit
+   key held in the shared keychain (backup-eligible
+   `kSecAttrAccessibleWhenUnlocked`, *no* biometry ACL — reads are gated by
+   in-code `LAContext` policy per operation, since ACL-bound items don't
+   survive device migration and silent-save flows must write without UI).
+   The mini-kdbx uses a deliberately cheap KDF (its secret is a random
+   256-bit key, so KDF strength is irrelevant — no Argon2 in the extension).
+   Staged entries are registered in the identity store so passkeys are
+   immediately assertable; the extension's lookup treats the staging kdbx as
+   simply one more open file. The main app merges it on next open (plus an
+   opportunistic `BGAppRefreshTask`): new UUIDs import, matching UUIDs merge
+   as edits with proper history via the existing kdbx merge — through a thin
+   wrapper that skips/backdates meta so staging meta never clobbers the main
+   file's. Then a normal save (salts rotate as usual) and the staging file is
+   cleared. Timeliness: reminder in the extension UI while staging is pending
+   (KeePassium 2.4 ships this pattern); optional AuthPass Cloud silent push as
+   an accelerator later. macOS additionally prefers IPC-to-app for writes when
+   the app is running. Rejected: in-extension saves of the main kdbx with
+   KDF-salt reuse (machinery + format deviation for a marginal exposure),
+   composite-hash caching for extension saves (Argon2 memory +
+   master-password-equivalent secret), ad-hoc per-credential keychain records
+   (a second serialization format; the mini-kdbx reuses the entry model and
+   merge machinery), and relying on waking the main app (unsupported for this
+   extension type; BGTask/push are best-effort only).
+
+   Known system-routed write flows to plan for: passkey registration
+   (iOS 17+), automatic passkey upgrades (iOS 18+, skip in v1), password
+   save/update + strong-password generation (**iOS 26.2**:
+   `ASSavePasswordRequest` / `ASGeneratePasswordsRequest`,
+   `SupportsSavePasswordCredentials` — 1Password/Enpass/RoboForm already
+   ship it; fast-follow after the MVP), and Signal-API maintenance reports
+   (iOS 26: passkey rename/removal hints, unused-password reports —
+   background, optional). TOTP setup never routes through the extension —
+   registering the app as an `otpauth://` handler is a separate cheap win.
 
 ## Phases
 

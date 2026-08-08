@@ -73,6 +73,22 @@ passkey provider support (iOS / macOS / Android). Companion document:
   unreliable — design for main-app writes), fails while device locked.
 - Testing: credential-provider extensions effectively require a **physical
   device**; Flutter-in-extension debug mode on device OOMs (test release/profile).
+- **System-routed write flows** to a third-party provider: passkey
+  registration (iOS 17+) and automatic passkey upgrades (18+) were the only
+  ones through iOS 18 — password saving did **not** exist at the OS level.
+  **iOS 26.2** added real password write routing: `ASSavePasswordRequest`
+  (`prepareInterface(for:)` + silent
+  `performWithoutUserInteractionIfPossible(savePasswordRequest:)`; events for
+  new account, password change, generated-password fill) and
+  `ASGeneratePasswordsRequest` (strong-password generation with password-rule
+  quirks), gated by the `SupportsSavePasswordCredentials` capability —
+  1Password, Enpass and RoboForm shipped within weeks. **iOS 26.0** added the
+  Signal API report callbacks (`reportPublicKeyCredentialUpdate`,
+  `reportAllAcceptedPublicKeyCredentials`, `reportUnknownPublicKeyCredential`,
+  `reportUnusedPasswordCredential`) — background maintenance hints, capability
+  `SupportsCredentialUpdate`. TOTP provisioning never routes through the
+  extension; apps register as `otpauth://` URL-scheme handlers to appear in
+  Settings → "Set Up Verification Codes Using".
 
 ## Flutter constraints
 
