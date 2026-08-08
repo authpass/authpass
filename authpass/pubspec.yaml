@@ -128,6 +128,10 @@ dependencies:
 
   string_literal_finder_annotations: ^1.0.0
 
+  # eTLD+1 matching for autofill. The rule list itself is vendored, see
+  # _tools/update_public_suffix_list.dart
+  public_suffix: ^3.0.0
+
   # WebDAV
   http_auth: ^1.0.0
   xml: ">=5.5.0 <7.0.0"
