@@ -180,8 +180,17 @@ refinement — KeePassium does resolve shared bookmarks in the extension).
   incl. RFC 6979; verify PKCS#8-vs-SEC1 PEM interop against KeePassXC files).
 - **Apple**: delta over a working extension is small (KeePassium's core is
   420 LOC Swift; Strongbox shipped both platforms in ~6–7 weeks). Registration
-  must **save the kdbx from inside the extension** (or route through the main
-  app). AAGUID gets zeroed by the system; only `fmt:"none"` attestation; no
+  must persist the new credential — either by saving the kdbx from inside the
+  extension (Strongbox), or by **staging out-of-band and merging in the main
+  app**: KeePassium 2.4 (Nov 2025) saves a new passkey "first to the system
+  keychain", then tries a DB save, else keeps it pending and reminds the user
+  to open the app. Relevant platform facts: an extension **cannot** launch its
+  containing app (Today-widget-only API; responder-chain hack is unsupported
+  with review risk), BGTaskScheduler runs are opportunistic (force-quit kills
+  them; extensions can't register handlers), silent push is throttled
+  best-effort — so merges must be assumed to wait for the next app open.
+  Keychain items without `ThisDeviceOnly` accessibility are backup-restorable;
+  biometry-ACL-bound items are not usable after device migration. AAGUID gets zeroed by the system; only `fmt:"none"` attestation; no
   Simulator support; expect a long relying-party-compat tail (KeePassium: ~1
   year of fixes). Conditional registration + largeBlob: skipped by all
   KeePass-family apps in v1.
