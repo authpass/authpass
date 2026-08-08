@@ -1,4 +1,12 @@
 {
+  "extraKnownMarketplaces": {
+    "dart-flutter": {
+      "source": {
+        "source": "github",
+        "repo": "flutter/agent-plugins"
+      }
+    }
+  },
   "permissions": {
     "allow": [
       "Bash(dart analyze *)",
