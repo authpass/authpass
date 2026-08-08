@@ -177,11 +177,22 @@ key/file sharing design — Phases 1, 3, 4 survive unchanged.
 
 ### Later — passkeys (separate plan when scheduled)
 
-Order of attack per research: shared pure-Dart authenticator core →
-**Android** `CredentialProviderService` (no dependency on the Apple
-extensions, full-Flutter UI) → Apple passkey delta on the extensions built
-above. The write-back path (Phase 1/2 design) and decisions 1–7 are the
+Order of attack per research: shared pure-Dart authenticator core +
+`KPEX_PASSKEY_*` layer (~3–4 weeks, no platform dependency) →
+**Android** `CredentialProviderService` (~5–8 weeks; no dependency on the
+Apple extensions, full-Flutter UI via PendingIntent) → Apple passkey delta on
+the extensions built above (~4–8 weeks shared between iOS and macOS; plus an
+ongoing relying-party-compat tail — KeePassium spent ~a year on site-specific
+fixes). The staging design (decision 8) and decisions 1–7 are the
 prerequisites this plan already provides.
+
+### Follow-up worth doing regardless
+
+Once kdbx.dart can export the transformed key (Phase 1), consider migrating
+**quick-unlock** itself from caching the composite key hash (all-powerful,
+never expires) to salt-bound transformed keys — that gives the
+"leaked key goes stale on next save" property to the secret that actually
+matters today, not just to the extension's copy.
 
 ## Effort summary
 
