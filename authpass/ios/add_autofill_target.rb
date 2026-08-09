@@ -17,7 +17,14 @@
 require 'xcodeproj'
 
 PROJECT_PATH = 'Runner.xcodeproj'
+# Target and product name: CamelCase, like Runner. Also becomes the swift
+# module name in NSExtensionPrincipalClass.
 TARGET_NAME = 'AuthPassAutofill'
+# Bundle id suffix: lowercase, like every other identifier in this project and
+# per apple's own convention. Xcode would default this to the product name, but
+# sources disagree on whether bundle ids are case sensitive and this string ends
+# up in the portal, the match profiles, entitlements and CI.
+BUNDLE_ID_SUFFIX = 'autofill'
 SOURCE_DIR = 'AuthPassAutofill'
 FIXTURES_DIR = File.join(SOURCE_DIR, 'Fixtures')
 # Built by autofill_module/build_ios_framework.sh
@@ -126,7 +133,7 @@ target.build_configurations.each do |config|
   config.base_configuration_reference = generated_xcconfig
   settings = config.build_settings
   settings['PRODUCT_BUNDLE_IDENTIFIER'] =
-    "$(PRODUCT_BUNDLE_IDENTIFIER_BASE).#{TARGET_NAME}"
+    "$(PRODUCT_BUNDLE_IDENTIFIER_BASE).#{BUNDLE_ID_SUFFIX}"
   settings['PRODUCT_NAME'] = TARGET_NAME
   settings['INFOPLIST_FILE'] = "#{SOURCE_DIR}/Info.plist"
   settings['CODE_SIGN_ENTITLEMENTS'] = "#{SOURCE_DIR}/#{TARGET_NAME}.entitlements"
@@ -161,7 +168,7 @@ app_target.build_configurations.each do |app_config|
   config = target.build_configurations.find { |c| c.name == app_config.name }
   next if config.nil?
 
-  config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = "#{base}.#{TARGET_NAME}"
+  config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = "#{base}.#{BUNDLE_ID_SUFFIX}"
 end
 
 # --- embed into the app -------------------------------------------------------

@@ -160,7 +160,8 @@ Build notes worth keeping (all three cost time to rediscover):
 - Dart eTLD+1 matcher (public-suffix based), wired into Android autofill too.
 - App-group mirror layer in the app: copy-on-open/save + manifest.
 - Provisioning: register extension bundle ids
-  (`design.codeux.authpass.ios[.debug].AuthPassAutofill`), app group and
+  (`design.codeux.authpass.ios[.debug].autofill` — lowercase, like every other
+  identifier here; the Xcode *target* stays `AuthPassAutofill`), app group and
   autofill capability in the portal; generate + push match profiles
   (needs write access to the private cert repo); `Appfile`/`Fastfile` updated
   for two identifiers.
