@@ -139,7 +139,6 @@ target.build_configurations.each do |config|
   settings['CODE_SIGN_ENTITLEMENTS'] = "#{SOURCE_DIR}/#{TARGET_NAME}.entitlements"
   settings['IPHONEOS_DEPLOYMENT_TARGET'] = DEPLOYMENT_TARGET
   settings['SWIFT_VERSION'] = '5.0'
-  settings['CODE_SIGN_STYLE'] = 'Automatic'
   settings['DEVELOPMENT_TEAM'] = '64ZPC769JY'
   settings['TARGETED_DEVICE_FAMILY'] = '1,2'
   settings['SKIP_INSTALL'] = 'YES'
@@ -169,6 +168,22 @@ app_target.build_configurations.each do |app_config|
   next if config.nil?
 
   config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = "#{base}.#{BUNDLE_ID_SUFFIX}"
+
+  # Signing follows the app, per configuration. Runner signs Debug
+  # automatically and Release/Profile manually against a match profile; an
+  # automatically signed appex inside a manually signed app is not valid for
+  # the store. The profile name is match's own convention,
+  # "match AppStore <bundle id>", so it resolves once
+  # `fastlane match appstore` has been run for the extension identifier —
+  # see docs/autofill/provisioning.md.
+  style = app_config.build_settings['CODE_SIGN_STYLE'] || 'Automatic'
+  config.build_settings['CODE_SIGN_STYLE'] = style
+  next unless style == 'Manual'
+
+  config.build_settings['CODE_SIGN_IDENTITY'] =
+    app_config.build_settings['CODE_SIGN_IDENTITY']
+  config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] =
+    "match AppStore #{base}.#{BUNDLE_ID_SUFFIX}"
 end
 
 # --- embed into the app -------------------------------------------------------

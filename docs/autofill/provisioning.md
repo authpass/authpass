@@ -89,6 +89,23 @@ extension.
 Saving a capability change invalidates existing profiles — that is expected,
 step 4 regenerates them.
 
+## 3b. What automatic signing already did
+
+Building to a device with automatic signing registers the App ID *and* enables
+the capabilities for you. After the first dev build, the portal already had
+`design.codeux.authpass.ios.debug.autofill` with both
+`autofill-credential-provider` and `group.design.codeux.authpass` — which is
+why trying to register it by hand answers "An App ID with Identifier … is not
+available".
+
+So steps 2 and 3 in practice only concern the two **production** identifiers,
+`design.codeux.authpass.ios` and `design.codeux.authpass.ios.autofill`. Check
+before creating; an existing one is fine, not a mistake.
+
+Automatic signing may also have left a stale
+`design.codeux.authpass.ios.debug.AuthPassAutofill` from before the bundle id
+was lowercased. Harmless, but worth deleting.
+
 ## 4. Match profiles
 
 Needs **write** access to the cert repo; the `Matchfile` currently points at
@@ -109,6 +126,15 @@ bundle exec fastlane match appstore --app_identifier "design.codeux.authpass.ios
 Drop `readonly` for these runs — they have to create the new profiles. If match
 complains the profiles are outdated after step 3, add `--force` to regenerate
 rather than reuse.
+
+Note the app's own `match AppStore design.codeux.authpass.ios` profile expired
+2025-09-02, so this step is needed regardless of the extension.
+
+The extension target expects the profile to be named
+`match AppStore design.codeux.authpass.ios.autofill` in its Release and Profile
+configurations — match's own naming, so it lines up automatically. Debug stays
+on automatic signing, which is what keeps device testing working without any of
+this.
 
 ## 5. Persist the identifier list
 
