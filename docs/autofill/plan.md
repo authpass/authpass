@@ -1,6 +1,8 @@
 # AutoFill Implementation Plan (iOS + macOS)
 
-Status: proposal, 2026-08-08. Background and sources: [research.md](research.md).
+Status: proposal, 2026-08-08. Phase 0 done (go, see below).
+Background and sources: [research.md](research.md).
+Portal checklist: [provisioning.md](provisioning.md).
 
 ## Goal
 

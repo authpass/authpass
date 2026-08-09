@@ -1,0 +1,154 @@
+# Provisioning the iOS AutoFill extension
+
+The last Phase 1 item from [plan.md](plan.md). Everything here needs credentials
+this repo does not carry — the Apple Developer portal and write access to the
+private match certificate repo — so it is a manual checklist rather than a
+script.
+
+Dev signing already works without any of this: Xcode's automatic signing has
+been creating what it needs. What follows is what App Store / TestFlight builds
+need.
+
+## What you are registering
+
+| | identifier |
+|---|---|
+| app | `design.codeux.authpass.ios` |
+| extension | `design.codeux.authpass.ios.autofill` |
+| app (debug) | `design.codeux.authpass.ios.debug` |
+| extension (debug) | `design.codeux.authpass.ios.debug.autofill` |
+| app group | `group.design.codeux.authpass` |
+
+Team `64ZPC769JY`. An extension's bundle id **must** be prefixed by its host
+app's — that is a hard Apple rule, not a convention.
+
+The app group doubles as the keychain access group. An app group identifier is
+a valid `kSecAttrAccessGroup` and needs no team-id prefix, which is why there is
+no Keychain Sharing capability to add.
+
+> Automatic signing may already have created
+> `design.codeux.authpass.ios.debug.autofill` (and, from an earlier iteration,
+> a stale `…debug.AuthPassAutofill`). Registering an existing id is a no-op;
+> delete the stale CamelCase one if you see it.
+
+## 1. App group
+
+Portal → **Certificates, Identifiers & Profiles** → **Identifiers** →
+filter the dropdown (top right) to **App Groups**.
+
+1. Check whether `group.design.codeux.authpass` already exists. If it does,
+   skip to step 2.
+2. **+** → **App Groups** → Continue.
+3. Description `AuthPass Shared`, Identifier `group.design.codeux.authpass`.
+4. Continue → Register.
+
+## 2. Extension App IDs
+
+Identifiers → filter to **App IDs** → **+** → **App IDs** → **App** → Continue.
+
+Do this twice, once per row:
+
+| Description | Bundle ID (explicit) |
+|---|---|
+| `AuthPass iOS AutoFill` | `design.codeux.authpass.ios.autofill` |
+| `AuthPass iOS AutoFill Debug` | `design.codeux.authpass.ios.debug.autofill` |
+
+For each, before saving, tick under **Capabilities**:
+
+- **App Groups**
+- **AutoFill Credential Provider**
+
+Then Continue → Register.
+
+## 3. Attach the app group to all four App IDs
+
+The capability checkbox only says "this app may use app groups"; the group
+itself is assigned separately, and it is easy to miss.
+
+For each of the four App IDs (the two apps **and** the two extensions):
+
+1. Identifiers → click the App ID.
+2. **App Groups** row → **Configure** (or **Edit**).
+3. Tick `group.design.codeux.authpass` → Continue → Save.
+
+While you are in the two *app* App IDs, also confirm **AutoFill Credential
+Provider** is ticked there. The containing app needs it too, not just the
+extension.
+
+Saving a capability change invalidates existing profiles — that is expected,
+step 4 regenerates them.
+
+## 4. Match profiles
+
+Needs **write** access to the cert repo; the `Matchfile` currently points at
+`git@gitlab.com:codeuxdesign/cux-certificates.git`, branch `cux_certificates`,
+and CI runs `match(readonly: true)`.
+
+`Appfile` names a single `app_identifier`, so match has to be told about all
+four. From `authpass/ios`:
+
+```bash
+bundle exec fastlane match development --app_identifier "design.codeux.authpass.ios,design.codeux.authpass.ios.autofill,design.codeux.authpass.ios.debug,design.codeux.authpass.ios.debug.autofill"
+```
+
+```bash
+bundle exec fastlane match appstore --app_identifier "design.codeux.authpass.ios,design.codeux.authpass.ios.autofill"
+```
+
+Drop `readonly` for these runs — they have to create the new profiles. If match
+complains the profiles are outdated after step 3, add `--force` to regenerate
+rather than reuse.
+
+## 5. Persist the identifier list
+
+So CI does not need the long `--app_identifier` flag. In
+`authpass/ios/fastlane/Matchfile`:
+
+```ruby
+app_identifier(["design.codeux.authpass.ios", "design.codeux.authpass.ios.autofill"])
+```
+
+`Appfile` keeps its single `app_identifier` — that one drives
+`upload_to_testflight` and should stay the app.
+
+The `Fastfile` `match(type: "appstore", readonly: true)` call then picks both
+identifiers up with no change. `build_app(workspace:, scheme: "Runner")` also
+needs no change: the extension is a dependency of the Runner target, so it is
+built and signed as part of it.
+
+## 6. Verify
+
+```bash
+cd authpass && flutter build ios --release -t lib/env/production.dart
+```
+
+Then check both binaries carry the entitlements:
+
+```bash
+codesign -d --entitlements - --xml build/ios/iphoneos/Runner.app | plutil -p - | grep -E "autofill|application-groups"
+```
+
+```bash
+codesign -d --entitlements - --xml build/ios/iphoneos/Runner.app/PlugIns/AuthPassAutofill.appex | plutil -p - | grep -E "autofill|application-groups"
+```
+
+Each should show
+`com.apple.developer.authentication-services.autofill-credential-provider` and
+`group.design.codeux.authpass`.
+
+## Known failure modes
+
+**"Provisioning profile doesn't include the AutoFill Credential Provider
+capability"** — step 2 or 3 was missed for that identifier, or the profile
+predates the change; regenerate with `--force`.
+
+**"doesn't support the group.design.codeux.authpass App Group"** — the
+capability is ticked but the group was never assigned. Step 3.
+
+**"Unable to log in with account … The login details were rejected"** — the
+Xcode account session expired. Xcode → Settings → Accounts → re-authenticate.
+Automatic signing cannot create anything until this is fixed.
+
+**appex rejected at install with "does not have a CFBundleVersion key"** — the
+extension target lost `Flutter/Generated.xcconfig` as its base configuration.
+Re-run `bundle exec ruby add_autofill_target.rb`.
