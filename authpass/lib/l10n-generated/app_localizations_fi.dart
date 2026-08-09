@@ -353,6 +353,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get autofillFilterPrefix => 'Suodatin:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt =>
       'Valitse salasanan syöttö automaattista täyttöä varten.';
 

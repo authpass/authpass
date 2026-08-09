@@ -748,6 +748,12 @@ abstract class AppLocalizations {
   /// **'Filter:'**
   String get autofillFilterPrefix;
 
+  /// Label displayed during autofill when the list was narrowed to entries whose URL belongs to the requesting website or app, rather than by a text search. Followed by the domain or app name.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching entries for:'**
+  String get autofillMatchPrefix;
+
   ///
   ///
   /// In en, this message translates to:

@@ -354,6 +354,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get autofillFilterPrefix => 'Filter:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt =>
       'Vyberte zadanie hesla pre automatické dopĺňanie.';
 

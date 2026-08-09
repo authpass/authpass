@@ -353,6 +353,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get autofillFilterPrefix => 'Saring:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => 'Pilih entri kata sandi untuk isi otomatis.';
 
   @override

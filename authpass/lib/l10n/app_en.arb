@@ -390,6 +390,10 @@
   "@autofillFilterPrefix": {
     "description": "Label displayed for android auto fill"
   },
+  "autofillMatchPrefix": "Matching entries for:",
+  "@autofillMatchPrefix": {
+    "description": "Label displayed during autofill when the list was narrowed to entries whose URL belongs to the requesting website or app, rather than by a text search. Followed by the domain or app name."
+  },
   "autofillPrompt": "Select password entry for autofill.",
   "@autofillPrompt": {
     "description": ""

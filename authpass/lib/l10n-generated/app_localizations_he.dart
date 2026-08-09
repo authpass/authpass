@@ -353,6 +353,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get autofillFilterPrefix => 'סינון:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => 'נא לבחור רשומת סיסמה למילוי אוטומטי.';
 
   @override

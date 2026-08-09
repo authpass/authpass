@@ -70,6 +70,10 @@ class CredentialMatcher {
   factory CredentialMatcher.withSuffixList(String suffixList) =>
       CredentialMatcher._(SuffixRules.fromString(suffixList));
 
+  /// Shared instance — parsing ten thousand suffix rules is not free, and the
+  /// result never changes.
+  static final CredentialMatcher instance = CredentialMatcher();
+
   final SuffixRules _suffixRules;
 
   /// Prefix Keepass2Android uses in the url field to record a native app.
@@ -184,6 +188,68 @@ class CredentialMatcher {
         ? CredentialMatchQuality.registrableDomain
         : null;
   }
+
+  /// Best quality across every request and every url, or null for no match.
+  ///
+  /// A fill request usually names more than one thing — a browser reports the
+  /// page domain, sometimes several, alongside the browser's own package — and
+  /// an entry may carry more than one url. Any pairing counts, and the
+  /// strongest one wins.
+  CredentialMatchQuality? matchBest(
+    Iterable<CredentialRequest> requests,
+    Iterable<String?> entryUrls,
+  ) {
+    CredentialMatchQuality? best;
+    for (final request in requests) {
+      for (final url in entryUrls) {
+        final quality = match(request, url);
+        if (quality == null) {
+          continue;
+        }
+        if (quality == CredentialMatchQuality.host) {
+          // nothing beats it, stop looking.
+          return quality;
+        }
+        if (best == null || quality.index < best.index) {
+          best = quality;
+        }
+      }
+    }
+    return best;
+  }
+
+  /// The candidates which answer [requests], strongest match first.
+  ///
+  /// Ties keep the order [candidates] came in, so an existing sort (by title,
+  /// say) still shows through within a quality band.
+  List<T> rank<T>(
+    Iterable<CredentialRequest> requests,
+    Iterable<T> candidates,
+    Iterable<String?> Function(T candidate) urlsOf,
+  ) {
+    final matched = <_Ranked<T>>[];
+    var position = 0;
+    for (final candidate in candidates) {
+      final quality = matchBest(requests, urlsOf(candidate));
+      if (quality != null) {
+        matched.add(_Ranked(candidate, quality, position));
+      }
+      position++;
+    }
+    matched.sort((a, b) {
+      final byQuality = a.quality.index.compareTo(b.quality.index);
+      return byQuality != 0 ? byQuality : a.position.compareTo(b.position);
+    });
+    return matched.map((e) => e.candidate).toList(growable: false);
+  }
+}
+
+class _Ranked<T> {
+  _Ranked(this.candidate, this.quality, this.position);
+
+  final T candidate;
+  final CredentialMatchQuality quality;
+  final int position;
 }
 
 extension on String {

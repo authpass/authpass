@@ -353,6 +353,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get autofillFilterPrefix => 'Фильтр:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => 'Выберите пароль для автозаполнения.';
 
   @override

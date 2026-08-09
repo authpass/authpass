@@ -354,6 +354,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get autofillFilterPrefix => 'Filtras:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt =>
       'Pasirinkite slaptažodžio įrašą automatiniam užpildymui.';
 

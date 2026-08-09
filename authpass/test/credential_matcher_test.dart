@@ -234,6 +234,127 @@ void main() {
     });
   });
 
+  group('matchBest', () {
+    // what a browser fill request actually looks like: the page domain plus
+    // the browser's own package name.
+    final browser = [
+      CredentialRequest.web('https://accounts.google.com'),
+      CredentialRequest.application('com.android.chrome'),
+    ];
+
+    test('takes the strongest quality across requests and urls', () {
+      expect(
+        matcher.matchBest(browser, [
+          'https://google.com',
+          'https://accounts.google.com',
+        ]),
+        CredentialMatchQuality.host,
+      );
+    });
+
+    test('order of the urls does not change the result', () {
+      expect(
+        matcher.matchBest(browser, [
+          'https://accounts.google.com',
+          'https://google.com',
+        ]),
+        CredentialMatchQuality.host,
+      );
+    });
+
+    test('falls back to the weaker match when there is no exact host', () {
+      expect(
+        matcher.matchBest(browser, ['https://mail.google.com']),
+        CredentialMatchQuality.registrableDomain,
+      );
+    });
+
+    test('does not offer the browser its own credentials by accident', () {
+      // an entry for chrome itself must not match because chrome is asking.
+      expect(
+        matcher.matchBest(
+          [CredentialRequest.web('https://example.com')],
+          ['androidapp://com.android.chrome'],
+        ),
+        isNull,
+      );
+    });
+
+    test('matches the requesting native app', () {
+      expect(
+        matcher.matchBest(
+          [CredentialRequest.application('com.example.app')],
+          ['androidapp://com.example.app'],
+        ),
+        CredentialMatchQuality.application,
+      );
+    });
+
+    test('is null when nothing matches', () {
+      expect(matcher.matchBest(browser, ['https://example.com', null]), isNull);
+    });
+
+    test('is null without requests or urls', () {
+      expect(matcher.matchBest([], ['https://google.com']), isNull);
+      expect(matcher.matchBest(browser, []), isNull);
+    });
+  });
+
+  group('rank', () {
+    List<String> rank(List<CredentialRequest> requests, List<String> urls) =>
+        matcher.rank(requests, urls, (url) => [url]);
+
+    final request = [CredentialRequest.web('https://accounts.google.com')];
+
+    test('drops everything which does not match', () {
+      expect(
+        rank(request, [
+          'https://example.com',
+          'https://accounts.google.com',
+          'https://google.com.evil.example',
+        ]),
+        ['https://accounts.google.com'],
+      );
+    });
+
+    test('puts the exact host ahead of the registrable domain', () {
+      expect(
+        rank(request, [
+          'https://mail.google.com',
+          'https://accounts.google.com',
+          'https://google.com',
+        ]),
+        [
+          'https://accounts.google.com',
+          'https://mail.google.com',
+          'https://google.com',
+        ],
+      );
+    });
+
+    test('keeps the incoming order within one quality band', () {
+      expect(
+        rank(request, ['https://z.google.com', 'https://a.google.com']),
+        ['https://z.google.com', 'https://a.google.com'],
+      );
+    });
+
+    test('is empty when nothing matches', () {
+      expect(rank(request, ['https://example.com']), isEmpty);
+    });
+
+    test('handles candidates carrying several urls', () {
+      final candidates = [
+        ['https://example.com', 'https://accounts.google.com'],
+        ['https://example.org'],
+      ];
+      expect(
+        matcher.rank(request, candidates, (urls) => urls),
+        [candidates.first],
+      );
+    });
+  });
+
   group('with a custom suffix list', () {
     final custom = CredentialMatcher.withSuffixList('''
 com

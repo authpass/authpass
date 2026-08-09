@@ -26,6 +26,7 @@ import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/ui/widgets/shortcut/authpass_intents.dart';
 import 'package:authpass/utils/cache_manager.dart';
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/credential_matcher.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/extension_methods.dart';
 import 'package:authpass/utils/format_utils.dart';
@@ -518,16 +519,7 @@ class _PasswordListContentState extends State<PasswordListContent>
         setState(() {
           _autofillMetadata = value;
         });
-        final val =
-            value?.searchTerm?.let((term) {
-              _filterTextEditingController.text = term;
-              _filterTextEditingController.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: term.length,
-              );
-              return _updateFilterQuery(term);
-            }) ??
-            0;
+        final val = value?.let(_applyAutofillFilter) ?? 0;
         context.read<Analytics>().events.trackAutofillFilter(
           filter: '${value?.searchTerm?.isNotEmpty}',
           value: val,
@@ -535,6 +527,39 @@ class _PasswordListContentState extends State<PasswordListContent>
       });
     }
   }
+
+  /// Narrows the list to the credentials which belong to the requesting site
+  /// or app, matched by registrable domain rather than by substring.
+  ///
+  /// Falls back to the old behaviour — the domain typed into the search box,
+  /// which searches every field — when nothing matches by url. Plenty of
+  /// entries carry the site only in their title, and offering nothing at all
+  /// would be worse than offering too much.
+  int _applyAutofillFilter(AutofillMetadata metadata) {
+    final matches = CredentialMatcher.instance.rank(
+      metadata.credentialRequests,
+      _allEntries!,
+      (entry) => [entry.entry.getString(EntryViewModel.websiteKey)?.getText()],
+    );
+    if (matches.isNotEmpty) {
+      _autofillMatchedByUrl = true;
+      return _showFilteredEntries(CharConstants.empty, matches);
+    }
+
+    _autofillMatchedByUrl = false;
+    return metadata.searchTerm?.let((term) {
+          _filterTextEditingController.text = term;
+          _filterTextEditingController.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: term.length,
+          );
+          return _updateFilterQuery(term);
+        }) ??
+        0;
+  }
+
+  /// Whether the list currently shows url matches rather than a text search.
+  bool _autofillMatchedByUrl = false;
 
   void _updateAllEntries() {
     final watch = Stopwatch()..start();
@@ -936,6 +961,8 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   int _updateFilterQuery(String newQuery) {
+    // a text search replaces whatever the url matcher put on screen.
+    _autofillMatchedByUrl = false;
     final entries = PasswordListFilterIsolateRunner.filterEntries(
       widget.appData,
       _allEntries!,
@@ -949,8 +976,12 @@ class _PasswordListContentState extends State<PasswordListContent>
       );
       return 0;
     }
+    return _showFilteredEntries(newQuery, entries);
+  }
+
+  int _showFilteredEntries(String query, List<EntryViewModel> entries) {
     setState(() {
-      _filterQuery = newQuery;
+      _filterQuery = query;
       _filteredEntries = entries;
       if (_filteredEntries!.isNotEmpty &&
           (widget.selectedEntry == null ||
@@ -1004,7 +1035,19 @@ class _PasswordListContentState extends State<PasswordListContent>
 
     final info = _autofillMetadata?.let((metadata) {
       final searchTerm = metadata.searchTerm;
-      if (searchTerm != null && searchTerm == _filterQuery) {
+      if (searchTerm == null) {
+        return null;
+      }
+      if (_autofillMatchedByUrl) {
+        return [
+          TextSpan(text: Nls.NL + loc.autofillMatchPrefix + Nls.SP),
+          TextSpan(
+            text: searchTerm,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ];
+      }
+      if (searchTerm == _filterQuery) {
         return [
           TextSpan(text: Nls.NL + loc.autofillFilterPrefix + Nls.SP),
           TextSpan(
@@ -1013,6 +1056,7 @@ class _PasswordListContentState extends State<PasswordListContent>
           ),
         ];
       }
+      return null;
     });
     return [
       Padding(
@@ -1889,6 +1933,22 @@ class EntryIcon extends StatelessWidget {
 }
 
 extension on AutofillMetadata {
+  /// Everything the platform said about who is asking, as match requests.
+  ///
+  /// A browser reports the page's domain (occasionally more than one, for
+  /// framed logins) plus its own package name; a native app reports only its
+  /// package. `android` is the framework itself, never a credential.
+  Iterable<CredentialRequest> get credentialRequests => [
+    ...webDomains
+        .where((domain) => domain.domain.isNotEmpty)
+        .map((domain) => CredentialRequest.web(domain.domain)),
+    ...packageNames
+        .where(
+          (packageName) => packageName != 'android', // NON-NLS
+        )
+        .map(CredentialRequest.application),
+  ];
+
   String? get searchTerm =>
       webDomains
           .where((element) => element.domain.isNotEmpty)

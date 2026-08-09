@@ -353,6 +353,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get autofillFilterPrefix => 'Фільтр:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => 'Оберіть пароль для автозаповнення.';
 
   @override

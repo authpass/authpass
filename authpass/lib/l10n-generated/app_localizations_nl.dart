@@ -353,6 +353,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get autofillFilterPrefix => 'Filter:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt =>
       'Selecteer wachtwoord invoer voor Automatisch aanvullen.';
 

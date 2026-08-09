@@ -346,6 +346,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get autofillFilterPrefix => '筛选：';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => '选择用于自动填充的密码条目。';
 
   @override

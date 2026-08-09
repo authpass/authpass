@@ -355,6 +355,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get autofillFilterPrefix => 'Filtrele:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => 'Select password entry for autofill.';
 
   @override
