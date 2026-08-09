@@ -97,23 +97,56 @@ below so it can be added later without a redesign.
 
 ## Phases
 
-### Phase 0 — Spike: headless module + memory (≈ 1 week)
+### Phase 0 — Spike: headless module + memory — **DONE, go** (2026-08-09)
 
-Fresh from `main` (do not rebase the old branches):
+Measured on an iPhone XR, iOS 18.7.9, release engine in the appex, via
+`autofill_module` + the `AuthPassAutofill` target. Two generated vaults, both
+opened with an injected transformed key (no Argon2):
 
-- Xcode-wizard `AuthPassAutofill` extension target in `ios/Runner.xcodeproj`;
-  entitlements (autofill capability + app group) on both targets; dev-signing
-  only.
-- Minimal Flutter module with `kdbx` + `argon2_ffi`; boot it headless behind a
-  bare Swift `ASCredentialProviderViewController`; hand it a kdbx file +
-  pre-derived key, get an entry back over the channel.
-- Measure `os_proc_available_memory()` with a realistic vault, release mode,
-  physical device.
+| step | 2000 entries / 0.9 MB | 5000 entries / 2.8 MB |
+|---|---|---|
+| baseline available | 114.8 MB | 114.8 MB |
+| engine + channel | 7.0 MB | 7.5 MB |
+| vault open | 47.7 MB | 77.6 MB |
+| list *all* entries over the channel | 3.0 MB | 17.3 MB |
+| lowest available reached | 57.1 MB | 12.4 MB |
+| dart time to open | 326 ms | 865 ms |
 
-**Exit criteria / go–no-go**: entry decrypted in-extension with comfortable
-memory headroom, headless engine stable (watch flutter#165904). Fallback if it
-fails: native Swift extension reusing KeePassiumLib (GPLv3-compatible), same
-key/file sharing design — Phases 1, 3, 4 survive unchanged.
+**Verdict: go.** The headless engine boots and runs in the appex —
+flutter#165904 did not bite on iOS 18 — and the engine itself costs only
+~7 MB. The KeePassiumLib fallback is not needed.
+
+What the numbers mean for the rest of the plan:
+
+- The cost is the decrypted XML DOM, not Flutter: roughly **28 MB fixed +
+  ~13.5 KB per entry** across the two data points, putting the cliff near
+  **6000 entries** for a vault of this shape. That is the threshold the
+  Phase 4 guardrail should warn at — measured, not guessed.
+- **Never send the whole entry list over the channel.** 17 MB of the 5000
+  entry run was the spike doing exactly that. Phase 2/3 must filter in Dart
+  with the shared matcher and return only what matches, which is worth ~14 MB
+  and moves the cliff to ~7500 entries.
+- Custom icons are charged twice, once as base64 in the DOM and once decoded.
+  The extension never renders them, so a kdbx.dart option to skip binaries and
+  custom icons on load is a cheap, large win — see follow-ups.
+- Skipping Argon2 was load bearing. At KeePass defaults (64 MB+) it would not
+  have fit alongside a 48–78 MB DOM.
+- 0.9 s / 1.15 s end to end is inside the few second budget for
+  `provideCredentialWithoutUserInteraction`, but that path adds a keychain
+  read and Face ID on top — measure it again in Phase 2 rather than assuming.
+
+Build notes worth keeping (all three cost time to rediscover):
+
+- The extension embeds the module's **Release** frameworks in every
+  configuration, so a Debug host app still yields a release-engine appex —
+  which is how to measure without replacing a production-signed app.
+- An appex with an empty `CFBundleVersion` is rejected by `installd`. The
+  target needs `Flutter/Generated.xcconfig` as its base configuration for
+  `$(FLUTTER_BUILD_NUMBER)` to resolve — not `Flutter/Debug.xcconfig`, which
+  drags in the app's Pods settings.
+- `xcodeproj`'s `new_target` sets no `LD_RUNPATH_SEARCH_PATHS`, so the appex
+  cannot resolve `@rpath/Flutter.framework` and dies before running a line of
+  code. Xcode's own template sets it; the script now does too.
 
 ### Phase 1 — Shared foundations (≈ 2–3 weeks, parallelizable with Phase 0)
 
@@ -188,6 +221,14 @@ prerequisites this plan already provides.
 
 ### Follow-up worth doing regardless
 
+**Lazy / skippable binaries in kdbx.dart.** Phase 0 measured the decrypted DOM
+at 28 MB + ~13.5 KB per entry, and custom icons are a visible part of that.
+The extension never renders an icon and never touches an attachment, so a load
+option that skips inner-header binaries and custom icons would buy back a
+large slice of the extension's budget — and would speed up opening big vaults
+in the app too. Worth doing before Phase 4 sets its warning threshold, since
+it moves the threshold.
+
 Once kdbx.dart can export the transformed key (Phase 1), consider migrating
 **quick-unlock** itself from caching the composite key hash (all-powerful,
 never expires) to salt-bound transformed keys — that gives the
@@ -210,8 +251,8 @@ matters today, not just to the extension's copy.
 
 | Risk | Mitigation |
 |---|---|
-| Headless engine unstable in the appex (flutter#165904) | Phase 0 spike decides early; KeePassiumLib fallback keeps the rest of the plan intact |
-| Memory blowup on large vaults (XML DOM) | transformed-key cache removes Argon2; memory monitor + user warning; test with big vaults in Phase 0 |
+| ~~Headless engine unstable in the appex (flutter#165904)~~ | **retired** — Phase 0 booted it on iOS 18 for ~7 MB; KeePassiumLib fallback dropped |
+| Memory blowup on large vaults (XML DOM) | **confirmed real, and now quantified**: ~28 MB + 13.5 KB/entry, cliff near 6000 entries. transformed-key cache removes Argon2; filter in Dart instead of listing every entry; skip binaries/icons on load; memory monitor + user warning in Phase 4 |
 | Provisioning/match friction (readonly repo, new ids, app group) | do it in Phase 1, not last; it gates everything |
 | biometric_storage migration breaks existing quick-unlock | re-create items lazily on next unlock; namespace new group items |
 | Mirror-copy staleness with cloud-synced vaults | manifest mtime check + clear "open AuthPass" UX; bookmark sharing as follow-up |
