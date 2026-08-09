@@ -11,9 +11,15 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  kdbx: ^2.4.1
+#  kdbx: ^2.4.1
 #  kdbx:
 #    path: ../deps/kdbx.dart
+  # Until 2.5.0 is on pub: TransformedKeyCredentials + kdfFingerprint, which
+  # the autofill extension needs to open a vault without argon2.
+  kdbx:
+    git:
+      url: https://github.com/authpass/kdbx.dart.git
+      ref: 5ec70166b79c821300c1bf7403c8f2291d834204
 #  argon2_ffi: ^1.0.0+2
   argon2_ffi:
     git:
@@ -75,6 +81,9 @@ dependencies:
 ##    path: ../deps/package_info_macos
   device_info_plus: ^12.3.0
   path_provider: ^2.0.1
+  # Directly, for getContainerPath: the app group container the autofill
+  # extension reads is not reachable through path_provider's own api.
+  path_provider_foundation: ^2.6.0
 #  path_provider_macos: ^0.0.4+4
 #  path_provider_linux: ">=0.0.1 <2.0.0"
   #path_provider_windows: '>=0.0.1+2 <2.0.0'
@@ -87,7 +96,13 @@ dependencies:
   flutter_email_sender: ^8.0.0
   flutter_store_listing: ^1.1.0
 
-  biometric_storage: ^5.1.1-dev.1
+#  biometric_storage: ^5.1.1-dev.1
+  # Until 5.2.0 is on pub: darwinKeychainAccessGroup, so the extension can read
+  # the keys the app caches.
+  biometric_storage:
+    git:
+      url: https://github.com/authpass/biometric_storage.git
+      ref: 14c88cf917059eb99ffb30af717cb7cd8491c033
   uuid: ^4.3.3
   url_launcher: ^6.0.2
   font_awesome_flutter: ^11.0.0

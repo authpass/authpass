@@ -59,7 +59,10 @@ void main() {
 
     test('withEntry replaces rather than duplicates', () {
       final manifest = AutofillManifest(
-        entries: [entry('a', name: 'Old'), entry('b')],
+        entries: [
+          entry('a', name: 'Old'),
+          entry('b'),
+        ],
       );
       final updated = manifest.withEntry(entry('a', name: 'New'));
 
