@@ -1,8 +1,21 @@
 import 'package:authpass/utils/credential_matcher.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kdbx/kdbx.dart';
 
 void main() {
   final matcher = CredentialMatcher();
+
+  KdbxEntry entryWith(Map<String, String> fields) {
+    final file = KdbxFormat().create(
+      Credentials.composite(ProtectedValue.fromString('asdf'), null),
+      'test',
+    );
+    final entry = KdbxEntry.create(file, file.body.rootGroup);
+    for (final field in fields.entries) {
+      entry.setString(KdbxKey(field.key), PlainValue(field.value));
+    }
+    return entry;
+  }
 
   CredentialMatchQuality? matchWeb(String requestUrl, String? entryUrl) =>
       matcher.match(CredentialRequest.web(requestUrl), entryUrl);
@@ -351,6 +364,92 @@ void main() {
       expect(
         matcher.rank(request, candidates, (urls) => urls),
         [candidates.first],
+      );
+    });
+  });
+
+  group('autofillUrls', () {
+    test('starts with the url field', () {
+      expect(
+        entryWith({'URL': 'https://example.com'}).autofillUrls,
+        ['https://example.com'],
+      );
+    });
+
+    test('picks up every shape of the KP2A_URL convention', () {
+      // KP2A_URL, KP2A_URL_1 and KP2A_URL2 are all in the wild.
+      final entry = entryWith({
+        'URL': 'https://mail.live.com',
+        'KP2A_URL': 'https://login.live.com',
+        'KP2A_URL_1': 'https://login.microsoftonline.com',
+        'KP2A_URL2': 'https://account.microsoft.com',
+      });
+      expect(
+        entry.autofillUrls,
+        containsAll(<String>[
+          'https://mail.live.com',
+          'https://login.live.com',
+          'https://login.microsoftonline.com',
+          'https://account.microsoft.com',
+        ]),
+      );
+      expect(entry.autofillUrls, hasLength(4));
+    });
+
+    test('is case insensitive about the key, like kdbx is', () {
+      expect(
+        entryWith({'kp2a_url_1': 'https://login.example.com'}).autofillUrls,
+        ['https://login.example.com'],
+      );
+    });
+
+    test('ignores unrelated custom fields', () {
+      final entry = entryWith({
+        'URL': 'https://example.com',
+        'Notes': 'https://not-a-url-field.example.com',
+        'KPEX_PASSKEY_RELYING_PARTY': 'example.org',
+      });
+      expect(entry.autofillUrls, ['https://example.com']);
+    });
+
+    test('skips empty values', () {
+      final entry = entryWith({
+        'URL': '',
+        'KP2A_URL_1': '   ',
+        'KP2A_URL_2': 'https://example.com',
+      });
+      expect(entry.autofillUrls, ['https://example.com']);
+    });
+
+    test('is empty for an entry with no urls', () {
+      expect(entryWith({'UserName': 'alice'}).autofillUrls, isEmpty);
+    });
+
+    test('an additional url is enough to match', () {
+      final entry = entryWith({
+        'URL': 'https://mail.live.com',
+        'KP2A_URL_1': 'https://login.microsoftonline.com',
+      });
+      expect(
+        matcher.matchBest(
+          [CredentialRequest.web('https://login.microsoftonline.com/oauth')],
+          entry.autofillUrls,
+        ),
+        CredentialMatchQuality.host,
+      );
+    });
+
+    test('additional urls do not widen matching beyond their own domain', () {
+      final entry = entryWith({
+        'URL': 'https://example.com',
+        'KP2A_URL_1': 'https://login.example.org',
+      });
+      expect(
+        matcher.matchBest(
+          [CredentialRequest.web('https://example.net')],
+          entry.autofillUrls,
+        ),
+        isNull,
       );
     });
   });

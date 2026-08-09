@@ -539,7 +539,7 @@ class _PasswordListContentState extends State<PasswordListContent>
     final matches = CredentialMatcher.instance.rank(
       metadata.credentialRequests,
       _allEntries!,
-      (entry) => [entry.entry.getString(EntryViewModel.websiteKey)?.getText()],
+      (entry) => entry.entry.autofillUrls,
     );
     if (matches.isNotEmpty) {
       _autofillMatchedByUrl = true;

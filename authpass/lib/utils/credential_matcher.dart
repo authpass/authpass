@@ -16,6 +16,7 @@
 /// package once that module exists.
 library;
 
+import 'package:kdbx/kdbx.dart';
 import 'package:public_suffix/public_suffix.dart';
 
 import 'public_suffix_list.g.dart';
@@ -254,4 +255,36 @@ class _Ranked<T> {
 
 extension on String {
   String? get nullIfEmpty => isEmpty ? null : this;
+}
+
+/// Prefix Keepass2Android uses for extra urls on an entry, so one login can
+/// cover several sign-in domains — a Microsoft account reached via
+/// `login.live.com`, `login.microsoftonline.com` and `account.microsoft.com`,
+/// say.
+///
+/// KeePassXC, KeeWeb and KeePassium read the same fields. There is no spec and
+/// no consistent shape: `KP2A_URL`, `KP2A_URL_1` and `KP2A_URL2` all occur, so
+/// match on the prefix instead of a fixed pattern. Comparison is
+/// case-insensitive because kdbx custom string keys are.
+const _additionalUrlPrefix = 'KP2A_URL'; // NON-NLS
+
+extension CredentialMatcherEntry on KdbxEntry {
+  /// Every url this entry claims — the url field plus any `KP2A_URL*` extras.
+  ///
+  /// Values are returned as stored; [CredentialMatcher] does the normalising.
+  Iterable<String> get autofillUrls sync* {
+    final url = getString(KdbxKeyCommon.URL)?.getText();
+    if (url != null && url.trim().isNotEmpty) {
+      yield url;
+    }
+    for (final entry in stringEntries) {
+      if (!entry.key.key.toUpperCase().startsWith(_additionalUrlPrefix)) {
+        continue;
+      }
+      final value = entry.value?.getText();
+      if (value != null && value.trim().isNotEmpty) {
+        yield value;
+      }
+    }
+  }
 }
