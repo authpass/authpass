@@ -106,7 +106,24 @@ end
 
 # --- build settings -----------------------------------------------------------
 
+# Info.plist reads $(FLUTTER_BUILD_NAME)/$(FLUTTER_BUILD_NUMBER), which live in
+# Generated.xcconfig. Without them CFBundleVersion comes out empty and installd
+# rejects the appex outright ("does not have a CFBundleVersion key with a
+# non-zero length string value"). Point at Generated.xcconfig rather than
+# Flutter/Debug.xcconfig — the latter also pulls in Pods-Runner, whose linker
+# flags belong to the app, not to us.
+generated_xcconfig = project.files.find do |file|
+  file.path&.end_with?('Flutter/Generated.xcconfig')
+end
+generated_xcconfig ||= begin
+  flutter_group = project.main_group.children.find do |child|
+    child.respond_to?(:name) && child.name == 'Flutter'
+  end || project.main_group
+  flutter_group.new_reference('Flutter/Generated.xcconfig')
+end
+
 target.build_configurations.each do |config|
+  config.base_configuration_reference = generated_xcconfig
   settings = config.build_settings
   settings['PRODUCT_BUNDLE_IDENTIFIER'] =
     "$(PRODUCT_BUNDLE_IDENTIFIER_BASE).#{TARGET_NAME}"
