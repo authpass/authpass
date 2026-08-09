@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:typed_data';
 
+import 'package:authpass/autofill/autofill_mirror.dart';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
@@ -277,6 +278,12 @@ class KdbxBloc {
   final Analytics analytics;
   final CloudStorageBloc cloudStorageBloc;
   final QuickUnlockStorage quickUnlockStorage;
+
+  /// Keeps the databases opted into autofill readable by the credential
+  /// provider extension. Inert on platforms without an app group container.
+  late final autofillMirror = AutofillMirror(
+    appGroupIdentifier: env.autofillAppGroupIdentifier,
+  );
   late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
@@ -308,6 +315,11 @@ class KdbxBloc {
     OpenedFileUpdater updater,
   ) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
+    if (file.openedFile.autofillEnabled == true &&
+        updatedFile.autofillEnabled != true) {
+      // opted out — take the copy and the cached key away again.
+      await autofillMirror.removeFile(file.openedFile.uuid);
+    }
     await appDataBloc.update((b, data) {
       b.previousFiles.map((f) {
         if (!f.isSameFileAs(file.openedFile)) {
@@ -458,7 +470,51 @@ class KdbxBloc {
       _logger.fine('adding file to quick unlock.');
       await _updateQuickUnlockStore();
     }
+    await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
     return kdbxOpenedFile;
+  }
+
+  /// Refreshes (or removes) this database's copy in the app group container.
+  ///
+  /// [bytes] must be the content that was actually read from or written to the
+  /// file source. Re-serializing here would rotate the kdf salt again and
+  /// strand the key we are about to cache.
+  ///
+  /// Never rethrows: autofill is a convenience, and failing to mirror must not
+  /// fail the open or the save that triggered it.
+  Future<void> _syncAutofillMirror(
+    KdbxOpenedFile file,
+    Uint8List bytes,
+  ) async {
+    try {
+      if (file.openedFile.autofillEnabled != true) {
+        return;
+      }
+      await autofillMirror.syncFile(
+        fileUuid: file.openedFile.uuid,
+        name: file.openedFile.name,
+        file: file.kdbxFile,
+        bytes: bytes,
+      );
+    } catch (e, stackTrace) {
+      _logger.warning('Unable to update the autofill mirror.', e, stackTrace);
+    }
+  }
+
+  /// Every save rotates the kdf salt, so the mirrored copy and its cached key
+  /// both have to be replaced or the extension is left holding a stale key.
+  Future<void> _syncAutofillMirrorAfterSave(
+    KdbxFile file,
+    Uint8List? writtenBytes,
+  ) async {
+    if (writtenBytes == null) {
+      return;
+    }
+    final openedFile = _openedFilesByKdbxFile[file];
+    if (openedFile == null) {
+      return;
+    }
+    await _syncAutofillMirror(openedFile, writtenBytes);
   }
 
   Color? _defaultNextColor() {
@@ -766,7 +822,9 @@ class KdbxBloc {
     }
 
     try {
+      Uint8List? writtenBytes;
       final ret = await _saveFileToBytes(file, (bytes) async {
+        writtenBytes = bytes;
         return await fileSource.contentWrite(bytes, metadata: null);
       });
       analytics.events.trackSave(
@@ -780,6 +838,7 @@ class KdbxBloc {
         label: 'save',
       );
       await updateQuickUnlock();
+      await _syncAutofillMirrorAfterSave(file, writtenBytes);
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
@@ -792,11 +851,15 @@ class KdbxBloc {
       final mergeResult = file.merge(remoteFile);
       try {
         _logger.fine('mergeResult: $mergeResult');
-        final ret = await _saveFileToBytes(
-          file,
-          (bytes) async =>
-              await fileSource.contentWrite(bytes, metadata: content.metadata),
-        );
+        Uint8List? writtenBytes;
+        final ret = await _saveFileToBytes(file, (bytes) async {
+          writtenBytes = bytes;
+          return await fileSource.contentWrite(
+            bytes,
+            metadata: content.metadata,
+          );
+        });
+        await _syncAutofillMirrorAfterSave(file, writtenBytes);
         delegate?.conflictMerged(fileSource, file, mergeResult);
         analytics.events.trackSaveConflict(
           type: fileSource.typeDebug,

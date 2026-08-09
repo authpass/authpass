@@ -93,6 +93,14 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
         ..add('colorCode')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
+    value = object.autofillEnabled;
+    if (value != null) {
+      result
+        ..add('autofillEnabled')
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(bool)),
+        );
+    }
     return result;
   }
 
@@ -178,6 +186,14 @@ class _$OpenedFileSerializer implements StructuredSerializer<OpenedFile> {
           result.colorCode =
               serializers.deserialize(value, specifiedType: const FullType(int))
                   as int?;
+          break;
+        case 'autofillEnabled':
+          result.autofillEnabled =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool?;
           break;
       }
     }
@@ -532,6 +548,8 @@ class _$OpenedFile extends OpenedFile {
   final String? filePickerIdentifier;
   @override
   final int? colorCode;
+  @override
+  final bool? autofillEnabled;
 
   factory _$OpenedFile([void Function(OpenedFileBuilder)? updates]) =>
       (OpenedFileBuilder()..update(updates))._build();
@@ -546,6 +564,7 @@ class _$OpenedFile extends OpenedFile {
     this.macOsSecureBookmark,
     this.filePickerIdentifier,
     this.colorCode,
+    this.autofillEnabled,
   }) : super._();
   @override
   OpenedFile rebuild(void Function(OpenedFileBuilder) updates) =>
@@ -565,7 +584,8 @@ class _$OpenedFile extends OpenedFile {
         biometricStoreName == other.biometricStoreName &&
         macOsSecureBookmark == other.macOsSecureBookmark &&
         filePickerIdentifier == other.filePickerIdentifier &&
-        colorCode == other.colorCode;
+        colorCode == other.colorCode &&
+        autofillEnabled == other.autofillEnabled;
   }
 
   @override
@@ -579,6 +599,7 @@ class _$OpenedFile extends OpenedFile {
     _$hash = $jc(_$hash, macOsSecureBookmark.hashCode);
     _$hash = $jc(_$hash, filePickerIdentifier.hashCode);
     _$hash = $jc(_$hash, colorCode.hashCode);
+    _$hash = $jc(_$hash, autofillEnabled.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -594,7 +615,8 @@ class _$OpenedFile extends OpenedFile {
           ..add('biometricStoreName', biometricStoreName)
           ..add('macOsSecureBookmark', macOsSecureBookmark)
           ..add('filePickerIdentifier', filePickerIdentifier)
-          ..add('colorCode', colorCode))
+          ..add('colorCode', colorCode)
+          ..add('autofillEnabled', autofillEnabled))
         .toString();
   }
 }
@@ -643,6 +665,11 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
   int? get colorCode => _$this._colorCode;
   set colorCode(int? colorCode) => _$this._colorCode = colorCode;
 
+  bool? _autofillEnabled;
+  bool? get autofillEnabled => _$this._autofillEnabled;
+  set autofillEnabled(bool? autofillEnabled) =>
+      _$this._autofillEnabled = autofillEnabled;
+
   OpenedFileBuilder();
 
   OpenedFileBuilder get _$this {
@@ -657,6 +684,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
       _macOsSecureBookmark = $v.macOsSecureBookmark;
       _filePickerIdentifier = $v.filePickerIdentifier;
       _colorCode = $v.colorCode;
+      _autofillEnabled = $v.autofillEnabled;
       _$v = null;
     }
     return this;
@@ -704,6 +732,7 @@ class OpenedFileBuilder implements Builder<OpenedFile, OpenedFileBuilder> {
           macOsSecureBookmark: macOsSecureBookmark,
           filePickerIdentifier: filePickerIdentifier,
           colorCode: colorCode,
+          autofillEnabled: autofillEnabled,
         );
     replace(_$result);
     return _$result;

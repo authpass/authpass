@@ -93,6 +93,13 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 
   int? get colorCode;
 
+  /// Whether this database may be offered by the OS credential provider.
+  ///
+  /// Opt in per database, because enabling it copies the vault into the shared
+  /// app group container and caches a key for it — see
+  /// [AutofillMirror]. Null means "never asked", which behaves as off.
+  bool? get autofillEnabled;
+
   Color? get color => colorCode == null ? null : Color(colorCode!);
 
   bool isSameFileAs(OpenedFile other) =>

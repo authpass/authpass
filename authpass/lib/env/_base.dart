@@ -119,6 +119,16 @@ abstract class Env {
   /// debug build vs. production/app store build.
   String? get storageNamespace => storageNamespaceFromEnvironment;
 
+  /// App group shared between the app and the credential provider extension,
+  /// and the keychain access group the cached vault keys live in — an app
+  /// group identifier doubles as a `kSecAttrAccessGroup`.
+  ///
+  /// Must match `com.apple.security.application-groups` in the entitlements of
+  /// both targets. Not namespaced per environment: debug and release builds
+  /// have distinct bundle ids but share this container, which is fine because
+  /// only one of them is ever installed with autofill enabled.
+  String get autofillAppGroupIdentifier => 'group.design.codeux.authpass';
+
   /// allow disabling of "onboarding".
   bool get featureOnboarding => true;
 
