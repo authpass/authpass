@@ -31,6 +31,12 @@
 			<dict>
 				<key>ProvidesPasswords</key>
 				<true/>
+				<!-- Adds an entry point in Settings > AutoFill & Passwords, so
+				     the spike can be triggered without hunting for a login
+				     form. Phase 2 replaces this with the real per-database
+				     opt-in screen. -->
+				<key>ShowsConfigurationUI</key>
+				<true/>
 			</dict>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

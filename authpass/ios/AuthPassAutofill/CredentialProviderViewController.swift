@@ -120,7 +120,15 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     output.text = (output.text ?? "") + line + "\n"
   }
 
+  /// Set when the system opened us from Settings rather than for a fill.
+  /// The two modes are dismissed differently.
+  private var isConfiguring = false
+
   @objc private func cancelTapped() {
+    if isConfiguring {
+      extensionContext.completeExtensionConfigurationRequest()
+      return
+    }
     extensionContext.cancelRequest(
       withError: NSError(
         domain: ASExtensionErrorDomain,
@@ -131,6 +139,15 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
 
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     log("asked for: \(serviceIdentifiers.map { $0.identifier }.joined(separator: ", "))")
+  }
+
+  /// Reached from Settings > General > AutoFill & Passwords > AuthPass.
+  ///
+  /// Same process and same memory limit as a real fill, so the numbers are
+  /// comparable — and it does not need a login form to trigger.
+  override func prepareInterfaceForExtensionConfiguration() {
+    isConfiguring = true
+    log("opened from settings")
   }
 
   /// The fast path arrives in phase 2. Until then always ask for UI, which is
