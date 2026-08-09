@@ -137,6 +137,15 @@ target.build_configurations.each do |config|
   settings['TARGETED_DEVICE_FAMILY'] = '1,2'
   settings['SKIP_INSTALL'] = 'YES'
   settings['FRAMEWORK_SEARCH_PATHS'] = ['$(inherited)', "$(PROJECT_DIR)/#{MODULE_FRAMEWORKS}"]
+  # What xcode's own extension template sets, and what xcodeproj's new_target
+  # does not. The binary links @rpath/Flutter.framework; without these dyld
+  # cannot resolve it and the extension dies the moment the system launches it.
+  # First entry is the appex's own Frameworks dir, second is the host app's.
+  settings['LD_RUNPATH_SEARCH_PATHS'] = [
+    '$(inherited)',
+    '@executable_path/Frameworks',
+    '@executable_path/../../Frameworks',
+  ]
   # the whole point of the extension safe engine
   settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
   settings['ENABLE_BITCODE'] = 'NO'
