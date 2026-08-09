@@ -47,7 +47,15 @@ and Developer ID builds, the macOS extension in phase 5 may need
 
 ## 2. Extension App IDs
 
-Identifiers → filter to **App IDs** → **+** → **App IDs** → **App** → Continue.
+> These are **App IDs**, not app groups, even though the portal lists both
+> under "Identifiers" — they are two values of the filter dropdown at the top
+> right. Only one app group is ever needed (step 1) and it is the only
+> identifier that starts with `group.`. An extension's App ID must instead be
+> prefixed by its host app's App ID, which is why these read
+> `design.codeux.authpass.ios` + `.autofill`.
+
+Identifiers → **switch the top right filter to App IDs** → **+** →
+**App IDs** → **App** → Continue.
 
 Do this twice, once per row:
 
