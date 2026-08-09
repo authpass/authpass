@@ -127,6 +127,14 @@ abstract class Env {
   /// both targets. Not namespaced per environment: debug and release builds
   /// have distinct bundle ids but share this container, which is fine because
   /// only one of them is ever installed with autofill enabled.
+  ///
+  /// The `group.` prefix is required on iOS, where Apple adds the team id
+  /// behind the scenes. **macOS differs**: a sandboxed app needs the group
+  /// either prefixed with the team id, authorized by an embedded provisioning
+  /// profile, or distributed through the Mac App Store. AuthPass ships both MAS
+  /// and Developer ID builds, so the macOS extension (phase 5) may need
+  /// `$(AppIdentifierPrefix)group.design.codeux.authpass` here — which is the
+  /// style macos/Runner already uses for `keychain-access-groups`.
   String get autofillAppGroupIdentifier => 'group.design.codeux.authpass';
 
   /// allow disabling of "onboarding".

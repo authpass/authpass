@@ -31,16 +31,19 @@ no Keychain Sharing capability to add.
 > a stale `…debug.AuthPassAutofill`). Registering an existing id is a no-op;
 > delete the stale CamelCase one if you see it.
 
-## 1. App group
+## 1. App group — already done
 
-Portal → **Certificates, Identifiers & Profiles** → **Identifiers** →
-filter the dropdown (top right) to **App Groups**.
+`group.design.codeux.authpass` is registered (confirmed in the portal
+2026-08-09, under Identifiers → App Groups). Nothing to do; kept here so the
+checklist reads completely.
 
-1. Check whether `group.design.codeux.authpass` already exists. If it does,
-   skip to step 2.
-2. **+** → **App Groups** → Continue.
-3. Description `AuthPass Shared`, Identifier `group.design.codeux.authpass`.
-4. Continue → Register.
+The `group.` prefix is mandatory on iOS — Apple rejects anything else and adds
+the team id itself. **macOS works differently**: a sandboxed app needs the
+group prefixed with the team id, authorized by an embedded provisioning
+profile, or distributed via the Mac App Store. Since AuthPass ships both MAS
+and Developer ID builds, the macOS extension in phase 5 may need
+`64ZPC769JY.group.design.codeux.authpass` instead — see
+`Env.autofillAppGroupIdentifier`.
 
 ## 2. Extension App IDs
 
