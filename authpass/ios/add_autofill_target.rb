@@ -32,8 +32,14 @@ BUNDLE_ID_SUFFIX = 'autofill'
 EXTENSION_PROFILE = 'AuthPass iOS AutoFill AppStore'
 SOURCE_DIR = 'AuthPassAutofill'
 FIXTURES_DIR = File.join(SOURCE_DIR, 'Fixtures')
-# Built by autofill_module/build_ios_framework.sh
-MODULE_FRAMEWORKS = '../../autofill_module/build/framework/Release'
+# Built by autofill_module/build_ios_framework.sh, which points `current` at
+# whichever configuration it last built. Deliberately not the Release path:
+# `flutter build ios-framework --release` emits an 84 KB *stub* for the
+# simulator slice of App.xcframework — release AOT does not exist there — so a
+# simulator build needs the Debug frameworks, and the file references and the
+# embed-frameworks phase both resolve through this literal path rather than
+# through $(CONFIGURATION).
+MODULE_FRAMEWORKS = '../../autofill_module/build/framework/current'
 DEPLOYMENT_TARGET = '17.0'
 
 project = Xcodeproj::Project.open(PROJECT_PATH)

@@ -23,7 +23,9 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     setUpViews()
     // Only the spike screen runs on load. A fill request arrives through
     // prepareCredentialList, which puts the picker up instead.
-    if !isFillRequest {
+    // The spike measurement is neither of the two real entry points; it only
+    // runs when the system opened us for something else entirely.
+    if !isFillRequest && !isConfiguring {
       Task { await runSpike() }
     }
   }
@@ -178,7 +180,16 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   /// comparable — and it does not need a login form to trigger.
   override func prepareInterfaceForExtensionConfiguration() {
     isConfiguring = true
-    log("opened from settings")
+
+    let configuration = ConfigurationViewController(onDone: { [weak self] in
+      self?.extensionContext.completeExtensionConfigurationRequest()
+    })
+    let nav = UINavigationController(rootViewController: configuration)
+    addChild(nav)
+    nav.view.frame = view.bounds
+    nav.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    view.addSubview(nav.view)
+    nav.didMove(toParent: self)
   }
 
   /// The fast path arrives in phase 2. Until then always ask for UI, which is

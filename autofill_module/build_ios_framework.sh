@@ -47,4 +47,9 @@ fi
 rm -rf "${OUTPUT}/${CONFIG}/Flutter.xcframework"
 cp -R "${EXTENSION_SAFE}" "${OUTPUT}/${CONFIG}/Flutter.xcframework"
 
-echo "frameworks in ${OUTPUT}/${CONFIG} (extension safe engine)"
+# The Xcode target references build/framework/current, so switching between a
+# device and a simulator build is running this script again rather than
+# editing the project.
+ln -sfn "${CONFIG}" "${OUTPUT}/current"
+
+echo "frameworks in ${OUTPUT}/${CONFIG} (extension safe engine), current -> ${CONFIG}"
