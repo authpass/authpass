@@ -315,10 +315,25 @@ class KdbxBloc {
     OpenedFileUpdater updater,
   ) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
-    if (file.openedFile.autofillEnabled == true &&
-        updatedFile.autofillEnabled != true) {
+    final wasAutofillEnabled = file.openedFile.autofillEnabled == true;
+    final isAutofillEnabled = updatedFile.autofillEnabled == true;
+    if (wasAutofillEnabled && !isAutofillEnabled) {
       // opted out — take the copy and the cached key away again.
       await autofillMirror.removeFile(file.openedFile.uuid);
+    } else if (!wasAutofillEnabled && isAutofillEnabled) {
+      // Opted in while the file is already open. The mirror is otherwise only
+      // written on open and after save, so without this the extension would
+      // find nothing until the user next did one of those — having just been
+      // told autofill is on.
+      //
+      // kdbxFileContent is what the file was read from, which is what the
+      // mirror needs: re-serializing would rotate the kdf salt and stand the
+      // cached key up against a vault it can no longer open.
+      await _mirrorFile(
+        updatedFile,
+        file.kdbxFile,
+        file.kdbxFileContent.content,
+      );
     }
     await appDataBloc.update((b, data) {
       b.previousFiles.map((f) {
@@ -486,14 +501,30 @@ class KdbxBloc {
     KdbxOpenedFile file,
     Uint8List bytes,
   ) async {
+    if (file.openedFile.autofillEnabled != true) {
+      return;
+    }
+    await _mirrorFile(file.openedFile, file.kdbxFile, bytes);
+  }
+
+  /// Writes the copy and the cached key, without asking whether it should.
+  ///
+  /// The opt-in path calls this with a file whose [OpenedFile] has only just
+  /// been flipped on, which [_syncAutofillMirror] would still read as off.
+  ///
+  /// Never fatal: a failure here costs autofill for this vault until the next
+  /// open or save, and failing the surrounding operation — opening a database,
+  /// or saving one — would be a much worse trade.
+  Future<void> _mirrorFile(
+    OpenedFile openedFile,
+    KdbxFile kdbxFile,
+    Uint8List bytes,
+  ) async {
     try {
-      if (file.openedFile.autofillEnabled != true) {
-        return;
-      }
       await autofillMirror.syncFile(
-        fileUuid: file.openedFile.uuid,
-        name: file.openedFile.name,
-        file: file.kdbxFile,
+        fileUuid: openedFile.uuid,
+        name: openedFile.name,
+        file: kdbxFile,
         bytes: bytes,
       );
     } catch (e, stackTrace) {

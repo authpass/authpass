@@ -156,9 +156,12 @@ Build notes worth keeping (all three cost time to rediscover):
   a pre-derived key; today internal to `_computeKeysV4`); salt-fingerprint
   accessor; `KPEX_*` preservation tests. (No save-path changes — the
   extension never writes the kdbx, see design decision 8.)
-- `biometric_storage`: `kSecAttrAccessGroup` support (upstream, own plugin);
-  migration for existing quick-unlock items (biometry-bound items cannot be
-  moved into a group after the fact — re-create on next unlock).
+- `biometric_storage`: `kSecAttrAccessGroup` support (upstream, own plugin).
+  ~~Migration for existing quick-unlock items.~~ Not needed as built: the
+  transformed keys went into a *separate* keychain item in the group rather
+  than moving quick unlock into it, and no `keychain-access-groups` entitlement
+  was added, so the app's default access group is unchanged and existing items
+  stay readable. See [status.md](status.md).
 - Dart eTLD+1 matcher (public-suffix based), wired into Android autofill too.
 - App-group mirror layer in the app: copy-on-open/save + manifest.
 - Provisioning: register extension bundle ids

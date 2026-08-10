@@ -50,12 +50,25 @@ a *spike*, not a product: `CredentialProviderViewController` loads a fixture
 vault and proves the engine boots. There is no picker, no keychain unlock path,
 no `provideCredentialWithoutUserInteraction`, no configuration UI.
 
-Also outstanding from Phase 1:
+### The quick-unlock migration is not needed
 
-- **Quick-unlock migration.** Existing biometry-bound keychain items cannot be
-  moved into an access group after the fact — they have to be re-created on
-  next unlock. Not written yet, and it is a silent breakage for existing users
-  if it ships without.
+plan.md lists one, on the assumption that the existing quick-unlock items would
+move into the shared access group — and biometry-bound items cannot be moved
+after the fact. The implementation went a different way, so nothing moves:
+
+- Quick unlock keeps its own keychain item (`…QuickUnlock`, holding composite
+  hashes) and the extension keeps a separate one (`AutofillTransformedKeys`,
+  holding transformed keys, in the app group). Different items, different
+  contents.
+- `Runner.entitlements` gains `application-groups` but **no
+  `keychain-access-groups`**. That is what makes it safe: with no such
+  entitlement the app's default access group stays the app-id group, so items
+  written without an explicit group — every existing quick-unlock item — are
+  still found exactly where they were. Adding a `keychain-access-groups` list
+  later *would* break them, because the first entry in it becomes the default.
+
+Existing users therefore keep quick unlock untouched, and the transformed key
+for a vault appears the first time it is opened or saved with autofill on.
 
 ## Things that will bite
 
