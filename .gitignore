@@ -13,7 +13,6 @@ development_hp.dart
 /authpass/_tools/secrets/fastlane_match_password
 /authpass/ios/vendor
 
-/authpass/_tools/secrets/fastlane_match_certificates_id_rsa
 Runner.app.dSYM.zip
 Runner.ipa
 /flutter
