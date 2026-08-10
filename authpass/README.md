@@ -24,6 +24,26 @@ Nothing here can create or renew signing material — see
 [../docs/apple-signing.md](../docs/apple-signing.md) for what is stored, and
 for the yearly certificate renewal.
 
+### The macOS direct download
+
+The `.zip` for the website and the GitHub release is Developer ID signed and
+notarized, which is a different signature from the App Store `.pkg`. Run it
+after `build-macos.sh`, from a laptop:
+
+```
+_tools/build-macos.sh -t lib/env/production.dart -b 1234
+_tools/notarize-macos.sh
+```
+
+It re-signs the archive the first command already produced, so the store build
+and the download are the same build. Then submits to Apple, waits, staples the
+ticket into the bundle and checks the result with `spctl` — the same thing
+Gatekeeper does, so a pass means it opens without a right-click.
+
+Not on CI on purpose: notarization is refused for the app-scoped key the
+uploaders use and needs a team key, which cannot be limited to one app. It
+reads one from `~/.appstoreconnect`, never from the repository.
+
 
 ## Releasing
 
@@ -35,10 +55,9 @@ One day I have to automate this...
 * push to `stable` branch `git push origin HEAD:stable` and wait for github builds
   * Generates all artifacts, macos included — `ios.yaml` builds and uploads
     both Apple platforms, and no longer needs `MATCH_PASSWORD`
-  * The macOS **direct download** zip is still made by hand: the `.pkg` CI
-    uploads is Mac App Store only, and a build for download off the store is a
-    different signature (Developer ID + notarization) that nothing here
-    produces yet
+  * The macOS **direct download** zip is a local step — see below. CI uploads
+    the `.pkg` to the Mac App Store, but notarizing needs a *team* App Store
+    Connect key, so it deliberately stays off CI
   * `_tools/upload-artifact.sh /Users/herbert/Downloads/tmp/AuthPass.app-1.7.7_1519.zip`
 * create tag called `v1.2.3` and `fdroid-v1.2.3`
 * data.authpass.app

@@ -3,8 +3,12 @@
 iOS and macOS releases are built and signed by `_tools/build-ios.sh` /
 `_tools/build-macos.sh` and uploaded by `_tools/upload-ios.sh` /
 `_tools/upload-macos.sh`. None of them uses fastlane, match, or the certificate
-repository. macOS ships to the Mac App Store only — there is no Developer ID
-build and nothing to notarize.
+repository.
+
+macOS ships twice from one archive: a `.pkg` to the Mac App Store, and a
+Developer ID signed, notarized `.zip` for direct download, produced by
+`_tools/notarize-macos.sh`. Re-signing the same archive rather than building
+again is what makes the two demonstrably the same build.
 
 ## The shape of it
 
@@ -32,6 +36,9 @@ All blackbox encrypted, under `authpass/_tools/secrets/`:
 | `macos_appstore.provisionprofile` | profile `AuthPass macOS AppStore` |
 | `mac_installer_distribution.p12` | installer certificate, to sign the `.pkg` |
 | `mac_installer_distribution_p12_password` | its export passphrase |
+| `developer_id_application.p12` | Developer ID certificate, for the direct download |
+| `developer_id_application_p12_password` | its export passphrase |
+| `macos_developerid.provisionprofile` | profile `AuthPass macOS DeveloperID` |
 | `ApiKey_4LJJBK4Z86KR.p8` | individual API key, scoped to AuthPass, upload only |
 
 "Apple Distribution" is universal — the same certificate signs the iOS app and
@@ -58,6 +65,8 @@ Team `64ZPC769JY`.
 | 3rd Party Mac Developer Installer | `WJPHRR6CJ7` | 2027-01-24 |
 | `AuthPass iOS AppStore` (`…authpass.ios`) | `73903dfd-e7e7-457d-8951-80c8a363b935` | 2027-08-10 |
 | `AuthPass macOS AppStore` (`…authpass`) | `0d395894-b9b8-4243-9e5e-5762c3866db0` | 2027-08-10 |
+| Developer ID Application | `3V8HC7P269` | 2031-08-11 |
+| `AuthPass macOS DeveloperID` (`…authpass`) | `8d47a2fd-02f4-41ac-bb7d-ba09a9a27ab5` | 2031-08-09 |
 
 A profile cannot outlive the certificate it references, so a profile and its
 certificate roll together. The installer certificate expires on its own
@@ -73,6 +82,27 @@ cd authpass/_tools/cux_ship && dart run cux_ship appstore signing --bundle-id de
 
 It lists certificates, bundle ids and profiles with their expiry dates, so it
 answers "what is about to expire" without opening the portal.
+
+**It does not see Xcode-managed certificates.** `/v1/certificates` returns
+every certificate created from a CSR and none of the ones Xcode minted itself —
+the portal shows those with a "Managed" suffix. This account has three the
+audit is blind to, so its certificate count reads lower than the portal's, and
+the cap warning it prints is against the wrong number. Check the portal before
+concluding there is room.
+
+## Notarization, and why it is not on CI
+
+`notarytool` refuses the app-scoped individual key the uploaders use — it
+answers 401 — and accepts only a team key, which cannot be limited to one app.
+Storing one in blackbox would give anything with CI access the ability to
+publish every app on the account, which is the thing this whole arrangement
+avoids. So `notarize-macos.sh` runs from a laptop and reads a team key from
+`~/.appstoreconnect`, overridable with `AUTHPASS_NOTARY_KEY`.
+
+The Developer ID profile matters more than it looks: `Release.entitlements`
+asks for `keychain-access-groups`, and a keychain group needs a profile to
+authorize it whatever the distribution channel. The profile grants
+`64ZPC769JY.*`, which covers both the app's group and Google Sign-In's.
 
 ## Renewal
 
