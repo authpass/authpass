@@ -53,3 +53,4 @@ metrics.json
 /authpass/_tools/secrets/apple_distribution_p12_password
 /authpass/_tools/secrets/ios_appstore.mobileprovision
 /authpass/_tools/secrets/ios_appstore_autofill.mobileprovision
+/authpass/_tools/secrets/ApiKey_4LJJBK4Z86KR.p8

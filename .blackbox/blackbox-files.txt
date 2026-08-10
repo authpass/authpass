@@ -1,4 +1,5 @@
 authpass/_tools/deploy-key/github-deploy-key
+authpass/_tools/secrets/ApiKey_4LJJBK4Z86KR.p8
 authpass/_tools/secrets/AuthKey_S5PTZMY9P8.p8
 authpass/_tools/secrets/api-project-284252947431-83b019c3ca1e.json
 authpass/_tools/secrets/apple_distribution.p12
