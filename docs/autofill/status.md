@@ -45,10 +45,31 @@ carrying `…autofill-credential-provider` and `group.design.codeux.authpass`.
 
 ## Not done
 
-**Phase 2 onwards — the actual feature.** What exists in the extension today is
-a *spike*, not a product: `CredentialProviderViewController` loads a fixture
-vault and proves the engine boots. There is no picker, no keychain unlock path,
-no `provideCredentialWithoutUserInteraction`, no configuration UI.
+**Phase 2 is started, and none of it has run on a device.** The lookup path
+exists in code and compiles into the extension:
+
+- `autofill_module` answers `openVaults` (every enabled vault at once) and
+  `matchEntries` (only what matches, ranked across all of them, metadata only).
+  Six tests cover it, including that ranking spans vaults — a weak match in the
+  first database must not outrank an exact one in the second — and that no
+  password crosses the channel until a row is picked.
+- `AutofillVaultStore` reads the manifest from the app group container and the
+  cached keys from the shared keychain, skipping any vault whose key went stale.
+- `CredentialListViewController` is the picker `prepareCredentialList` puts up.
+
+Still missing: `provideCredentialWithoutUserInteraction` (the fast path), the
+configuration UI, and the identity store sync of phase 3.
+
+### What stops any of it being proven
+
+**Nothing can enable autofill for a vault.** `OpenedFile.autofillEnabled` is
+only settable programmatically — there is no preferences UI — so the mirror
+stays empty, the keychain holds no key, and the picker has nothing to find.
+
+The enable-autofill flow is therefore the next thing to build. Not because it
+is the most interesting part, but because everything already written is
+unverifiable without it, and the spike screen still stands in for the parts
+that are.
 
 ### The quick-unlock migration is not needed
 
