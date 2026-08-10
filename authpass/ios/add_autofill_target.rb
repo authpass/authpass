@@ -52,6 +52,14 @@ existing.each do |target|
     phase.files.select { |f| f.display_name == "#{TARGET_NAME}.appex" }
          .each { |f| phase.remove_build_file(f) }
   end
+  # remove_from_project drops the target but leaves its configuration list and
+  # that list's XCBuildConfigurations behind, unreferenced. Without this every
+  # re-run leaks another three of them into the file.
+  configuration_list = target.build_configuration_list
+  if configuration_list
+    configuration_list.build_configurations.each(&:remove_from_project)
+    configuration_list.remove_from_project
+  end
   target.remove_from_project
 end
 project.main_group.children
