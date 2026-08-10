@@ -1,1 +1,2 @@
+github-actions2@authpass.app
 herbert@poul.at
