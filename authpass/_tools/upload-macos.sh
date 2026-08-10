@@ -72,8 +72,9 @@ echo "    bundle id    $BUNDLE_ID"
 echo "    version      $VERSION ($BUILD_NUMBER)"
 echo "    credential   individual key $KEY_ID, scoped to this app"
 
+# --yes: see upload-ios.sh.
 cd _tools/cux_ship
-exec dart run cux_ship appstore upload \
+exec dart run cux_ship --yes appstore upload \
   --platform macos \
   --ipa "../../$PKG" \
   --bundle-id "$BUNDLE_ID" \

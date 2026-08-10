@@ -77,8 +77,10 @@ echo "    bundle id    $BUNDLE_ID"
 echo "    version      $VERSION ($BUILD_NUMBER)"
 echo "    credential   individual key $KEY_ID, scoped to this app"
 
+# --yes because there is no terminal on CI, and cux_ship treats "no terminal and
+# no --yes" as a refusal rather than an assumed yes.
 cd _tools/cux_ship
-exec dart run cux_ship appstore upload \
+exec dart run cux_ship --yes appstore upload \
   --ipa "../../$IPA" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \

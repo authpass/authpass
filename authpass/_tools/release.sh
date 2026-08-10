@@ -8,7 +8,6 @@ cd $dir/..
 flavor="$1"
 
 FLT=${FLT:-}
-AUTHPASS_SKIP_FASTLANE=${AUTHPASS_SKIP_FASTLANE:-}
 
 if test -z "$FLT" && test -d .dart_tool ; then
     FLT=_tools/flutter_run.sh
@@ -94,27 +93,24 @@ case "${flavor}" in
     ;;
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
-        cd android
-        bundle install
         echo "Check if we are in a beta branch ${GITHUB_REF}"
-        exitCode=success
+        track=internal
         if [[ "${GITHUB_REF:-}" == *"beta"* || "${GITHUB_REF:-}" == *"stable"* ]] ; then
-          echo "Pushing to beta."
-          bundle exec fastlane devbeta || exitCode=$?
-        else
-          echo "Pushing to dev"
-          bundle exec fastlane dev || exitCode=$?
+          track=beta
         fi
+        echo "Pushing to ${track}"
+        # Deliberately not fatal: re-running a release for a buildnumber Play
+        # already holds fails, and that is a no-op rather than a broken build.
+        exitCode=success
+        ./_tools/upload-android.sh -f playstoredev -t "${track}" -b $buildnumber || exitCode=$?
 
         if [[ "${exitCode}" != "success" ]] ; then
-          echo "fastlane failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
+          echo "upload failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
         fi
     ;;
     android | playstore)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
-        cd android
-        bundle install
-        bundle exec fastlane beta
+        ./_tools/upload-android.sh -f playstore -t internal -b $buildnumber
     ;;
     linux)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
