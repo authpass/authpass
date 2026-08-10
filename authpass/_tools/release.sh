@@ -67,11 +67,12 @@ echo "::set-output name=appbuildnumber::$buildnumber"
 $FLT pub get
 case "${flavor}" in
     ios)
-        mkdir -p ~/.fastlane/spaceship
-        $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --config-only
-        cd ios
-#        sudo fastlane run update_fastlane
-        bundle exec fastlane beta
+        # No fastlane, and no App Store Connect credential during the build:
+        # build-ios.sh signs against the profiles in _tools/secrets, and
+        # upload-ios.sh is the only step holding a key — an individual one,
+        # scoped to this app. See docs/autofill/provisioning.md.
+        ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
+        ./_tools/upload-ios.sh
     ;;
     macos)
         # on mac os there is right now no --build-number argument :-(

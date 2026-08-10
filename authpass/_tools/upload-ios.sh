@@ -55,8 +55,22 @@ unset APPLE_API_ISSUER_ID
 # the wrapper above authpass/ and holds no pubspec.yaml or ios/. So the values
 # it would normally work out have to be passed.
 BUNDLE_ID="design.codeux.authpass.ios"
-VERSION=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version: *//' | cut -d+ -f1)
-BUILD_NUMBER=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version: *//' | cut -d+ -f2)
+
+# Read from the .ipa, not from pubspec.yaml. On CI the build number comes from
+# git-buildnumber.sh rather than the pubspec, so the two disagree — and the
+# number that matters is the one actually inside the binary. cux_ship checks it
+# against what Apple reports, so a mismatch here fails the upload rather than
+# publishing something mislabelled.
+PLIST=$(mktemp -t authpass-ipa-plist)
+trap 'rm -f "$PLIST"' EXIT INT TERM
+unzip -p "$IPA" 'Payload/*.app/Info.plist' > "$PLIST"
+VERSION=$(plutil -extract CFBundleShortVersionString raw -o - "$PLIST")
+BUILD_NUMBER=$(plutil -extract CFBundleVersion raw -o - "$PLIST")
+
+if [ -z "$VERSION" ] || [ -z "$BUILD_NUMBER" ]; then
+  echo "could not read the version out of $IPA" >&2
+  exit 1
+fi
 
 echo "==> uploading $IPA"
 echo "    bundle id    $BUNDLE_ID"

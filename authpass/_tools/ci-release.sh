@@ -29,21 +29,14 @@ ssh-keygen -F gitlab.com > /dev/null || (mkdir -p ~/.ssh && echo "|1|SM9ao9YoaAX
 export PATH=${DEPS}/flutter/bin:$PATH
 
 if test "$target_platform" == "ios" ; then
-    eval $(ssh-agent -s)
-    cat _tools/secrets/fastlane_match_certificates_id_rsa | ssh-add -
-    set +x
-    # defines MATCH_PASSWORD and FASTLANE_PASSWORD
-    source _tools/secrets/fastlane_match_password
-    set -x
-
-    # no need for calling fastlane match, will be done during `fastlane beta`
-    #cd ios && fastlane match appstore --readonly && cd ..
-
-    # make sure cocoapods is up to date.
+    # No ssh-agent, no certificate repository, no MATCH_PASSWORD, and no
+    # fastlane. Signing material comes from _tools/secrets, decrypted by
+    # blackbox above; _tools/build-ios.sh imports it into a keychain that
+    # exists for the build and no longer.
+    #
+    # CocoaPods is still here: seven plugins have not adopted Swift Package
+    # Manager, and most of them are ours.
     pod repo update
-    pushd ios
-    sudo bundle install
-    popd
 fi
 if test "$target_platform" == "macos" ; then
     eval $(ssh-agent -s)

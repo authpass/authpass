@@ -19,11 +19,13 @@ cd "${0%/*}/.."
 
 TARGET="lib/env/production.dart"
 OUTPUT="build/ios/ipa"
+BUILD_NUMBER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -t) shift; TARGET="$1" ;;
     -o) shift; OUTPUT="$1" ;;
-    *) echo "usage: $0 [-t target.dart] [-o outdir]" >&2; exit 64 ;;
+    -b) shift; BUILD_NUMBER="$1" ;;
+    *) echo "usage: $0 [-t target.dart] [-o outdir] [-b buildnumber]" >&2; exit 64 ;;
   esac
   shift
 done
@@ -93,7 +95,12 @@ for profile in "${PROFILES[@]}"; do
 done
 
 echo "==> flutter build ios --config-only"
-flutter build ios --release --config-only -t "$TARGET"
+# --config-only writes Generated.xcconfig and stops; xcodebuild does the rest.
+# The build number lands in FLUTTER_BUILD_NUMBER there, which is where the
+# Info.plist reads it from — and ExportOptions.plist sets
+# manageAppVersionAndBuildNumber false so the export cannot overwrite it.
+flutter build ios --release --config-only -t "$TARGET" \
+  ${BUILD_NUMBER:+--build-number "$BUILD_NUMBER"}
 
 ARCHIVE="build/ios/authpass.xcarchive"
 rm -rf "$ARCHIVE" "$OUTPUT"
