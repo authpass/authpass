@@ -8,6 +8,9 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    if let controller = window?.rootViewController as? FlutterViewController {
+      AutofillIdentityChannel.register(with: controller)
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     

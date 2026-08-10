@@ -205,6 +205,30 @@ app_target.build_configurations.each do |app_config|
   config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = EXTENSION_PROFILE
 end
 
+# --- the app side of autofill --------------------------------------------------
+
+# Publishing credential identities happens in the *app*, not the extension, so
+# this file belongs to Runner. Added here because it is the same kind of
+# project surgery, and because a file that is not a target member simply never
+# compiles — with no error, and a channel that answers MissingPluginException
+# at runtime.
+APP_SOURCES = ['Runner/AutofillIdentityChannel.swift'].freeze
+
+APP_SOURCES.each do |path|
+  next if app_target.source_build_phase.files_references.any? { |f| f.path == File.basename(path) }
+
+  # matched on path: this group carries no name, only a path.
+  runner_group = project.main_group.children.find do |child|
+    child.respond_to?(:path) && child.path == 'Runner'
+  end
+  raise 'Runner group not found' unless runner_group
+
+  existing = runner_group.files.find { |f| f.path == File.basename(path) }
+  reference = existing || runner_group.new_reference(File.basename(path))
+  app_target.add_file_references([reference])
+  puts "added #{path} to Runner"
+end
+
 # --- embed into the app -------------------------------------------------------
 
 app_target.add_dependency(target)

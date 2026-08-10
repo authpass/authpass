@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:typed_data';
 
+import 'package:authpass/autofill/autofill_identities.dart';
 import 'package:authpass/autofill/autofill_mirror.dart';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
@@ -284,6 +285,7 @@ class KdbxBloc {
   late final autofillMirror = AutofillMirror(
     appGroupIdentifier: env.autofillAppGroupIdentifier,
   );
+  late final autofillIdentities = AutofillIdentities();
   late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
@@ -318,8 +320,10 @@ class KdbxBloc {
     final wasAutofillEnabled = file.openedFile.autofillEnabled == true;
     final isAutofillEnabled = updatedFile.autofillEnabled == true;
     if (wasAutofillEnabled && !isAutofillEnabled) {
-      // opted out — take the copy and the cached key away again.
+      // opted out — take the copy and the cached key away again, and stop
+      // advertising its entries.
       await autofillMirror.removeFile(file.openedFile.uuid);
+      await _publishAutofillIdentities();
     } else if (!wasAutofillEnabled && isAutofillEnabled) {
       // Opted in while the file is already open. The mirror is otherwise only
       // written on open and after save, so without this the extension would
@@ -527,9 +531,26 @@ class KdbxBloc {
         file: kdbxFile,
         bytes: bytes,
       );
+      await _publishAutofillIdentities();
     } catch (e, stackTrace) {
       _logger.warning('Unable to update the autofill mirror.', e, stackTrace);
     }
+  }
+
+  /// Advertises every entry of every enabled vault to iOS.
+  ///
+  /// Republished as a whole set rather than incrementally, because this is the
+  /// only place that knows which vaults are currently enabled — and an entry
+  /// that was deleted, or a vault that was switched off, has to stop being
+  /// offered. Cheap: names and usernames only, no decryption beyond what is
+  /// already in memory.
+  Future<void> _publishAutofillIdentities() async {
+    final enabled = <String, KdbxFile>{
+      for (final file in _openedFiles.value.values)
+        if (file.openedFile.autofillEnabled == true)
+          file.openedFile.uuid: file.kdbxFile,
+    };
+    await autofillIdentities.publish(enabled);
   }
 
   /// Every save rotates the kdf salt, so the mirrored copy and its cached key

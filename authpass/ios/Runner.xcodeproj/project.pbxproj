@@ -7,49 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02A496A3EFA81393075D1DBF /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843239E9A73A15B31167557C /* Flutter.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
+		05D81928618957669247D9F2 /* AutofillEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEC1823ABD8A1CA417C6B0C /* AutofillEngine.swift */; };
+		120B14E9054A62F971D7D475 /* ConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485E5A06CA04EC6BAF935D2F /* ConfigurationViewController.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		1F99CB347E861E454E516CB2 /* vault.kdbx in Resources */ = {isa = PBXBuildFile; fileRef = 3D7CF738798E989D2F647055 /* vault.kdbx */; };
+		21D0587FD2635B79AE8BF5C2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87C51697E110D4FFDFEA002A /* Foundation.framework */; };
 		22D71752926771B7CC033B74 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87C51697E110D4FFDFEA002A /* Foundation.framework */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		41B96FCAE00799BD70447440 /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA793EB7FBC39387459751CB /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		44CF10EAB04018B1A6E1EEF1 /* App.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB529956D58D7D59F45F4C6B /* App.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
 		485691305E1F9104089137B3 /* AutofillEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23976E3EEFED0D1CA72D6D09 /* AutofillEngine.swift */; };
-		4DBE922CC79C4DAD0A3A6092 /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 843239E9A73A15B31167557C /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		502EF5B6DD3053DACB2D07EB /* App.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AB529956D58D7D59F45F4C6B /* App.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5E8CC4FE761D712D565E4E63 /* vault_key.json in Resources */ = {isa = PBXBuildFile; fileRef = 0C496AE7CB8E96C2327AFF24 /* vault_key.json */; };
+		4F86BF9E2E3B5696A6480564 /* App.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B4168AF2C66045533E3F69C /* App.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
+		6A930164386BE729ED0E6D80 /* App.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4B4168AF2C66045533E3F69C /* App.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6D7FEFC4408132AE5BCBE7AA /* AutofillVaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F96D2605814902245DE1595 /* AutofillVaultStore.swift */; };
-		6EA901797D67A8FBC3651D4C /* AutofillVaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA05B8235020398EEC9C537 /* AutofillVaultStore.swift */; };
+		73C24700EAB656302AF31EF2 /* AuthPassAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AF2F82BCB1CDEC99A5038F6D /* AuthPassAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		75D178E3C5A795E247872819 /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA793EB7FBC39387459751CB /* Flutter.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
-		7B49EF199CCB41628AE9B1DE /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DDEE2B191B8BB00953C11F /* CredentialProviderViewController.swift */; };
 		7DA78D23ADC75E708D60826D /* ConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265B87B65FC53F41E7AC98C9 /* ConfigurationViewController.swift */; };
-		8B1CA40B9E03471C5FAF0D6F /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892DF1B21507ACFC7EF615D6 /* CredentialListViewController.swift */; };
+		88A79929F42FC4CFFB4A6402 /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AA2608AEBE7C23B745BE397B /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		89065F04E9997DB7CBA3ADD0 /* AutofillIdentityChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F19E1041A9BD3CFFA78CBC /* AutofillIdentityChannel.swift */; };
+		8ADC85DEA6BB0676636794F3 /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA2608AEBE7C23B745BE397B /* Flutter.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9740EEB21CF90195004384FC /* Debug.xcconfig */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		A52DABEA2733A4BAAC23A7FF /* vault.kdbx in Resources */ = {isa = PBXBuildFile; fileRef = 56DEC4851DFBD7ACF5571C73 /* vault.kdbx */; };
 		A8AEDD585205DEA308FE6819 /* vault.kdbx in Resources */ = {isa = PBXBuildFile; fileRef = 32713DCDAF8D227C452F64E7 /* vault.kdbx */; };
 		AA5E781A84B3135920B20A11 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4329060BC21FFA1174F57E1 /* Pods_Runner.framework */; };
+		B32753BF8736A8BDFE3D67D6 /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47FE866930C8BECE91AD92B /* CredentialListViewController.swift */; };
 		B61AC55C032446D4404DC9E0 /* App.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CDB33B2D74AD9508C6E8A6A9 /* App.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B73F573B2F814FF82EB6171D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87C51697E110D4FFDFEA002A /* Foundation.framework */; };
-		BF36BDBF0512DA4C7776B283 /* AuthPassAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9F2D9413BE1DC777DC59A514 /* AuthPassAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C59DAE8146229E70EE74312F /* AutofillVaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546976DAEFE04D17E854758 /* AutofillVaultStore.swift */; };
+		C8BE655E30E857ED134A9FAD /* vault_key.json in Resources */ = {isa = PBXBuildFile; fileRef = 0477C036B8D9703102F60053 /* vault_key.json */; };
 		C9622B90FCE5F7BD2F5FAF11 /* vault_key.json in Resources */ = {isa = PBXBuildFile; fileRef = D517EA3DCF18F55096C0FED0 /* vault_key.json */; };
+		DA17EBA9E0A4114050033FF3 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C99EB62D3E85906EC142CF /* CredentialProviderViewController.swift */; };
 		DA7CFC713A534F97C047BF00 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE827B6B6D6917BA763AD924 /* CredentialProviderViewController.swift */; };
 		DC181BD1FEBFEC14701D0D51 /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A59A806DB48BE6897194D /* CredentialListViewController.swift */; };
-		E2351FCAFBFE0584663AAB7E /* AutofillEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26412F010EE6607693617E44 /* AutofillEngine.swift */; };
 		E59625BE2451A984004DE975 /* kdbx_doc_type.png in Resources */ = {isa = PBXBuildFile; fileRef = E59625BD2451A7C1004DE975 /* kdbx_doc_type.png */; };
 		E59625C02451AD45004DE975 /* AuthPassMacLogo.svg in Resources */ = {isa = PBXBuildFile; fileRef = E59625BF2451AD45004DE975 /* AuthPassMacLogo.svg */; };
 		FA5E15112CEC45FEB7185033 /* App.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDB33B2D74AD9508C6E8A6A9 /* App.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		73622C4318E2639B17C2FB09 /* PBXContainerItemProxy */ = {
+		3A1057A5342AF9E14F2F1FA3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = B7B1C20A2D638A2D5644E172;
+			remoteGlobalIDString = CED0C779402A5F92F05B2CB5;
 			remoteInfo = AuthPassAutofill;
 		};
 		91D4A660CA51BEDFF5DF222D /* PBXContainerItemProxy */ = {
@@ -62,14 +64,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		70A88D526E69CC05DEFFF183 /* Embed Frameworks */ = {
+		83DDAB83108B81111E5ABE87 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				41B96FCAE00799BD70447440 /* Flutter.xcframework in Embed Frameworks */,
-				B61AC55C032446D4404DC9E0 /* App.xcframework in Embed Frameworks */,
+				88A79929F42FC4CFFB4A6402 /* Flutter.xcframework in Embed Frameworks */,
+				6A930164386BE729ED0E6D80 /* App.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,7 +92,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				BF36BDBF0512DA4C7776B283 /* AuthPassAutofill.appex in Embed App Extensions */,
+				73C24700EAB656302AF31EF2 /* AuthPassAutofill.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,32 +100,34 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0C496AE7CB8E96C2327AFF24 /* vault_key.json */ = {isa = PBXFileReference; includeInIndex = 1; path = vault_key.json; sourceTree = "<group>"; };
+		0477C036B8D9703102F60053 /* vault_key.json */ = {isa = PBXFileReference; includeInIndex = 1; path = vault_key.json; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		1546976DAEFE04D17E854758 /* AutofillVaultStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillVaultStore.swift; sourceTree = "<group>"; };
 		1CA10E5B9FB74A5128907A12 /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		1EDF0E0AB5433B458577CFD3 /* AuthPassAutofill.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = AuthPassAutofill.entitlements; sourceTree = "<group>"; };
 		23976E3EEFED0D1CA72D6D09 /* AutofillEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillEngine.swift; sourceTree = "<group>"; };
-		26412F010EE6607693617E44 /* AutofillEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillEngine.swift; sourceTree = "<group>"; };
 		265B87B65FC53F41E7AC98C9 /* ConfigurationViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigurationViewController.swift; sourceTree = "<group>"; };
 		27BF7ED4D0D8FCB8DAB793D6 /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C723ED8C2EF39D111B7295A /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		32713DCDAF8D227C452F64E7 /* vault.kdbx */ = {isa = PBXFileReference; includeInIndex = 1; path = vault.kdbx; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		3D7CF738798E989D2F647055 /* vault.kdbx */ = {isa = PBXFileReference; includeInIndex = 1; path = vault.kdbx; sourceTree = "<group>"; };
 		3F96D2605814902245DE1595 /* AutofillVaultStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillVaultStore.swift; sourceTree = "<group>"; };
 		4185C63B2A976DCEA183DB7F /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4503317C057DABE7044A8795 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45D5180FD22088BF17387870 /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		5AA05B8235020398EEC9C537 /* AutofillVaultStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillVaultStore.swift; sourceTree = "<group>"; };
+		485E5A06CA04EC6BAF935D2F /* ConfigurationViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigurationViewController.swift; sourceTree = "<group>"; };
+		4B4168AF2C66045533E3F69C /* App.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = App.xcframework; sourceTree = "<group>"; };
+		56DEC4851DFBD7ACF5571C73 /* vault.kdbx */ = {isa = PBXFileReference; includeInIndex = 1; path = vault.kdbx; sourceTree = "<group>"; };
+		67F19E1041A9BD3CFFA78CBC /* AutofillIdentityChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillIdentityChannel.swift; sourceTree = "<group>"; };
 		6B58E58EEE1A49B3952466A0 /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E1A59A806DB48BE6897194D /* CredentialListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CredentialListViewController.swift; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
-		843239E9A73A15B31167557C /* Flutter.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = Flutter.xcframework; sourceTree = "<group>"; };
 		87C51697E110D4FFDFEA002A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		892DF1B21507ACFC7EF615D6 /* CredentialListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CredentialListViewController.swift; sourceTree = "<group>"; };
+		8CEC1823ABD8A1CA417C6B0C /* AutofillEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillEngine.swift; sourceTree = "<group>"; };
+		96C99EB62D3E85906EC142CF /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,9 +137,11 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9AFE6ADD58E9F268BCF8512B /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		9F2D9413BE1DC777DC59A514 /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB072C36A106CECFB853C2B4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AB529956D58D7D59F45F4C6B /* App.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = App.xcframework; sourceTree = "<group>"; };
+		AA2608AEBE7C23B745BE397B /* Flutter.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = Flutter.xcframework; sourceTree = "<group>"; };
+		AF2F82BCB1CDEC99A5038F6D /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C428A4F820EE9218DE907507 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		C47FE866930C8BECE91AD92B /* CredentialListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CredentialListViewController.swift; sourceTree = "<group>"; };
+		C8437BD02D29D2707FAE5973 /* AuthPassAutofill.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = AuthPassAutofill.entitlements; sourceTree = "<group>"; };
 		CA7DA9F2D5C85EB0DE3E48CB /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		CDB33B2D74AD9508C6E8A6A9 /* App.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = App.xcframework; sourceTree = "<group>"; };
 		D4329060BC21FFA1174F57E1 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,29 +149,28 @@
 		E59625BD2451A7C1004DE975 /* kdbx_doc_type.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kdbx_doc_type.png; sourceTree = "<group>"; };
 		E59625BF2451AD45004DE975 /* AuthPassMacLogo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AuthPassMacLogo.svg; sourceTree = "<group>"; };
 		E5B5D0C42324499200121CB9 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
-		E6DDEE2B191B8BB00953C11F /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
 		EA793EB7FBC39387459751CB /* Flutter.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = Flutter.xcframework; sourceTree = "<group>"; };
 		EE827B6B6D6917BA763AD924 /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
 		FAC85194FE5F66E87A1D9A60 /* AuthPassAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuthPassAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0D730FE52BC8CFD270C2A1E9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				22D71752926771B7CC033B74 /* Foundation.framework in Frameworks */,
-				75D178E3C5A795E247872819 /* Flutter.xcframework in Frameworks */,
-				FA5E15112CEC45FEB7185033 /* App.xcframework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		97C146EB1CF9000F007C117D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
 				AA5E781A84B3135920B20A11 /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D915679511BE830FF1EC5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21D0587FD2635B79AE8BF5C2 /* Foundation.framework in Frameworks */,
+				8ADC85DEA6BB0676636794F3 /* Flutter.xcframework in Frameworks */,
+				4F86BF9E2E3B5696A6480564 /* App.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,20 +186,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2984B33292F4E504BADBEF64 /* AuthPassAutofill */ = {
+		116E01FEE23B62243581C095 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
-				23976E3EEFED0D1CA72D6D09 /* AutofillEngine.swift */,
-				3F96D2605814902245DE1595 /* AutofillVaultStore.swift */,
-				265B87B65FC53F41E7AC98C9 /* ConfigurationViewController.swift */,
-				6E1A59A806DB48BE6897194D /* CredentialListViewController.swift */,
-				EE827B6B6D6917BA763AD924 /* CredentialProviderViewController.swift */,
-				AB072C36A106CECFB853C2B4 /* Info.plist */,
-				1EDF0E0AB5433B458577CFD3 /* AuthPassAutofill.entitlements */,
-				4B3BA2D542ABF223AF9598A3 /* Fixtures */,
+				56DEC4851DFBD7ACF5571C73 /* vault.kdbx */,
+				0477C036B8D9703102F60053 /* vault_key.json */,
 			);
-			name = AuthPassAutofill;
-			path = AuthPassAutofill;
+			name = Fixtures;
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		39DB363BAB9196479143AE8E /* iOS */ = {
@@ -205,24 +204,20 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		4B3BA2D542ABF223AF9598A3 /* Fixtures */ = {
+		964882BCA9925F77C6D89FFA /* AuthPassAutofill */ = {
 			isa = PBXGroup;
 			children = (
-				32713DCDAF8D227C452F64E7 /* vault.kdbx */,
-				D517EA3DCF18F55096C0FED0 /* vault_key.json */,
+				8CEC1823ABD8A1CA417C6B0C /* AutofillEngine.swift */,
+				1546976DAEFE04D17E854758 /* AutofillVaultStore.swift */,
+				485E5A06CA04EC6BAF935D2F /* ConfigurationViewController.swift */,
+				C47FE866930C8BECE91AD92B /* CredentialListViewController.swift */,
+				96C99EB62D3E85906EC142CF /* CredentialProviderViewController.swift */,
+				4503317C057DABE7044A8795 /* Info.plist */,
+				C8437BD02D29D2707FAE5973 /* AuthPassAutofill.entitlements */,
+				116E01FEE23B62243581C095 /* Fixtures */,
 			);
-			name = Fixtures;
-			path = Fixtures;
-			sourceTree = "<group>";
-		};
-		7D20A6436ECB72A122AA39D8 /* AutofillModuleFrameworks */ = {
-			isa = PBXGroup;
-			children = (
-				EA793EB7FBC39387459751CB /* Flutter.xcframework */,
-				CDB33B2D74AD9508C6E8A6A9 /* App.xcframework */,
-			);
-			name = AutofillModuleFrameworks;
-			path = ../../autofill_module/build/framework/current;
+			name = AuthPassAutofill;
+			path = AuthPassAutofill;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -245,8 +240,8 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				9C9F7E3EC0F609A614F32C90 /* Pods */,
 				0DC1DCDFC57163EF4938E5A2 /* Frameworks */,
-				2984B33292F4E504BADBEF64 /* AuthPassAutofill */,
-				7D20A6436ECB72A122AA39D8 /* AutofillModuleFrameworks */,
+				964882BCA9925F77C6D89FFA /* AuthPassAutofill */,
+				FAB9C845C42F4FC1822E1252 /* AutofillModuleFrameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -262,6 +257,7 @@
 				FAC85194FE5F66E87A1D9A60 /* AuthPassAutofill.appex */,
 				1CA10E5B9FB74A5128907A12 /* AuthPassAutofill.appex */,
 				9F2D9413BE1DC777DC59A514 /* AuthPassAutofill.appex */,
+				AF2F82BCB1CDEC99A5038F6D /* AuthPassAutofill.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -279,6 +275,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				67F19E1041A9BD3CFFA78CBC /* AutofillIdentityChannel.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -302,27 +299,19 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		FAB9C845C42F4FC1822E1252 /* AutofillModuleFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA2608AEBE7C23B745BE397B /* Flutter.xcframework */,
+				4B4168AF2C66045533E3F69C /* App.xcframework */,
+			);
+			name = AutofillModuleFrameworks;
+			path = ../../autofill_module/build/framework/current;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2FCB5DB0CDDAAC9DD476813E /* AuthPassAutofill */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 476BC704EBD9BBA0BDE46162 /* Build configuration list for PBXNativeTarget "AuthPassAutofill" */;
-			buildPhases = (
-				E28E49E3B2DB0D304538D5B2 /* Sources */,
-				0D730FE52BC8CFD270C2A1E9 /* Frameworks */,
-				1E667E65CB4A7E30378397E8 /* Resources */,
-				70A88D526E69CC05DEFFF183 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = AuthPassAutofill;
-			productName = AuthPassAutofill;
-			productReference = 9F2D9413BE1DC777DC59A514 /* AuthPassAutofill.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		97C146ED1CF9000F007C117D /* Runner */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
@@ -340,7 +329,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C48317BFDC7831B3A3877C5 /* PBXTargetDependency */,
+				45DE7B982F8BFF54D804169C /* PBXTargetDependency */,
 			);
 			name = Runner;
 			packageProductDependencies = (
@@ -349,6 +338,24 @@
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		CED0C779402A5F92F05B2CB5 /* AuthPassAutofill */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D913CD3D6E8CFD121FE6288E /* Build configuration list for PBXNativeTarget "AuthPassAutofill" */;
+			buildPhases = (
+				D7A6ABDB6330DBBA32BD9D09 /* Sources */,
+				D88D915679511BE830FF1EC5 /* Frameworks */,
+				B242B996EEBAE1E38295531C /* Resources */,
+				83DDAB83108B81111E5ABE87 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AuthPassAutofill;
+			productName = AuthPassAutofill;
+			productReference = AF2F82BCB1CDEC99A5038F6D /* AuthPassAutofill.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -389,21 +396,12 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
-				2FCB5DB0CDDAAC9DD476813E /* AuthPassAutofill */,
+				CED0C779402A5F92F05B2CB5 /* AuthPassAutofill */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1E667E65CB4A7E30378397E8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A8AEDD585205DEA308FE6819 /* vault.kdbx in Resources */,
-				C9622B90FCE5F7BD2F5FAF11 /* vault_key.json in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		97C146EC1CF9000F007C117D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -415,6 +413,15 @@
 				E59625BE2451A984004DE975 /* kdbx_doc_type.png in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B242B996EEBAE1E38295531C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A52DABEA2733A4BAAC23A7FF /* vault.kdbx in Resources */,
+				C8BE655E30E857ED134A9FAD /* vault_key.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,34 +518,35 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				89065F04E9997DB7CBA3ADD0 /* AutofillIdentityChannel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E28E49E3B2DB0D304538D5B2 /* Sources */ = {
+		D7A6ABDB6330DBBA32BD9D09 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				485691305E1F9104089137B3 /* AutofillEngine.swift in Sources */,
-				6D7FEFC4408132AE5BCBE7AA /* AutofillVaultStore.swift in Sources */,
-				7DA78D23ADC75E708D60826D /* ConfigurationViewController.swift in Sources */,
-				DC181BD1FEBFEC14701D0D51 /* CredentialListViewController.swift in Sources */,
-				DA7CFC713A534F97C047BF00 /* CredentialProviderViewController.swift in Sources */,
+				05D81928618957669247D9F2 /* AutofillEngine.swift in Sources */,
+				C59DAE8146229E70EE74312F /* AutofillVaultStore.swift in Sources */,
+				120B14E9054A62F971D7D475 /* ConfigurationViewController.swift in Sources */,
+				B32753BF8736A8BDFE3D67D6 /* CredentialListViewController.swift in Sources */,
+				DA17EBA9E0A4114050033FF3 /* CredentialProviderViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		45DE7B982F8BFF54D804169C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AuthPassAutofill;
+			target = CED0C779402A5F92F05B2CB5 /* AuthPassAutofill */;
+			targetProxy = 3A1057A5342AF9E14F2F1FA3 /* PBXContainerItemProxy */;
+		};
 		4C48317BFDC7831B3A3877C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = AuthPassAutofill;
-			target = 2FCB5DB0CDDAAC9DD476813E /* AuthPassAutofill */;
 			targetProxy = 91D4A660CA51BEDFF5DF222D /* PBXContainerItemProxy */;
-		};
-		74E45EF313C694CA72174A15 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AuthPassAutofill;
-			targetProxy = 73622C4318E2639B17C2FB09 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -562,6 +570,69 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		03D352F340F0815F893A65CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9740EEB31CF90195004384FC /* Generated.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = AuthPassAutofill/AuthPassAutofill.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 64ZPC769JY;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../autofill_module/build/framework/current",
+				);
+				INFOPLIST_FILE = AuthPassAutofill/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass.ios.debug.autofill;
+				PRODUCT_NAME = AuthPassAutofill;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2074BBC89215472CF621547C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9740EEB31CF90195004384FC /* Generated.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = AuthPassAutofill/AuthPassAutofill.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 64ZPC769JY;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../autofill_module/build/framework/current",
+				);
+				INFOPLIST_FILE = AuthPassAutofill/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass.ios.autofill;
+				PRODUCT_NAME = AuthPassAutofill;
+				PROVISIONING_PROFILE_SPECIFIER = "AuthPass iOS AutoFill AppStore";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		249021D3217E4FDB00AE95B9 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -643,39 +714,6 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Profile;
-		};
-		46133D1B51936F7692B8820B /* Profile */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB31CF90195004384FC /* Generated.xcconfig */;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_ENTITLEMENTS = AuthPassAutofill/AuthPassAutofill.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 64ZPC769JY;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../autofill_module/build/framework/current",
-				);
-				INFOPLIST_FILE = AuthPassAutofill/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass.ios.autofill;
-				PRODUCT_NAME = AuthPassAutofill;
-				PROVISIONING_PROFILE_SPECIFIER = "AuthPass iOS AutoFill AppStore";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Profile;
 		};
@@ -858,7 +896,7 @@
 			};
 			name = Release;
 		};
-		BF26AD79AF20A3F361ABB399 /* Release */ = {
+		E7F0FAAD80F4E2158207AD6B /* Profile */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB31CF90195004384FC /* Generated.xcconfig */;
 			buildSettings = {
@@ -889,51 +927,11 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
-		};
-		E53DFA46A114D0590B874279 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB31CF90195004384FC /* Generated.xcconfig */;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_ENTITLEMENTS = AuthPassAutofill/AuthPassAutofill.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 64ZPC769JY;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../autofill_module/build/framework/current",
-				);
-				INFOPLIST_FILE = AuthPassAutofill/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = design.codeux.authpass.ios.debug.autofill;
-				PRODUCT_NAME = AuthPassAutofill;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		476BC704EBD9BBA0BDE46162 /* Build configuration list for PBXNativeTarget "AuthPassAutofill" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BF26AD79AF20A3F361ABB399 /* Release */,
-				E53DFA46A114D0590B874279 /* Debug */,
-				46133D1B51936F7692B8820B /* Profile */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -950,6 +948,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D913CD3D6E8CFD121FE6288E /* Build configuration list for PBXNativeTarget "AuthPassAutofill" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2074BBC89215472CF621547C /* Release */,
+				03D352F340F0815F893A65CF /* Debug */,
+				E7F0FAAD80F4E2158207AD6B /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
