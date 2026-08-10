@@ -29,7 +29,11 @@ Debug) FLUTTER_ARGS=(--debug --no-profile --no-release) ; ENGINE_DIR=ios ;;
   ;;
 esac
 
-flutter build ios-framework "${FLUTTER_ARGS[@]}" --output="${OUTPUT}"
+# --no-codesign because the app target signs the embedded frameworks on copy
+# anyway ("CodeSignOnCopy"), and signing here only introduces a way to fail:
+# two development certificates with the same common name in the keychain make
+# the automatic choice ambiguous, which stops the build.
+flutter build ios-framework "${FLUTTER_ARGS[@]}" --no-codesign --output="${OUTPUT}"
 
 FLUTTER_ROOT="$(dirname "$(dirname "$(readlink -f "$(command -v flutter)")")")"
 EXTENSION_SAFE="${FLUTTER_ROOT}/bin/cache/artifacts/engine/${ENGINE_DIR}/extension_safe/Flutter.xcframework"

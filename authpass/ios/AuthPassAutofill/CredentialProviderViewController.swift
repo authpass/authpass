@@ -21,8 +21,15 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setUpViews()
-    Task { await runSpike() }
+    // Only the spike screen runs on load. A fill request arrives through
+    // prepareCredentialList, which puts the picker up instead.
+    if !isFillRequest {
+      Task { await runSpike() }
+    }
   }
+
+  /// Set by [prepareCredentialList] before the view loads.
+  private var isFillRequest = false
 
   private func setUpViews() {
     view.backgroundColor = .systemBackground
@@ -138,7 +145,31 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   // MARK: - ASCredentialProviderViewController
 
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    log("asked for: \(serviceIdentifiers.map { $0.identifier }.joined(separator: ", "))")
+    isFillRequest = true
+
+    let list = CredentialListViewController(
+      engine: engine,
+      serviceIdentifiers: serviceIdentifiers,
+      onPick: { [weak self] credential in
+        self?.extensionContext.completeRequest(withSelectedCredential: credential)
+      },
+      onCancel: { [weak self] in
+        self?.extensionContext.cancelRequest(
+          withError: NSError(
+            domain: ASExtensionErrorDomain,
+            code: ASExtensionError.userCanceled.rawValue))
+      }
+    )
+
+    // Hosted in a navigation controller for the title and cancel button; the
+    // system presents this controller, so the picker has to live inside it
+    // rather than being presented on top.
+    let navigation = UINavigationController(rootViewController: list)
+    addChild(navigation)
+    navigation.view.frame = view.bounds
+    navigation.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    view.addSubview(navigation.view)
+    navigation.didMove(toParent: self)
   }
 
   /// Reached from Settings > General > AutoFill & Passwords > AuthPass.
