@@ -51,3 +51,4 @@ metrics.json
 
 /authpass/_tools/secrets/apple_distribution.p12
 /authpass/_tools/secrets/apple_distribution_p12_password
+/authpass/_tools/secrets/ios_appstore.mobileprovision
