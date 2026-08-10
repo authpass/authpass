@@ -15,6 +15,7 @@ authpass/_tools/secrets/ios_appstore.mobileprovision
 authpass/_tools/secrets/ios_appstore_autofill.mobileprovision
 authpass/_tools/secrets/mac_installer_distribution.p12
 authpass/_tools/secrets/mac_installer_distribution_p12_password
+authpass/_tools/secrets/macos_appstore.provisionprofile
 authpass/lib/env/production.dart
 authpass/lib/env/secrets.dart
 authpass/test/_testSecrets.json

@@ -59,3 +59,4 @@ metrics.json
 .blackbox/random_seed
 /authpass/_tools/secrets/mac_installer_distribution.p12
 /authpass/_tools/secrets/mac_installer_distribution_p12_password
+/authpass/_tools/secrets/macos_appstore.provisionprofile
