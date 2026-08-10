@@ -39,22 +39,9 @@ if test "$target_platform" == "ios" ; then
     pod repo update
 fi
 if test "$target_platform" == "macos" ; then
-    eval $(ssh-agent -s)
-    cat _tools/secrets/fastlane_match_certificates_id_rsa | ssh-add -
-    set +x
-    # defines MATCH_PASSWORD and FASTLANE_PASSWORD
-    source _tools/secrets/fastlane_match_password
-    set -x
-
-    # make sure cocoapods is up to date.
+    # As for ios: no cert repo, no MATCH_PASSWORD, no fastlane. Signing
+    # material comes from _tools/secrets, decrypted by blackbox above.
     pod repo update
-    pushd macos
-    sudo bundle install
-    popd
-#    # upgrade to flutter master channel
-#    flutter channel master
-#    flutter upgrade
-#    flutter config --enable-macos-desktop
 fi
 
 pwd

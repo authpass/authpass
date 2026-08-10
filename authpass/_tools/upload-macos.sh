@@ -1,0 +1,82 @@
+#!/bin/bash
+# Uploads a signed .pkg to App Store Connect.
+#
+#   _tools/upload-macos.sh [-p build/macos/pkg/authpass.pkg] [--dry-run]
+#
+# The macOS counterpart of upload-ios.sh, and uses the same credential: the
+# individual API key scoped to the AuthPass apps. See that script for why the
+# release pipeline holds nothing stronger.
+
+set -euo pipefail
+
+cd "${0%/*}/.."
+
+PKG=""
+ARCHIVE="build/macos/authpass.xcarchive"
+EXTRA=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -p) shift; PKG="$1" ;;
+    -a) shift; ARCHIVE="$1" ;;
+    *) EXTRA+=("$1") ;;
+  esac
+  shift
+done
+
+# The export directory holds exactly one .pkg, whose name follows the scheme
+# rather than the product, so glob rather than hardcode.
+if [ -z "$PKG" ]; then
+  PKG=$(ls build/macos/pkg/*.pkg 2>/dev/null | head -1 || true)
+fi
+
+SECRETS="_tools/secrets"
+KEY_ID="4LJJBK4Z86KR"
+KEY_PATH="$SECRETS/ApiKey_${KEY_ID}.p8"
+
+if [ ! -f "$KEY_PATH" ]; then
+  echo "missing $KEY_PATH — decrypt the blackbox secrets first" >&2
+  exit 1
+fi
+if [ -z "$PKG" ] || [ ! -f "$PKG" ]; then
+  echo "no .pkg found — run _tools/build-macos.sh first" >&2
+  exit 1
+fi
+
+export APPLE_API_KEY_ID="$KEY_ID"
+export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
+# An individual key has no issuer id; see upload-ios.sh.
+unset APPLE_API_ISSUER_ID
+
+BUNDLE_ID="design.codeux.authpass"
+
+# Read from the archive the .pkg was exported from, in the same run. A .pkg
+# keeps its Info.plist inside a compressed payload, so reading it back means
+# expanding the whole thing; the archive holds the same built app as a plain
+# bundle. Still the built artifact, not pubspec.yaml — on CI the build number
+# comes from git-buildnumber.sh and the two disagree.
+APP_PLIST=$(ls -d "$ARCHIVE"/Products/Applications/*.app 2>/dev/null | head -1)/Contents/Info.plist
+if [ ! -f "$APP_PLIST" ]; then
+  echo "could not find the built app in $ARCHIVE" >&2
+  exit 1
+fi
+VERSION=$(plutil -extract CFBundleShortVersionString raw -o - "$APP_PLIST")
+BUILD_NUMBER=$(plutil -extract CFBundleVersion raw -o - "$APP_PLIST")
+
+if [ -z "$VERSION" ] || [ -z "$BUILD_NUMBER" ]; then
+  echo "could not read the version out of $APP_PLIST" >&2
+  exit 1
+fi
+
+echo "==> uploading $PKG"
+echo "    bundle id    $BUNDLE_ID"
+echo "    version      $VERSION ($BUILD_NUMBER)"
+echo "    credential   individual key $KEY_ID, scoped to this app"
+
+cd _tools/cux_ship
+exec dart run cux_ship appstore upload \
+  --platform macos \
+  --ipa "../../$PKG" \
+  --bundle-id "$BUNDLE_ID" \
+  --version-name "$VERSION" \
+  --build-number "$BUILD_NUMBER" \
+  ${EXTRA+"${EXTRA[@]}"}

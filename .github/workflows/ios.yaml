@@ -28,9 +28,9 @@ jobs:
       - name: ci-install-deps
         env:
           BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: "./authpass/_tools/ci-install-deps.sh ios"
+      # No MATCH_PASSWORD: signing material is decrypted from _tools/secrets by
+      # blackbox, using BLACKBOX_SECRET_KEY above, and nothing fetches
+      # certificates at build time any more.
       - name: 'ci-release ${{ matrix.platform }}'
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: "./authpass/_tools/ci-release.sh ${{ matrix.platform }}"

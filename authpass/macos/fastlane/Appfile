@@ -1,5 +1,0 @@
-app_identifier("design.codeux.authpass")
-apple_id("herbert.fastlane.uploader@codeux.design") # Your Apple email address
-
-#itc_team_id("827760") # App Store Connect Team ID
-team_id("64ZPC769JY") # Developer Portal Team ID
