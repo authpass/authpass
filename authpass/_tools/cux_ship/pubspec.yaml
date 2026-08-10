@@ -1,0 +1,32 @@
+name: authpass_ship
+description: >-
+  Resolves the release tooling. One directory for it to be run from, and one
+  place to bump the ref.
+publish_to: 'none'
+version: 1.0.0
+
+# https://github.com/codeuxdesign/cux_ship — HTTPS rather than SSH on purpose.
+# That repository is public, so this resolves with no credentials anywhere,
+# including on a CI runner.
+#
+# Naming only cux_ship is load bearing: pub treats a git dependency's ref as
+# part of its identity, so a package named both here and inside cux_ship would
+# be two sources for the same package and version solving fails. The other four
+# arrive transitively, pinned to the same commit.
+#
+# NOTE: cux_ship infers the project from the *git* root, which in this
+# repository is the wrapper above authpass/ and has no pubspec.yaml or ios/.
+# So nothing is inferred here and the flags that would otherwise be optional
+# are required — pass --bundle-id explicitly. Worth fixing upstream with a
+# --project flag before the uploaders move over.
+#
+# TO BUMP: change the one ref below.
+environment:
+  sdk: ^3.8.0
+
+dependencies:
+  cux_ship:
+    git:
+      url: https://github.com/codeuxdesign/cux_ship.git
+      path: cux_ship
+      ref: v1.3.0
