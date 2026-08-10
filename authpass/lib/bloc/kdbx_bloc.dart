@@ -320,10 +320,9 @@ class KdbxBloc {
     final wasAutofillEnabled = file.openedFile.autofillEnabled == true;
     final isAutofillEnabled = updatedFile.autofillEnabled == true;
     if (wasAutofillEnabled && !isAutofillEnabled) {
-      // opted out — take the copy and the cached key away again, and stop
-      // advertising its entries.
+      // opted out — take the copy and the cached key away again. What is
+      // advertised is republished below, once the flag has actually landed.
       await autofillMirror.removeFile(file.openedFile.uuid);
-      await _publishAutofillIdentities();
     } else if (!wasAutofillEnabled && isAutofillEnabled) {
       // Opted in while the file is already open. The mirror is otherwise only
       // written on open and after save, so without this the extension would
@@ -360,6 +359,14 @@ class KdbxBloc {
         file.fileSource: newFile,
       }),
     );
+    if (wasAutofillEnabled != isAutofillEnabled) {
+      // Only now, after the stream carries the new flag. What gets advertised
+      // is derived from _openedFiles, so publishing from the branches above
+      // announced precisely the state the user had just left — switching
+      // autofill on published nothing, and switching it off published
+      // everything.
+      await _publishAutofillIdentities();
+    }
     _logger.info('new values: ${_openedFiles.value}');
     return newFile;
   }
@@ -509,12 +516,15 @@ class KdbxBloc {
       return;
     }
     await _mirrorFile(file.openedFile, file.kdbxFile, bytes);
+    await _publishAutofillIdentities();
   }
 
   /// Writes the copy and the cached key, without asking whether it should.
   ///
   /// The opt-in path calls this with a file whose [OpenedFile] has only just
   /// been flipped on, which [_syncAutofillMirror] would still read as off.
+  /// That path advertises the result itself, once the new flag is visible on
+  /// [_openedFiles] — which is why publishing is not done here.
   ///
   /// Never fatal: a failure here costs autofill for this vault until the next
   /// open or save, and failing the surrounding operation — opening a database,
@@ -531,7 +541,6 @@ class KdbxBloc {
         file: kdbxFile,
         bytes: bytes,
       );
-      await _publishAutofillIdentities();
     } catch (e, stackTrace) {
       _logger.warning('Unable to update the autofill mirror.', e, stackTrace);
     }
