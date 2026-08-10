@@ -54,3 +54,6 @@ metrics.json
 /authpass/_tools/secrets/ios_appstore.mobileprovision
 /authpass/_tools/secrets/ios_appstore_autofill.mobileprovision
 /authpass/_tools/secrets/ApiKey_4LJJBK4Z86KR.p8
+
+# gpg scratch file, regenerated on every keyring operation
+.blackbox/random_seed
