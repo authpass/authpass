@@ -5,7 +5,6 @@ authpass/_tools/secrets/api-project-284252947431-83b019c3ca1e.json
 authpass/_tools/secrets/apple_distribution.p12
 authpass/_tools/secrets/apple_distribution_p12_password
 authpass/_tools/secrets/artifact_token.txt
-authpass/_tools/secrets/fastlane_match_password
 authpass/_tools/secrets/fosshub_token.txt
 authpass/_tools/secrets/gradle_home/amazon-key.jks
 authpass/_tools/secrets/gradle_home/gradle.properties

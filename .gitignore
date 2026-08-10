@@ -10,7 +10,6 @@ git-buildnumber.sh
 development_hp.dart
 /tmp
 
-/authpass/_tools/secrets/fastlane_match_password
 /authpass/ios/vendor
 
 Runner.app.dSYM.zip
