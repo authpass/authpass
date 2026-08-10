@@ -74,6 +74,26 @@ if [ -z "$VERSION" ] || [ -z "$BUILD_NUMBER" ]; then
   exit 1
 fi
 
+# Refuse a build number the store already has, before spending the upload on
+# it. Apple rejects a duplicate anyway, but only after the whole binary has
+# gone up and been processed — minutes later, and the number is burnt either
+# way. Build numbers have to increase, so "not greater than the newest" is the
+# same question asked cheaply.
+#
+# Set AUTHPASS_ALLOW_REUSED_BUILD_NUMBER=1 to skip, e.g. when deliberately
+# re-uploading after a processing failure.
+echo "==> checking build $BUILD_NUMBER is newer than what Apple holds"
+NEWEST=$(cd _tools/cux_ship && dart run cux_ship appstore build-number \
+  --bundle-id "$BUNDLE_ID" 2>/dev/null | tail -1 | tr -dc '0-9')
+if [ -n "$NEWEST" ] && [ "$BUILD_NUMBER" -le "$NEWEST" ] \
+   && [ "${AUTHPASS_ALLOW_REUSED_BUILD_NUMBER:-}" != "1" ]; then
+  echo "    newest on App Store Connect is $NEWEST" >&2
+  echo "build $BUILD_NUMBER is not newer than $NEWEST — Apple would reject it" >&2
+  echo "  Rebuild with a higher -b, or set AUTHPASS_ALLOW_REUSED_BUILD_NUMBER=1" >&2
+  exit 1
+fi
+echo "    newest is ${NEWEST:-unknown}, ours is $BUILD_NUMBER"
+
 # upload_to_testflight was called with no changelog, so the default here is no
 # notes. cux_ship refuses to guess — absent is not the same answer as empty —
 # and would otherwise look for a CHANGELOG.md at the *git* root, which in this

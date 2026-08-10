@@ -67,6 +67,20 @@ if [ -z "$VERSION" ] || [ -z "$BUILD_NUMBER" ]; then
   exit 1
 fi
 
+# See upload-ios.sh. macOS keeps its own build numbers, so this asks about the
+# macos platform of the same app rather than iOS.
+echo "==> checking build $BUILD_NUMBER is newer than what Apple holds"
+NEWEST=$(cd _tools/cux_ship && dart run cux_ship appstore build-number \
+  --bundle-id "$BUNDLE_ID" --platform macos 2>/dev/null | tail -1 | tr -dc '0-9')
+if [ -n "$NEWEST" ] && [ "$BUILD_NUMBER" -le "$NEWEST" ] \
+   && [ "${AUTHPASS_ALLOW_REUSED_BUILD_NUMBER:-}" != "1" ]; then
+  echo "    newest on App Store Connect is $NEWEST" >&2
+  echo "build $BUILD_NUMBER is not newer than $NEWEST — Apple would reject it" >&2
+  echo "  Rebuild with a higher -b, or set AUTHPASS_ALLOW_REUSED_BUILD_NUMBER=1" >&2
+  exit 1
+fi
+echo "    newest is ${NEWEST:-unknown}, ours is $BUILD_NUMBER"
+
 # See upload-ios.sh: no notes by default, matching what fastlane did.
 NOTES=()
 case " ${EXTRA[*]-} " in

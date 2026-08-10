@@ -61,6 +61,32 @@ export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
 
 VERSION=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version: *//' | cut -d+ -f1)
 
+# Refuse a versionCode Play already has, before spending the upload on it. Play
+# rejects a duplicate anyway, but only after the whole bundle has gone up — and
+# on the playstoredev lane that failure is deliberately tolerated, so it would
+# otherwise pass by unnoticed. Only checked when a build number was given;
+# without -b there is nothing to compare yet.
+#
+# This checks the number passed in, not the one inside the bundle — reading a
+# versionCode out of an .aab needs bundletool. cux_ship checks the bundle
+# itself, so a disagreement between the two still fails, just later. The iOS
+# and macOS uploaders read theirs out of the built artifact directly.
+#
+# Set AUTHPASS_ALLOW_REUSED_BUILD_NUMBER=1 to skip.
+if [ -n "$BUILD_NUMBER" ]; then
+  echo "==> checking versionCode $BUILD_NUMBER is newer than what Play holds"
+  NEWEST=$(cd _tools/cux_ship && dart run cux_ship play version-code \
+    --package "$PACKAGE" --track "$TRACK" 2>/dev/null | tail -1 | tr -dc '0-9')
+  if [ -n "$NEWEST" ] && [ "$BUILD_NUMBER" -le "$NEWEST" ] \
+     && [ "${AUTHPASS_ALLOW_REUSED_BUILD_NUMBER:-}" != "1" ]; then
+    echo "    newest on \"$TRACK\" is $NEWEST" >&2
+    echo "versionCode $BUILD_NUMBER is not newer than $NEWEST — Play would reject it" >&2
+    echo "  Rebuild with a higher -b, or set AUTHPASS_ALLOW_REUSED_BUILD_NUMBER=1" >&2
+    exit 1
+  fi
+  echo "    newest is ${NEWEST:-unknown}, ours is $BUILD_NUMBER"
+fi
+
 # The lanes this replaced all passed skip_upload_changelogs, so the default here
 # is no notes. cux_ship refuses to guess — absent is not the same answer as
 # empty — and an empty file is how you say "leave the listing alone", which
