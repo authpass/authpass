@@ -11,6 +11,7 @@ authpass/_tools/secrets/gradle_home/amazon-key.jks
 authpass/_tools/secrets/gradle_home/gradle.properties
 authpass/_tools/secrets/gradle_home/upload-key.jks
 authpass/_tools/secrets/ios_appstore.mobileprovision
+authpass/_tools/secrets/ios_appstore_autofill.mobileprovision
 authpass/lib/env/production.dart
 authpass/lib/env/secrets.dart
 authpass/test/_testSecrets.json
