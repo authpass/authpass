@@ -49,10 +49,7 @@ class AutofillManifest {
 
   /// Replaces the entry for [entry]'s file, or appends it.
   AutofillManifest withEntry(AutofillManifestEntry entry) => AutofillManifest(
-    entries: [
-      ...entries.where((e) => e.fileUuid != entry.fileUuid),
-      entry,
-    ],
+    entries: [...entries.where((e) => e.fileUuid != entry.fileUuid), entry],
   );
 
   AutofillManifest withoutFileUuid(String fileUuid) => AutofillManifest(

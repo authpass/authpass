@@ -1,5 +1,5 @@
-import 'package:authpass/autofill/autofill_manifest.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:autofill_shared/autofill_manifest.dart';
+import 'package:test/test.dart';
 
 void main() {
   AutofillManifestEntry entry(String uuid, {String name = 'Vault'}) =>

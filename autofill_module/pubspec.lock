@@ -33,6 +33,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.1"
+  autofill_shared:
+    dependency: "direct main"
+    description:
+      path: "../autofill_shared"
+      relative: true
+    source: path
+    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -73,13 +80,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  credential_matcher:
-    dependency: "direct main"
-    description:
-      path: "../credential_matcher"
-      relative: true
-    source: path
-    version: "1.0.0"
   crypto:
     dependency: transitive
     description:

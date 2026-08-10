@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:authpass/autofill/autofill_manifest.dart';
+import 'package:autofill_shared/autofill_manifest.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';

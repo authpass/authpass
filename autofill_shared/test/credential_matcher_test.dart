@@ -1,4 +1,4 @@
-import 'package:credential_matcher/credential_matcher.dart';
+import 'package:autofill_shared/credential_matcher.dart';
 import 'package:test/test.dart';
 import 'package:kdbx/kdbx.dart';
 

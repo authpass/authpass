@@ -1,7 +1,8 @@
-name: credential_matcher
+name: autofill_shared
 description: >-
-  Decides which stored entries may be offered for a fill request, by
-  registrable domain (eTLD+1). Shared by the app and the autofill extension.
+  The contract between the app and the credential provider extension: the
+  manifest indexing mirrored vaults, and the matcher deciding which entries may
+  be offered for a fill request. Written by the app, read by both.
 publish_to: 'none'
 version: 1.0.0
 

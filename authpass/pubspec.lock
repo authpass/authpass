@@ -128,6 +128,13 @@ packages:
       relative: true
     source: path
     version: "0.1.1"
+  autofill_shared:
+    dependency: "direct main"
+    description:
+      path: "../autofill_shared"
+      relative: true
+    source: path
+    version: "1.0.0"
   badges:
     dependency: "direct main"
     description:
@@ -369,13 +376,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.1"
-  credential_matcher:
-    dependency: "direct main"
-    description:
-      path: "../credential_matcher"
-      relative: true
-    source: path
-    version: "1.0.0"
   cross_file:
     dependency: transitive
     description:
