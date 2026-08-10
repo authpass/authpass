@@ -6,16 +6,12 @@ this branch, what is proven, and what to pick up next".
 
 ## Branch layout
 
-This branch is **stacked on `claude/ios-release-without-fastlane`**, which
-removes fastlane/match from the iOS release path. That branch must land first —
-the extension signs against a stored provisioning profile that only exists in
-that world. Nothing here is pushed.
-
-```
-main
- └─ claude/ios-release-without-fastlane   release/signing, no autofill
-     └─ claude/authpass-ios-autofill-…    this branch
-```
+Branched from `main`, and not pushed. The release work this used to be stacked
+on — fastlane and match removed, signing against stored profiles — landed in
+`main` on 2026-08-10, so the extension's provisioning is already there:
+`AuthPass iOS AutoFill AppStore`, in blackbox, listed in
+`ios/ExportOptions.plist` and in the `PROFILES` array of `_tools/build-ios.sh`.
+See [../apple-signing.md](../apple-signing.md).
 
 ## Done
 
