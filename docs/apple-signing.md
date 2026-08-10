@@ -86,6 +86,26 @@ Before the certificate expires, from a laptop, with an **Admin** key:
    the new certificate, and download it.
 3. Export the certificate and its private key as a `.p12` with a fresh random
    passphrase.
+
+   In Keychain Access, export from **My Certificates**, not **Keys** — select
+   the *certificate* row, having expanded it to confirm the private key sits
+   underneath. Exporting from the Keys category yields a `.p12` holding a bare
+   key with no certificate, and key items carry legacy names, so it is easy to
+   export a key belonging to some older certificate entirely. Check before
+   trusting one:
+
+   ```bash
+   openssl pkcs12 -in cert.p12 -nokeys -clcerts | openssl x509 -noout -pubkey | openssl pkey -pubin -outform DER | openssl dgst -sha256
+   openssl pkcs12 -in cert.p12 -nodes -nocerts | openssl pkey -pubout -outform DER | openssl dgst -sha256
+   ```
+
+   Those two digests must match, or the file is not a usable identity.
+
+   If a `.p12` is ever rebuilt with `openssl pkcs12 -export`, pass `-legacy
+   -macalg sha1`. macOS `security import` rejects OpenSSL 3's defaults
+   (AES-256 + SHA-256 MAC) with "MAC verification failed during PKCS12 import
+   (wrong password?)", which is about the algorithms and not the password.
+   Add `-legacy` when *reading* a Keychain Access export too.
 4. Replace the four files above and re-encrypt:
    `blackbox_edit_start` / `blackbox_edit_end`, or `blackbox_register_new_file`
    for anything new.
