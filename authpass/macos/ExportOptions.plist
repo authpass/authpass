@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  How `xcodebuild -exportArchive` turns the macOS archive into the .pkg that
+  goes to App Store Connect. The iOS counterpart is ios/ExportOptions.plist and
+  the reasoning behind manual signing is the same — see docs/apple-signing.md.
+-->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+
+	<key>teamID</key>
+	<string>64ZPC769JY</string>
+
+	<key>signingStyle</key>
+	<string>manual</string>
+
+	<!--
+	  Two certificates, unlike iOS. "Apple Distribution" signs the .app and is
+	  the same universal certificate the iOS build uses; the Mac App Store
+	  additionally wants the .pkg *installer* signed, by a separate certificate
+	  Apple still labels "3rd Party Mac Developer Installer".
+	-->
+	<key>signingCertificate</key>
+	<string>Apple Distribution</string>
+
+	<key>installerSigningCertificate</key>
+	<string>3rd Party Mac Developer Installer</string>
+
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>design.codeux.authpass</key>
+		<string>AuthPass macOS AppStore</string>
+	</dict>
+
+	<!--
+	  Load bearing. Left at its default, Xcode rewrites CFBundleVersion and
+	  CFBundleShortVersionString during export, discarding the build number
+	  git-buildnumber allocated for this commit.
+	-->
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>
