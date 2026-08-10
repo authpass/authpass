@@ -61,6 +61,22 @@ export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
 
 VERSION=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version: *//' | cut -d+ -f1)
 
+# The lanes this replaced all passed skip_upload_changelogs, so the default here
+# is no notes. cux_ship refuses to guess — absent is not the same answer as
+# empty — and an empty file is how you say "leave the listing alone", which
+# keeps whatever Play already shows. Pass --changelog or --release-notes to
+# override; cux_ship would otherwise look for a CHANGELOG.md at the *git* root,
+# which in this repository is the wrapper above authpass/.
+NOTES=()
+case " ${EXTRA[*]-} " in
+  *" --release-notes "* | *" --changelog "*) ;;
+  *)
+    EMPTY_NOTES=$(mktemp -t authpass-release-notes)
+    trap 'rm -f "$EMPTY_NOTES"' EXIT INT TERM
+    NOTES=(--release-notes "$EMPTY_NOTES")
+    ;;
+esac
+
 echo "==> uploading $AAB"
 echo "    package      $PACKAGE"
 echo "    track        $TRACK"
@@ -71,10 +87,12 @@ echo "    version      $VERSION${BUILD_NUMBER:+ ($BUILD_NUMBER)}"
 # against the versionCode inside the bundle, so a mismatch fails here rather
 # than publishing something mislabelled.
 cd _tools/cux_ship
-exec dart run cux_ship --yes play upload \
+# not exec: the trap above still has an empty notes file to clean up
+dart run cux_ship --yes play upload \
   --aab "../../$AAB" \
   --package "$PACKAGE" \
   --track "$TRACK" \
   --version-name "$VERSION" \
   ${BUILD_NUMBER:+--build-number "$BUILD_NUMBER"} \
+  ${NOTES+"${NOTES[@]}"} \
   ${EXTRA+"${EXTRA[@]}"}
