@@ -66,18 +66,37 @@ final class ConfigurationViewController: UIViewController {
     let vaults: [AutofillVaultStore.Vault]
     do {
       vaults = try AutofillVaultStore.vaults()
-    } catch {
-      add(title: "AutoFill is not ready", body:
-        "The shared container could not be opened, so no databases can be "
-        + "read.\n\n\(error.localizedDescription)")
-      return
-    }
-
-    guard !vaults.isEmpty else {
+    } catch AutofillVaultStore.StoreError.noVaults {
+      // No manifest at all, which is what "nothing has been enabled yet" looks
+      // like — not a failure, and the state every user starts in.
       add(title: "No databases yet", body:
         "Open AuthPass, choose a database, and switch on AutoFill for it.\n\n"
         + "Each database is enabled separately, because enabling one keeps a "
         + "copy of it for AutoFill until you switch it off again.")
+      return
+    } catch AutofillVaultStore.StoreError.noContainer {
+      add(title: "AutoFill is not ready", body:
+        "The shared container could not be opened, so no databases can be "
+        + "read. This usually means the app group entitlement is missing from "
+        + "this build.")
+      return
+    } catch {
+      // A manifest that exists but will not parse — worth showing verbatim,
+      // since nothing the user can do in the app will fix it.
+      add(title: "AutoFill is not ready", body:
+        "The list of databases could not be read.\n\n"
+        + "\(error.localizedDescription)")
+      return
+    }
+
+    guard !vaults.isEmpty else {
+      // The manifest listed databases but none had a usable key: either the
+      // app has not cached one yet, or every one of them went stale when the
+      // database was saved somewhere else.
+      add(title: "Open AuthPass to finish setting up", body:
+        "AutoFill is switched on for at least one database, but AuthPass has "
+        + "not shared a key for it yet — or the database was saved elsewhere "
+        + "since. Open AuthPass and unlock it once.")
       return
     }
 
