@@ -8,6 +8,7 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -202,6 +203,39 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     setState(() {});
                   },
                 ),
+                // iOS only for now: the credential provider extension is what
+                // consumes this, and there is none on the other platforms.
+                if (AuthPassPlatform.isIOS) ...[
+                  SwitchListTile(
+                    secondary: const Icon(Icons.password),
+                    title: Text(loc.databaseAutofill),
+                    subtitle: Text(
+                      _file!.openedFile.autofillEnabled == true
+                          ? loc.databaseAutofillCopyWarning
+                          : loc.databaseAutofillSubtitle,
+                    ),
+                    value: _file!.openedFile.autofillEnabled == true,
+                    onChanged: (enabled) async {
+                      // updateOpenedFile writes or removes the app group copy
+                      // and the cached key; nothing else has to happen here.
+                      _file = await _kdbxBloc.updateOpenedFile(
+                        _file!,
+                        (b) => b.autofillEnabled = enabled,
+                      );
+                      if (!context.mounted) {
+                        return;
+                      }
+                      setState(() {});
+                      if (enabled) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(loc.databaseAutofillSystemHint),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
                 ListTile(
                   title: Text(loc.databaseKdbxVersion),
                   subtitle: Text(

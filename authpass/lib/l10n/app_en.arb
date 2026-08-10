@@ -1464,6 +1464,22 @@
   "@databaseColorChoose": {
     "description": ""
   },
+  "databaseAutofill": "AutoFill",
+  "@databaseAutofill": {
+    "description": "Switch on the database screen, enabling this database for iOS AutoFill."
+  },
+  "databaseAutofillSubtitle": "Offer this database's entries when apps and websites ask for a password.",
+  "@databaseAutofillSubtitle": {
+    "description": "Explains what enabling AutoFill for a database does."
+  },
+  "databaseAutofillCopyWarning": "A copy of this database is kept for AutoFill until you switch it off again.",
+  "@databaseAutofillCopyWarning": {
+    "description": "Shown when enabling AutoFill, so it is clear a second copy of the file exists."
+  },
+  "databaseAutofillSystemHint": "Also turn AuthPass on in Settings › General › AutoFill & Passwords.",
+  "@databaseAutofillSystemHint": {
+    "description": "Reminder that iOS needs AuthPass enabled as a credential provider as well."
+  },
   "databaseKdbxVersion": "KDBX File Version",
   "@databaseKdbxVersion": {
     "description": ""

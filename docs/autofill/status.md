@@ -60,16 +60,18 @@ exists in code and compiles into the extension:
 Still missing: `provideCredentialWithoutUserInteraction` (the fast path), the
 configuration UI, and the identity store sync of phase 3.
 
-### What stops any of it being proven
+### How to try it
 
-**Nothing can enable autofill for a vault.** `OpenedFile.autofillEnabled` is
-only settable programmatically — there is no preferences UI — so the mirror
-stays empty, the keychain holds no key, and the picker has nothing to find.
+The database screen (Manage database) has an **AutoFill** switch on iOS.
+Turning it on mirrors that database into the app group and caches its key, so
+the extension can see it; turning it off takes both away again.
 
-The enable-autofill flow is therefore the next thing to build. Not because it
-is the most interesting part, but because everything already written is
-unverifiable without it, and the spike screen still stands in for the parts
-that are.
+iOS also has to be told AuthPass may fill passwords at all:
+Settings › General › AutoFill & Passwords › AuthPass. The switch shows a
+reminder, since one without the other looks like a broken feature.
+
+Then a login form in Safari should offer entries from that database. None of
+this has been run on a device yet.
 
 ### The quick-unlock migration is not needed
 

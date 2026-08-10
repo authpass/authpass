@@ -2117,6 +2117,30 @@ abstract class AppLocalizations {
   /// **'Select a color to distinguish between files.'**
   String get databaseColorChoose;
 
+  /// Switch on the database screen, enabling this database for iOS AutoFill.
+  ///
+  /// In en, this message translates to:
+  /// **'AutoFill'**
+  String get databaseAutofill;
+
+  /// Explains what enabling AutoFill for a database does.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer this database\'s entries when apps and websites ask for a password.'**
+  String get databaseAutofillSubtitle;
+
+  /// Shown when enabling AutoFill, so it is clear a second copy of the file exists.
+  ///
+  /// In en, this message translates to:
+  /// **'A copy of this database is kept for AutoFill until you switch it off again.'**
+  String get databaseAutofillCopyWarning;
+
+  /// Reminder that iOS needs AuthPass enabled as a credential provider as well.
+  ///
+  /// In en, this message translates to:
+  /// **'Also turn AuthPass on in Settings › General › AutoFill & Passwords.'**
+  String get databaseAutofillSystemHint;
+
   ///
   ///
   /// In en, this message translates to:

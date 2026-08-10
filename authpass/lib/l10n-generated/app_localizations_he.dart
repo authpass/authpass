@@ -1144,6 +1144,21 @@ class AppLocalizationsHe extends AppLocalizations {
       'Select a color to distinguish between files.';
 
   @override
+  String get databaseAutofill => 'AutoFill';
+
+  @override
+  String get databaseAutofillSubtitle =>
+      'Offer this database\'s entries when apps and websites ask for a password.';
+
+  @override
+  String get databaseAutofillCopyWarning =>
+      'A copy of this database is kept for AutoFill until you switch it off again.';
+
+  @override
+  String get databaseAutofillSystemHint =>
+      'Also turn AuthPass on in Settings › General › AutoFill & Passwords.';
+
+  @override
   String get databaseKdbxVersion => 'KDBX File Version';
 
   @override
