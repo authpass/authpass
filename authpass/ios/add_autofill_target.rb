@@ -10,9 +10,10 @@
 # (17.0, while the app is still on 13.0), the embed-appex build phase, and the
 # frameworks from the headless Flutter module.
 #
-# Signing is left on automatic. Provisioning for the real bundle ids, the app
-# group and the autofill capability is a phase 1 job — do not point this at the
-# match profiles.
+# Signing follows the app: automatic for Debug, manual for Release and Profile
+# against the stored profiles. Registering the bundle ids, the app group and the
+# autofill capability in the portal is a manual job — see
+# docs/autofill/provisioning.md.
 
 require 'xcodeproj'
 
@@ -23,8 +24,12 @@ TARGET_NAME = 'AuthPassAutofill'
 # Bundle id suffix: lowercase, like every other identifier in this project and
 # per apple's own convention. Xcode would default this to the product name, but
 # sources disagree on whether bundle ids are case sensitive and this string ends
-# up in the portal, the match profiles, entitlements and CI.
+# up in the portal, the profiles, entitlements and CI.
 BUNDLE_ID_SUFFIX = 'autofill'
+# Provisioning profile the extension signs Release/Profile against. Stored,
+# encrypted, in _tools/secrets and installed by _tools/build-ios.sh; the app's
+# own is "AuthPass iOS AppStore". See docs/ios-signing.md.
+EXTENSION_PROFILE = 'AuthPass iOS AutoFill AppStore'
 SOURCE_DIR = 'AuthPassAutofill'
 FIXTURES_DIR = File.join(SOURCE_DIR, 'Fixtures')
 # Built by autofill_module/build_ios_framework.sh
@@ -169,21 +174,21 @@ app_target.build_configurations.each do |app_config|
 
   config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = "#{base}.#{BUNDLE_ID_SUFFIX}"
 
-  # Signing follows the app, per configuration. Runner signs Debug
-  # automatically and Release/Profile manually against a match profile; an
-  # automatically signed appex inside a manually signed app is not valid for
-  # the store. The profile name is match's own convention,
-  # "match AppStore <bundle id>", so it resolves once
-  # `fastlane match appstore` has been run for the extension identifier —
-  # see docs/autofill/provisioning.md.
+  # Signing follows the app, per configuration. Debug signs automatically, so
+  # a device build needs nothing but an Xcode account. Release and Profile sign
+  # manually against the profiles stored in _tools/secrets, which is what lets
+  # CI hold no credential that can create or revoke signing material — see
+  # docs/ios-signing.md.
+  #
+  # An automatically signed appex inside a manually signed app is not valid for
+  # the store, so the two must agree.
   style = app_config.build_settings['CODE_SIGN_STYLE'] || 'Automatic'
   config.build_settings['CODE_SIGN_STYLE'] = style
   next unless style == 'Manual'
 
   config.build_settings['CODE_SIGN_IDENTITY'] =
     app_config.build_settings['CODE_SIGN_IDENTITY']
-  config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] =
-    "match AppStore #{base}.#{BUNDLE_ID_SUFFIX}"
+  config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = EXTENSION_PROFILE
 end
 
 # --- embed into the app -------------------------------------------------------

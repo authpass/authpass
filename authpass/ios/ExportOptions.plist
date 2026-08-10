@@ -37,15 +37,16 @@
 	<string>Apple Distribution</string>
 
 	<!--
-	  By bundle id. A target built into the archive but missing here does not
-	  fail the export; it produces an .ipa Apple rejects at upload, which is a
-	  much later and less obvious failure — so this dict grows whenever the app
-	  gains an extension.
+	  Both targets, by bundle id. Omitting the extension does not fail the
+	  export; it produces an .ipa Apple rejects at upload, which is a much
+	  later and less obvious failure.
 	-->
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>design.codeux.authpass.ios</key>
 		<string>AuthPass iOS AppStore</string>
+		<key>design.codeux.authpass.ios.autofill</key>
+		<string>AuthPass iOS AutoFill AppStore</string>
 	</dict>
 
 	<!--

@@ -164,9 +164,9 @@ Build notes worth keeping (all three cost time to rediscover):
 - Provisioning: register extension bundle ids
   (`design.codeux.authpass.ios[.debug].autofill` — lowercase, like every other
   identifier here; the Xcode *target* stays `AuthPassAutofill`), app group and
-  autofill capability in the portal; generate + push match profiles
-  (needs write access to the private cert repo); `Appfile`/`Fastfile` updated
-  for two identifiers.
+  autofill capability in the portal; a distribution profile for the extension,
+  stored in blackbox (needs an Admin App Store Connect key); the profile added
+  to `ios/ExportOptions.plist` and `_tools/build-ios.sh`.
 
 ### Phase 2 — iOS extension MVP (≈ 3–4 weeks)
 
