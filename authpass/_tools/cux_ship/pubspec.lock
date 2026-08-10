@@ -69,8 +69,8 @@ packages:
     dependency: "direct main"
     description:
       path: cux_ship
-      ref: "v1.4.1"
-      resolved-ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
+      ref: "v1.4.2"
+      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.1.0"
@@ -78,8 +78,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_appstore
-      ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
-      resolved-ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
+      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
+      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
@@ -87,8 +87,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_notes
-      ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
-      resolved-ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
+      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
+      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
@@ -96,8 +96,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_play
-      ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
-      resolved-ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
+      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
+      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
@@ -105,8 +105,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_verify
-      ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
-      resolved-ref: d213e6da7d21621377348a2c9a1d44eb25b608c5
+      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
+      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"

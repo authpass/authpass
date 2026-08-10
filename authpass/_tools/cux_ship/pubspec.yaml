@@ -29,4 +29,4 @@ dependencies:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_ship
-      ref: v1.4.1
+      ref: v1.4.2
