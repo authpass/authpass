@@ -109,7 +109,7 @@ was lowercased. Harmless, but worth deleting.
 
 Match is gone — releases sign manually against profiles stored in blackbox. The
 general procedure, and the yearly certificate renewal, are in
-[../ios-signing.md](../ios-signing.md); this is only what the extension adds.
+[../apple-signing.md](../apple-signing.md); this is only what the extension adds.
 
 The app already has `AuthPass iOS AppStore`. The extension needs its own, named
 exactly **`AuthPass iOS AutoFill AppStore`** — `EXTENSION_PROFILE` in

@@ -28,7 +28,7 @@ TARGET_NAME = 'AuthPassAutofill'
 BUNDLE_ID_SUFFIX = 'autofill'
 # Provisioning profile the extension signs Release/Profile against. Stored,
 # encrypted, in _tools/secrets and installed by _tools/build-ios.sh; the app's
-# own is "AuthPass iOS AppStore". See docs/ios-signing.md.
+# own is "AuthPass iOS AppStore". See docs/apple-signing.md.
 EXTENSION_PROFILE = 'AuthPass iOS AutoFill AppStore'
 SOURCE_DIR = 'AuthPassAutofill'
 FIXTURES_DIR = File.join(SOURCE_DIR, 'Fixtures')
@@ -186,7 +186,7 @@ app_target.build_configurations.each do |app_config|
   # a device build needs nothing but an Xcode account. Release and Profile sign
   # manually against the profiles stored in _tools/secrets, which is what lets
   # CI hold no credential that can create or revoke signing material — see
-  # docs/ios-signing.md.
+  # docs/apple-signing.md.
   #
   # An automatically signed appex inside a manually signed app is not valid for
   # the store, so the two must agree.
