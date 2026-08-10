@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The direct-download export: the same archive ExportOptions.plist turns into a
+  Mac App Store .pkg, re-signed for distribution outside the store.
+
+  Two exports from one archive is the point — `xcodebuild -exportArchive`
+  re-signs, so the build does not have to run twice and the two downloads are
+  demonstrably the same build.
+-->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>developer-id</string>
+
+	<key>teamID</key>
+	<string>64ZPC769JY</string>
+
+	<key>signingStyle</key>
+	<string>manual</string>
+
+	<key>signingCertificate</key>
+	<string>Developer ID Application</string>
+
+	<!--
+	  Needed despite this being a direct download. Release.entitlements asks for
+	  keychain-access-groups, and a keychain group has to be authorized by a
+	  profile whatever the distribution channel — so this build wants a
+	  Developer ID profile, not just the certificate.
+	-->
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>design.codeux.authpass</key>
+		<string>AuthPass macOS DeveloperID</string>
+	</dict>
+
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+
+	<!--
+	  Gatekeeper refuses an unnotarized download, and notarization refuses a
+	  binary without the hardened runtime. The Runner target already sets
+	  ENABLE_HARDENED_RUNTIME; this is the other half of the same requirement.
+	-->
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>
