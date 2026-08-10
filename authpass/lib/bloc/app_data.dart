@@ -330,10 +330,18 @@ class AppDataBloc {
     final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
     final colorCode =
         recentFile?.colorCode ?? oldFile?.colorCode ?? defaultColor?.toARGB32();
+    // Carried like colorCode, and for the same reason: this record is built
+    // fresh on every open, so anything not copied here is a setting the user
+    // silently loses by closing the database. Autofill has to survive, or the
+    // mirror stops being refreshed while the switch still reads as on.
+    final autofillEnabled =
+        recentFile?.autofillEnabled ?? oldFile?.autofillEnabled;
     final openedFile = OpenedFile.fromFileSource(
       file,
       name,
-      (b) => b..colorCode = colorCode,
+      (b) => b
+        ..colorCode = colorCode
+        ..autofillEnabled = autofillEnabled,
     );
     _logger.finest('openedFile: $openedFile');
     // TODO remove potential old storages?
