@@ -57,3 +57,4 @@ metrics.json
 
 # gpg scratch file, regenerated on every keyring operation
 .blackbox/random_seed
+/authpass/_tools/secrets/mac_installer_distribution.p12
