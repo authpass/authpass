@@ -44,8 +44,8 @@ fi
 
 export APPLE_API_KEY_ID="$KEY_ID"
 export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
-# An individual key has no issuer id; see upload-ios.sh.
-unset APPLE_API_ISSUER_ID
+# Issuer id: see upload-ios.sh — altool needs it even for an individual key.
+export APPLE_API_ISSUER_ID="0f1ac0c6-ea92-4609-a2f0-c9b239198a75"
 
 BUNDLE_ID="design.codeux.authpass"
 
@@ -67,17 +67,30 @@ if [ -z "$VERSION" ] || [ -z "$BUILD_NUMBER" ]; then
   exit 1
 fi
 
+# See upload-ios.sh: no notes by default, matching what fastlane did.
+NOTES=()
+case " ${EXTRA[*]-} " in
+  *" --release-notes "* | *" --changelog "*) ;;
+  *)
+    EMPTY_NOTES=$(mktemp -t authpass-release-notes)
+    trap 'rm -f "$EMPTY_NOTES"' EXIT INT TERM
+    NOTES=(--release-notes "$EMPTY_NOTES")
+    ;;
+esac
+
 echo "==> uploading $PKG"
 echo "    bundle id    $BUNDLE_ID"
 echo "    version      $VERSION ($BUILD_NUMBER)"
 echo "    credential   individual key $KEY_ID, scoped to this app"
 
 # --yes: see upload-ios.sh.
+# not exec: the trap above still has a temp file to clean up
 cd _tools/cux_ship
-exec dart run cux_ship --yes appstore upload \
+dart run cux_ship --yes appstore upload \
   --platform macos \
   --ipa "../../$PKG" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \
+  ${NOTES+"${NOTES[@]}"} \
   ${EXTRA+"${EXTRA[@]}"}

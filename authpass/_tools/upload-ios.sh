@@ -46,10 +46,12 @@ fi
 
 export APPLE_API_KEY_ID="$KEY_ID"
 export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
-# Deliberately unset: an individual key has no issuer id, and cux_ship uses its
-# absence to pick the `sub: user` JWT claim instead of `iss`. Setting it to a
-# team issuer produces a 401 that explains nothing.
-unset APPLE_API_ISSUER_ID
+# Set even though this is an individual key. The REST API and altool disagree:
+# the key's JWT must not name an issuer (it says `sub: user`), but altool
+# documents --api-issuer as required with --api-key and refuses to upload
+# without it. cux_ship tells the two apart by Apple's ApiKey_ filename prefix,
+# so the issuer here only ever reaches altool.
+export APPLE_API_ISSUER_ID="0f1ac0c6-ea92-4609-a2f0-c9b239198a75"
 
 # cux_ship infers the project from the *git* root, which in this repository is
 # the wrapper above authpass/ and holds no pubspec.yaml or ios/. So the values
@@ -72,6 +74,22 @@ if [ -z "$VERSION" ] || [ -z "$BUILD_NUMBER" ]; then
   exit 1
 fi
 
+# upload_to_testflight was called with no changelog, so the default here is no
+# notes. cux_ship refuses to guess — absent is not the same answer as empty —
+# and would otherwise look for a CHANGELOG.md at the *git* root, which in this
+# repository is the wrapper above authpass/. Pass --changelog or
+# --release-notes to override. Note this failure comes *after* the binary is
+# uploaded and processed, so it costs a build number.
+NOTES=()
+case " ${EXTRA[*]-} " in
+  *" --release-notes "* | *" --changelog "*) ;;
+  *)
+    EMPTY_NOTES=$(mktemp -t authpass-release-notes)
+    trap 'rm -f "$PLIST" "$EMPTY_NOTES"' EXIT INT TERM
+    NOTES=(--release-notes "$EMPTY_NOTES")
+    ;;
+esac
+
 echo "==> uploading $IPA"
 echo "    bundle id    $BUNDLE_ID"
 echo "    version      $VERSION ($BUILD_NUMBER)"
@@ -79,10 +97,12 @@ echo "    credential   individual key $KEY_ID, scoped to this app"
 
 # --yes because there is no terminal on CI, and cux_ship treats "no terminal and
 # no --yes" as a refusal rather than an assumed yes.
+# not exec: the trap above still has a temp file to clean up
 cd _tools/cux_ship
-exec dart run cux_ship --yes appstore upload \
+dart run cux_ship --yes appstore upload \
   --ipa "../../$IPA" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \
+  ${NOTES+"${NOTES[@]}"} \
   ${EXTRA+"${EXTRA[@]}"}
