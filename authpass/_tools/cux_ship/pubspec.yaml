@@ -29,4 +29,6 @@ dependencies:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_ship
-      ref: v1.3.0
+      # Commit rather than tag for now: individual API key support is on a
+      # branch, not yet released. Move back to a tag once it is merged.
+      ref: 537ab4be22181d562efd2df738477e6e14a57915

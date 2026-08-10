@@ -69,8 +69,8 @@ packages:
     dependency: "direct main"
     description:
       path: cux_ship
-      ref: "v1.3.0"
-      resolved-ref: e62a6c1628576a826e2b474d6cfd15e754488317
+      ref: "537ab4be22181d562efd2df738477e6e14a57915"
+      resolved-ref: "537ab4be22181d562efd2df738477e6e14a57915"
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.1.0"
@@ -78,8 +78,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_appstore
-      ref: e62a6c1628576a826e2b474d6cfd15e754488317
-      resolved-ref: e62a6c1628576a826e2b474d6cfd15e754488317
+      ref: "537ab4be22181d562efd2df738477e6e14a57915"
+      resolved-ref: "537ab4be22181d562efd2df738477e6e14a57915"
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
@@ -87,8 +87,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_notes
-      ref: e62a6c1628576a826e2b474d6cfd15e754488317
-      resolved-ref: e62a6c1628576a826e2b474d6cfd15e754488317
+      ref: "537ab4be22181d562efd2df738477e6e14a57915"
+      resolved-ref: "537ab4be22181d562efd2df738477e6e14a57915"
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
@@ -96,8 +96,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_play
-      ref: e62a6c1628576a826e2b474d6cfd15e754488317
-      resolved-ref: e62a6c1628576a826e2b474d6cfd15e754488317
+      ref: "537ab4be22181d562efd2df738477e6e14a57915"
+      resolved-ref: "537ab4be22181d562efd2df738477e6e14a57915"
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
@@ -105,8 +105,8 @@ packages:
     dependency: transitive
     description:
       path: cux_ship_verify
-      ref: e62a6c1628576a826e2b474d6cfd15e754488317
-      resolved-ref: e62a6c1628576a826e2b474d6cfd15e754488317
+      ref: "537ab4be22181d562efd2df738477e6e14a57915"
+      resolved-ref: "537ab4be22181d562efd2df738477e6e14a57915"
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "1.0.0"
