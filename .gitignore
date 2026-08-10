@@ -50,3 +50,4 @@ metrics.json
 /annotations*.json
 
 /authpass/_tools/secrets/apple_distribution.p12
+/authpass/_tools/secrets/apple_distribution_p12_password
