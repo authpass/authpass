@@ -142,6 +142,8 @@ dependencies:
   archive: ^4.0.0
 
   string_literal_finder_annotations: ^1.0.0
+  credential_matcher:
+    path: ../credential_matcher
 
   # eTLD+1 matching for autofill. The rule list itself is vendored, see
   # _tools/update_public_suffix_list.dart

@@ -1,0 +1,7 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+  exclude:
+    - lib/src/public_suffix_list.g.dart

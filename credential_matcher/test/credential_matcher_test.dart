@@ -1,5 +1,5 @@
-import 'package:authpass/utils/credential_matcher.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:credential_matcher/credential_matcher.dart';
+import 'package:test/test.dart';
 import 'package:kdbx/kdbx.dart';
 
 void main() {
@@ -83,10 +83,7 @@ void main() {
     });
 
     test('handles a multi label suffix', () {
-      expect(
-        matcher.registrableDomain('https://www.bbc.co.uk'),
-        'bbc.co.uk',
-      );
+      expect(matcher.registrableDomain('https://www.bbc.co.uk'), 'bbc.co.uk');
       expect(
         matcher.registrableDomain('https://images.google.co.uk'),
         'google.co.uk',
@@ -346,10 +343,10 @@ void main() {
     });
 
     test('keeps the incoming order within one quality band', () {
-      expect(
-        rank(request, ['https://z.google.com', 'https://a.google.com']),
-        ['https://z.google.com', 'https://a.google.com'],
-      );
+      expect(rank(request, ['https://z.google.com', 'https://a.google.com']), [
+        'https://z.google.com',
+        'https://a.google.com',
+      ]);
     });
 
     test('is empty when nothing matches', () {
@@ -361,19 +358,17 @@ void main() {
         ['https://example.com', 'https://accounts.google.com'],
         ['https://example.org'],
       ];
-      expect(
-        matcher.rank(request, candidates, (urls) => urls),
-        [candidates.first],
-      );
+      expect(matcher.rank(request, candidates, (urls) => urls), [
+        candidates.first,
+      ]);
     });
   });
 
   group('autofillUrls', () {
     test('starts with the url field', () {
-      expect(
-        entryWith({'URL': 'https://example.com'}).autofillUrls,
-        ['https://example.com'],
-      );
+      expect(entryWith({'URL': 'https://example.com'}).autofillUrls, [
+        'https://example.com',
+      ]);
     });
 
     test('picks up every shape of the KP2A_URL convention', () {
@@ -431,10 +426,9 @@ void main() {
         'KP2A_URL_1': 'https://login.microsoftonline.com',
       });
       expect(
-        matcher.matchBest(
-          [CredentialRequest.web('https://login.microsoftonline.com/oauth')],
-          entry.autofillUrls,
-        ),
+        matcher.matchBest([
+          CredentialRequest.web('https://login.microsoftonline.com/oauth'),
+        ], entry.autofillUrls),
         CredentialMatchQuality.host,
       );
     });
@@ -445,10 +439,9 @@ void main() {
         'KP2A_URL_1': 'https://login.example.org',
       });
       expect(
-        matcher.matchBest(
-          [CredentialRequest.web('https://example.net')],
-          entry.autofillUrls,
-        ),
+        matcher.matchBest([
+          CredentialRequest.web('https://example.net'),
+        ], entry.autofillUrls),
         isNull,
       );
     });

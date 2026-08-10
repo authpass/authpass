@@ -1,4 +1,4 @@
-// Regenerates lib/utils/public_suffix_list.g.dart from publicsuffix.org.
+// Regenerates the vendored public suffix list from publicsuffix.org.
 //
 // The list is vendored rather than fetched at runtime: the iOS AutoFill
 // extension has no business making network requests while filling a password,
@@ -14,7 +14,7 @@
 import 'dart:io';
 
 const _sourceUrl = 'https://publicsuffix.org/list/public_suffix_list.dat';
-const _outputPath = 'lib/utils/public_suffix_list.g.dart';
+const _outputPath = '../credential_matcher/lib/src/public_suffix_list.g.dart';
 
 Future<void> main() async {
   if (!File('pubspec.yaml').existsSync()) {

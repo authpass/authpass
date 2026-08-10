@@ -19,7 +19,7 @@ library;
 import 'package:kdbx/kdbx.dart';
 import 'package:public_suffix/public_suffix.dart';
 
-import 'public_suffix_list.g.dart';
+import 'src/public_suffix_list.g.dart';
 
 /// How closely an entry matched the fill request.
 ///

@@ -369,6 +369,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.1"
+  credential_matcher:
+    dependency: "direct main"
+    description:
+      path: "../credential_matcher"
+      relative: true
+    source: path
+    version: "1.0.0"
   cross_file:
     dependency: transitive
     description:
