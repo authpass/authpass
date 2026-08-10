@@ -72,7 +72,7 @@ NOTES=()
 case " ${EXTRA[*]-} " in
   *" --release-notes "* | *" --changelog "*) ;;
   *)
-    EMPTY_NOTES=$(mktemp -t authpass-release-notes)
+    EMPTY_NOTES=$(mktemp "${TMPDIR:-/tmp}/authpass-release-notes.XXXXXX")
     trap 'rm -f "$EMPTY_NOTES"' EXIT INT TERM
     NOTES=(--release-notes "$EMPTY_NOTES")
     ;;

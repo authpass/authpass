@@ -63,7 +63,7 @@ BUNDLE_ID="design.codeux.authpass.ios"
 # number that matters is the one actually inside the binary. cux_ship checks it
 # against what Apple reports, so a mismatch here fails the upload rather than
 # publishing something mislabelled.
-PLIST=$(mktemp -t authpass-ipa-plist)
+PLIST=$(mktemp "${TMPDIR:-/tmp}/authpass-ipa-plist.XXXXXX")
 trap 'rm -f "$PLIST"' EXIT INT TERM
 unzip -p "$IPA" 'Payload/*.app/Info.plist' > "$PLIST"
 VERSION=$(plutil -extract CFBundleShortVersionString raw -o - "$PLIST")
@@ -84,7 +84,7 @@ NOTES=()
 case " ${EXTRA[*]-} " in
   *" --release-notes "* | *" --changelog "*) ;;
   *)
-    EMPTY_NOTES=$(mktemp -t authpass-release-notes)
+    EMPTY_NOTES=$(mktemp "${TMPDIR:-/tmp}/authpass-release-notes.XXXXXX")
     trap 'rm -f "$PLIST" "$EMPTY_NOTES"' EXIT INT TERM
     NOTES=(--release-notes "$EMPTY_NOTES")
     ;;
