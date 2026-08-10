@@ -1,3 +1,6 @@
 source "https://rubygems.org"
 
-gem "fastlane"
+# Not fastlane any more — releases go through _tools/build-ios.sh and
+# _tools/upload-ios.sh. What is left is xcodeproj, for the scripts that edit
+# Runner.xcodeproj rather than hand-editing project.pbxproj.
+gem "xcodeproj"

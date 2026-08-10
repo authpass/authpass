@@ -8,7 +8,6 @@ cd $dir/..
 flavor="$1"
 
 FLT=${FLT:-}
-AUTHPASS_SKIP_FASTLANE=${AUTHPASS_SKIP_FASTLANE:-}
 
 if test -z "$FLT" && test -d .dart_tool ; then
     FLT=_tools/flutter_run.sh
@@ -67,31 +66,18 @@ echo "::set-output name=appbuildnumber::$buildnumber"
 $FLT pub get
 case "${flavor}" in
     ios)
-        mkdir -p ~/.fastlane/spaceship
-        $FLT build ios -t lib/env/production.dart --release --build-number $buildnumber --config-only
-        cd ios
-#        sudo fastlane run update_fastlane
-        bundle exec fastlane beta
+        # No fastlane, and no App Store Connect credential during the build:
+        # build-ios.sh signs against the profiles in _tools/secrets, and
+        # upload-ios.sh is the only step holding a key — an individual one,
+        # scoped to this app. See docs/apple-signing.md.
+        ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
+        ./_tools/upload-ios.sh
     ;;
     macos)
-        # on mac os there is right now no --build-number argument :-(
-        #flutter build macos -t lib/env/production.dart --release --build-number $buildnumber
-#        sed -i .bak 's/^\(version: [0-9\\.]*\).*$/\1+'$buildnumber'/' pubspec.yaml
-#        cat pubspec.yaml | grep version | grep "+$buildnumber$"  || (
-#            echo "Buildnumber replacement was not successful." && exit 1
-#        )
-#        version=$(cat pubspec.yaml | grep version | sed "s/version: *//" | cut -d'+' -f 1)
-#        sed -i .bak "s/_DEFAULT_VERSION = '.*'/_DEFAULT_VERSION = '$version'/" lib/env/_base.dart
-#        sed -i .bak "s/_DEFAULT_BUILD_NUMBER = [0-9]*/_DEFAULT_BUILD_NUMBER = $buildnumber/" lib/env/_base.dart
-#        $FLT pub get
-        $FLT build macos -v -t lib/env/production.dart --release --build-number $buildnumber --config-only
-        cd macos
-        bundle exec fastlane beta
-#        echo
-#        echo
-#        echo 'Now opening workspace in xcode. Click Build -> Archive'
-#        echo
-#        open macos/Runner.xcworkspace
+        # Same shape as ios: signed against the stored profile, uploaded with
+        # the app-scoped key. See docs/apple-signing.md.
+        ./_tools/build-macos.sh -t lib/env/production.dart -b $buildnumber
+        ./_tools/upload-macos.sh
     ;;
     samsungapps | huawei | sideload | amazon)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
@@ -107,27 +93,24 @@ case "${flavor}" in
     ;;
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
-        cd android
-        bundle install
         echo "Check if we are in a beta branch ${GITHUB_REF}"
-        exitCode=success
+        track=internal
         if [[ "${GITHUB_REF:-}" == *"beta"* || "${GITHUB_REF:-}" == *"stable"* ]] ; then
-          echo "Pushing to beta."
-          bundle exec fastlane devbeta || exitCode=$?
-        else
-          echo "Pushing to dev"
-          bundle exec fastlane dev || exitCode=$?
+          track=beta
         fi
+        echo "Pushing to ${track}"
+        # Deliberately not fatal: re-running a release for a buildnumber Play
+        # already holds fails, and that is a no-op rather than a broken build.
+        exitCode=success
+        ./_tools/upload-android.sh -f playstoredev -t "${track}" -b $buildnumber || exitCode=$?
 
         if [[ "${exitCode}" != "success" ]] ; then
-          echo "fastlane failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
+          echo "upload failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
         fi
     ;;
     android | playstore)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
-        cd android
-        bundle install
-        bundle exec fastlane beta
+        ./_tools/upload-android.sh -f playstore -t internal -b $buildnumber
     ;;
     linux)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)

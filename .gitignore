@@ -10,10 +10,8 @@ git-buildnumber.sh
 development_hp.dart
 /tmp
 
-/authpass/_tools/secrets/fastlane_match_password
 /authpass/ios/vendor
 
-/authpass/_tools/secrets/fastlane_match_certificates_id_rsa
 Runner.app.dSYM.zip
 Runner.ipa
 /flutter
@@ -49,3 +47,14 @@ metrics.json
 /authpass/_tools/secrets/AuthKey_S5PTZMY9P8.p8
 /annotations*.json
 
+/authpass/_tools/secrets/apple_distribution.p12
+/authpass/_tools/secrets/apple_distribution_p12_password
+/authpass/_tools/secrets/ios_appstore.mobileprovision
+/authpass/_tools/secrets/ios_appstore_autofill.mobileprovision
+/authpass/_tools/secrets/ApiKey_4LJJBK4Z86KR.p8
+
+# gpg scratch file, regenerated on every keyring operation
+.blackbox/random_seed
+/authpass/_tools/secrets/mac_installer_distribution.p12
+/authpass/_tools/secrets/mac_installer_distribution_p12_password
+/authpass/_tools/secrets/macos_appstore.provisionprofile

@@ -3,21 +3,26 @@
 see [../README.md](../README.md) for details.
 
 
-## MacOS Release
+## Apple releases
 
-
-### Build with Flutter
+`release.sh` builds, signs and uploads on its own — no fastlane, no Xcode step:
 
 ```
-# Use the  correct flutter version from _tools/_flutter_version.sh
-
+# Use the correct flutter version from _tools/_flutter_version.sh
 _tools/flutter_run.sh clean
-_tools/release.sh macos
+_tools/release.sh macos    # or: ios
 ```
 
-### Open Xcode
+That runs `_tools/build-macos.sh` (archive + export a signed `.pkg`) and then
+`_tools/upload-macos.sh` (App Store Connect), with `-ios` counterparts for iOS.
+Either script can also be run on its own, with `-t` for the target and `-b` for
+the build number.
 
-Product -> Archive Project.
+Signing material comes from `_tools/secrets`, so the blackbox secrets have to
+be decrypted first (`blackbox_postdeploy`, or `blackbox_edit_start` per file).
+Nothing here can create or renew signing material — see
+[../docs/apple-signing.md](../docs/apple-signing.md) for what is stored, and
+for the yearly certificate renewal.
 
 
 ## Releasing
@@ -26,10 +31,14 @@ One day I have to automate this...
 
 * Write CHANGELOG
   * [`CHANGELOG.md`](./CHANGELOG.md)
-  * copy&paste current build to fdroid changelog `metadata/android/en-US/changelogs/XXX.txt`
+  * copy&paste current build to fdroid changelog `../metadata/android/en-US/changelogs/XXX.txt`
 * push to `stable` branch `git push origin HEAD:stable` and wait for github builds
-  * Already generates all artifacts except macos
-  * Run macOS build locally (see above step), publish to app store and create distribution zip file
+  * Generates all artifacts, macos included — `ios.yaml` builds and uploads
+    both Apple platforms, and no longer needs `MATCH_PASSWORD`
+  * The macOS **direct download** zip is still made by hand: the `.pkg` CI
+    uploads is Mac App Store only, and a build for download off the store is a
+    different signature (Developer ID + notarization) that nothing here
+    produces yet
   * `_tools/upload-artifact.sh /Users/herbert/Downloads/tmp/AuthPass.app-1.7.7_1519.zip`
 * create tag called `v1.2.3` and `fdroid-v1.2.3`
 * data.authpass.app
