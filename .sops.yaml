@@ -1,0 +1,35 @@
+# Which key encrypts what. sops reads this on `sops -e`, so nothing here has to
+# be repeated on a command line and a new secrets file cannot be written to the
+# wrong recipients by forgetting a flag.
+#
+# The keys below are public, which is the point of the choice. The matching
+# identities live in ~/.config/sops/age/keys.txt on a machine allowed to
+# decrypt, and in CI as the single SOPS_AGE_KEY secret — so changing CI provider
+# means moving one value rather than re-entering a credential set.
+#
+# The CI key is AuthPass's own rather than one shared with the other projects
+# that use cux_ship. A leak of this repository's CI secret should not make their
+# files readable, for the same reason the App Store upload key is scoped to one
+# app.
+#
+# To add a person or a machine, append their public key and run
+#   .bin/sops updatekeys secrets/release.yaml
+# which re-encrypts the data key to the new set without decrypting to disk.
+creation_rules:
+  - path_regex: ^secrets/.*\.yaml$
+    # `path`, `env` and `kind` are metadata, not credentials, and have to be
+    # readable with no identity at all: `cux_ship secrets keys` reports what a
+    # file holds without decrypting it, and `secrets place` checks a path
+    # against the repository — is it ignored, is it tracked, does it leave the
+    # tree — before writing a byte. Encrypt those and both checks can only run
+    # for someone holding a key, which is the property they exist to avoid.
+    #
+    # The trade is a real disclosure: a path says where this project keeps
+    # things and an env name says which services it uses. Both are already
+    # visible in .gitignore and in the release scripts. No field carrying a
+    # secret may ever be named path, env or kind — cux_ship asserts that over
+    # its schema, so a family that broke it would fail its own test suite.
+    unencrypted_regex: '^(path|env|kind)$'
+    age: >-
+      age1wk48cqpglu37a4zed268qxlndm0r4vxwzjwlknp0c8uk7wddduvq5gayk7,
+      age18rjg79qr30r3zw9qu2fwlm4t3nuujju43me7heuy6t9rz7t9fymqyyc5cf
