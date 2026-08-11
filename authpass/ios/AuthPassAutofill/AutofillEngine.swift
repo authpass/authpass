@@ -26,16 +26,19 @@ final class AutofillEngine {
     return String(format: "%.1f MB", Double(bytes) / 1024.0 / 1024.0)
   }
 
-  /// The App.framework embedded in *this* bundle, holding the module's Dart.
+  /// AutofillApp.framework, holding the module's Dart.
+  ///
+  /// It lives in the *host app's* Frameworks, not this bundle's: an appex may
+  /// not carry frameworks of its own, and the store rejects one that does. Two
+  /// levels up from Runner.app/PlugIns/AuthPassAutofill.appex is Runner.app,
+  /// and there is no API that answers "the app containing this extension".
   ///
   /// Returns nil rather than asserting: a nil bundle puts Flutter back on its
   /// default lookup, which is no worse than not having tried.
   private static func dartBundle() -> Bundle? {
-    let container = Bundle(for: AutofillEngine.self)
-    guard let frameworks = container.privateFrameworksURL else {
-      return nil
-    }
-    return Bundle(url: frameworks.appendingPathComponent("App.framework"))
+    let container = Bundle(for: AutofillEngine.self).bundleURL
+    let app = container.deletingLastPathComponent().deletingLastPathComponent()
+    return Bundle(url: app.appendingPathComponent("Frameworks/AutofillApp.framework"))
   }
 
   /// Starts the engine if it is not running yet.

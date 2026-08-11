@@ -102,26 +102,73 @@ group.new_reference("#{TARGET_NAME}.entitlements")
 frameworks_group = project.main_group.new_group(
   'AutofillModuleFrameworks', MODULE_FRAMEWORKS
 )
-%w[Flutter.xcframework App.xcframework].each do |name|
+def module_framework(group, name)
   unless File.exist?(File.join(File.dirname(PROJECT_PATH), MODULE_FRAMEWORKS, name))
     warn "missing #{name} — run autofill_module/build_ios_framework.sh"
   end
-  reference = frameworks_group.new_reference(name)
-  build_file = target.frameworks_build_phase.add_file_reference(reference)
-  # embed, and let the linker find it
-  embed = target.build_phases.find do |phase|
-    phase.is_a?(Xcodeproj::Project::Object::PBXCopyFilesBuildPhase) &&
-      phase.name == 'Embed Frameworks'
-  end
-  embed ||= begin
-    phase = target.new_copy_files_build_phase('Embed Frameworks')
-    phase.symbol_dst_subfolder_spec = :frameworks
-    phase
-  end
-  embedded = embed.add_file_reference(reference)
-  embedded.settings = { 'ATTRIBUTES' => ['CodeSignOnCopy', 'RemoveHeadersOnCopy'] }
-  build_file.settings = { 'ATTRIBUTES' => ['Required'] }
+  group.new_reference(name)
 end
+
+# Linked, not embedded. An appex may not contain a Frameworks directory — the
+# store rejects it outright (altool 90205/90206) — so what the extension needs
+# at runtime is embedded in the app and reached through
+# @executable_path/../../Frameworks, set below.
+#
+# App.xcframework is deliberately absent here: it holds the module's Dart, which
+# the engine loads from a bundle path rather than by linking. Linking it would
+# put an unresolvable @rpath/App.framework/App in the binary once the shipped
+# copy is renamed, and the extension would die at launch.
+linked = module_framework(frameworks_group, 'Flutter.xcframework')
+target.frameworks_build_phase.add_file_reference(linked)
+       .settings = { 'ATTRIBUTES' => ['Required'] }
+
+# Embedded in the app under the names build_ios_framework.sh gave them, because
+# beside the app's own Flutter they would otherwise be a second
+# io.flutter.flutter and a second io.flutter.flutter.app (altool 90685).
+embed = app_target.build_phases.find do |phase|
+  phase.is_a?(Xcodeproj::Project::Object::PBXCopyFilesBuildPhase) &&
+    phase.name == 'Embed Autofill Module Frameworks'
+end
+embed ||= begin
+  phase = app_target.new_copy_files_build_phase('Embed Autofill Module Frameworks')
+  phase.symbol_dst_subfolder_spec = :frameworks
+  # Ahead of flutter's "Thin Binary" script, for the same reason the appex embed
+  # phase is moved below: that script declares Runner.app as an output while
+  # this phase writes into it, and xcode calls that a dependency cycle.
+  app_target.build_phases.delete(phase)
+  app_target.build_phases.insert(
+    app_target.build_phases.index(app_target.resources_build_phase) + 1, phase
+  )
+  phase
+end
+embed.files.to_a.each { |f| embed.remove_build_file(f) }
+%w[FlutterExt.xcframework AutofillApp.xcframework].each do |name|
+  embedded = embed.add_file_reference(module_framework(frameworks_group, name))
+  embedded.settings = { 'ATTRIBUTES' => ['CodeSignOnCopy', 'RemoveHeadersOnCopy'] }
+end
+
+# The extension was compiled against Flutter.xcframework, so its binary asks for
+# @rpath/Flutter.framework/Flutter — which at runtime would resolve to the app's
+# *own* engine, the one that is not extension safe. Point it at the renamed copy
+# instead. After linking and before signing, which is where every build phase
+# of this target runs.
+repoint = target.new_shell_script_build_phase('Repoint Flutter To FlutterExt')
+# pipefail is not in POSIX sh, and xcode's default is /bin/sh.
+repoint.shell_path = '/bin/bash'
+repoint.shell_script = <<~SH
+  # Written by add_autofill_target.rb. See build_ios_framework.sh for why the
+  # embedded engine is renamed at all.
+  set -euo pipefail
+  binary="${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}"
+  install_name_tool -change \\
+    @rpath/Flutter.framework/Flutter \\
+    @rpath/FlutterExt.framework/FlutterExt \\
+    "${binary}"
+  otool -L "${binary}" | grep -q FlutterExt.framework/FlutterExt || {
+    echo "error: the extension still links Flutter.framework" >&2
+    exit 1
+  }
+SH
 
 # --- build settings -----------------------------------------------------------
 
@@ -156,12 +203,12 @@ target.build_configurations.each do |config|
   settings['SKIP_INSTALL'] = 'YES'
   settings['FRAMEWORK_SEARCH_PATHS'] = ['$(inherited)', "$(PROJECT_DIR)/#{MODULE_FRAMEWORKS}"]
   # What xcode's own extension template sets, and what xcodeproj's new_target
-  # does not. The binary links @rpath/Flutter.framework; without these dyld
+  # does not. The binary links @rpath/FlutterExt.framework; without this dyld
   # cannot resolve it and the extension dies the moment the system launches it.
-  # First entry is the appex's own Frameworks dir, second is the host app's.
+  # The host app's Frameworks, two levels up from PlugIns/*.appex, is the only
+  # place it can be: an appex may not carry frameworks of its own.
   settings['LD_RUNPATH_SEARCH_PATHS'] = [
     '$(inherited)',
-    '@executable_path/Frameworks',
     '@executable_path/../../Frameworks',
   ]
   # the whole point of the extension safe engine
