@@ -20,10 +20,7 @@ dependencies:
   # No argon2_ffi. The extension never derives a key — it is handed the
   # post-kdf transformed key by the app, which is the whole reason it fits in
   # the memory budget.
-  kdbx:
-    git:
-      url: https://github.com/authpass/kdbx.dart.git
-      ref: 5ec70166b79c821300c1bf7403c8f2291d834204
+  kdbx: ^2.5.0
 
   # The same matcher the app uses, so the extension and Android autofill
   # agree on what counts as a match.

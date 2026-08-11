@@ -14,12 +14,9 @@ dependencies:
 #  kdbx: ^2.4.1
 #  kdbx:
 #    path: ../deps/kdbx.dart
-  # Until 2.5.0 is on pub: TransformedKeyCredentials + kdfFingerprint, which
-  # the autofill extension needs to open a vault without argon2.
-  kdbx:
-    git:
-      url: https://github.com/authpass/kdbx.dart.git
-      ref: 5ec70166b79c821300c1bf7403c8f2291d834204
+  # 2.5.0 for TransformedKeyCredentials + kdfFingerprint, which the autofill
+  # extension needs to open a vault without argon2.
+  kdbx: ^2.5.0
 #  argon2_ffi: ^1.0.0+2
   argon2_ffi:
     git:
@@ -97,12 +94,9 @@ dependencies:
   flutter_store_listing: ^1.1.0
 
 #  biometric_storage: ^5.1.1-dev.1
-  # Until 5.2.0 is on pub: darwinKeychainAccessGroup, so the extension can read
-  # the keys the app caches.
-  biometric_storage:
-    git:
-      url: https://github.com/authpass/biometric_storage.git
-      ref: 14c88cf917059eb99ffb30af717cb7cd8491c033
+  # 5.2.0-dev.1 for darwinKeychainAccessGroup, so the extension can read the
+  # keys the app caches.
+  biometric_storage: ^5.2.0-dev.1
   uuid: ^4.3.3
   url_launcher: ^6.0.2
   font_awesome_flutter: ^11.0.0

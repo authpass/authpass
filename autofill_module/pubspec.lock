@@ -173,11 +173,10 @@ packages:
   kdbx:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "5ec70166b79c821300c1bf7403c8f2291d834204"
-      resolved-ref: "5ec70166b79c821300c1bf7403c8f2291d834204"
-      url: "https://github.com/authpass/kdbx.dart.git"
-    source: git
+      name: kdbx
+      sha256: "8cded0bd122c17b1c1b9398ea6589ed79b34830baba9873d688646cb009bea88"
+      url: "https://pub.dev"
+    source: hosted
     version: "2.5.0"
   leak_tracker:
     dependency: transitive

@@ -13,13 +13,10 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  # The same git source and ref the app and the module use. Pub refuses to mix
-  # sources for one package across a dependency graph, so all three have to
-  # agree — a path here would break the app's resolution and vice versa.
-  kdbx:
-    git:
-      url: https://github.com/authpass/kdbx.dart.git
-      ref: 5ec70166b79c821300c1bf7403c8f2291d834204
+  # The same constraint the app and the module use. Pub refuses to mix sources
+  # for one package across a dependency graph, so all three have to agree — a
+  # path or git ref here would break the app's resolution and vice versa.
+  kdbx: ^2.5.0
   public_suffix: ^3.0.0
   string_literal_finder_annotations: ^1.0.0
 

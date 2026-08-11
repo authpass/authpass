@@ -162,11 +162,10 @@ packages:
   biometric_storage:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "14c88cf917059eb99ffb30af717cb7cd8491c033"
-      resolved-ref: "14c88cf917059eb99ffb30af717cb7cd8491c033"
-      url: "https://github.com/authpass/biometric_storage.git"
-    source: git
+      name: biometric_storage
+      sha256: "083e103c32d353ebc436b14e9c281eea0d7837087e408196cb328e4400c96890"
+      url: "https://pub.dev"
+    source: hosted
     version: "5.2.0-dev.1"
   boolean_selector:
     dependency: transitive
@@ -1134,11 +1133,10 @@ packages:
   kdbx:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "5ec70166b79c821300c1bf7403c8f2291d834204"
-      resolved-ref: "5ec70166b79c821300c1bf7403c8f2291d834204"
-      url: "https://github.com/authpass/kdbx.dart.git"
-    source: git
+      name: kdbx
+      sha256: "8cded0bd122c17b1c1b9398ea6589ed79b34830baba9873d688646cb009bea88"
+      url: "https://pub.dev"
+    source: hosted
     version: "2.5.0"
   leak_tracker:
     dependency: transitive
