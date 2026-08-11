@@ -26,6 +26,18 @@ final class AutofillEngine {
     return String(format: "%.1f MB", Double(bytes) / 1024.0 / 1024.0)
   }
 
+  /// The App.framework embedded in *this* bundle, holding the module's Dart.
+  ///
+  /// Returns nil rather than asserting: a nil bundle puts Flutter back on its
+  /// default lookup, which is no worse than not having tried.
+  private static func dartBundle() -> Bundle? {
+    let container = Bundle(for: AutofillEngine.self)
+    guard let frameworks = container.privateFrameworksURL else {
+      return nil
+    }
+    return Bundle(url: frameworks.appendingPathComponent("App.framework"))
+  }
+
   /// Starts the engine if it is not running yet.
   ///
   /// `run` with a nil entrypoint uses `main()` in the module's lib/main.dart,
@@ -33,7 +45,14 @@ final class AutofillEngine {
   func start() throws {
     guard engine == nil else { return }
 
-    let engine = FlutterEngine(name: "authpass-autofill", project: nil, allowHeadlessExecution: true)
+    // Explicit, rather than `project: nil`. Flutter's default resolution asks
+    // for the loaded bundle with identifier io.flutter.flutter.app, and the
+    // host app's App.framework carries that same identifier — so the appex can
+    // end up running the *app's* Dart entrypoint, which then dies on the first
+    // plugin it expects (device_info) and never registers our channel.
+    let project = FlutterDartProject(precompiledDartBundle: Self.dartBundle())
+    let engine = FlutterEngine(
+      name: "authpass-autofill", project: project, allowHeadlessExecution: true)
     guard engine.run() else {
       throw AutofillEngineError.startFailed
     }

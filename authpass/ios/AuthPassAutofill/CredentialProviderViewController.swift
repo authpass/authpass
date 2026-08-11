@@ -21,16 +21,32 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setUpViews()
-    // Only the spike screen runs on load. A fill request arrives through
-    // prepareCredentialList, which puts the picker up instead.
-    // The spike measurement is neither of the two real entry points; it only
-    // runs when the system opened us for something else entirely.
-    if !isFillRequest && !isConfiguring {
-      Task { await runSpike() }
-    }
   }
 
-  /// Set by [prepareCredentialList] before the view loads.
+  /// The spike runs here, not in `viewDidLoad`, and only if nothing else claimed
+  /// the screen.
+  ///
+  /// The two real entry points do not agree on ordering: `prepareCredentialList`
+  /// arrives before the view loads, but `prepareInterfaceToProvideCredential` —
+  /// the one a tapped QuickType suggestion goes through — arrives after it. A
+  /// flag check in `viewDidLoad` therefore misses the second case, and the spike
+  /// opened the 5000-entry fixture *behind* a live picker, spending the memory
+  /// the extension exists to conserve.
+  ///
+  /// `children.isEmpty` is the honest test: any real request installs a child
+  /// controller, whichever callback delivered it.
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    guard !isFillRequest, !isConfiguring, children.isEmpty, !spikeStarted else {
+      return
+    }
+    spikeStarted = true
+    Task { await runSpike() }
+  }
+
+  private var spikeStarted = false
+
+  /// Set by whichever fill callback the system chose.
   private var isFillRequest = false
 
   private func setUpViews() {
@@ -147,6 +163,22 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   // MARK: - ASCredentialProviderViewController
 
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    showPicker(for: serviceIdentifiers)
+  }
+
+  /// Reached when the user taps one of our QuickType suggestions.
+  ///
+  /// Registering an identity buys the suggestion, not the fill. iOS asks
+  /// `provideCredentialWithoutUserInteraction` first, and the
+  /// `userInteractionRequired` answer arrives *here* rather than in
+  /// `prepareCredentialList` — so without this override the system presents a
+  /// controller nothing has populated, and the user sees a blank screen after
+  /// tapping their own credential.
+  override func prepareInterfaceToProvideCredential(for credentialRequest: ASCredentialRequest) {
+    showPicker(for: [credentialRequest.credentialIdentity.serviceIdentifier])
+  }
+
+  private func showPicker(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     isFillRequest = true
 
     let list = CredentialListViewController(
