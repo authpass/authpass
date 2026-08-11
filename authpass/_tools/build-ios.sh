@@ -95,6 +95,17 @@ for profile in "${PROFILES[@]}"; do
   echo "    $(basename "$profile") -> $uuid"
 done
 
+echo "==> autofill module frameworks"
+# The extension embeds a separate Flutter module, and its xcframeworks are
+# build output — gitignored, so a fresh checkout has none and the archive fails
+# with "There is no XCFramework found at .../build/framework/current". Building
+# them here rather than expecting them to be lying around is what makes a clean
+# machine, CI included, able to build at all.
+#
+# Release: a debug engine in an appex exceeds the extension memory cap on its
+# own (flutter#135243). The script points `current` at whatever it just built.
+../autofill_module/build_ios_framework.sh Release
+
 echo "==> flutter build ios --config-only"
 # --config-only writes Generated.xcconfig and stops; xcodebuild does the rest.
 # The build number lands in FLUTTER_BUILD_NUMBER there, which is where the
