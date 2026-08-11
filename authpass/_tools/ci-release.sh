@@ -29,9 +29,9 @@ export PATH=${DEPS}/flutter/bin:$PATH
 
 if test "$target_platform" == "ios" ; then
     # No ssh-agent, no certificate repository, no MATCH_PASSWORD, and no
-    # fastlane. Signing material comes from _tools/secrets, decrypted by
-    # secrets exec; _tools/build-ios.sh imports it into a keychain that
-    # exists for the build and no longer.
+    # fastlane. Signing material arrives in the environment from secrets
+    # exec; _tools/build-ios.sh imports it into a keychain that exists for
+    # the build and no longer.
     #
     # CocoaPods is still here: seven plugins have not adopted Swift Package
     # Manager, and most of them are ours.

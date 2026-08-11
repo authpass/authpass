@@ -5,7 +5,11 @@ set -xeu
 dir="${0%/*}"
 cd $dir/../..
 
-token=$(cat _tools/secrets/fosshub_token.txt)
+# Run under `cux_ship secrets exec`, which is where the token comes from:
+#
+#   _tools/ship.sh secrets exec --keystore upload --api-key upload -- \
+#     _tools/release/fosshub-release.sh
+token="${FOSSHUB_TOKEN:?run this under 'cux_ship secrets exec'}"
 project_id='5f15fc217b2287584bc1e019'
 
 tmpfile=$(mktemp)

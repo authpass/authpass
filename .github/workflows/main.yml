@@ -46,10 +46,6 @@ jobs:
         auth_header="$(git config --local --get http.https://github.com/.extraheader)"
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-    - name: Postdeploy
-      env:
-        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-      run: authpass/_tools/postdeploy.sh
     - name: debug android directory
       run: echo "${ANDROID_SDK_ROOT} , ${ANDROID_HOME}" , Running in ${{ github.ref }}
     - uses: ruby/setup-ruby@v1
@@ -65,20 +61,35 @@ jobs:
 #      run: 'yes | sdkmanager "ndk;21.0.6113669"'
       run: echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
     - name: ci-install-deps
+      env:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       run: "./authpass/_tools/ci-install-deps.sh android"
+    # The keystore is named because the file holds two, and the amazon flavor
+    # is the one signed with the other. The api key is named for the same
+    # reason and used by nothing here — cux_ship materializes what the file
+    # holds and refuses to pick between two of a kind, whether or not this
+    # particular build would have read it.
     - name: build ${{ matrix.flavor }} apk
       id: buildapk
       env:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         GIT_AUTHOR_NAME: 'Github Action CI'
         GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
       run: |
         export JAVA_HOME="$JAVA_HOME_17_X64"
-        ./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}
+        ./authpass/_tools/ship.sh secrets exec \
+          --keystore ${{ matrix.flavor == 'amazon' && 'amazon' || 'upload' }} \
+          --api-key upload -- \
+          ./authpass/_tools/ci-release.sh android ${{ matrix.flavor }}
     - name: upload artifact
       if: ${{ steps.buildapk.outputs.outputfilename != null }}
-      run: ./authpass/_tools/upload-artifact.sh authpass/${{ steps.buildapk.outputs.outputpath }}
+      env:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      run: >-
+        ./authpass/_tools/ship.sh secrets exec --keystore upload --api-key upload --
+        ./authpass/_tools/upload-artifact.sh authpass/${{ steps.buildapk.outputs.outputpath }}
     - uses: actions/upload-artifact@v4
       if: ${{ steps.buildapk.outputs.outputfilename != null }}
       with:

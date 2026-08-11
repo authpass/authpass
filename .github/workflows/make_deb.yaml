@@ -16,10 +16,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Postdeploy
-        env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-        run: authpass/_tools/postdeploy.sh
+      # The only job here that never builds the app: it repackages a published
+      # tarball, so there is no Flutter SDK to borrow a Dart from and no
+      # ci-install-deps step to install sops. Both, and nothing else.
+      - uses: dart-lang/setup-dart@v1
+      - name: install sops
+        run: ./authpass/_tools/ship.sh deps install
       - id: build
         run: |
           path=debian/opt/authpass
@@ -38,7 +40,11 @@ jobs:
           echo "::set-output name=outputfilename::${filename}"
           echo "::set-output name=outputpath::${filename}"
       - name: upload artifact
-        run: ./authpass/_tools/upload-artifact.sh ${{ steps.build.outputs.outputfilename }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: >-
+          ./authpass/_tools/ship.sh secrets exec --keystore upload --api-key upload --
+          ./authpass/_tools/upload-artifact.sh ${{ steps.build.outputs.outputfilename }}
       - uses: docker://lpenz/ghaction-packagecloud:0.4
         with:
           files: ${{ steps.build.outputs.outputpath }}

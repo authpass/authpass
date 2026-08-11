@@ -7,6 +7,15 @@ DEPS=${DEPS:-~/deps}
 root="${0%/*}/.."
 pwd
 
+echo "Installing flutter into $DEPS"
+
+cd ${root}
+
+DEPS=${DEPS} _tools/install_flutter.sh
+
+# Flutter first, because everything below runs on the Dart inside it — see
+# _tools/ship.sh. The runners have no Dart of their own.
+
 # sops and age, pinned by hash and installed into .bin/ at the repository root.
 #
 # This replaced a per-platform download of a personally-maintained blackbox
@@ -18,7 +27,7 @@ pwd
 # `cux_ship secrets exec`, which needs only SOPS_AGE_KEY in the environment —
 # one secret, whatever the CI provider.
 echo "==> installing sops and age"
-( cd "${root}/_tools/cux_ship" && dart pub get >/dev/null && dart run cux_ship deps install )
+DEPS=${DEPS} _tools/ship.sh deps install
 
 # The source files the build and the analyzer read from fixed paths —
 # lib/env/production.dart, lib/env/secrets.dart, test/_testSecrets.json. They
@@ -29,12 +38,7 @@ echo "==> installing sops and age"
 # can rather than failing here.
 if [ -n "${SOPS_AGE_KEY:-}" ]; then
   echo "==> placing the source files that carry secrets"
-  ( cd "${root}/_tools/cux_ship" && dart run cux_ship secrets place )
+  DEPS=${DEPS} _tools/ship.sh secrets place
+else
+  echo "==> no SOPS_AGE_KEY, skipping the source files that carry secrets"
 fi
-
-echo "Installing flutter into $DEPS"
-
-cd ${root}
-
-DEPS=${DEPS} _tools/install_flutter.sh
-

@@ -25,7 +25,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
+      # SOPS_AGE_KEY here too, and for a different reason than below:
+      # ci-install-deps writes lib/env/production.dart, which the compiler
+      # reads long after any one step has ended and `secrets exec` cannot
+      # therefore provide. Without the key it skips that and the release build
+      # fails on a missing import.
       - name: ci-install-deps
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         run: "./authpass/_tools/ci-install-deps.sh ios"
       # One secret, and it is the only one. SOPS_AGE_KEY decrypts
       # secrets/release.yaml; `secrets exec` puts every credential in the
@@ -41,7 +48,6 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         run: >-
-          cd authpass/_tools/cux_ship &&
-          dart run cux_ship secrets exec
+          ./authpass/_tools/ship.sh secrets exec
           --keystore upload --api-key upload --
           ./authpass/_tools/ci-release.sh ${{ matrix.platform }}

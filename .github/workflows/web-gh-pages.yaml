@@ -20,11 +20,9 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Postdeploy
+      - name: ci-install-deps
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-        run: authpass/_tools/postdeploy.sh
-      - name: ci-install-deps
         run: "./authpass/_tools/ci-install-deps.sh linux"
       - name: Build
         id: build
