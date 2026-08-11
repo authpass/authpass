@@ -18,4 +18,4 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  cux_ship: ^1.7.0
+  cux_ship: ^1.8.0

@@ -33,7 +33,7 @@ jobs:
         run: "./authpass/_tools/ci-install-deps.sh android"
       - name: Postdeploy
         env:
-          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         run: authpass/_tools/postdeploy.sh
       - run: authpass/_tools/test-coverage.sh
       - name: Coveralls

@@ -67,7 +67,7 @@ $FLT pub get
 case "${flavor}" in
     ios)
         # No fastlane, and no App Store Connect credential during the build:
-        # build-ios.sh signs against the profiles in _tools/secrets, and
+        # build-ios.sh signs against the profiles secrets exec supplies, and
         # upload-ios.sh is the only step holding a key — an individual one,
         # scoped to this app. See docs/apple-signing.md.
         ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber

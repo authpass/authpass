@@ -33,11 +33,11 @@ jobs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 #    - name: Postdeploy
 #      env:
-#        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+#        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
 #      run: authpass/_tools/postdeploy.sh
     - name: ci-install-deps
       env:
-        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       run: "./authpass/_tools/ci-install-deps.sh ios"
     - name: 'Start Simulator'
       uses: futureware-tech/simulator-action@v4

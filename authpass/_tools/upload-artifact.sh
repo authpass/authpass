@@ -16,16 +16,15 @@ trap '_trap_exit $? $LINENO "$BASH_COMMAND"' EXIT
 
 root="${0%/*}/.."
 
-token_file="${root}/_tools/secrets/artifact_token.txt"
 upload_file="$1"
 
-test -f "$token_file"
+: "${ARTIFACT_TOKEN:?run this under 'cux_ship secrets exec'}"
 test -f "$upload_file"
 
 set +x
 set -v
 
-token=$( cat "${token_file}" )
+token="${ARTIFACT_TOKEN}"
 
 curl --request POST \
     --url https://data.authpass.app/data/artifact.push \

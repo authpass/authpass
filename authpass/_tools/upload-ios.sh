@@ -28,30 +28,27 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-SECRETS="_tools/secrets"
-# Individual keys are named ApiKey_*, team keys AuthKey_*. The prefix is
-# App Store Connect's own, and worth keeping: it is the only visible difference
-# between a credential scoped to this app and one that owns the whole account.
-KEY_ID="4LJJBK4Z86KR"
-KEY_PATH="$SECRETS/ApiKey_${KEY_ID}.p8"
+# The key comes from the environment, which is where `cux_ship secrets exec`
+# puts it:
+#
+#   cux_ship secrets exec --api-key upload -- _tools/upload-ios.sh
+#
+# Nothing is exported here any more. The three variables below used to be set by
+# this script from a decrypted file; they now arrive already set, and the file
+# lives in a temp directory removed however the run ends.
+#
+# The issuer is one of them, and is set even for an individual key: the REST API
+# and altool disagree — the key's JWT must not name an issuer, but altool
+# documents --api-issuer as required with --api-key and refuses without it.
+# cux_ship tells the two kinds apart by the declared `kind`, which decides the
+# ApiKey_/AuthKey_ filename, so the issuer only ever reaches altool.
+: "${APPLE_API_KEY_ID:?run this under 'cux_ship secrets exec'}"
+: "${APPLE_API_PRIVATE_KEY_PATH:?not set by secrets exec}"
 
-if [ ! -f "$KEY_PATH" ]; then
-  echo "missing $KEY_PATH — decrypt the blackbox secrets first" >&2
-  exit 1
-fi
 if [ ! -f "$IPA" ]; then
   echo "missing $IPA — run _tools/build-ios.sh first" >&2
   exit 1
 fi
-
-export APPLE_API_KEY_ID="$KEY_ID"
-export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
-# Set even though this is an individual key. The REST API and altool disagree:
-# the key's JWT must not name an issuer (it says `sub: user`), but altool
-# documents --api-issuer as required with --api-key and refuses to upload
-# without it. cux_ship tells the two apart by Apple's ApiKey_ filename prefix,
-# so the issuer here only ever reaches altool.
-export APPLE_API_ISSUER_ID="0f1ac0c6-ea92-4609-a2f0-c9b239198a75"
 
 # Explicit, though .cux-ship.yaml now points cux_ship at authpass/ and it could
 # read this out of the Xcode project. A release script naming the app it is
@@ -114,7 +111,7 @@ esac
 echo "==> uploading $IPA"
 echo "    bundle id    $BUNDLE_ID"
 echo "    version      $VERSION ($BUILD_NUMBER)"
-echo "    credential   individual key $KEY_ID, scoped to this app"
+echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 
 # --yes because there is no terminal on CI, and cux_ship treats "no terminal and
 # no --yes" as a refusal rather than an assumed yes.

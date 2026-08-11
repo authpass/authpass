@@ -44,20 +44,14 @@ case "$FLAVOR" in
     ;;
 esac
 
-SERVICE_ACCOUNT="_tools/secrets/api-project-284252947431-83b019c3ca1e.json"
-
-if [ ! -f "$SERVICE_ACCOUNT" ]; then
-  echo "missing $SERVICE_ACCOUNT — decrypt the blackbox secrets first" >&2
-  exit 1
-fi
-if [ ! -f "$AAB" ]; then
-  echo "missing $AAB — build the $FLAVOR appbundle first" >&2
-  exit 1
-fi
-
-# The JSON itself, not a path to it.
-GOOGLE_PLAY_SERVICE_ACCOUNT_JSON="$(cat "$SERVICE_ACCOUNT")"
-export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
+# The service account comes from the environment, which is where
+# `cux_ship secrets exec` puts it:
+#
+#   cux_ship secrets exec --keystore upload -- _tools/upload-android.sh
+#
+# As a value rather than a path: cux_ship's Play client reads the JSON itself,
+# so nothing has to be written to disk for this one.
+: "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:?run this under 'cux_ship secrets exec'}"
 
 VERSION=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version: *//' | cut -d+ -f1)
 

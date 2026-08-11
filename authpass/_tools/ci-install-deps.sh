@@ -7,53 +7,30 @@ DEPS=${DEPS:-~/deps}
 root="${0%/*}/.."
 pwd
 
-echo "Installing blackbox into $DEPS" 
-mkdir -p ${DEPS}
-pushd ${DEPS}
-
-if test "${1:-}" == "ios" ; then
-    curl -L -o blackbox.go.macos https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.macos
-    chmod +x blackbox.go.macos
-    popd
-    pushd "${root}"
-    if ! test -z "${BLACKBOX_SECRET:-}" ; then
-        echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.macos cipostdeploy
-    fi
-elif test "${1:-}" == "windows" ; then
-    curl -L -o blackbox.go.windows.amd64.exe https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.windows.amd64.exe
-    #chmod +x blackbox.go.macos
-    popd
-    pushd "${root}"
-    if ! test -z "${BLACKBOX_SECRET:-}" ; then
-        echo "$BLACKBOX_SECRET" | ${DEPS}/blackbox.go.windows.amd64.exe cipostdeploy
-    fi
-#    popd
-
-#    pushd ${DEPS}
-#    git clone https://github.com/flutter/flutter.git
-#    cd flutter/bin
-#    ./flutter upgrade
-#    ./flutter config --enable-windows-desktop
-#    cd "${DEPS}/flutter/dev/tools"
-#    "${DEPS}/flutter/bin/flutter" pub get
+# sops and age, pinned by hash and installed into .bin/ at the repository root.
 #
-#    exit 0
-else
-    if ! test -z "${BLACKBOX_SECRET:-}" ; then
-        blackbox='blackbox.go.linux.amd64'
-        curl -L -o ${blackbox} https://github.com/hpoul/blackbox/releases/download/golang-v0.1-cipostdeploy/blackbox.go.linux.amd64
+# This replaced a per-platform download of a personally-maintained blackbox
+# fork, fetched from a release tag at build time on three different operating
+# systems. cux_ship pins what it installs and verifies it, and there is one code
+# path rather than three.
+#
+# Nothing is decrypted here. Credentials arrive when a command is run under
+# `cux_ship secrets exec`, which needs only SOPS_AGE_KEY in the environment —
+# one secret, whatever the CI provider.
+echo "==> installing sops and age"
+( cd "${root}/_tools/cux_ship" && dart pub get >/dev/null && dart run cux_ship deps install )
 
-        chmod +x ${blackbox}
-
-        popd
-        pushd "${root}"
-
-        echo "${BLACKBOX_SECRET}" | ${DEPS}/${blackbox} cipostdeploy -
-
-    fi
+# The source files the build and the analyzer read from fixed paths —
+# lib/env/production.dart, lib/env/secrets.dart, test/_testSecrets.json. They
+# cannot come from `secrets exec`, which removes what it writes: the compiler
+# reads them long after any single command has ended.
+#
+# Skipped when there is no key, so a fork's pull request still builds what it
+# can rather than failing here.
+if [ -n "${SOPS_AGE_KEY:-}" ]; then
+  echo "==> placing the source files that carry secrets"
+  ( cd "${root}/_tools/cux_ship" && dart run cux_ship secrets place )
 fi
-
-popd
 
 echo "Installing flutter into $DEPS"
 

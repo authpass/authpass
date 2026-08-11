@@ -4,7 +4,7 @@
 #   _tools/build-macos.sh [-t lib/env/production.dart] [-o build/macos/pkg] [-b buildnumber]
 #
 # The macOS counterpart of build-ios.sh, and deliberately the same shape: the
-# blackbox secrets supply the signing material, so this needs no App Store
+# secrets exec supplies the signing material, so this needs no App Store
 # Connect credential and cannot create or revoke anything. Uploading is a
 # separate step — see _tools/upload-macos.sh.
 #
@@ -27,29 +27,20 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-SECRETS="_tools/secrets"
+# Signing material comes from the environment, which is where
+# `cux_ship secrets exec` puts it:
+#
+#   cux_ship secrets exec --keystore upload --api-key upload -- _tools/build-macos.sh
+#
 # The .app is signed by the same universal "Apple Distribution" certificate the
 # iOS build uses; the .pkg needs its own installer certificate on top.
-P12="$SECRETS/apple_distribution.p12"
-P12_PASSWORD_FILE="$SECRETS/apple_distribution_p12_password"
-INSTALLER_P12="$SECRETS/mac_installer_distribution.p12"
-INSTALLER_P12_PASSWORD_FILE="$SECRETS/mac_installer_distribution_p12_password"
-PROFILES=("$SECRETS/macos_appstore.provisionprofile")
+: "${APPLE_DISTRIBUTION_P12_PATH:?run this under 'cux_ship secrets exec'}"
+: "${APPLE_DISTRIBUTION_P12_PASSWORD:?not set by secrets exec}"
+: "${APPLE_MAC_INSTALLER_P12_PASSWORD:?not set by secrets exec}"
 
-for f in "$P12" "$P12_PASSWORD_FILE" "$INSTALLER_P12" \
-         "$INSTALLER_P12_PASSWORD_FILE" "${PROFILES[@]}"; do
-  if [ ! -f "$f" ]; then
-    echo "missing $f — decrypt the blackbox secrets first" >&2
-    exit 1
-  fi
-done
-
-# defines APPLE_DISTRIBUTION_P12_PASSWORD
-# shellcheck disable=SC1090
-. "$P12_PASSWORD_FILE"
-# defines MAC_INSTALLER_DISTRIBUTION_P12_PASSWORD
-# shellcheck disable=SC1090
-. "$INSTALLER_P12_PASSWORD_FILE"
+P12="$APPLE_DISTRIBUTION_P12_PATH"
+INSTALLER_P12="${APPLE_MAC_INSTALLER_P12_PATH:?}"
+PROFILES=("${APPLE_PROFILE_MACOS_APPSTORE_PATH:?}")
 
 # A keychain that exists for this build and no longer. Named per-process so two
 # builds on one runner cannot delete each other's.
@@ -74,7 +65,7 @@ security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
 security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DISTRIBUTION_P12_PASSWORD" \
   -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
 security import "$INSTALLER_P12" -k "$KEYCHAIN" \
-  -P "$MAC_INSTALLER_DISTRIBUTION_P12_PASSWORD" \
+  -P "$APPLE_MAC_INSTALLER_P12_PASSWORD" \
   -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
 security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')

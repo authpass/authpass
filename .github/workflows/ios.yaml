@@ -26,11 +26,22 @@ jobs:
         with:
           submodules: true
       - name: ci-install-deps
-        env:
-          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
         run: "./authpass/_tools/ci-install-deps.sh ios"
-      # No MATCH_PASSWORD: signing material is decrypted from _tools/secrets by
-      # blackbox, using BLACKBOX_SECRET_KEY above, and nothing fetches
-      # certificates at build time any more.
+      # One secret, and it is the only one. SOPS_AGE_KEY decrypts
+      # secrets/release.yaml; `secrets exec` puts every credential in the
+      # environment for the length of this step and removes what it wrote
+      # however the step ends. Nothing fetches certificates at build time, and
+      # no credential is written into the workspace.
+      #
+      # --keystore and --api-key are named because the file holds two of each:
+      # an upload keystore and an Amazon one, and an app-scoped API key
+      # alongside the team key that can read the developer portal. cux_ship
+      # refuses to guess between them rather than picking the first.
       - name: 'ci-release ${{ matrix.platform }}'
-        run: "./authpass/_tools/ci-release.sh ${{ matrix.platform }}"
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: >-
+          cd authpass/_tools/cux_ship &&
+          dart run cux_ship secrets exec
+          --keystore upload --api-key upload --
+          ./authpass/_tools/ci-release.sh ${{ matrix.platform }}
