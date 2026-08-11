@@ -69,18 +69,18 @@ packages:
     dependency: "direct main"
     description:
       name: cux_ship
-      sha256: "48c70c4fc8c0cd676ddc0215c43d4ae330d387587c7ae1440a0f34db4796c2ef"
+      sha256: "13f981c670aad0650b1c483ba4085fbbef89f1c53313bf7664ebaaf862c2a9ed"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.7.1"
   cux_ship_verify:
     dependency: transitive
     description:
       name: cux_ship_verify
-      sha256: "381a7fb34055d1a182e9cbeef5808f73c7fd7d715a2e13a66a0d6f50180c7e1a"
+      sha256: "4b7bf090d383b6fd726dadd3e2c1ce43f1ea5c23e3a966dc53a1de5c923aba25"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.7.1"
   dart_jsonwebtoken:
     dependency: transitive
     description:
