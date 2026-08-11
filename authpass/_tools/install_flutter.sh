@@ -41,6 +41,10 @@ case "${platform}" in
     *)          echo "Unknown platform ${platform}" ; exit 1 ;;
 esac
 
+# Created here rather than by the caller: this is the script that unpacks into
+# it. It used to exist by the time this ran only because the blackbox download
+# that ci-install-deps.sh did first happened to make it.
+mkdir -p "${DEPS}"
 pushd "${DEPS}"
 echo "Using flutter for ${FLUTTER_PLATFORM}: ${FLUTTER_VERSION}."
 echo "Downloading ${FLUTTER_URL}${FLUTTER_ARCHIVE}"
