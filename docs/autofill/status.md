@@ -45,10 +45,15 @@ Verified 2026-08-10 by a real signed build: the exported `.ipa` embeds
 `AuthPassAutofill.appex`, signed `Apple Distribution` with the right profile,
 carrying `…autofill-credential-provider` and `group.design.codeux.authpass`.
 
-## Not done
+**Phase 2 and phase 3 — proven end to end** in the iOS Simulator on
+2026-08-11. A login form in Safari showed the QuickType suggestion
+("octocat@example.com · password for this website — AuthPass"); tapping it put
+up our picker; picking the row filled both the username and the password
+fields. The whole path ran: app publishes identities → iOS offers one →
+extension boots its engine → module matches against the mirrored vault →
+credential returned.
 
-**Phase 2 is started, and none of it has run on a device.** The lookup path
-exists in code and compiles into the extension:
+The lookup path:
 
 - `autofill_module` answers `openVaults` (every enabled vault at once) and
   `matchEntries` (only what matches, ranked across all of them, metadata only).
@@ -57,10 +62,28 @@ exists in code and compiles into the extension:
   password crosses the channel until a row is picked.
 - `AutofillVaultStore` reads the manifest from the app group container and the
   cached keys from the shared keychain, skipping any vault whose key went stale.
-- `CredentialListViewController` is the picker `prepareCredentialList` puts up.
+- `CredentialListViewController` is the picker, reached from both fill
+  callbacks.
+- `ConfigurationViewController` is what Settings shows, reporting the real
+  container contents rather than a welcome screen.
+- **Identity store sync** (phase 3) — `lib/autofill/autofill_identities.dart`
+  and `ios/Runner/AutofillIdentityChannel.swift`, republished as a whole set on
+  open, save, opt-in and opt-out.
 
-Still missing: `provideCredentialWithoutUserInteraction` (the fast path), the
-configuration UI, and the identity store sync of phase 3.
+### Phase 3 is a prerequisite for phase 2, not later polish
+
+On iOS 18 the QuickType bar is built from `ASCredentialIdentityStore`, and a
+provider that has registered nothing contributes no suggestions — so before the
+identity sync existed, nothing ever reached the extension and the feature
+looked broken. Register first, then get asked.
+
+## Not done
+
+`provideCredentialWithoutUserInteraction` — the fast path that fills without
+showing the picker at all. It still answers `userInteractionRequired`, which is
+what routes a tapped suggestion into
+`prepareInterfaceToProvideCredential` and our picker. Correct, just one tap
+more than it needs to be.
 
 ### How to try it
 
@@ -72,8 +95,16 @@ iOS also has to be told AuthPass may fill passwords at all:
 Settings › General › AutoFill & Passwords › AuthPass. The switch shows a
 reminder, since one without the other looks like a broken feature.
 
-Then a login form in Safari should offer entries from that database. None of
-this has been run on a device yet.
+Then a login form in Safari offers entries from that database.
+
+**In the simulator**, two things cost time before they were understood:
+
+- Reinstalling the app can switch the credential provider back off in Settings,
+  and `ASCredentialIdentityStore` then rejects every write with
+  `ASCredentialIdentityStoreErrorDomain error 1` (`storeDisabled`). Check the
+  Settings switch before believing a publish failure.
+- The switches in Settings ignore synthesized taps. They need a slow drag that
+  starts on the knob and holds ~500 ms before moving.
 
 ### The quick-unlock migration is not needed
 
@@ -112,14 +143,37 @@ for a vault appears the first time it is opened or saved with autofill on.
   UUIDs and ordering even when nothing changed. It no longer leaks build
   configurations, but expect a noisy diff.
 
+## Four bugs the simulator run found
+
+Worth knowing about, because none of them showed up in a test:
+
+1. **The identity publish announced the state the user had just left.** The
+   published set is derived from `_openedFiles`, and `updateOpenedFile` updated
+   that *after* the branches that were publishing — so switching autofill on
+   published nothing and switching it off published everything.
+2. **`autofillEnabled` did not survive a reopen.** `AppDataBloc.openedFile`
+   rebuilds the record on every open and only carried `colorCode` forward.
+3. **A tapped suggestion had no handler.** It arrives through
+   `prepareInterfaceToProvideCredential`, not `prepareCredentialList`, so the
+   user got the bare phase 0 spike screen after tapping their own credential.
+4. **The extension ran the app's Dart entrypoint.** `FlutterEngine(project:
+   nil)` resolves the bundle with identifier `io.flutter.flutter.app`, and the
+   host app's `App.framework` carries that identifier too. It died on
+   `device_info` and never registered the module's channel. The engine now
+   names its own `App.framework` explicitly.
+
+A fifth, related: the spike ran *behind* a live picker, opening the
+5000-entry fixture during a real fill. The callbacks disagree on ordering —
+`prepareCredentialList` lands before `viewDidLoad`, `prepareInterfaceTo
+ProvideCredential` after it — so the spike is now started from `viewDidAppear`
+and only when no child controller has claimed the screen.
+
 ## Picking it back up
 
-1. Run it on a device — see "How to try it". Nothing in phase 2 is proven yet.
+1. Run it on a **physical device** — everything above is simulator-only.
 2. `provideCredentialWithoutUserInteraction`, the fast path that fills without
    showing the picker at all.
-3. The configuration UI (`prepareInterfaceForExtensionConfiguration`), which
-   still shows the phase 0 spike screen.
+3. Delete the phase 0 spike from the shipping extension; it has served its
+   purpose and is the only thing left that can open a vault nobody asked for.
 4. Unpin `kdbx` and `biometric_storage` once 2.5.0 / 5.2.0 are on pub — three
    pubspecs name the same git ref, and they have to agree.
-5. Phase 3 from `plan.md`: the identity store sync that puts entries in the
-   QuickType bar without opening the picker.
