@@ -73,7 +73,7 @@ security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
 security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DISTRIBUTION_P12_PASSWORD" \
   -T /usr/bin/codesign -T /usr/bin/security
 # Without this, codesign blocks on a UI prompt that a runner cannot answer.
-security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
+security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
 # Prepend rather than replace: the login keychain still holds what other tools
 # expect, and xcodebuild searches the whole list.
 security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
