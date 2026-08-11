@@ -31,7 +31,6 @@ BUNDLE_ID_SUFFIX = 'autofill'
 # own is "AuthPass iOS AppStore". See docs/apple-signing.md.
 EXTENSION_PROFILE = 'AuthPass iOS AutoFill AppStore'
 SOURCE_DIR = 'AuthPassAutofill'
-FIXTURES_DIR = File.join(SOURCE_DIR, 'Fixtures')
 # Built by autofill_module/build_ios_framework.sh, which points `current` at
 # whichever configuration it last built. Deliberately not the Release path:
 # `flutter build ios-framework --release` emits an 84 KB *stub* for the
@@ -91,17 +90,11 @@ end
 group.new_reference('Info.plist')
 group.new_reference("#{TARGET_NAME}.entitlements")
 
-# --- the spike fixture --------------------------------------------------------
-
-fixtures = Dir.glob("#{FIXTURES_DIR}/*").sort
-if fixtures.empty?
-  warn "no fixtures in #{FIXTURES_DIR} — the spike will report a missing vault."
-  warn 'generate one: cd ../../autofill_module && dart run tool/generate_test_vault.dart'
-else
-  fixture_group = group.new_group('Fixtures', 'Fixtures')
-  resources = fixtures.map { |path| fixture_group.new_reference(File.basename(path)) }
-  target.add_resources(resources)
-end
+# No fixtures. They used to be added as resources of this target, which was a
+# trap twice over: the glob ran when the project was generated, so a machine
+# that happened to have them baked references to gitignored files into the
+# committed pbxproj and every clean checkout failed to build — and when they
+# were present, a 2.9 MB test vault shipped inside the extension.
 
 # --- the flutter module -------------------------------------------------------
 
