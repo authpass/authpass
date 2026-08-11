@@ -14,8 +14,8 @@
 #
 # Notarization will not accept the app-scoped individual key the uploaders use
 # — it answers 401 — and the team key it does accept cannot be scoped to one
-# app. Putting one in blackbox would hand anything with CI access the ability
-# to publish every app on the account, which is the whole reason the rest of
+# app. Putting one in secrets/release.yaml would hand anything with CI access
+# the ability to publish every app on the account, which is the whole reason
 # this pipeline avoids team keys. So this step runs from a laptop, against a
 # key in ~/.appstoreconnect that never enters the repository.
 

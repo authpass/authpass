@@ -7,7 +7,7 @@
 # the same `upload_to_play_store` with the listing switched off. Metadata is
 # opt-in here (`--metadata`), so the pile of skip_upload_* flags is gone.
 #
-# The credential is the Play service account already in blackbox — cux_ship
+# The credential is the Play service account in secrets/release.yaml — cux_ship
 # takes it as JSON in the environment rather than as a path.
 
 set -euo pipefail
