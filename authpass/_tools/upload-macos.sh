@@ -47,6 +47,10 @@ export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
 # Issuer id: see upload-ios.sh — altool needs it even for an individual key.
 export APPLE_API_ISSUER_ID="0f1ac0c6-ea92-4609-a2f0-c9b239198a75"
 
+# Explicit for the reasons in upload-ios.sh, and for one more: this is not the
+# iOS bundle id with a suffix, it is a different app record entirely, so
+# inference reading the wrong project would be plausible rather than obviously
+# broken.
 BUNDLE_ID="design.codeux.authpass"
 
 # Read from the archive the .pkg was exported from, in the same run. A .pkg

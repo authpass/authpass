@@ -91,8 +91,9 @@ fi
 # is no notes. cux_ship refuses to guess — absent is not the same answer as
 # empty — and an empty file is how you say "leave the listing alone", which
 # keeps whatever Play already shows. Pass --changelog or --release-notes to
-# override; cux_ship would otherwise look for a CHANGELOG.md at the *git* root,
-# which in this repository is the wrapper above authpass/.
+# override — cux_ship would otherwise read the CHANGELOG.md at the repository
+# root, which is a real file and would start publishing notes that no release
+# has ever published.
 NOTES=()
 case " ${EXTRA[*]-} " in
   *" --release-notes "* | *" --changelog "*) ;;

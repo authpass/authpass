@@ -53,9 +53,10 @@ export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
 # so the issuer here only ever reaches altool.
 export APPLE_API_ISSUER_ID="0f1ac0c6-ea92-4609-a2f0-c9b239198a75"
 
-# cux_ship infers the project from the *git* root, which in this repository is
-# the wrapper above authpass/ and holds no pubspec.yaml or ios/. So the values
-# it would normally work out have to be passed.
+# Explicit, though .cux-ship.yaml now points cux_ship at authpass/ and it could
+# read this out of the Xcode project. A release script naming the app it is
+# about to publish to is worth the duplication: it is printed in the summary
+# below, and it means a wrong app-dir cannot quietly redirect an upload.
 BUNDLE_ID="design.codeux.authpass.ios"
 
 # Read from the .ipa, not from pubspec.yaml. On CI the build number comes from
