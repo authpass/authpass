@@ -33,6 +33,22 @@ if (secretPropertiesFile.exists()) {
     System.err.println("secrets not found at ${secretPropertiesFile.absolutePath}")
 }
 
+// Signing credentials come from the environment first, and from the encrypted
+// gradle.properties only if it is still there.
+//
+// The environment is where `cux_ship secrets exec` puts them, and it is the
+// same shape the other apps sharing that tooling already use. The properties
+// file is the blackbox arrangement it replaces: its own contents are *paths* to
+// two more encrypted files, which is the one secret whose value depends on
+// where the others were unpacked — the reason this is moving at all.
+//
+// Both paths work for now, deliberately, so the migration can be verified one
+// credential at a time. When gradle_home/ is gone from blackbox, the fallback
+// argument and everything above it goes with it.
+def signingSecret = { String envName, String propertyName ->
+    System.getenv(envName) ?: secretProperties[propertyName]
+}
+
 kotlin {
     jvmToolchain(17)
 }
@@ -62,16 +78,16 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'authpass'
-            keyPassword secretProperties['design.codeux.authpass.storePassword']
-            storeFile file(secretProperties['design.codeux.authpass.storeFile'] ?: "invalid")
-            storePassword secretProperties['design.codeux.authpass.storePassword']
+            keyAlias System.getenv('ANDROID_UPLOAD_KEY_ALIAS') ?: 'authpass'
+            keyPassword signingSecret('ANDROID_UPLOAD_KEY_PASSWORD', 'design.codeux.authpass.storePassword')
+            storeFile file(signingSecret('ANDROID_UPLOAD_KEYSTORE_PATH', 'design.codeux.authpass.storeFile') ?: "invalid")
+            storePassword signingSecret('ANDROID_UPLOAD_KEYSTORE_PASSWORD', 'design.codeux.authpass.storePassword')
         }
         amazon {
-            keyAlias 'amazon-key'
-            keyPassword secretProperties['design.codeux.authpass.amazon.storePassword']
-            storeFile file(secretProperties['design.codeux.authpass.amazon.storeFile'] ?: "invalid")
-            storePassword secretProperties['design.codeux.authpass.amazon.storePassword']
+            keyAlias System.getenv('ANDROID_AMAZON_KEY_ALIAS') ?: 'amazon-key'
+            keyPassword signingSecret('ANDROID_AMAZON_KEY_PASSWORD', 'design.codeux.authpass.amazon.storePassword')
+            storeFile file(signingSecret('ANDROID_AMAZON_KEYSTORE_PATH', 'design.codeux.authpass.amazon.storeFile') ?: "invalid")
+            storePassword signingSecret('ANDROID_AMAZON_KEYSTORE_PASSWORD', 'design.codeux.authpass.amazon.storePassword')
         }
     }
 
