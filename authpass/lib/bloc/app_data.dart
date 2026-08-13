@@ -95,10 +95,17 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 
   /// Whether this database may be offered by the OS credential provider.
   ///
-  /// Opt in per database, because enabling it copies the vault into the shared
-  /// app group container and caches a key for it — see
-  /// [AutofillMirror]. Null means "never asked", which behaves as off.
+  /// Null means "never chosen", and defaults to on: a database that is open is
+  /// offered. Opting out is explicit and is remembered as false, so this cannot
+  /// silently turn itself back on for someone who switched it off.
+  ///
+  /// Enabling copies the vault into the shared app group container and caches
+  /// its key — encrypted, and biometry bound, respectively. See
+  /// [AutofillMirror] for what that does and does not expose.
   bool? get autofillEnabled;
+
+  /// [autofillEnabled], with "never chosen" resolved. Read this, not the field.
+  bool get autofillEnabledOrDefault => autofillEnabled ?? true;
 
   Color? get color => colorCode == null ? null : Color(colorCode!);
 

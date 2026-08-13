@@ -1158,7 +1158,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get databaseAutofillCopyWarning =>
-      'A copy of this database is kept for AutoFill until you switch it off again.';
+      'An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.';
+
+  @override
+  String get databaseAutofillNeedsKdbx4 =>
+      'AutoFill needs KDBX 4. Upgrade this database below to use it.';
 
   @override
   String get databaseAutofillSystemHint =>

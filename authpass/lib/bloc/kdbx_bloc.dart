@@ -317,8 +317,8 @@ class KdbxBloc {
     OpenedFileUpdater updater,
   ) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
-    final wasAutofillEnabled = file.openedFile.autofillEnabled == true;
-    final isAutofillEnabled = updatedFile.autofillEnabled == true;
+    final wasAutofillEnabled = file.openedFile.autofillEnabledOrDefault;
+    final isAutofillEnabled = updatedFile.autofillEnabledOrDefault;
     if (wasAutofillEnabled && !isAutofillEnabled) {
       // opted out — take the copy and the cached key away again. What is
       // advertised is republished below, once the flag has actually landed.
@@ -512,7 +512,7 @@ class KdbxBloc {
     KdbxOpenedFile file,
     Uint8List bytes,
   ) async {
-    if (file.openedFile.autofillEnabled != true) {
+    if (!file.openedFile.autofillEnabledOrDefault) {
       return;
     }
     await _mirrorFile(file.openedFile, file.kdbxFile, bytes);
@@ -556,7 +556,7 @@ class KdbxBloc {
   Future<void> _publishAutofillIdentities() async {
     final enabled = <String, KdbxFile>{
       for (final file in _openedFiles.value.values)
-        if (file.openedFile.autofillEnabled == true)
+        if (file.openedFile.autofillEnabledOrDefault)
           file.openedFile.uuid: file.kdbxFile,
     };
     await autofillIdentities.publish(enabled);
@@ -697,11 +697,17 @@ class KdbxBloc {
   Future<void> close(KdbxFile file) async {
     _logger.fine('Close file.');
     analytics.events.trackCloseFile();
-    final fileSource = fileForKdbxFile(file).fileSource;
+    final openedFile = fileForKdbxFile(file);
+    final fileSource = openedFile.fileSource;
     _openedFiles.add(
       OpenedKdbxFiles(Map.from(_openedFiles.value._files)..remove(fileSource)),
     );
     file.dispose();
+    // Closing a database stops it being offered. The mirror outlives the app,
+    // so nothing else would ever take it away, and a database the user closed
+    // going on answering autofill requests is not what closing looks like.
+    await autofillMirror.removeFile(openedFile.openedFile.uuid);
+    await _publishAutofillIdentities();
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
       await _updateQuickUnlockStore();
@@ -719,6 +725,13 @@ class KdbxBloc {
       // clear all quick unlock data.
       _openedFilesQuickUnlock.clear();
       await quickUnlockStorage.updateQuickUnlockFile({});
+      // The autofill mirror keeps exactly the same company as quick unlock:
+      // both are a cached way in that outlives the app, so "close everything
+      // and forget how to get back in" has to mean both or it means neither.
+      // Locking, which keeps quick unlock, keeps the mirror for the same
+      // reason — autofill working while the app is locked is the point of it.
+      await autofillMirror.clear();
+      await autofillIdentities.publish({});
       analytics.events.trackCloseAllFiles(count: _openedFiles.value.length);
     } else {
       analytics.events.trackLockAllFiles(count: _openedFiles.value.length);

@@ -133,6 +133,9 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     final databaseName = _file!.kdbxFile.body.meta.databaseName.get()!;
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
+    // kdbx3 keeps no transformed key, so the autofill mirror has nothing to
+    // cache and the extension could never open the copy. See [AutofillMirror].
+    final canAutofill = _file!.kdbxFile.header.version >= KdbxVersion.V4;
     return ProgressOverlay(
       task: task,
       child: Center(
@@ -209,31 +212,40 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                   SwitchListTile(
                     secondary: const Icon(Icons.password),
                     title: Text(loc.databaseAutofill),
+                    // Said outright for kdbx3, rather than leaving a switch
+                    // that is on and quietly offers nothing.
                     subtitle: Text(
-                      _file!.openedFile.autofillEnabled == true
+                      !canAutofill
+                          ? loc.databaseAutofillNeedsKdbx4
+                          : _file!.openedFile.autofillEnabledOrDefault
                           ? loc.databaseAutofillCopyWarning
                           : loc.databaseAutofillSubtitle,
                     ),
-                    value: _file!.openedFile.autofillEnabled == true,
-                    onChanged: (enabled) async {
-                      // updateOpenedFile writes or removes the app group copy
-                      // and the cached key; nothing else has to happen here.
-                      _file = await _kdbxBloc.updateOpenedFile(
-                        _file!,
-                        (b) => b.autofillEnabled = enabled,
-                      );
-                      if (!context.mounted) {
-                        return;
-                      }
-                      setState(() {});
-                      if (enabled) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(loc.databaseAutofillSystemHint),
-                          ),
-                        );
-                      }
-                    },
+                    value:
+                        canAutofill &&
+                        _file!.openedFile.autofillEnabledOrDefault,
+                    onChanged: !canAutofill
+                        ? null
+                        : (enabled) async {
+                            // updateOpenedFile writes or removes the app group
+                            // copy and the cached key; nothing else has to
+                            // happen here.
+                            _file = await _kdbxBloc.updateOpenedFile(
+                              _file!,
+                              (b) => b.autofillEnabled = enabled,
+                            );
+                            if (!context.mounted) {
+                              return;
+                            }
+                            setState(() {});
+                            if (enabled) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(loc.databaseAutofillSystemHint),
+                                ),
+                              );
+                            }
+                          },
                   ),
                 ],
                 ListTile(

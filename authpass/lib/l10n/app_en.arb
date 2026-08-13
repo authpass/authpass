@@ -1472,9 +1472,13 @@
   "@databaseAutofillSubtitle": {
     "description": "Explains what enabling AutoFill for a database does."
   },
-  "databaseAutofillCopyWarning": "A copy of this database is kept for AutoFill until you switch it off again.",
+  "databaseAutofillCopyWarning": "An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.",
   "@databaseAutofillCopyWarning": {
-    "description": "Shown when enabling AutoFill, so it is clear a second copy of the file exists."
+    "description": "Shown when AutoFill is on for a database, so it is clear a second copy of the file exists and what removes it."
+  },
+  "databaseAutofillNeedsKdbx4": "AutoFill needs KDBX 4. Upgrade this database below to use it.",
+  "@databaseAutofillNeedsKdbx4": {
+    "description": "Shown instead of the AutoFill switch for kdbx3 databases, which cannot be mirrored for the extension."
   },
   "databaseAutofillSystemHint": "Also turn AuthPass on in Settings › General › AutoFill & Passwords.",
   "@databaseAutofillSystemHint": {

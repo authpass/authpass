@@ -2129,11 +2129,17 @@ abstract class AppLocalizations {
   /// **'Offer this database\'s entries when apps and websites ask for a password.'**
   String get databaseAutofillSubtitle;
 
-  /// Shown when enabling AutoFill, so it is clear a second copy of the file exists.
+  /// Shown when AutoFill is on for a database, so it is clear a second copy of the file exists and what removes it.
   ///
   /// In en, this message translates to:
-  /// **'A copy of this database is kept for AutoFill until you switch it off again.'**
+  /// **'An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.'**
   String get databaseAutofillCopyWarning;
+
+  /// Shown instead of the AutoFill switch for kdbx3 databases, which cannot be mirrored for the extension.
+  ///
+  /// In en, this message translates to:
+  /// **'AutoFill needs KDBX 4. Upgrade this database below to use it.'**
+  String get databaseAutofillNeedsKdbx4;
 
   /// Reminder that iOS needs AuthPass enabled as a credential provider as well.
   ///
