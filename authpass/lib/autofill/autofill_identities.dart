@@ -87,6 +87,41 @@ class AutofillIdentities {
     }
   }
 
+  /// Whether the user has switched AuthPass on as a credential provider.
+  ///
+  /// Null when the question does not apply — not iOS, or the platform side
+  /// could not answer. Callers use that to say nothing rather than to guess,
+  /// because "we could not ask" and "it is off" want different behaviour.
+  Future<bool?> isEnabled() async {
+    if (!_isAvailable) {
+      return null;
+    }
+    try {
+      final state = await _channel.invokeMapMethod<String, Object?>('state');
+      return state?['enabled'] as bool?; // NON-NLS
+    } on PlatformException catch (e, stackTrace) {
+      _logger.warning('Unable to read the autofill state.', e, stackTrace);
+      return null;
+    }
+  }
+
+  /// Asks iOS to turn AuthPass on, and reports whether it now is.
+  ///
+  /// iOS 18 asks in place. Earlier it can only open Settings, and then this
+  /// answers false whatever the user does there — ask [isEnabled] again once
+  /// the app is resumed rather than trusting this.
+  Future<bool> requestEnable() async {
+    if (!_isAvailable) {
+      return false;
+    }
+    try {
+      return await _channel.invokeMethod<bool>('requestEnable') ?? false;
+    } on PlatformException catch (e, stackTrace) {
+      _logger.warning('Unable to request autofill be enabled.', e, stackTrace);
+      return false;
+    }
+  }
+
   Future<void> removeAll() async {
     if (!_isAvailable) {
       return;

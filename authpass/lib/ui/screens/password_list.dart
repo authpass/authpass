@@ -477,6 +477,10 @@ class _PasswordListContentState extends State<PasswordListContent>
   //  final _isolateRunner = IsolateRunner.spawn();
 
   AutofillServiceStatus? _autofillStatus;
+
+  /// iOS's answer to the same question [_autofillStatus] asks on android.
+  /// Null until asked, and on every other platform.
+  bool? _iosAutofillEnabled;
   bool? _dismissedAutofillSuggestion;
 
   @override
@@ -506,7 +510,24 @@ class _PasswordListContentState extends State<PasswordListContent>
     if (AuthPassPlatform.isWeb) {
       return;
     }
-    _autofillStatus = await AutofillService().status();
+    if (AuthPassPlatform.isIOS) {
+      // The autofill_service plugin has no iOS implementation — its method
+      // channel answers every call with a version string — so asking it here
+      // would only throw. iOS keeps the answer in the credential identity
+      // store instead.
+      _iosAutofillEnabled = await context
+          .read<KdbxBloc>()
+          .autofillIdentities
+          .isEnabled();
+      _logger.fine(
+        'autofill credential provider enabled: $_iosAutofillEnabled',
+      );
+    } else {
+      _autofillStatus = await AutofillService().status();
+    }
+    if (!mounted) {
+      return;
+    }
     setState(() {});
   }
 
@@ -610,6 +631,11 @@ class _PasswordListContentState extends State<PasswordListContent>
       setState(() {
         _selectAllFilter();
       });
+      // Coming back from Settings is how this gets switched on when the system
+      // would not ask in place — on iOS before 18, and on android always. The
+      // banner has to notice, or it sits there contradicting what the user just
+      // did.
+      _updateAutofillPrefs();
     }
   }
 
@@ -1146,8 +1172,16 @@ class _PasswordListContentState extends State<PasswordListContent>
   }
 
   List<Widget>? _buildAutofillSuggestBanners() {
-    if (_autofillStatus == null ||
-        _autofillStatus != AutofillServiceStatus.disabled) {
+    // Two platforms, one banner. Android asks its own autofill service whether
+    // it is the current one; iOS asks whether the credential provider is
+    // switched on in Settings — the same question, and until it is answered
+    // yes, autofill silently does nothing on either.
+    // Both compare against a value that is null until asked, so neither shows
+    // the banner before the answer is in.
+    final isOff = AuthPassPlatform.isIOS
+        ? _iosAutofillEnabled == false
+        : _autofillStatus == AutofillServiceStatus.disabled;
+    if (!isOff) {
       return null;
     }
     if (_dismissedAutofillSuggestion == true) {
@@ -1170,7 +1204,14 @@ class _PasswordListContentState extends State<PasswordListContent>
           ),
           TextButton(
             onPressed: () async {
-              await AutofillService().requestSetAutofillService();
+              if (AuthPassPlatform.isIOS) {
+                await context
+                    .read<KdbxBloc>()
+                    .autofillIdentities
+                    .requestEnable();
+              } else {
+                await AutofillService().requestSetAutofillService();
+              }
               await _updateAutofillPrefs();
               analytics.events.trackAutofillBanner(BannerAction.saved);
             },

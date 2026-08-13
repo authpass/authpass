@@ -35,6 +35,8 @@ enum AutofillIdentityChannel {
         result(isSupported())
       case "state":
         state(result: result)
+      case "requestEnable":
+        requestEnable(result: result)
       case "replaceIdentities":
         replaceIdentities(call: call, result: result)
       case "removeAll":
@@ -62,6 +64,36 @@ enum AutofillIdentityChannel {
         "enabled": state.isEnabled,
         "supportsIncrementalUpdates": state.supportsIncrementalUpdates,
       ])
+    }
+  }
+
+  /// Asks the user to switch AuthPass on, and says whether it is on afterwards.
+  ///
+  /// The android side of this app has had `requestSetAutofillService` since
+  /// forever, and this is the same gesture: a banner offers it, the system asks,
+  /// the answer comes back. iOS only grew the in-app prompt in 18. On 17 the
+  /// best there is deep links to the AutoFill page in Settings, which cannot
+  /// report anything back — so it answers false, and the banner goes away on the
+  /// next check instead, when the app is resumed.
+  ///
+  /// Apple asks for 10 seconds between calls to the prompt. Nothing here
+  /// enforces that; the button is not reachable often enough to matter, and a
+  /// refused prompt simply leaves the banner up.
+  private static func requestEnable(result: @escaping FlutterResult) {
+    if #available(iOS 18.0, *) {
+      ASSettingsHelper.requestToTurnOnCredentialProviderExtension { enabled in
+        log("prompt closed, enabled: \(enabled)")
+        result(enabled)
+      }
+    } else if #available(iOS 17.0, *) {
+      ASSettingsHelper.openCredentialProviderAppSettings { error in
+        if let error {
+          log("could not open settings: \(error.localizedDescription)")
+        }
+        result(false)
+      }
+    } else {
+      result(false)
     }
   }
 
