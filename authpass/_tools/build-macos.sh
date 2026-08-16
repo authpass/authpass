@@ -82,12 +82,31 @@ while IFS= read -r keychain_line; do
 done < <(security list-keychains -d user)
 security list-keychains -d user -s "$KEYCHAIN" ${SEARCH_LIST+"${SEARCH_LIST[@]}"}
 
+# Both listings on failure, because the filtered one cannot diagnose itself:
+# `-v` shows identities that are valid *and* chain to a trusted root, so an
+# empty result means either a .p12 exported without its private key or a
+# certificate that does not chain — opposite fixes. Note the installer check
+# deliberately omits `-p codesigning`: an installer identity never appears under
+# that policy, so the same call with a different grep would find nothing and
+# say so for the wrong reason.
+explain_identities() {
+  echo "  valid for codesigning:" >&2
+  security find-identity -v -p codesigning "$KEYCHAIN" >&2 || true
+  echo "  everything in the keychain:" >&2
+  security find-identity "$KEYCHAIN" >&2 || true
+}
+
 if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Distribution"; then
   echo "the .p12 did not yield a usable distribution identity" >&2
+  explain_identities
   exit 1
 fi
+# Matches "3rd Party Mac Developer Installer", which is what the Mac App Store
+# .pkg needs. "Developer ID Installer" is a different certificate for the
+# direct-download path, and would need its own arm here.
 if ! security find-identity -v "$KEYCHAIN" | grep -q "Mac Developer Installer"; then
   echo "the installer .p12 did not yield a usable installer identity" >&2
+  explain_identities
   exit 1
 fi
 

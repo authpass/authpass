@@ -103,6 +103,15 @@ security list-keychains -d user -s "$KEYCHAIN" ${SEARCH_LIST+"${SEARCH_LIST[@]}"
 
 if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Distribution"; then
   echo "the .p12 did not yield a usable distribution identity" >&2
+  # Both listings, because the filtered one cannot diagnose its own failure:
+  # `-v` shows identities that are valid *and* chain to a trusted root, so
+  # nothing here means either the .p12 was exported without its private key or
+  # the certificate does not chain to an Apple intermediate. Opposite fixes,
+  # and the difference is one subprocess.
+  echo "  valid for codesigning:" >&2
+  security find-identity -v -p codesigning "$KEYCHAIN" >&2 || true
+  echo "  everything in the keychain:" >&2
+  security find-identity "$KEYCHAIN" >&2 || true
   exit 1
 fi
 
