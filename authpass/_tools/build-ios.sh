@@ -74,6 +74,11 @@ security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
 security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DISTRIBUTION_P12_PASSWORD" \
   -T /usr/bin/codesign -T /usr/bin/security
 # Without this, codesign blocks on a UI prompt that a runner cannot answer.
+#
+# `apple:` is the entry that does the work — measured, not assumed: with only
+# `apple:` codesign signs, and with `codesign:` or `apple-tool:` alone it blocks
+# on the prompt. The other two are kept because an unmatched partition id costs
+# nothing, but nobody should believe they are the fix, or add more in hope.
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
 # Prepend rather than replace: the login keychain still holds what other tools
 # expect, and xcodebuild searches the whole list.
