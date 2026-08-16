@@ -27,6 +27,25 @@ ssh-keygen -F gitlab.com > /dev/null || (mkdir -p ~/.ssh && echo "|1|SM9ao9YoaAX
 # Flutter was installed by `install_flutter.sh` in `ci-install-deps.sh`.
 export PATH=${DEPS}/flutter/bin:$PATH
 
+# Anything an apple build cannot need is dropped before xcodebuild sees it.
+#
+# This is not tidiness. An xcode script build phase writes its whole environment
+# into the build log — `export GCC_WARN_...`, and every other variable with it —
+# and a public repository's action logs are public. Every other credential here
+# is a *path*, so what leaks is a filename; the play service account is the one
+# exported as a value, so what leaked was the private key itself. It has been in
+# the logs of every ios and macos release since this script moved under
+# `secrets exec`, which is a leak this line would have prevented.
+#
+# The general rule, for whatever is added next: a secret passed as a value can
+# escape through anything that echoes its environment, and a secret passed as a
+# path cannot.
+if test "$target_platform" == "ios" || test "$target_platform" == "macos" ; then
+    unset GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
+    unset ANDROID_KEYSTORE_PATH ANDROID_KEYSTORE_PASSWORD
+    unset ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD
+fi
+
 if test "$target_platform" == "ios" ; then
     # No ssh-agent, no certificate repository, no MATCH_PASSWORD, and no
     # fastlane. Signing material arrives in the environment from secrets
