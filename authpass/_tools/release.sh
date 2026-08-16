@@ -65,18 +65,22 @@ echo "::set-output name=appbuildnumber::$buildnumber"
 $FLT pub get
 case "${flavor}" in
     ios)
-        # No fastlane, and no App Store Connect credential during the build:
-        # build-ios.sh signs against the profiles secrets exec supplies, and
-        # upload-ios.sh is the only step holding a key — an individual one,
-        # scoped to this app. See docs/apple-signing.md.
+        # The split is the point. This whole script runs under `keychain exec`
+        # (see .github/workflows/ios.yaml), which places no App Store Connect
+        # credential in the environment — so the archive cannot hold a key that
+        # could create or revoke signing material, rather than merely not using
+        # one. The upload asks for a key itself, because it is the step that
+        # needs it, and it is an individual key scoped to this app.
+        # See docs/apple-signing.md.
         ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
-        ./_tools/upload-ios.sh
+        ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
+            -- authpass/_tools/upload-ios.sh
     ;;
     macos)
-        # Same shape as ios: signed against the stored profile, uploaded with
-        # the app-scoped key. See docs/apple-signing.md.
+        # As for ios: the archive holds no key, the upload asks for one.
         ./_tools/build-macos.sh -t lib/env/production.dart -b $buildnumber
-        ./_tools/upload-macos.sh
+        ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
+            -- authpass/_tools/upload-macos.sh
     ;;
     samsungapps | huawei | sideload | amazon)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)

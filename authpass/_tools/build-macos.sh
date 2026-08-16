@@ -3,8 +3,8 @@
 #
 #   _tools/build-macos.sh [-t lib/env/production.dart] [-o build/macos/pkg] [-b buildnumber]
 #
-# The macOS counterpart of build-ios.sh, and deliberately the same shape: the
-# secrets exec supplies the signing material, so this needs no App Store
+# The macOS counterpart of build-ios.sh, and deliberately the same shape:
+# keychain exec supplies the signing material, so this holds no App Store
 # Connect credential and cannot create or revoke anything. Uploading is a
 # separate step — see _tools/upload-macos.sh.
 #
@@ -27,104 +27,19 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-# Signing material comes from the environment, which is where
-# `cux_ship secrets exec` puts it:
+# The keychain and the profiles arrive from `cux_ship keychain exec`, which
+# makes a keychain that lives for one command, imports every certificate it
+# finds — the app store one signs the .app, the installer one signs the .pkg —
+# installs the profiles where macOS reads them, and destroys all of it however
+# this exits:
 #
-#   cux_ship secrets exec --keystore upload --api-key upload -- _tools/build-macos.sh
+#   _tools/ship.sh keychain exec --profile macos_appstore \
+#     -- authpass/_tools/build-macos.sh
 #
-# The .app is signed by the same universal "Apple Distribution" certificate the
-# iOS build uses; the .pkg needs its own installer certificate on top.
-: "${APPLE_DISTRIBUTION_P12_PATH:?run this under 'cux_ship secrets exec'}"
-: "${APPLE_DISTRIBUTION_P12_PASSWORD:?not set by secrets exec}"
-: "${APPLE_MAC_INSTALLER_P12_PASSWORD:?not set by secrets exec}"
-
-P12="$APPLE_DISTRIBUTION_P12_PATH"
-INSTALLER_P12="${APPLE_MAC_INSTALLER_P12_PATH:?}"
-PROFILES=("${APPLE_PROFILE_MACOS_APPSTORE_PATH:?}")
-
-# A keychain that exists for this build and no longer. Named per-process so two
-# builds on one runner cannot delete each other's.
-KEYCHAIN="$HOME/Library/Keychains/authpass-build-macos-$$.keychain-db"
-KEYCHAIN_PASSWORD="$(openssl rand -hex 24)"
-INSTALLED_PROFILES=()
-
-cleanup() {
-  security delete-keychain "$KEYCHAIN" 2>/dev/null || true
-  for p in ${INSTALLED_PROFILES+"${INSTALLED_PROFILES[@]}"}; do
-    rm -f "$p"
-  done
-}
-trap cleanup EXIT INT TERM
-
-echo "==> importing the signing certificates into a temporary keychain"
-security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-security set-keychain-settings -lut 3600 "$KEYCHAIN"
-security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-# productbuild signs the installer, so it needs the key too — codesign alone is
-# not enough here, unlike on iOS.
-security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DISTRIBUTION_P12_PASSWORD" \
-  -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-security import "$INSTALLER_P12" -k "$KEYCHAIN" \
-  -P "$APPLE_MAC_INSTALLER_P12_PASSWORD" \
-  -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
-# A line at a time rather than `tr -d '"'`: the list is quote-delimited so a
-# path may contain a space, and stripping the quotes splits one such path into
-# two arguments, dropping keychains out of the search list. See build-ios.sh.
-SEARCH_LIST=()
-while IFS= read -r keychain_line; do
-  keychain_line="${keychain_line#"${keychain_line%%[![:space:]]*}"}"
-  keychain_line="${keychain_line%\"}"
-  keychain_line="${keychain_line#\"}"
-  if [ -n "$keychain_line" ]; then
-    SEARCH_LIST+=("$keychain_line")
-  fi
-done < <(security list-keychains -d user)
-security list-keychains -d user -s "$KEYCHAIN" ${SEARCH_LIST+"${SEARCH_LIST[@]}"}
-
-# Both listings on failure, because the filtered one cannot diagnose itself:
-# `-v` shows identities that are valid *and* chain to a trusted root, so an
-# empty result means either a .p12 exported without its private key or a
-# certificate that does not chain — opposite fixes. Note the installer check
-# deliberately omits `-p codesigning`: an installer identity never appears under
-# that policy, so the same call with a different grep would find nothing and
-# say so for the wrong reason.
-explain_identities() {
-  echo "  valid for codesigning:" >&2
-  security find-identity -v -p codesigning "$KEYCHAIN" >&2 || true
-  echo "  everything in the keychain:" >&2
-  security find-identity "$KEYCHAIN" >&2 || true
-}
-
-if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Distribution"; then
-  echo "the .p12 did not yield a usable distribution identity" >&2
-  explain_identities
-  exit 1
-fi
-# Matches "3rd Party Mac Developer Installer", which is what the Mac App Store
-# .pkg needs. "Developer ID Installer" is a different certificate for the
-# direct-download path, and would need its own arm here.
-if ! security find-identity -v "$KEYCHAIN" | grep -q "Mac Developer Installer"; then
-  echo "the installer .p12 did not yield a usable installer identity" >&2
-  explain_identities
-  exit 1
-fi
-
-echo "==> installing the provisioning profile"
-# macOS reads profiles from a different directory than iOS, and by filename
-# uuid just the same.
-PROFILE_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
-mkdir -p "$PROFILE_DIR"
-for profile in "${PROFILES[@]}"; do
-  uuid=$(security cms -D -i "$profile" | plutil -extract UUID raw -)
-  destination="$PROFILE_DIR/$uuid.provisionprofile"
-  # Only clean up what this build put there — see build-ios.sh.
-  if [ ! -e "$destination" ]; then
-    INSTALLED_PROFILES+=("$destination")
-  fi
-  cp "$profile" "$destination"
-  echo "    $(basename "$profile") -> $uuid"
-done
+# Deliberately *not* `secrets exec --api-key`: this script holds no App Store
+# Connect credential, and under keychain exec none is placed in the environment
+# for it to hold. See _tools/upload-macos.sh for the step that does.
+: "${APPLE_KEYCHAIN:?run this under 'cux_ship keychain exec'}"
 
 echo "==> flutter build macos --config-only"
 flutter build macos --release --config-only -t "$TARGET" \
@@ -137,7 +52,7 @@ echo "==> xcodebuild archive"
 xcodebuild -workspace macos/Runner.xcworkspace -scheme Runner \
   -configuration Release -destination 'generic/platform=macOS' \
   -archivePath "$ARCHIVE" \
-  OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN" \
+  OTHER_CODE_SIGN_FLAGS="--keychain $APPLE_KEYCHAIN" \
   archive
 
 echo "==> xcodebuild -exportArchive"

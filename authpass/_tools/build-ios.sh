@@ -3,8 +3,8 @@
 #
 #   _tools/build-ios.sh [-t lib/env/production.dart] [-o build/ios/ipa]
 #
-# Run under `cux_ship secrets exec`, which is where the certificate and the
-# profiles come from. Needs no App Store Connect credential at all: signing
+# Run under `cux_ship keychain exec`, which is where the keychain and the
+# installed profiles come from. Holds no App Store Connect credential: signing
 # material is supplied, not fetched, so nothing here can create or revoke it.
 # Uploading is a separate step and the only one holding a key — see
 # _tools/upload-ios.sh.
@@ -30,107 +30,26 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-# Signing material comes from the environment, which is where
-# `cux_ship secrets exec` puts it:
+# The keychain and the profiles arrive from `cux_ship keychain exec`, which
+# makes a keychain that lives for one command, imports the certificate,
+# installs the profiles under the uuid Xcode looks them up by, and destroys all
+# of it however this exits:
 #
-#   cux_ship secrets exec --keystore upload --api-key upload -- _tools/build-ios.sh
+#   _tools/ship.sh keychain exec \
+#     --profile ios_appstore --profile ios_appstore_autofill \
+#     -- authpass/_tools/build-ios.sh
 #
-# Nothing here reads an encrypted file, and nothing holds a credential that
-# outlives the run: the certificate and the profiles sit in a temp directory
-# secrets exec removes however this exits.
-: "${APPLE_DISTRIBUTION_P12_PATH:?run this under 'cux_ship secrets exec'}"
-: "${APPLE_DISTRIBUTION_P12_PASSWORD:?not set by secrets exec}"
-
-P12="$APPLE_DISTRIBUTION_P12_PATH"
-# One per signed target. The extension has its own, and a matching entry in
-# ios/ExportOptions.plist.
-PROFILES=(
-  "${APPLE_PROFILE_IOS_APPSTORE_PATH:?}"
-  "${APPLE_PROFILE_IOS_APPSTORE_AUTOFILL_PATH:?}"
-)
-
-# A keychain that exists for this build and no longer. Named per-process so two
-# builds on one runner cannot delete each other's.
-KEYCHAIN="$HOME/Library/Keychains/authpass-build-$$.keychain-db"
-# openssl rather than `tr </dev/urandom | head`: head exits at its byte count,
-# tr takes SIGPIPE, and pipefail turns that into a fatal 141.
-KEYCHAIN_PASSWORD="$(openssl rand -hex 24)"
-INSTALLED_PROFILES=()
-
-cleanup() {
-  security delete-keychain "$KEYCHAIN" 2>/dev/null || true
-  for p in ${INSTALLED_PROFILES+"${INSTALLED_PROFILES[@]}"}; do
-    rm -f "$p"
-  done
-}
-trap cleanup EXIT INT TERM
-
-echo "==> importing the distribution certificate into a temporary keychain"
-security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-security set-keychain-settings -lut 3600 "$KEYCHAIN"
-security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-# -A would let any binary use the key without prompting; -T codesign keeps that
-# to the one tool that needs it.
-security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DISTRIBUTION_P12_PASSWORD" \
-  -T /usr/bin/codesign -T /usr/bin/security
-# Without this, codesign blocks on a UI prompt that a runner cannot answer.
+# Deliberately *not* `secrets exec --api-key`. Under keychain exec no App Store
+# Connect credential is placed in the environment at all, so this script cannot
+# acquire one by accident — which is what makes the claim above true rather
+# than aspirational. Uploading is a separate step and the only one holding a
+# key; see _tools/upload-ios.sh and how _tools/release.sh wraps it.
 #
-# `apple:` is the entry that does the work — measured, not assumed: with only
-# `apple:` codesign signs, and with `codesign:` or `apple-tool:` alone it blocks
-# on the prompt. The other two are kept because an unmatched partition id costs
-# nothing, but nobody should believe they are the fix, or add more in hope.
-security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
-# Prepend rather than replace: the login keychain still holds what other tools
-# expect, and xcodebuild searches the whole list.
-#
-# Parsed a line at a time rather than `tr -d '"'` on the lot: the output is
-# quote-delimited exactly so a keychain path may contain a space, and stripping
-# the quotes hands the shell two arguments where there was one — which drops
-# every keychain after the space out of the search list. No restore afterwards;
-# `security delete-keychain` removes it from the list too, and a snapshot and
-# restore would be worse than nothing, since a concurrent build prepending in
-# between would be restored out of existence.
-SEARCH_LIST=()
-while IFS= read -r keychain_line; do
-  keychain_line="${keychain_line#"${keychain_line%%[![:space:]]*}"}"
-  keychain_line="${keychain_line%\"}"
-  keychain_line="${keychain_line#\"}"
-  if [ -n "$keychain_line" ]; then
-    SEARCH_LIST+=("$keychain_line")
-  fi
-done < <(security list-keychains -d user)
-security list-keychains -d user -s "$KEYCHAIN" ${SEARCH_LIST+"${SEARCH_LIST[@]}"}
-
-if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Distribution"; then
-  echo "the .p12 did not yield a usable distribution identity" >&2
-  # Both listings, because the filtered one cannot diagnose its own failure:
-  # `-v` shows identities that are valid *and* chain to a trusted root, so
-  # nothing here means either the .p12 was exported without its private key or
-  # the certificate does not chain to an Apple intermediate. Opposite fixes,
-  # and the difference is one subprocess.
-  echo "  valid for codesigning:" >&2
-  security find-identity -v -p codesigning "$KEYCHAIN" >&2 || true
-  echo "  everything in the keychain:" >&2
-  security find-identity "$KEYCHAIN" >&2 || true
-  exit 1
-fi
-
-echo "==> installing provisioning profiles"
-PROFILE_DIR="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
-mkdir -p "$PROFILE_DIR"
-for profile in "${PROFILES[@]}"; do
-  # Xcode finds a profile by the uuid in its filename, not by its path.
-  uuid=$(security cms -D -i "$profile" | plutil -extract UUID raw -)
-  destination="$PROFILE_DIR/$uuid.mobileprovision"
-  # Only clean up what this build put there. The same uuid may already be
-  # installed because Xcode downloaded it, and on a developer machine removing
-  # that on exit takes away something the build did not provide.
-  if [ ! -e "$destination" ]; then
-    INSTALLED_PROFILES+=("$destination")
-  fi
-  cp "$profile" "$destination"
-  echo "    $(basename "$profile") -> $uuid"
-done
+# What used to be here — the temporary keychain, the partition list, the search
+# list, the identity check, the profile installation — was forty lines that
+# three projects each kept a slightly different copy of. Two bugs in this copy
+# were found by review against the one that became cux_ship's.
+: "${APPLE_KEYCHAIN:?run this under 'cux_ship keychain exec'}"
 
 echo "==> autofill module frameworks"
 # The extension embeds a separate Flutter module, and its xcframeworks are
@@ -158,7 +77,7 @@ echo "==> xcodebuild archive"
 xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner \
   -configuration Release -destination 'generic/platform=iOS' \
   -archivePath "$ARCHIVE" \
-  OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN" \
+  OTHER_CODE_SIGN_FLAGS="--keychain $APPLE_KEYCHAIN" \
   archive
 
 echo "==> xcodebuild -exportArchive"

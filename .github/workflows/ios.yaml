@@ -40,14 +40,21 @@ jobs:
       # however the step ends. Nothing fetches certificates at build time, and
       # no credential is written into the workspace.
       #
-      # --keystore and --api-key are named because the file holds two of each:
-      # an upload keystore and an Amazon one, and an app-scoped API key
-      # alongside the team key that can read the developer portal. cux_ship
-      # refuses to guess between them rather than picking the first.
+      # `keychain exec` rather than `secrets exec`: it imports the certificate
+      # into a keychain that dies with the step, installs the named profiles,
+      # and — the reason it is the outer wrapper — places no App Store Connect
+      # credential in the environment at all. The archive therefore cannot hold
+      # a key that could create or revoke signing material. _tools/release.sh
+      # asks for one around the upload alone.
+      #
+      # Profiles are named because naming them is what makes an expired one
+      # fatal here rather than a signing failure twenty minutes in. All four,
+      # because this one step covers both platforms.
       - name: 'ci-release ${{ matrix.platform }}'
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         run: >-
-          ./authpass/_tools/ship.sh secrets exec
-          --keystore upload --api-key upload --
+          ./authpass/_tools/ship.sh keychain exec
+          --profile ios_appstore --profile ios_appstore_autofill
+          --profile macos_appstore --profile macos_developerid --
           ./authpass/_tools/ci-release.sh ${{ matrix.platform }}
