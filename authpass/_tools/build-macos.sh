@@ -68,7 +68,19 @@ security import "$INSTALLER_P12" -k "$KEYCHAIN" \
   -P "$APPLE_MAC_INSTALLER_P12_PASSWORD" \
   -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
-security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+# A line at a time rather than `tr -d '"'`: the list is quote-delimited so a
+# path may contain a space, and stripping the quotes splits one such path into
+# two arguments, dropping keychains out of the search list. See build-ios.sh.
+SEARCH_LIST=()
+while IFS= read -r keychain_line; do
+  keychain_line="${keychain_line#"${keychain_line%%[![:space:]]*}"}"
+  keychain_line="${keychain_line%\"}"
+  keychain_line="${keychain_line#\"}"
+  if [ -n "$keychain_line" ]; then
+    SEARCH_LIST+=("$keychain_line")
+  fi
+done < <(security list-keychains -d user)
+security list-keychains -d user -s "$KEYCHAIN" ${SEARCH_LIST+"${SEARCH_LIST[@]}"}
 
 if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Distribution"; then
   echo "the .p12 did not yield a usable distribution identity" >&2
@@ -86,8 +98,12 @@ PROFILE_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
 mkdir -p "$PROFILE_DIR"
 for profile in "${PROFILES[@]}"; do
   uuid=$(security cms -D -i "$profile" | plutil -extract UUID raw -)
-  cp "$profile" "$PROFILE_DIR/$uuid.provisionprofile"
-  INSTALLED_PROFILES+=("$PROFILE_DIR/$uuid.provisionprofile")
+  destination="$PROFILE_DIR/$uuid.provisionprofile"
+  # Only clean up what this build put there — see build-ios.sh.
+  if [ ! -e "$destination" ]; then
+    INSTALLED_PROFILES+=("$destination")
+  fi
+  cp "$profile" "$destination"
   echo "    $(basename "$profile") -> $uuid"
 done
 

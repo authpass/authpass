@@ -77,7 +77,24 @@ security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DISTRIBUTION_P12_PASSWORD" \
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
 # Prepend rather than replace: the login keychain still holds what other tools
 # expect, and xcodebuild searches the whole list.
-security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+#
+# Parsed a line at a time rather than `tr -d '"'` on the lot: the output is
+# quote-delimited exactly so a keychain path may contain a space, and stripping
+# the quotes hands the shell two arguments where there was one — which drops
+# every keychain after the space out of the search list. No restore afterwards;
+# `security delete-keychain` removes it from the list too, and a snapshot and
+# restore would be worse than nothing, since a concurrent build prepending in
+# between would be restored out of existence.
+SEARCH_LIST=()
+while IFS= read -r keychain_line; do
+  keychain_line="${keychain_line#"${keychain_line%%[![:space:]]*}"}"
+  keychain_line="${keychain_line%\"}"
+  keychain_line="${keychain_line#\"}"
+  if [ -n "$keychain_line" ]; then
+    SEARCH_LIST+=("$keychain_line")
+  fi
+done < <(security list-keychains -d user)
+security list-keychains -d user -s "$KEYCHAIN" ${SEARCH_LIST+"${SEARCH_LIST[@]}"}
 
 if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Distribution"; then
   echo "the .p12 did not yield a usable distribution identity" >&2
@@ -90,8 +107,14 @@ mkdir -p "$PROFILE_DIR"
 for profile in "${PROFILES[@]}"; do
   # Xcode finds a profile by the uuid in its filename, not by its path.
   uuid=$(security cms -D -i "$profile" | plutil -extract UUID raw -)
-  cp "$profile" "$PROFILE_DIR/$uuid.mobileprovision"
-  INSTALLED_PROFILES+=("$PROFILE_DIR/$uuid.mobileprovision")
+  destination="$PROFILE_DIR/$uuid.mobileprovision"
+  # Only clean up what this build put there. The same uuid may already be
+  # installed because Xcode downloaded it, and on a developer machine removing
+  # that on exit takes away something the build did not provide.
+  if [ ! -e "$destination" ]; then
+    INSTALLED_PROFILES+=("$destination")
+  fi
+  cp "$profile" "$destination"
   echo "    $(basename "$profile") -> $uuid"
 done
 
