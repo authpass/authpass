@@ -7,8 +7,8 @@
 # the same `upload_to_play_store` with the listing switched off. Metadata is
 # opt-in here (`--metadata`), so the pile of skip_upload_* flags is gone.
 #
-# The credential is the Play service account in secrets/release.yaml — cux_ship
-# takes it as JSON in the environment rather than as a path.
+# The credential is the Play service account in secrets/release.yaml, which
+# cux_ship writes to a file and names in GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH.
 
 set -euo pipefail
 
@@ -49,9 +49,11 @@ esac
 #
 #   cux_ship secrets exec --keystore upload -- _tools/upload-android.sh
 #
-# As a value rather than a path: cux_ship's Play client reads the JSON itself,
-# so nothing has to be written to disk for this one.
-: "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:?run this under 'cux_ship secrets exec'}"
+# A path, like every other credential. It used to be the JSON itself, which is
+# how this key reached four public CI logs — anything that echoes its
+# environment prints what a variable holds, and an xcode script build phase
+# does exactly that. Needs cux_ship 2.0.0.
+: "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH:?run this under 'cux_ship secrets exec'}"
 
 VERSION=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version: *//' | cut -d+ -f1)
 

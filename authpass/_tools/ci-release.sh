@@ -41,7 +41,11 @@ export PATH=${DEPS}/flutter/bin:$PATH
 # escape through anything that echoes its environment, and a secret passed as a
 # path cannot.
 if test "$target_platform" == "ios" || test "$target_platform" == "macos" ; then
-    unset GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
+    # Since cux_ship 2.0.0 this is a path rather than the key itself, so what
+    # an echoed environment would leak is a filename in a directory that no
+    # longer exists. Still unset, because an apple build has no business
+    # holding it at all — but the leak it was written for cannot recur.
+    unset GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH
     unset ANDROID_KEYSTORE_PATH ANDROID_KEYSTORE_PASSWORD
     unset ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD
 fi
