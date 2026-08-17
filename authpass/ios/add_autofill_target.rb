@@ -65,6 +65,12 @@ existing.each do |target|
     configuration_list.build_configurations.each(&:remove_from_project)
     configuration_list.remove_from_project
   end
+  # Same story for the product reference: removing the target leaves its
+  # `AuthPassAutofill.appex` row in the Products group, so each re-run adds
+  # another one beside it. Harmless to the build, but they accumulate — the
+  # committed project had eleven.
+  product = target.product_reference
+  product&.remove_from_project
   target.remove_from_project
 end
 project.main_group.children

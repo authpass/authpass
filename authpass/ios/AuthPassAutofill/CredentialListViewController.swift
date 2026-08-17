@@ -55,7 +55,7 @@ final class CredentialListViewController: UITableViewController {
 
   private func load() async {
     do {
-      let vaults = try AutofillVaultStore.vaults()
+      let vaults = try await AutofillVaultStore.vaults()
       guard !vaults.isEmpty else {
         // Either nothing is enabled for autofill, or every cached key went
         // stale. Both are fixed in the app, not here.
@@ -77,6 +77,10 @@ final class CredentialListViewController: UITableViewController {
       }
       message = nil
       tableView.reloadData()
+    } catch AutofillVaultStore.StoreError.cancelled {
+      // Not a failure. The user declined Face ID, and telling them something
+      // went wrong when they chose this would be both wrong and alarming.
+      show(message: "Unlock AuthPass to see your entries.")
     } catch {
       logger.error("lookup failed: \(String(describing: error), privacy: .public)")
       show(message: "AuthPass could not read your databases.")

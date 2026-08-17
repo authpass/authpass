@@ -235,10 +235,11 @@ class AutofillMirror {
 
   /// The keychain item every cached key lives in.
   ///
-  /// Biometry bound and `WhenPasscodeSetThisDeviceOnly`, so a key never leaves
-  /// this device and never survives a change to the enrolled biometrics. It is
-  /// only as powerful as the vault revision it belongs to — the next save
-  /// rotates the kdf salt and strands it.
+  /// `biometryCurrentSet` and `WhenPasscodeSetThisDeviceOnly` — the default
+  /// `darwinBiometricOnly` in `biometric_storage`, taken deliberately. So a key
+  /// never leaves this device, cannot be reached with the passcode, and does
+  /// not survive re-enrolling Face ID. It is also only as powerful as the vault
+  /// revision it belongs to: the next save rotates the kdf salt and strands it.
   /// Not [_sanitize]d, deliberately: a `kSecAttrAccount` is an arbitrary
   /// string with no path to traverse, and the extension recovers the uuid by
   /// stripping the prefix — so it has to be the same uuid the manifest holds.

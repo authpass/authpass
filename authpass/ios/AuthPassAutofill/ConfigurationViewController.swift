@@ -62,10 +62,15 @@ final class ConfigurationViewController: UIViewController {
   /// if the container is unreachable or a key is missing, this screen says so
   /// at the moment the user is looking, instead of the failure surfacing later
   /// as an empty password list in Safari with no explanation.
+  ///
+  /// Prompt-free, though. This asks which vaults have a key, not what the keys
+  /// are, and that question is answerable from keychain *attributes* without
+  /// decrypting anything. Opening a settings screen is not a moment to demand
+  /// Face ID.
   private func describeState() {
-    let vaults: [AutofillVaultStore.Vault]
+    let statuses: [AutofillVaultStore.VaultStatus]
     do {
-      vaults = try AutofillVaultStore.vaults()
+      statuses = try AutofillVaultStore.statuses()
     } catch AutofillVaultStore.StoreError.noVaults {
       // No manifest at all, which is what "nothing has been enabled yet" looks
       // like — not a failure, and the state every user starts in.
@@ -89,7 +94,8 @@ final class ConfigurationViewController: UIViewController {
       return
     }
 
-    guard !vaults.isEmpty else {
+    let ready = statuses.filter { $0.hasKey }
+    guard !ready.isEmpty else {
       // The manifest listed databases but none had a usable key: either the
       // app has not cached one yet, or every one of them went stale when the
       // database was saved somewhere else.
@@ -100,10 +106,10 @@ final class ConfigurationViewController: UIViewController {
       return
     }
 
-    add(title: vaults.count == 1 ? "1 database ready" : "\(vaults.count) databases ready",
+    add(title: ready.count == 1 ? "1 database ready" : "\(ready.count) databases ready",
         body: "AuthPass will offer entries from these when an app or website "
           + "asks for a password.")
-    for vault in vaults {
+    for vault in ready {
       add(row: vault.name)
     }
   }

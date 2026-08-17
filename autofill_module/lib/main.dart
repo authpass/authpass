@@ -265,10 +265,17 @@ class AutofillVaultService {
     // Ranked across every vault at once. Ranking per vault and concatenating
     // would put a weak match from the first database above an exact one from
     // the second.
+    // Deleted entries are skipped here as well as in the app's identity
+    // publishing, and both are needed: the QuickType bar is built from what the
+    // app registered, but opening the picker directly goes through this path
+    // and never consults it. Filtering only there left the bin reachable by the
+    // keyboard's key icon.
     final candidates = [
       for (final vault in _files.entries)
         for (final entry in vault.value.file.body.rootGroup.getAllEntries())
-          _Candidate(vault.key, vault.value.name, entry),
+          if (!entry.isInRecycleBin()) ...[
+            _Candidate(vault.key, vault.value.name, entry),
+          ],
     ];
 
     final ranked = _matcher.rank(
