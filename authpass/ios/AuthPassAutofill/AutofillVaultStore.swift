@@ -1,5 +1,6 @@
 import Flutter
 import Foundation
+import LocalAuthentication
 import os
 
 /// Everything the extension can see of the app: the manifest and mirrored
@@ -19,7 +20,8 @@ enum AutofillVaultStore {
   /// under. Both have to match the plugin exactly or the lookup silently finds
   /// nothing — see deps/biometric_storage BiometricStorageImpl.baseQuery.
   private static let keychainService = "flutter_biometric_storage"
-  private static let keychainAccount = "AutofillTransformedKeys"
+  /// One item per file, named `<prefix><file uuid>` — see AutofillMirror.
+  private static let keychainAccountPrefix = "AutofillTransformedKeys_"
 
   private static let logger = Logger(
     subsystem: "design.codeux.authpass", category: "autofill")
@@ -109,37 +111,63 @@ enum AutofillVaultStore {
     let kdfFingerprint: String
   }
 
-  /// Every cached key, by file uuid. Empty when the item is absent, which is
-  /// the normal state before the user enables autofill for anything.
+  /// Every cached key, by file uuid. Empty when there are none, which is the
+  /// normal state before the user enables autofill for anything.
   ///
-  /// No `LAContext` and no prompt: the item is biometry bound, so the system
-  /// puts up its own Face ID sheet when this runs. That is deliberate — the
-  /// user is unlocking their vault, and it happens once per invocation.
+  /// One item per file, so this is a single `kSecMatchLimitAll` query rather
+  /// than one lookup per vault. The app writes them individually — that is what
+  /// keeps *it* from prompting on every save — and the uuid is the part of
+  /// `kSecAttrAccount` after the prefix.
+  ///
+  /// The shared `LAContext` is what holds this to one Face ID sheet. Each item
+  /// is guarded by `.userPresence`, so without a context to authenticate into,
+  /// decrypting N items asks N times. With one, the first evaluation satisfies
+  /// the rest.
   private static func cachedKeys() -> [String: CachedKey] {
-    var query: [String: Any] = [
+    let context = LAContext()
+    context.touchIDAuthenticationAllowableReuseDuration =
+      LATouchIDAuthenticationMaximumAllowableReuseDuration
+    context.localizedReason = "Unlock AuthPass to fill a password"
+
+    let query: [String: Any] = [
       kSecClass as String: kSecClassGenericPassword,
       kSecAttrService as String: keychainService,
-      kSecAttrAccount as String: keychainAccount,
       kSecAttrAccessGroup as String: appGroupIdentifier,
       kSecReturnData as String: true,
-      kSecMatchLimit as String: kSecMatchLimitOne,
+      kSecReturnAttributes as String: true,
+      kSecMatchLimit as String: kSecMatchLimitAll,
+      kSecUseAuthenticationContext as String: context,
     ]
-    query[kSecUseOperationPrompt as String] = "Unlock AuthPass to fill a password"
 
     var item: CFTypeRef?
     let status = SecItemCopyMatching(query as CFDictionary, &item)
-    guard status == errSecSuccess, let data = item as? Data else {
+    guard status == errSecSuccess, let entries = item as? [[String: Any]] else {
       if status != errSecItemNotFound {
         logger.error("keychain read failed: \(status, privacy: .public)")
       }
       return [:]
     }
-    do {
-      return try JSONDecoder().decode([String: CachedKey].self, from: data)
-    } catch {
-      logger.error("cached key store is not readable: \(error, privacy: .public)")
-      return [:]
+
+    var keys: [String: CachedKey] = [:]
+    for entry in entries {
+      guard let account = entry[kSecAttrAccount as String] as? String,
+        account.hasPrefix(keychainAccountPrefix),
+        let data = entry[kSecValueData as String] as? Data
+      else {
+        // Other items live under the same service — biometric_storage is also
+        // what quick-unlock uses — so anything without our prefix is not ours.
+        continue
+      }
+      let fileUuid = String(account.dropFirst(keychainAccountPrefix.count))
+      do {
+        keys[fileUuid] = try JSONDecoder().decode(CachedKey.self, from: data)
+      } catch {
+        logger.error(
+          "cached key for \(fileUuid, privacy: .public) is not readable: "
+            + "\(error, privacy: .public)")
+      }
     }
+    return keys
   }
 
   // MARK: - the manifest, as the app writes it

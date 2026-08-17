@@ -40,9 +40,20 @@ class AutofillMirror {
   final PathProviderFoundation _pathProvider;
   final BiometricStorage _biometricStorage;
 
-  /// Name of the keychain item holding every cached transformed key.
+  /// Prefix of the keychain item holding one file's cached transformed key.
+  ///
+  /// One item per file, rather than one item holding a map of them all. The map
+  /// cost two Face ID prompts per file per save: [_storeKey] had to read the
+  /// existing map before it could add to it, and the write then found the item
+  /// already present and fell through to `SecItemUpdate`, which evaluates the
+  /// access control again. Three open databases meant six prompts on every
+  /// save.
+  ///
+  /// With one item per file the app never reads this keychain at all — it
+  /// deletes and adds, and neither of those requires user presence. Only the
+  /// extension reads, which is where a prompt belongs.
   @NonNls
-  static const _keyStoreName = 'AutofillTransformedKeys';
+  static const _keyStorePrefix = 'AutofillTransformedKeys_';
 
   @NonNls
   static const _vaultsDirName = 'vaults';
@@ -162,15 +173,21 @@ class AutofillMirror {
       return;
     }
     try {
+      // The manifest names every file with a cached key, so it has to be read
+      // before it is deleted — with one keychain item per file there is no
+      // single item to drop, and an orphaned key would outlive its vault.
+      final manifest = await readManifest();
+      for (final entry in manifest.entries) {
+        await _removeKey(entry.fileUuid);
+      }
       final vaults = Directory('${dir.path}/$_vaultsDirName');
       if (vaults.existsSync()) {
         await vaults.delete(recursive: true);
       }
-      final manifest = File('${dir.path}/${AutofillManifest.fileName}');
-      if (manifest.existsSync()) {
-        await manifest.delete();
+      final manifestFile = File('${dir.path}/${AutofillManifest.fileName}');
+      if (manifestFile.existsSync()) {
+        await manifestFile.delete();
       }
-      await (await _keyStore()).delete();
     } catch (e, stackTrace) {
       _logger.warning('Unable to clear the autofill mirror.', e, stackTrace);
     }
@@ -218,54 +235,48 @@ class AutofillMirror {
   /// this device and never survives a change to the enrolled biometrics. It is
   /// only as powerful as the vault revision it belongs to — the next save
   /// rotates the kdf salt and strands it.
-  Future<BiometricStorageFile> _keyStore() => _biometricStorage.getStorage(
-    _keyStoreName,
-    options: StorageFileInitOptions(
-      darwinKeychainAccessGroup: appGroupIdentifier,
-    ),
-  );
+  /// Not [_sanitize]d, deliberately: a `kSecAttrAccount` is an arbitrary
+  /// string with no path to traverse, and the extension recovers the uuid by
+  /// stripping the prefix — so it has to be the same uuid the manifest holds.
+  Future<BiometricStorageFile> _keyStore(String fileUuid) =>
+      _biometricStorage.getStorage(
+        '$_keyStorePrefix$fileUuid',
+        options: StorageFileInitOptions(
+          darwinKeychainAccessGroup: appGroupIdentifier,
+        ),
+      );
 
+  /// Caches one file's transformed key, without ever reading the keychain.
+  ///
+  /// Deleting first is what keeps this prompt-free. `SecItemAdd` on an absent
+  /// item needs no user presence, but on a present one it returns
+  /// `errSecDuplicateItem` and `biometric_storage` retries as `SecItemUpdate`
+  /// — and updating an item guarded by `.userPresence` puts up Face ID. So the
+  /// old item goes before the new one arrives.
   Future<void> _storeKey(
     String fileUuid,
     TransformedKeyCredentials credentials,
   ) async {
-    final store = await _keyStore();
-    final keys = await _readKeys(store);
-    keys[fileUuid] = {
-      'transformedKey': base64.encode(credentials.transformedKey), // NON-NLS
-      'kdfFingerprint': credentials.kdfFingerprint, // NON-NLS
-    };
-    await store.write(json.encode(keys));
+    final store = await _keyStore(fileUuid);
+    await _deleteQuietly(store);
+    await store.write(
+      json.encode({
+        'transformedKey': base64.encode(credentials.transformedKey), // NON-NLS
+        'kdfFingerprint': credentials.kdfFingerprint, // NON-NLS
+      }),
+    );
   }
 
-  Future<void> _removeKey(String fileUuid) async {
-    final store = await _keyStore();
-    final keys = await _readKeys(store);
-    if (keys.remove(fileUuid) == null) {
-      return;
-    }
-    if (keys.isEmpty) {
-      await store.delete();
-    } else {
-      await store.write(json.encode(keys));
-    }
-  }
+  Future<void> _removeKey(String fileUuid) async =>
+      _deleteQuietly(await _keyStore(fileUuid));
 
-  Future<Map<String, Object?>> _readKeys(BiometricStorageFile store) async {
-    final content = await store.read();
-    if (content == null) {
-      return {};
-    }
+  /// `delete` throws when the item is not there, which is a normal state here
+  /// — nothing has been cached for this file yet, or it was already removed.
+  Future<void> _deleteQuietly(BiometricStorageFile store) async {
     try {
-      return (json.decode(content) as Map<Object?, Object?>)
-          .cast<String, Object?>();
-    } catch (e, stackTrace) {
-      _logger.warning(
-        'Corrupt autofill key store, starting over.',
-        e,
-        stackTrace,
-      );
-      return {};
+      await store.delete();
+    } catch (e) {
+      _logger.finest('Nothing to delete from the autofill key store.', e);
     }
   }
 
