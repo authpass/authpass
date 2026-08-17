@@ -32,7 +32,18 @@ ls ${DEPS}/flutter || echo "Flutter not found"
 $FLT --version
 
 if ! test -e ./git-buildnumber.sh ; then
-    curl -s -O https://raw.githubusercontent.com/hpoul/git-buildnumber/stable/git-buildnumber.sh
+    # --fail matters more than it looks. Without it curl writes the *error body*
+    # to the file, and the next two lines chmod +x it and run it — so a bad day
+    # at raw.githubusercontent.com becomes an executable HTML page. That is not
+    # hypothetical: on 2026-08-17 a 429 during a GitHub outage produced
+    #
+    #     ./git-buildnumber.sh: line 1: 429:: command not found
+    #
+    # and the build number came back empty. --retry covers the transient
+    # statuses (408, 429, 5xx) so the outage is survived rather than merely
+    # reported, and -S keeps the reason visible when it is not.
+    curl -sS --fail --retry 5 --retry-delay 5 \
+        -O https://raw.githubusercontent.com/hpoul/git-buildnumber/stable/git-buildnumber.sh
     chmod +x git-buildnumber.sh
 fi
 
@@ -65,7 +76,21 @@ does_phase() { test "${RELEASE_PHASE}" = all -o "${RELEASE_PHASE}" = "$1" ; }
 buildnumber_record=build/release-buildnumber.txt
 
 buildnumber=${FORCE_BUILDNUMBER:-}
-if test -z "$buildnumber" && test "${RELEASE_PHASE}" = upload && test -f "${buildnumber_record}" ; then
+if test -z "$buildnumber" && test "${RELEASE_PHASE}" = upload ; then
+    # The upload phase never allocates. If the record is missing the build step
+    # did not get far enough to write one, and falling through to `generate`
+    # below would claim a *second* number — shipping an artifact whose
+    # CFBundleVersion is not the one Apple was told about. That is the failure
+    # this record exists to prevent, so refuse rather than paper over it.
+    #
+    # Refusing here also keeps the error legible: ci-release.sh leaves
+    # GITHUB_DEPLOY_KEY_PATH unset for this phase, precisely because nothing
+    # here pushes, so reaching `generate` would fail inside git with an empty
+    # `ssh -i` rather than saying what is actually wrong.
+    if ! test -f "${buildnumber_record}" ; then
+        echo "no ${buildnumber_record} — run RELEASE_PHASE=build first, or set FORCE_BUILDNUMBER" >&2
+        exit 1
+    fi
     buildnumber=$(cat "${buildnumber_record}")
     echo "reusing build number ${buildnumber} from the build step"
 fi
