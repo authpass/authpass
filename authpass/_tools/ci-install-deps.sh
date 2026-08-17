@@ -36,7 +36,7 @@ DEPS=${DEPS} _tools/ship.sh deps install
 #
 # Skipped when there is no key, so a fork's pull request still builds what it
 # can rather than failing here.
-if [ -n "${SOPS_AGE_KEY:-}" ]; then
+if [ -n "${SOPS_AGE_KEY:+set}" ]; then
   echo "==> placing the source files that carry secrets"
   DEPS=${DEPS} _tools/ship.sh secrets place
 else

@@ -22,11 +22,20 @@ upload_file="$1"
 # page is generated from these names.
 remote_name="${2:-$( basename "${upload_file}" )}"
 
-: "${ARTIFACT_TOKEN:?run this under 'cux_ship secrets exec'}"
 test -f "$upload_file"
 
 set +x
 set -v
+
+# Checked *after* `set +x`, and without expanding the value. Under xtrace bash
+# prints a command after expansion, so `: "${ARTIFACT_TOKEN:?...}"` above this
+# line printed the token itself into the log — and these logs are public. That
+# is how the token rotated this morning was public again by lunchtime. `:+set`
+# expands to the word "set" or to nothing, never to the secret.
+if [ -z "${ARTIFACT_TOKEN:+set}" ]; then
+  echo "ARTIFACT_TOKEN is not set — run this under 'cux_ship secrets exec'" >&2
+  exit 1
+fi
 
 token="${ARTIFACT_TOKEN}"
 

@@ -28,7 +28,10 @@ echo "::set-output name=total_annotations::${total_annotations}"
 # From the environment, via `cux_ship secrets exec`. Absent on a fork's pull
 # request, where there is no key to decrypt it — so this stays optional rather
 # than failing a build that has nothing to push with.
-if test -n "${ARTIFACT_TOKEN:-}"; then
+# `:+set` rather than `:-`, and xtrace off before the value is used: this runs
+# under `set -x`, which prints commands after expansion.
+if test -n "${ARTIFACT_TOKEN:+set}"; then
+  set +x
   curl --request POST \
     --url https://data.authpass.app/data/artifact.push \
     --fail \
