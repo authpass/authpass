@@ -118,7 +118,7 @@ echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 # not exec: the trap above still has a temp file to clean up
 cd _tools/cux_ship
 dart run cux_ship --yes appstore upload \
-  --ipa "../../$IPA" \
+  --artifact "../../$IPA" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \

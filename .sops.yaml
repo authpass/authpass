@@ -18,7 +18,7 @@
 creation_rules:
   - path_regex: ^secrets/.*\.yaml$
     # `path`, `env` and `kind` are metadata, not credentials, and have to be
-    # readable with no identity at all: `cux_ship secrets keys` reports what a
+    # readable with no identity at all: `cux_ship secrets list` reports what a
     # file holds without decrypting it, and `secrets place` checks a path
     # against the repository — is it ignored, is it tracked, does it leave the
     # tree — before writing a byte. Encrypt those and both checks can only run

@@ -103,7 +103,7 @@ echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 cd _tools/cux_ship
 dart run cux_ship --yes appstore upload \
   --platform macos \
-  --ipa "../../$PKG" \
+  --artifact "../../$PKG" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \
