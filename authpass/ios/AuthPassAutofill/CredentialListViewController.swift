@@ -81,11 +81,13 @@ final class CredentialListViewController: UITableViewController {
       // Not a failure. The user declined Face ID, and telling them something
       // went wrong when they chose this would be both wrong and alarming.
       show(message: "Unlock AuthPass to see your entries.")
-    } catch AutofillVaultStore.StoreError.biometryLockout {
+    } catch AutofillVaultStore.StoreError.biometryLockout(let biometry) {
       // Recoverable, and the recovery is somewhere this screen cannot reach —
-      // so say where it is rather than describing the symptom.
-      show(message: "Face ID is locked. Unlock your iPhone with your passcode "
-        + "once, then try again.")
+      // so say where it is rather than describing the symptom. Both nouns come
+      // from the device rather than from an assumption about it: this runs on
+      // Touch ID iPhones and on iPads.
+      show(message: "\(biometry) is locked. Unlock your \(deviceNoun) with "
+        + "your passcode once, then try again.")
     } catch AutofillVaultStore.StoreError.biometryNotEnrolled {
       show(message: "AutoFill needs Face ID or Touch ID, which is not set up "
         + "on this device.")
@@ -93,6 +95,11 @@ final class CredentialListViewController: UITableViewController {
       logger.error("lookup failed: \(String(describing: error), privacy: .public)")
       show(message: "AuthPass could not read your databases.")
     }
+  }
+
+  /// What to call the thing the user is holding.
+  private var deviceNoun: String {
+    UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
   }
 
   private func show(message: String) {

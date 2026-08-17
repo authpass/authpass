@@ -56,10 +56,13 @@ enum AutofillVaultStore {
     /// error because it is not a fault: the right response is to say nothing
     /// went wrong, rather than "AuthPass could not read your databases".
     case cancelled
-    /// Face ID is locked out after too many failures. Separate because the user
-    /// can fix it — one passcode unlock at the system level — and a message
-    /// blaming the databases sends them to look in the wrong place.
-    case biometryLockout
+    /// Biometry is locked out after too many failures. Separate because the
+    /// user can fix it — one passcode unlock at the system level — and a
+    /// message blaming the databases sends them to look in the wrong place.
+    ///
+    /// Carries the biometry's own name, because the message says it out loud
+    /// and this extension runs on Touch ID hardware too.
+    case biometryLockout(String)
     /// No biometrics enrolled, so the cached keys are unreachable on this
     /// device. Also fixable, and also not about the databases.
     case biometryNotEnrolled
@@ -179,7 +182,7 @@ enum AutofillVaultStore {
       case .userCancel, .userFallback, .appCancel, .systemCancel:
         throw StoreError.cancelled
       case .biometryLockout:
-        throw StoreError.biometryLockout
+        throw StoreError.biometryLockout(biometryName(context))
       case .biometryNotEnrolled, .biometryNotAvailable:
         throw StoreError.biometryNotEnrolled
       default:
@@ -226,6 +229,23 @@ enum AutofillVaultStore {
       }
     }
     return keys
+  }
+
+  /// What this device calls its biometry, for a message that says it out loud.
+  ///
+  /// `biometryType` is only populated once `canEvaluatePolicy` has been called
+  /// on the context, so it is called here rather than trusted to have run —
+  /// the lockout path arrives from a *failed* evaluation, and reading the
+  /// property off an untouched context returns `.none` and would name nothing.
+  private static func biometryName(_ context: LAContext) -> String {
+    _ = context.canEvaluatePolicy(
+      .deviceOwnerAuthenticationWithBiometrics, error: nil)
+    switch context.biometryType {
+    case .faceID: return "Face ID"
+    case .touchID: return "Touch ID"
+    case .opticID: return "Optic ID"
+    default: return "Biometric authentication"
+    }
   }
 
   /// Which file uuids have a cached key, without reading one.
