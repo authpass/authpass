@@ -56,6 +56,13 @@ enum AutofillVaultStore {
     /// error because it is not a fault: the right response is to say nothing
     /// went wrong, rather than "AuthPass could not read your databases".
     case cancelled
+    /// Face ID is locked out after too many failures. Separate because the user
+    /// can fix it — one passcode unlock at the system level — and a message
+    /// blaming the databases sends them to look in the wrong place.
+    case biometryLockout
+    /// No biometrics enrolled, so the cached keys are unreachable on this
+    /// device. Also fixable, and also not about the databases.
+    case biometryNotEnrolled
   }
 
   /// One manifest entry plus whether a key for it exists — established without
@@ -167,11 +174,17 @@ enum AutofillVaultStore {
       try await context.evaluatePolicy(
         .deviceOwnerAuthenticationWithBiometrics,
         localizedReason: "Unlock AuthPass to fill a password")
-    } catch let error as LAError where error.code == .userCancel
-      || error.code == .userFallback || error.code == .appCancel
-      || error.code == .systemCancel
-    {
-      throw StoreError.cancelled
+    } catch let error as LAError {
+      switch error.code {
+      case .userCancel, .userFallback, .appCancel, .systemCancel:
+        throw StoreError.cancelled
+      case .biometryLockout:
+        throw StoreError.biometryLockout
+      case .biometryNotEnrolled, .biometryNotAvailable:
+        throw StoreError.biometryNotEnrolled
+      default:
+        throw error
+      }
     }
 
     let query: [String: Any] = [
