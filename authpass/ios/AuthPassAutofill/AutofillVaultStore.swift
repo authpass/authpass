@@ -163,8 +163,8 @@ enum AutofillVaultStore {
         keys[fileUuid] = try JSONDecoder().decode(CachedKey.self, from: data)
       } catch {
         logger.error(
-          "cached key for \(fileUuid, privacy: .public) is not readable: "
-            + "\(error, privacy: .public)")
+          "cached key for \(fileUuid, privacy: .public) is not readable: \(error, privacy: .public)"
+        )
       }
     }
     return keys

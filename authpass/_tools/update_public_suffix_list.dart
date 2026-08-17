@@ -14,7 +14,7 @@
 import 'dart:io';
 
 const _sourceUrl = 'https://publicsuffix.org/list/public_suffix_list.dat';
-const _outputPath = '../credential_matcher/lib/src/public_suffix_list.g.dart';
+const _outputPath = '../autofill_shared/lib/src/public_suffix_list.g.dart';
 
 Future<void> main() async {
   if (!File('pubspec.yaml').existsSync()) {

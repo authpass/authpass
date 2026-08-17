@@ -554,10 +554,19 @@ class KdbxBloc {
   /// that was deleted, or a vault that was switched off, has to stop being
   /// offered. Cheap: names and usernames only, no decryption beyond what is
   /// already in memory.
+  /// Only what the mirror actually holds is advertised. Being enabled and open
+  /// is not enough — mirroring can fail, quietly and by design, and a
+  /// suggestion for a vault the extension has no copy of goes nowhere when the
+  /// user taps it. The manifest is the extension's own view, so intersecting
+  /// with it is what keeps the two stores from disagreeing.
   Future<void> _publishAutofillIdentities() async {
+    final mirrored = (await autofillMirror.readManifest()).entries
+        .map((e) => e.fileUuid)
+        .toSet();
     final enabled = <String, KdbxFile>{
       for (final file in _openedFiles.value.values)
-        if (file.openedFile.autofillEnabledOrDefault)
+        if (file.openedFile.autofillEnabledOrDefault &&
+            mirrored.contains(file.openedFile.uuid))
           file.openedFile.uuid: file.kdbxFile,
     };
     await autofillIdentities.publish(enabled);

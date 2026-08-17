@@ -293,7 +293,12 @@ app_target.build_phases.insert(
   app_target.build_phases.index(app_target.resources_build_phase) + 1,
   embed_phase
 )
-appex = embed_phase.add_file_reference(target.product_reference)
+# Reusing an existing phase means this can already hold the appex — the script
+# is meant to be re-runnable, and add_file_reference appends unconditionally, so
+# without this a second run embeds the extension twice and the build fails on
+# duplicate output.
+appex = embed_phase.files.find { |f| f.file_ref == target.product_reference }
+appex ||= embed_phase.add_file_reference(target.product_reference)
 appex.settings = { 'ATTRIBUTES' => ['RemoveHeadersOnCopy'] }
 
 project.save
