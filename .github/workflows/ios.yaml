@@ -54,9 +54,18 @@ jobs:
       # the upload nesting `secrets exec` inside this child to get its key. That
       # cost the guarantee above: a child that can decrypt the secrets file
       # holds the means to mint the App Store key the archive is meant not to
-      # have. As separate steps the build never decrypts, so nothing here needs
-      # the sops identity to survive into xcodebuild — and a failed upload is
-      # retried without rebuilding.
+      # have. As separate steps the build never decrypts — and a failed upload
+      # is retried without rebuilding.
+      #
+      # That said: the split is what *permits* the sops identity to be kept out
+      # of xcodebuild, and does not by itself do it. SOPS_AGE_KEY is still set
+      # on this step — `keychain exec` needs it to decrypt the certificates —
+      # and cux_ship 2.3.x passes it to the child. Run 32049052318 has
+      # `export SOPS_AGE_KEY` in xcodebuild's script-phase environment dump,
+      # masked to *** because it is a registered secret, so nothing leaked; but
+      # the build *can* decrypt today, and merely has no reason to. cux_ship
+      # 3.0.0 strips it from the child unconditionally, and that is what turns
+      # the paragraph above from an argument into a guarantee.
       - name: 'build ${{ matrix.platform }}'
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
