@@ -42,19 +42,38 @@ jobs:
       #
       # `keychain exec` rather than `secrets exec`: it imports the certificate
       # into a keychain that dies with the step, installs the named profiles,
-      # and — the reason it is the outer wrapper — places no App Store Connect
+      # and — the reason it is the wrapper — places no App Store Connect
       # credential in the environment at all. The archive therefore cannot hold
-      # a key that could create or revoke signing material. _tools/release.sh
-      # asks for one around the upload alone.
+      # a key that could create or revoke signing material.
       #
       # Profiles are named because naming them is what makes an expired one
       # fatal here rather than a signing failure twenty minutes in. All four,
       # because this one step covers both platforms.
-      - name: 'ci-release ${{ matrix.platform }}'
+      #
+      # **Build and upload are two steps, not one.** They used to be one, with
+      # the upload nesting `secrets exec` inside this child to get its key. That
+      # cost the guarantee above: a child that can decrypt the secrets file
+      # holds the means to mint the App Store key the archive is meant not to
+      # have. As separate steps the build never decrypts, so nothing here needs
+      # the sops identity to survive into xcodebuild — and a failed upload is
+      # retried without rebuilding.
+      - name: 'build ${{ matrix.platform }}'
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+          RELEASE_PHASE: build
         run: >-
           ./authpass/_tools/ship.sh keychain exec
           --profile ios_appstore --profile ios_appstore_autofill
           --profile macos_appstore --profile macos_developerid --
           ./authpass/_tools/ci-release.sh ${{ matrix.platform }}
+
+      # No keychain: nothing here signs. The build number comes from the file
+      # the build step wrote, because the two must publish the same one and
+      # only the first allocates — `git-buildnumber.sh generate` pushes a ref to
+      # claim it, so calling it twice would upload an artifact whose
+      # CFBundleVersion is not the one Apple was told about.
+      - name: 'upload ${{ matrix.platform }}'
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+          RELEASE_PHASE: upload
+        run: "./authpass/_tools/ci-release.sh ${{ matrix.platform }}"

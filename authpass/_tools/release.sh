@@ -36,7 +36,39 @@ if ! test -e ./git-buildnumber.sh ; then
     chmod +x git-buildnumber.sh
 fi
 
+# Which half of a release this run does. `all` — the default, and what every
+# platform but ios and macos ever uses — is the behaviour this script has always
+# had. The Apple path splits it into two CI steps, for two reasons:
+#
+#   - a failed upload is retried without rebuilding, which is the split
+#     `build.sh`/`upload.sh` already have one level down; and
+#   - the build step then never needs to decrypt anything, so the sops identity
+#     can be kept out of the environment `keychain exec` hands to xcodebuild.
+#     That second one is what makes cux_ship 3.0.0 adoptable here: it strips
+#     SOPS_AGE_KEY from that child unconditionally, and today the upload runs
+#     *inside* that child and would lose the ability to decrypt.
+RELEASE_PHASE=${RELEASE_PHASE:-all}
+case "${RELEASE_PHASE}" in
+    all|build|upload) ;;
+    *) echo "RELEASE_PHASE is '${RELEASE_PHASE}' — expected all, build or upload" >&2 ; exit 1 ;;
+esac
+does_phase() { test "${RELEASE_PHASE}" = all -o "${RELEASE_PHASE}" = "$1" ; }
+
+# The two steps must publish the *same* build number, and only the first one
+# allocates. `git-buildnumber.sh generate` pushes a ref to claim it, so calling
+# it twice would claim two and upload an artifact whose CFBundleVersion is not
+# the one Apple was told about.
+#
+# Carried through the workspace rather than a step output: GitHub disabled
+# `::set-output` in 2023, so the line below that still uses it has been doing
+# nothing for a while.
+buildnumber_record=build/release-buildnumber.txt
+
 buildnumber=${FORCE_BUILDNUMBER:-}
+if test -z "$buildnumber" && test "${RELEASE_PHASE}" = upload && test -f "${buildnumber_record}" ; then
+    buildnumber=$(cat "${buildnumber_record}")
+    echo "reusing build number ${buildnumber} from the build step"
+fi
 if test -z "$buildnumber" ; then
     git --version
     echo "=========="
@@ -61,26 +93,42 @@ else
 fi
 
 echo "::set-output name=appbuildnumber::$buildnumber"
+mkdir -p "$(dirname "${buildnumber_record}")"
+echo "${buildnumber}" > "${buildnumber_record}"
 
 $FLT pub get
 case "${flavor}" in
     ios)
-        # The split is the point. This whole script runs under `keychain exec`
-        # (see .github/workflows/ios.yaml), which places no App Store Connect
-        # credential in the environment — so the archive cannot hold a key that
-        # could create or revoke signing material, rather than merely not using
-        # one. The upload asks for a key itself, because it is the step that
-        # needs it, and it is an individual key scoped to this app.
-        # See docs/apple-signing.md.
-        ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
-        ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
-            -- authpass/_tools/upload-ios.sh
+        # The split is the point, and it is now a split of *steps* rather than
+        # of commands within one. The build runs under `keychain exec`, which
+        # places no App Store Connect credential — so the archive cannot hold a
+        # key that could create or revoke signing material, rather than merely
+        # not using one. The upload is its own step and asks for a key itself,
+        # with an individual key scoped to this app.
+        #
+        # It used to ask by nesting `secrets exec` inside the `keychain exec`
+        # child. That worked, and cost the guarantee its own comment claims:
+        # a child able to decrypt the file holds the means to mint the very key
+        # the archive is meant not to have. As siblings, the build step never
+        # decrypts. See docs/apple-signing.md.
+        if does_phase build ; then
+            ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
+        fi
+        if does_phase upload ; then
+            ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
+                -- authpass/_tools/upload-ios.sh
+        fi
     ;;
     macos)
-        # As for ios: the archive holds no key, the upload asks for one.
-        ./_tools/build-macos.sh -t lib/env/production.dart -b $buildnumber
-        ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
-            -- authpass/_tools/upload-macos.sh
+        # As for ios: the archive holds no key, the upload is a separate step
+        # and asks for one.
+        if does_phase build ; then
+            ./_tools/build-macos.sh -t lib/env/production.dart -b $buildnumber
+        fi
+        if does_phase upload ; then
+            ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
+                -- authpass/_tools/upload-macos.sh
+        fi
     ;;
     samsungapps | huawei | sideload | amazon)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
