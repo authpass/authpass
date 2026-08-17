@@ -46,44 +46,26 @@ ssh-keygen -F gitlab.com > /dev/null || (mkdir -p ~/.ssh && echo "|1|SM9ao9YoaAX
 # Flutter was installed by `install_flutter.sh` in `ci-install-deps.sh`.
 export PATH=${DEPS}/flutter/bin:$PATH
 
-# Anything an apple build cannot need is dropped before xcodebuild sees it.
+# Nothing is dropped here any more, because nothing arrives that has to be.
 #
-# This is not tidiness. An xcode script build phase writes its whole environment
-# into the build log — `export GCC_WARN_...`, and every other variable with it —
-# and a public repository's action logs are public. Every other credential here
-# is a *path*, so what leaks is a filename; the play service account is the one
-# exported as a value, so what leaked was the private key itself. It has been in
-# the logs of every ios and macos release since this script moved under
-# `secrets exec`, which is a leak this line would have prevented.
+# There used to be a ten-line `unset` denylist at this point, and the reason it
+# existed is still worth knowing: an xcode script build phase writes its whole
+# environment into the build log — `export GCC_WARN_...`, and every other
+# variable with it — and a public repository's action logs are public. The play
+# service account was exported as a *value*, so what leaked was the private key
+# itself, in every ios and macos release from the day this script moved under
+# `secrets exec`.
 #
-# The general rule, for whatever is added next: a secret passed as a value can
-# escape through anything that echoes its environment, and a secret passed as a
-# path cannot.
-if test "$target_platform" == "ios" || test "$target_platform" == "macos" ; then
-    # Since cux_ship 2.0.0 this is a path rather than the key itself, so what
-    # an echoed environment would leak is a filename in a directory that no
-    # longer exists. Still unset, because an apple build has no business
-    # holding it at all — but the leak it was written for cannot recur.
-    unset GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH
-    unset ANDROID_KEYSTORE_PATH ANDROID_KEYSTORE_PASSWORD
-    unset ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD
-    # Everything else this build cannot need, because the environment dump
-    # prints *values*: the certificate passwords are consumed by `keychain
-    # exec` before this runs and nothing downstream reads them, and the
-    # artifact and fosshub tokens belong to the platforms that publish
-    # downloads. Verified in build-ios.sh, build-macos.sh, upload-ios.sh,
-    # upload-macos.sh and release.sh: none of them mentions these.
-    unset APPLE_DISTRIBUTION_P12_PASSWORD APPLE_DISTRIBUTION_P12_PATH
-    unset APPLE_DEVELOPER_ID_P12_PASSWORD APPLE_DEVELOPER_ID_P12_PATH
-    unset APPLE_MAC_INSTALLER_P12_PASSWORD APPLE_MAC_INSTALLER_P12_PATH
-    unset ARTIFACT_TOKEN FOSSHUB_TOKEN
-    # This whole block is a denylist, and a denylist is fail-open: the next
-    # credential family added to the secrets file reaches xcodebuild until
-    # somebody remembers to add a line here. cux_ship 3.0.0 replaces it with one
-    # allowlist token on the wrapper — `--only ssh_keys.github_deploy`, which is
-    # all the build actually consumes — and every `unset` above can then go.
-    # Waiting on that release; we are pinned to ^2.3.0 today.
-fi
+# A denylist is fail-open, which is the deeper problem: every credential added
+# to the secrets file reached xcodebuild until somebody remembered a line here.
+# cux_ship 3.0.0 inverts it. `keychain exec` gives its child the keychain and
+# nothing else, so the build step names what it needs — `--only
+# ssh_keys.github_deploy` in .github/workflows/ios.yaml — and a credential
+# nobody asked for is simply absent rather than subtracted.
+#
+# The general rule survives the block that taught it, for whatever is added
+# next: a secret passed as a value can escape through anything that echoes its
+# environment, and a secret passed as a path cannot.
 
 # Build-time only: the upload step neither compiles nor links, so refreshing
 # the CocoaPods spec repo there is minutes of nothing.

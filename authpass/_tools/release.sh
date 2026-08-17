@@ -55,9 +55,10 @@ fi
 #     `build.sh`/`upload.sh` already have one level down; and
 #   - the build step then never needs to decrypt anything, so the sops identity
 #     can be kept out of the environment `keychain exec` hands to xcodebuild.
-#     That second one is what makes cux_ship 3.0.0 adoptable here: it strips
-#     SOPS_AGE_KEY from that child unconditionally, and today the upload runs
-#     *inside* that child and would lose the ability to decrypt.
+#     That second one is what made cux_ship 3.0.0 adoptable here: it strips
+#     SOPS_AGE_KEY from that child unconditionally, and before the split the
+#     upload ran *inside* that child and would have lost the ability to
+#     decrypt. The two now run as siblings, which is what 3.0.0 asks for.
 RELEASE_PHASE=${RELEASE_PHASE:-all}
 case "${RELEASE_PHASE}" in
     all|build|upload) ;;
