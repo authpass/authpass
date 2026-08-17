@@ -48,6 +48,16 @@ if test "$target_platform" == "ios" || test "$target_platform" == "macos" ; then
     unset GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH
     unset ANDROID_KEYSTORE_PATH ANDROID_KEYSTORE_PASSWORD
     unset ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD
+    # Everything else this build cannot need, because the environment dump
+    # prints *values*: the certificate passwords are consumed by `keychain
+    # exec` before this runs and nothing downstream reads them, and the
+    # artifact and fosshub tokens belong to the platforms that publish
+    # downloads. Verified in build-ios.sh, build-macos.sh, upload-ios.sh,
+    # upload-macos.sh and release.sh: none of them mentions these.
+    unset APPLE_DISTRIBUTION_P12_PASSWORD APPLE_DISTRIBUTION_P12_PATH
+    unset APPLE_DEVELOPER_ID_P12_PASSWORD APPLE_DEVELOPER_ID_P12_PATH
+    unset APPLE_MAC_INSTALLER_P12_PASSWORD APPLE_MAC_INSTALLER_P12_PATH
+    unset ARTIFACT_TOKEN FOSSHUB_TOKEN
 fi
 
 if test "$target_platform" == "ios" ; then
