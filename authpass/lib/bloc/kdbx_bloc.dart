@@ -205,7 +205,8 @@ class KdbxOpenedFile {
   final OpenedFile openedFile;
   final KdbxFile kdbxFile;
 
-  /// the file content which was used to originally read the [kdbxFile]
+  /// The file content as the source last saw it: what [kdbxFile] was read
+  /// from, and after that whatever the most recent save wrote.
   final FileContent kdbxFileContent;
 }
 
@@ -562,17 +563,42 @@ class KdbxBloc {
     await autofillIdentities.publish(enabled);
   }
 
+  /// Records what the save put on disk, and refreshes the autofill mirror.
+  ///
   /// Every save rotates the kdf salt, so the mirrored copy and its cached key
   /// both have to be replaced or the extension is left holding a stale key.
+  ///
+  /// [savedContent] then replaces [KdbxOpenedFile.kdbxFileContent], which
+  /// otherwise keeps the bytes the file was *opened* with for as long as it
+  /// stays open. Two things go wrong when it does. [reload] compares fresh
+  /// origin content against it, so after any save it decides the file changed
+  /// and merges against itself. And the autofill opt-in path mirrors it
+  /// verbatim — handing the extension pre-save bytes whose kdf salt the key
+  /// cached alongside them no longer matches, so the copy cannot be opened.
   Future<void> _syncAutofillMirrorAfterSave(
     KdbxFile file,
     Uint8List? writtenBytes,
+    FileContent? savedContent,
   ) async {
-    if (writtenBytes == null) {
+    var openedFile = _openedFilesByKdbxFile[file];
+    if (openedFile == null) {
       return;
     }
-    final openedFile = _openedFilesByKdbxFile[file];
-    if (openedFile == null) {
+    if (savedContent != null) {
+      openedFile = KdbxOpenedFile(
+        fileSource: openedFile.fileSource,
+        openedFile: openedFile.openedFile,
+        kdbxFile: openedFile.kdbxFile,
+        kdbxFileContent: savedContent,
+      );
+      _openedFiles.add(
+        OpenedKdbxFiles({
+          ..._openedFiles.value._files,
+          openedFile.fileSource: openedFile,
+        }),
+      );
+    }
+    if (writtenBytes == null) {
       return;
     }
     await _syncAutofillMirror(openedFile, writtenBytes);
@@ -912,7 +938,7 @@ class KdbxBloc {
         label: 'save',
       );
       await updateQuickUnlock();
-      await _syncAutofillMirrorAfterSave(file, writtenBytes);
+      await _syncAutofillMirrorAfterSave(file, writtenBytes, ret);
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
@@ -933,7 +959,7 @@ class KdbxBloc {
             metadata: content.metadata,
           );
         });
-        await _syncAutofillMirrorAfterSave(file, writtenBytes);
+        await _syncAutofillMirrorAfterSave(file, writtenBytes, ret);
         delegate?.conflictMerged(fileSource, file, mergeResult);
         analytics.events.trackSaveConflict(
           type: fileSource.typeDebug,

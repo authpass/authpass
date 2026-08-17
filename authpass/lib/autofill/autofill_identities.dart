@@ -60,7 +60,22 @@ class AutofillIdentities {
     }
     final identities = <Map<String, String>>[];
     for (final file in filesByUuid.entries) {
+      // A vault the extension cannot open must not be advertised. Only kdbx4
+      // exposes a transformed key, and without one AutofillMirror refuses to
+      // mirror the file — so publishing its entries would offer the user a
+      // suggestion that can only fail once they tap it.
+      if (file.value.transformedKeyCredentials == null) {
+        _logger.fine(
+          'Not publishing identities for ${file.key}: no transformed key.',
+        );
+        continue;
+      }
       for (final entry in file.value.body.rootGroup.getAllEntries()) {
+        // Deleted entries stay in the file until the bin is emptied. Offering
+        // them would resurrect passwords the user believes they threw away.
+        if (entry.isInRecycleBin()) {
+          continue;
+        }
         final user = entry.getString(KdbxKeyCommon.USER_NAME)?.getText() ?? '';
         for (final host in _hostsOf(entry)) {
           identities.add({

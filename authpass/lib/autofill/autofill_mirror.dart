@@ -23,7 +23,7 @@ final _logger = Logger('autofill_mirror');
 /// Read-only from the extension's side in v1, but the layout is meant to carry
 /// a staging file alongside the mirror later, for passkey registration.
 ///
-/// iOS and macOS only; every method is a no-op elsewhere.
+/// iOS only; every method is a no-op elsewhere.
 class AutofillMirror {
   AutofillMirror({
     required this.appGroupIdentifier,
@@ -66,7 +66,11 @@ class AutofillMirror {
     if (_containerCache != null) {
       return _containerCache;
     }
-    if (!Platform.isIOS && !Platform.isMacOS) {
+    // iOS only, deliberately. There is no credential provider extension under
+    // macos/ yet, so mirroring there would write a decrypted copy of every
+    // open vault into a shared container that nothing reads — cost with no
+    // benefit. Lift this when the macOS extension exists.
+    if (!Platform.isIOS) {
       return null;
     }
     final String? path;
