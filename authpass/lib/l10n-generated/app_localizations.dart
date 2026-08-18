@@ -748,6 +748,12 @@ abstract class AppLocalizations {
   /// **'Filter:'**
   String get autofillFilterPrefix;
 
+  /// Label displayed during autofill when the list was narrowed to entries whose URL belongs to the requesting website or app, rather than by a text search. Followed by the domain or app name.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching entries for:'**
+  String get autofillMatchPrefix;
+
   ///
   ///
   /// In en, this message translates to:
@@ -2110,6 +2116,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a color to distinguish between files.'**
   String get databaseColorChoose;
+
+  /// Switch on the database screen, enabling this database for iOS AutoFill.
+  ///
+  /// In en, this message translates to:
+  /// **'AutoFill'**
+  String get databaseAutofill;
+
+  /// Explains what enabling AutoFill for a database does.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer this database\'s entries when apps and websites ask for a password.'**
+  String get databaseAutofillSubtitle;
+
+  /// Shown when AutoFill is on for a database, so it is clear a second copy of the file exists and what removes it.
+  ///
+  /// In en, this message translates to:
+  /// **'An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.'**
+  String get databaseAutofillCopyWarning;
+
+  /// Shown instead of the AutoFill switch for kdbx3 databases, which cannot be mirrored for the extension.
+  ///
+  /// In en, this message translates to:
+  /// **'AutoFill needs KDBX 4. Upgrade this database below to use it.'**
+  String get databaseAutofillNeedsKdbx4;
+
+  /// Reminder that iOS needs AuthPass enabled as a credential provider as well.
+  ///
+  /// In en, this message translates to:
+  /// **'Also turn AuthPass on in Settings › General › AutoFill & Passwords.'**
+  String get databaseAutofillSystemHint;
 
   ///
   ///

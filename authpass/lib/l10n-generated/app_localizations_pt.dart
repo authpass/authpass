@@ -352,6 +352,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get autofillFilterPrefix => 'Filtro:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt =>
       'Selecione a senha para preenchimento automático.';
 
@@ -1145,6 +1148,25 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get databaseColorChoose =>
       'Select a color to distinguish between files.';
+
+  @override
+  String get databaseAutofill => 'AutoFill';
+
+  @override
+  String get databaseAutofillSubtitle =>
+      'Offer this database\'s entries when apps and websites ask for a password.';
+
+  @override
+  String get databaseAutofillCopyWarning =>
+      'An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.';
+
+  @override
+  String get databaseAutofillNeedsKdbx4 =>
+      'AutoFill needs KDBX 4. Upgrade this database below to use it.';
+
+  @override
+  String get databaseAutofillSystemHint =>
+      'Also turn AuthPass on in Settings › General › AutoFill & Passwords.';
 
   @override
   String get databaseKdbxVersion => 'KDBX File Version';

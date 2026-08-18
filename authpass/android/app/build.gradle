@@ -22,17 +22,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def secretProperties = new Properties()
-def secretPropertiesFile = rootProject.file('../_tools/secrets/gradle_home/gradle.properties')
-if (secretPropertiesFile.exists()) {
-    System.out.println("loading secrets from ${secretPropertiesFile.absolutePath}")
-    secretPropertiesFile.withReader('UTF-8') { reader ->
-        secretProperties.load(reader)
-    }
-} else {
-    System.err.println("secrets not found at ${secretPropertiesFile.absolutePath}")
-}
-
 kotlin {
     jvmToolchain(17)
 }
@@ -60,18 +49,22 @@ android {
         }
     }
 
+    // One config, because there is one keystore in the environment at a time.
+    //
+    // `cux_ship secrets exec --keystore <name>` decrypts the named keystore and
+    // exports it under these four fixed variables — the upload key for the
+    // store flavors, the Amazon one for that flavor. Which key signs a build is
+    // therefore the caller's choice, made once per CI job, rather than a second
+    // copy of that decision kept here.
+    //
+    // "invalid" keeps a checkout without any of it configurable: the release
+    // buildType is only reachable with a keystore, debug never needs one.
     signingConfigs {
         release {
-            keyAlias 'authpass'
-            keyPassword secretProperties['design.codeux.authpass.storePassword']
-            storeFile file(secretProperties['design.codeux.authpass.storeFile'] ?: "invalid")
-            storePassword secretProperties['design.codeux.authpass.storePassword']
-        }
-        amazon {
-            keyAlias 'amazon-key'
-            keyPassword secretProperties['design.codeux.authpass.amazon.storePassword']
-            storeFile file(secretProperties['design.codeux.authpass.amazon.storeFile'] ?: "invalid")
-            storePassword secretProperties['design.codeux.authpass.amazon.storePassword']
+            keyAlias System.getenv('ANDROID_KEY_ALIAS') ?: 'authpass'
+            keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            storeFile file(System.getenv('ANDROID_KEYSTORE_PATH') ?: "invalid")
+            storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
         }
     }
 
@@ -97,7 +90,8 @@ android {
         amazon {
             dimension "hpdist"
             applicationIdSuffix ".amazon"
-            signingConfig signingConfigs.amazon
+            // Signed with whatever `secrets exec --keystore amazon` supplied.
+            signingConfig signingConfigs.release
         }
         playstore {
             dimension "hpdist"

@@ -68,48 +68,19 @@ packages:
   cux_ship:
     dependency: "direct main"
     description:
-      path: cux_ship
-      ref: "v1.4.2"
-      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      url: "https://github.com/codeuxdesign/cux_ship.git"
-    source: git
-    version: "1.1.0"
-  cux_ship_appstore:
-    dependency: transitive
-    description:
-      path: cux_ship_appstore
-      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      url: "https://github.com/codeuxdesign/cux_ship.git"
-    source: git
-    version: "1.0.0"
-  cux_ship_notes:
-    dependency: transitive
-    description:
-      path: cux_ship_notes
-      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      url: "https://github.com/codeuxdesign/cux_ship.git"
-    source: git
-    version: "1.0.0"
-  cux_ship_play:
-    dependency: transitive
-    description:
-      path: cux_ship_play
-      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      url: "https://github.com/codeuxdesign/cux_ship.git"
-    source: git
-    version: "1.0.0"
+      name: cux_ship
+      sha256: a56826c848e5705272a6c2ee0c4c0a4c6739c900d2141384013dde5fd5f77297
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   cux_ship_verify:
     dependency: transitive
     description:
-      path: cux_ship_verify
-      ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      resolved-ref: a8db40e1b8e0a8c8d1f5f31d75f581e582ef3d2b
-      url: "https://github.com/codeuxdesign/cux_ship.git"
-    source: git
-    version: "1.0.0"
+      name: cux_ship_verify
+      sha256: "6ba516d144d17cbbc42b488c767a8b54e819a4db027f758525b454d4bfb61f26"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.0"
   dart_jsonwebtoken:
     dependency: transitive
     description:
@@ -278,5 +249,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      sha256: b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.3"
 sdks:
   dart: ">=3.12.2 <4.0.0"

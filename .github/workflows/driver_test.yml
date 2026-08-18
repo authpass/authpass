@@ -23,7 +23,7 @@ jobs:
 #          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 #      - name: ci-install-deps
 #        env:
-#          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+#          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
 #        run: "./authpass/_tools/ci-install-deps.sh ios"
 #      - name: run test
 #        run: "cd authpass && ~/deps/flutter/bin/flutter test"
@@ -51,12 +51,18 @@ jobs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 #    - name: Postdeploy
 #      env:
-#        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+#        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
 #      run: authpass/_tools/postdeploy.sh
     - name: ci-install-deps
       env:
-        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       run: "./authpass/_tools/ci-install-deps.sh ios"
+    # As in integration_test.yml: the extension's flutter module is build
+    # output, and without it the simulator build stops on a missing file.
+    - name: autofill module frameworks
+      run: |
+        export PATH="$HOME/deps/flutter/bin:$PATH"
+        ./autofill_module/build_ios_framework.sh Debug
 #    - name: List all simulators
 #      run: xcrun instruments -s
 #    # get UUID  simulator and boot a simulator on mac from  command line

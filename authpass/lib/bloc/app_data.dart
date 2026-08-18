@@ -93,6 +93,20 @@ abstract class OpenedFile implements Built<OpenedFile, OpenedFileBuilder> {
 
   int? get colorCode;
 
+  /// Whether this database may be offered by the OS credential provider.
+  ///
+  /// Null means "never chosen", and defaults to on: a database that is open is
+  /// offered. Opting out is explicit and is remembered as false, so this cannot
+  /// silently turn itself back on for someone who switched it off.
+  ///
+  /// Enabling copies the vault into the shared app group container and caches
+  /// its key — encrypted, and biometry bound, respectively. See
+  /// [AutofillMirror] for what that does and does not expose.
+  bool? get autofillEnabled;
+
+  /// [autofillEnabled], with "never chosen" resolved. Read this, not the field.
+  bool get autofillEnabledOrDefault => autofillEnabled ?? true;
+
   Color? get color => colorCode == null ? null : Color(colorCode!);
 
   bool isSameFileAs(OpenedFile other) =>
@@ -323,10 +337,18 @@ class AppDataBloc {
     final recentFile = data.recentFileByUuid(file.uuid) ?? oldFile;
     final colorCode =
         recentFile?.colorCode ?? oldFile?.colorCode ?? defaultColor?.toARGB32();
+    // Carried like colorCode, and for the same reason: this record is built
+    // fresh on every open, so anything not copied here is a setting the user
+    // silently loses by closing the database. Autofill has to survive, or the
+    // mirror stops being refreshed while the switch still reads as on.
+    final autofillEnabled =
+        recentFile?.autofillEnabled ?? oldFile?.autofillEnabled;
     final openedFile = OpenedFile.fromFileSource(
       file,
       name,
-      (b) => b..colorCode = colorCode,
+      (b) => b
+        ..colorCode = colorCode
+        ..autofillEnabled = autofillEnabled,
     );
     _logger.finest('openedFile: $openedFile');
     // TODO remove potential old storages?

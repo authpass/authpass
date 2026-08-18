@@ -18,7 +18,7 @@ jobs:
           submodules: true
       - name: ci-install-deps
         env:
-          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         run: "./authpass/_tools/ci-install-deps.sh android"
       - run: |
           cd authpass

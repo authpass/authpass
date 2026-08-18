@@ -14,8 +14,8 @@
 #
 # Notarization will not accept the app-scoped individual key the uploaders use
 # — it answers 401 — and the team key it does accept cannot be scoped to one
-# app. Putting one in blackbox would hand anything with CI access the ability
-# to publish every app on the account, which is the whole reason the rest of
+# app. Putting one in secrets/release.yaml would hand anything with CI access
+# the ability to publish every app on the account, which is the whole reason
 # this pipeline avoids team keys. So this step runs from a laptop, against a
 # key in ~/.appstoreconnect that never enters the repository.
 
@@ -40,17 +40,20 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-SECRETS="_tools/secrets"
-P12="$SECRETS/developer_id_application.p12"
-P12_PASSWORD_FILE="$SECRETS/developer_id_application_p12_password"
-PROFILE="$SECRETS/macos_developerid.provisionprofile"
+# The Developer ID certificate and its profile come from the environment, which
+# is where `cux_ship secrets exec` puts them:
+#
+#   cux_ship secrets exec --keystore upload --api-key upload -- _tools/notarize-macos.sh
+#
+# The notary key does not, and that is the point — see NOTARY_KEY above. It is a
+# team key with Admin access, so it reaches every app in the team, and it stays
+# outside this repository rather than being encrypted into it.
+: "${APPLE_DEVELOPER_ID_P12_PATH:?run this under 'cux_ship secrets exec'}"
+: "${APPLE_DEVELOPER_ID_P12_PASSWORD:?not set by secrets exec}"
 
-for f in "$P12" "$P12_PASSWORD_FILE" "$PROFILE"; do
-  if [ ! -f "$f" ]; then
-    echo "missing $f — decrypt the blackbox secrets first" >&2
-    exit 1
-  fi
-done
+P12="$APPLE_DEVELOPER_ID_P12_PATH"
+PROFILE="${APPLE_PROFILE_MACOS_DEVELOPERID_PATH:?}"
+
 if [ ! -d "$ARCHIVE" ]; then
   echo "missing $ARCHIVE — run _tools/build-macos.sh first" >&2
   exit 1
@@ -61,10 +64,6 @@ if [ ! -f "$NOTARY_KEY" ]; then
   echo "  outside the repository. Override with AUTHPASS_NOTARY_KEY." >&2
   exit 1
 fi
-
-# defines DEVELOPER_ID_APPLICATION_P12_PASSWORD
-# shellcheck disable=SC1090
-. "$P12_PASSWORD_FILE"
 
 KEYCHAIN="$HOME/Library/Keychains/authpass-notarize-$$.keychain-db"
 KEYCHAIN_PASSWORD="$(openssl rand -hex 24)"
@@ -80,9 +79,9 @@ echo "==> importing the Developer ID certificate into a temporary keychain"
 security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
 security set-keychain-settings -lut 3600 "$KEYCHAIN"
 security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-security import "$P12" -k "$KEYCHAIN" -P "$DEVELOPER_ID_APPLICATION_P12_PASSWORD" \
+security import "$P12" -k "$KEYCHAIN" -P "$APPLE_DEVELOPER_ID_P12_PASSWORD" \
   -T /usr/bin/codesign -T /usr/bin/security
-security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
+security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
 security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
 
 if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Developer ID Application"; then

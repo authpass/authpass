@@ -8,6 +8,7 @@ import 'package:authpass/ui/screens/select_file_screen.dart';
 import 'package:authpass/ui/widgets/savefile/save_file_diag_button.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -132,6 +133,9 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
     final databaseName = _file!.kdbxFile.body.meta.databaseName.get()!;
     final loc = AppLocalizations.of(context);
     final env = Provider.of<Env>(context);
+    // kdbx3 keeps no transformed key, so the autofill mirror has nothing to
+    // cache and the extension could never open the copy. See [AutofillMirror].
+    final canAutofill = _file!.kdbxFile.header.version >= KdbxVersion.V4;
     return ProgressOverlay(
       task: task,
       child: Center(
@@ -202,6 +206,48 @@ class _ManageFileState extends State<ManageFile> with FutureTaskStateMixin {
                     setState(() {});
                   },
                 ),
+                // iOS only for now: the credential provider extension is what
+                // consumes this, and there is none on the other platforms.
+                if (AuthPassPlatform.isIOS) ...[
+                  SwitchListTile(
+                    secondary: const Icon(Icons.password),
+                    title: Text(loc.databaseAutofill),
+                    // Said outright for kdbx3, rather than leaving a switch
+                    // that is on and quietly offers nothing.
+                    subtitle: Text(
+                      !canAutofill
+                          ? loc.databaseAutofillNeedsKdbx4
+                          : _file!.openedFile.autofillEnabledOrDefault
+                          ? loc.databaseAutofillCopyWarning
+                          : loc.databaseAutofillSubtitle,
+                    ),
+                    value:
+                        canAutofill &&
+                        _file!.openedFile.autofillEnabledOrDefault,
+                    onChanged: !canAutofill
+                        ? null
+                        : (enabled) async {
+                            // updateOpenedFile writes or removes the app group
+                            // copy and the cached key; nothing else has to
+                            // happen here.
+                            _file = await _kdbxBloc.updateOpenedFile(
+                              _file!,
+                              (b) => b.autofillEnabled = enabled,
+                            );
+                            if (!context.mounted) {
+                              return;
+                            }
+                            setState(() {});
+                            if (enabled) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(loc.databaseAutofillSystemHint),
+                                ),
+                              );
+                            }
+                          },
+                  ),
+                ],
                 ListTile(
                   title: Text(loc.databaseKdbxVersion),
                   subtitle: Text(

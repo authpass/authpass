@@ -128,6 +128,13 @@ packages:
       relative: true
     source: path
     version: "0.1.1"
+  autofill_shared:
+    dependency: "direct main"
+    description:
+      path: "../autofill_shared"
+      relative: true
+    source: path
+    version: "1.0.0"
   badges:
     dependency: "direct main"
     description:
@@ -156,10 +163,10 @@ packages:
     dependency: "direct main"
     description:
       name: biometric_storage
-      sha256: "4befc943ff9971f17f654d6d06140829dc4f86a019f7db3524accccc72dfb3ea"
+      sha256: "083e103c32d353ebc436b14e9c281eea0d7837087e408196cb328e4400c96890"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1-dev.2"
+    version: "5.2.0-dev.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -1127,10 +1134,10 @@ packages:
     dependency: "direct main"
     description:
       name: kdbx
-      sha256: "36632c4745a527f0b6f38e895eca37c94502d122cd4bc63d55050869dbebe00f"
+      sha256: "8cded0bd122c17b1c1b9398ea6589ed79b34830baba9873d688646cb009bea88"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.5.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -1462,7 +1469,7 @@ packages:
     source: hosted
     version: "2.3.1"
   path_provider_foundation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider_foundation
       sha256: "2a376b7d6392d80cd3705782d2caa734ca4727776db0b6ec36ef3f1855197699"
@@ -1597,6 +1604,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  public_suffix:
+    dependency: "direct main"
+    description:
+      name: public_suffix
+      sha256: "8c41d2246cd6e8355459dbfa5fcb36add619b3afe5e0cad535cfa460f5498b68"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   pubspec_parse:
     dependency: transitive
     description:
@@ -1605,6 +1620,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  punycode:
+    dependency: transitive
+    description:
+      name: punycode
+      sha256: "39b874cc1f78b94e57db17e74b3f2ba2a96e25c0bebdcc8a571614dccda0ff0c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   qr:
     dependency: transitive
     description:

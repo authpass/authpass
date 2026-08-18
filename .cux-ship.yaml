@@ -1,0 +1,8 @@
+# Where the Flutter app lives. The git root is a thin wrapper, so without this
+# cux_ship finds no pubspec.yaml, no android/ and no ios/ here and can infer
+# nothing — which is why the release scripts used to pass --bundle-id and
+# friends explicitly.
+#
+# CHANGELOG.md and store/ deliberately stay at this level: a release describes
+# what the repository shipped, not what one package did.
+app-dir: authpass

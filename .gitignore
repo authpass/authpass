@@ -61,3 +61,7 @@ metrics.json
 /authpass/_tools/secrets/developer_id_application.p12
 /authpass/_tools/secrets/developer_id_application_p12_password
 /authpass/_tools/secrets/macos_developerid.provisionprofile
+
+# Installed by `cux_ship deps install`, pinned by hash. Platform-specific
+# binaries do not belong in a repository.
+/.bin/

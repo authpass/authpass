@@ -29,12 +29,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
+      # The key is what puts test/_testSecrets.json on disk. Absent — on a
+      # fork's pull request — the tests that need it are the ones that skip.
       - name: ci-install-deps
-        run: "./authpass/_tools/ci-install-deps.sh android"
-      - name: Postdeploy
         env:
-          BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
-        run: authpass/_tools/postdeploy.sh
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: "./authpass/_tools/ci-install-deps.sh android"
       - run: authpass/_tools/test-coverage.sh
       - name: Coveralls
         uses: coverallsapp/github-action@master

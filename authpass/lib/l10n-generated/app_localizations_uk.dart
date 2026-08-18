@@ -353,6 +353,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get autofillFilterPrefix => 'Фільтр:';
 
   @override
+  String get autofillMatchPrefix => 'Matching entries for:';
+
+  @override
   String get autofillPrompt => 'Оберіть пароль для автозаповнення.';
 
   @override
@@ -1150,6 +1153,25 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get databaseColorChoose => 'Виберіть колір, щоб розрізняти файли.';
+
+  @override
+  String get databaseAutofill => 'AutoFill';
+
+  @override
+  String get databaseAutofillSubtitle =>
+      'Offer this database\'s entries when apps and websites ask for a password.';
+
+  @override
+  String get databaseAutofillCopyWarning =>
+      'An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.';
+
+  @override
+  String get databaseAutofillNeedsKdbx4 =>
+      'AutoFill needs KDBX 4. Upgrade this database below to use it.';
+
+  @override
+  String get databaseAutofillSystemHint =>
+      'Also turn AuthPass on in Settings › General › AutoFill & Passwords.';
 
   @override
   String get databaseKdbxVersion => 'Версія файлу KDBX';

@@ -33,12 +33,22 @@ jobs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 #    - name: Postdeploy
 #      env:
-#        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+#        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
 #      run: authpass/_tools/postdeploy.sh
     - name: ci-install-deps
       env:
-        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       run: "./authpass/_tools/ci-install-deps.sh ios"
+    # The app embeds an extension which embeds a separate flutter module, and
+    # that module's xcframeworks are build output — gitignored, so a fresh
+    # checkout has none and the simulator build stops on the missing file.
+    # _tools/build-ios.sh does this for a release; a test build has to do it
+    # too. Debug, because the simulator slice of a release App.xcframework is
+    # an 84 KB stub — release AOT does not exist there.
+    - name: autofill module frameworks
+      run: |
+        export PATH="$HOME/deps/flutter/bin:$PATH"
+        ./autofill_module/build_ios_framework.sh Debug
     - name: 'Start Simulator'
       uses: futureware-tech/simulator-action@v4
       with:

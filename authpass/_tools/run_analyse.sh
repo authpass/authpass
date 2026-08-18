@@ -25,13 +25,17 @@ total_annotations=$(cat "${reporoot}/annotations.json" | jq -c '. | length')
 
 echo "::set-output name=total_annotations::${total_annotations}"
 
-tokenfile="_tools/secrets/artifact_token.txt"
-
-if test -f "${tokenfile}"; then
+# From the environment, via `cux_ship secrets exec`. Absent on a fork's pull
+# request, where there is no key to decrypt it — so this stays optional rather
+# than failing a build that has nothing to push with.
+# `:+set` rather than `:-`, and xtrace off before the value is used: this runs
+# under `set -x`, which prints commands after expansion.
+if test -n "${ARTIFACT_TOKEN:+set}"; then
+  set +x
   curl --request POST \
     --url https://data.authpass.app/data/artifact.push \
     --fail \
-    --form token=$(cat "${tokenfile}") \
+    --form token="${ARTIFACT_TOKEN}" \
     --form metrics="$(cat metrics.json)"
 fi
 

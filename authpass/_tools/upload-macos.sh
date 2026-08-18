@@ -29,24 +29,25 @@ if [ -z "$PKG" ]; then
   PKG=$(ls build/macos/pkg/*.pkg 2>/dev/null | head -1 || true)
 fi
 
-SECRETS="_tools/secrets"
-KEY_ID="4LJJBK4Z86KR"
-KEY_PATH="$SECRETS/ApiKey_${KEY_ID}.p8"
+# The key comes from the environment, which is where `cux_ship secrets exec`
+# puts it:
+#
+#   cux_ship secrets exec --api-key upload -- _tools/upload-macos.sh
+#
+# Nothing is exported here any more, including the issuer — see upload-ios.sh
+# for why altool needs one even for an individual key.
+: "${APPLE_API_KEY_ID:?run this under 'cux_ship secrets exec'}"
+: "${APPLE_API_PRIVATE_KEY_PATH:?not set by secrets exec}"
 
-if [ ! -f "$KEY_PATH" ]; then
-  echo "missing $KEY_PATH — decrypt the blackbox secrets first" >&2
-  exit 1
-fi
 if [ -z "$PKG" ] || [ ! -f "$PKG" ]; then
   echo "no .pkg found — run _tools/build-macos.sh first" >&2
   exit 1
 fi
 
-export APPLE_API_KEY_ID="$KEY_ID"
-export APPLE_API_PRIVATE_KEY_PATH="$PWD/$KEY_PATH"
-# Issuer id: see upload-ios.sh — altool needs it even for an individual key.
-export APPLE_API_ISSUER_ID="0f1ac0c6-ea92-4609-a2f0-c9b239198a75"
-
+# Explicit for the reasons in upload-ios.sh, and for one more: this is not the
+# iOS bundle id with a suffix, it is a different app record entirely, so
+# inference reading the wrong project would be plausible rather than obviously
+# broken.
 BUNDLE_ID="design.codeux.authpass"
 
 # Read from the archive the .pkg was exported from, in the same run. A .pkg
@@ -95,14 +96,14 @@ esac
 echo "==> uploading $PKG"
 echo "    bundle id    $BUNDLE_ID"
 echo "    version      $VERSION ($BUILD_NUMBER)"
-echo "    credential   individual key $KEY_ID, scoped to this app"
+echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 
 # --yes: see upload-ios.sh.
 # not exec: the trap above still has a temp file to clean up
 cd _tools/cux_ship
 dart run cux_ship --yes appstore upload \
   --platform macos \
-  --ipa "../../$PKG" \
+  --artifact "../../$PKG" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \

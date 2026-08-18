@@ -390,6 +390,10 @@
   "@autofillFilterPrefix": {
     "description": "Label displayed for android auto fill"
   },
+  "autofillMatchPrefix": "Matching entries for:",
+  "@autofillMatchPrefix": {
+    "description": "Label displayed during autofill when the list was narrowed to entries whose URL belongs to the requesting website or app, rather than by a text search. Followed by the domain or app name."
+  },
   "autofillPrompt": "Select password entry for autofill.",
   "@autofillPrompt": {
     "description": ""
@@ -1459,6 +1463,26 @@
   "databaseColorChoose": "Select a color to distinguish between files.",
   "@databaseColorChoose": {
     "description": ""
+  },
+  "databaseAutofill": "AutoFill",
+  "@databaseAutofill": {
+    "description": "Switch on the database screen, enabling this database for iOS AutoFill."
+  },
+  "databaseAutofillSubtitle": "Offer this database's entries when apps and websites ask for a password.",
+  "@databaseAutofillSubtitle": {
+    "description": "Explains what enabling AutoFill for a database does."
+  },
+  "databaseAutofillCopyWarning": "An encrypted copy of this database is kept for AutoFill until you switch it off, or close the database.",
+  "@databaseAutofillCopyWarning": {
+    "description": "Shown when AutoFill is on for a database, so it is clear a second copy of the file exists and what removes it."
+  },
+  "databaseAutofillNeedsKdbx4": "AutoFill needs KDBX 4. Upgrade this database below to use it.",
+  "@databaseAutofillNeedsKdbx4": {
+    "description": "Shown instead of the AutoFill switch for kdbx3 databases, which cannot be mirrored for the extension."
+  },
+  "databaseAutofillSystemHint": "Also turn AuthPass on in Settings › General › AutoFill & Passwords.",
+  "@databaseAutofillSystemHint": {
+    "description": "Reminder that iOS needs AuthPass enabled as a credential provider as well."
   },
   "databaseKdbxVersion": "KDBX File Version",
   "@databaseKdbxVersion": {

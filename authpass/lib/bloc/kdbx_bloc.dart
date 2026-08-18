@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:typed_data';
 
+import 'package:authpass/autofill/autofill_identities.dart';
+import 'package:authpass/autofill/autofill_mirror.dart';
 import 'package:authpass/bloc/analytics.dart';
 import 'package:authpass/bloc/app_data.dart';
 import 'package:authpass/bloc/kdbx/file_content.dart';
@@ -203,7 +205,8 @@ class KdbxOpenedFile {
   final OpenedFile openedFile;
   final KdbxFile kdbxFile;
 
-  /// the file content which was used to originally read the [kdbxFile]
+  /// The file content as the source last saw it: what [kdbxFile] was read
+  /// from, and after that whatever the most recent save wrote.
   final FileContent kdbxFileContent;
 }
 
@@ -277,6 +280,13 @@ class KdbxBloc {
   final Analytics analytics;
   final CloudStorageBloc cloudStorageBloc;
   final QuickUnlockStorage quickUnlockStorage;
+
+  /// Keeps the databases opted into autofill readable by the credential
+  /// provider extension. Inert on platforms without an app group container.
+  late final autofillMirror = AutofillMirror(
+    appGroupIdentifier: env.autofillAppGroupIdentifier,
+  );
+  late final autofillIdentities = AutofillIdentities();
   late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
@@ -308,6 +318,27 @@ class KdbxBloc {
     OpenedFileUpdater updater,
   ) async {
     final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
+    final wasAutofillEnabled = file.openedFile.autofillEnabledOrDefault;
+    final isAutofillEnabled = updatedFile.autofillEnabledOrDefault;
+    if (wasAutofillEnabled && !isAutofillEnabled) {
+      // opted out — take the copy and the cached key away again. What is
+      // advertised is republished below, once the flag has actually landed.
+      await autofillMirror.removeFile(file.openedFile.uuid);
+    } else if (!wasAutofillEnabled && isAutofillEnabled) {
+      // Opted in while the file is already open. The mirror is otherwise only
+      // written on open and after save, so without this the extension would
+      // find nothing until the user next did one of those — having just been
+      // told autofill is on.
+      //
+      // kdbxFileContent is what the file was read from, which is what the
+      // mirror needs: re-serializing would rotate the kdf salt and stand the
+      // cached key up against a vault it can no longer open.
+      await _mirrorFile(
+        updatedFile,
+        file.kdbxFile,
+        file.kdbxFileContent.content,
+      );
+    }
     await appDataBloc.update((b, data) {
       b.previousFiles.map((f) {
         if (!f.isSameFileAs(file.openedFile)) {
@@ -329,6 +360,14 @@ class KdbxBloc {
         file.fileSource: newFile,
       }),
     );
+    if (wasAutofillEnabled != isAutofillEnabled) {
+      // Only now, after the stream carries the new flag. What gets advertised
+      // is derived from _openedFiles, so publishing from the branches above
+      // announced precisely the state the user had just left — switching
+      // autofill on published nothing, and switching it off published
+      // everything.
+      await _publishAutofillIdentities();
+    }
     _logger.info('new values: ${_openedFiles.value}');
     return newFile;
   }
@@ -458,7 +497,120 @@ class KdbxBloc {
       _logger.fine('adding file to quick unlock.');
       await _updateQuickUnlockStore();
     }
+    await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
     return kdbxOpenedFile;
+  }
+
+  /// Refreshes (or removes) this database's copy in the app group container.
+  ///
+  /// [bytes] must be the content that was actually read from or written to the
+  /// file source. Re-serializing here would rotate the kdf salt again and
+  /// strand the key we are about to cache.
+  ///
+  /// Never rethrows: autofill is a convenience, and failing to mirror must not
+  /// fail the open or the save that triggered it.
+  Future<void> _syncAutofillMirror(
+    KdbxOpenedFile file,
+    Uint8List bytes,
+  ) async {
+    if (!file.openedFile.autofillEnabledOrDefault) {
+      return;
+    }
+    await _mirrorFile(file.openedFile, file.kdbxFile, bytes);
+    await _publishAutofillIdentities();
+  }
+
+  /// Writes the copy and the cached key, without asking whether it should.
+  ///
+  /// The opt-in path calls this with a file whose [OpenedFile] has only just
+  /// been flipped on, which [_syncAutofillMirror] would still read as off.
+  /// That path advertises the result itself, once the new flag is visible on
+  /// [_openedFiles] — which is why publishing is not done here.
+  ///
+  /// Never fatal: a failure here costs autofill for this vault until the next
+  /// open or save, and failing the surrounding operation — opening a database,
+  /// or saving one — would be a much worse trade.
+  Future<void> _mirrorFile(
+    OpenedFile openedFile,
+    KdbxFile kdbxFile,
+    Uint8List bytes,
+  ) async {
+    try {
+      await autofillMirror.syncFile(
+        fileUuid: openedFile.uuid,
+        name: openedFile.name,
+        file: kdbxFile,
+        bytes: bytes,
+      );
+    } catch (e, stackTrace) {
+      _logger.warning('Unable to update the autofill mirror.', e, stackTrace);
+    }
+  }
+
+  /// Advertises every entry of every enabled vault to iOS.
+  ///
+  /// Republished as a whole set rather than incrementally, because this is the
+  /// only place that knows which vaults are currently enabled — and an entry
+  /// that was deleted, or a vault that was switched off, has to stop being
+  /// offered. Cheap: names and usernames only, no decryption beyond what is
+  /// already in memory.
+  /// Only what the mirror actually holds is advertised. Being enabled and open
+  /// is not enough — mirroring can fail, quietly and by design, and a
+  /// suggestion for a vault the extension has no copy of goes nowhere when the
+  /// user taps it. The manifest is the extension's own view, so intersecting
+  /// with it is what keeps the two stores from disagreeing.
+  Future<void> _publishAutofillIdentities() async {
+    final mirrored = (await autofillMirror.readManifest()).entries
+        .map((e) => e.fileUuid)
+        .toSet();
+    final enabled = <String, KdbxFile>{
+      for (final file in _openedFiles.value.values)
+        if (file.openedFile.autofillEnabledOrDefault &&
+            mirrored.contains(file.openedFile.uuid))
+          file.openedFile.uuid: file.kdbxFile,
+    };
+    await autofillIdentities.publish(enabled);
+  }
+
+  /// Records what the save put on disk, and refreshes the autofill mirror.
+  ///
+  /// Every save rotates the kdf salt, so the mirrored copy and its cached key
+  /// both have to be replaced or the extension is left holding a stale key.
+  ///
+  /// [savedContent] then replaces [KdbxOpenedFile.kdbxFileContent], which
+  /// otherwise keeps the bytes the file was *opened* with for as long as it
+  /// stays open. Two things go wrong when it does. [reload] compares fresh
+  /// origin content against it, so after any save it decides the file changed
+  /// and merges against itself. And the autofill opt-in path mirrors it
+  /// verbatim — handing the extension pre-save bytes whose kdf salt the key
+  /// cached alongside them no longer matches, so the copy cannot be opened.
+  Future<void> _syncAutofillMirrorAfterSave(
+    KdbxFile file,
+    Uint8List? writtenBytes,
+    FileContent? savedContent,
+  ) async {
+    var openedFile = _openedFilesByKdbxFile[file];
+    if (openedFile == null) {
+      return;
+    }
+    if (savedContent != null) {
+      openedFile = KdbxOpenedFile(
+        fileSource: openedFile.fileSource,
+        openedFile: openedFile.openedFile,
+        kdbxFile: openedFile.kdbxFile,
+        kdbxFileContent: savedContent,
+      );
+      _openedFiles.add(
+        OpenedKdbxFiles({
+          ..._openedFiles.value._files,
+          openedFile.fileSource: openedFile,
+        }),
+      );
+    }
+    if (writtenBytes == null) {
+      return;
+    }
+    await _syncAutofillMirror(openedFile, writtenBytes);
   }
 
   Color? _defaultNextColor() {
@@ -580,11 +732,17 @@ class KdbxBloc {
   Future<void> close(KdbxFile file) async {
     _logger.fine('Close file.');
     analytics.events.trackCloseFile();
-    final fileSource = fileForKdbxFile(file).fileSource;
+    final openedFile = fileForKdbxFile(file);
+    final fileSource = openedFile.fileSource;
     _openedFiles.add(
       OpenedKdbxFiles(Map.from(_openedFiles.value._files)..remove(fileSource)),
     );
     file.dispose();
+    // Closing a database stops it being offered. The mirror outlives the app,
+    // so nothing else would ever take it away, and a database the user closed
+    // going on answering autofill requests is not what closing looks like.
+    await autofillMirror.removeFile(openedFile.openedFile.uuid);
+    await _publishAutofillIdentities();
     if (_openedFilesQuickUnlock.remove(fileSource)) {
       _logger.fine('file was in quick unlock. need to persist it.');
       await _updateQuickUnlockStore();
@@ -602,6 +760,13 @@ class KdbxBloc {
       // clear all quick unlock data.
       _openedFilesQuickUnlock.clear();
       await quickUnlockStorage.updateQuickUnlockFile({});
+      // The autofill mirror keeps exactly the same company as quick unlock:
+      // both are a cached way in that outlives the app, so "close everything
+      // and forget how to get back in" has to mean both or it means neither.
+      // Locking, which keeps quick unlock, keeps the mirror for the same
+      // reason — autofill working while the app is locked is the point of it.
+      await autofillMirror.clear();
+      await autofillIdentities.publish({});
       analytics.events.trackCloseAllFiles(count: _openedFiles.value.length);
     } else {
       analytics.events.trackLockAllFiles(count: _openedFiles.value.length);
@@ -766,7 +931,9 @@ class KdbxBloc {
     }
 
     try {
+      Uint8List? writtenBytes;
       final ret = await _saveFileToBytes(file, (bytes) async {
+        writtenBytes = bytes;
         return await fileSource.contentWrite(bytes, metadata: null);
       });
       analytics.events.trackSave(
@@ -780,6 +947,7 @@ class KdbxBloc {
         label: 'save',
       );
       await updateQuickUnlock();
+      await _syncAutofillMirrorAfterSave(file, writtenBytes, ret);
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
@@ -792,11 +960,15 @@ class KdbxBloc {
       final mergeResult = file.merge(remoteFile);
       try {
         _logger.fine('mergeResult: $mergeResult');
-        final ret = await _saveFileToBytes(
-          file,
-          (bytes) async =>
-              await fileSource.contentWrite(bytes, metadata: content.metadata),
-        );
+        Uint8List? writtenBytes;
+        final ret = await _saveFileToBytes(file, (bytes) async {
+          writtenBytes = bytes;
+          return await fileSource.contentWrite(
+            bytes,
+            metadata: content.metadata,
+          );
+        });
+        await _syncAutofillMirrorAfterSave(file, writtenBytes, ret);
         delegate?.conflictMerged(fileSource, file, mergeResult);
         analytics.events.trackSaveConflict(
           type: fileSource.typeDebug,

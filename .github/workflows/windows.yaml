@@ -43,7 +43,7 @@ jobs:
     - name: ci-install-deps
       shell: bash
       env:
-        BLACKBOX_SECRET: ${{ secrets.BLACKBOX_SECRET_KEY }}
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       run: |
         ./authpass/_tools/ci-install-deps.sh windows
         ~/deps/flutter/bin/flutter config --enable-windows-desktop
@@ -51,11 +51,14 @@ jobs:
       id: buildapk
       shell: bash
       env:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         GIT_AUTHOR_NAME: 'Github Action CI'
         GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
-      run: ./authpass/_tools/ci-release.sh ${{ matrix.flavor }}
+      run: >-
+        ./authpass/_tools/ship.sh secrets exec --keystore upload --api-key upload --
+        ./authpass/_tools/ci-release.sh ${{ matrix.flavor }}
 #    - shell: bash
 #      run: |
 #        cat authpass/lib/generated_plugin_registrant.dart
@@ -65,7 +68,11 @@ jobs:
         path: authpass/${{ steps.buildapk.outputs.outputpath }}
     - name: upload artifact
       shell: bash
-      run: ./authpass/_tools/upload-artifact.sh authpass/${{ steps.buildapk.outputs.outputpath }}
+      env:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      run: >-
+        ./authpass/_tools/ship.sh secrets exec --keystore upload --api-key upload --
+        ./authpass/_tools/upload-artifact.sh authpass/${{ steps.buildapk.outputs.outputpath }}
     # - uses: snapcore/action-build@v1
     #   id: snapcraft
     # - uses: actions/upload-artifact@v2
