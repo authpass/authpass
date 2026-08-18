@@ -8,7 +8,12 @@ The git root is a thin wrapper. Nearly all code lives in `authpass/` — **run a
 
 - `authpass/` — the Flutter app (Dart, plus `android/`, `ios/`, `macos/`, `linux/`, `windows/`, `web/` platform dirs)
 - `deps/` — 8 git submodules, several maintained by the same author: `kdbx.dart`, `autofill_service`, `biometric_storage`, `diac`, `analytics_events`, `authpass-cloud`, `package_info_macos`, `clipboard_plugintest`. After cloning: `git submodule update --init`.
-- `debian/`, `snap/`, `metadata/`, `_docs/` — packaging and store metadata
+- `debian/`, `snap/`, `_docs/` — packaging
+- `metadata/` — **three trees with different audiences, not one.**
+  - `misc/<locale>/store_metadata.csv` — the real store copy. One CSV per locale carrying Play, Apple App Store *and* Microsoft Store rows, each with its own length limit and a note for translators. Translated on Crowdin.
+  - `android/` — **F-Droid's** tree (fastlane shape, versionCode-named changelogs). Play never reads it; see `authpass/README.md`. Translated on Crowdin.
+  - `linux/` — desktop entry, AppStream metainfo and icon. Nothing in this repository references these files, so whatever consumes them is external (a distro or flatpak packaging repo); do not assume `debian/` or `snap/` build them.
+- **Nothing publishes any store listing.** No script or workflow passes `--metadata`; every release uploads the binary and leaves the listing alone, so listings are maintained by hand in each console. That is how a store limit went stale unnoticed for years — see issue #418.
 
 Note: `deps/` submodules are normally consumed as *published pub packages*, not path deps. `pubspec.yaml` has many commented-out `dependency_overrides` pointing at `../deps/...` and at absolute paths under `/Users/herbert/dev/`. Uncomment those only when deliberately developing against a local checkout; never commit them enabled.
 
