@@ -69,7 +69,7 @@ jobs:
       #
       # `--only` is the other half. 3.0.0 gives the child the keychain and
       # nothing else, so what the build consumes is named here rather than
-      # subtracted downstream: the deploy key, for `git-buildnumber.sh
+      # subtracted downstream: the deploy key, for `ship.sh buildnumber
       # generate`. APPLE_KEYCHAIN arrives on its own. This replaced a ten-line
       # `unset` denylist in ci-release.sh, which was fail-open — every
       # credential added to the secrets file reached xcodebuild until somebody
@@ -87,7 +87,7 @@ jobs:
 
       # No keychain: nothing here signs. The build number comes from the file
       # the build step wrote, because the two must publish the same one and
-      # only the first allocates — `git-buildnumber.sh generate` pushes a ref to
+      # only the first allocates — `ship.sh buildnumber generate` pushes a ref to
       # claim it, so calling it twice would upload an artifact whose
       # CFBundleVersion is not the one Apple was told about.
       - name: 'upload ${{ matrix.platform }}'
