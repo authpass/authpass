@@ -77,8 +77,8 @@ packages:
     dependency: "direct main"
     description:
       path: cux_ship
-      ref: "6a8254e96df543e6c22e2edadfc443c70ab6c04c"
-      resolved-ref: "6a8254e96df543e6c22e2edadfc443c70ab6c04c"
+      ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
+      resolved-ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "3.4.0-dev.1"

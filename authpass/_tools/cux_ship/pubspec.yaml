@@ -28,7 +28,9 @@ dependencies:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_ship
-      ref: 6a8254e96df543e6c22e2edadfc443c70ab6c04c
+      # cux_ship main, carrying `manifest write --derived-from` (PR #11) and
+      # the aab/ipa baked-value cross-checks (PR #10).
+      ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
