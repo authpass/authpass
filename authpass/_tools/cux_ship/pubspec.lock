@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: a96e8b390886ee8abb49b7bd3ac8df6f451c621619f52a26e815fdcf568959ff
+      sha256: be169cf6ac481e052c4538715d88841d567150dfe1df38aaec76461a4e7b39f2
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.9"
+    version: "4.1.0"
   args:
     dependency: transitive
     description:
@@ -65,22 +65,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  cux_buildnumber:
+    dependency: "direct main"
+    description:
+      name: cux_buildnumber
+      sha256: "6993d7c0759baf5675234cbe7ad22c3f1595c1ad92d1765fca84be5732921ff0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0-dev.1"
   cux_ship:
     dependency: "direct main"
     description:
       name: cux_ship
-      sha256: b5e8e6801d7c4c0e79545102c3a1cdea1e7d8ab9688628078fa59a8f34838107
+      sha256: "55ef4abc8a6e79e1c67130c5ede4ba44356784d63d59c8c44402d1f113ae1a4a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "3.4.0-dev.1"
   cux_ship_verify:
     dependency: transitive
     description:
       name: cux_ship_verify
-      sha256: "6ba516d144d17cbbc42b488c767a8b54e819a4db027f758525b454d4bfb61f26"
+      sha256: a1d3b07e8e01c986c4da2b42234eeb00ef8fbe26570ee0b833802c244bee572a
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.9.0"
   dart_jsonwebtoken:
     dependency: transitive
     description:
@@ -149,10 +157,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "6300175e00616bbc832e2fc91bfa4d776af5402c81c7151bee6905bb08473c52"
+      sha256: "1976370a4df3091bb0f72409c187ad1f9132a818bc6b95ca59c0bae1c75c688e"
       url: "https://pub.dev"
     source: hosted
-    version: "4.9.1"
+    version: "4.9.2"
   meta:
     dependency: transitive
     description:
@@ -169,14 +177,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
-  petitparser:
-    dependency: transitive
-    description:
-      name: petitparser
-      sha256: "91bd59303e9f769f108f8df05e371341b15d59e995e6806aefab827b58336675"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.2"
   pointycastle:
     dependency: transitive
     description:
@@ -241,14 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  xml:
-    dependency: transitive
-    description:
-      name: xml
-      sha256: "67f0aff7be013d107995e9b75bf4e7f2c3ef2dfdb2c8e68024bba0a7fd5756a4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.1"
   yaml:
     dependency: transitive
     description:

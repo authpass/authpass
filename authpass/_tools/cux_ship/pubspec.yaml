@@ -18,4 +18,12 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  cux_ship: ^2.2.0
+  # 3.x: `keychain exec` passes nothing to its child unless selected with
+  # --only, and strips SOPS_AGE_KEY unconditionally — see ci-release.sh and
+  # ios.yaml, which were restructured for exactly that.
+  cux_ship: ^3.4.0-dev.1
+  # The git-buildnumber port. Replaces the shell script release.sh used to curl
+  # from the mutable `stable` branch and execute — unpinned, unhashed, run on a
+  # CI machine holding push credentials. This is pinned by the lockfile like
+  # everything else here.
+  cux_buildnumber: ^0.1.0-dev.1
