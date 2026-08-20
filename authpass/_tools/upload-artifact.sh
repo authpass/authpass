@@ -47,3 +47,20 @@ curl --request POST \
     --form upload="@${upload_file}" \
     --form filename="${remote_name}" | cat
 
+# The build manifest travels beside its artifact, across this hop like every
+# other: a repackager (make_deb) downloads it next to the tarball, verifies
+# the bytes against its digest, and derives its own manifest from it. Absent
+# for artifacts nothing writes one for yet, so its absence is not an error —
+# but the two uploads are not atomic, so a `latest` alias can briefly name a
+# tarball whose sidecar is one PUT behind; the consumer's digest check turns
+# that skew into a loud retry rather than silent wrongness.
+manifest_file="${upload_file}.manifest.json"
+if [ -f "${manifest_file}" ]; then
+  curl --request POST \
+      --url https://data.authpass.app/data/artifact.push \
+      --fail \
+      --form token="${token}" \
+      --form upload="@${manifest_file}" \
+      --form filename="${remote_name}.manifest.json" | cat
+fi
+

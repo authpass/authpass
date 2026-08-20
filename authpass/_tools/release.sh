@@ -113,6 +113,37 @@ echo "::set-output name=appbuildnumber::$buildnumber"
 mkdir -p "$(dirname "${buildnumber_record}")"
 echo "${buildnumber}" > "${buildnumber_record}"
 
+# What every build manifest records, captured *before* any build step can move
+# the tree — the writer refuses to derive gitSha and dirty itself, because it
+# runs after the build, where a moved tree is invisible.
+manifest_version=$(grep version pubspec.yaml | head -1 | cut -d' ' -f2 | cut -d'+' -f1)
+manifest_gitsha=$(git rev-parse HEAD)
+if test -z "$(git status --porcelain)" ; then
+    manifest_dirty=--no-dirty
+else
+    manifest_dirty=--dirty
+fi
+flutter_version=$($FLT --version 2>/dev/null | head -1 | awk '{print $2}')
+
+# Writes <artifact>.manifest.json beside the artifact — schema 2, the digest
+# taken from the bytes as they stand, so it is called after signing and
+# packing, never before. The default sidecar name matters: the android matrix
+# puts six flavors' artifacts through here, and a fixed manifest.json could
+# only describe one of them.
+write_manifest() {
+    local artifact="$1" platform="$2" format="$3" flavor="${4:-}"
+    ./_tools/ship.sh manifest write \
+        --artifact "${artifact}" \
+        --platform "${platform}" \
+        --format "${format}" \
+        ${flavor:+--flavor "${flavor}"} \
+        --version-name "${manifest_version}" \
+        --build-number "${buildnumber}" \
+        --git-sha "${manifest_gitsha}" \
+        "${manifest_dirty}" \
+        --toolchain "flutter=${flutter_version}"
+}
+
 $FLT pub get
 case "${flavor}" in
     ios)
@@ -130,6 +161,7 @@ case "${flavor}" in
         # decrypts. See docs/apple-signing.md.
         if does_phase build ; then
             ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
+            write_manifest build/ios/ipa/authpass.ipa ios ipa
         fi
         if does_phase upload ; then
             ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
@@ -141,6 +173,9 @@ case "${flavor}" in
         # and asks for one.
         if does_phase build ; then
             ./_tools/build-macos.sh -t lib/env/production.dart -b $buildnumber
+            # The export names the .pkg after the scheme, so glob like
+            # upload-macos.sh does.
+            write_manifest "$(ls build/macos/pkg/*.pkg | head -1)" macos pkg
         fi
         if does_phase upload ; then
             ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
@@ -156,11 +191,13 @@ case "${flavor}" in
         outputpath="${apkpath}/${outputfilename}"
         echo "Copying to output apk ${apk}"
         cp ${apk} ${outputpath}
+        write_manifest "${outputpath}" android apk "${flavor}"
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
     ;;
     playstoredev)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstoredev
+        write_manifest build/app/outputs/bundle/playstoredevRelease/app-playstoredev-release.aab android aab playstoredev
         echo "Check if we are in a beta branch ${GITHUB_REF}"
         track=internal
         if [[ "${GITHUB_REF:-}" == *"beta"* || "${GITHUB_REF:-}" == *"stable"* ]] ; then
@@ -178,6 +215,7 @@ case "${flavor}" in
     ;;
     android | playstore)
         $FLT build -v appbundle -t lib/env/production.dart --release --build-number $buildnumber --flavor playstore
+        write_manifest build/app/outputs/bundle/playstoreRelease/app-playstore-release.aab android aab playstore
         ./_tools/upload-android.sh -f playstore -t internal -b $buildnumber
     ;;
     linux)
@@ -190,6 +228,9 @@ case "${flavor}" in
         echo "${version}+${buildnumber}" > build/${flavor}/${arch}/release/version.txt
         echo "${version}+${buildnumber}" > build/${flavor}/${arch}/release/bundle/version.txt
         tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/x64/release/bundle
+        # The tarball is the parent of the derived .deb: make_deb downloads the
+        # sidecar next to it, verifies the bytes, and derives its own manifest.
+        write_manifest "${outputpath}" linux tar.gz
         echo "::set-output name=appversion::${version}"
         echo "::set-output name=outputfilename::${outputfilename}"
         echo "::set-output name=outputpath::${outputpath}"
@@ -204,6 +245,9 @@ case "${flavor}" in
 
         outputfilename="AuthPass-setup-${version}_${buildnumber}.exe"
         outputpath="build/_authpass/windows/setup/${outputfilename}"
+        # `exe` has no cross-check reader in cux_ship; the manifest is taken on
+        # trust, which the writer says out loud.
+        write_manifest "${outputpath}" windows exe
         #echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
         #echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
         #tar czvf ${outputpath} --transform "s/^build.*bundle/authpass/" build/${flavor}/release/bundle
@@ -224,6 +268,7 @@ case "${flavor}" in
 
         version="${version}" buildnumber="${buildnumber}" \
           _tools/windows/create_portable.sh
+        write_manifest "build/_authpass/windows/release/AuthPass-portable-${version}_${buildnumber}.zip" windows zip
     ;;
     msix)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
@@ -240,6 +285,7 @@ case "${flavor}" in
         outputfilename="authpass-${version}_${buildnumber}.msix"
         outputpath="${outputdir}/${outputfilename}"
         cp "${outputdir}/authpass.msix" "${outputpath}"
+        write_manifest "${outputpath}" windows msix
 
         #echo "${version}+${buildnumber}" > build/${flavor}/release/version.txt
         #echo "${version}+${buildnumber}" > build/${flavor}/release/bundle/version.txt
@@ -249,6 +295,9 @@ case "${flavor}" in
         echo "::set-output name=outputpath::${outputpath}"
     ;;
     web)
+        # No manifest, deliberately: web deploys a directory to gh-pages, no
+        # archive exists in the flow, and a required digest of a directory is
+        # not a thing. If web ever ships as an archive, it gets one then.
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
         $FLT build web -t lib/env/web.dart --release \
             --dart-define=AUTHPASS_VERSION=$version \
