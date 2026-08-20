@@ -18,4 +18,11 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  cux_ship: ^3.1.0
+  cux_ship: ^3.4.0-dev.1
+  # The git-buildnumber port, invoked through ship.sh's `buildnumber`
+  # dispatch. Replaces the shell script release.sh used to curl from the
+  # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
+  # machine holding push credentials. A separate package from cux_ship (an
+  # allocator whose only dependency is git should not pull googleapis), but
+  # pinned by the same lockfile so there is exactly one place to bump.
+  cux_buildnumber: ^0.1.0-dev.1

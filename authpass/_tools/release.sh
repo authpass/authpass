@@ -31,22 +31,6 @@ ls ${DEPS}/flutter || echo "Flutter not found"
 
 $FLT --version
 
-if ! test -e ./git-buildnumber.sh ; then
-    # --fail matters more than it looks. Without it curl writes the *error body*
-    # to the file, and the next two lines chmod +x it and run it — so a bad day
-    # at raw.githubusercontent.com becomes an executable HTML page. That is not
-    # hypothetical: on 2026-08-17 a 429 during a GitHub outage produced
-    #
-    #     ./git-buildnumber.sh: line 1: 429:: command not found
-    #
-    # and the build number came back empty. --retry covers the transient
-    # statuses (408, 429, 5xx) so the outage is survived rather than merely
-    # reported, and -S keeps the reason visible when it is not.
-    curl -sS --fail --retry 5 --retry-delay 5 \
-        -O https://raw.githubusercontent.com/hpoul/git-buildnumber/stable/git-buildnumber.sh
-    chmod +x git-buildnumber.sh
-fi
-
 # Which half of a release this run does. `all` — the default, and what every
 # platform but ios and macos ever uses — is the behaviour this script has always
 # had. The Apple path splits it into two CI steps, for two reasons:
@@ -67,7 +51,7 @@ esac
 does_phase() { test "${RELEASE_PHASE}" = all -o "${RELEASE_PHASE}" = "$1" ; }
 
 # The two steps must publish the *same* build number, and only the first one
-# allocates. `git-buildnumber.sh generate` pushes a ref to claim it, so calling
+# allocates. `ship.sh buildnumber generate` pushes a ref to claim it, so calling
 # it twice would claim two and upload an artifact whose CFBundleVersion is not
 # the one Apple was told about.
 #
@@ -113,7 +97,14 @@ if test -z "$buildnumber" ; then
       git checkout -- pubspec.lock
       ;;
     esac
-    buildnumber=`./git-buildnumber.sh generate`
+    # The Dart port of git-buildnumber, resolved by _tools/cux_ship's lockfile
+    # like the rest of the release tooling. Replaces a shell script this used
+    # to curl from a mutable branch and execute — unpinned, on a runner
+    # holding push credentials, and one GitHub 429 away from executing an
+    # error page (see the git history of this block). Same command surface:
+    # the number on stdout, logs on stderr, GIT_PUSH_REMOTE and
+    # GIT_SSH_COMMAND honored from the environment.
+    buildnumber=$(./_tools/ship.sh buildnumber generate)
 else
 	echo "WARNING: forcing buildnumber $buildnumber"
 fi
