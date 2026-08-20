@@ -28,7 +28,11 @@ dependencies:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_ship
-      ref: 6a8254e96df543e6c22e2edadfc443c70ab6c04c
+      # DO NOT MERGE at this ref: 84fe85e is cux_ship PR #11 (--derived-from),
+      # on a feature branch — a squash-merge would strand this sha, which is
+      # the exact decay BUILD-TAGS documents. Repin to the main sha once #11
+      # lands, before this PR merges.
+      ref: 84fe85eb2980d577e5bccf52f866806d6b7df10c
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
