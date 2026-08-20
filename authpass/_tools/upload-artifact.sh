@@ -54,6 +54,11 @@ curl --request POST \
 # but the two uploads are not atomic, so a `latest` alias can briefly name a
 # tarball whose sidecar is one PUT behind; the consumer's digest check turns
 # that skew into a loud retry rather than silent wrongness.
+# Tolerated failure, for now: artifact-push.php admits filenames from an
+# anchored allow-list, and no `*.manifest.json` companion pattern is in it yet
+# — so until the server learns them, this refusal is expected and must not
+# fail an artifact upload that already succeeded. Drop the `||` once the
+# allow-list knows manifests; a silent-refusal state is not worth keeping.
 manifest_file="${upload_file}.manifest.json"
 if [ -f "${manifest_file}" ]; then
   curl --request POST \
@@ -61,6 +66,7 @@ if [ -f "${manifest_file}" ]; then
       --fail \
       --form token="${token}" \
       --form upload="@${manifest_file}" \
-      --form filename="${remote_name}.manifest.json" | cat
+      --form filename="${remote_name}.manifest.json" | cat \
+    || echo "WARNING: manifest upload refused — add ${remote_name}.manifest.json's pattern to artifact-push.php's allow-list" >&2
 fi
 
