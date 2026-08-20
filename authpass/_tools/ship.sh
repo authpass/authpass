@@ -36,4 +36,16 @@ if [ ! -f .dart_tool/package_config.json ]; then
   "$dart" pub get >&2
 fi
 
+# The build number allocator. A separate package from cux_ship — an allocator
+# whose only dependency is git should not pull googleapis — but resolved by the
+# same lockfile here, so there is exactly one pin. Replaces the
+# git-buildnumber.sh release.sh used to curl from a mutable branch and execute.
+# Runs from this directory, which is inside the repository; git does not care
+# where inside, and `generate` prints the number on stdout and everything else
+# on stderr, same as the script it replaces.
+if [ "${1:-}" = "buildnumber" ]; then
+  shift
+  exec "$dart" run cux_buildnumber:git_buildnumber "$@"
+fi
+
 exec "$dart" run cux_ship "$@"

@@ -31,11 +31,6 @@ ls ${DEPS}/flutter || echo "Flutter not found"
 
 $FLT --version
 
-if ! test -e ./git-buildnumber.sh ; then
-    curl -s -O https://raw.githubusercontent.com/hpoul/git-buildnumber/stable/git-buildnumber.sh
-    chmod +x git-buildnumber.sh
-fi
-
 buildnumber=${FORCE_BUILDNUMBER:-}
 if test -z "$buildnumber" ; then
     git --version
@@ -55,7 +50,12 @@ if test -z "$buildnumber" ; then
       git checkout -- pubspec.lock
       ;;
     esac
-    buildnumber=`./git-buildnumber.sh generate`
+    # The Dart port, resolved by _tools/cux_ship's lockfile like the rest of
+    # the release tooling. Replaces a git-buildnumber.sh this script curled
+    # from a mutable branch and executed — unpinned, on a runner holding push
+    # credentials. GIT_PUSH_REMOTE and GIT_SSH_COMMAND pass through from the
+    # environment exactly as they did to the shell script.
+    buildnumber=$(./_tools/ship.sh buildnumber generate)
 else
 	echo "WARNING: forcing buildnumber $buildnumber"
 fi
@@ -65,22 +65,19 @@ echo "::set-output name=appbuildnumber::$buildnumber"
 $FLT pub get
 case "${flavor}" in
     ios)
-        # The split is the point. This whole script runs under `keychain exec`
-        # (see .github/workflows/ios.yaml), which places no App Store Connect
-        # credential in the environment — so the archive cannot hold a key that
-        # could create or revoke signing material, rather than merely not using
-        # one. The upload asks for a key itself, because it is the step that
-        # needs it, and it is an individual key scoped to this app.
-        # See docs/apple-signing.md.
+        # Build only. This whole script runs under `keychain exec` (see
+        # .github/workflows/ios.yaml), which since cux_ship 3.0.0 strips the
+        # sops identity from its child — so a nested `secrets exec` in here
+        # can decrypt nothing, and that is the design: the archive cannot hold
+        # a key that could create or revoke signing material, and the build
+        # environment cannot mint one either. The upload is the workflow step
+        # after this one, holding the one credential it needs and nothing
+        # signing-related. See docs/apple-signing.md.
         ./_tools/build-ios.sh -t lib/env/production.dart -b $buildnumber
-        ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
-            -- authpass/_tools/upload-ios.sh
     ;;
     macos)
-        # As for ios: the archive holds no key, the upload asks for one.
+        # As for ios: build only, the upload is its own workflow step.
         ./_tools/build-macos.sh -t lib/env/production.dart -b $buildnumber
-        ./_tools/ship.sh secrets exec --keystore upload --api-key upload \
-            -- authpass/_tools/upload-macos.sh
     ;;
     samsungapps | huawei | sideload | amazon)
         version=$(cat pubspec.yaml | grep version | cut -d' ' -f2 | cut -d'+' -f1)
