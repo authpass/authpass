@@ -71,7 +71,8 @@ fi
 # See upload-ios.sh. macOS keeps its own build numbers, so this asks about the
 # macos platform of the same app rather than iOS.
 echo "==> checking build $BUILD_NUMBER is newer than what Apple holds"
-NEWEST=$(cd _tools/cux_ship && dart run cux_ship appstore build-number \
+# Through ship.sh, for its dart resolution — see upload-ios.sh.
+NEWEST=$(./_tools/ship.sh appstore build-number \
   --bundle-id "$BUNDLE_ID" --platform macos 2>/dev/null | tail -1 | tr -dc '0-9')
 if [ -n "$NEWEST" ] && [ "$BUILD_NUMBER" -le "$NEWEST" ] \
    && [ "${AUTHPASS_ALLOW_REUSED_BUILD_NUMBER:-}" != "1" ]; then
@@ -99,9 +100,9 @@ echo "    version      $VERSION ($BUILD_NUMBER)"
 echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 
 # --yes: see upload-ios.sh.
-# not exec: the trap above still has a temp file to clean up
-cd _tools/cux_ship
-dart run cux_ship --yes appstore upload \
+# not exec: the trap above still has a temp file to clean up.
+# Paths stay ../../-relative: ship.sh runs cux_ship from _tools/cux_ship.
+./_tools/ship.sh --yes appstore upload \
   --platform macos \
   --ipa "../../$PKG" \
   --bundle-id "$BUNDLE_ID" \

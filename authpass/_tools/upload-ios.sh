@@ -81,7 +81,10 @@ fi
 # Set AUTHPASS_ALLOW_REUSED_BUILD_NUMBER=1 to skip, e.g. when deliberately
 # re-uploading after a processing failure.
 echo "==> checking build $BUILD_NUMBER is newer than what Apple holds"
-NEWEST=$(cd _tools/cux_ship && dart run cux_ship appstore build-number \
+# Through ship.sh, which resolves the pinned SDK's dart: this script now runs
+# as its own workflow step, where nothing has put a dart on PATH — a bare
+# `dart run` here died with 127 the first time the split flow ran.
+NEWEST=$(./_tools/ship.sh appstore build-number \
   --bundle-id "$BUNDLE_ID" 2>/dev/null | tail -1 | tr -dc '0-9')
 if [ -n "$NEWEST" ] && [ "$BUILD_NUMBER" -le "$NEWEST" ] \
    && [ "${AUTHPASS_ALLOW_REUSED_BUILD_NUMBER:-}" != "1" ]; then
@@ -115,9 +118,10 @@ echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 
 # --yes because there is no terminal on CI, and cux_ship treats "no terminal and
 # no --yes" as a refusal rather than an assumed yes.
-# not exec: the trap above still has a temp file to clean up
-cd _tools/cux_ship
-dart run cux_ship --yes appstore upload \
+# not exec: the trap above still has a temp file to clean up.
+# Paths stay ../../-relative: ship.sh runs cux_ship from _tools/cux_ship, the
+# same directory this used to cd into.
+./_tools/ship.sh --yes appstore upload \
   --ipa "../../$IPA" \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
