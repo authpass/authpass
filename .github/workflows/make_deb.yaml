@@ -25,18 +25,48 @@ jobs:
       - id: build
         run: |
           path=debian/opt/authpass
-          cd "$path"
-          wget https://authpass-data.codeux.design/data/artifacts/authpass-linux-latest.tar.gz
-          tar -zxvf authpass-linux-latest.tar.gz authpass -C . --strip-components=1
-          rm authpass-linux-latest.tar.gz
-          version=$(cat version.txt)
+          base=https://authpass-data.codeux.design/data/artifacts
+          # The sidecar first, then the artifact: the two uploads are not
+          # atomic, so fetching in this order turns a mid-publish skew into a
+          # digest mismatch — loud and retryable — rather than a manifest
+          # describing bytes we do not have. Tolerated when absent: the server
+          # only recently learned to accept manifests, and a tarball published
+          # before that has none.
+          wget "${base}/authpass-linux-latest.tar.gz.manifest.json" \
+            || echo "WARNING: no manifest beside the tarball — the deb will carry no provenance record"
+          wget "${base}/authpass-linux-latest.tar.gz"
+          src=authpass-linux-latest.tar.gz
+          if [ -f authpass-linux-latest.tar.gz.manifest.json ]; then
+            # Restore the versioned names the manifest records: a reader
+            # refuses a sidecar whose stem disagrees with its artifact field,
+            # and the parent digest check finds the artifact by that name.
+            src=$(jq -r .artifact authpass-linux-latest.tar.gz.manifest.json)
+            mv authpass-linux-latest.tar.gz.manifest.json "${src}.manifest.json"
+            mv authpass-linux-latest.tar.gz "${src}"
+          fi
+          tar -zxvf "${src}" -C "${path}" --strip-components=1 authpass
+          version=$(cat "${path}/version.txt")
           version_name=${version/+/_}
           filename="authpass-linux-${version_name}.deb"
-          cd ../../../
           sed -i "s/^Version=1.0/Version=${version}/g" debian/usr/share/applications/authpass.desktop
           sed -i "s/^Version: 1.0/Version: ${version}/g" debian/DEBIAN/control
-          dpkg-deb --build --root-owner-group ./debian 
+          dpkg-deb --build --root-owner-group ./debian
           mv debian.deb $filename
+          if [ -f "${src}.manifest.json" ]; then
+            # The deb inherits the tarball's build facts — gitSha, dirty,
+            # version, build number — and records its own packaging step:
+            # this checkout is the default branch at trigger time, derivable
+            # from nothing afterwards, and a broken Depends: line's
+            # provenance is this commit, not the tarball's. The tarball sits
+            # beside its manifest here, so the parent digest is verified in
+            # the same call. upload-artifact.sh then ships the deb's sidecar
+            # beside the deb on its own.
+            ./authpass/_tools/ship.sh manifest write \
+              --artifact "${filename}" --platform linux --format deb \
+              --derived-from "${src}.manifest.json" \
+              --packaging "gitSha=$(git rev-parse HEAD)" \
+              --packaging "dirty=false"
+          fi
           echo "::set-output name=outputfilename::${filename}"
           echo "::set-output name=outputpath::${filename}"
       - name: upload artifact
