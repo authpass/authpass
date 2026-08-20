@@ -44,8 +44,14 @@ jobs:
       # into a keychain that dies with the step, installs the named profiles,
       # and — the reason it is the outer wrapper — places no App Store Connect
       # credential in the environment at all. The archive therefore cannot hold
-      # a key that could create or revoke signing material. _tools/release.sh
-      # asks for one around the upload alone.
+      # a key that could create or revoke signing material.
+      #
+      # Since cux_ship 3.0.0 the child gets the keychain and *nothing* else:
+      # no credentials without `--only`, and never the sops identity. The
+      # deploy key is named because ci-release.sh pushes build numbers; the
+      # upload is a separate step below, because the nested `secrets exec` the
+      # build used to run cannot decrypt anything in here any more — which is
+      # the point, not a limitation.
       #
       # Profiles are named because naming them is what makes an expired one
       # fatal here rather than a signing failure twenty minutes in. All four,
@@ -56,5 +62,16 @@ jobs:
         run: >-
           ./authpass/_tools/ship.sh keychain exec
           --profile ios_appstore --profile ios_appstore_autofill
-          --profile macos_appstore --profile macos_developerid --
+          --profile macos_appstore --profile macos_developerid
+          --only ssh_keys.github_deploy --
           ./authpass/_tools/ci-release.sh ${{ matrix.platform }}
+      # The upload, outside `keychain exec`: it needs the App Store Connect key
+      # and nothing signing-related, the exact inverse of the build. `--only`
+      # places that one credential rather than all seventeen.
+      - name: 'upload ${{ matrix.platform }}'
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: >-
+          ./authpass/_tools/ship.sh secrets exec
+          --only apple.api_keys.upload --
+          ./authpass/_tools/upload-${{ matrix.platform }}.sh
