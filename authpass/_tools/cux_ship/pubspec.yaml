@@ -34,7 +34,10 @@ dependencies:
       # cross-check reader and uploadCollisionExit = 3. The branch will be
       # true-merged, so this sha stays reachable; repin to the main sha once
       # #13 lands.
-      ref: 176924c4ee5bcda9155a44f633a10d24ea41f9dc
+      # 1b6d069 additionally runs the baked-value cross-check at `manifest
+      # write` time, refusing before the file exists — a wrong manifest on
+      # disk is a wrong manifest somebody will believe.
+      ref: 1b6d069a6cc242877c47f39dae37eb1e555b2f32
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
