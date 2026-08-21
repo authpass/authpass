@@ -27,7 +27,9 @@ dependencies:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_ship
-      ref: b2110d461cf7fca29b4f5e497babe78d3753134a
+      # c38b705 fixes findSops on windows: the probe now asks for sops.exe and
+      # the PATH fallback uses `where` instead of shelling to a nonexistent sh.
+      ref: c38b7053c75fe5d8cb507ccc1eac312549c86899
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
