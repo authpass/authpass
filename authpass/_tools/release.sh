@@ -123,7 +123,11 @@ if test -z "$(git status --porcelain)" ; then
 else
     manifest_dirty=--dirty
 fi
-flutter_version=$($FLT --version 2>/dev/null | head -1 | awk '{print $2}')
+# The line starting "Flutter", not the first line: _tools/flutter_run.sh and
+# the wrappers print their own banner first, which is how a manifest once
+# recorded `flutter=/home/runner/deps/flutter` as a version. Empty when
+# nothing matches, and write_manifest then omits the toolchain field.
+flutter_version=$($FLT --version 2>/dev/null | grep -m1 '^Flutter' | awk '{print $2}')
 
 # Writes <artifact>.manifest.json beside the artifact — schema 2, the digest
 # taken from the bytes as they stand, so it is called after signing and
@@ -132,8 +136,11 @@ flutter_version=$($FLT --version 2>/dev/null | head -1 | awk '{print $2}')
 # only describe one of them.
 write_manifest() {
     local artifact="$1" platform="$2" format="$3" flavor="${4:-}"
+    # Absolute, because ship.sh runs cux_ship from _tools/cux_ship: a path
+    # relative to *this* script's directory resolves against the wrong one
+    # there — which is precisely how the first stable push failed.
     ./_tools/ship.sh manifest write \
-        --artifact "${artifact}" \
+        --artifact "$PWD/${artifact}" \
         --platform "${platform}" \
         --format "${format}" \
         ${flavor:+--flavor "${flavor}"} \
@@ -141,7 +148,7 @@ write_manifest() {
         --build-number "${buildnumber}" \
         --git-sha "${manifest_gitsha}" \
         "${manifest_dirty}" \
-        --toolchain "flutter=${flutter_version}"
+        ${flutter_version:+--toolchain "flutter=${flutter_version}"}
 }
 
 $FLT pub get

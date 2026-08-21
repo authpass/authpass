@@ -37,12 +37,19 @@ RELEASE_PHASE=${RELEASE_PHASE:-all}
 # whole split exists to remove.
 if test "${RELEASE_PHASE}" = upload ; then
     github_key="${GITHUB_DEPLOY_KEY_PATH:-}"
-else
+elif test "$target_platform" == "ios" || test "$target_platform" == "macos" ; then
     # The remedy names the whole invocation, flag included. Before cux_ship
     # 3.0.0 this credential arrived by default and "run it under a wrapper"
     # would have been enough; under the empty default that advice gets you a
     # keychain, clears this check, and fails further down instead.
     github_key="${GITHUB_DEPLOY_KEY_PATH:?run under 'cux_ship keychain exec --only ssh_keys.github_deploy'}"
+else
+    # Every other platform runs without a keychain wrapper and pushes build
+    # numbers over the checkout's own https credentials — the web workflow has
+    # done so since before the deploy key existed here, and requiring the key
+    # unconditionally is what broke it on the first stable push after the
+    # split.
+    github_key="${GITHUB_DEPLOY_KEY_PATH:-}"
 fi
 ssh-keygen -F github.com > /dev/null || (mkdir -p ~/.ssh && echo "github.com,192.30.253.113 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" >> ~/.ssh/known_hosts)
 ssh-keygen -F gitlab.com > /dev/null || (mkdir -p ~/.ssh && echo "|1|SM9ao9YoaAXLKTeh0tbzHwhhLcY=|0uw956+KbChkLUB6mmO8gq//Nsk= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9" >> ~/.ssh/known_hosts)
@@ -91,6 +98,12 @@ fi
 
 pwd
 
-GIT_SSH_COMMAND="ssh -i \"$github_key\"" \
-    GIT_PUSH_REMOTE='git@github.com:authpass/authpass.git' \
+if test -n "$github_key" ; then
+    GIT_SSH_COMMAND="ssh -i \"$github_key\"" \
+        GIT_PUSH_REMOTE='git@github.com:authpass/authpass.git' \
+        ./_tools/release.sh "$target_variant"
+else
+    # No key, no ssh: git-buildnumber pushes to `origin`, whose persisted
+    # checkout token already proves itself on every android run.
     ./_tools/release.sh "$target_variant"
+fi
