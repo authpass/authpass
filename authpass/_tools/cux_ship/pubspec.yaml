@@ -18,26 +18,11 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  # From git at a pinned commit, not pub: the manifest writer (`cux_ship
-  # manifest write`) is on main and unreleased, and Herbert wants both
-  # consuming projects on it before a version number is spent. A full sha,
-  # never a branch — a branch resolves to whatever it points at on the next
-  # `pub get`, so two machines would build different code from one pubspec.
-  # TO RETURN TO PUB: restore `cux_ship: ^x.y.z` once the writer is released.
-  cux_ship:
-    git:
-      url: https://github.com/codeuxdesign/cux_ship.git
-      path: cux_ship
-      # cux_ship PR #13 (`fix/record-upload-capability-check`): upload tagging
-      # that actually fires for --manifest callers — the guard on main at
-      # cc41902 skipped recording for exactly those — plus the .apk
-      # cross-check reader and uploadCollisionExit = 3. The branch will be
-      # true-merged, so this sha stays reachable; repin to the main sha once
-      # #13 lands.
-      # 1b6d069 additionally runs the baked-value cross-check at `manifest
-      # write` time, refusing before the file exists — a wrong manifest on
-      # disk is a wrong manifest somebody will believe.
-      ref: 1b6d069a6cc242877c47f39dae37eb1e555b2f32
+  # 3.4.1: the manifest writer with write-time cross-checks, --derived-from,
+  # upload tagging whose recording actually fires for --manifest callers (the
+  # 3.4.0 guard was silently dead for exactly those), the .apk cross-check
+  # reader, and uploadCollisionExit = 3.
+  cux_ship: ^3.4.1
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
