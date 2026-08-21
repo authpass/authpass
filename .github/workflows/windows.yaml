@@ -22,6 +22,12 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+    # Before the checkout, so the clone is born with it: with autocrlf on
+    # (the runner default), git reports LF-normalized files as pending CRLF
+    # conversions, and the buildnumber allocator's clean-repository assertion
+    # reads that as a dirty tree. Checked out as-is, the tree stays clean.
+    - shell: bash
+      run: git config --global core.autocrlf false
     - uses: actions/checkout@v3
       with:
         submodules: true
