@@ -117,8 +117,17 @@ echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 # no --yes" as a refusal rather than an assumed yes.
 # not exec: the trap above still has a temp file to clean up
 cd _tools/cux_ship
+# The manifest supplies the built commit for the `uploaded/` tag. With
+# tag.upload.enabled, an upload with neither manifest nor --commit is refused
+# by cux_ship with a message naming the fix — see upload-android.sh.
+MANIFEST=()
+# ../../ in the test too: this runs after the cd above.
+if [ -f "../../$IPA.manifest.json" ]; then
+  MANIFEST=(--manifest "../../$IPA.manifest.json")
+fi
 dart run cux_ship --yes appstore upload \
   --artifact "../../$IPA" \
+  ${MANIFEST+"${MANIFEST[@]}"} \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \
