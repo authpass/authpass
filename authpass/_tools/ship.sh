@@ -44,7 +44,30 @@ fi
 # on stderr, same as the script it replaces.
 if [ "${1:-}" = "buildnumber" ]; then
   shift
-  exec "$dart" run cux_buildnumber:git_buildnumber "$@"
+  # Test-branch instrumentation: the allocator's callers capture stdout with a
+  # command substitution, so when it dies its last words go nowhere — a silent
+  # 255 on windows is exactly that shape. Both streams go to files first and
+  # are replayed to stderr on failure, so no run can hide how it died. Note
+  # this also changes the experiment: a child whose real stderr handle is
+  # broken can write to a *file* fine, so a run that goes green only under
+  # this instrumentation is itself a finding.
+  bn_out=$(mktemp)
+  bn_err=$(mktemp)
+  set +e
+  "$dart" run cux_buildnumber:git_buildnumber "$@" >"$bn_out" 2>"$bn_err"
+  bn_code=$?
+  set -e
+  cat "$bn_err" >&2
+  if [ "$bn_code" -ne 0 ]; then
+    {
+      echo "== buildnumber exited $bn_code =="
+      echo "== captured stdout =="
+      cat "$bn_out"
+      echo "== end =="
+    } >&2
+  fi
+  cat "$bn_out"
+  exit "$bn_code"
 fi
 
 exec "$dart" run cux_ship "$@"
