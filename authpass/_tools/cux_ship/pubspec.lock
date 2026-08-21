@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: cux_ship
-      sha256: "802b7f419a5591993f4f5a6339872f016ffb69289817be2c3dd7c24cc6a6ffa7"
+      sha256: ffd448d82ead6d0988f6815d4ac269963ec69a04102fc8903c64d7dd4cb45f94
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.1"
+    version: "3.4.2"
   cux_ship_verify:
     dependency: transitive
     description:

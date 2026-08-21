@@ -18,11 +18,11 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  # 3.4.1: the manifest writer with write-time cross-checks, --derived-from,
-  # upload tagging whose recording actually fires for --manifest callers (the
-  # 3.4.0 guard was silently dead for exactly those), the .apk cross-check
-  # reader, and uploadCollisionExit = 3.
-  cux_ship: ^3.4.1
+  # 3.4.2: windows support proven by the seven-round sha loop (sops/age pins,
+  # findSops on windows, .sh children through Git Bash — the real one, not the
+  # WSL shim — and a platform-aware signal list), plus the same-commit tag
+  # race fixed in both tag paths by asking origin what its tag names.
+  cux_ship: ^3.4.2
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
