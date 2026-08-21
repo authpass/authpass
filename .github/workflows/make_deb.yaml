@@ -62,8 +62,8 @@ jobs:
             # the same call. upload-artifact.sh then ships the deb's sidecar
             # beside the deb on its own.
             ./authpass/_tools/ship.sh manifest write \
-              --artifact "${filename}" --platform linux --format deb \
-              --derived-from "${src}.manifest.json" \
+              --artifact "${PWD}/${filename}" --platform linux --format deb \
+              --derived-from "${PWD}/${src}.manifest.json" \
               --packaging "gitSha=$(git rev-parse HEAD)" \
               --packaging "dirty=false"
           fi
