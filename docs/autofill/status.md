@@ -187,7 +187,12 @@ and only when no child controller has claimed the screen.
 
 ## Picking it back up
 
-1. Run it on a **physical device** — everything above is simulator-only.
+1. ~~Run it on a **physical device**.~~ Done 2026-08-21: verified working on an
+   iPhone XR (Face ID) with the TestFlight build of 1.9.12 (2168) — which also
+   confirms on hardware the two claims only a device could settle: the single
+   Face ID sheet for the extension's bulk keychain read (an explicitly
+   evaluated `LAContext` covering every per-file key item), and the
+   prompt-free open/save path in the app (delete-then-add, never a read).
 2. `provideCredentialWithoutUserInteraction`, the fast path that fills without
    showing the picker at all.
 3. Delete the phase 0 spike from the shipping extension; it has served its
