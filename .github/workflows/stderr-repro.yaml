@@ -1,0 +1,79 @@
+# Minimal repro hunt for the windows silent-255: a Dart child dies before its
+# first stderr write when stderr is the inherited console handle, in the
+# nesting GH-bash -> dart (inheritStdio spawn) -> bash -> bash -> command
+# substitution. Four levels of decreasing nesting in one run; whichever level
+# first shows exit 255 with the child's stderr line missing localizes the
+# defect. Lives only on the windows-deps test branch; delete with it.
+name: stderr repro
+
+on:
+  push:
+    branches:
+      - 'windows-deps-*'
+
+jobs:
+  repro:
+    runs-on: windows-2022
+    steps:
+      - uses: dart-lang/setup-dart@v1
+      - name: write fixtures
+        shell: bash
+        run: |
+          mkdir -p repro
+          cat > repro/child.dart <<'EOF'
+          import 'dart:io';
+          void main() {
+            stderr.writeln('CHILD STDERR ALIVE');
+            print('42');
+          }
+          EOF
+          cat > repro/parent.dart <<'EOF'
+          // Mimics cux_ship secrets exec: spawn with inherited stdio, exit
+          // with the child's code.
+          import 'dart:io';
+          Future<void> main(List<String> args) async {
+            final p = await Process.start(args.first, args.sublist(1),
+                mode: ProcessStartMode.inheritStdio);
+            exit(await p.exitCode);
+          }
+          EOF
+          cat > repro/inner.sh <<'EOF'
+          #!/bin/bash
+          set -eu
+          out=$(dart repro/child.dart)
+          echo "inner captured stdout: $out"
+          EOF
+          cat > repro/outer.sh <<'EOF'
+          #!/bin/bash
+          set -eu
+          bash repro/inner.sh
+          EOF
+          chmod +x repro/inner.sh repro/outer.sh
+      - name: L1 plain substitution in GH bash
+        shell: bash
+        continue-on-error: true
+        run: |
+          set +e
+          out=$(dart repro/child.dart)
+          echo "L1 exit=$? captured=$out"
+      - name: L2 one bash layer
+        shell: bash
+        continue-on-error: true
+        run: |
+          set +e
+          bash repro/inner.sh
+          echo "L2 exit=$?"
+      - name: L3 dart inheritStdio parent over one bash
+        shell: bash
+        continue-on-error: true
+        run: |
+          set +e
+          dart repro/parent.dart bash repro/inner.sh
+          echo "L3 exit=$?"
+      - name: L4 full nesting dart parent, two bash layers
+        shell: bash
+        continue-on-error: true
+        run: |
+          set +e
+          dart repro/parent.dart bash repro/outer.sh
+          echo "L4 exit=$?"
