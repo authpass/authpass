@@ -19,8 +19,10 @@ import Foundation
 enum AutofillIdentityChannel {
   static let channelName = "design.codeux.authpass/autofill_identities"
 
-  /// NSLog rather than os.Logger: the app still deploys to iOS 13, where
-  /// Logger does not exist. The extension is free to use it — it targets 17.
+  /// NSLog rather than os.Logger, from when the app deployed to iOS 13 and
+  /// Logger (14+) did not exist. The floor is 15 now, so Logger would work —
+  /// this just has not been worth churning. The extension uses it; it
+  /// targets 17.
   private static func log(_ message: String) {
     NSLog("[autofill-identities] %@", message)
   }

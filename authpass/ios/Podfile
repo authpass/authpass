@@ -1,5 +1,9 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '13.0'
+# 15.0 for Apple's ITMS-90068: from Spring 2027 uploads need
+# MinimumOSVersion >= 15.0. Every device that ran 13 or 14 can update to 15
+# (the 13-capable floor, the iPhone 6s, received iOS 15), so this excludes
+# unupdated installations rather than hardware.
+platform :ios, '15.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
