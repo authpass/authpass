@@ -18,19 +18,11 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  # From git at a pinned commit, not pub: the manifest writer (`cux_ship
-  # manifest write`) is on main and unreleased, and Herbert wants both
-  # consuming projects on it before a version number is spent. A full sha,
-  # never a branch — a branch resolves to whatever it points at on the next
-  # `pub get`, so two machines would build different code from one pubspec.
-  # TO RETURN TO PUB: restore `cux_ship: ^x.y.z` once the writer is released.
-  cux_ship:
-    git:
-      url: https://github.com/codeuxdesign/cux_ship.git
-      path: cux_ship
-      # cux_ship main, carrying `manifest write --derived-from` (PR #11) and
-      # the aab/ipa baked-value cross-checks (PR #10).
-      ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
+  # 3.4.1: the manifest writer with write-time cross-checks, --derived-from,
+  # upload tagging whose recording actually fires for --manifest callers (the
+  # 3.4.0 guard was silently dead for exactly those), the .apk cross-check
+  # reader, and uploadCollisionExit = 3.
+  cux_ship: ^3.4.1
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI

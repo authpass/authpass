@@ -6,3 +6,12 @@
 # CHANGELOG.md and store/ deliberately stay at this level: a release describes
 # what the repository shipped, not what one package did.
 app-dir: authpass
+
+# Every upload that succeeds writes an annotated `uploaded/v{version}+{build}`
+# tag at the commit the artifact was built from (fed by the manifest beside
+# it), pushed before the store is contacted — so nothing ships unprovable.
+# One tag per commit, first store wins. The namespace is deliberately clear of
+# both `v*` (workflow triggers) and `fdroid-v*` (F-Droid's builder).
+tag:
+  upload:
+    enabled: true

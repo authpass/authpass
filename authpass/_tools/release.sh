@@ -204,11 +204,19 @@ case "${flavor}" in
           track=beta
         fi
         echo "Pushing to ${track}"
-        # Deliberately not fatal: re-running a release for a buildnumber Play
-        # already holds fails, and that is a no-op rather than a broken build.
+        # Deliberately not fatal — with one exception. Re-running a release for
+        # a buildnumber Play already holds fails, and that is a no-op rather
+        # than a broken build. But exit 3 is cux_ship's uploadCollisionExit:
+        # one build number has been used for two commits, and tolerating that
+        # would leave the provenance record naming the wrong one. The two used
+        # to be indistinguishable here, which is why the distinct code exists.
         exitCode=success
         ./_tools/upload-android.sh -f playstoredev -t "${track}" -b $buildnumber || exitCode=$?
 
+        if [[ "${exitCode}" == "3" ]] ; then
+          echo "upload refused: build number ${buildnumber} already names a different commit" >&2
+          exit 3
+        fi
         if [[ "${exitCode}" != "success" ]] ; then
           echo "upload failed. maybe this buildnumber was uploaded before? exitCode:$exitCode"
         fi
