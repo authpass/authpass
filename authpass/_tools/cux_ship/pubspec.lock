@@ -69,19 +69,18 @@ packages:
     dependency: "direct main"
     description:
       name: cux_buildnumber
-      sha256: "6993d7c0759baf5675234cbe7ad22c3f1595c1ad92d1765fca84be5732921ff0"
+      sha256: f46f5c962932bee2153205163300951519e2a571db753e82240a9a5674211d42
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0-dev.1"
+    version: "0.1.0"
   cux_ship:
     dependency: "direct main"
     description:
-      path: cux_ship
-      ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
-      resolved-ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
-      url: "https://github.com/codeuxdesign/cux_ship.git"
-    source: git
-    version: "3.4.0-dev.1"
+      name: cux_ship
+      sha256: "802b7f419a5591993f4f5a6339872f016ffb69289817be2c3dd7c24cc6a6ffa7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.1"
   cux_ship_verify:
     dependency: transitive
     description:
