@@ -44,7 +44,31 @@ fi
 # on stderr, same as the script it replaces.
 if [ "${1:-}" = "buildnumber" ]; then
   shift
-  exec "$dart" run cux_buildnumber:git_buildnumber "$@"
+  # Both streams via files, replayed to stderr afterwards — two jobs at once.
+  # Diagnostics: callers capture stdout with a command substitution, so a
+  # dying allocator's last words would otherwise go nowhere; this replays
+  # them, and no run can hide how it died. Workaround: on windows a dart
+  # child of a dart inheritStdio parent dies writing to the inherited console
+  # handle (dart-lang SDK issue pending; minimal repro on the
+  # windows-deps-b2110d4 branch), and writing to a *file* sidesteps it. If
+  # the SDK fixes that, the diagnostic half still earns the block its place.
+  bn_out=$(mktemp)
+  bn_err=$(mktemp)
+  set +e
+  "$dart" run cux_buildnumber:git_buildnumber "$@" >"$bn_out" 2>"$bn_err"
+  bn_code=$?
+  set -e
+  cat "$bn_err" >&2
+  if [ "$bn_code" -ne 0 ]; then
+    {
+      echo "== buildnumber exited $bn_code =="
+      echo "== captured stdout =="
+      cat "$bn_out"
+      echo "== end =="
+    } >&2
+  fi
+  cat "$bn_out"
+  exit "$bn_code"
 fi
 
 exec "$dart" run cux_ship "$@"
