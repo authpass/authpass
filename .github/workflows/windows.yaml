@@ -62,9 +62,13 @@ jobs:
         GIT_AUTHOR_EMAIL: 'herbert.github.ci@codeux.design'
         GIT_COMMITTER_NAME: 'Github Action CI'
         GIT_COMMITTER_EMAIL: 'herbert.github.ci@codeux.design'
-      run: >-
-        ./authpass/_tools/ship.sh secrets exec --keystore upload --api-key upload --
-        ./authpass/_tools/ci-release.sh ${{ matrix.flavor }}
+      # No secrets exec: the build consumes no credential — the wrapper was a
+      # relic of the pre-split single step, and what it placed included the
+      # deploy key, which routed the build-number push onto ssh. Without it the
+      # allocator pushes via the checkout's https origin, the path every linux
+      # and android run already proves. The upload step below keeps its own
+      # scoped secrets exec.
+      run: "./authpass/_tools/ci-release.sh ${{ matrix.flavor }}"
 #    - shell: bash
 #      run: |
 #        cat authpass/lib/generated_plugin_registrant.dart
