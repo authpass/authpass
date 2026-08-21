@@ -76,11 +76,12 @@ packages:
   cux_ship:
     dependency: "direct main"
     description:
-      name: cux_ship
-      sha256: "802b7f419a5591993f4f5a6339872f016ffb69289817be2c3dd7c24cc6a6ffa7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.1"
+      path: cux_ship
+      ref: b2110d461cf7fca29b4f5e497babe78d3753134a
+      resolved-ref: b2110d461cf7fca29b4f5e497babe78d3753134a
+      url: "https://github.com/codeuxdesign/cux_ship.git"
+    source: git
+    version: "3.4.2"
   cux_ship_verify:
     dependency: transitive
     description:

@@ -18,11 +18,16 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  # 3.4.1: the manifest writer with write-time cross-checks, --derived-from,
-  # upload tagging whose recording actually fires for --manifest callers (the
-  # 3.4.0 guard was silently dead for exactly those), the .apk cross-check
-  # reader, and uploadCollisionExit = 3.
-  cux_ship: ^3.4.1
+  # Verification pin for windows_x64 deps-install support (sops/age pins plus
+  # the four windows quirks their install needed) — cux_ship branch
+  # fix/same-commit-tag-race, to be proven on a windows runner before any
+  # version number is spent on it. DO NOT MERGE this branch; it exists to run
+  # the windows workflow once.
+  cux_ship:
+    git:
+      url: https://github.com/codeuxdesign/cux_ship.git
+      path: cux_ship
+      ref: b2110d461cf7fca29b4f5e497babe78d3753134a
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
