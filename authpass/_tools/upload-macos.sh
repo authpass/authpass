@@ -101,9 +101,17 @@ echo "    credential   $APPLE_API_KEY_ID, scoped to this app"
 # --yes: see upload-ios.sh.
 # not exec: the trap above still has a temp file to clean up
 cd _tools/cux_ship
+# The manifest supplies the built commit for the `uploaded/` tag; see
+# upload-ios.sh.
+MANIFEST=()
+# ../../ in the test too: this runs after the cd above.
+if [ -f "../../$PKG.manifest.json" ]; then
+  MANIFEST=(--manifest "../../$PKG.manifest.json")
+fi
 dart run cux_ship --yes appstore upload \
   --platform macos \
   --artifact "../../$PKG" \
+  ${MANIFEST+"${MANIFEST[@]}"} \
   --bundle-id "$BUNDLE_ID" \
   --version-name "$VERSION" \
   --build-number "$BUILD_NUMBER" \

@@ -28,9 +28,13 @@ dependencies:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_ship
-      # cux_ship main, carrying `manifest write --derived-from` (PR #11) and
-      # the aab/ipa baked-value cross-checks (PR #10).
-      ref: cc4190228d64d1d16ccf3e0330bd09ba351ce43a
+      # cux_ship PR #13 (`fix/record-upload-capability-check`): upload tagging
+      # that actually fires for --manifest callers — the guard on main at
+      # cc41902 skipped recording for exactly those — plus the .apk
+      # cross-check reader and uploadCollisionExit = 3. The branch will be
+      # true-merged, so this sha stays reachable; repin to the main sha once
+      # #13 lands.
+      ref: 176924c4ee5bcda9155a44f633a10d24ea41f9dc
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI

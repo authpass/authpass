@@ -111,8 +111,19 @@ echo "    version      $VERSION${BUILD_NUMBER:+ ($BUILD_NUMBER)}"
 # than publishing something mislabelled.
 cd _tools/cux_ship
 # not exec: the trap above still has an empty notes file to clean up
+# The manifest supplies the built commit for the `uploaded/` tag — recording
+# is manifest-fed, and with tag.upload.enabled an upload with neither manifest
+# nor --commit is *refused* by cux_ship, with a message naming the fix. So the
+# conditional only decides who explains the absence, not whether it is fatal:
+# a local build without a manifest passes --commit by hand or does not upload.
+MANIFEST=()
+# ../../ in the test too: this runs after the cd above.
+if [ -f "../../$AAB.manifest.json" ]; then
+  MANIFEST=(--manifest "../../$AAB.manifest.json")
+fi
 dart run cux_ship --yes play upload \
   --aab "../../$AAB" \
+  ${MANIFEST+"${MANIFEST[@]}"} \
   --package "$PACKAGE" \
   --track "$TRACK" \
   --version-name "$VERSION" \
