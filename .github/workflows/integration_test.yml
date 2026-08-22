@@ -74,3 +74,47 @@ jobs:
 #        name: driver-screenshots
 #        path: authpass/build/screenshots
 
+
+  # Android was the one platform with no runtime coverage at all: the kdbx-open
+  # test above ran only on an iOS simulator, and the autofill mirror's eager
+  # PathProviderFoundation() — an FFI dlopen of Foundation.framework — broke
+  # every database open on Android while passing iOS, macOS-host unit tests,
+  # and the compile-only android release builds. It reached the Play internal
+  # and beta tracks (1.9.12 build 2168) before a phone found it. Same test,
+  # an emulator.
+  drive_android:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
+    - name: ci-install-deps
+      env:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      run: "./authpass/_tools/ci-install-deps.sh linux"
+    # The emulator is unusably slow without hardware acceleration, and the
+    # runner's kvm device is root-only by default.
+    - name: Enable KVM
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: run test integration_test on an emulator
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 34
+        arch: x86_64
+        profile: pixel_6
+        # sideload: a flavor with no store signing requirement, so the debug
+        # build the test installs needs no credential.
+        script: cd authpass && ~/deps/flutter/bin/flutter test integration_test --flavor sideload
