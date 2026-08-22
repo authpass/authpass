@@ -29,7 +29,7 @@ class AutofillMirror {
     required this.appGroupIdentifier,
     PathProviderFoundation? pathProvider,
     BiometricStorage? biometricStorage,
-  }) : _pathProvider = pathProvider ?? PathProviderFoundation(),
+  }) : _pathProvider = pathProvider,
        _biometricStorage = biometricStorage ?? BiometricStorage();
 
   /// e.g. `group.design.codeux.authpass`. Doubles as the keychain access
@@ -37,7 +37,13 @@ class AutofillMirror {
   /// unlike a `keychain-access-groups` entry, needs no team id prefix.
   final String appGroupIdentifier;
 
-  final PathProviderFoundation _pathProvider;
+  /// Constructed lazily, and only on iOS. `path_provider_foundation` is
+  /// FFI-based and `dlopen`s Foundation.framework the moment it is
+  /// instantiated — so building it eagerly here, as this constructor once
+  /// did, made every database open on *Android* fail with "Failed to load
+  /// dynamic library '/System/Library/Frameworks/Foundation.framework'". The
+  /// platform check in [container] has to run before this exists.
+  PathProviderFoundation? _pathProvider;
   final BiometricStorage _biometricStorage;
 
   /// Prefix of the keychain item holding one file's cached transformed key.
@@ -73,9 +79,10 @@ class AutofillMirror {
     if (!Platform.isIOS) {
       return null;
     }
+    final provider = _pathProvider ??= PathProviderFoundation();
     final String? path;
     try {
-      path = await _pathProvider.getContainerPath(
+      path = await provider.getContainerPath(
         appGroupIdentifier: appGroupIdentifier,
       );
     } catch (e, stackTrace) {
