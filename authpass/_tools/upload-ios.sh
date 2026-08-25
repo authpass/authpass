@@ -125,7 +125,14 @@ MANIFEST=()
 if [ -f "../../$IPA.manifest.json" ]; then
   MANIFEST=(--manifest "../../$IPA.manifest.json")
 fi
+# --no-metadata: this lane ships TestFlight builds and never the listing. It
+# used to hold implicitly — no store/ tree existed, so there was nothing to
+# infer — but store/appstore/ exists now (it carries the beta description),
+# and without the flag cux_ship would infer it and try to publish a listing
+# the tree does not contain. The beta description is test information, not
+# listing, and still applies to a --beta-group release under --no-metadata.
 dart run cux_ship --yes appstore upload \
+  --no-metadata \
   --artifact "../../$IPA" \
   ${MANIFEST+"${MANIFEST[@]}"} \
   --bundle-id "$BUNDLE_ID" \

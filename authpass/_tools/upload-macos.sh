@@ -108,7 +108,10 @@ MANIFEST=()
 if [ -f "../../$PKG.manifest.json" ]; then
   MANIFEST=(--manifest "../../$PKG.manifest.json")
 fi
+# --no-metadata: see upload-ios.sh — this lane never publishes the listing,
+# and the store/appstore/ tree (beta description) must not be inferred as one.
 dart run cux_ship --yes appstore upload \
+  --no-metadata \
   --platform macos \
   --artifact "../../$PKG" \
   ${MANIFEST+"${MANIFEST[@]}"} \

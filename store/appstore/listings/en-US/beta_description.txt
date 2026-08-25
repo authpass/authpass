@@ -1,0 +1,1 @@
+AuthPass is a free and open source password manager, compatible with the proven KeePass (kdbx) format. Store your passwords and share them across all your devices. This TestFlight build previews upcoming releases - including the new iOS AutoFill support - before they reach the App Store.
