@@ -1,3 +1,9 @@
+# 1.9.12 - 2026-08-25
+
+* iOS: AutoFill support — fill passwords from AuthPass directly in Safari and apps.
+* Upgrade to the latest Flutter and many dependency updates.
+* Update translations.
+
 # 1.9.11 - 2024-02-02
 
 * Switch Google Drive integration to using Google SignIn plugin.
