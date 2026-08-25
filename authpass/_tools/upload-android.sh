@@ -83,22 +83,15 @@ if [ -n "$BUILD_NUMBER" ]; then
   echo "    newest is ${NEWEST:-unknown}, ours is $BUILD_NUMBER"
 fi
 
-# The lanes this replaced all passed skip_upload_changelogs, so the default here
-# is no notes. cux_ship refuses to guess — absent is not the same answer as
-# empty — and an empty file is how you say "leave the listing alone", which
-# keeps whatever Play already shows. Pass --changelog or --release-notes to
-# override — cux_ship would otherwise read the CHANGELOG.md at the repository
-# root, which is a real file and would start publishing notes that no release
-# has ever published.
-NOTES=()
-case " ${EXTRA[*]-} " in
-  *" --release-notes "* | *" --changelog "*) ;;
-  *)
-    EMPTY_NOTES=$(mktemp "${TMPDIR:-/tmp}/authpass-release-notes.XXXXXX")
-    trap 'rm -f "$EMPTY_NOTES"' EXIT INT TERM
-    NOTES=(--release-notes "$EMPTY_NOTES")
-    ;;
-esac
+# Notes come from CHANGELOG.md at the repository root — cux_ship's own
+# default, which this script used to suppress with an empty --release-notes
+# file back when the changelog's h1 headings made it unreadable to the
+# parser and no release had ever published from it. The file is h2-sectioned
+# now and 1.9.12 is written, so the suppression is retired: a release must
+# have a section for the version being shipped (cux_ship refuses before any
+# bytes go up if it is missing — deliberate, that is the discipline), and
+# `[ios]`-tagged entries stay out of Play's notes. Pass --changelog or
+# --release-notes to override.
 
 echo "==> uploading $AAB"
 echo "    package      $PACKAGE"
@@ -110,7 +103,6 @@ echo "    version      $VERSION${BUILD_NUMBER:+ ($BUILD_NUMBER)}"
 # against the versionCode inside the bundle, so a mismatch fails here rather
 # than publishing something mislabelled.
 cd _tools/cux_ship
-# not exec: the trap above still has an empty notes file to clean up
 # The manifest supplies the built commit for the `uploaded/` tag — recording
 # is manifest-fed, and with tag.upload.enabled an upload with neither manifest
 # nor --commit is *refused* by cux_ship, with a message naming the fix. So the
@@ -128,5 +120,4 @@ dart run cux_ship --yes play upload \
   --track "$TRACK" \
   --version-name "$VERSION" \
   ${BUILD_NUMBER:+--build-number "$BUILD_NUMBER"} \
-  ${NOTES+"${NOTES[@]}"} \
   ${EXTRA+"${EXTRA[@]}"}
