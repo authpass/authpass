@@ -24,9 +24,12 @@ dependencies:
   # releases a build CI already uploaded — the whole external beta is one
   # command. 3.4.2 brought the windows support and the same-commit tag race
   # fix.
-  # 3.5.1: the committed-notes guard resolves symlinks (this repo's root
-  # CHANGELOG.md is one), and manifests stop naming producer 3.4.2.
-  cux_ship: ^3.5.1
+  # 3.6.0: `appstore beta-groups` prints the group names --beta-group needs
+  # (the kind with them — internal or external decides what a release costs),
+  # a lookup that misses names what exists, and a group kind Apple did not
+  # report is refused at release rather than guessed. 3.5.1 brought the
+  # symlink-aware committed-notes guard this repo's root CHANGELOG.md needs.
+  cux_ship: ^3.6.0
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
