@@ -26,6 +26,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get fieldTotp => 'Senha Única (Baseado no Tempo)';
 
   @override
+  String get fieldNotes => 'Notes';
+
+  @override
   String get english => 'Inglês';
 
   @override
@@ -1420,6 +1423,60 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get scanQrCodeTitle => 'Scan QR Code.';
+
+  @override
+  String get csvImportMenuItemTitle => 'Import from CSV';
+
+  @override
+  String get csvImportScreenTitle => 'Import from CSV';
+
+  @override
+  String get csvImportSelectFileButton => 'Select CSV File';
+
+  @override
+  String get csvImportSelectFileHint =>
+      'Choose a .csv file to import password entries';
+
+  @override
+  String get csvImportMappingTitle => 'Map Columns';
+
+  @override
+  String get csvImportMappingSubtitle =>
+      'Assign each CSV column to an AuthPass field';
+
+  @override
+  String get csvImportFieldSkip => 'Skip';
+
+  @override
+  String get csvImportPreviewTitle => 'Ready to Import';
+
+  @override
+  String csvImportPreviewSubtitle(int count) {
+    return '$count entries will be imported';
+  }
+
+  @override
+  String csvImportConfirmButton(int count) {
+    return 'Import $count entries';
+  }
+
+  @override
+  String csvImportSuccessMessage(int count) {
+    return 'Successfully imported $count entries';
+  }
+
+  @override
+  String csvImportSuccessWithSkipped(int imported, int skipped) {
+    return 'Imported $imported entries, $skipped duplicates skipped';
+  }
+
+  @override
+  String get csvImportErrorNoData =>
+      'The CSV file appears to be empty or has no data rows.';
+
+  @override
+  String get csvImportErrorNoMappedFields =>
+      'Please map at least one column before importing.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

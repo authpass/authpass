@@ -4,6 +4,7 @@ import 'package:authpass/bloc/kdbx/file_source_ui.dart';
 import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/ui/screens/about.dart';
+import 'package:authpass/ui/screens/csv_import_screen.dart';
 import 'package:authpass/ui/screens/manage_file.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/preferences.dart';
@@ -99,6 +100,16 @@ class AppBarMenu {
             key: const ValueKey('openAnotherFile'),
             leading: const FaIcon(FontAwesomeIcons.folderPlus),
             title: Text(loc.menuItemOpenAnotherFile),
+          ),
+        ),
+        PopupMenuItem(
+          value: () {
+            analytics.events.trackActionPressed(action: 'csvImport');
+            Navigator.of(context).push(CsvImportScreen.route());
+          },
+          child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.fileCsv),
+            title: Text(loc.csvImportMenuItemTitle),
           ),
         ),
       ],

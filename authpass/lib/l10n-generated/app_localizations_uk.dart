@@ -26,6 +26,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get fieldTotp => 'Одноразовий пароль (залежить від часу)';
 
   @override
+  String get fieldNotes => 'Notes';
+
+  @override
   String get english => 'Англійська';
 
   @override
@@ -1428,4 +1431,58 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get scanQrCodeTitle => 'Сканувати QR-код.';
+
+  @override
+  String get csvImportMenuItemTitle => 'Import from CSV';
+
+  @override
+  String get csvImportScreenTitle => 'Import from CSV';
+
+  @override
+  String get csvImportSelectFileButton => 'Select CSV File';
+
+  @override
+  String get csvImportSelectFileHint =>
+      'Choose a .csv file to import password entries';
+
+  @override
+  String get csvImportMappingTitle => 'Map Columns';
+
+  @override
+  String get csvImportMappingSubtitle =>
+      'Assign each CSV column to an AuthPass field';
+
+  @override
+  String get csvImportFieldSkip => 'Skip';
+
+  @override
+  String get csvImportPreviewTitle => 'Ready to Import';
+
+  @override
+  String csvImportPreviewSubtitle(int count) {
+    return '$count entries will be imported';
+  }
+
+  @override
+  String csvImportConfirmButton(int count) {
+    return 'Import $count entries';
+  }
+
+  @override
+  String csvImportSuccessMessage(int count) {
+    return 'Successfully imported $count entries';
+  }
+
+  @override
+  String csvImportSuccessWithSkipped(int imported, int skipped) {
+    return 'Imported $imported entries, $skipped duplicates skipped';
+  }
+
+  @override
+  String get csvImportErrorNoData =>
+      'The CSV file appears to be empty or has no data rows.';
+
+  @override
+  String get csvImportErrorNoMappedFields =>
+      'Please map at least one column before importing.';
 }
