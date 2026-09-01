@@ -64,4 +64,11 @@
         <releases>
     <release version="1.9.6_1904" date="2022-06-10"/>
   </releases>
+        <keywords>
+          <keyword>password manager</keyword>
+          <keyword>password safe</keyword>
+          <keyword>kdbx format</keyword>
+          <keyword>linux password manager</keyword>
+          <keyword>secure password storage</keyword>
+        </keywords>
 </component>
