@@ -130,10 +130,12 @@ class AutofillMirror {
         return false;
       }
 
-      final vaults = Directory('${dir.path}/$_vaultsDirName');
+      final vaults = Directory('${dir.path}/$_vaultsDirName'); // NON-NLS
       await vaults.create(recursive: true);
-      final fileName = '$_vaultsDirName/${_sanitize(fileUuid)}.kdbx';
-      await File('${dir.path}/$fileName').writeAsBytes(bytes, flush: true);
+      final fileName = '$_vaultsDirName/${_sanitize(fileUuid)}.kdbx'; // NON-NLS
+      await File(
+        '${dir.path}/$fileName', // NON-NLS
+      ).writeAsBytes(bytes, flush: true);
 
       await _storeKey(fileUuid, credentials);
       await _updateManifest(
@@ -165,7 +167,7 @@ class AutofillMirror {
       final manifest = await readManifest();
       final entry = manifest.byFileUuid(fileUuid);
       if (entry != null) {
-        final file = File('${dir.path}/${entry.fileName}');
+        final file = File('${dir.path}/${entry.fileName}'); // NON-NLS
         if (file.existsSync()) {
           await file.delete();
         }
@@ -191,11 +193,13 @@ class AutofillMirror {
       for (final entry in manifest.entries) {
         await _removeKey(entry.fileUuid);
       }
-      final vaults = Directory('${dir.path}/$_vaultsDirName');
+      final vaults = Directory('${dir.path}/$_vaultsDirName'); // NON-NLS
       if (vaults.existsSync()) {
         await vaults.delete(recursive: true);
       }
-      final manifestFile = File('${dir.path}/${AutofillManifest.fileName}');
+      final manifestFile = File(
+        '${dir.path}/${AutofillManifest.fileName}', // NON-NLS
+      );
       if (manifestFile.existsSync()) {
         await manifestFile.delete();
       }
@@ -209,7 +213,7 @@ class AutofillMirror {
     if (dir == null) {
       return AutofillManifest(entries: []);
     }
-    final file = File('${dir.path}/${AutofillManifest.fileName}');
+    final file = File('${dir.path}/${AutofillManifest.fileName}'); // NON-NLS
     if (!file.existsSync()) {
       return AutofillManifest(entries: []);
     }
@@ -234,7 +238,7 @@ class AutofillMirror {
     }
     final manifest = update(await readManifest());
     await File(
-      '${dir.path}/${AutofillManifest.fileName}',
+      '${dir.path}/${AutofillManifest.fileName}', // NON-NLS
     ).writeAsString(manifest.encode(), flush: true);
   }
 
@@ -252,7 +256,7 @@ class AutofillMirror {
   /// stripping the prefix — so it has to be the same uuid the manifest holds.
   Future<BiometricStorageFile> _keyStore(String fileUuid) =>
       _biometricStorage.getStorage(
-        '$_keyStorePrefix$fileUuid',
+        '$_keyStorePrefix$fileUuid', // NON-NLS
         options: StorageFileInitOptions(
           darwinKeychainAccessGroup: appGroupIdentifier,
         ),

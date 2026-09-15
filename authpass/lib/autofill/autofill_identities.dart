@@ -35,6 +35,7 @@ class AutofillIdentities {
       '$fileUuid:$entryUuid';
 
   /// The two halves of [recordIdentifier], or null if it is not one of ours.
+  @NonNls
   static ({String fileUuid, String entryUuid})? parseRecordIdentifier(
     String value,
   ) {
@@ -76,22 +77,24 @@ class AutofillIdentities {
         if (entry.isInRecycleBin()) {
           continue;
         }
-        final user = entry.getString(KdbxKeyCommon.USER_NAME)?.getText() ?? '';
+        final user =
+            entry.getString(KdbxKeyCommon.USER_NAME)?.getText() ??
+            nonNls<String>('');
         for (final host in _hostsOf(entry)) {
           identities.add({
             'serviceIdentifier': host, // NON-NLS
             'user': user, // NON-NLS
-            'recordIdentifier': recordIdentifier(
+            nonNls('recordIdentifier'): recordIdentifier(
               file.key,
               entry.uuid.uuid,
-            ), // NON-NLS
+            ),
           });
         }
       }
     }
     try {
-      await _channel.invokeMethod<bool>('replaceIdentities', {
-        'identities': identities,
+      await _channel.invokeMethod<bool>(nonNls('replaceIdentities'), {
+        nonNls('identities'): identities,
       });
       _logger.fine('published ${identities.length} autofill identities.');
     } on PlatformException catch (e, stackTrace) {
@@ -112,7 +115,9 @@ class AutofillIdentities {
       return null;
     }
     try {
-      final state = await _channel.invokeMapMethod<String, Object?>('state');
+      final state = await _channel.invokeMapMethod<String, Object?>(
+        nonNls('state'),
+      );
       return state?['enabled'] as bool?; // NON-NLS
     } on PlatformException catch (e, stackTrace) {
       _logger.warning('Unable to read the autofill state.', e, stackTrace);
@@ -130,7 +135,8 @@ class AutofillIdentities {
       return false;
     }
     try {
-      return await _channel.invokeMethod<bool>('requestEnable') ?? false;
+      return await _channel.invokeMethod<bool>(nonNls('requestEnable')) ??
+          false;
     } on PlatformException catch (e, stackTrace) {
       _logger.warning('Unable to request autofill be enabled.', e, stackTrace);
       return false;
@@ -142,7 +148,7 @@ class AutofillIdentities {
       return;
     }
     try {
-      await _channel.invokeMethod<bool>('removeAll');
+      await _channel.invokeMethod<bool>(nonNls('removeAll'));
     } on PlatformException catch (e, stackTrace) {
       _logger.warning('Unable to clear autofill identities.', e, stackTrace);
     }

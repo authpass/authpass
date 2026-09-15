@@ -4,16 +4,9 @@
 include: package:flutter_lints/flutter.yaml
 
 plugins:
-  string_literal_finder:
-    path: /Users/herbert/dev/dart/string_literal_finder/packages/string_literal_finder
-
+  string_literal_finder: ^2.0.0-dev.2
 
 analyzer:
-#  FIXME: externalize / annotate all strings so this can be enabled.
-#  plugins:
-##    - string_literal_finder
-#    - string_literal_finder:
-#        path: /Users/herbert/dev/dart/string_literal_finder/packages/string_literal_finder
   errors:
     # treat missing required parameters as a warning (not a hint)
     missing_required_param: warning
@@ -26,6 +19,13 @@ analyzer:
     - lib/**/*.freezed.dart
     - test/**/*.mocks.dart
     - lib/generated_plugin_registrant.dart
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   language:
     strict-casts: true
     strict-raw-types: true
