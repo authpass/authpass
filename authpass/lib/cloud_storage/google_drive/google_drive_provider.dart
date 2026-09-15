@@ -441,8 +441,8 @@ class SearchQueryValueLiteral implements SearchQueryAtom {
     if (value is String) {
       final escaped = value.replaceAllMapped(
         RegExp(r'''['\\]'''),
-        (match) => '\\${match.group(0)}',
-      ); // NON-NLS
+        (match) => nonNls('\\${match.group(0)}'),
+      );
       return "'$escaped'"; // NON-NLS
     }
     if (value is List) {
