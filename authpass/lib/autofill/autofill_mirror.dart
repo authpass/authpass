@@ -8,6 +8,7 @@ import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider_foundation/path_provider_foundation.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+import 'package:authpass/utils/platform.dart';
 
 final _logger = Logger('autofill_mirror');
 
@@ -76,7 +77,7 @@ class AutofillMirror {
     // macos/ yet, so mirroring there would write a decrypted copy of every
     // open vault into a shared container that nothing reads — cost with no
     // benefit. Lift this when the macOS extension exists.
-    if (!Platform.isIOS) {
+    if (!AuthPassPlatform.isIOS) {
       return null;
     }
     final provider = _pathProvider ??= PathProviderFoundation();
