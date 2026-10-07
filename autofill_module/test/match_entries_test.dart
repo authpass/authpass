@@ -158,6 +158,54 @@ void main() {
     });
     expect(matches, isEmpty);
   });
+
+  group('searchEntries', () {
+    Future<List<Map<Object?, Object?>>> search(String query) async =>
+        (await call('searchEntries', {'query': query}) as List<Object?>)
+            .cast<Map<Object?, Object?>>();
+
+    setUp(() => call('openVaults', {'vaults': vaultArgs}));
+
+    test('finds entries the url matcher would not offer', () async {
+      final results = await search('contoso');
+      expect(results.map((e) => e['label']), ['Other']);
+      expect(results.single['fileUuid'], 'work');
+    });
+
+    test('searches titles, usernames and urls across vaults', () async {
+      expect((await search('GOOGLE')).map((e) => e['label']), [
+        'Google account',
+        'Google mail',
+      ]);
+      expect((await search('user@unrelated')).map((e) => e['label']), [
+        'Unrelated',
+      ]);
+    });
+
+    test('every term has to match', () async {
+      expect((await search('google mail')).map((e) => e['label']), [
+        'Google mail',
+      ]);
+      expect(await search('google contoso'), isEmpty);
+    });
+
+    test('title hits rank above url and username hits', () async {
+      // A title starting with the term, then titles containing it, then
+      // entries that only match elsewhere (`Unrelated` by its url); a-z within
+      // each.
+      expect((await search('o')).map((e) => e['label']), [
+        'Other',
+        'Google account',
+        'Google mail',
+        'Unrelated',
+      ]);
+    });
+
+    test('an empty query returns nothing rather than everything', () async {
+      expect(await search(''), isEmpty);
+      expect(await search('   '), isEmpty);
+    });
+  });
 }
 
 /// Reaches the handler [AutofillVaultService.attach] installed, so the tests
