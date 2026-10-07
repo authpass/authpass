@@ -58,6 +58,8 @@ class AutofillVaultService {
           return await _openVaults(_args(call));
         case 'matchEntries':
           return _matchEntries(_args(call));
+        case 'searchEntries':
+          return _searchEntries(_args(call));
         case 'credentialFor':
           final args = _args(call);
           final fileUuid = args['fileUuid'] as String?;
@@ -265,39 +267,92 @@ class AutofillVaultService {
     // Ranked across every vault at once. Ranking per vault and concatenating
     // would put a weak match from the first database above an exact one from
     // the second.
-    // Deleted entries are skipped here as well as in the app's identity
-    // publishing, and both are needed: the QuickType bar is built from what the
-    // app registered, but opening the picker directly goes through this path
-    // and never consults it. Filtering only there left the bin reachable by the
-    // keyboard's key icon.
-    final candidates = [
-      for (final vault in _files.entries)
-        for (final entry in vault.value.file.body.rootGroup.getAllEntries())
-          if (!entry.isInRecycleBin()) ...[
-            _Candidate(vault.key, vault.value.name, entry),
-          ],
-    ];
-
     final ranked = _matcher.rank(
       requests,
-      candidates,
+      _candidates(),
       (candidate) => candidate.entry.autofillUrls,
     );
 
     return [
       for (final candidate in ranked.take(limit))
         {
-          'fileUuid': candidate.fileUuid,
-          'fileName': candidate.fileName,
-          'uuid': candidate.entry.uuid.uuid,
-          'label': candidate.entry.label,
-          'username': candidate.entry
-              .getString(KdbxKeyCommon.USER_NAME)
-              ?.getText(),
+          ..._metadata(candidate),
           'quality': _matcher
               .matchBest(requests, candidate.entry.autofillUrls)
               ?.name,
         },
+    ];
+  }
+
+  /// Every entry of every open vault, except the recycle bin's.
+  ///
+  /// The bin is skipped here as well as in the app's identity publishing, and
+  /// both are needed: the QuickType bar is built from what the app registered,
+  /// but opening the picker directly goes through this path and never consults
+  /// it. Filtering only there left the bin reachable by the keyboard's key icon.
+  List<_Candidate> _candidates() => [
+    for (final vault in _files.entries)
+      for (final entry in vault.value.file.body.rootGroup.getAllEntries())
+        if (!entry.isInRecycleBin())
+          _Candidate(vault.key, vault.value.name, entry),
+  ];
+
+  /// What the picker shows for one entry — never its password.
+  Map<String, Object?> _metadata(_Candidate candidate) => {
+    'fileUuid': candidate.fileUuid,
+    'fileName': candidate.fileName,
+    'uuid': candidate.entry.uuid.uuid,
+    'label': candidate.entry.label,
+    'username': candidate.entry.getString(KdbxKeyCommon.USER_NAME)?.getText(),
+  };
+
+  /// Free text search across every open vault, for when [_matchEntries]
+  /// found nothing — or the wrong thing — and the user picks by hand.
+  ///
+  /// Every whitespace separated term has to appear, case-insensitively, in the
+  /// title, the username or one of the entry's urls. Title hits rank first,
+  /// then alphabetical. An empty query returns nothing: listing every entry is
+  /// what the phase 0 measurement showed the channel cannot afford.
+  List<Map<String, Object?>> _searchEntries(Map<String, Object?> args) {
+    final terms = (args['query'] as String? ?? '')
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .where((term) => term.isNotEmpty)
+        .toList();
+    if (terms.isEmpty) {
+      return const [];
+    }
+
+    final hits = <(int, String, _Candidate)>[];
+    for (final candidate in _candidates()) {
+      final entry = candidate.entry;
+      final title = (entry.label ?? '').toLowerCase();
+      final username =
+          (entry.getString(KdbxKeyCommon.USER_NAME)?.getText() ?? '')
+              .toLowerCase();
+      final urls = entry.autofillUrls.join(' ').toLowerCase();
+      if (!terms.every(
+        (term) =>
+            title.contains(term) ||
+            username.contains(term) ||
+            urls.contains(term),
+      )) {
+        continue;
+      }
+      final rank = title.startsWith(terms.first)
+          ? 0
+          : terms.every(title.contains)
+          ? 1
+          : 2;
+      hits.add((rank, title, candidate));
+    }
+    hits.sort((a, b) {
+      final byRank = a.$1.compareTo(b.$1);
+      return byRank != 0 ? byRank : a.$2.compareTo(b.$2);
+    });
+
+    return [
+      for (final (_, _, candidate) in hits.take(50)) _metadata(candidate),
     ];
   }
 
