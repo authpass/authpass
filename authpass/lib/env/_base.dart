@@ -135,6 +135,7 @@ abstract class Env {
   /// and Developer ID builds, so the macOS extension (phase 5) may need
   /// `$(AppIdentifierPrefix)group.design.codeux.authpass` here — which is the
   /// style macos/Runner already uses for `keychain-access-groups`.
+  @NonNls
   String get autofillAppGroupIdentifier => 'group.design.codeux.authpass';
 
   /// allow disabling of "onboarding".

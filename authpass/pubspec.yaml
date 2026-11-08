@@ -258,7 +258,11 @@ dev_dependencies:
   freezed: ^3.2.4
   plugin_platform_interface: ^2.0.0
   msix: ^3.6.2
-  string_literal_finder: ^1.1.0+2
+  # string_literal_finder is deliberately *not* a dev dependency: 2.x needs
+  # analyzer ^14, analytics_event_gen pins analyzer <11, and the two cannot
+  # share a resolution. It does not have to be one — the analyzer resolves the
+  # `plugins:` entry in analysis_options.yaml on its own, and CI runs the CLI
+  # from `pub global activate`. See _tools/run_analyse.sh.
   flutter_lints: ^6.0.0
 
 dependency_overrides:

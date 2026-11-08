@@ -20,6 +20,14 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
         run: "./authpass/_tools/ci-install-deps.sh android"
+      # The analyzer's linked summaries, which is most of what a
+      # string_literal_finder run costs. Keyed on the lock file because that is
+      # what decides the summaries; a miss just makes the run slower.
+      - name: cache-string-literal-finder
+        uses: actions/cache@v4
+        with:
+          path: authpass/.dart_tool/string_literal_finder
+          key: slf-${{ hashFiles('authpass/pubspec.lock') }}
       - run: |
           cd authpass
           ~/deps/flutter/bin/flutter pub get
