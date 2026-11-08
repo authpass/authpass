@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/utils/platform.dart';
 import 'package:autofill_shared/autofill_manifest.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:kdbx/kdbx.dart';
@@ -76,7 +77,7 @@ class AutofillMirror {
     // macos/ yet, so mirroring there would write a decrypted copy of every
     // open vault into a shared container that nothing reads — cost with no
     // benefit. Lift this when the macOS extension exists.
-    if (!Platform.isIOS) {
+    if (!AuthPassPlatform.isIOS) {
       return null;
     }
     final provider = _pathProvider ??= PathProviderFoundation();
