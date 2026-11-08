@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/utils/platform.dart';
 import 'package:autofill_shared/autofill_manifest.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider_foundation/path_provider_foundation.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
-import 'package:authpass/utils/platform.dart';
 
 final _logger = Logger('autofill_mirror');
 
