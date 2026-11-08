@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:authpass/utils/platform.dart';
 import 'package:autofill_shared/autofill_manifest.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:kdbx/kdbx.dart';
@@ -67,7 +68,11 @@ class AutofillMirror {
   Directory? _containerCache;
 
   /// The app group container, or null when there is none — every platform
-  /// except iOS/macOS, and iOS/macOS builds whose entitlements lack the group.
+  /// except iOS (see below), and iOS builds whose entitlements lack the group.
+  ///
+  /// Answered without `dart:io`, which throws rather than reporting a platform
+  /// on the web. Every other method funnels through here, so this one check
+  /// keeps the whole mirror inert off iOS.
   Future<Directory?> container() async {
     if (_containerCache != null) {
       return _containerCache;
@@ -76,7 +81,7 @@ class AutofillMirror {
     // macos/ yet, so mirroring there would write a decrypted copy of every
     // open vault into a shared container that nothing reads — cost with no
     // benefit. Lift this when the macOS extension exists.
-    if (!Platform.isIOS) {
+    if (!AuthPassPlatform.isIOS) {
       return null;
     }
     final provider = _pathProvider ??= PathProviderFoundation();
