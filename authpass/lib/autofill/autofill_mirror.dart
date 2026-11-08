@@ -68,7 +68,11 @@ class AutofillMirror {
   Directory? _containerCache;
 
   /// The app group container, or null when there is none — every platform
-  /// except iOS/macOS, and iOS/macOS builds whose entitlements lack the group.
+  /// except iOS (see below), and iOS builds whose entitlements lack the group.
+  ///
+  /// Answered without `dart:io`, which throws rather than reporting a platform
+  /// on the web. Every other method funnels through here, so this one check
+  /// keeps the whole mirror inert off iOS.
   Future<Directory?> container() async {
     if (_containerCache != null) {
       return _containerCache;
