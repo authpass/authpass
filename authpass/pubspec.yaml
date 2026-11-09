@@ -21,7 +21,9 @@ dependencies:
 #    path: ../deps/kdbx.dart
   # 2.5.0 for TransformedKeyCredentials + kdfFingerprint, which the autofill
   # extension needs to open a vault without argon2.
-  kdbx: ^2.5.0
+  # 2.5.1 for duplicateUuidsOnOpen + mergeDuplicateUuidEntries, to find and
+  # repair the duplicate entries an older version's merge left behind.
+  kdbx: ^2.5.1
 #  argon2_ffi: ^1.0.0+2
   argon2_ffi:
     git:

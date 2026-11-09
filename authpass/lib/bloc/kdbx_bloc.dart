@@ -246,6 +246,17 @@ class OpenFileResult {
 
 abstract class KdbxBlocDelegate {
   void conflictMerged(FileSource fileSource, KdbxFile file, MergeContext merge);
+
+  /// The file which was just opened carries several live entries sharing one
+  /// uuid, the residue of a merge bug in kdbx up to 2.5.0 (see
+  /// [KdbxFile.duplicateUuidsOnOpen]). The file is perfectly usable, but
+  /// merging it will not work properly until it is repaired, so warn the user
+  /// and offer [KdbxBloc.repairDuplicateUuidEntries].
+  void duplicateUuidsDetected(
+    FileSource fileSource,
+    KdbxFile file,
+    Set<KdbxUuid> uuids,
+  );
 }
 
 typedef OpenedFileUpdater = void Function(OpenedFileBuilder b);
@@ -498,7 +509,46 @@ class KdbxBloc {
       await _updateQuickUnlockStore();
     }
     await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
+    _reportDuplicateUuids(file, kdbxFile);
     return kdbxOpenedFile;
+  }
+
+  /// File sources we have already told the user about, so that a second
+  /// [FileContent] from the same source (cache, then remote) does not ask
+  /// twice.
+  final _duplicateUuidsReported = <FileSource>{};
+
+  void _reportDuplicateUuids(FileSource file, KdbxFile kdbxFile) {
+    final uuids = kdbxFile.duplicateUuidsOnOpen;
+    if (uuids.isEmpty) {
+      return;
+    }
+    _logger.severe(
+      '$file contains ${uuids.length} uuid(s) shared by more than one live '
+      'entry: ${uuids.join(', ')}',
+    );
+    if (!_duplicateUuidsReported.add(file)) {
+      _logger.fine('Already offered to repair $file, not asking again.');
+      return;
+    }
+    delegate?.duplicateUuidsDetected(file, kdbxFile, uuids);
+  }
+
+  /// Folds entries which share a uuid into the newest of them (keeping the
+  /// others as history revisions) and saves the file.
+  ///
+  /// Destructive, and only ever called after the user agreed to it - see
+  /// [KdbxBlocDelegate.duplicateUuidsDetected]. Returns the repaired uuids,
+  /// empty if there was nothing to repair after all.
+  Future<List<KdbxUuid>> repairDuplicateUuidEntries(KdbxFile file) async {
+    final repaired = file.mergeDuplicateUuidEntries();
+    if (repaired.isEmpty) {
+      _logger.warning('Nothing to repair in $file.');
+      return repaired;
+    }
+    _logger.info('Repaired ${repaired.length} duplicate uuid(s), saving.');
+    await saveFile(file);
+    return repaired;
   }
 
   /// Refreshes (or removes) this database's copy in the app group container.

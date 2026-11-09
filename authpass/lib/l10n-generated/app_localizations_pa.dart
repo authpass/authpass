@@ -1416,4 +1416,39 @@ class AppLocalizationsPa extends AppLocalizations {
 
   @override
   String get scanQrCodeTitle => 'Scan QR Code.';
+
+  @override
+  String get duplicateEntriesDialogTitle => 'Duplicate entries found';
+
+  @override
+  String duplicateEntriesDialogMessage(String fileName, int numEntries) {
+    String _temp0 = intl.Intl.pluralLogic(
+      numEntries,
+      locale: localeName,
+      other: '$numEntries entries which exist more than once',
+      one: 'one entry which exists twice',
+    );
+    return '$fileName contains $_temp0, caused by a bug in an older version of AuthPass.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.';
+  }
+
+  @override
+  String get duplicateEntriesRepairAction => 'Repair now';
+
+  @override
+  String get duplicateEntriesRepairLaterAction => 'Not now';
+
+  @override
+  String duplicateEntriesRepairedMessage(int numEntries) {
+    String _temp0 = intl.Intl.pluralLogic(
+      numEntries,
+      locale: localeName,
+      other: '$numEntries entries were repaired',
+      one: 'One entry was repaired',
+    );
+    return '$_temp0 and the database was saved.';
+  }
+
+  @override
+  String get duplicateEntriesRepairFailedMessage =>
+      'The duplicate entries could not be repaired, and the database was not saved.';
 }
