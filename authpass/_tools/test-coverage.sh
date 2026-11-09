@@ -21,6 +21,23 @@ fail=false
 _tools/flutter_run.sh test --coverage --exclude-tags=webdav || fail=true
 echo "fail=$fail"
 
+# test/web/ holds what cannot be answered on the VM: dart:io compiles for the
+# web and throws at *runtime*, so a stray `Platform.isIOS` is invisible to
+# `flutter analyze` and to every test above this line, and only shows up once a
+# real browser reaches it. That is how opening a database on the web broke
+# (#432).
+#
+# Scoped to the directory, not a tag: --tags selects tests, but the runner
+# still loads every file to find them, and test/cloud_storage/*_test.dart does
+# not compile for the browser. Those files are what the chrome run would die
+# on, long before reaching anything under test/web/.
+#
+# A second run rather than a flag, because --coverage and --platform chrome
+# cannot be combined. Nothing is collected here, so the lcov upload below still
+# reports the VM run alone.
+_tools/flutter_run.sh test --platform chrome test/web || fail=true
+echo "fail=$fail"
+
 bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
 
 
