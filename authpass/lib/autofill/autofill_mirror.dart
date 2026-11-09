@@ -84,9 +84,12 @@ class AutofillMirror {
     if (!AuthPassPlatform.isIOS) {
       return null;
     }
-    final provider = _pathProvider ??= PathProviderFoundation();
     final String? path;
     try {
+      // Constructed inside the try deliberately: this is the line that dlopens
+      // Foundation.framework (see [_pathProvider]), so it can throw before
+      // getContainerPath is ever reached.
+      final provider = _pathProvider ??= PathProviderFoundation();
       path = await provider.getContainerPath(
         appGroupIdentifier: appGroupIdentifier,
       );
@@ -209,20 +212,28 @@ class AutofillMirror {
     }
   }
 
+  /// What the mirror holds, or an empty manifest.
+  ///
+  /// Never throws, for either of the two reasons it could. A manifest that
+  /// cannot be parsed is started over from — the next [syncFile] rewrites it.
+  /// And the filesystem can fail before parsing is reached at all:
+  /// `existsSync` throws `FileSystemException` for a container that is present
+  /// but unreadable, which is why the try covers it rather than opening just
+  /// below it.
   Future<AutofillManifest> readManifest() async {
     final dir = await container();
     if (dir == null) {
       return AutofillManifest(entries: []);
     }
-    final file = File('${dir.path}/${AutofillManifest.fileName}');
-    if (!file.existsSync()) {
-      return AutofillManifest(entries: []);
-    }
     try {
+      final file = File('${dir.path}/${AutofillManifest.fileName}');
+      if (!file.existsSync()) {
+        return AutofillManifest(entries: []);
+      }
       return AutofillManifest.parse(await file.readAsString());
     } catch (e, stackTrace) {
       _logger.warning(
-        'Corrupt autofill manifest, starting over.',
+        'Unable to read the autofill manifest, starting over.',
         e,
         stackTrace,
       );
