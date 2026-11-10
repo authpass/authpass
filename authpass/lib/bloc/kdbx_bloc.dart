@@ -77,6 +77,34 @@ class FileAlreadyOpenException extends KdbxException {
   }
 }
 
+/// The entries sharing a uuid were folded together, but the file could not be
+/// saved afterwards - see [KdbxBloc.repairDuplicateUuidEntries].
+///
+/// Not the same as a failed repair, and worth telling the user apart from one:
+/// the repair did happen, the database in memory is the repaired one, and the
+/// next save which does go through keeps it.
+class DuplicateUuidRepairNotSavedException extends KdbxException {
+  DuplicateUuidRepairNotSavedException(
+    this.repaired,
+    this.error,
+    this.stackTrace,
+  );
+
+  /// The uuids which were repaired before saving failed.
+  final List<KdbxUuid> repaired;
+
+  /// Why saving failed.
+  final Object error;
+  final StackTrace stackTrace;
+
+  @NonNls
+  @override
+  String toString() {
+    return 'DuplicateUuidRepairNotSavedException{repaired: '
+        '${repaired.length}, error: $error}';
+  }
+}
+
 class QuickUnlockStorage {
   QuickUnlockStorage({
     required this.cloudStorageBloc,
@@ -310,6 +338,7 @@ class KdbxBloc {
 
   void dispose() {
     _openedFiles.close();
+    _duplicateUuidsPendingChanged.close();
     //    super.dispose();
   }
 
@@ -497,8 +526,120 @@ class KdbxBloc {
       _logger.fine('adding file to quick unlock.');
       await _updateQuickUnlockStore();
     }
-    await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
+    // Last, with the file registered and nothing left to await. Not earlier:
+    // everything above this line can take a while - quick unlock writes to the
+    // keystore, and the autofill mirror does real file and keychain i/o on iOS
+    // - and frames are produced throughout, so a watcher told about the file
+    // here would ask from the route stack the unlock flow is about to replace.
+    // Which is also why this is not published on [openedFilesChanged]: being
+    // open and being ready to ask about are two different things.
+    _reportDuplicateUuids(file, kdbxFile);
     return kdbxOpenedFile;
+  }
+
+  /// File sources which were found to contain several live entries sharing a
+  /// uuid, and which still have to be put to the user.
+  ///
+  /// Only queued here, never asked about from inside the open: unlocking
+  /// replaces the whole route stack as soon as the open returns, which would
+  /// take an already pushed dialog with it. `DuplicateUuidWatcher` drains this
+  /// once there is a route stack which stays.
+  final _duplicateUuidsPending = <FileSource>{};
+
+  /// File sources the user has already been asked about, so that a second
+  /// [FileContent] from the same source (cache, then remote) does not ask
+  /// twice. Cleared when the file is closed, so reopening it asks again.
+  final _duplicateUuidsAnswered = <FileSource>{};
+
+  /// Fires whenever something is put on [_duplicateUuidsPending].
+  ///
+  /// A notifier of its own, rather than letting `DuplicateUuidWatcher` take
+  /// `openedFilesChanged` as its cue: a file is registered as open long before
+  /// this bloc is ready to have it asked about, and a watcher woken by the
+  /// earlier of the two asks from a route which is about to be thrown away.
+  final _duplicateUuidsPendingChanged = StreamController<void>.broadcast();
+
+  Stream<void> get duplicateUuidsPendingChanged =>
+      _duplicateUuidsPendingChanged.stream;
+
+  /// Notices a file which carries several live entries sharing one uuid, which
+  /// no kdbx file should contain (see [KdbxFile.duplicateUuidsOnOpen]). A merge
+  /// bug in kdbx up to 2.5.0 produced exactly this, but any program which wrote
+  /// the file could have, and we cannot tell which one did. The file is
+  /// perfectly usable, but merging it will not work properly until it is
+  /// repaired, so the user is offered [repairDuplicateUuidEntries].
+  void _reportDuplicateUuids(FileSource file, KdbxFile kdbxFile) {
+    final uuids = kdbxFile.duplicateUuidsOnOpen;
+    if (uuids.isEmpty) {
+      return;
+    }
+    _logger.severe(
+      '$file contains ${uuids.length} uuid(s) shared by more than one live '
+      'entry: ${uuids.join(', ')}',
+    );
+    if (_duplicateUuidsAnswered.contains(file)) {
+      _logger.fine('Already asked about $file, not asking again.');
+      return;
+    }
+    _duplicateUuidsPending.add(file);
+    _duplicateUuidsPendingChanged.add(null);
+  }
+
+  /// The next file source to warn the user about, taken off the queue, or
+  /// `null` when there is nothing left to ask about.
+  ///
+  /// Only `DuplicateUuidWatcher` should call this: taking a file source off
+  /// the queue counts as having asked, so whoever calls it has to go through
+  /// with it - or hand it back with [returnPendingDuplicateUuidReport].
+  FileSource? takePendingDuplicateUuidReport() {
+    if (_duplicateUuidsPending.isEmpty) {
+      return null;
+    }
+    final fileSource = _duplicateUuidsPending.first;
+    _duplicateUuidsPending.remove(fileSource);
+    _duplicateUuidsAnswered.add(fileSource);
+    return fileSource;
+  }
+
+  /// Puts a file source back on the queue, for a question which never reached
+  /// the user: a dialog destroyed by navigation rather than answered.
+  ///
+  /// Taking silence for a "no" is what made this whole area hard to get right,
+  /// so the one safe reading of an unanswered dialog is to ask again. Does
+  /// nothing for a file which has been closed since, because closing it
+  /// cleared both sets already.
+  void returnPendingDuplicateUuidReport(FileSource file) {
+    if (!_duplicateUuidsAnswered.remove(file)) {
+      return;
+    }
+    _logger.fine('$file was never actually asked about, queueing it again.');
+    _duplicateUuidsPending.add(file);
+    _duplicateUuidsPendingChanged.add(null);
+  }
+
+  /// Folds entries which share a uuid into the newest of them (keeping the
+  /// others as history revisions) and saves the file.
+  ///
+  /// Destructive, and only ever called after the user agreed to it - see
+  /// `offerDuplicateUuidRepair`. Returns the repaired uuids, empty if there
+  /// was nothing to repair after all.
+  ///
+  /// Throws [DuplicateUuidRepairNotSavedException] when the entries were
+  /// folded together but the file could not be saved, which is not the same
+  /// as a failed repair: the database in memory is the repaired one.
+  Future<List<KdbxUuid>> repairDuplicateUuidEntries(KdbxFile file) async {
+    final repaired = file.mergeDuplicateUuidEntries();
+    if (repaired.isEmpty) {
+      _logger.warning('Nothing to repair in $file.');
+      return repaired;
+    }
+    _logger.info('Repaired ${repaired.length} duplicate uuid(s), saving.');
+    try {
+      await saveFile(file);
+    } catch (error, stackTrace) {
+      throw DuplicateUuidRepairNotSavedException(repaired, error, stackTrace);
+    }
+    return repaired;
   }
 
   /// Refreshes (or removes) this database's copy in the app group container.
@@ -757,6 +898,10 @@ class KdbxBloc {
       OpenedKdbxFiles(Map.from(_openedFiles.value._files)..remove(fileSource)),
     );
     file.dispose();
+    // "Not now" only holds for as long as the file is open - reopening a
+    // database which still needs repairing asks about it again.
+    _duplicateUuidsPending.remove(fileSource);
+    _duplicateUuidsAnswered.remove(fileSource);
     // Closing a database stops it being offered. The mirror outlives the app,
     // so nothing else would ever take it away, and a database the user closed
     // going on answering autofill requests is not what closing looks like.
@@ -775,6 +920,8 @@ class KdbxBloc {
     for (final file in _openedFiles.value.values) {
       file.kdbxFile.dispose();
     }
+    _duplicateUuidsPending.clear();
+    _duplicateUuidsAnswered.clear();
     if (clearQuickUnlock) {
       // clear all quick unlock data.
       _openedFilesQuickUnlock.clear();
@@ -1025,6 +1172,12 @@ class KdbxBloc {
 
   KdbxOpenedFile? fileForFileSource(FileSource fileSource) =>
       _openedFiles.value[fileSource];
+
+  /// Where [file] was opened from, or null if it is not open any more - unlike
+  /// [fileForKdbxFile], which throws a `StateError`. For the callers which run
+  /// long after the action they belong to, such as a snackbar's undo.
+  FileSource? fileSourceForKdbxFile(KdbxFile file) =>
+      _openedFilesByKdbxFile[file]?.fileSource;
 
   Future<KdbxOpenedFile> saveAs(
     KdbxOpenedFile oldFile,
