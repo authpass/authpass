@@ -1414,4 +1414,45 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get scanQrCodeTitle => 'Scan QR Code.';
+
+  @override
+  String get duplicateEntriesDialogTitle => 'Duplicate entries found';
+
+  @override
+  String duplicateEntriesDialogMessage(String fileName, int numEntries) {
+    String _temp0 = intl.Intl.pluralLogic(
+      numEntries,
+      locale: localeName,
+      other:
+          '$numEntries entries which exist more than once: several copies share the same internal id',
+      one:
+          'an entry which exists more than once: two or more copies of it share the same internal id',
+    );
+    return '$fileName contains $_temp0.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.';
+  }
+
+  @override
+  String get duplicateEntriesRepairAction => 'Repair now';
+
+  @override
+  String get duplicateEntriesRepairLaterAction => 'Not now';
+
+  @override
+  String duplicateEntriesRepairedMessage(int numEntries) {
+    String _temp0 = intl.Intl.pluralLogic(
+      numEntries,
+      locale: localeName,
+      other: '$numEntries entries were repaired',
+      one: 'One entry was repaired',
+    );
+    return '$_temp0 and the database was saved.';
+  }
+
+  @override
+  String get duplicateEntriesRepairFailedMessage =>
+      'The duplicate entries could not be repaired, and the database was not saved.';
+
+  @override
+  String get duplicateEntriesRepairNotSavedMessage =>
+      'The duplicate entries were merged, but the database could not be saved. The repair is still there and will be included the next time the database is saved.';
 }
