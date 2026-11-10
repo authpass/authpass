@@ -1,4 +1,5 @@
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -155,6 +156,31 @@ abstract class Env {
   /// not sold there, but the Mac App Store is still where a Mac user reviews
   /// AuthPass.
   String get macAppStoreId => '1478552452'; // NON-NLS
+
+  /// Where an explicit "review AuthPass" action goes on the platforms
+  /// flutter_store_listing reports as `unsupportedPlatform`.
+  ///
+  /// The package knows the three app stores, so on Linux and Windows it opens
+  /// nothing at all — but those builds do come from stores of their own that
+  /// take reviews. Without this the button is simply dead there; on 1.x it
+  /// opened a Google Play page for a package name that is not on Play, which
+  /// is where the dedicated `StorePlatform.unsupported` came from.
+  ///
+  /// Null on web, where there is genuinely nowhere to leave a review.
+  ///
+  /// Each platform gets its primary channel, because nothing at runtime says
+  /// which one this build was installed from: a flatpak or portable-zip user
+  /// reaches a listing they did not install from, which still beats a button
+  /// that does nothing.
+  Uri? get reviewFallbackUri {
+    if (AuthPassPlatform.isLinux) {
+      return Uri.parse(UrlConstants.snapStoreUrl);
+    }
+    if (AuthPassPlatform.isWindows) {
+      return Uri.parse(UrlConstants.microsoftStoreUrl);
+    }
+    return null;
+  }
 
   /// allow disabling of "onboarding".
   bool get featureOnboarding => true;

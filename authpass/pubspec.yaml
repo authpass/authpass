@@ -105,7 +105,9 @@ dependencies:
   # tell "no store on this platform" from "could not resolve the id" from "the
   # launcher refused". It also dropped the iTunes lookup that used to discover
   # the App Store id over the network at launch, which is why startApp now
-  # configures both ids -- and with them the http dependency left the tree.
+  # configures both ids -- and why the package itself no longer depends on
+  # http. AuthPass still does, directly and in eight files; nothing about
+  # the `http` entry above changes here.
   # 2.1.0 adds the StoreKit prompt on macOS.
   flutter_store_listing: ^2.1.0
 

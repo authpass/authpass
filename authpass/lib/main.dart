@@ -634,16 +634,36 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
             final outcome = await FlutterStoreListing.instance.openStoreListing(
               writeReview: true,
             );
-            return outcome.isSuccess;
+            // Logged, because the enum is the whole reason for being on 2.x
+            // and diac only ever reports the bool. storeIdUnavailable (a wrong
+            // id in Env) is reported rather than asserted in release builds,
+            // so without this line the one failure that only happens in
+            // release is also the one nothing records.
+            _logger.fine('openStoreListing() = $outcome');
+            if (outcome.isSuccess) {
+              return true;
+            }
+            // Linux and Windows are unsupportedPlatform to a package that
+            // knows only the three app stores, so this would otherwise be a
+            // dead button there. Env sends them to the store they most likely
+            // did install from.
+            final fallback = _deps.env.reviewFallbackUri;
+            if (fallback == null) {
+              return false;
+            }
+            return await DialogUtils.openUri(fallback);
           },
           'requestReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewRequest');
             // ReviewFallback.none is the old onlyNative: true -- ask StoreKit
             // and report, never send the user out to the store behind the
-            // prompt's back.
+            // prompt's back. So no reviewFallbackUri here either, unlike
+            // launchReview above: navigating somewhere is the one thing
+            // ReviewFallback.none exists to rule out.
             final outcome = await FlutterStoreListing.instance.requestReview(
               fallback: ReviewFallback.none,
             );
+            _logger.fine('requestReview() = $outcome');
             return outcome.isSuccess;
           },
           'diacOptIn': (event) async {
