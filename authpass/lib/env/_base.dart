@@ -1,4 +1,5 @@
 import 'package:authpass/utils/constants.dart';
+import 'package:authpass/utils/platform.dart';
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -136,6 +137,50 @@ abstract class Env {
   /// `$(AppIdentifierPrefix)group.design.codeux.authpass` here — which is the
   /// style macos/Runner already uses for `keychain-access-groups`.
   String get autofillAppGroupIdentifier => 'group.design.codeux.authpass';
+
+  /// The numeric App Store id of the iOS app, as in
+  /// `apps.apple.com/app/authpass-password-manager/id1479297675`.
+  ///
+  /// Configuration rather than something discoverable: flutter_store_listing
+  /// 2.0 deleted the iTunes `/lookup` call that used to find this at launch,
+  /// so an id that is wrong or unset means the store listing and the review
+  /// form do not open at all, on a release build without an error.
+  String get appStoreId => '1479297675'; // NON-NLS
+
+  /// The Mac App Store id, which is a **different app** from [appStoreId] —
+  /// `id1478552452`, the `mt=12` link in README.md.
+  ///
+  /// flutter_store_listing defaults this to [appStoreId] when it is not given,
+  /// which would send Mac users to the iOS listing, so it is always passed
+  /// separately. It stays correct for the Developer ID builds too: they are
+  /// not sold there, but the Mac App Store is still where a Mac user reviews
+  /// AuthPass.
+  String get macAppStoreId => '1478552452'; // NON-NLS
+
+  /// Where an explicit "review AuthPass" action goes on the platforms
+  /// flutter_store_listing reports as `unsupportedPlatform`.
+  ///
+  /// The package knows the three app stores, so on Linux and Windows it opens
+  /// nothing at all — but those builds do come from stores of their own that
+  /// take reviews. Without this the button is simply dead there; on 1.x it
+  /// opened a Google Play page for a package name that is not on Play, which
+  /// is where the dedicated `StorePlatform.unsupported` came from.
+  ///
+  /// Null on web, where there is genuinely nowhere to leave a review.
+  ///
+  /// Each platform gets its primary channel, because nothing at runtime says
+  /// which one this build was installed from: a flatpak or portable-zip user
+  /// reaches a listing they did not install from, which still beats a button
+  /// that does nothing.
+  Uri? get reviewFallbackUri {
+    if (AuthPassPlatform.isLinux) {
+      return Uri.parse(UrlConstants.snapStoreUrl);
+    }
+    if (AuthPassPlatform.isWindows) {
+      return Uri.parse(UrlConstants.microsoftStoreUrl);
+    }
+    return null;
+  }
 
   /// allow disabling of "onboarding".
   bool get featureOnboarding => true;
