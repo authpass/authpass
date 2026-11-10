@@ -190,10 +190,6 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 PopupMenuItem(
                   value: () {
                     final oldGroup = entry.parent;
-                    final kdbxBloc = Provider.of<KdbxBloc>(
-                      context,
-                      listen: false,
-                    );
                     try {
                       entry.file.deleteEntry(entry);
                     } on KdbxDuplicateUuidException catch (e, stackTrace) {
@@ -205,12 +201,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                         e,
                         stackTrace,
                       );
-                      unawaited(
-                        offerDuplicateUuidRepair(
-                          context,
-                          kdbxBloc.fileForKdbxFile(entry.file).fileSource,
-                        ),
-                      );
+                      offerDuplicateUuidRepairForFile(context, entry.file);
                       return;
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -227,13 +218,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                                 e,
                                 trace,
                               );
-                              unawaited(
-                                offerDuplicateUuidRepair(
-                                  context,
-                                  kdbxBloc
-                                      .fileForKdbxFile(entry.file)
-                                      .fileSource,
-                                ),
+                              offerDuplicateUuidRepairForFile(
+                                context,
+                                entry.file,
                               );
                             }
                           },
@@ -825,7 +812,6 @@ class _EntryDetailsState extends State<EntryDetails>
         ))?.firstOrNull;
     if (newGroup != null) {
       final oldGroup = entry.parent;
-      final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
       try {
         file.move(entry, newGroup);
       } on KdbxDuplicateUuidException catch (e, trace) {
@@ -834,12 +820,7 @@ class _EntryDetailsState extends State<EntryDetails>
         // the recycle bin comes through here too, which is the likeliest way
         // into this for a database which needs repairing.
         _logger.warning('Unable to move ${entry.uuid}', e, trace);
-        unawaited(
-          offerDuplicateUuidRepair(
-            context,
-            kdbxBloc.fileForKdbxFile(file).fileSource,
-          ),
-        );
+        offerDuplicateUuidRepairForFile(context, file);
         return null;
       }
       ScaffoldMessenger.of(context).showSnackBar(
@@ -856,12 +837,7 @@ class _EntryDetailsState extends State<EntryDetails>
                   e,
                   trace,
                 );
-                unawaited(
-                  offerDuplicateUuidRepair(
-                    context,
-                    kdbxBloc.fileForKdbxFile(file).fileSource,
-                  ),
-                );
+                offerDuplicateUuidRepairForFile(context, file);
               }
             },
           ),

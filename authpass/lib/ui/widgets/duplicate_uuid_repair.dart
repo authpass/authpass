@@ -5,6 +5,7 @@ import 'package:authpass/bloc/kdbx_bloc.dart';
 import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:authpass/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:kdbx/kdbx.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -20,9 +21,11 @@ final _logger = Logger('duplicate_uuid_repair');
 /// object which is no longer open - which cannot be saved and leaves the live
 /// database just as broken as it was.
 ///
-/// [context] has to outlive the dialog. A file which was just unlocked is the
-/// awkward case, since the whole route stack is replaced right after the open,
-/// so that path goes through [DuplicateUuidWatcher] instead of calling this.
+/// [context] only has to be alive while the question is on screen: a repair
+/// the user has confirmed goes ahead even when the route it was asked from has
+/// gone by then, and only the message afterwards is dropped. A file which was
+/// just unlocked still goes through [DuplicateUuidWatcher] rather than calling
+/// this directly, so that it is asked about from the route stack which stays.
 Future<void> offerDuplicateUuidRepair(
   BuildContext context,
   FileSource fileSource,
@@ -52,12 +55,27 @@ Future<void> offerDuplicateUuidRepair(
       negativeButtonText: loc.duplicateEntriesRepairLaterAction,
     ),
   );
-  if (!confirmed || !context.mounted) {
+  if (!confirmed) {
     return;
   }
+  // Deliberately not also gated on `context.mounted`: repairing needs the
+  // bloc and nothing else, while the route this dialog was pushed from can be
+  // on its way out while the dialog is still up - which is how a confirmed
+  // repair used to be dropped without a word. The user said yes, so the
+  // database gets repaired; only the messages further down need a live
+  // context.
   final file = kdbxBloc.fileForFileSource(fileSource)?.kdbxFile;
   if (file == null) {
     _logger.warning('$fileSource was closed while we were asking.');
+    return;
+  }
+  if (file.findDuplicateUuidObjects().isEmpty) {
+    // The open file was swapped underneath the dialog for one which has
+    // nothing wrong with it - a cloud database is opened from its cached
+    // content first and from the remote content afterwards, and another device
+    // may have repaired it in between. Repairing would report that it did
+    // nothing, which would read as a failure.
+    _logger.info('$fileSource no longer contains any duplicate uuids.');
     return;
   }
   try {
@@ -118,6 +136,32 @@ Future<void> offerDuplicateUuidRepair(
       routeAppend: 'duplicateUuidsRepair',
     );
   }
+}
+
+/// Offers the repair for whichever database [file] belongs to, as far as that
+/// is still possible.
+///
+/// For the callers which can run long after the action they belong to - the
+/// snackbar undo actions in the entry details screen, which outlive the screen
+/// that put them up. By the time the user taps Undo the element can be defunct
+/// and the database can have been closed, and both of those used to throw:
+/// `AppLocalizations.of` on a dead context, and [KdbxBloc.fileForKdbxFile],
+/// which raises a `StateError` rather than answering null. Inside a snackbar
+/// callback that surfaces as a framework error and an undo which does nothing.
+void offerDuplicateUuidRepairForFile(BuildContext context, KdbxFile file) {
+  if (!context.mounted) {
+    _logger.warning('Not offering to repair $file: the screen is gone.');
+    return;
+  }
+  final fileSource = Provider.of<KdbxBloc>(
+    context,
+    listen: false,
+  ).fileSourceForKdbxFile(file);
+  if (fileSource == null) {
+    _logger.warning('Not offering to repair $file: it is no longer open.');
+    return;
+  }
+  unawaited(offerDuplicateUuidRepair(context, fileSource));
 }
 
 /// Asks about the files which [KdbxBloc] found duplicate uuids in while it was
@@ -187,6 +231,22 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
     binding.scheduleFrame();
   }
 
+  /// Whether this watcher's route is still part of the navigator's history,
+  /// and so whether it is the one which should be asking.
+  ///
+  /// Unlocking a second database over an open one does not replace the
+  /// scaffold it starts from: the select file screen is *pushed* over it
+  /// (`app_bar_menu.dart`), so this watcher is still mounted - and still first
+  /// in line - when `pushAndRemoveUntil` installs the watcher that is going to
+  /// stay. Taking the file here would mean asking from a route which is
+  /// disposed as soon as the new one has finished animating in, and an answer
+  /// into a dead element.
+  ///
+  /// `isActive` turns false as soon as the route leaves the history, which is
+  /// well before it is disposed. Deliberately not `isCurrent`: a watcher with
+  /// the entry details screen pushed over it is still the right one to ask.
+  bool get _routeIsStaying => ModalRoute.of(context)?.isActive ?? true;
+
   Future<void> _askAboutPendingFiles() async {
     if (_asking) {
       return;
@@ -194,7 +254,7 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
     _asking = true;
     try {
       final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-      while (mounted) {
+      while (mounted && _routeIsStaying) {
         final fileSource = kdbxBloc.takePendingDuplicateUuidReport();
         if (fileSource == null) {
           return;

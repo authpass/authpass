@@ -51,6 +51,7 @@ class _FakeOpenedFile extends Fake implements KdbxOpenedFile {
 
 class _FakeKdbxBloc extends Fake implements KdbxBloc {
   final _pending = <FileSource>[];
+  final _answered = <FileSource>{};
   final _opened = <FileSource, KdbxOpenedFile>{};
   final _openedFiles = BehaviorSubject<OpenedKdbxFiles>();
 
@@ -60,11 +61,16 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   /// The files it was asked to repair, in order.
   final repairCalls = <KdbxFile>[];
 
-  /// What [KdbxBloc] does while opening a file: register it, and queue it when
-  /// it turned out to carry duplicates.
+  /// What [KdbxBloc] does while opening a file: register it, queue it when it
+  /// turned out to carry duplicates, and announce it.
+  ///
+  /// Queue first and emit second, which is the order the real bloc keeps - the
+  /// emit is what makes the watcher look at the queue, so a file queued after
+  /// it goes unmentioned. It used to be the other way round there, and this
+  /// fake having the right order is why these tests could not see that.
   void open(FileSource fileSource, KdbxFile file, {bool duplicates = true}) {
     _opened[fileSource] = _FakeOpenedFile(fileSource, file);
-    if (duplicates) {
+    if (duplicates && !_answered.contains(fileSource)) {
       _pending.add(fileSource);
     }
     _openedFiles.add(OpenedKdbxFiles(_opened));
@@ -74,16 +80,34 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   /// which takes the `KdbxFile` and would be an override.
   void closeFile(FileSource fileSource) {
     _opened.remove(fileSource);
+    _pending.remove(fileSource);
+    _answered.remove(fileSource);
     _openedFiles.add(OpenedKdbxFiles(_opened));
   }
 
   @override
-  FileSource? takePendingDuplicateUuidReport() =>
-      _pending.isEmpty ? null : _pending.removeAt(0);
+  FileSource? takePendingDuplicateUuidReport() {
+    if (_pending.isEmpty) {
+      return null;
+    }
+    final fileSource = _pending.removeAt(0);
+    _answered.add(fileSource);
+    return fileSource;
+  }
 
   @override
   KdbxOpenedFile? fileForFileSource(FileSource fileSource) =>
       _opened[fileSource];
+
+  @override
+  FileSource? fileSourceForKdbxFile(KdbxFile file) {
+    for (final opened in _opened.entries) {
+      if (opened.value.kdbxFile == file) {
+        return opened.key;
+      }
+    }
+    return null;
+  }
 
   @override
   ValueStream<OpenedKdbxFiles> get openedFilesChanged => _openedFiles.stream;
@@ -102,11 +126,20 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   Future<void> dispose() => _openedFiles.close();
 }
 
+/// The watcher, around a scaffold which says [label].
+Widget _watched(_FakeKdbxBloc bloc, String label) => Provider<KdbxBloc>.value(
+  value: bloc,
+  child: DuplicateUuidWatcher(child: Scaffold(body: Text(label))),
+);
+
 /// Mounts the watcher the way unlocking a database does: the file is opened -
 /// and queued - while the select-file screen is still up, and then the unlock
 /// flow throws away the whole route stack. The dialog must still arrive, which
 /// is what went wrong when the bloc pushed it itself.
-Future<void> _unlockThenMainApp(
+///
+/// Answers the navigator key, for the tests which have to navigate again
+/// afterwards.
+Future<GlobalKey<NavigatorState>> _unlockThenMainApp(
   WidgetTester tester,
   _FakeKdbxBloc bloc, {
   bool quickUnlock = false,
@@ -138,6 +171,7 @@ Future<void> _unlockThenMainApp(
     );
   }
   await tester.pumpAndSettle();
+  return navigatorKey;
 }
 
 void main() {
@@ -311,6 +345,228 @@ void main() {
       isEmpty,
       reason: 'the file we were asking about is no longer open',
     );
+  });
+
+  testWidgets('leaves a second database to the watcher which stays', (
+    tester,
+  ) async {
+    final navigatorKey = GlobalKey<NavigatorState>();
+    // database 1 is open, so a watcher is already mounted.
+    await tester.pumpWidget(
+      MaterialApp(
+        navigatorKey: navigatorKey,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
+        home: _watched(bloc, 'db1'),
+      ),
+    );
+    // "Open another file" pushes the select file screen *over* the scaffold
+    // rather than replacing it, so that first watcher stays mounted and keeps
+    // its subscription.
+    unawaited(
+      navigatorKey.currentState!.push(
+        MaterialPageRoute<void>(
+          builder: (context) => const Scaffold(body: Text('select file')),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // unlocking database 2: the open and the navigation are one turn, so both
+    // watchers run their callback in the same frame, the doomed one first.
+    bloc.open(source, file);
+    unawaited(
+      navigatorKey.currentState!.pushAndRemoveUntil(
+        MaterialPageRoute<void>(builder: (context) => _watched(bloc, 'db2')),
+        (route) => false,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('db2'), findsOneWidget);
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsOneWidget);
+
+    await tester.tap(find.text(loc.duplicateEntriesRepairAction));
+    await tester.pumpAndSettle();
+
+    expect(
+      bloc.repairCalls,
+      [file],
+      reason: 'the watcher being torn down must not be the one which asks',
+    );
+    expect(find.text(loc.duplicateEntriesRepairedMessage(1)), findsOneWidget);
+  });
+
+  testWidgets('repairs even when the screen it asked from is gone', (
+    tester,
+  ) async {
+    bloc.open(source, file);
+    var watcherMounted = true;
+    late StateSetter rebuild;
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
+        home: Provider<KdbxBloc>.value(
+          value: bloc,
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = setState;
+              return watcherMounted
+                  ? const DuplicateUuidWatcher(
+                      child: Scaffold(body: Text('main app')),
+                    )
+                  : const Scaffold(body: Text('main app'));
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsOneWidget);
+
+    rebuild(() => watcherMounted = false);
+    await tester.pumpAndSettle();
+    expect(
+      find.text(loc.duplicateEntriesDialogTitle),
+      findsOneWidget,
+      reason: 'the dialog is on the navigator, not inside the watcher',
+    );
+
+    await tester.tap(find.text(loc.duplicateEntriesRepairAction));
+    await tester.pumpAndSettle();
+
+    expect(
+      bloc.repairCalls,
+      [file],
+      reason: 'the user said yes, and repairing needs nothing but the bloc',
+    );
+  });
+
+  testWidgets('repairs the database which is open when the user agrees', (
+    tester,
+  ) async {
+    bloc.open(source, file);
+    await _unlockThenMainApp(tester, bloc);
+
+    // the remote content of a cloud file replaces the cached content which was
+    // asked about, while the dialog is still up.
+    final remote = _FakeKdbxFile(duplicates: 3);
+    bloc.open(source, remote);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(loc.duplicateEntriesRepairAction));
+    await tester.pumpAndSettle();
+
+    expect(
+      bloc.repairCalls,
+      [remote],
+      reason: 'repairing the copy which is no longer open fixes nothing',
+    );
+  });
+
+  testWidgets('says nothing when the duplicates are gone by then', (
+    tester,
+  ) async {
+    bloc.open(source, file);
+    await _unlockThenMainApp(tester, bloc);
+
+    // same swap, except that the copy which arrived was already repaired on
+    // another device.
+    bloc.open(source, _FakeKdbxFile(duplicates: 0));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(loc.duplicateEntriesRepairAction));
+    await tester.pumpAndSettle();
+
+    expect(bloc.repairCalls, isEmpty);
+    expect(
+      find.text(loc.duplicateEntriesRepairFailedMessage),
+      findsNothing,
+      reason: 'there was nothing wrong with the database by the time we looked',
+    );
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsNothing);
+  });
+
+  testWidgets('asks once while the file stays open', (tester) async {
+    bloc.open(source, file);
+    await _unlockThenMainApp(tester, bloc);
+    await tester.tap(find.text(loc.duplicateEntriesRepairLaterAction));
+    await tester.pumpAndSettle();
+
+    // the remote content arrives and is reported a second time. Which set the
+    // file lands in is [KdbxBloc]'s business; this is the watcher holding up
+    // its end of it.
+    bloc.open(source, file);
+    await tester.pumpAndSettle();
+
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsNothing);
+  });
+
+  testWidgets('a snackbar undo offers nothing once its screen is gone', (
+    tester,
+  ) async {
+    bloc.open(source, file, duplicates: false);
+    late BuildContext snackbarContext;
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
+        home: Provider<KdbxBloc>.value(
+          value: bloc,
+          child: Builder(
+            builder: (context) {
+              snackbarContext = context;
+              return const Scaffold(body: Text('entry details'));
+            },
+          ),
+        ),
+      ),
+    );
+    // a snackbar outlives the screen which put it up, so by the time Undo is
+    // tapped this element can be defunct.
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: Text('somewhere else'))),
+    );
+
+    offerDuplicateUuidRepairForFile(snackbarContext, file);
+    await tester.pumpAndSettle();
+
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('and offers nothing for a database which was closed', (
+    tester,
+  ) async {
+    bloc.open(source, file, duplicates: false);
+    late BuildContext screenContext;
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
+        home: Provider<KdbxBloc>.value(
+          value: bloc,
+          child: Builder(
+            builder: (context) {
+              screenContext = context;
+              return const Scaffold(body: Text('entry details'));
+            },
+          ),
+        ),
+      ),
+    );
+
+    bloc.closeFile(source);
+    offerDuplicateUuidRepairForFile(screenContext, file);
+    await tester.pumpAndSettle();
+
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }
 

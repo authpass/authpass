@@ -508,6 +508,13 @@ class KdbxBloc {
       kdbxFile: kdbxFile,
       kdbxFileContent: fileContent,
     );
+    // Queued before the stream event below, not after it: that event is what
+    // makes DuplicateUuidWatcher look at the queue, and everything between
+    // here and the end of this method can await - quick unlock, and real file
+    // and keychain i/o in the autofill mirror on iOS. Reported afterwards, the
+    // watcher reads an empty queue and the file stays unmentioned until some
+    // unrelated open, save or close happens to emit again.
+    _reportDuplicateUuids(file, kdbxFile);
     _openedFiles.add(
       OpenedKdbxFiles({
         ..._openedFiles.value._files,
@@ -526,7 +533,6 @@ class KdbxBloc {
       await _updateQuickUnlockStore();
     }
     await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
-    _reportDuplicateUuids(file, kdbxFile);
     return kdbxOpenedFile;
   }
 
@@ -1137,6 +1143,12 @@ class KdbxBloc {
 
   KdbxOpenedFile? fileForFileSource(FileSource fileSource) =>
       _openedFiles.value[fileSource];
+
+  /// Where [file] was opened from, or null if it is not open any more - unlike
+  /// [fileForKdbxFile], which throws a `StateError`. For the callers which run
+  /// long after the action they belong to, such as a snackbar's undo.
+  FileSource? fileSourceForKdbxFile(KdbxFile file) =>
+      _openedFilesByKdbxFile[file]?.fileSource;
 
   Future<KdbxOpenedFile> saveAs(
     KdbxOpenedFile oldFile,
