@@ -256,7 +256,9 @@ class KdbxBloc {
     required this.appDataBloc,
     required this.analytics,
     required this.cloudStorageBloc,
-  }) : quickUnlockStorage = QuickUnlockStorage(
+    @visibleForTesting KdbxFormat? kdbxFormat,
+  }) : _kdbxFormatOverride = kdbxFormat,
+       quickUnlockStorage = QuickUnlockStorage(
          cloudStorageBloc: cloudStorageBloc,
          env: env,
          analytics: analytics,
@@ -287,7 +289,13 @@ class KdbxBloc {
     appGroupIdentifier: env.autofillAppGroupIdentifier,
   );
   late final autofillIdentities = AutofillIdentities();
-  late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
+
+  /// Only set by tests. [FlutterArgon2] throws while looking up its symbols
+  /// outside a real app, which would otherwise make the bloc impossible to
+  /// construct in a unit test.
+  final KdbxFormat? _kdbxFormatOverride;
+  late final KdbxFormat kdbxFormat =
+      _kdbxFormatOverride ?? KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
   final _openedFiles = BehaviorSubject<OpenedKdbxFiles>.seeded(
@@ -378,6 +386,7 @@ class KdbxBloc {
     bool addToQuickUnlock = false,
   }) async* {
     Uint8List? previous;
+    var writeGeneration = file.writeGeneration;
     late KdbxOpenedFile openedFile;
     await for (final fileContent in file.content()) {
       _logger.finer('$file got from ${fileContent.source}');
@@ -386,14 +395,35 @@ class KdbxBloc {
         if (ByteUtils.eq(previous, fileContent.content)) {
           _logger.finer('$file: No changes detected. Nothing to do.');
           continue;
-        } else {
-          if (openedFile.kdbxFile.isDirty) {
-            // ooooopsie.
-            throw StateError(
-              'File was changed locally while '
-              'loading new file from remote storage.',
-            );
-          }
+        }
+        // Everything past here hands the content to [_openFileContent], which
+        // replaces the open [KdbxFile] with one read from these bytes. That is
+        // only ever right while the open file is still exactly what the source
+        // holds — and for the second and later yields, which arrive in the
+        // background seconds or minutes after the file was opened from cache,
+        // it often is not.
+        if (file.writeGeneration != writeGeneration) {
+          // We saved while this load was in flight, so these bytes predate the
+          // save: applying them would throw away the change, and silently,
+          // because the save already cleared isDirty. Our own write is what
+          // the source holds now (or it raised a conflict and was merged), so
+          // dropping this load loses nothing.
+          _logger.info(
+            '$file: saved while loading from remote storage. '
+            'Discarding the stale content.',
+          );
+          return;
+        }
+        if (openedFile.kdbxFile.isDirty) {
+          // Unsaved local changes; replacing the file would drop them. The
+          // next save picks the remote change up again as a storage conflict
+          // and merges it. Not thrown: both callers run this in the
+          // background, unawaited.
+          _logger.info(
+            '$file: changed locally while loading from remote storage. '
+            'Keeping the local file.',
+          );
+          return;
         }
       }
       previous = fileContent.content;
@@ -405,6 +435,7 @@ class KdbxBloc {
         fileContent,
         addToQuickUnlock,
       );
+      writeGeneration = file.writeGeneration;
       addToQuickUnlock = false;
 
       if (file is FileSourceCloudStorage) {
