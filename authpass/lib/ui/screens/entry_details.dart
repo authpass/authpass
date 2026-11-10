@@ -189,14 +189,40 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 PopupMenuItem(
                   value: () {
                     final oldGroup = entry.parent;
-                    entry.file.deleteEntry(entry);
+                    final kdbxBloc = Provider.of<KdbxBloc>(
+                      context,
+                      listen: false,
+                    );
+                    try {
+                      entry.file.deleteEntry(entry);
+                    } on KdbxDuplicateUuidException catch (e, stackTrace) {
+                      // The recycle bin already holds another entry with this
+                      // uuid, so the move was refused before it changed
+                      // anything - this database needs repairing first.
+                      _logger.warning(
+                        'Unable to delete ${entry.uuid}',
+                        e,
+                        stackTrace,
+                      );
+                      kdbxBloc.offerDuplicateUuidRepair(entry.file);
+                      return;
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(loc.deletedEntry),
                         action: SnackBarAction(
                           label: loc.undoButtonLabel,
                           onPressed: () {
-                            entry.file.move(entry, oldGroup!);
+                            try {
+                              entry.file.move(entry, oldGroup!);
+                            } on KdbxDuplicateUuidException catch (e, trace) {
+                              _logger.warning(
+                                'Unable to undo deleting ${entry.uuid}',
+                                e,
+                                trace,
+                              );
+                              kdbxBloc.offerDuplicateUuidRepair(entry.file);
+                            }
                           },
                         ),
                       ),

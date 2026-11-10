@@ -536,6 +536,27 @@ class KdbxBloc {
     delegate?.duplicateUuidsDetected(file, kdbxFile, uuids);
   }
 
+  /// Asks the user about the duplicates in [file] again, for a caller which
+  /// just ran into a `KdbxDuplicateUuidException` doing something ordinary -
+  /// deleting an entry, say, which kdbx refuses while another entry with that
+  /// uuid is already in the target group.
+  ///
+  /// Looks at the file as it is now rather than at
+  /// [KdbxFile.duplicateUuidsOnOpen], since an earlier repair may have dealt
+  /// with some of it.
+  void offerDuplicateUuidRepair(KdbxFile file) {
+    final uuids = file.findDuplicateUuidObjects().keys.toSet();
+    if (uuids.isEmpty) {
+      _logger.warning('Asked to repair $file, which has no duplicates.');
+      return;
+    }
+    delegate?.duplicateUuidsDetected(
+      fileForKdbxFile(file).fileSource,
+      file,
+      uuids,
+    );
+  }
+
   /// Folds entries which share a uuid into the newest of them (keeping the
   /// others as history revisions) and saves the file.
   ///
