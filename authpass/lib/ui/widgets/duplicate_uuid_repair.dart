@@ -175,11 +175,16 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
   /// stream which replays its current value on listen - and a dialog must not
   /// be pushed from inside a build.
   void _scheduleAsk() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    final binding = WidgetsBinding.instance;
+    binding.addPostFrameCallback((_) {
       if (mounted) {
         unawaited(_askAboutPendingFiles());
       }
     });
+    // A post frame callback only runs once a frame is actually produced, and
+    // nothing here guarantees one: a file which turns up while we are already
+    // mounted arrives on a stream, which rebuilds nothing by itself.
+    binding.scheduleFrame();
   }
 
   Future<void> _askAboutPendingFiles() async {
