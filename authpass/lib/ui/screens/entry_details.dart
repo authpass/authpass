@@ -21,6 +21,7 @@ import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/password_list.dart';
+import 'package:authpass/ui/widgets/duplicate_uuid_repair.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -189,14 +190,39 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                 PopupMenuItem(
                   value: () {
                     final oldGroup = entry.parent;
-                    entry.file.deleteEntry(entry);
+                    try {
+                      entry.file.deleteEntry(entry);
+                    } on KdbxDuplicateUuidException catch (e, stackTrace) {
+                      // The recycle bin already holds another entry with this
+                      // uuid, so the move was refused before it changed
+                      // anything - this database needs repairing first.
+                      _logger.warning(
+                        'Unable to delete ${entry.uuid}',
+                        e,
+                        stackTrace,
+                      );
+                      offerDuplicateUuidRepairForFile(context, entry.file);
+                      return;
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(loc.deletedEntry),
                         action: SnackBarAction(
                           label: loc.undoButtonLabel,
                           onPressed: () {
-                            entry.file.move(entry, oldGroup!);
+                            try {
+                              entry.file.move(entry, oldGroup!);
+                            } on KdbxDuplicateUuidException catch (e, trace) {
+                              _logger.warning(
+                                'Unable to undo deleting ${entry.uuid}',
+                                e,
+                                trace,
+                              );
+                              offerDuplicateUuidRepairForFile(
+                                context,
+                                entry.file,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -786,14 +812,33 @@ class _EntryDetailsState extends State<EntryDetails>
         ))?.firstOrNull;
     if (newGroup != null) {
       final oldGroup = entry.parent;
-      file.move(entry, newGroup);
+      try {
+        file.move(entry, newGroup);
+      } on KdbxDuplicateUuidException catch (e, trace) {
+        // The target group already holds another entry with this uuid, so the
+        // move was refused before it changed anything. Restoring an entry from
+        // the recycle bin comes through here too, which is the likeliest way
+        // into this for a database which needs repairing.
+        _logger.warning('Unable to move ${entry.uuid}', e, trace);
+        offerDuplicateUuidRepairForFile(context, file);
+        return null;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(loc.movedEntryToGroup(newGroup.name.get()!)),
           action: SnackBarAction(
             label: loc.undoButtonLabel,
             onPressed: () {
-              file.move(entry, oldGroup!);
+              try {
+                file.move(entry, oldGroup!);
+              } on KdbxDuplicateUuidException catch (e, trace) {
+                _logger.warning(
+                  'Unable to undo moving ${entry.uuid}',
+                  e,
+                  trace,
+                );
+                offerDuplicateUuidRepairForFile(context, file);
+              }
             },
           ),
         ),
