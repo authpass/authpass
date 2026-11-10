@@ -1476,4 +1476,8 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get duplicateEntriesRepairFailedMessage =>
       'The duplicate entries could not be repaired, and the database was not saved.';
+
+  @override
+  String get duplicateEntriesRepairNotSavedMessage =>
+      'The duplicate entries were merged, but the database could not be saved. The repair is still there and will be included the next time the database is saved.';
 }

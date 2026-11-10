@@ -77,6 +77,34 @@ class FileAlreadyOpenException extends KdbxException {
   }
 }
 
+/// The entries sharing a uuid were folded together, but the file could not be
+/// saved afterwards - see [KdbxBloc.repairDuplicateUuidEntries].
+///
+/// Not the same as a failed repair, and worth telling the user apart from one:
+/// the repair did happen, the database in memory is the repaired one, and the
+/// next save which does go through keeps it.
+class DuplicateUuidRepairNotSavedException extends KdbxException {
+  DuplicateUuidRepairNotSavedException(
+    this.repaired,
+    this.error,
+    this.stackTrace,
+  );
+
+  /// The uuids which were repaired before saving failed.
+  final List<KdbxUuid> repaired;
+
+  /// Why saving failed.
+  final Object error;
+  final StackTrace stackTrace;
+
+  @NonNls
+  @override
+  String toString() {
+    return 'DuplicateUuidRepairNotSavedException{repaired: '
+        '${repaired.length}, error: $error}';
+  }
+}
+
 class QuickUnlockStorage {
   QuickUnlockStorage({
     required this.cloudStorageBloc,
@@ -246,19 +274,6 @@ class OpenFileResult {
 
 abstract class KdbxBlocDelegate {
   void conflictMerged(FileSource fileSource, KdbxFile file, MergeContext merge);
-
-  /// The file which was just opened carries several live entries sharing one
-  /// uuid, which no kdbx file should contain (see
-  /// [KdbxFile.duplicateUuidsOnOpen]). A merge bug in kdbx up to 2.5.0
-  /// produced exactly this, but any program which wrote the file could have,
-  /// and we cannot tell which one did. The file is perfectly usable, but
-  /// merging it will not work properly until it is repaired, so warn the user
-  /// and offer [KdbxBloc.repairDuplicateUuidEntries].
-  void duplicateUuidsDetected(
-    FileSource fileSource,
-    KdbxFile file,
-    Set<KdbxUuid> uuids,
-  );
 }
 
 typedef OpenedFileUpdater = void Function(OpenedFileBuilder b);
@@ -515,11 +530,26 @@ class KdbxBloc {
     return kdbxOpenedFile;
   }
 
-  /// File sources we have already told the user about, so that a second
-  /// [FileContent] from the same source (cache, then remote) does not ask
-  /// twice.
-  final _duplicateUuidsReported = <FileSource>{};
+  /// File sources which were found to contain several live entries sharing a
+  /// uuid, and which still have to be put to the user.
+  ///
+  /// Only queued here, never asked about from inside the open: unlocking
+  /// replaces the whole route stack as soon as the open returns, which would
+  /// take an already pushed dialog with it. `DuplicateUuidWatcher` drains this
+  /// once there is a route stack which stays.
+  final _duplicateUuidsPending = <FileSource>{};
 
+  /// File sources the user has already been asked about, so that a second
+  /// [FileContent] from the same source (cache, then remote) does not ask
+  /// twice. Cleared when the file is closed, so reopening it asks again.
+  final _duplicateUuidsAnswered = <FileSource>{};
+
+  /// Notices a file which carries several live entries sharing one uuid, which
+  /// no kdbx file should contain (see [KdbxFile.duplicateUuidsOnOpen]). A merge
+  /// bug in kdbx up to 2.5.0 produced exactly this, but any program which wrote
+  /// the file could have, and we cannot tell which one did. The file is
+  /// perfectly usable, but merging it will not work properly until it is
+  /// repaired, so the user is offered [repairDuplicateUuidEntries].
   void _reportDuplicateUuids(FileSource file, KdbxFile kdbxFile) {
     final uuids = kdbxFile.duplicateUuidsOnOpen;
     if (uuids.isEmpty) {
@@ -529,40 +559,39 @@ class KdbxBloc {
       '$file contains ${uuids.length} uuid(s) shared by more than one live '
       'entry: ${uuids.join(', ')}',
     );
-    if (!_duplicateUuidsReported.add(file)) {
-      _logger.fine('Already offered to repair $file, not asking again.');
+    if (_duplicateUuidsAnswered.contains(file)) {
+      _logger.fine('Already asked about $file, not asking again.');
       return;
     }
-    delegate?.duplicateUuidsDetected(file, kdbxFile, uuids);
+    _duplicateUuidsPending.add(file);
   }
 
-  /// Asks the user about the duplicates in [file] again, for a caller which
-  /// just ran into a `KdbxDuplicateUuidException` doing something ordinary -
-  /// deleting an entry, say, which kdbx refuses while another entry with that
-  /// uuid is already in the target group.
+  /// The next file source to warn the user about, taken off the queue, or
+  /// `null` when there is nothing left to ask about.
   ///
-  /// Looks at the file as it is now rather than at
-  /// [KdbxFile.duplicateUuidsOnOpen], since an earlier repair may have dealt
-  /// with some of it.
-  void offerDuplicateUuidRepair(KdbxFile file) {
-    final uuids = file.findDuplicateUuidObjects().keys.toSet();
-    if (uuids.isEmpty) {
-      _logger.warning('Asked to repair $file, which has no duplicates.');
-      return;
+  /// Only `DuplicateUuidWatcher` should call this: taking a file source off
+  /// the queue counts as having asked, so whoever calls it has to go through
+  /// with it.
+  FileSource? takePendingDuplicateUuidReport() {
+    if (_duplicateUuidsPending.isEmpty) {
+      return null;
     }
-    delegate?.duplicateUuidsDetected(
-      fileForKdbxFile(file).fileSource,
-      file,
-      uuids,
-    );
+    final fileSource = _duplicateUuidsPending.first;
+    _duplicateUuidsPending.remove(fileSource);
+    _duplicateUuidsAnswered.add(fileSource);
+    return fileSource;
   }
 
   /// Folds entries which share a uuid into the newest of them (keeping the
   /// others as history revisions) and saves the file.
   ///
   /// Destructive, and only ever called after the user agreed to it - see
-  /// [KdbxBlocDelegate.duplicateUuidsDetected]. Returns the repaired uuids,
-  /// empty if there was nothing to repair after all.
+  /// `offerDuplicateUuidRepair`. Returns the repaired uuids, empty if there
+  /// was nothing to repair after all.
+  ///
+  /// Throws [DuplicateUuidRepairNotSavedException] when the entries were
+  /// folded together but the file could not be saved, which is not the same
+  /// as a failed repair: the database in memory is the repaired one.
   Future<List<KdbxUuid>> repairDuplicateUuidEntries(KdbxFile file) async {
     final repaired = file.mergeDuplicateUuidEntries();
     if (repaired.isEmpty) {
@@ -570,7 +599,11 @@ class KdbxBloc {
       return repaired;
     }
     _logger.info('Repaired ${repaired.length} duplicate uuid(s), saving.');
-    await saveFile(file);
+    try {
+      await saveFile(file);
+    } catch (error, stackTrace) {
+      throw DuplicateUuidRepairNotSavedException(repaired, error, stackTrace);
+    }
     return repaired;
   }
 
@@ -830,6 +863,10 @@ class KdbxBloc {
       OpenedKdbxFiles(Map.from(_openedFiles.value._files)..remove(fileSource)),
     );
     file.dispose();
+    // "Not now" only holds for as long as the file is open - reopening a
+    // database which still needs repairing asks about it again.
+    _duplicateUuidsPending.remove(fileSource);
+    _duplicateUuidsAnswered.remove(fileSource);
     // Closing a database stops it being offered. The mirror outlives the app,
     // so nothing else would ever take it away, and a database the user closed
     // going on answering autofill requests is not what closing looks like.
@@ -848,6 +885,8 @@ class KdbxBloc {
     for (final file in _openedFiles.value.values) {
       file.kdbxFile.dispose();
     }
+    _duplicateUuidsPending.clear();
+    _duplicateUuidsAnswered.clear();
     if (clearQuickUnlock) {
       // clear all quick unlock data.
       _openedFilesQuickUnlock.clear();

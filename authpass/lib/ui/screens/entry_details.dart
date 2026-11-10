@@ -21,6 +21,7 @@ import 'package:authpass/ui/screens/group_list.dart';
 import 'package:authpass/ui/screens/hud.dart';
 import 'package:authpass/ui/screens/password_generator.dart';
 import 'package:authpass/ui/screens/password_list.dart';
+import 'package:authpass/ui/widgets/duplicate_uuid_repair.dart';
 import 'package:authpass/ui/widgets/icon_selector.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/link_button.dart';
@@ -204,7 +205,12 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                         e,
                         stackTrace,
                       );
-                      kdbxBloc.offerDuplicateUuidRepair(entry.file);
+                      unawaited(
+                        offerDuplicateUuidRepair(
+                          context,
+                          kdbxBloc.fileForKdbxFile(entry.file).fileSource,
+                        ),
+                      );
                       return;
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -221,7 +227,14 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
                                 e,
                                 trace,
                               );
-                              kdbxBloc.offerDuplicateUuidRepair(entry.file);
+                              unawaited(
+                                offerDuplicateUuidRepair(
+                                  context,
+                                  kdbxBloc
+                                      .fileForKdbxFile(entry.file)
+                                      .fileSource,
+                                ),
+                              );
                             }
                           },
                         ),
@@ -812,14 +825,44 @@ class _EntryDetailsState extends State<EntryDetails>
         ))?.firstOrNull;
     if (newGroup != null) {
       final oldGroup = entry.parent;
-      file.move(entry, newGroup);
+      final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+      try {
+        file.move(entry, newGroup);
+      } on KdbxDuplicateUuidException catch (e, trace) {
+        // The target group already holds another entry with this uuid, so the
+        // move was refused before it changed anything. Restoring an entry from
+        // the recycle bin comes through here too, which is the likeliest way
+        // into this for a database which needs repairing.
+        _logger.warning('Unable to move ${entry.uuid}', e, trace);
+        unawaited(
+          offerDuplicateUuidRepair(
+            context,
+            kdbxBloc.fileForKdbxFile(file).fileSource,
+          ),
+        );
+        return null;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(loc.movedEntryToGroup(newGroup.name.get()!)),
           action: SnackBarAction(
             label: loc.undoButtonLabel,
             onPressed: () {
-              file.move(entry, oldGroup!);
+              try {
+                file.move(entry, oldGroup!);
+              } on KdbxDuplicateUuidException catch (e, trace) {
+                _logger.warning(
+                  'Unable to undo moving ${entry.uuid}',
+                  e,
+                  trace,
+                );
+                unawaited(
+                  offerDuplicateUuidRepair(
+                    context,
+                    kdbxBloc.fileForKdbxFile(file).fileSource,
+                  ),
+                );
+              }
             },
           ),
         ),

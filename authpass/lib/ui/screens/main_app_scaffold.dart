@@ -7,6 +7,7 @@ import 'package:authpass/main.dart';
 import 'package:authpass/theme.dart';
 import 'package:authpass/ui/screens/entry_details.dart';
 import 'package:authpass/ui/screens/password_list.dart';
+import 'package:authpass/ui/widgets/duplicate_uuid_repair.dart';
 import 'package:authpass/ui/widgets/keyboard_handler.dart';
 import 'package:authpass/ui/widgets/primary_button.dart';
 import 'package:authpass/ui/widgets/utils/back_button_navigator_delegate.dart';
@@ -31,15 +32,11 @@ class MainAppScaffold extends StatelessWidget {
       (appData) => appData.systemWideShortcuts,
     );
     _logger.finer('size.width: ${mediaQuery.size.width}');
+    final Widget scaffold;
     if (mediaQuery.size.width >= Breakpoints.TABLET_WIDTH) {
-      return KeyboardHandler(
-        systemWideShortcuts: systemWideShortcuts,
-        child: MainAppTabletScaffold(),
-      );
-    }
-    return KeyboardHandler(
-      systemWideShortcuts: systemWideShortcuts,
-      child: BackButtonNavigatorDelegate(
+      scaffold = MainAppTabletScaffold();
+    } else {
+      scaffold = BackButtonNavigatorDelegate(
         observers: [
           AnalyticsNavigatorObserver(Provider.of<Analytics>(context)),
         ],
@@ -47,6 +44,15 @@ class MainAppScaffold extends StatelessWidget {
         onGenerateInitialRoutes: (navigator, initialRoute) => [
           PasswordList.route(),
         ],
+      );
+    }
+    // Unlocking a database lands here, which makes this the first route which
+    // can hold a dialog about what opening it turned up - anything pushed
+    // during the open goes away with the route stack this replaces.
+    return DuplicateUuidWatcher(
+      child: KeyboardHandler(
+        systemWideShortcuts: systemWideShortcuts,
+        child: scaffold,
       ),
     );
   }
