@@ -1795,5 +1795,45 @@
   },
   "googleDriveMorePermissionsRequired": "Additional permissions needed to access Google Drive.",
   "googleDriveRequestPermissionButtonLabel": "Request Permissions",
-  "scanQrCodeTitle": "Scan QR Code."
+  "scanQrCodeTitle": "Scan QR Code.",
+  "duplicateEntriesDialogTitle": "Duplicate entries found",
+  "@duplicateEntriesDialogTitle": {
+    "description": "Title of the dialog which offers to repair a database containing entries which share an id, caused by a bug in an older version."
+  },
+  "duplicateEntriesDialogMessage": "{fileName} contains {numEntries, plural, =1 {an entry which exists more than once: two or more copies of it share the same internal id} other {{numEntries} entries which exist more than once: several copies share the same internal id}}.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.",
+  "@duplicateEntriesDialogMessage": {
+    "description": "Explains the duplicate entries and what repairing them does. Deliberately does not say what caused them: any program which wrote this database could have, and we cannot tell which one did.",
+    "placeholders": {
+      "fileName": {
+        "type": "String",
+        "description": "Name of the affected password database."
+      },
+      "numEntries": {
+        "type": "int",
+        "description": "Number of entries which exist more than once (at least 1)."
+      }
+    }
+  },
+  "duplicateEntriesRepairAction": "Repair now",
+  "@duplicateEntriesRepairAction": {
+    "description": "Confirm button of the duplicate entries dialog."
+  },
+  "duplicateEntriesRepairLaterAction": "Not now",
+  "@duplicateEntriesRepairLaterAction": {
+    "description": "Dismiss button of the duplicate entries dialog."
+  },
+  "duplicateEntriesRepairedMessage": "{numEntries, plural, =1 {One entry was repaired} other {{numEntries} entries were repaired}} and the database was saved.",
+  "@duplicateEntriesRepairedMessage": {
+    "description": "Shown after the duplicate entries were repaired and the database saved.",
+    "placeholders": {
+      "numEntries": {
+        "type": "int",
+        "description": "Number of repaired entries (at least 1)."
+      }
+    }
+  },
+  "duplicateEntriesRepairFailedMessage": "The duplicate entries could not be repaired, and the database was not saved.",
+  "@duplicateEntriesRepairFailedMessage": {
+    "description": "Shown when repairing the duplicate entries failed."
+  }
 }
