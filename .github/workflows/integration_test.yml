@@ -125,12 +125,34 @@ jobs:
     # Not cached across runs on purpose: a cache keyed on the image would
     # also cache a bad copy of it, turning a transient failure into a
     # permanent one, and the download is ~10s when it works.
+    #
+    # sdkmanager is addressed by full path, not as a bare command. It is not
+    # on PATH in an ordinary step — the action's log shows a bare
+    # `sdkmanager` only because the action puts cmdline-tools on PATH for
+    # itself first, and the first version of this step failed three times
+    # with "sdkmanager: command not found" on that assumption.
     - name: Android system image
       run: |
         image='system-images;android-34;default;x86_64'
-        yes | sdkmanager --licenses > /dev/null 2>&1 || true
+        sdkmanager=
+        for candidate in \
+            "${ANDROID_HOME:-}/cmdline-tools/latest/bin/sdkmanager" \
+            "${ANDROID_SDK_ROOT:-}/cmdline-tools/latest/bin/sdkmanager" \
+            "$(command -v sdkmanager || true)" ; do
+          if test -n "${candidate}" && test -x "${candidate}" ; then
+            sdkmanager="${candidate}"
+            break
+          fi
+        done
+        if test -z "${sdkmanager}" ; then
+          echo "no sdkmanager found (ANDROID_HOME=${ANDROID_HOME:-unset})" >&2
+          ls -la "${ANDROID_HOME:-/nonexistent}/cmdline-tools" >&2 || true
+          exit 1
+        fi
+        echo "using ${sdkmanager}"
+        yes | "${sdkmanager}" --licenses > /dev/null 2>&1 || true
         for attempt in 1 2 3; do
-          if sdkmanager --install "${image}" --channel=0 ; then
+          if "${sdkmanager}" --install "${image}" --channel=0 ; then
             exit 0
           fi
           echo "attempt ${attempt} for ${image} failed; clearing partial download" >&2
