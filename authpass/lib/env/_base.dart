@@ -137,6 +137,25 @@ abstract class Env {
   /// style macos/Runner already uses for `keychain-access-groups`.
   String get autofillAppGroupIdentifier => 'group.design.codeux.authpass';
 
+  /// The numeric App Store id of the iOS app, as in
+  /// `apps.apple.com/app/authpass-password-manager/id1479297675`.
+  ///
+  /// Configuration rather than something discoverable: flutter_store_listing
+  /// 2.0 deleted the iTunes `/lookup` call that used to find this at launch,
+  /// so an id that is wrong or unset means the store listing and the review
+  /// form do not open at all, on a release build without an error.
+  String get appStoreId => '1479297675'; // NON-NLS
+
+  /// The Mac App Store id, which is a **different app** from [appStoreId] —
+  /// `id1478552452`, the `mt=12` link in README.md.
+  ///
+  /// flutter_store_listing defaults this to [appStoreId] when it is not given,
+  /// which would send Mac users to the iOS listing, so it is always passed
+  /// separately. It stays correct for the Developer ID builds too: they are
+  /// not sold there, but the Mac App Store is still where a Mac user reviews
+  /// AuthPass.
+  String get macAppStoreId => '1478552452'; // NON-NLS
+
   /// allow disabling of "onboarding".
   bool get featureOnboarding => true;
 

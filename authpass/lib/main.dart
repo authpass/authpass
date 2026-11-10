@@ -68,6 +68,14 @@ Future<void> startApp(Env env) async {
   StoreBackend.defaultBaseDirectoryBuilder = () async =>
       (await PathUtils().getAppDataDirectory()).path;
 
+  // Both ids are passed: flutter_store_listing defaults the mac one to the
+  // iOS one, and they are different apps. Android needs nothing here, the
+  // package reads the package name.
+  FlutterStoreListing.configure(
+    appStoreId: env.appStoreId,
+    macAppStoreId: env.macAppStoreId,
+  );
+
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(
@@ -619,13 +627,24 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         customActions: nonNls({
           'launchReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
-            return await FlutterStoreListing().launchStoreListing();
+            // writeReview: true keeps what this action did on 1.x, where the
+            // write-a-review page was the default. The user asked for it from
+            // a message inviting them to review, so the review form is the
+            // page they meant, not the listing.
+            final outcome = await FlutterStoreListing.instance.openStoreListing(
+              writeReview: true,
+            );
+            return outcome.isSuccess;
           },
           'requestReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewRequest');
-            return await FlutterStoreListing().launchRequestReview(
-              onlyNative: true,
+            // ReviewFallback.none is the old onlyNative: true -- ask StoreKit
+            // and report, never send the user out to the store behind the
+            // prompt's back.
+            final outcome = await FlutterStoreListing.instance.requestReview(
+              fallback: ReviewFallback.none,
             );
+            return outcome.isSuccess;
           },
           'diacOptIn': (event) async {
             final flushbar = FlushbarHelper.createSuccess(
