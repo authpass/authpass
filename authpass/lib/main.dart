@@ -68,15 +68,12 @@ Future<void> startApp(Env env) async {
   StoreBackend.defaultBaseDirectoryBuilder = () async =>
       (await PathUtils().getAppDataDirectory()).path;
 
-  // The two Apple ids the README links, and they are genuinely different
-  // apps: 1479297675 is the iOS one, 1478552452 the Mac App Store one. Since
-  // flutter_store_listing 2.0 there is no network lookup to discover either,
-  // so an unconfigured build reports storeIdUnavailable instead of opening
-  // anything -- and passing only appStoreId would send Mac users to the iOS
-  // listing. Android needs nothing here; the package reads the package name.
+  // Both ids are passed: flutter_store_listing defaults the mac one to the
+  // iOS one, and they are different apps. Android needs nothing here, the
+  // package reads the package name.
   FlutterStoreListing.configure(
-    appStoreId: nonNls('1479297675'),
-    macAppStoreId: nonNls('1478552452'),
+    appStoreId: env.appStoreId,
+    macAppStoreId: env.macAppStoreId,
   );
 
   initIsolate(fromMain: true);
