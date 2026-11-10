@@ -129,14 +129,24 @@ class DialogUtils {
   static Future<bool> showConfirmDialog({
     required BuildContext context,
     required ConfirmDialogParams params,
-  }) async {
-    return (await showDialog<bool>(
-          context: context,
-          routeSettings: const RouteSettings(name: '/dialog/confirm'),
-          builder: (context) => ConfirmDialog(params: params),
-        )) ==
-        true;
-  }
+  }) async =>
+      (await showConfirmDialogOrNull(context: context, params: params)) == true;
+
+  /// [showConfirmDialog], except that a dialog which was never answered is
+  /// `null` rather than `false`.
+  ///
+  /// A dialog whose route is removed - by navigation which replaces the stack
+  /// it was pushed onto, say - completes without a result, which is not the
+  /// user declining. Callers which have to tell those apart, because silence
+  /// means "ask again" rather than "no", use this.
+  static Future<bool?> showConfirmDialogOrNull({
+    required BuildContext context,
+    required ConfirmDialogParams params,
+  }) => showDialog<bool>(
+    context: context,
+    routeSettings: const RouteSettings(name: '/dialog/confirm'),
+    builder: (context) => ConfirmDialog(params: params),
+  );
 
   static bool sendLogsSupported() =>
       AuthPassPlatform.isIOS || AuthPassPlatform.isAndroid;

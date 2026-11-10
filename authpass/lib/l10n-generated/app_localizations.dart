@@ -2602,6 +2602,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan QR Code.'**
   String get scanQrCodeTitle;
+
+  /// Title of the dialog which offers to repair a database containing entries which share an id.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate entries found'**
+  String get duplicateEntriesDialogTitle;
+
+  /// Explains the duplicate entries and what repairing them does. Deliberately does not say what caused them: any program which wrote this database could have, and we cannot tell which one did.
+  ///
+  /// In en, this message translates to:
+  /// **'{fileName} contains {numEntries, plural, =1 {an entry which exists more than once: two or more copies of it share the same internal id} other {{numEntries} entries which exist more than once: several copies share the same internal id}}.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.'**
+  String duplicateEntriesDialogMessage(String fileName, int numEntries);
+
+  /// Confirm button of the duplicate entries dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair now'**
+  String get duplicateEntriesRepairAction;
+
+  /// Dismiss button of the duplicate entries dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get duplicateEntriesRepairLaterAction;
+
+  /// Shown after the duplicate entries were repaired and the database saved.
+  ///
+  /// In en, this message translates to:
+  /// **'{numEntries, plural, =1 {One entry was repaired} other {{numEntries} entries were repaired}} and the database was saved.'**
+  String duplicateEntriesRepairedMessage(int numEntries);
+
+  /// Shown when repairing the duplicate entries failed, and nothing was changed.
+  ///
+  /// In en, this message translates to:
+  /// **'The duplicate entries could not be repaired, and the database was not saved.'**
+  String get duplicateEntriesRepairFailedMessage;
+
+  /// Shown when the duplicate entries were repaired but saving the database afterwards failed. Deliberately different from duplicateEntriesRepairFailedMessage: the repair did happen, so telling the user it failed would send them looking for duplicates which are no longer there.
+  ///
+  /// In en, this message translates to:
+  /// **'The duplicate entries were merged, but the database could not be saved. The repair is still there and will be included the next time the database is saved.'**
+  String get duplicateEntriesRepairNotSavedMessage;
 }
 
 class _AppLocalizationsDelegate
