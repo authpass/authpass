@@ -5,6 +5,13 @@ reads (`cux_ship`, keep-a-changelog style). An entry starting with a
 `[platform]` tag is published only in that platform's release notes;
 untagged entries go everywhere.
 
+## 1.9.13 - 2026-11-09
+
+* [android] Quick unlock recovers instead of failing for good when its key is gone, after a backup was restored onto another device for instance.
+* [ios] AutoFill can no longer fail opening, saving or closing a database.
+* [web] Fix a crash when logging in, and a database failing to open.
+* Dependency updates.
+
 ## 1.9.12 - 2026-08-25
 
 * [ios] AutoFill support — fill passwords from AuthPass directly in Safari and apps.
