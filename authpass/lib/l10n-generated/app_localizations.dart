@@ -2609,10 +2609,10 @@ abstract class AppLocalizations {
   /// **'Duplicate entries found'**
   String get duplicateEntriesDialogTitle;
 
-  /// Explains the duplicate entries and what repairing them does.
+  /// Explains the duplicate entries and what repairing them does. Deliberately does not say what caused them: any program which wrote this database could have, and we cannot tell which one did.
   ///
   /// In en, this message translates to:
-  /// **'{fileName} contains {numEntries, plural, =1 {one entry which exists twice} other {{numEntries} entries which exist more than once}}, caused by a bug in an older version of AuthPass.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.'**
+  /// **'{fileName} contains {numEntries, plural, =1 {an entry which exists more than once: two or more copies of it share the same internal id} other {{numEntries} entries which exist more than once: several copies share the same internal id}}.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.'**
   String duplicateEntriesDialogMessage(String fileName, int numEntries);
 
   /// Confirm button of the duplicate entries dialog.

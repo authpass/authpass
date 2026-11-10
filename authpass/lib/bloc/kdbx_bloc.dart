@@ -248,8 +248,10 @@ abstract class KdbxBlocDelegate {
   void conflictMerged(FileSource fileSource, KdbxFile file, MergeContext merge);
 
   /// The file which was just opened carries several live entries sharing one
-  /// uuid, the residue of a merge bug in kdbx up to 2.5.0 (see
-  /// [KdbxFile.duplicateUuidsOnOpen]). The file is perfectly usable, but
+  /// uuid, which no kdbx file should contain (see
+  /// [KdbxFile.duplicateUuidsOnOpen]). A merge bug in kdbx up to 2.5.0
+  /// produced exactly this, but any program which wrote the file could have,
+  /// and we cannot tell which one did. The file is perfectly usable, but
   /// merging it will not work properly until it is repaired, so warn the user
   /// and offer [KdbxBloc.repairDuplicateUuidEntries].
   void duplicateUuidsDetected(

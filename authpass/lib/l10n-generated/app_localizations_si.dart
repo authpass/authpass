@@ -1425,10 +1425,12 @@ class AppLocalizationsSi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       numEntries,
       locale: localeName,
-      other: '$numEntries entries which exist more than once',
-      one: 'one entry which exists twice',
+      other:
+          '$numEntries entries which exist more than once: several copies share the same internal id',
+      one:
+          'an entry which exists more than once: two or more copies of it share the same internal id',
     );
-    return '$fileName contains $_temp0, caused by a bug in an older version of AuthPass.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.';
+    return '$fileName contains $_temp0.\n\nYour passwords are all there, but synchronising this database will not work correctly until it is repaired. Repairing keeps the most recently changed copy of each entry and moves the others into its history.';
   }
 
   @override
