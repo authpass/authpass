@@ -109,6 +109,36 @@ jobs:
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
         sudo udevadm control --reload-rules
         sudo udevadm trigger --name-match=kvm
+    # android-emulator-runner downloads the system image with a single
+    # unretried `sdkmanager --install`, and on 2026-11-10 that came back
+    # truncated: "Error on ZipFile unknown archive", which failed the job in
+    # 2m15s before an emulator existed. The "could not connect to TCP port
+    # 5554" line right after it is the action's own cleanup finding no
+    # emulator to kill — a symptom, not the cause.
+    #
+    # Installing it here first means the action's call finds it in place and
+    # returns without downloading anything, so this step owns the one
+    # download and can retry it. Each retry deletes the partial image and
+    # sdkmanager's cache, because otherwise a second attempt can unpack the
+    # same corrupt file again.
+    #
+    # Not cached across runs on purpose: a cache keyed on the image would
+    # also cache a bad copy of it, turning a transient failure into a
+    # permanent one, and the download is ~10s when it works.
+    - name: Android system image
+      run: |
+        image='system-images;android-34;default;x86_64'
+        yes | sdkmanager --licenses > /dev/null 2>&1 || true
+        for attempt in 1 2 3; do
+          if sdkmanager --install "${image}" --channel=0 ; then
+            exit 0
+          fi
+          echo "attempt ${attempt} for ${image} failed; clearing partial download" >&2
+          rm -rf "${ANDROID_HOME:?}/system-images/android-34" "${HOME}/.android/cache"
+          sleep 15
+        done
+        echo "could not install ${image} after 3 attempts" >&2
+        exit 1
     - name: run test integration_test on an emulator
       uses: reactivecircus/android-emulator-runner@v2
       with:

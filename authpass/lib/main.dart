@@ -68,6 +68,14 @@ Future<void> startApp(Env env) async {
   StoreBackend.defaultBaseDirectoryBuilder = () async =>
       (await PathUtils().getAppDataDirectory()).path;
 
+  // Both ids are passed: flutter_store_listing defaults the mac one to the
+  // iOS one, and they are different apps. Android needs nothing here, the
+  // package reads the package name.
+  FlutterStoreListing.configure(
+    appStoreId: env.appStoreId,
+    macAppStoreId: env.macAppStoreId,
+  );
+
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(
@@ -619,13 +627,44 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         customActions: nonNls({
           'launchReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
-            return await FlutterStoreListing().launchStoreListing();
+            // writeReview: true keeps what this action did on 1.x, where the
+            // write-a-review page was the default. The user asked for it from
+            // a message inviting them to review, so the review form is the
+            // page they meant, not the listing.
+            final outcome = await FlutterStoreListing.instance.openStoreListing(
+              writeReview: true,
+            );
+            // Logged, because the enum is the whole reason for being on 2.x
+            // and diac only ever reports the bool. storeIdUnavailable (a wrong
+            // id in Env) is reported rather than asserted in release builds,
+            // so without this line the one failure that only happens in
+            // release is also the one nothing records.
+            _logger.fine('openStoreListing() = $outcome');
+            if (outcome.isSuccess) {
+              return true;
+            }
+            // Linux and Windows are unsupportedPlatform to a package that
+            // knows only the three app stores, so this would otherwise be a
+            // dead button there. Env sends them to the store they most likely
+            // did install from.
+            final fallback = _deps.env.reviewFallbackUri;
+            if (fallback == null) {
+              return false;
+            }
+            return await DialogUtils.openUri(fallback);
           },
           'requestReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewRequest');
-            return await FlutterStoreListing().launchRequestReview(
-              onlyNative: true,
+            // ReviewFallback.none is the old onlyNative: true -- ask StoreKit
+            // and report, never send the user out to the store behind the
+            // prompt's back. So no reviewFallbackUri here either, unlike
+            // launchReview above: navigating somewhere is the one thing
+            // ReviewFallback.none exists to rule out.
+            final outcome = await FlutterStoreListing.instance.requestReview(
+              fallback: ReviewFallback.none,
             );
+            _logger.fine('requestReview() = $outcome');
+            return outcome.isSuccess;
           },
           'diacOptIn': (event) async {
             final flushbar = FlushbarHelper.createSuccess(
