@@ -521,19 +521,29 @@ class KdbxBloc {
       version: '${kdbxFile.header.version}',
     );
 
-    if (addToQuickUnlock) {
-      _openedFilesQuickUnlock.add(file);
-      _logger.fine('adding file to quick unlock.');
-      await _updateQuickUnlockStore();
+    try {
+      if (addToQuickUnlock) {
+        _openedFilesQuickUnlock.add(file);
+        _logger.fine('adding file to quick unlock.');
+        await _updateQuickUnlockStore();
+      }
+      await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
+    } finally {
+      // Last, with the file registered and nothing left to await. Not earlier:
+      // everything above this line can take a while - quick unlock writes to
+      // the keystore, and the autofill mirror does real file and keychain i/o
+      // on iOS - and frames are produced throughout, so a watcher told about
+      // the file then would ask from the route stack the unlock flow is about
+      // to replace. Which is also why this is not published on
+      // [openedFilesChanged]: being open and being ready to be asked about are
+      // two different things.
+      //
+      // In a `finally` because the file is registered as open above whether or
+      // not either of those succeeded - a cancelled biometric prompt makes
+      // `_updateQuickUnlockStore` throw - and a file which is open has to be
+      // asked about.
+      _reportDuplicateUuids(file, kdbxFile);
     }
-    // Last, with the file registered and nothing left to await. Not earlier:
-    // everything above this line can take a while - quick unlock writes to the
-    // keystore, and the autofill mirror does real file and keychain i/o on iOS
-    // - and frames are produced throughout, so a watcher told about the file
-    // here would ask from the route stack the unlock flow is about to replace.
-    // Which is also why this is not published on [openedFilesChanged]: being
-    // open and being ready to ask about are two different things.
-    _reportDuplicateUuids(file, kdbxFile);
     return kdbxOpenedFile;
   }
 

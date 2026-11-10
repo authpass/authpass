@@ -466,6 +466,30 @@ void main() {
     expect(bloc.repairCalls, [file]);
   });
 
+  testWidgets('but a question the user dismisses stays dismissed', (
+    tester,
+  ) async {
+    bloc.open(source, file);
+    await _unlockThenMainApp(tester, bloc);
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsOneWidget);
+
+    // Tapping outside the dialog pops it with no result, exactly as the
+    // Android back button and Escape do - and the other side of handing an
+    // unanswered question back is that this must not count as one. It is the
+    // user saying no.
+    await tester.tapAt(const Offset(5, 5));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(loc.duplicateEntriesDialogTitle),
+      findsNothing,
+      reason:
+          'handing this one back puts the same dialog straight back up, '
+          'and then the only way out of it is a button',
+    );
+    expect(bloc.repairCalls, isEmpty);
+  });
+
   testWidgets('repairs even when the screen it asked from is gone', (
     tester,
   ) async {

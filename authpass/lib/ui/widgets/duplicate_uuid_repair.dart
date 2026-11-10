@@ -56,10 +56,24 @@ Future<void> offerDuplicateUuidRepair(
     ),
   );
   if (confirmed == null) {
-    // The dialog was taken off the navigator before the user got to answer
-    // it, so this file has not actually been asked about and goes back on the
-    // queue. Reading that as a "no" is the mistake this whole mechanism exists
-    // to avoid, and no amount of picking the right moment to ask rules it out.
+    // No answer means one of two opposite things, and `showDialog` reports
+    // both the same way. The user dismissing the dialog - tapping outside it,
+    // the Android back button, Escape - is a "no". A dialog taken off the
+    // navigator by something else never reached them at all, and reading
+    // *that* as a "no" is the mistake this whole mechanism exists to avoid.
+    //
+    // What tells them apart is whether the route the question was asked from
+    // is still there to have been answered from: if it is, the only thing
+    // which can have closed the dialog is the user. A programmatic `pop()`
+    // which happens to land on this dialog reads as a dismissal too, which is
+    // the safe way round - re-asking a question nobody dismissed is a dialog
+    // the user cannot get rid of.
+    final couldHaveAnswered =
+        context.mounted && (ModalRoute.of(context)?.isActive ?? true);
+    if (couldHaveAnswered) {
+      _logger.fine('$fileSource: the question was dismissed, so: not now.');
+      return;
+    }
     _logger.fine('The question about $fileSource never reached the user.');
     kdbxBloc.returnPendingDuplicateUuidReport(fileSource);
     return;
@@ -225,9 +239,8 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
     super.dispose();
   }
 
-  /// Both triggers can fire while a frame is being built - mounting, and a
-  /// stream which replays its current value on listen - and a dialog must not
-  /// be pushed from inside a build.
+  /// Mounting fires this from inside a build, and a dialog must not be pushed
+  /// from there.
   void _scheduleAsk() {
     final binding = WidgetsBinding.instance;
     binding.addPostFrameCallback((_) {
@@ -264,11 +277,11 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
     _asking = true;
     try {
       final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
-      // Both conditions are checked again on every pass, which is also what
-      // stops a file handed back by `offerDuplicateUuidRepair` from being
-      // picked straight back up here: whatever took that dialog off the
-      // navigator took this route with it, so the loop ends and the watcher
-      // which replaces us gets the file instead.
+      // Both are checked again on every pass, which is also what stops a file
+      // handed back by `offerDuplicateUuidRepair` from being picked straight
+      // back up here: a file is only handed back when the route it was asked
+      // from has gone, and that is this same condition, so the pass ends and
+      // the watcher which replaces us gets the file instead.
       while (mounted && _routeIsStaying) {
         final fileSource = kdbxBloc.takePendingDuplicateUuidReport();
         if (fileSource == null) {
