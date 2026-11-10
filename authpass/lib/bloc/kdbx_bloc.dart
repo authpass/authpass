@@ -386,55 +386,56 @@ class KdbxBloc {
     bool addToQuickUnlock = false,
   }) async* {
     Uint8List? previous;
+    KdbxOpenedFile? installed;
     var writeGeneration = file.writeGeneration;
-    late KdbxOpenedFile openedFile;
     await for (final fileContent in file.content()) {
       _logger.finer('$file got from ${fileContent.source}');
       final loadStopwatch = Stopwatch()..start();
+      final wasInstalled = installed;
+      // Re-asked at the moment of the swap, because decrypting the content
+      // below takes a while — argon2, plus a second or more on a phone — and
+      // the file stays open and in use for all of it.
+      bool stillUnchanged() =>
+          wasInstalled == null ||
+          _isUnchangedSinceOpened(file, wasInstalled, writeGeneration);
       if (previous != null) {
+        // The second and later yields arrive in the background, seconds or
+        // minutes after the user was let in, and both branches below act on
+        // them: one replaces the open file, the other lets [content] cache
+        // these bytes as the current state of the source. Neither is right
+        // once local work has overtaken this load, so the check comes before
+        // both — returning here cancels [content] at its yield, which is what
+        // keeps the cache from being rolled back to these bytes too.
+        if (!stillUnchanged()) {
+          _logger.warning(
+            '$file: changed locally while loading from the origin. '
+            'Discarding the content from the origin.',
+          );
+          return;
+        }
         if (ByteUtils.eq(previous, fileContent.content)) {
           _logger.finer('$file: No changes detected. Nothing to do.');
           continue;
-        }
-        // Everything past here hands the content to [_openFileContent], which
-        // replaces the open [KdbxFile] with one read from these bytes. That is
-        // only ever right while the open file is still exactly what the source
-        // holds — and for the second and later yields, which arrive in the
-        // background seconds or minutes after the file was opened from cache,
-        // it often is not.
-        if (file.writeGeneration != writeGeneration) {
-          // We saved while this load was in flight, so these bytes predate the
-          // save: applying them would throw away the change, and silently,
-          // because the save already cleared isDirty. Our own write is what
-          // the source holds now (or it raised a conflict and was merged), so
-          // dropping this load loses nothing.
-          _logger.info(
-            '$file: saved while loading from remote storage. '
-            'Discarding the stale content.',
-          );
-          return;
-        }
-        if (openedFile.kdbxFile.isDirty) {
-          // Unsaved local changes; replacing the file would drop them. The
-          // next save picks the remote change up again as a storage conflict
-          // and merges it. Not thrown: both callers run this in the
-          // background, unawaited.
-          _logger.info(
-            '$file: changed locally while loading from remote storage. '
-            'Keeping the local file.',
-          );
-          return;
         }
       }
       previous = fileContent.content;
       loadStopwatch.stop();
       final unlockStopwatch = Stopwatch()..start();
-      openedFile = await _openFileContent(
+      final openedFile = await _openFileContent(
         file,
         credentials,
         fileContent,
         addToQuickUnlock,
+        stillWanted: stillUnchanged,
       );
+      if (openedFile == null) {
+        _logger.warning(
+          '$file: changed locally while the content from the origin was '
+          'being opened. Discarding it.',
+        );
+        return;
+      }
+      installed = openedFile;
       writeGeneration = file.writeGeneration;
       addToQuickUnlock = false;
 
@@ -461,12 +462,60 @@ class KdbxBloc {
     _logger.finer('$file: Done.');
   }
 
-  Future<KdbxOpenedFile> _openFileContent(
+  /// Whether [opened] — installed by an earlier [content] yield of the same
+  /// [openFile] loop — is still the open file, and still untouched since it
+  /// was installed.
+  ///
+  /// False means content loaded from the origin must be dropped rather than
+  /// applied, because the user has moved on: the open file carries a change
+  /// the load cannot contain, or is not the open file any more at all.
+  ///
+  /// Four ways it goes false, and each of them has lost a save or reopened a
+  /// locked database before:
+  ///
+  ///  * nothing is open under [source] — closed, locked, or saved somewhere
+  ///    else;
+  ///  * a different [KdbxFile] is open — the database was reopened;
+  ///  * [KdbxOpenedFile.kdbxFileContent] is a different object — every save
+  ///    swaps in the content it wrote, [saveAs] and rename included, so this
+  ///    is what catches a save that has already cleared `isDirty`;
+  ///  * the file has unsaved changes.
+  ///
+  /// [writeGeneration] covers the gap the one above cannot: a save increments
+  /// it from inside the write, before `isDirty` clears, whereas
+  /// `kdbxFileContent` is only swapped in a few awaits later — and much later
+  /// when the credentials changed and quick unlock has to re-authenticate.
+  bool _isUnchangedSinceOpened(
+    FileSource source,
+    KdbxOpenedFile opened,
+    int writeGeneration,
+  ) {
+    final current = _openedFiles.value[source];
+    if (current == null) {
+      return false;
+    }
+    if (!identical(current.kdbxFile, opened.kdbxFile) ||
+        !identical(current.kdbxFileContent, opened.kdbxFileContent)) {
+      return false;
+    }
+    if (current.kdbxFile.isDirty) {
+      return false;
+    }
+    return source.writeGeneration == writeGeneration;
+  }
+
+  /// Reads [fileContent] and publishes it as the open file for [file].
+  ///
+  /// Returns null when [stillWanted] — checked immediately before the open
+  /// file is replaced, after the decrypting is done — says the result is no
+  /// longer wanted. Callers must drop it; nothing has been published.
+  Future<KdbxOpenedFile?> _openFileContent(
     FileSource file,
     Credentials credentials,
     FileContent fileContent,
-    bool addToQuickUnlock,
-  ) async {
+    bool addToQuickUnlock, {
+    bool Function()? stillWanted,
+  }) async {
     final readArgs = KdbxReadArgs(fileContent.content, credentials);
     //    final kdbxReadFile = await compute(
     //        staticReadKdbxFile, readArgs,
@@ -485,6 +534,15 @@ class KdbxBloc {
       throw kdbxReadFileException;
     }
     final kdbxFile = kdbxReadFile.file!;
+
+    // Asked once here as well as before the swap below, so that a load nobody
+    // wants any more does not raise [FileAlreadyOpenException] on its way out:
+    // after a [saveAs] to another source, this file's own database is open
+    // under that other source and the scan below would find it.
+    if (stillWanted != null && !stillWanted()) {
+      kdbxFile.dispose();
+      return null;
+    }
 
     // make sure kdbxFile is not already opened with another FileSource.
     final openedUuid = kdbxFile.body.rootGroup.uuid;
@@ -505,6 +563,12 @@ class KdbxBloc {
       name: kdbxFile.body.meta.databaseName.get(),
       defaultColor: _defaultNextColor(),
     );
+    // Last possible moment: everything above only read, and the line below is
+    // the one that takes the file the user is working in away from them.
+    if (stillWanted != null && !stillWanted()) {
+      kdbxFile.dispose();
+      return null;
+    }
     final kdbxOpenedFile = KdbxOpenedFile(
       fileSource: file,
       openedFile: openedFile,

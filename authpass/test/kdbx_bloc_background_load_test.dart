@@ -81,9 +81,47 @@ class _GatedFileSource extends FileSource {
   @override
   String get displayPath => 'gated://test.kdbx';
 
+  /// A rename goes through `saveAs(file, copyWithDatabaseName(name))`, so the
+  /// write lands on a *different instance* that is `==` to this one. The copy
+  /// shares [remote] and [writtenBytes], being the same file at the origin.
   @override
   FileSource copyWithDatabaseName(String databaseName) =>
-      throw UnimplementedError();
+      _RenamedFileSource(this);
+}
+
+class _RenamedFileSource extends FileSource {
+  _RenamedFileSource(this.original)
+    : super(
+        databaseName: 'renamed',
+        uuid: original.uuid,
+        initialCachedContent: original.lastContent,
+      );
+
+  final _GatedFileSource original;
+
+  @override
+  Stream<FileContent> load() => original.load();
+
+  @override
+  Future<Map<String, dynamic>?> write(
+    Uint8List bytes,
+    Map<String, dynamic>? previousMetadata,
+  ) => original.write(bytes, previousMetadata);
+
+  @override
+  bool get supportsWrite => true;
+
+  @override
+  FileSourceIcon get displayIcon => FileSourceIcon.webDav;
+
+  @override
+  String get displayNameFromPath => 'renamed';
+
+  @override
+  String get displayPath => original.displayPath;
+
+  @override
+  FileSource copyWithDatabaseName(String databaseName) => this;
 }
 
 class _FakeAppDataBloc extends Fake implements AppDataBloc {
@@ -102,6 +140,36 @@ class _FakeAppDataBloc extends Fake implements AppDataBloc {
       // keeps the autofill mirror out of a unit test; it has its own.
       ..autofillEnabled = false,
   );
+}
+
+/// Holds the second and later `openedFile()` calls open, which is where
+/// `_openFileContent` sits between "the content from the origin is decrypted"
+/// and "the open file is replaced with it". In the app that gap is argon2, long
+/// enough on a phone for the user to save in the middle of it.
+class _GatedAppDataBloc extends _FakeAppDataBloc {
+  var calls = 0;
+  final reopenStarted = Completer<void>();
+  final gate = Completer<void>();
+
+  @override
+  Future<OpenedFile> openedFile(
+    FileSource file, {
+    required String? name,
+    OpenedFile? oldFile,
+    Color? defaultColor,
+  }) async {
+    calls++;
+    if (calls == 2) {
+      reopenStarted.complete();
+      await gate.future;
+    }
+    return super.openedFile(
+      file,
+      name: name,
+      oldFile: oldFile,
+      defaultColor: defaultColor,
+    );
+  }
 }
 
 class _FakeCloudStorageBloc extends Fake implements CloudStorageBloc {}
@@ -137,14 +205,18 @@ String? _titleOf(KdbxFile file) =>
 void main() {
   late KdbxBloc bloc;
 
-  setUp(() async {
+  Future<void> newBloc([AppDataBloc? appDataBloc]) async {
     bloc = KdbxBloc(
       env: await TestUtil.createEnv(),
-      appDataBloc: _FakeAppDataBloc(),
+      appDataBloc: appDataBloc ?? _FakeAppDataBloc(),
       analytics: _FakeAnalytics(),
       cloudStorageBloc: _FakeCloudStorageBloc(),
       kdbxFormat: _format,
     );
+  }
+
+  setUp(() async {
+    await newBloc();
   });
 
   tearDown(() {
@@ -244,8 +316,9 @@ void main() {
       expect(opened.kdbxFile.isDirty, isTrue);
 
       source.gate.complete();
-      // Both call sites run this unawaited, so anything thrown here reaches
-      // the zone as an unhandled error rather than a user-visible failure.
+      // Both call sites run this unawaited, so anything thrown here lands in
+      // `PlatformDispatcher.instance.onError` and shows the user an
+      // "Unexpected error" dialog for something they cannot act on.
       await expectLater(background, completes);
 
       expect(
@@ -280,5 +353,197 @@ void main() {
         expect(_titleOf(bloc.openedFiles[source]!.kdbxFile), 'remote');
       },
     );
+
+    // The common case, and the one that has to be guarded before the
+    // byte-equality shortcut rather than after it: the open file is kept
+    // either way, but `content()` resuming past its yield would roll the
+    // memory cache — and, for a cloud source, the cache on disk — back to the
+    // bytes from the origin, which predate the save. The next save would then
+    // send a stale revision and conflict with itself, and the next cold start
+    // would open the content from before the save.
+    test(
+      'does not roll the cache back when the bytes happen to match',
+      () async {
+        final versions = await twoVersions();
+        final source = _GatedFileSource(
+          cached: versions.cached,
+          remote: versions.cached,
+        );
+
+        final openIt = StreamIterator(bloc.openFile(source, _credentials));
+        expect(await openIt.moveNext(), isTrue);
+        final opened = openIt.current.kdbxOpenedFile!;
+
+        final background = bloc.continueLoadInBackground(
+          openIt,
+          debugName: 'test',
+          fileSource: source,
+        );
+        await source.loadStarted.future;
+
+        opened.kdbxFile.body.rootGroup.getAllEntries().single.setString(
+          _title,
+          PlainValue('repaired'),
+        );
+        final saved = await bloc.saveFile(opened.kdbxFile);
+
+        source.gate.complete();
+        await background;
+
+        expect(_titleOf(bloc.openedFiles[source]!.kdbxFile), 'repaired');
+        expect(
+          source.lastContent!.content,
+          same(saved.content),
+          reason: 'the cache was rolled back to the content from the origin',
+        );
+      },
+    );
+
+    // The guard has to be asked again at the swap, not only before the
+    // decrypting: on a phone argon2 takes long enough for the user to save in
+    // the middle of it, and the swap is what takes their file away.
+    test('survives a save made while the remote copy is decrypting', () async {
+      final appData = _GatedAppDataBloc();
+      await newBloc(appData);
+      final versions = await twoVersions();
+      final source = _GatedFileSource(
+        cached: versions.cached,
+        remote: versions.remote,
+      );
+
+      final openIt = StreamIterator(bloc.openFile(source, _credentials));
+      expect(await openIt.moveNext(), isTrue);
+      final opened = openIt.current.kdbxOpenedFile!;
+
+      final background = bloc.continueLoadInBackground(
+        openIt,
+        debugName: 'test',
+        fileSource: source,
+      );
+      await source.loadStarted.future;
+      // Let the content from the origin arrive and start being opened, then
+      // hold it just short of the swap.
+      source.gate.complete();
+      await appData.reopenStarted.future;
+
+      opened.kdbxFile.body.rootGroup.getAllEntries().single.setString(
+        _title,
+        PlainValue('repaired'),
+      );
+      await bloc.saveFile(opened.kdbxFile);
+
+      appData.gate.complete();
+      await background;
+
+      expect(_titleOf(bloc.openedFiles[source]!.kdbxFile), 'repaired');
+      expect(bloc.openedFiles[source]!.kdbxFile, same(opened.kdbxFile));
+    });
+
+    test(
+      'keeps an unsaved edit made while the remote copy is decrypting',
+      () async {
+        final appData = _GatedAppDataBloc();
+        await newBloc(appData);
+        final versions = await twoVersions();
+        final source = _GatedFileSource(
+          cached: versions.cached,
+          remote: versions.remote,
+        );
+
+        final openIt = StreamIterator(bloc.openFile(source, _credentials));
+        expect(await openIt.moveNext(), isTrue);
+        final opened = openIt.current.kdbxOpenedFile!;
+
+        final background = bloc.continueLoadInBackground(
+          openIt,
+          debugName: 'test',
+          fileSource: source,
+        );
+        await source.loadStarted.future;
+        source.gate.complete();
+        await appData.reopenStarted.future;
+
+        opened.kdbxFile.body.rootGroup.getAllEntries().single.setString(
+          _title,
+          PlainValue('edited, not yet saved'),
+        );
+
+        appData.gate.complete();
+        await expectLater(background, completes);
+
+        // Not merely "the edit is still there": the file has to be the same
+        // object, or `fileForKdbxFile` throws when the user saves it.
+        expect(bloc.openedFiles[source]!.kdbxFile, same(opened.kdbxFile));
+        expect(
+          _titleOf(bloc.openedFiles[source]!.kdbxFile),
+          'edited, not yet saved',
+        );
+      },
+    );
+
+    test('does not reopen a database that was locked meanwhile', () async {
+      final versions = await twoVersions();
+      final source = _GatedFileSource(
+        cached: versions.cached,
+        remote: versions.remote,
+      );
+
+      final openIt = StreamIterator(bloc.openFile(source, _credentials));
+      expect(await openIt.moveNext(), isTrue);
+
+      final background = bloc.continueLoadInBackground(
+        openIt,
+        debugName: 'test',
+        fileSource: source,
+      );
+      await source.loadStarted.future;
+
+      await bloc.closeAllFiles(clearQuickUnlock: false);
+      expect(bloc.openedFiles.length, 0);
+
+      source.gate.complete();
+      await expectLater(background, completes);
+
+      expect(
+        bloc.openedFiles.length,
+        0,
+        reason: 'the background load put the locked database back',
+      );
+    });
+
+    // A rename is `saveAs(file, fileSource.copyWithDatabaseName(name))`, so
+    // the write lands on a different FileSource instance that is `==` to this
+    // one. Identity of the installed state is what catches it; a counter kept
+    // on the instance does not.
+    test('survives a rename made while the load was in flight', () async {
+      final versions = await twoVersions();
+      final source = _GatedFileSource(
+        cached: versions.cached,
+        remote: versions.remote,
+      );
+
+      final openIt = StreamIterator(bloc.openFile(source, _credentials));
+      expect(await openIt.moveNext(), isTrue);
+      final opened = openIt.current.kdbxOpenedFile!;
+
+      final background = bloc.continueLoadInBackground(
+        openIt,
+        debugName: 'test',
+        fileSource: source,
+      );
+      await source.loadStarted.future;
+
+      opened.kdbxFile.body.rootGroup.getAllEntries().single.setString(
+        _title,
+        PlainValue('repaired'),
+      );
+      await bloc.saveAs(opened, source.copyWithDatabaseName('renamed'));
+
+      source.gate.complete();
+      await expectLater(background, completes);
+
+      expect(_titleOf(bloc.openedFiles[source]!.kdbxFile), 'repaired');
+      expect(bloc.openedFiles[source]!.kdbxFile, same(opened.kdbxFile));
+    });
   });
 }
