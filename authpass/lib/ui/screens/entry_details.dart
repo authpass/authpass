@@ -801,6 +801,11 @@ class _EntryDetailsState extends State<EntryDetails>
     final KdbxGroup? toGroup,
   }) async {
     final file = entry.file;
+    // The element itself, while there certainly is one. `State.context` throws
+    // once this screen has been disposed, and the snackbar below outlives it -
+    // so reading it inside the undo action would throw before the callee got
+    // the chance to check whether it is still any good.
+    final screenContext = context;
     final newGroup =
         toGroup ??
         (await Navigator.of(context).push(
@@ -820,7 +825,7 @@ class _EntryDetailsState extends State<EntryDetails>
         // the recycle bin comes through here too, which is the likeliest way
         // into this for a database which needs repairing.
         _logger.warning('Unable to move ${entry.uuid}', e, trace);
-        offerDuplicateUuidRepairForFile(context, file);
+        offerDuplicateUuidRepairForFile(screenContext, file);
         return null;
       }
       ScaffoldMessenger.of(context).showSnackBar(
@@ -837,7 +842,7 @@ class _EntryDetailsState extends State<EntryDetails>
                   e,
                   trace,
                 );
-                offerDuplicateUuidRepairForFile(context, file);
+                offerDuplicateUuidRepairForFile(screenContext, file);
               }
             },
           ),

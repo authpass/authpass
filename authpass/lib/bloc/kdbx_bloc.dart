@@ -338,6 +338,7 @@ class KdbxBloc {
 
   void dispose() {
     _openedFiles.close();
+    _duplicateUuidsPendingChanged.close();
     //    super.dispose();
   }
 
@@ -508,13 +509,6 @@ class KdbxBloc {
       kdbxFile: kdbxFile,
       kdbxFileContent: fileContent,
     );
-    // Queued before the stream event below, not after it: that event is what
-    // makes DuplicateUuidWatcher look at the queue, and everything between
-    // here and the end of this method can await - quick unlock, and real file
-    // and keychain i/o in the autofill mirror on iOS. Reported afterwards, the
-    // watcher reads an empty queue and the file stays unmentioned until some
-    // unrelated open, save or close happens to emit again.
-    _reportDuplicateUuids(file, kdbxFile);
     _openedFiles.add(
       OpenedKdbxFiles({
         ..._openedFiles.value._files,
@@ -532,7 +526,14 @@ class KdbxBloc {
       _logger.fine('adding file to quick unlock.');
       await _updateQuickUnlockStore();
     }
-    await _syncAutofillMirror(kdbxOpenedFile, fileContent.content);
+    // Last, with the file registered and nothing left to await. Not earlier:
+    // everything above this line can take a while - quick unlock writes to the
+    // keystore, and the autofill mirror does real file and keychain i/o on iOS
+    // - and frames are produced throughout, so a watcher told about the file
+    // here would ask from the route stack the unlock flow is about to replace.
+    // Which is also why this is not published on [openedFilesChanged]: being
+    // open and being ready to ask about are two different things.
+    _reportDuplicateUuids(file, kdbxFile);
     return kdbxOpenedFile;
   }
 
@@ -549,6 +550,17 @@ class KdbxBloc {
   /// [FileContent] from the same source (cache, then remote) does not ask
   /// twice. Cleared when the file is closed, so reopening it asks again.
   final _duplicateUuidsAnswered = <FileSource>{};
+
+  /// Fires whenever something is put on [_duplicateUuidsPending].
+  ///
+  /// A notifier of its own, rather than letting `DuplicateUuidWatcher` take
+  /// `openedFilesChanged` as its cue: a file is registered as open long before
+  /// this bloc is ready to have it asked about, and a watcher woken by the
+  /// earlier of the two asks from a route which is about to be thrown away.
+  final _duplicateUuidsPendingChanged = StreamController<void>.broadcast();
+
+  Stream<void> get duplicateUuidsPendingChanged =>
+      _duplicateUuidsPendingChanged.stream;
 
   /// Notices a file which carries several live entries sharing one uuid, which
   /// no kdbx file should contain (see [KdbxFile.duplicateUuidsOnOpen]). A merge
@@ -570,6 +582,7 @@ class KdbxBloc {
       return;
     }
     _duplicateUuidsPending.add(file);
+    _duplicateUuidsPendingChanged.add(null);
   }
 
   /// The next file source to warn the user about, taken off the queue, or
@@ -577,7 +590,7 @@ class KdbxBloc {
   ///
   /// Only `DuplicateUuidWatcher` should call this: taking a file source off
   /// the queue counts as having asked, so whoever calls it has to go through
-  /// with it.
+  /// with it - or hand it back with [returnPendingDuplicateUuidReport].
   FileSource? takePendingDuplicateUuidReport() {
     if (_duplicateUuidsPending.isEmpty) {
       return null;
@@ -586,6 +599,22 @@ class KdbxBloc {
     _duplicateUuidsPending.remove(fileSource);
     _duplicateUuidsAnswered.add(fileSource);
     return fileSource;
+  }
+
+  /// Puts a file source back on the queue, for a question which never reached
+  /// the user: a dialog destroyed by navigation rather than answered.
+  ///
+  /// Taking silence for a "no" is what made this whole area hard to get right,
+  /// so the one safe reading of an unanswered dialog is to ask again. Does
+  /// nothing for a file which has been closed since, because closing it
+  /// cleared both sets already.
+  void returnPendingDuplicateUuidReport(FileSource file) {
+    if (!_duplicateUuidsAnswered.remove(file)) {
+      return;
+    }
+    _logger.fine('$file was never actually asked about, queueing it again.');
+    _duplicateUuidsPending.add(file);
+    _duplicateUuidsPendingChanged.add(null);
   }
 
   /// Folds entries which share a uuid into the newest of them (keeping the

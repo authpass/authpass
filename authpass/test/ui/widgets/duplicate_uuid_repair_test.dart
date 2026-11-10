@@ -54,6 +54,7 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   final _answered = <FileSource>{};
   final _opened = <FileSource, KdbxOpenedFile>{};
   final _openedFiles = BehaviorSubject<OpenedKdbxFiles>();
+  final _pendingChanged = StreamController<void>.broadcast();
 
   /// Stands in for the repair, which is otherwise a merge plus a save.
   Future<List<KdbxUuid>> Function(KdbxFile file)? onRepair;
@@ -61,19 +62,19 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   /// The files it was asked to repair, in order.
   final repairCalls = <KdbxFile>[];
 
-  /// What [KdbxBloc] does while opening a file: register it, queue it when it
-  /// turned out to carry duplicates, and announce it.
+  /// What [KdbxBloc] does by the end of opening a file: register it, announce
+  /// it, and - last - queue it when it turned out to carry duplicates.
   ///
-  /// Queue first and emit second, which is the order the real bloc keeps - the
-  /// emit is what makes the watcher look at the queue, so a file queued after
-  /// it goes unmentioned. It used to be the other way round there, and this
-  /// fake having the right order is why these tests could not see that.
+  /// The real bloc reports at the very end of `_openFileContent`, with the
+  /// file registered and nothing left to await, and the queue has a notifier
+  /// of its own so that the order of these two does not matter.
   void open(FileSource fileSource, KdbxFile file, {bool duplicates = true}) {
     _opened[fileSource] = _FakeOpenedFile(fileSource, file);
+    _openedFiles.add(OpenedKdbxFiles(_opened));
     if (duplicates && !_answered.contains(fileSource)) {
       _pending.add(fileSource);
+      _pendingChanged.add(null);
     }
-    _openedFiles.add(OpenedKdbxFiles(_opened));
   }
 
   /// Named for what it stands in for rather than after [KdbxBloc.close],
@@ -86,6 +87,9 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   }
 
   @override
+  Stream<void> get duplicateUuidsPendingChanged => _pendingChanged.stream;
+
+  @override
   FileSource? takePendingDuplicateUuidReport() {
     if (_pending.isEmpty) {
       return null;
@@ -93,6 +97,15 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
     final fileSource = _pending.removeAt(0);
     _answered.add(fileSource);
     return fileSource;
+  }
+
+  @override
+  void returnPendingDuplicateUuidReport(FileSource fileSource) {
+    if (!_answered.remove(fileSource)) {
+      return;
+    }
+    _pending.add(fileSource);
+    _pendingChanged.add(null);
   }
 
   @override
@@ -123,7 +136,10 @@ class _FakeKdbxBloc extends Fake implements KdbxBloc {
   }
 
   @override
-  Future<void> dispose() => _openedFiles.close();
+  Future<void> dispose() async {
+    await _openedFiles.close();
+    await _pendingChanged.close();
+  }
 }
 
 /// The watcher, around a scaffold which says [label].
@@ -396,6 +412,58 @@ void main() {
       reason: 'the watcher being torn down must not be the one which asks',
     );
     expect(find.text(loc.duplicateEntriesRepairedMessage(1)), findsOneWidget);
+  });
+
+  testWidgets('and asks again if the unlock took the dialog with it', (
+    tester,
+  ) async {
+    final navigatorKey = GlobalKey<NavigatorState>();
+    await tester.pumpWidget(
+      MaterialApp(
+        navigatorKey: navigatorKey,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales:
+            const [Locale('en')] + AppLocalizations.supportedLocales,
+        home: _watched(bloc, 'db1'),
+      ),
+    );
+    unawaited(
+      navigatorKey.currentState!.push(
+        MaterialPageRoute<void>(
+          builder: (context) => const Scaffold(body: Text('select file')),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // The slow unlock path. Opening does real i/o after the file is queued -
+    // quick unlock writes to the keystore, the autofill mirror reads files and
+    // the keychain - so frames are produced before the unlock flow navigates,
+    // and the watcher under the select file screen is still active when one
+    // arrives. So it asks, and it is too early.
+    bloc.open(source, file);
+    await tester.pumpAndSettle();
+    expect(find.text(loc.duplicateEntriesDialogTitle), findsOneWidget);
+
+    unawaited(
+      navigatorKey.currentState!.pushAndRemoveUntil(
+        MaterialPageRoute<void>(builder: (context) => _watched(bloc, 'db2')),
+        (route) => false,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(loc.duplicateEntriesDialogTitle),
+      findsOneWidget,
+      reason:
+          'that dialog went with the route stack, so ask again rather '
+          'than treating silence as "Not now"',
+    );
+    await tester.tap(find.text(loc.duplicateEntriesRepairAction));
+    await tester.pumpAndSettle();
+
+    expect(bloc.repairCalls, [file]);
   });
 
   testWidgets('repairs even when the screen it asked from is gone', (

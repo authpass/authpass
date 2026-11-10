@@ -43,7 +43,7 @@ Future<void> offerDuplicateUuidRepair(
     _logger.fine('Nothing to repair in $fileSource.');
     return;
   }
-  final confirmed = await DialogUtils.showConfirmDialog(
+  final confirmed = await DialogUtils.showConfirmDialogOrNull(
     context: context,
     params: ConfirmDialogParams(
       title: loc.duplicateEntriesDialogTitle,
@@ -55,6 +55,15 @@ Future<void> offerDuplicateUuidRepair(
       negativeButtonText: loc.duplicateEntriesRepairLaterAction,
     ),
   );
+  if (confirmed == null) {
+    // The dialog was taken off the navigator before the user got to answer
+    // it, so this file has not actually been asked about and goes back on the
+    // queue. Reading that as a "no" is the mistake this whole mechanism exists
+    // to avoid, and no amount of picking the right moment to ask rules it out.
+    _logger.fine('The question about $fileSource never reached the user.');
+    kdbxBloc.returnPendingDuplicateUuidReport(fileSource);
+    return;
+  }
   if (!confirmed) {
     return;
   }
@@ -201,12 +210,13 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // and a file which is opened while we are up, or whose remote content
-    // turns out to have duplicates the cached content did not.
+    // and a file queued while we are up: one opened later, one whose remote
+    // content turns out to have duplicates the cached content did not, or one
+    // handed back because the dialog about it was destroyed unanswered.
     _subscription ??= Provider.of<KdbxBloc>(
       context,
       listen: false,
-    ).openedFilesChanged.listen((_) => _scheduleAsk());
+    ).duplicateUuidsPendingChanged.listen((_) => _scheduleAsk());
   }
 
   @override
@@ -254,6 +264,11 @@ class _DuplicateUuidWatcherState extends State<DuplicateUuidWatcher> {
     _asking = true;
     try {
       final kdbxBloc = Provider.of<KdbxBloc>(context, listen: false);
+      // Both conditions are checked again on every pass, which is also what
+      // stops a file handed back by `offerDuplicateUuidRepair` from being
+      // picked straight back up here: whatever took that dialog off the
+      // navigator took this route with it, so the loop ends and the watcher
+      // which replaces us gets the file instead.
       while (mounted && _routeIsStaying) {
         final fileSource = kdbxBloc.takePendingDuplicateUuidReport();
         if (fileSource == null) {
