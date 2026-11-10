@@ -68,6 +68,17 @@ Future<void> startApp(Env env) async {
   StoreBackend.defaultBaseDirectoryBuilder = () async =>
       (await PathUtils().getAppDataDirectory()).path;
 
+  // The two Apple ids the README links, and they are genuinely different
+  // apps: 1479297675 is the iOS one, 1478552452 the Mac App Store one. Since
+  // flutter_store_listing 2.0 there is no network lookup to discover either,
+  // so an unconfigured build reports storeIdUnavailable instead of opening
+  // anything -- and passing only appStoreId would send Mac users to the iOS
+  // listing. Android needs nothing here; the package reads the package name.
+  FlutterStoreListing.configure(
+    appStoreId: nonNls('1479297675'),
+    macAppStoreId: nonNls('1478552452'),
+  );
+
   initIsolate(fromMain: true);
   _setTargetPlatformForDesktop();
   _logger.info(
@@ -619,13 +630,24 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         customActions: nonNls({
           'launchReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewLaunch');
-            return await FlutterStoreListing().launchStoreListing();
+            // writeReview: true keeps what this action did on 1.x, where the
+            // write-a-review page was the default. The user asked for it from
+            // a message inviting them to review, so the review form is the
+            // page they meant, not the listing.
+            final outcome = await FlutterStoreListing.instance.openStoreListing(
+              writeReview: true,
+            );
+            return outcome.isSuccess;
           },
           'requestReview': (event) async {
             _deps.analytics.trackGenericEvent('review', 'reviewRequest');
-            return await FlutterStoreListing().launchRequestReview(
-              onlyNative: true,
+            // ReviewFallback.none is the old onlyNative: true -- ask StoreKit
+            // and report, never send the user out to the store behind the
+            // prompt's back.
+            final outcome = await FlutterStoreListing.instance.requestReview(
+              fallback: ReviewFallback.none,
             );
+            return outcome.isSuccess;
           },
           'diacOptIn': (event) async {
             final flushbar = FlushbarHelper.createSuccess(
