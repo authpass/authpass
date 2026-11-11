@@ -36,19 +36,6 @@ abstract class FileSource {
   /// the last read or written content.
   FileContent? get lastContent => cached;
 
-  int _writeGeneration = 0;
-
-  /// Counts the successful [contentWrite] calls on this source.
-  ///
-  /// A [load] that was started before a write cannot see that write — an HTTP
-  /// GET answers with whatever the file held when the request went out, even
-  /// if a PUT has landed in the meantime. So content yielded by [content] is
-  /// stale, and must not be acted upon, if this counter moved on since that
-  /// load was started. `KdbxBloc.openFile` is the one caller that needs this:
-  /// it keeps reading [content] in the background long after the file is open
-  /// and in use.
-  int get writeGeneration => _writeGeneration;
-
   final String uuid;
 
   /// If known should return the name of the database, null otherwise.
@@ -116,7 +103,6 @@ abstract class FileSource {
     _logger.finer('Writing content to $typeDebug ($runtimeType) $this');
     try {
       final newMetadata = await write(bytes, metadata ?? _cached?.metadata);
-      _writeGeneration++;
       return _cached = FileContent(
         bytes,
         newMetadata,
