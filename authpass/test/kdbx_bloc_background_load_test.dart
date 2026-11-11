@@ -128,7 +128,7 @@ class _RenamedFileSource extends FileSource {
   String get displayNameFromPath => 'renamed';
 
   @override
-  String get displayPath => original.displayPath;
+  String get displayPath => 'gated://renamed.kdbx';
 
   @override
   FileSource copyWithDatabaseName(String databaseName) => this;
@@ -260,6 +260,13 @@ class _FakeAnalyticsEvents extends Fake implements AnalyticsEvents {
 }
 
 class _FakeAnalytics extends Fake implements Analytics {
+  _FakeAnalytics({this.throwFromTrackTiming = false});
+
+  /// Stands in for anything that can fail between the write and the end of
+  /// the save — in the app, a quick unlock store that cannot re-authenticate
+  /// after the master password changed.
+  final bool throwFromTrackTiming;
+
   @override
   final AnalyticsEvents events = _FakeAnalyticsEvents();
 
@@ -269,7 +276,11 @@ class _FakeAnalytics extends Fake implements Analytics {
     int timeMs, {
     String? category,
     String? label,
-  }) {}
+  }) {
+    if (throwFromTrackTiming) {
+      throw StateError('analytics is down');
+    }
+  }
 }
 
 const _title = KdbxKeyCommon.TITLE;
@@ -288,11 +299,12 @@ void main() {
   Future<void> newBloc({
     AppDataBloc? appDataBloc,
     KdbxFormat? kdbxFormat,
+    Analytics? analytics,
   }) async {
     bloc = KdbxBloc(
       env: await TestUtil.createEnv(),
       appDataBloc: appDataBloc ?? _FakeAppDataBloc(),
-      analytics: _FakeAnalytics(),
+      analytics: analytics ?? _FakeAnalytics(),
       cloudStorageBloc: _FakeCloudStorageBloc(),
       kdbxFormat: kdbxFormat ?? _format,
     );
@@ -595,9 +607,10 @@ void main() {
     });
 
     // A rename is `saveAs(file, fileSource.copyWithDatabaseName(name))`, so
-    // the write lands on a different FileSource instance that is `==` to this
-    // one. Identity of the installed state is what catches it; a counter kept
-    // on the instance does not.
+    // the write lands on a different FileSource instance that is merely `==`
+    // to this one. Anything keyed on the source instance is blind to it; what
+    // catches it is the identity of the installed state, and a mark keyed by
+    // the KdbxFile, which a rename does not replace.
     test('survives a rename made while the load was in flight', () async {
       final versions = await twoVersions();
       final source = _GatedFileSource(
@@ -763,6 +776,60 @@ void main() {
 
       expect(_titleOf(bloc.openedFiles[source]!.kdbxFile), 'repaired');
       expect(bloc.openedFiles[source]!.openedFile.colorCode, 0xff00ff00);
+      // The OpenedFile the colour lands on has to be the renamed one too, or
+      // the colour change quietly writes the pre-rename record back.
+      expect(
+        bloc.openedFiles[source]!.openedFile.sourcePath,
+        'gated://renamed.kdbx',
+      );
+    });
+
+    // The save-in-flight mark lasts exactly as long as the save, so the
+    // written content has to be installed before anything that could end the
+    // save early. It used to be installed last of all, after the analytics
+    // calls and after the quick unlock store — which, for the one save that
+    // never dirties the file, is the one that can genuinely fail: changing the
+    // master password on a database in quick unlock has to re-authenticate.
+    test('survives a save that writes and then throws', () async {
+      await newBloc(analytics: _FakeAnalytics(throwFromTrackTiming: true));
+      final versions = await twoVersions();
+      final source = _GatedFileSource(
+        cached: versions.cached,
+        remote: versions.remote,
+      );
+
+      final openIt = StreamIterator(bloc.openFile(source, _credentials));
+      expect(await openIt.moveNext(), isTrue);
+      final opened = openIt.current.kdbxOpenedFile!;
+
+      final background = bloc.continueLoadInBackground(
+        openIt,
+        debugName: 'test',
+        fileSource: source,
+      );
+      await source.loadStarted.future;
+
+      final newCredentials = Credentials(ProtectedValue.fromString('hunter2'));
+      await expectLater(
+        bloc.saveFile(opened.kdbxFile, updateCredentials: newCredentials),
+        throwsA(isStateError),
+      );
+      expect(
+        source.writtenBytes,
+        hasLength(1),
+        reason: 'the premise: the bytes did reach the origin',
+      );
+      expect(opened.kdbxFile.isDirty, isFalse);
+
+      source.gate.complete();
+      await expectLater(background, completes);
+
+      expect(bloc.openedFiles[source]!.kdbxFile, same(opened.kdbxFile));
+      expect(
+        source.lastContent!.content,
+        same(source.writtenBytes.single),
+        reason: 'the cache was rolled back over content already at the origin',
+      );
     });
   });
 }
