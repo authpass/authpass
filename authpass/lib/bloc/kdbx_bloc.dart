@@ -284,7 +284,9 @@ class KdbxBloc {
     required this.appDataBloc,
     required this.analytics,
     required this.cloudStorageBloc,
-  }) : quickUnlockStorage = QuickUnlockStorage(
+    @visibleForTesting KdbxFormat? kdbxFormat,
+  }) : _kdbxFormatOverride = kdbxFormat,
+       quickUnlockStorage = QuickUnlockStorage(
          cloudStorageBloc: cloudStorageBloc,
          env: env,
          analytics: analytics,
@@ -315,7 +317,13 @@ class KdbxBloc {
     appGroupIdentifier: env.autofillAppGroupIdentifier,
   );
   late final autofillIdentities = AutofillIdentities();
-  late final KdbxFormat kdbxFormat = KdbxFormat(FlutterArgon2());
+
+  /// Only set by tests. [FlutterArgon2] throws while looking up its symbols
+  /// outside a real app, which would otherwise make the bloc impossible to
+  /// construct in a unit test.
+  final KdbxFormat? _kdbxFormatOverride;
+  late final KdbxFormat kdbxFormat =
+      _kdbxFormatOverride ?? KdbxFormat(FlutterArgon2());
   KdbxBlocDelegate? delegate;
 
   final _openedFiles = BehaviorSubject<OpenedKdbxFiles>.seeded(
@@ -346,47 +354,85 @@ class KdbxBloc {
     KdbxOpenedFile file,
     OpenedFileUpdater updater,
   ) async {
-    final updatedFile = (file.openedFile.toBuilder()..update(updater)).build();
-    final wasAutofillEnabled = file.openedFile.autofillEnabledOrDefault;
+    // [file] is whatever the caller is holding, and callers hold it across
+    // other operations: `ManageFile` keeps its `_file` through its own rename,
+    // the v4 upgrade's save and a return from the master password screen,
+    // because `didUpdateWidget` only compares sources by uuid. So nothing but
+    // the update itself may come out of it — not the name, not the open
+    // [KdbxFile], and above all not [KdbxOpenedFile.kdbxFileContent], which
+    // reinstated the content the file was read from and made the rename's save
+    // invisible to [_isUnchangedSinceOpened].
+    //
+    // Looked up twice: once here, for what the update is built on and what the
+    // mirror is written from, and again after the awaits below, because those
+    // are file, keychain and app-data i/o and a save finishing during them
+    // installs the content it wrote.
+    final base = _openedFileFor(file.kdbxFile) ?? file;
+    final updatedFile = (base.openedFile.toBuilder()..update(updater)).build();
+    final wasAutofillEnabled = base.openedFile.autofillEnabledOrDefault;
     final isAutofillEnabled = updatedFile.autofillEnabledOrDefault;
     if (wasAutofillEnabled && !isAutofillEnabled) {
       // opted out — take the copy and the cached key away again. What is
       // advertised is republished below, once the flag has actually landed.
-      await autofillMirror.removeFile(file.openedFile.uuid);
+      await autofillMirror.removeFile(base.openedFile.uuid);
     } else if (!wasAutofillEnabled && isAutofillEnabled) {
       // Opted in while the file is already open. The mirror is otherwise only
       // written on open and after save, so without this the extension would
       // find nothing until the user next did one of those — having just been
       // told autofill is on.
       //
-      // kdbxFileContent is what the file was read from, which is what the
+      // kdbxFileContent is the content the source last saw, which is what the
       // mirror needs: re-serializing would rotate the kdf salt and stand the
-      // cached key up against a vault it can no longer open.
+      // cached key up against a vault it can no longer open. Which is also why
+      // it has to come from [base] — a copy written from the bytes the file
+      // was read from, next to the key of a since-rotated salt, cannot be
+      // opened either.
       await _mirrorFile(
         updatedFile,
-        file.kdbxFile,
-        file.kdbxFileContent.content,
+        base.kdbxFile,
+        base.kdbxFileContent.content,
       );
     }
     await appDataBloc.update((b, data) {
       b.previousFiles.map((f) {
-        if (!f.isSameFileAs(file.openedFile)) {
+        if (!f.isSameFileAs(base.openedFile)) {
           return f;
         }
         //          return (f.toBuilder()..update(updater)).build();
         return updatedFile;
       });
     });
+    // The second lookup. Everything published below comes from it, and the
+    // update is re-applied on top of whatever it carries, so that a save, a
+    // rename or a `saveAs` that completed while this method was awaiting is
+    // kept rather than rolled back to [base]. Publishing [base] here is how
+    // this method undid a save twice over: the content object it reinstated
+    // was the one the file was read from, which is indistinguishable — to
+    // [_isUnchangedSinceOpened] — from a file nobody has saved.
+    final current = _openedFileFor(file.kdbxFile);
+    if (current == null) {
+      // Closed or locked, either before this started or while the mirror and
+      // the app data were being written. The preference above is kept — it is
+      // the user's — but putting the file back would reopen a database they
+      // locked.
+      _logger.info('$file is not open. Not publishing it.');
+      return KdbxOpenedFile(
+        fileSource: base.fileSource,
+        openedFile: updatedFile,
+        kdbxFile: base.kdbxFile,
+        kdbxFileContent: base.kdbxFileContent,
+      );
+    }
     final newFile = KdbxOpenedFile(
-      fileSource: file.fileSource,
-      openedFile: updatedFile,
-      kdbxFile: file.kdbxFile,
-      kdbxFileContent: file.kdbxFileContent,
+      fileSource: current.fileSource,
+      openedFile: (current.openedFile.toBuilder()..update(updater)).build(),
+      kdbxFile: current.kdbxFile,
+      kdbxFileContent: current.kdbxFileContent,
     );
     _openedFiles.add(
       OpenedKdbxFiles({
         ..._openedFiles.value._files,
-        file.fileSource: newFile,
+        current.fileSource: newFile,
       }),
     );
     if (wasAutofillEnabled != isAutofillEnabled) {
@@ -407,33 +453,54 @@ class KdbxBloc {
     bool addToQuickUnlock = false,
   }) async* {
     Uint8List? previous;
-    late KdbxOpenedFile openedFile;
+    KdbxOpenedFile? installed;
     await for (final fileContent in file.content()) {
       _logger.finer('$file got from ${fileContent.source}');
       final loadStopwatch = Stopwatch()..start();
+      final wasInstalled = installed;
+      // Re-asked at the moment of the swap, because decrypting the content
+      // below takes a while — argon2, plus a second or more on a phone — and
+      // the file stays open and in use for all of it.
+      bool stillUnchanged() =>
+          wasInstalled == null || _isUnchangedSinceOpened(file, wasInstalled);
       if (previous != null) {
+        // The second and later yields arrive in the background, seconds or
+        // minutes after the user was let in, and both branches below act on
+        // them: one replaces the open file, the other lets [content] cache
+        // these bytes as the current state of the source. Neither is right
+        // once local work has overtaken this load, so the check comes before
+        // both — returning here cancels [content] at its yield, which is what
+        // keeps the cache from being rolled back to these bytes too.
+        if (!stillUnchanged()) {
+          _logger.warning(
+            '$file: changed locally while loading from the origin. '
+            'Discarding the content from the origin.',
+          );
+          return;
+        }
         if (ByteUtils.eq(previous, fileContent.content)) {
           _logger.finer('$file: No changes detected. Nothing to do.');
           continue;
-        } else {
-          if (openedFile.kdbxFile.isDirty) {
-            // ooooopsie.
-            throw StateError(
-              'File was changed locally while '
-              'loading new file from remote storage.',
-            );
-          }
         }
       }
       previous = fileContent.content;
       loadStopwatch.stop();
       final unlockStopwatch = Stopwatch()..start();
-      openedFile = await _openFileContent(
+      final openedFile = await _openFileContent(
         file,
         credentials,
         fileContent,
         addToQuickUnlock,
+        stillWanted: stillUnchanged,
       );
+      if (openedFile == null) {
+        _logger.warning(
+          '$file: changed locally while the content from the origin was '
+          'being opened. Discarding it.',
+        );
+        return;
+      }
+      installed = openedFile;
       addToQuickUnlock = false;
 
       if (file is FileSourceCloudStorage) {
@@ -459,12 +526,99 @@ class KdbxBloc {
     _logger.finer('$file: Done.');
   }
 
-  Future<KdbxOpenedFile> _openFileContent(
+  /// Whether [opened] — installed by an earlier [content] yield of the same
+  /// [openFile] loop — is still the open file, and still untouched since it
+  /// was installed.
+  ///
+  /// False means content loaded from the origin must be dropped rather than
+  /// applied, because the user has moved on: the open file carries a change
+  /// the load cannot contain, or is not the open file any more at all.
+  ///
+  /// Five ways it goes false, and each of them has lost a save or reopened a
+  /// locked database before:
+  ///
+  ///  * nothing is open under [source] — closed, locked, or saved somewhere
+  ///    else;
+  ///  * a different [KdbxFile] is open — the database was reopened;
+  ///  * [KdbxOpenedFile.kdbxFileContent] is a different object — a save swaps
+  ///    in the content it wrote as soon as the write returns, [saveAs] and
+  ///    rename included, so this is what catches a save that has already
+  ///    finished and cleared `isDirty`, and also one that wrote and then threw
+  ///    on its way out. Which is why the content is installed first, before
+  ///    anything that can fail: everything after the install is covered by
+  ///    this condition, and only what runs before it needs the mark;
+  ///  * the file has unsaved changes;
+  ///  * a save is still in flight — see [_savesInFlight], which is the only
+  ///    one of the five that notices a save of a file that never becomes
+  ///    dirty in the first place, before that save has written anything.
+  bool _isUnchangedSinceOpened(FileSource source, KdbxOpenedFile opened) {
+    final current = _openedFiles.value[source];
+    if (current == null) {
+      return false;
+    }
+    if (!identical(current.kdbxFile, opened.kdbxFile) ||
+        !identical(current.kdbxFileContent, opened.kdbxFileContent)) {
+      return false;
+    }
+    if (current.kdbxFile.isDirty) {
+      return false;
+    }
+    return !_isSaving(current.kdbxFile);
+  }
+
+  /// Databases being serialized right now, counted so that nesting — [saveAs]
+  /// goes through [saveFile] — does not clear the mark early.
+  ///
+  /// [_isUnchangedSinceOpened] needs this because `isDirty` is not the same
+  /// thing as "the user has local work". Only a [KdbxObject] marks the file
+  /// dirty, and [KdbxMeta] and [KdbxCustomData] are plain [KdbxNode]s — so
+  /// changing the master password, which is `file.credentials = …` and goes
+  /// through `body.meta.modify`, saves a file that is clean from start to
+  /// finish. Until the write returns there is nothing else to see either, so
+  /// this is the only thing covering the stretch from the first mutation up to
+  /// the moment the written content is installed; after that the content
+  /// identity in [_isUnchangedSinceOpened] carries it.
+  ///
+  /// [reload] is marked too. It does not write anywhere, but it serializes the
+  /// file to bytes, and `KdbxFormat.save` clears `isDirty` whether or not the
+  /// bytes ever reach a file source.
+  final _savesInFlight = <KdbxFile, int>{};
+
+  bool _isSaving(KdbxFile file) => _savesInFlight.containsKey(file);
+
+  void _markSaving(KdbxFile file) =>
+      _savesInFlight.update(file, (count) => count + 1, ifAbsent: () => 1);
+
+  void _unmarkSaving(KdbxFile file) {
+    final remaining = _savesInFlight[file]! - 1;
+    if (remaining == 0) {
+      _savesInFlight.remove(file);
+    } else {
+      _savesInFlight[file] = remaining;
+    }
+  }
+
+  Future<T> _whileSaving<T>(KdbxFile file, Future<T> Function() save) async {
+    _markSaving(file);
+    try {
+      return await save();
+    } finally {
+      _unmarkSaving(file);
+    }
+  }
+
+  /// Reads [fileContent] and publishes it as the open file for [file].
+  ///
+  /// Returns null when [stillWanted] — checked immediately before the open
+  /// file is replaced, after the decrypting is done — says the result is no
+  /// longer wanted. Callers must drop it; nothing has been published.
+  Future<KdbxOpenedFile?> _openFileContent(
     FileSource file,
     Credentials credentials,
     FileContent fileContent,
-    bool addToQuickUnlock,
-  ) async {
+    bool addToQuickUnlock, {
+    bool Function()? stillWanted,
+  }) async {
     final readArgs = KdbxReadArgs(fileContent.content, credentials);
     //    final kdbxReadFile = await compute(
     //        staticReadKdbxFile, readArgs,
@@ -483,6 +637,15 @@ class KdbxBloc {
       throw kdbxReadFileException;
     }
     final kdbxFile = kdbxReadFile.file!;
+
+    // Asked once here as well as before the swap below, so that a load nobody
+    // wants any more does not raise [FileAlreadyOpenException] on its way out:
+    // after a [saveAs] to another source, this file's own database is open
+    // under that other source and the scan below would find it.
+    if (stillWanted != null && !stillWanted()) {
+      kdbxFile.dispose();
+      return null;
+    }
 
     // make sure kdbxFile is not already opened with another FileSource.
     final openedUuid = kdbxFile.body.rootGroup.uuid;
@@ -503,6 +666,12 @@ class KdbxBloc {
       name: kdbxFile.body.meta.databaseName.get(),
       defaultColor: _defaultNextColor(),
     );
+    // Last possible moment: everything above only read, and the line below is
+    // the one that takes the file the user is working in away from them.
+    if (stillWanted != null && !stillWanted()) {
+      kdbxFile.dispose();
+      return null;
+    }
     final kdbxOpenedFile = KdbxOpenedFile(
       fileSource: file,
       openedFile: openedFile,
@@ -1083,6 +1252,19 @@ class KdbxBloc {
     KdbxFile file, {
     FileSource? toFileSource,
     Credentials? updateCredentials,
+  }) => _whileSaving(
+    file,
+    () => _saveFile(
+      file,
+      toFileSource: toFileSource,
+      updateCredentials: updateCredentials,
+    ),
+  );
+
+  Future<FileContent> _saveFile(
+    KdbxFile file, {
+    FileSource? toFileSource,
+    Credentials? updateCredentials,
   }) async {
     final oldCredentials = file.credentials;
     if (updateCredentials != null) {
@@ -1112,6 +1294,18 @@ class KdbxBloc {
         writtenBytes = bytes;
         return await fileSource.contentWrite(bytes, metadata: null);
       });
+      // First, before anything else that could throw, and so before the mark
+      // this save holds can be released by one. The bytes are at the origin
+      // now; until they are installed, the open file still carries the content
+      // it was read from, and that is indistinguishable — to
+      // [_isUnchangedSinceOpened] — from a file nobody has saved. Anything
+      // throwing in between used to leave exactly that: the origin holding the
+      // new master password, the open file looking untouched and free to be
+      // replaced by content fetched before the save, and the user looking at
+      // an error.
+      //
+      // The conflict branch below already had this order.
+      await _syncAutofillMirrorAfterSave(file, writtenBytes, ret);
       analytics.events.trackSave(
         type: fileSource.typeDebug,
         value: ret.content.length,
@@ -1123,7 +1317,6 @@ class KdbxBloc {
         label: 'save',
       );
       await updateQuickUnlock();
-      await _syncAutofillMirrorAfterSave(file, writtenBytes, ret);
       return ret;
     } on StorageConflictException catch (e, stackTrace) {
       _logger.fine(
@@ -1183,6 +1376,21 @@ class KdbxBloc {
   KdbxOpenedFile? fileForFileSource(FileSource fileSource) =>
       _openedFiles.value[fileSource];
 
+  /// The entry [file] is open under right now, or null if it is not open.
+  ///
+  /// By identity and straight out of [_openedFiles], rather than through
+  /// [_openedFilesByKdbxFile], which a stream listener keeps up to date and is
+  /// therefore a microtask behind; and rather than by [FileSource], which a
+  /// [saveAs] to a different source changes.
+  KdbxOpenedFile? _openedFileFor(KdbxFile file) {
+    for (final opened in _openedFiles.value.values) {
+      if (identical(opened.kdbxFile, file)) {
+        return opened;
+      }
+    }
+    return null;
+  }
+
   /// Where [file] was opened from, or null if it is not open any more - unlike
   /// [fileForKdbxFile], which throws a `StateError`. For the callers which run
   /// long after the action they belong to, such as a snackbar's undo.
@@ -1192,10 +1400,13 @@ class KdbxBloc {
   Future<KdbxOpenedFile> saveAs(
     KdbxOpenedFile oldFile,
     FileSource output,
-  ) async {
+  ) => _whileSaving(oldFile.kdbxFile, () async {
+    // Marked for the whole of it, not just the inner [saveFile], which leaves
+    // the file open under the *old* source until [_savedAs] re-keys it. A
+    // background load for that old source is still running until then.
     final content = await saveFile(oldFile.kdbxFile, toFileSource: output);
     return await _savedAs(oldFile, output, content);
-  }
+  });
 
   Future<KdbxOpenedFile> _savedAs(
     KdbxOpenedFile oldFile,
@@ -1248,14 +1459,14 @@ class KdbxBloc {
     KdbxOpenedFile oldFile,
     CloudStorageSelectorSaveResult createFileInfo,
     CloudStorageProvider cs,
-  ) async {
+  ) => _whileSaving(oldFile.kdbxFile, () async {
     return await _saveFileToBytes(oldFile.kdbxFile, (bytes) async {
       final entity = await cs.createEntity(createFileInfo, bytes);
       final lastContent = entity.lastContent!;
       assert(bytes == lastContent.content);
       return await _savedAs(oldFile, entity, lastContent);
     });
-  }
+  });
 
   Future<FileSource> saveLocally(FileSource? source) async {
     final file = _openedFiles.value[source];
@@ -1286,6 +1497,10 @@ class KdbxBloc {
   Stream<ReloadStatus> reload(KdbxOpenedFile file) async* {
     Uint8List? bytes;
     final dirtyObjects = file.kdbxFile.dirtyObjects;
+    // Serializing below clears `isDirty` without the bytes going anywhere, so
+    // for as long as that is true a background load must not take this file
+    // for one nobody has touched.
+    _markSaving(file.kdbxFile);
     try {
       if (file.kdbxFile.isDirty) {
         //throw StateError('File must not be dirty for now.');
@@ -1318,6 +1533,7 @@ class KdbxBloc {
       if (bytes != null && !file.kdbxFile.isDirty) {
         dirtyObjects.forEach(file.kdbxFile.dirtyObject);
       }
+      _unmarkSaving(file.kdbxFile);
     }
   }
 
