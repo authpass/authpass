@@ -540,71 +540,81 @@ class KdbxBloc {
   ///  * nothing is open under [source] — closed, locked, or saved somewhere
   ///    else;
   ///  * a different [KdbxFile] is open — the database was reopened;
-  ///  * [KdbxOpenedFile.kdbxFileContent] is a different object — a save swaps
-  ///    in the content it wrote as soon as the write returns, [saveAs] and
-  ///    rename included, so this is what catches a save that has already
-  ///    finished and cleared `isDirty`, and also one that wrote and then threw
-  ///    on its way out. Which is why the content is installed first, before
-  ///    anything that can fail: everything after the install is covered by
-  ///    this condition, and only what runs before it needs the mark;
-  ///  * the file has unsaved changes;
-  ///  * a save is still in flight — see [_savesInFlight], which is the only
-  ///    one of the five that notices a save of a file that never becomes
-  ///    dirty in the first place, before that save has written anything.
+  ///  * a save has been started on it — see [_saveAttempted], which is the
+  ///    one condition here that covers a save from its first mutation right
+  ///    through to the end of the file's life, whatever the save does or
+  ///    fails to do in between;
+  ///  * the file has unsaved changes, which is what catches a user edit that
+  ///    has never been saved at all;
+  ///  * [KdbxOpenedFile.kdbxFileContent] is a different object. Every content
+  ///    swap follows a save, so [_saveAttempted] has already covered this by
+  ///    the time it could matter; it is kept because it costs nothing and
+  ///    because it fails in the safe direction. Do not make anything depend
+  ///    on it — preserving this object's identity across a rebuild of a
+  ///    [KdbxOpenedFile] is explicitly *not* an invariant anyone has to
+  ///    maintain, and the two commits that treated it as one both lost a
+  ///    save.
   bool _isUnchangedSinceOpened(FileSource source, KdbxOpenedFile opened) {
     final current = _openedFiles.value[source];
     if (current == null) {
       return false;
     }
-    if (!identical(current.kdbxFile, opened.kdbxFile) ||
-        !identical(current.kdbxFileContent, opened.kdbxFileContent)) {
+    if (!identical(current.kdbxFile, opened.kdbxFile)) {
+      return false;
+    }
+    if (_saveAttempted.contains(current.kdbxFile)) {
       return false;
     }
     if (current.kdbxFile.isDirty) {
       return false;
     }
-    return !_isSaving(current.kdbxFile);
+    return identical(current.kdbxFileContent, opened.kdbxFileContent);
   }
 
-  /// Databases being serialized right now, counted so that nesting — [saveAs]
-  /// goes through [saveFile] — does not clear the mark early.
+  /// Databases a save has been started on since they were opened.
   ///
-  /// [_isUnchangedSinceOpened] needs this because `isDirty` is not the same
+  /// Sticky on purpose: an entry goes in when a save begins and comes out only
+  /// when the file is closed ([close], [closeAllFiles]), so the set never
+  /// holds a disposed [KdbxFile]. Nothing releases it when a save finishes,
+  /// succeeds or fails.
+  ///
+  /// [_isUnchangedSinceOpened] needs it because `isDirty` is not the same
   /// thing as "the user has local work". Only a [KdbxObject] marks the file
   /// dirty, and [KdbxMeta] and [KdbxCustomData] are plain [KdbxNode]s — so
   /// changing the master password, which is `file.credentials = …` and goes
   /// through `body.meta.modify`, saves a file that is clean from start to
-  /// finish. Until the write returns there is nothing else to see either, so
-  /// this is the only thing covering the stretch from the first mutation up to
-  /// the moment the written content is installed; after that the content
-  /// identity in [_isUnchangedSinceOpened] carries it.
+  /// finish.
+  ///
+  /// Sticky rather than released when the save returns, because the end of a
+  /// save is not a moment at which the file becomes safe to replace again:
+  ///
+  ///  * a write that throws *after* the bytes reached the origin — a dropped
+  ///    response, a timeout after the PUT — never installs the content it
+  ///    wrote, and for a save that never dirtied the file that leaves nothing
+  ///    whatsoever to tell it apart from a file nobody has touched;
+  ///  * anything throwing between the write returning and the content being
+  ///    installed leaves the same gap, which is what made the statement order
+  ///    inside [_saveFile] load-bearing;
+  ///  * and once a database has been saved at all, content the origin handed
+  ///    us *before* that save is stale by definition, whatever happened next.
+  ///
+  /// Keyed by [KdbxFile], not [FileSource], because a rename is
+  /// `saveAs(file, fileSource.copyWithDatabaseName(name))`: the source being
+  /// written to is a different object from the one the [openFile] loop is
+  /// watching, while the database is the same one. An earlier attempt at this
+  /// guard counted writes on the [FileSource] and was blind to exactly that.
   ///
   /// [reload] is marked too. It does not write anywhere, but it serializes the
   /// file to bytes, and `KdbxFormat.save` clears `isDirty` whether or not the
   /// bytes ever reach a file source.
-  final _savesInFlight = <KdbxFile, int>{};
+  final _saveAttempted = Set<KdbxFile>.identity();
 
-  bool _isSaving(KdbxFile file) => _savesInFlight.containsKey(file);
+  void _markSaveAttempted(KdbxFile file) => _saveAttempted.add(file);
 
-  void _markSaving(KdbxFile file) =>
-      _savesInFlight.update(file, (count) => count + 1, ifAbsent: () => 1);
-
-  void _unmarkSaving(KdbxFile file) {
-    final remaining = _savesInFlight[file]! - 1;
-    if (remaining == 0) {
-      _savesInFlight.remove(file);
-    } else {
-      _savesInFlight[file] = remaining;
-    }
-  }
-
-  Future<T> _whileSaving<T>(KdbxFile file, Future<T> Function() save) async {
-    _markSaving(file);
-    try {
-      return await save();
-    } finally {
-      _unmarkSaving(file);
-    }
+  /// Marks [file] before [save] runs, and leaves the mark in place afterwards.
+  Future<T> _markedSave<T>(KdbxFile file, Future<T> Function() save) {
+    _markSaveAttempted(file);
+    return save();
   }
 
   /// Reads [fileContent] and publishes it as the open file for [file].
@@ -1077,6 +1087,10 @@ class KdbxBloc {
       OpenedKdbxFiles(Map.from(_openedFiles.value._files)..remove(fileSource)),
     );
     file.dispose();
+    // The only thing that takes a save mark off again. A closed database has
+    // no background load left to protect it from, and leaving it in would
+    // keep a disposed [KdbxFile] alive in the set for as long as the app runs.
+    _saveAttempted.remove(file);
     // "Not now" only holds for as long as the file is open - reopening a
     // database which still needs repairing asks about it again.
     _duplicateUuidsPending.remove(fileSource);
@@ -1098,6 +1112,7 @@ class KdbxBloc {
     _logger.finer('Closing all files, clearing quick unlock.');
     for (final file in _openedFiles.value.values) {
       file.kdbxFile.dispose();
+      _saveAttempted.remove(file.kdbxFile);
     }
     _duplicateUuidsPending.clear();
     _duplicateUuidsAnswered.clear();
@@ -1252,7 +1267,7 @@ class KdbxBloc {
     KdbxFile file, {
     FileSource? toFileSource,
     Credentials? updateCredentials,
-  }) => _whileSaving(
+  }) => _markedSave(
     file,
     () => _saveFile(
       file,
@@ -1400,13 +1415,14 @@ class KdbxBloc {
   Future<KdbxOpenedFile> saveAs(
     KdbxOpenedFile oldFile,
     FileSource output,
-  ) => _whileSaving(oldFile.kdbxFile, () async {
-    // Marked for the whole of it, not just the inner [saveFile], which leaves
-    // the file open under the *old* source until [_savedAs] re-keys it. A
-    // background load for that old source is still running until then.
+  ) async {
+    // No mark of its own: the one [saveFile] leaves behind covers the rest of
+    // this as well. That matters because the file stays open under the *old*
+    // source until [_savedAs] re-keys it, and a background load for that old
+    // source is still running until then.
     final content = await saveFile(oldFile.kdbxFile, toFileSource: output);
     return await _savedAs(oldFile, output, content);
-  });
+  }
 
   Future<KdbxOpenedFile> _savedAs(
     KdbxOpenedFile oldFile,
@@ -1459,7 +1475,9 @@ class KdbxBloc {
     KdbxOpenedFile oldFile,
     CloudStorageSelectorSaveResult createFileInfo,
     CloudStorageProvider cs,
-  ) => _whileSaving(oldFile.kdbxFile, () async {
+  ) => _markedSave(oldFile.kdbxFile, () async {
+    // Marked here rather than relying on [saveFile], which this does not go
+    // through — it serializes the file itself.
     return await _saveFileToBytes(oldFile.kdbxFile, (bytes) async {
       final entity = await cs.createEntity(createFileInfo, bytes);
       final lastContent = entity.lastContent!;
@@ -1498,9 +1516,11 @@ class KdbxBloc {
     Uint8List? bytes;
     final dirtyObjects = file.kdbxFile.dirtyObjects;
     // Serializing below clears `isDirty` without the bytes going anywhere, so
-    // for as long as that is true a background load must not take this file
-    // for one nobody has touched.
-    _markSaving(file.kdbxFile);
+    // from here on a background load must not take this file for one nobody
+    // has touched. The mark stays for the rest of the file's life: a reload
+    // merges origin content into the open database, which makes anything the
+    // origin handed out earlier stale as surely as a save would.
+    _markSaveAttempted(file.kdbxFile);
     try {
       if (file.kdbxFile.isDirty) {
         //throw StateError('File must not be dirty for now.');
@@ -1533,7 +1553,6 @@ class KdbxBloc {
       if (bytes != null && !file.kdbxFile.isDirty) {
         dirtyObjects.forEach(file.kdbxFile.dirtyObject);
       }
-      _unmarkSaving(file.kdbxFile);
     }
   }
 
