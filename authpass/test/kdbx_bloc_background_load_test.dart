@@ -222,6 +222,25 @@ class _FakeAppDataBloc extends Fake implements AppDataBloc {
   );
 }
 
+/// Holds `update()` open, which is where `updateOpenedFile` sits while it
+/// writes the app data — after it has looked the open file up and before it
+/// republishes it.
+class _GatedUpdateAppDataBloc extends _FakeAppDataBloc {
+  final updateStarted = Completer<void>();
+  final gate = Completer<void>();
+
+  @override
+  Future<T> update<T>(
+    T Function(AppDataBuilder builder, AppData data) updater,
+  ) async {
+    if (!updateStarted.isCompleted) {
+      updateStarted.complete();
+      await gate.future;
+    }
+    return super.update(updater);
+  }
+}
+
 /// Holds the second and later `openedFile()` calls open, which is where
 /// `_openFileContent` sits between "the content from the origin is decrypted"
 /// and "the open file is replaced with it". In the app that gap is argon2, long
@@ -783,6 +802,62 @@ void main() {
         'gated://renamed.kdbx',
       );
     });
+
+    // updateOpenedFile looks the open file up, then awaits the mirror and the
+    // app data — file, keychain and app-data i/o — and only then republishes.
+    // A save finishing inside that window installs the content it wrote, so
+    // republishing what was looked up beforehand puts the pre-save content
+    // object back and makes the save invisible all over again.
+    test(
+      'survives a save that finishes while a setting is being stored',
+      () async {
+        final appData = _GatedUpdateAppDataBloc();
+        await newBloc(appDataBloc: appData);
+        final versions = await twoVersions();
+        final source = _GatedFileSource(
+          cached: versions.cached,
+          remote: versions.remote,
+        );
+
+        final openIt = StreamIterator(bloc.openFile(source, _credentials));
+        expect(await openIt.moveNext(), isTrue);
+        final opened = openIt.current.kdbxOpenedFile!;
+
+        final background = bloc.continueLoadInBackground(
+          openIt,
+          debugName: 'test',
+          fileSource: source,
+        );
+        await source.loadStarted.future;
+
+        // The user opens the database settings and picks a colour.
+        final updating = bloc.updateOpenedFile(
+          opened,
+          (b) => b..colorCode = 0xff00ff00,
+        );
+        await appData.updateStarted.future;
+
+        // Their earlier edit's save lands while that is still being stored.
+        opened.kdbxFile.body.rootGroup.getAllEntries().single.setString(
+          _title,
+          PlainValue('repaired'),
+        );
+        await bloc.saveFile(opened.kdbxFile);
+
+        appData.gate.complete();
+        await updating;
+
+        source.gate.complete();
+        await expectLater(background, completes);
+
+        expect(_titleOf(bloc.openedFiles[source]!.kdbxFile), 'repaired');
+        expect(
+          bloc.openedFiles[source]!.openedFile.colorCode,
+          0xff00ff00,
+          reason: 'the setting the user changed was dropped',
+        );
+      },
+    );
 
     // The save-in-flight mark lasts exactly as long as the save, so the
     // written content has to be installed before anything that could end the

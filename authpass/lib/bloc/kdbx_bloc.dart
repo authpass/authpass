@@ -362,8 +362,12 @@ class KdbxBloc {
     // [KdbxFile], and above all not [KdbxOpenedFile.kdbxFileContent], which
     // reinstated the content the file was read from and made the rename's save
     // invisible to [_isUnchangedSinceOpened].
-    final current = _openedFileFor(file.kdbxFile);
-    final base = current ?? file;
+    //
+    // Looked up twice: once here, for what the update is built on and what the
+    // mirror is written from, and again after the awaits below, because those
+    // are file, keychain and app-data i/o and a save finishing during them
+    // installs the content it wrote.
+    final base = _openedFileFor(file.kdbxFile) ?? file;
     final updatedFile = (base.openedFile.toBuilder()..update(updater)).build();
     final wasAutofillEnabled = base.openedFile.autofillEnabledOrDefault;
     final isAutofillEnabled = updatedFile.autofillEnabledOrDefault;
@@ -398,25 +402,39 @@ class KdbxBloc {
         return updatedFile;
       });
     });
-    final newFile = KdbxOpenedFile(
-      fileSource: base.fileSource,
-      openedFile: updatedFile,
-      kdbxFile: base.kdbxFile,
-      kdbxFileContent: base.kdbxFileContent,
-    );
-    if (current != null) {
-      _openedFiles.add(
-        OpenedKdbxFiles({
-          ..._openedFiles.value._files,
-          base.fileSource: newFile,
-        }),
+    // The second lookup. Everything published below comes from it, and the
+    // update is re-applied on top of whatever it carries, so that a save, a
+    // rename or a `saveAs` that completed while this method was awaiting is
+    // kept rather than rolled back to [base]. Publishing [base] here is how
+    // this method undid a save twice over: the content object it reinstated
+    // was the one the file was read from, which is indistinguishable — to
+    // [_isUnchangedSinceOpened] — from a file nobody has saved.
+    final current = _openedFileFor(file.kdbxFile);
+    if (current == null) {
+      // Closed or locked, either before this started or while the mirror and
+      // the app data were being written. The preference above is kept — it is
+      // the user's — but putting the file back would reopen a database they
+      // locked.
+      _logger.info('$file is not open. Not publishing it.');
+      return KdbxOpenedFile(
+        fileSource: base.fileSource,
+        openedFile: updatedFile,
+        kdbxFile: base.kdbxFile,
+        kdbxFileContent: base.kdbxFileContent,
       );
-    } else {
-      // Closed or locked while the mirror and the app data were being written.
-      // The preference above is kept — it is the user's — but putting the file
-      // back would reopen a database they locked.
-      _logger.info('$file was closed while being updated. Not publishing it.');
     }
+    final newFile = KdbxOpenedFile(
+      fileSource: current.fileSource,
+      openedFile: (current.openedFile.toBuilder()..update(updater)).build(),
+      kdbxFile: current.kdbxFile,
+      kdbxFileContent: current.kdbxFileContent,
+    );
+    _openedFiles.add(
+      OpenedKdbxFiles({
+        ..._openedFiles.value._files,
+        current.fileSource: newFile,
+      }),
+    );
     if (wasAutofillEnabled != isAutofillEnabled) {
       // Only now, after the stream carries the new flag. What gets advertised
       // is derived from _openedFiles, so publishing from the branches above
@@ -522,16 +540,17 @@ class KdbxBloc {
   ///  * nothing is open under [source] — closed, locked, or saved somewhere
   ///    else;
   ///  * a different [KdbxFile] is open — the database was reopened;
-  ///  * [KdbxOpenedFile.kdbxFileContent] is a different object — a save that
-  ///    returns normally swaps in the content it wrote, [saveAs] and rename
-  ///    included, so this is what catches a save that has already finished and
-  ///    cleared `isDirty`. A save that writes and *then* throws is caught by
-  ///    the condition below instead, which is why the content is installed
-  ///    before anything else that can fail;
+  ///  * [KdbxOpenedFile.kdbxFileContent] is a different object — a save swaps
+  ///    in the content it wrote as soon as the write returns, [saveAs] and
+  ///    rename included, so this is what catches a save that has already
+  ///    finished and cleared `isDirty`, and also one that wrote and then threw
+  ///    on its way out. Which is why the content is installed first, before
+  ///    anything that can fail: everything after the install is covered by
+  ///    this condition, and only what runs before it needs the mark;
   ///  * the file has unsaved changes;
   ///  * a save is still in flight — see [_savesInFlight], which is the only
   ///    one of the five that notices a save of a file that never becomes
-  ///    dirty in the first place.
+  ///    dirty in the first place, before that save has written anything.
   bool _isUnchangedSinceOpened(FileSource source, KdbxOpenedFile opened) {
     final current = _openedFiles.value[source];
     if (current == null) {
@@ -555,8 +574,10 @@ class KdbxBloc {
   /// dirty, and [KdbxMeta] and [KdbxCustomData] are plain [KdbxNode]s — so
   /// changing the master password, which is `file.credentials = …` and goes
   /// through `body.meta.modify`, saves a file that is clean from start to
-  /// finish. Nothing else about such a save is visible either: the content the
-  /// save wrote is only installed as the open file's at the very end of it.
+  /// finish. Until the write returns there is nothing else to see either, so
+  /// this is the only thing covering the stretch from the first mutation up to
+  /// the moment the written content is installed; after that the content
+  /// identity in [_isUnchangedSinceOpened] carries it.
   ///
   /// [reload] is marked too. It does not write anywhere, but it serializes the
   /// file to bytes, and `KdbxFormat.save` clears `isDirty` whether or not the
@@ -1380,9 +1401,9 @@ class KdbxBloc {
     KdbxOpenedFile oldFile,
     FileSource output,
   ) => _whileSaving(oldFile.kdbxFile, () async {
-    // Marked for the whole of it, not just the inner [saveFile]: until
-    // [_savedAs] has installed the content it wrote, the open file still
-    // carries the one it was read from.
+    // Marked for the whole of it, not just the inner [saveFile], which leaves
+    // the file open under the *old* source until [_savedAs] re-keys it. A
+    // background load for that old source is still running until then.
     final content = await saveFile(oldFile.kdbxFile, toFileSource: output);
     return await _savedAs(oldFile, output, content);
   });
