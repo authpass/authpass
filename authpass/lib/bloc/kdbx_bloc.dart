@@ -573,10 +573,14 @@ class KdbxBloc {
 
   /// Databases a save has been started on since they were opened.
   ///
-  /// Sticky on purpose: an entry goes in when a save begins and comes out only
-  /// when the file is closed ([close], [closeAllFiles]), so the set never
-  /// holds a disposed [KdbxFile]. Nothing releases it when a save finishes,
-  /// succeeds or fails.
+  /// Sticky on purpose: an entry goes in when a save begins and comes out
+  /// only when the file is closed ([close]) or everything is
+  /// ([closeAllFiles]). Nothing releases it when a save finishes, succeeds or
+  /// fails. [close] cannot reach a [KdbxFile] which is no longer in
+  /// [_openedFiles], so [closeAllFiles] clears the set outright rather than
+  /// removing the files it finds — otherwise a save on a stale [KdbxFile],
+  /// which marks it and then throws out of [fileForKdbxFile], would keep that
+  /// database in memory, decrypted, for as long as the app runs.
   ///
   /// [_isUnchangedSinceOpened] needs it because `isDirty` is not the same
   /// thing as "the user has local work". Only a [KdbxObject] marks the file
@@ -1112,8 +1116,13 @@ class KdbxBloc {
     _logger.finer('Closing all files, clearing quick unlock.');
     for (final file in _openedFiles.value.values) {
       file.kdbxFile.dispose();
-      _saveAttempted.remove(file.kdbxFile);
     }
+    // Cleared rather than removed one by one, because a mark can outlive
+    // [_openedFiles]: a save on a [KdbxFile] which is not open any more marks
+    // it and then throws out of [fileForKdbxFile], and [close] can no longer
+    // reach it. Nothing is open after this, so nothing has a background load
+    // left to be protected from, and anything still in the set is an orphan.
+    _saveAttempted.clear();
     _duplicateUuidsPending.clear();
     _duplicateUuidsAnswered.clear();
     if (clearQuickUnlock) {
