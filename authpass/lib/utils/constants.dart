@@ -88,4 +88,17 @@ class AssetConstants {
 
 class UrlConstants {
   static const forumUrl = 'https://forum.authpass.app/'; // NON-NLS
+
+  /// The Snap Store listing, which takes ratings and reviews.
+  ///
+  /// Linux ships through `snap/` (the snap the linux workflow publishes), a
+  /// deb from `debian/` and a flatpak, and only this one has a review page.
+  static const snapStoreUrl = 'https://snapcraft.io/authpass'; // NON-NLS
+
+  /// The Microsoft Store listing of the `msix` flavor, reviews included.
+  ///
+  /// `9P5N6ZNPSFBN` is the store's own product id, not a package name; see
+  /// README.md, which links the same listing.
+  static const microsoftStoreUrl =
+      'https://www.microsoft.com/store/apps/9P5N6ZNPSFBN'; // NON-NLS
 }
