@@ -13,6 +13,12 @@ import 'package:kdbx/kdbx.dart';
 
 import 'util/test_util.dart';
 
+/// What a write that reached the origin and then lost its response throws.
+class _WriteFailedAfterOrigin implements Exception {
+  @override
+  String toString() => 'the bytes are at the origin; the response is not';
+}
+
 /// A cloud-ish file source: [content] hands out the cached bytes at once and
 /// only then starts a "remote" fetch, exactly as [FileSource.content] does for
 /// a real provider.
@@ -49,6 +55,11 @@ class _GatedFileSource extends FileSource {
   /// When set, [write] waits on it, so a test can hold a save open.
   Completer<void>? writeGate;
 
+  /// When true, [write] puts the bytes at the origin and *then* throws, the
+  /// way a dropped response or a timeout after the PUT does: the origin has
+  /// the new content, the caller is told the save failed.
+  bool throwAfterWrite = false;
+
   final writtenBytes = <Uint8List>[];
 
   @override
@@ -76,6 +87,9 @@ class _GatedFileSource extends FileSource {
     await writeGate?.future;
     writtenBytes.add(bytes);
     remote = bytes;
+    if (throwAfterWrite) {
+      throw _WriteFailedAfterOrigin();
+    }
     return <String, dynamic>{};
   }
 
@@ -859,12 +873,14 @@ void main() {
       },
     );
 
-    // The save-in-flight mark lasts exactly as long as the save, so the
-    // written content has to be installed before anything that could end the
+    // Back when the mark was released as soon as the save returned, the
+    // written content had to be installed before anything that could end the
     // save early. It used to be installed last of all, after the analytics
     // calls and after the quick unlock store — which, for the one save that
     // never dirties the file, is the one that can genuinely fail: changing the
     // master password on a database in quick unlock has to re-authenticate.
+    // The mark is sticky now and covers this on its own, but the ordering is
+    // still right and this pins it.
     test('survives a save that writes and then throws', () async {
       await newBloc(analytics: _FakeAnalytics(throwFromTrackTiming: true));
       final versions = await twoVersions();
@@ -904,6 +920,70 @@ void main() {
         source.lastContent!.content,
         same(source.writtenBytes.single),
         reason: 'the cache was rolled back over content already at the origin',
+      );
+    });
+
+    // The gap a mark released at the end of the save cannot cover, and the
+    // reason this one is sticky. When the write itself throws *after* the
+    // bytes reached the origin — a dropped response, a timeout after the PUT
+    // went through — `contentWrite` throws, so the written content is never
+    // installed, and `KdbxFormat.save` never reaches `onSaved`. For a
+    // credentials change, which never dirties the file in the first place,
+    // that leaves the open file byte-for-byte indistinguishable from one
+    // nobody has touched: same [KdbxFile], same content object, not dirty.
+    // Every condition except the mark says "go ahead and replace it", and the
+    // content the origin handed out before the save is then installed over a
+    // database whose master password has already changed at the origin.
+    test('survives a write that reaches the origin and then throws', () async {
+      final versions = await twoVersions();
+      final source = _GatedFileSource(
+        cached: versions.cached,
+        remote: versions.remote,
+      )..throwAfterWrite = true;
+
+      final openIt = StreamIterator(bloc.openFile(source, _credentials));
+      expect(await openIt.moveNext(), isTrue);
+      final opened = openIt.current.kdbxOpenedFile!;
+
+      final background = bloc.continueLoadInBackground(
+        openIt,
+        debugName: 'test',
+        fileSource: source,
+      );
+      await source.loadStarted.future;
+
+      final newCredentials = Credentials(ProtectedValue.fromString('hunter2'));
+      await expectLater(
+        bloc.saveFile(opened.kdbxFile, updateCredentials: newCredentials),
+        throwsA(isA<_WriteFailedAfterOrigin>()),
+      );
+
+      // The three premises, asserted rather than assumed, because the test is
+      // only about the mark if the other conditions really do all pass.
+      expect(
+        source.writtenBytes,
+        hasLength(1),
+        reason: 'the bytes did reach the origin',
+      );
+      expect(
+        opened.kdbxFile.isDirty,
+        isFalse,
+        reason: 'a credentials change never dirties the file',
+      );
+      expect(
+        bloc.openedFiles[source]!.kdbxFileContent,
+        same(opened.kdbxFileContent),
+        reason: 'the written content was never installed',
+      );
+
+      source.gate.complete();
+      await expectLater(background, completes);
+
+      expect(bloc.openedFiles[source]!.kdbxFile, same(opened.kdbxFile));
+      expect(
+        _titleOf(bloc.openedFiles[source]!.kdbxFile),
+        'cached',
+        reason: 'the open database was replaced by pre-save origin content',
       );
     });
   });
