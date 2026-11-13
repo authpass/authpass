@@ -41,11 +41,37 @@ done
 # for it to hold. See _tools/upload-macos.sh for the step that does.
 : "${APPLE_KEYCHAIN:?run this under 'cux_ship keychain exec'}"
 
+ARCHIVE="build/macos/authpass.xcarchive"
+
+# The build facts a manifest cannot recover afterwards, captured before the
+# build can move the tree — `flutter build` alone is enough to dirty it.
+#
+# notarize-macos.sh writes the manifest for the direct-download zip, from a
+# laptop and possibly a good while later, and by then a tree that moved in
+# between is invisible to it. release.sh captures the same three at the top of
+# a release rather than at write time, for exactly that reason. Version and build
+# number are deliberately *not* recorded here: notarize-macos.sh reads those
+# back out of the exported app, where they cannot disagree with the bytes being
+# shipped. Named after the archive, so `-a` keeps both scripts on one build.
+BUILD_FACTS="${ARCHIVE}.build-facts"
+mkdir -p "$(dirname "$BUILD_FACTS")"
+{
+  echo "gitSha=$(git rev-parse HEAD)"
+  if [ -z "$(git status --porcelain)" ]; then
+    echo "dirty=false"
+  else
+    echo "dirty=true"
+  fi
+  # The line starting "Flutter", not the first line: a wrapper prints its own
+  # banner first, which is how a manifest once recorded a path as a version.
+  # Empty when nothing matches, and the manifest then omits the toolchain.
+  echo "flutter=$(flutter --version 2>/dev/null | grep -m1 '^Flutter' | awk '{print $2}')"
+} > "$BUILD_FACTS"
+
 echo "==> flutter build macos --config-only"
 flutter build macos --release --config-only -t "$TARGET" \
   ${BUILD_NUMBER:+--build-number "$BUILD_NUMBER"}
 
-ARCHIVE="build/macos/authpass.xcarchive"
 rm -rf "$ARCHIVE" "$OUTPUT"
 
 echo "==> xcodebuild archive"
