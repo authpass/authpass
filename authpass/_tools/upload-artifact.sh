@@ -54,20 +54,17 @@ curl --request POST \
 # but the two uploads are not atomic, so a `latest` alias can briefly name a
 # tarball whose sidecar is one PUT behind; the consumer's digest check turns
 # that skew into a loud retry rather than silent wrongness.
-# Tolerated failure, still — but for a narrower reason than when this was
-# written. artifact-push.php admits filenames from an anchored allow-list, one
-# pattern per artifact kind with the extension written into it, so a
-# `.manifest.json` companion has to be taught kind by kind. It has been, for
-# the five kinds that were writing manifests at the time: the tar.gz, the deb,
-# the exe, the msix and the portable zip each have one published beside them
-# today. It cannot have been for the two that only start writing one now — the
-# notarized macOS zip and the snap — so their first upload is expected to be
-# refused, and must not fail an artifact upload that already succeeded.
+# No longer tolerated, and no longer piped: artifact-push.php derives the
+# `.manifest.json` companion from the artifact allow-list itself rather than
+# keeping a second list of its own, so every filename it admits brings its
+# sidecar with it — the two new ones here included. A refusal now means
+# something is actually wrong, and leaving half a pair on the server is the
+# state the digest check downstream exists to make loud.
 #
-# Drop the `||` once `AuthPass.app-<version>.zip.manifest.json` and
-# `authpass_<version>_amd64.snap.manifest.json` are in the allow-list too
-# (packages/artifact_server/artifact-push.php, in authpass-cloud); a
-# silent-refusal state is not worth keeping.
+# `| cat` is gone with it, and that is the part doing the work: this script
+# has `set -e` without `pipefail`, so a pipeline ends in `cat`'s zero and a
+# curl that failed is invisible. The `||` above it could never fire for the
+# same reason.
 manifest_file="${upload_file}.manifest.json"
 if [ -f "${manifest_file}" ]; then
   curl --request POST \
@@ -75,7 +72,6 @@ if [ -f "${manifest_file}" ]; then
       --fail \
       --form token="${token}" \
       --form upload="@${manifest_file}" \
-      --form filename="${remote_name}.manifest.json" | cat \
-    || echo "WARNING: manifest upload refused — add ${remote_name}.manifest.json's pattern to artifact-push.php's allow-list" >&2
+      --form filename="${remote_name}.manifest.json"
 fi
 
