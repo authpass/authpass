@@ -67,15 +67,42 @@ jobs:
     - uses: snapcore/action-build@v1
       id: snapcraft
     # snapcraft names the file after the snap, not after the release, so the
-    # version has to be put back on it for the download page.
+    # version has to be put back on it for the download page: artifact-push.php
+    # admits `authpass_<version>_amd64.snap` and derives the `latest` symlink
+    # and version file from that name.
+    #
+    # A copy under the published name, rather than the second argument
+    # upload-artifact.sh takes, because the manifest has to travel under that
+    # name too — it is published as `<published name>.manifest.json`, and a
+    # reader refuses a sidecar whose stem disagrees with the artifact it names.
+    # A copy and not a rename: the publish step below still wants the name
+    # snapcraft chose.
+    - name: name the snap after the release, and write its manifest
+      id: snap
+      run: |
+        manifest="authpass/${{ steps.buildapk.outputs.outputpath }}.manifest.json"
+        # Taken from the tarball's manifest rather than read a second time, so
+        # the name on the download page and the manifest beside it cannot
+        # disagree about which build this is.
+        snap="authpass_$(jq -r .versionName "${manifest}")_$(jq -r .buildNumber "${manifest}")_amd64.snap"
+        cp "${{ steps.snapcraft.outputs.snap }}" "${snap}"
+        # The snap *is* that tarball: snap/snapcraft.yaml pulls
+        # authpass-linux-latest.tar.gz, which the step above published from
+        # this very job. So the build facts are inherited rather than retyped,
+        # the same way make_deb.yaml derives the deb's, and the tarball sits
+        # beside its manifest here, so the parent digest is checked in the same
+        # call. No --packaging, unlike the deb: the packaging files are this
+        # checkout, which is the commit the parent manifest already records.
+        ./authpass/_tools/ship.sh manifest write \
+          --artifact "${PWD}/${snap}" --platform linux --format snap \
+          --derived-from "${PWD}/${manifest}"
+        echo "snap=${snap}" >> "$GITHUB_OUTPUT"
     - name: upload snap artifact
       env:
         SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       run: >-
         ./authpass/_tools/ship.sh secrets exec --keystore upload --api-key upload --
-        ./authpass/_tools/upload-artifact.sh
-        ${{ steps.snapcraft.outputs.snap }}
-        authpass_${{ steps.buildapk.outputs.appversion }}_${{ steps.buildapk.outputs.appbuildnumber }}_amd64.snap
+        ./authpass/_tools/upload-artifact.sh ${{ steps.snap.outputs.snap }}
     - uses: snapcore/action-publish@v1
       env:
         SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_TOKEN }}
