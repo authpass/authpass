@@ -54,11 +54,20 @@ curl --request POST \
 # but the two uploads are not atomic, so a `latest` alias can briefly name a
 # tarball whose sidecar is one PUT behind; the consumer's digest check turns
 # that skew into a loud retry rather than silent wrongness.
-# Tolerated failure, for now: artifact-push.php admits filenames from an
-# anchored allow-list, and no `*.manifest.json` companion pattern is in it yet
-# — so until the server learns them, this refusal is expected and must not
-# fail an artifact upload that already succeeded. Drop the `||` once the
-# allow-list knows manifests; a silent-refusal state is not worth keeping.
+# Tolerated failure, still — but for a narrower reason than when this was
+# written. artifact-push.php admits filenames from an anchored allow-list, one
+# pattern per artifact kind with the extension written into it, so a
+# `.manifest.json` companion has to be taught kind by kind. It has been, for
+# the five kinds that were writing manifests at the time: the tar.gz, the deb,
+# the exe, the msix and the portable zip each have one published beside them
+# today. It cannot have been for the two that only start writing one now — the
+# notarized macOS zip and the snap — so their first upload is expected to be
+# refused, and must not fail an artifact upload that already succeeded.
+#
+# Drop the `||` once `AuthPass.app-<version>.zip.manifest.json` and
+# `authpass_<version>_amd64.snap.manifest.json` are in the allow-list too
+# (packages/artifact_server/artifact-push.php, in authpass-cloud); a
+# silent-refusal state is not worth keeping.
 manifest_file="${upload_file}.manifest.json"
 if [ -f "${manifest_file}" ]; then
   curl --request POST \

@@ -40,6 +40,13 @@ and the download are the same build. Then submits to Apple, waits, staples the
 ticket into the bundle and checks the result with `spctl` — the same thing
 Gatekeeper does, so a pass means it opens without a right-click.
 
+The zip is named `AuthPass.app-<version>_<build>.zip`, which is the name the
+artifact server admits, and gets a `.manifest.json` beside it like every other
+release artifact — so `_tools/upload-artifact.sh <the zip>` publishes both, with
+no name to repeat. The version and build number in that name are read out of the
+app itself; the commit comes from a record `build-macos.sh` leaves beside the
+archive, because by the time this runs the tree may have moved.
+
 Not on CI on purpose: notarization is refused for the app-scoped key the
 uploaders use and needs a team key, which cannot be limited to one app. It
 reads one from `~/.appstoreconnect`, never from the repository.
