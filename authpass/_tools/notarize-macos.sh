@@ -64,6 +64,29 @@ if [ ! -f "$NOTARY_KEY" ]; then
   echo "  outside the repository. Override with AUTHPASS_NOTARY_KEY." >&2
   exit 1
 fi
+# The commit the archive was built from, written by build-macos.sh before the
+# build could move the tree. It cannot be derived here — this runs long after
+# the build, from a laptop, and `git rev-parse HEAD` now would certify whatever
+# the tree happens to hold. Checked before notarization rather than beside the
+# manifest write at the end, so a missing record costs nothing instead of
+# surfacing after several minutes of waiting on Apple.
+BUILD_FACTS="${ARCHIVE}.build-facts"
+if [ ! -f "$BUILD_FACTS" ]; then
+  echo "missing $BUILD_FACTS — rebuild with _tools/build-macos.sh, which records" >&2
+  echo "  the commit the archive was built from. Guessing it here would put a" >&2
+  echo "  commit in the build manifest that nothing actually built." >&2
+  exit 1
+fi
+# Fails on a key that is not there rather than yielding an empty value: a
+# missing `dirty` read as empty would certify a dirty build as clean.
+fact() {
+  local line
+  line=$(grep -m1 "^$1=" "$BUILD_FACTS") || {
+    echo "$BUILD_FACTS records no $1 — rebuild with _tools/build-macos.sh" >&2
+    exit 1
+  }
+  echo "${line#*=}"
+}
 
 KEYCHAIN="$HOME/Library/Keychains/authpass-notarize-$$.keychain-db"
 KEYCHAIN_PASSWORD="$(openssl rand -hex 24)"
@@ -108,10 +131,24 @@ if [ -z "$APP" ]; then
   exit 1
 fi
 
+# What this is a build of, read back out of the app that goes inside the zip:
+# FLUTTER_BUILD_NAME and FLUTTER_BUILD_NUMBER are what macos/Runner/Info.plist
+# resolves these two from, so a number read here cannot disagree with the bytes
+# being shipped the way a retyped one can.
+VERSION_NAME=$(plutil -extract CFBundleShortVersionString raw -o - "$APP/Contents/Info.plist")
+BUILD_NUMBER=$(plutil -extract CFBundleVersion raw -o - "$APP/Contents/Info.plist")
+
 # Notarization takes an archive, not a bundle. ditto rather than zip: zip does
 # not preserve the symlinks inside a macOS framework, and the result fails to
 # notarize in a way that is tedious to diagnose.
-ZIP="$OUTPUT/$(basename "${APP%.app}").zip"
+#
+# Named the way it is published rather than after the bundle. artifact-push.php
+# admits `AuthPass.app-<version>.zip` and refuses everything else, so a zip
+# called `AuthPass.zip` could only be uploaded by repeating the real name as
+# upload-artifact.sh's second argument — and the manifest written beside it has
+# to carry the published name as well, since a reader refuses a sidecar whose
+# stem disagrees with the artifact it names.
+ZIP="$OUTPUT/$(basename "$APP")-${VERSION_NAME}_${BUILD_NUMBER}.zip"
 echo "==> zipping for submission"
 ditto -c -k --keepParent "$APP" "$ZIP"
 
@@ -131,6 +168,49 @@ ditto -c -k --keepParent "$APP" "$ZIP"
 echo "==> verifying the way Gatekeeper will"
 spctl --assess --type execute --verbose=2 "$APP"
 
+# The build manifest, beside the artifact and digested from the bytes as they
+# stand — so after stapling and the final re-zip, never before. The same writer
+# and the same shape as every other release artifact; release.sh's
+# `write_manifest` is a shell function inside a script that allocates a build
+# number and runs a whole release, so it can be matched from here but not
+# reused.
+#
+# It is worth more here than anywhere else: this is the one artifact built on a
+# laptop, so there is no CI run behind it to fall back on as weaker evidence
+# that the build number on the download page was ever produced.
+#
+# Each fact is read into a variable first. A failing `fact` inside an `if`
+# condition or a command argument would not stop the script — set -e does not
+# apply there — and would hand the writer an empty value, which is the silent
+# wrongness this whole file exists to avoid.
+git_sha=$(fact gitSha)
+dirty_fact=$(fact dirty)
+flutter_version=$(fact flutter)
+if [ "$dirty_fact" = true ]; then
+  dirty=--dirty
+else
+  dirty=--no-dirty
+fi
+# Absolute, because ship.sh runs cux_ship from _tools/cux_ship: a relative path
+# resolves against the wrong directory there.
+case "$ZIP" in
+  /*) zip_path="$ZIP" ;;
+  *) zip_path="$PWD/$ZIP" ;;
+esac
+
+echo "==> writing the build manifest"
+./_tools/ship.sh manifest write \
+  --artifact "${zip_path}" \
+  --platform macos \
+  --format zip \
+  --version-name "${VERSION_NAME}" \
+  --build-number "${BUILD_NUMBER}" \
+  --git-sha "${git_sha}" \
+  "${dirty}" \
+  ${flutter_version:+--toolchain "flutter=${flutter_version}"}
+
 echo
 echo "notarized $ZIP"
+# No second argument: the zip already carries the name it is published under,
+# and upload-artifact.sh ships the manifest beside it.
 echo "upload it with: _tools/upload-artifact.sh $ZIP"
