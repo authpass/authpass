@@ -447,6 +447,52 @@ class KdbxBloc {
     return newFile;
   }
 
+  /// Like [openFile], for a password typed in by the user.
+  ///
+  /// A kdbx file can be locked with an *empty password* (the password is part
+  /// of the composite key, hashed as the empty string) or with no password at
+  /// all (only a key file, or nothing). Both look the same in an empty password
+  /// field. So an empty password is tried as "no password" first, and then as
+  /// an empty password, before the credentials are reported as invalid.
+  Stream<OpenFileResult> openFileWithPassword(
+    FileSource file, {
+    required String password,
+    Uint8List? keyFile,
+    bool addToQuickUnlock = false,
+  }) async* {
+    final attempts = <Credentials>[
+      Credentials.composite(
+        password.isEmpty ? null : ProtectedValue.fromString(password),
+        keyFile,
+      ),
+      if (password.isEmpty)
+        Credentials.composite(ProtectedValue.fromString(password), keyFile),
+    ];
+    for (final credentials in attempts) {
+      var yielded = false;
+      try {
+        await for (final result in openFile(
+          file,
+          credentials,
+          addToQuickUnlock: addToQuickUnlock,
+        )) {
+          yielded = true;
+          yield result;
+        }
+        return;
+      } on KdbxInvalidKeyException {
+        // Only a failure of the very first unlock is a wrong guess; later
+        // yields are the same file reloaded in the background.
+        if (yielded || credentials == attempts.last) {
+          rethrow;
+        }
+        _logger.fine(
+          '$file: Invalid key without password, trying with an empty password.',
+        );
+      }
+    }
+  }
+
   Stream<OpenFileResult> openFile(
     FileSource file,
     Credentials credentials, {
