@@ -1461,8 +1461,9 @@ class KdbxBloc {
         newFile.fileSource: newFile,
       }),
     );
-    // TODO also do not update quick unlock if this file is not in quick unlock.
-    if (_openedFilesQuickUnlock.isNotEmpty) {
+    // Quick unlock is keyed by file source, so it has to follow the move.
+    if (_openedFilesQuickUnlock.remove(oldSource)) {
+      _openedFilesQuickUnlock.add(output);
       try {
         await _updateQuickUnlockStore();
       } on AuthException catch (e, stackTrace) {

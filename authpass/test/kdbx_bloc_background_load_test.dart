@@ -151,7 +151,8 @@ class _RenamedFileSource extends FileSource {
 /// A second place to save to, with a uuid of its own so it is a genuinely
 /// different [FileSource].
 class _PlainFileSource extends FileSource {
-  _PlainFileSource() : super(databaseName: 'other', uuid: 'other-source');
+  _PlainFileSource({super.uuid = 'other-source'})
+    : super(databaseName: 'other');
 
   Uint8List? written;
 
@@ -985,6 +986,56 @@ void main() {
         'cached',
         reason: 'the open database was replaced by pre-save origin content',
       );
+    });
+  });
+
+  group('quick unlock follows a save as', () {
+    setUp(() {
+      QuickUnlockStorage.debugForceNoBiometricSupport = true;
+    });
+    tearDown(() {
+      QuickUnlockStorage.debugForceNoBiometricSupport = false;
+    });
+
+    Future<KdbxOpenedFile> openFirst(bool addToQuickUnlock) async {
+      final source = _PlainFileSource(uuid: 'first-source');
+      source.written = await _format.create(_credentials, 'test').save();
+      final openIt = StreamIterator(
+        bloc.openFile(
+          source,
+          _credentials,
+          addToQuickUnlock: addToQuickUnlock,
+        ),
+      );
+      expect(await openIt.moveNext(), isTrue);
+      final opened = openIt.current.kdbxOpenedFile!;
+      await openIt.cancel();
+      return opened;
+    }
+
+    // Issue #258: the old source stayed in the quick unlock set, the new one
+    // was never added, so the store lost the database and closing it left a
+    // stale entry behind.
+    test('moves the quick unlock entry to the new source', () async {
+      final opened = await openFirst(true);
+      expect(bloc.hasQuickUnlockOpen(), isTrue);
+
+      final moved = await bloc.saveAs(opened, _PlainFileSource());
+      expect(bloc.hasQuickUnlockOpen(), isTrue);
+
+      // The by-kdbx-file index is a stream listener behind; in the app the
+      // user closes long after.
+      await pumpEventQueue();
+      await bloc.close(moved.kdbxFile);
+      expect(bloc.hasQuickUnlockOpen(), isFalse);
+    });
+
+    test('does not add a file that was not in quick unlock', () async {
+      final opened = await openFirst(false);
+      expect(bloc.hasQuickUnlockOpen(), isFalse);
+
+      await bloc.saveAs(opened, _PlainFileSource());
+      expect(bloc.hasQuickUnlockOpen(), isFalse);
     });
   });
 }
