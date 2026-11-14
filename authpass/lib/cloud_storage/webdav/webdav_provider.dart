@@ -35,6 +35,7 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
   static const METHOD_HEAD = 'HEAD'; // NON-NLS
   static const METHOD_PUT = 'PUT'; // NON-NLS
   static const METHOD_PROPFIND = 'PROPFIND'; // NON-NLS
+  static const contentTypeXml = 'application/xml'; // NON-NLS
 
   xml.XmlNode _propfindRequest() {
     return nonNls(() {
@@ -180,6 +181,10 @@ class WebDavProvider extends CloudStorageProviderClientBase<WebDavClient> {
     final parentUri = _uriForEntity(client, parent);
     final request = Request(METHOD_PROPFIND, parentUri);
     request.headers['Depth'] = '1'; // NON-NLS
+    // RFC 4918 section 8.2: an XML body is sent as application/xml. Without
+    // this the http package labels a string body text/plain, which strict
+    // servers (lighttpd mod_webdav) refuse with 415.
+    request.headers[HttpHeaders.contentTypeHeader] = contentTypeXml;
     final body = _propfindRequest();
     //    _logger.finest('Requesting: ${body.toXmlString(pretty: true)}');
     request.body = body.toXmlString();
