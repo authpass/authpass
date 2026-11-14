@@ -733,6 +733,13 @@ class _EntryDetailsState extends State<EntryDetails>
                       builder: (context) => AttachmentBottomSheet(
                         entry: entry,
                         attachment: e,
+                        onRemoved: () {
+                          // `removeBinary` does not emit a change event
+                          // for an entry which is already dirty.
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
                       ),
                     );
                   },
@@ -905,6 +912,11 @@ class _EntryDetailsState extends State<EntryDetails>
       fileName: fileName,
       bytes: bytes,
     );
+    // `createBinary` does not emit a change event for an entry which is
+    // already dirty, so rebuild explicitly.
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<OtpAuth?> _askForTotpSecret(BuildContext context) async {
@@ -992,10 +1004,12 @@ class AttachmentBottomSheet extends StatelessWidget {
     super.key,
     required this.entry,
     required this.attachment,
+    required this.onRemoved,
   });
 
   final KdbxEntry entry;
   final MapEntry<KdbxKey, KdbxBinary> attachment;
+  final VoidCallback onRemoved;
 
   @override
   Widget build(BuildContext context) {
@@ -1124,6 +1138,7 @@ class AttachmentBottomSheet extends StatelessWidget {
             );
             if (confirm) {
               entry.removeBinary(attachment.key);
+              onRemoved();
             }
           },
         ),
