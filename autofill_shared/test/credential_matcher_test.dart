@@ -23,6 +23,55 @@ void main() {
   CredentialMatchQuality? matchApp(String package, String? entryUrl) =>
       matcher.match(CredentialRequest.application(package), entryUrl);
 
+  group('searchTermFor', () {
+    test('drops the www. prefix browsers report', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['www.paypal.com'],
+          packageNames: ['com.kiwibrowser.browser'],
+        ),
+        'paypal.com',
+      );
+    });
+
+    test('leaves other hosts unchanged', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['mail.example.com'],
+          packageNames: [],
+        ),
+        'mail.example.com',
+      );
+    });
+
+    test('falls back to the package name, skipping android', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['', ''],
+          packageNames: ['android', 'com.example.app'],
+        ),
+        'com.example.app',
+      );
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: [],
+          packageNames: ['android'],
+        ),
+        isNull,
+      );
+    });
+
+    test('keeps a domain hostOf rejects as is', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['not a host'],
+          packageNames: ['com.example.app'],
+        ),
+        'not a host',
+      );
+    });
+  });
+
   group('hostOf', () {
     test('extracts the host from a full url', () {
       expect(
