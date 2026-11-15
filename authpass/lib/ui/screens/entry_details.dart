@@ -402,6 +402,9 @@ class _EntryDetailsState extends State<EntryDetails>
     with StreamSubscriberMixin {
   List<Tuple3<GlobalKey<_EntryFieldState>, KdbxKey, CommonField?>>? _fieldKeys;
 
+  /// Unsaved edits of hidden protected fields, shared with the fields.
+  final Map<KdbxKey, String> _pendingEdits = {};
+
   IntentActionRegistration? _shortcutRegistration;
 
   @override
@@ -596,6 +599,11 @@ class _EntryDetailsState extends State<EntryDetails>
     _logger.fine('_EntryDetailsState.didUpdateWidget');
     if (oldWidget.entry != widget.entry) {
       _logger.info('_EntryDetailsState: widget.entry changed.');
+      // The screen creates a new view model whenever the file reports a
+      // change, so only a different underlying entry drops the edits.
+      if (oldWidget.entry.entry != widget.entry.entry) {
+        _pendingEdits.clear();
+      }
       _initFields(Provider.of<CommonFields>(context));
     }
   }
@@ -684,6 +692,7 @@ class _EntryDetailsState extends State<EntryDetails>
                       entry: entry,
                       fieldKey: f.item2,
                       commonField: f.item3,
+                      pendingEdits: _pendingEdits,
                       onChangedMetadata: () => setState(() {
                         _initFields(
                           Provider.of<CommonFields>(context, listen: false),
@@ -1269,6 +1278,7 @@ class EntryField extends StatefulWidget {
     required this.fieldKey,
     this.commonField,
     required this.onChangedMetadata,
+    this.pendingEdits,
   });
 
   final FieldType fieldType;
@@ -1276,6 +1286,11 @@ class EntryField extends StatefulWidget {
   final KdbxKey fieldKey;
   final CommonField? commonField;
   final VoidCallback onChangedMetadata;
+
+  /// Edits of hidden protected fields which are not saved yet, by field key.
+  /// Owned by the parent, so that they survive the field state being replaced
+  /// (renaming a field gives it a new state).
+  final Map<KdbxKey, String>? pendingEdits;
 
   @override
   _EntryFieldState createState() =>
@@ -1321,9 +1336,27 @@ class _EntryFieldState extends State<EntryField>
       ? widget.commonField?.protect == true
       : _fieldValue is ProtectedValue;
 
+  final Map<KdbxKey, String> _ownPendingEdits = {};
+
+  Map<KdbxKey, String> get _pendingEdits =>
+      widget.pendingEdits ?? _ownPendingEdits;
+
+  /// Edited value of a protected field which was hidden again after it lost
+  /// focus, but was not saved yet. It is only written to the entry when the
+  /// form is saved, so that discarding the changes restores the old value.
+  String? get _pendingText => _pendingEdits[widget.fieldKey];
+
+  set _pendingText(String? value) {
+    if (value == null) {
+      _pendingEdits.remove(widget.fieldKey);
+    } else {
+      _pendingEdits[widget.fieldKey] = value;
+    }
+  }
+
   String? get _valueCurrent =>
       (_isValueObscured
-          ? widget.entry.getString(widget.fieldKey)?.getText()
+          ? _pendingText ?? widget.entry.getString(widget.fieldKey)?.getText()
           : _controller.text) ??
       _fieldValue?.getText();
 
@@ -1337,14 +1370,19 @@ class _EntryFieldState extends State<EntryField>
     _initController();
   }
 
+  /// Sets up the text field and the obscured state from the stored value.
+  /// A pending edit is kept while the field is obscured, otherwise it moves
+  /// into the text field, which is then the source of the edit.
   void _initController() {
     if (_fieldValue is ProtectedValue || widget.commonField?.protect == true) {
       _isValueObscured = true;
       _controller = TextEditingController();
     } else {
+      _isValueObscured = false;
       _controller = TextEditingController(
-        text: _fieldValue?.getText() ?? CharConstants.empty,
+        text: _pendingText ?? _fieldValue?.getText() ?? CharConstants.empty,
       );
+      _pendingText = null;
     }
   }
 
@@ -1370,7 +1408,10 @@ class _EntryFieldState extends State<EntryField>
     );
     if (!_focusNode.hasFocus) {
       setState(() {
-        _fieldValue = ProtectedValue.fromString(_controller.text);
+        final stored =
+            widget.entry.getString(widget.fieldKey)?.getText() ??
+            CharConstants.empty;
+        _pendingText = _controller.text == stored ? null : _controller.text;
         _isValueObscured = true;
         _logger.finer('${widget.fieldKey} _isProtected= $_isValueObscured');
       });
@@ -1480,7 +1521,15 @@ class _EntryFieldState extends State<EntryField>
           initialValue: widget.fieldKey.key,
         ).show(context);
         if (key != null) {
-          widget.entry.renameKey(widget.fieldKey, KdbxKey(key));
+          final newKey = KdbxKey(key);
+          // renaming replaces this field state, so the pending edit moves to
+          // the new name; it is written when the form is saved.
+          final pending = _pendingText;
+          _pendingText = null;
+          widget.entry.renameKey(widget.fieldKey, newKey);
+          if (pending != null) {
+            _pendingEdits[newKey] = pending;
+          }
           widget.onChangedMetadata();
         }
         break;
@@ -1488,23 +1537,39 @@ class _EntryFieldState extends State<EntryField>
         await _launchPasswordGenerator();
         break;
       case EntryAction.protect:
+        // Only the stored value is converted. An edit which is not saved
+        // yet (pending, or in the text field) is carried over and written
+        // with the form.
+        final storedText =
+            widget.entry.getString(widget.fieldKey)?.getText() ??
+            CharConstants.empty;
+        final String? pending;
+        if (_isValueObscured) {
+          pending = _pendingText;
+        } else {
+          pending = _controller.text == storedText ? null : _controller.text;
+        }
         setState(() {
-          if (_isProtected) {
-            _fieldValue = PlainValue(_valueCurrent ?? CharConstants.empty);
-            _isValueObscured = false;
-          } else {
-            _logger.fine(
-              'protected: $_isProtected, obscured: $_isValueObscured, current: $_valueCurrent',
-            );
-            _fieldValue = ProtectedValue.fromString(
-              _valueCurrent ?? CharConstants.empty,
-            );
-            _isValueObscured = true;
-          }
+          _fieldValue = _isProtected
+              ? PlainValue(storedText)
+              : ProtectedValue.fromString(storedText);
+          _pendingText = pending;
           _initController();
         });
+        if (pending != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) {
+              return;
+            }
+            final state = _formFieldKey.currentState;
+            if (state is FormFieldState<String>) {
+              state.didChange(pending);
+            }
+          });
+        }
         break;
       case EntryAction.delete:
+        _pendingText = null;
         widget.entry.removeString(widget.fieldKey);
         widget.onChangedMetadata();
         break;
@@ -1526,6 +1591,7 @@ class _EntryFieldState extends State<EntryField>
               entryUuid: widget.entry.uuid.uuid,
             );
             setState(() {
+              _pendingText = null;
               _isValueObscured = false;
               _controller.text = address!;
               _fieldValue = PlainValue(_controller.text);
@@ -1660,14 +1726,25 @@ class _EntryFieldState extends State<EntryField>
 
   void _generatedPassword(String password) {
     setState(() {
+      _pendingText = null;
       _isValueObscured = false;
       _controller.text = password;
-      _fieldValue = ProtectedValue.fromString(_controller.text);
       _controller.selection = TextSelection(
         baseOffset: 0,
         extentOffset: _controller.text.length,
       );
       _focusNode.requestFocus();
+    });
+    // The text field may only be built with the next frame, in which case it
+    // does not notice the new text, so tell the form about the change.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final state = _formFieldKey.currentState;
+      if (state is FormFieldState<String>) {
+        state.didChange(password);
+      }
     });
     copyValue();
   }
@@ -1690,10 +1767,30 @@ class _EntryFieldState extends State<EntryField>
       : _buildStringEntryFieldEditor();
 
   Widget _buildObscuredEntryFieldEditor() {
+    return FormField<String>(
+      // Writes the pending value, when the form is saved.
+      onSaved: (_) => _commitPendingValue(),
+      builder: (_) => _buildObscuredEntryFieldEditorContent(),
+    );
+  }
+
+  void _commitPendingValue() {
+    final pending = _pendingText;
+    if (pending != null) {
+      _fieldValue = _isProtected
+          ? ProtectedValue.fromString(pending)
+          : PlainValue(pending);
+      _pendingText = null;
+    }
+  }
+
+  Widget _buildObscuredEntryFieldEditorContent() {
     return ObscuredEntryFieldEditor(
       onPressed: () {
         setState(() {
           _controller.text = _valueCurrent ?? CharConstants.empty;
+          // the text field is the source of the edit from now on.
+          _pendingText = null;
           _controller.selection = TextSelection(
             baseOffset: 0,
             extentOffset: _controller.text.length,
@@ -1723,6 +1820,7 @@ class _EntryFieldState extends State<EntryField>
               ? ProtectedValue.fromString(value)
               : PlainValue(value);
           _fieldValue = newValue;
+          _pendingText = null;
         }
       },
       fieldKey: widget.fieldKey,
