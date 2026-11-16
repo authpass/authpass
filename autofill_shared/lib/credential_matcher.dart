@@ -117,7 +117,14 @@ class CredentialMatcher {
       // free text in the url field shows up here.
       return null;
     }
-    return host.startsWith('www.') ? host.substring(4) : host; // NON-NLS
+    final stripped =
+        host.startsWith('www.') // NON-NLS
+        ? host.substring(4)
+        : host;
+    // `www.` with nothing after it strips to the empty string, which is no
+    // more a host than what the caller started with. Returning it would
+    // defeat every `?? url` fallback, since empty is not null.
+    return stripped.nullIfEmpty;
   }
 
   /// The text to put in the search field when no entry matched a fill request:

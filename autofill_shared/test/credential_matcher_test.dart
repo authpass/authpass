@@ -70,6 +70,18 @@ void main() {
         'not a host',
       );
     });
+
+    test('never searches for nothing', () {
+      // `www.` normalises to the empty string. Searching for it would list
+      // every entry in the vault under a banner naming the requesting site.
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['www.'],
+          packageNames: ['com.example.app'],
+        ),
+        'www.',
+      );
+    });
   });
 
   group('hostOf', () {
@@ -120,6 +132,11 @@ void main() {
       expect(CredentialMatcher.hostOf(''), isNull);
       expect(CredentialMatcher.hostOf('   '), isNull);
       expect(CredentialMatcher.hostOf('some note about the account'), isNull);
+    });
+
+    test('returns null when stripping www leaves nothing', () {
+      expect(CredentialMatcher.hostOf('www.'), isNull);
+      expect(CredentialMatcher.hostOf('https://www.'), isNull);
     });
   });
 
