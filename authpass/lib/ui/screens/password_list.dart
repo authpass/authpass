@@ -1990,14 +1990,8 @@ extension on AutofillMetadata {
         .map(CredentialRequest.application),
   ];
 
-  String? get searchTerm =>
-      webDomains
-          .where((element) => element.domain.isNotEmpty)
-          .firstOrNull
-          ?.domain ??
-      packageNames
-          .where(
-            (element) => element != 'android', // NON-NLS
-          )
-          .firstOrNull;
+  String? get searchTerm => CredentialMatcher.searchTermFor(
+    webDomains: webDomains.map((d) => d.domain),
+    packageNames: packageNames,
+  );
 }
