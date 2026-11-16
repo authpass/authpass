@@ -93,9 +93,10 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
 
   @override
   void dispose() {
-    super.dispose();
     // An entry which was just created with the add button, but never edited,
-    // is not worth keeping.
+    // is not worth keeping. Before `super.dispose()`, which ends this state:
+    // afterwards it is defunct, and reading `widget` from it is not something
+    // the framework promises to keep working.
     final kdbxBloc = _kdbxBloc;
     if (kdbxBloc != null) {
       if (kdbxBloc.openedFilesKdbx.contains(widget.entry.file)) {
@@ -105,6 +106,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
         kdbxBloc.forgetNewEntry(widget.entry);
       }
     }
+    super.dispose();
   }
 
   @override

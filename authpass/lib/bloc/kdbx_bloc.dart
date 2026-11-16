@@ -32,8 +32,6 @@ import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_async_utils/flutter_async_utils.dart';
 import 'package:kdbx/kdbx.dart';
-// ignore: implementation_imports
-import 'package:kdbx/src/utils/sequence.dart' show TimeSequence;
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
@@ -249,7 +247,6 @@ class _NewEntry {
     required this.parent,
     required this.lastModified,
     required this.parentData,
-    required this.fileWasClean,
   });
 
   final KdbxFile file;
@@ -259,7 +256,6 @@ class _NewEntry {
   /// The parent group's own data right after the entry was added, see
   /// [KdbxBloc._groupData].
   final String parentData;
-  final bool fileWasClean;
 }
 
 class OpenedKdbxFiles {
@@ -1274,7 +1270,6 @@ class KdbxBloc {
       file = openedFilesKdbx.first;
     }
     final rootGroup = group ?? file.body.rootGroup;
-    final fileWasClean = !file.isDirty;
     final entry = KdbxEntry.create(file, rootGroup);
     rootGroup.addEntry(entry);
     _newEntries[entry] = _NewEntry(
@@ -1282,7 +1277,6 @@ class KdbxBloc {
       parent: rootGroup,
       lastModified: entry.times.lastModificationTime.get(),
       parentData: _groupData(rootGroup),
-      fileWasClean: fileWasClean,
     );
     return entry;
   }
@@ -1296,9 +1290,10 @@ class KdbxBloc {
   /// Meant to be called once the user is done with the entry, so that pressing
   /// the add button and going back does not leave an empty entry behind.
   ///
-  /// If the file did not have any unsaved changes before the entry was
-  /// created, it is clean again afterwards. Returns `true` if the entry was
-  /// removed.
+  /// The unsaved state that adding the entry created is dropped with it, on
+  /// the entry and on its group, so a file that had nothing else to save is
+  /// clean again and the save indicator goes away. Anything else the user has
+  /// touched stays unsaved. Returns `true` if the entry was removed.
   bool discardUntouchedNewEntry(KdbxEntry entry) {
     final created = _newEntries.remove(entry);
     if (created == null) {
@@ -1316,16 +1311,17 @@ class KdbxBloc {
     // The group might have been renamed or got another icon while the entry
     // was open. That change is the user's, and it is still unsaved.
     final parentUntouched = _groupData(parent) == created.parentData;
+    // Records no deleted object, because nothing outside this session ever
+    // held the entry - see `KdbxObject.isKnownOutsideThisSession`.
     file.deletePermanently(entry);
-    if (created.fileWasClean &&
-        parentUntouched &&
-        file.dirtyObjects.every((o) => o == entry || o == parent)) {
-      // Everything that is dirty was caused by adding and removing the entry.
-      // kdbx has no public way to mark objects clean other than `onSaved`,
-      // whose argument type is only available from the package's src folder.
-      // test/kdbx_bloc_new_entry_test.dart fails if a kdbx update breaks this.
-      file.onSaved(TimeSequence.now());
-    }
+    // Only these two, so anything else the user has edited is still waiting to
+    // be saved. The group is left out when it carries a change of its own: a
+    // rename while the entry was open is the user's, and clearing it would
+    // leave it unsaved with nothing left to prompt for it.
+    file.markClean([
+      entry,
+      if (parentUntouched) ...[parent],
+    ]);
     return true;
   }
 
