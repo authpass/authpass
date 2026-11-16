@@ -26,6 +26,13 @@ analyzer:
     - lib/**/*.freezed.dart
     - test/**/*.mocks.dart
     - lib/generated_plugin_registrant.dart
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   language:
     strict-casts: true
     strict-raw-types: true

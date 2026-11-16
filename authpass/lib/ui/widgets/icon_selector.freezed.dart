@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'icon_selector.dart';
@@ -9,6 +9,7 @@ part of 'icon_selector.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -19,14 +20,14 @@ mixin _$SelectedIcon implements DiagnosticableTreeMixin {
 
 @override
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
+    properties
     ..add(DiagnosticsProperty('type', 'SelectedIcon'))
     ;
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SelectedIcon);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SelectedIcon);
 }
 
 
@@ -35,7 +36,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'SelectedIcon()';
+    return 'SelectedIcon()';
 }
 
 
@@ -195,23 +196,25 @@ _$SelectedIconPredefinedCopyWith<_SelectedIconPredefined> get copyWith => __$Sel
 
 @override
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
+    properties
     ..add(DiagnosticsProperty('type', 'SelectedIcon.predefined'))
     ..add(DiagnosticsProperty('icon', icon));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SelectedIconPredefined&&(identical(other.icon, icon) || other.icon == icon));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SelectedIconPredefined&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,icon);
+int get hashCode {
+    return Object.hash(runtimeType,icon);
+}
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'SelectedIcon.predefined(icon: $icon)';
+    return 'SelectedIcon.predefined(icon: $icon)';
 }
 
 
@@ -267,23 +270,25 @@ _$SelectedIconCustomCopyWith<_SelectedIconCustom> get copyWith => __$SelectedIco
 
 @override
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
+    properties
     ..add(DiagnosticsProperty('type', 'SelectedIcon.custom'))
     ..add(DiagnosticsProperty('custom', custom));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SelectedIconCustom&&(identical(other.custom, custom) || other.custom == custom));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SelectedIconCustom&&(identical(other.custom, custom) || other.custom == custom));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,custom);
+int get hashCode {
+    return Object.hash(runtimeType,custom);
+}
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'SelectedIcon.custom(custom: $custom)';
+    return 'SelectedIcon.custom(custom: $custom)';
 }
 
 
