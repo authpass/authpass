@@ -1552,71 +1552,15 @@ class KdbxBloc {
 
     _logger.info('\n\n\n===========\n\n\n');
     _logger.info('starting merge.');
-    final unsavedStates = _unsavedEntryStates(
-      file.kdbxFile,
-      kdbxReadFile.file!,
-    );
+    // An unsaved edit which the other copy has a newer version of is kept as
+    // a history revision by the merge itself, and held back from the history
+    // limits until the next save writes it out - see kdbx 2.7.0, which is
+    // where that moved to.
     file.kdbxFile.merge(kdbxReadFile.file!);
-    _keepUnsavedEntryStates(file.kdbxFile, unsavedStates);
 
     _logger.info('\n\nDONE MERGE\n\n\n\n');
 
     yield ReloadStatus.merged;
-  }
-
-  /// Copies the state of every unsaved entry that [remote] has a newer copy
-  /// of, before [local] is merged with it, because the merge overwrites it.
-  ///
-  /// An entry takes a history revision when it turns dirty. One that is dirty
-  /// already is overwritten by an incoming change without taking one, so the
-  /// unsaved state would be in neither the fields nor the history, and the next
-  /// save would write that loss to the origin. Hand the result to
-  /// [_keepUnsavedEntryStates] after the merge.
-  List<KdbxEntry> _unsavedEntryStates(KdbxFile local, KdbxFile remote) {
-    final remoteEntries = {
-      for (final e in remote.body.rootGroup.getAllEntries()) e.uuid: e,
-    };
-    return [
-      for (final entry in local.dirtyObjects.whereType<KdbxEntry>())
-        if (remoteEntries[entry.uuid]?.wasModifiedAfter(entry) ?? false)
-          KdbxEntry.read(
-            entry.ctx,
-            entry.parent,
-            entry.toXml(),
-            isHistoryEntry: true,
-          )..file = local,
-    ];
-  }
-
-  /// Adds the [states] taken by [_unsavedEntryStates] to the history of their
-  /// entries in [local], unless the merge has put that state there already.
-  ///
-  /// The merge does it in two cases: kdbx records the state of an entry whose
-  /// only unsaved change is a move itself, and the remote copy may hold it in
-  /// its own history. Asking afterwards, instead of predicting either, means
-  /// the same state is never in the history twice, which under
-  /// `HistoryMaxItems` would push out a real older revision.
-  ///
-  /// This does not prune the history, so an entry can end up one revision over
-  /// the limit until it is next edited.
-  void _keepUnsavedEntryStates(KdbxFile local, List<KdbxEntry> states) {
-    if (states.isEmpty) {
-      return;
-    }
-    final entries = {
-      for (final e in local.body.rootGroup.getAllEntries()) e.uuid: e,
-    };
-    for (final state in states) {
-      final entry = entries[state.uuid];
-      final modified = state.times.lastModificationTime.get();
-      if (entry == null ||
-          entry.history.any(
-            (h) => h.times.lastModificationTime.get() == modified,
-          )) {
-        continue;
-      }
-      entry.history.add(state);
-    }
   }
 
   Future<AttachmentProvider> attachmentProviderForFileSource(
