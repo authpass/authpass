@@ -484,10 +484,10 @@ class _EntryDetailsState extends State<EntryDetails>
       ),
       CopyTotpIntent: CallbackAction(
         onInvoke: (_) {
-          _logger.fine('Copying ${commonFields.otpAuth}');
+          _logger.fine('Copying ${commonFields.otp}');
           _copyField([
-            commonFields.otpAuth,
-            commonFields.otpAuthCompat2,
+            commonFields.otp,
+            commonFields.otpAuthLegacy,
             commonFields.otpAuthCompat1,
           ]);
           return null;
@@ -724,16 +724,13 @@ class _EntryDetailsState extends State<EntryDetails>
               AddFieldButton(
                 onAddField: (key) async {
                   final cf = commonFields[key];
-                  if (cf == commonFields.otpAuth) {
+                  if (cf == commonFields.otp) {
                     final secret = await _askForTotpSecret(context);
                     if (secret == null) {
                       return;
                     }
                     _logger.finer('Got otp auth: $secret');
-                    entry.setString(
-                      key,
-                      ProtectedValue.fromString(secret.toUri().toString()),
-                    );
+                    commonFields.setTotp(entry, secret.toUri().toString());
                   } else {
                     entry.setString(
                       key,
@@ -1250,6 +1247,7 @@ class _AddFieldButtonState extends State<AddFieldButton> {
           key: KdbxKey('__custom'), // NON-NLS
         );
         final fields = commonFields.fields
+            .where((f) => !f.legacy)
             .followedBy([custom])
             .map(
               (f) => PopupMenuItem(
