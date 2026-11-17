@@ -91,8 +91,21 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
   EntryViewModel? entryViewModel;
   KdbxBloc? _kdbxBloc;
 
+  /// Deliberately held here rather than in [StreamSubscriberMixin]'s bag.
+  ///
+  /// That bag is shared with [KdbxObjectSavableStateMixin], whose
+  /// `_registerListener` cancels *all* of it and then re-registers only its
+  /// own listener - and it runs on every `didUpdateWidget`, which an ancestor
+  /// rebuild is enough to cause. This subscription would be cancelled for
+  /// good, and [didChangeDependencies] only subscribes while
+  /// [entryViewModel] is null, so nothing would ever restore it. The screen
+  /// then stopped reacting to anything in the file: an attachment added or
+  /// removed, the title and group in the header, an entry a sync brought in.
+  StreamSubscription<void>? _dirtyObjects;
+
   @override
   void dispose() {
+    _dirtyObjects?.cancel();
     // An entry which was just created with the add button, but never edited,
     // is not worth keeping. Before `super.dispose()`, which ends this state:
     // afterwards it is defunct, and reading `widget` from it is not something
@@ -116,13 +129,11 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
     _kdbxBloc = kdbxBloc;
     if (entryViewModel == null) {
       entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
-      handleSubscription(
-        widget.entry.file.dirtyObjectsChanged.listen((event) {
-          setState(() {
-            entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
-          });
-        }),
-      );
+      _dirtyObjects = widget.entry.file.dirtyObjectsChanged.listen((event) {
+        setState(() {
+          entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
+        });
+      });
     }
   }
 
