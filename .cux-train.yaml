@@ -45,9 +45,19 @@
 # the commit `stable` was built from. That lookup arrived in cux_ship 4.0.1;
 # under the 3.6.0 this repository pinned before, the flag only went into the
 # tag message and HEAD was tagged regardless.
+#
+# `--no-bump` matters as much. Left to itself `release finish` does a second
+# thing after the tag: it moves the branch to the next patch version — rewrites
+# `authpass/pubspec.yaml`, adds a `## X.Y.Z` section to CHANGELOG.md, commits,
+# and pushes that commit straight to `main`. README.md has no such step, the
+# command refuses outright from any branch but `main` (before it tags), and
+# here it comes out half done: the root CHANGELOG.md is a symlink, so the
+# commit carries the pubspec and leaves the changelog edit in the working
+# tree. All three seen in a scratch clone under cux_ship 4.5.0-dev.9. The
+# version is still bumped by hand, as it is today.
 finish:
   kind: run
-  command: "authpass/_tools/ship.sh release finish --version {version} --build-number {build}"
+  command: "authpass/_tools/ship.sh release finish --version {version} --build-number {build} --no-bump"
 
 destinations:
   # ---- the two consoles that will become API destinations (plan step 3) ----
