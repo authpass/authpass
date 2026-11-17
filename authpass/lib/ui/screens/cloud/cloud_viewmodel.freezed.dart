@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'cloud_viewmodel.dart';
@@ -9,6 +9,7 @@ part of 'cloud_viewmodel.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $EmailViewModelCopyWith<EmailViewModel> get copyWith => _$EmailViewModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EmailViewModel&&(identical(other.emailMessage, emailMessage) || other.emailMessage == emailMessage)&&(identical(other.mimeMessage, mimeMessage) || other.mimeMessage == mimeMessage)&&(identical(other.mailbox, mailbox) || other.mailbox == mailbox)&&(identical(other.kdbxEntry, kdbxEntry) || other.kdbxEntry == kdbxEntry));
+  final _this = this as EmailViewModel;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EmailViewModel&&(identical(other.emailMessage, _this.emailMessage) || other.emailMessage == _this.emailMessage)&&(identical(other.mimeMessage, _this.mimeMessage) || other.mimeMessage == _this.mimeMessage)&&(identical(other.mailbox, _this.mailbox) || other.mailbox == _this.mailbox)&&(identical(other.kdbxEntry, _this.kdbxEntry) || other.kdbxEntry == _this.kdbxEntry));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,emailMessage,mimeMessage,mailbox,kdbxEntry);
+int get hashCode {
+  final _this = this as EmailViewModel;
+  return Object.hash(runtimeType,_this.emailMessage,_this.mimeMessage,_this.mailbox,_this.kdbxEntry);
+}
 
 @override
 String toString() {
-  return 'EmailViewModel(emailMessage: $emailMessage, mimeMessage: $mimeMessage, mailbox: $mailbox, kdbxEntry: $kdbxEntry)';
+  final _this = this as EmailViewModel;
+  return 'EmailViewModel(emailMessage: ${_this.emailMessage}, mimeMessage: ${_this.mimeMessage}, mailbox: ${_this.mailbox}, kdbxEntry: ${_this.kdbxEntry})';
 }
 
 
@@ -63,7 +69,7 @@ class _$EmailViewModelCopyWithImpl<$Res>
 /// Create a copy of EmailViewModel
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? emailMessage = null,Object? mimeMessage = freezed,Object? mailbox = freezed,Object? kdbxEntry = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EmailViewModel(
 emailMessage: null == emailMessage ? _self.emailMessage : emailMessage // ignore: cast_nullable_to_non_nullable
 as EmailMessage,mimeMessage: freezed == mimeMessage ? _self.mimeMessage : mimeMessage // ignore: cast_nullable_to_non_nullable
 as MimeMessage?,mailbox: freezed == mailbox ? _self.mailbox : mailbox // ignore: cast_nullable_to_non_nullable
@@ -221,16 +227,18 @@ _$EmailViewModelCopyWith<_EmailViewModel> get copyWith => __$EmailViewModelCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmailViewModel&&(identical(other.emailMessage, emailMessage) || other.emailMessage == emailMessage)&&(identical(other.mimeMessage, mimeMessage) || other.mimeMessage == mimeMessage)&&(identical(other.mailbox, mailbox) || other.mailbox == mailbox)&&(identical(other.kdbxEntry, kdbxEntry) || other.kdbxEntry == kdbxEntry));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmailViewModel&&(identical(other.emailMessage, emailMessage) || other.emailMessage == emailMessage)&&(identical(other.mimeMessage, mimeMessage) || other.mimeMessage == mimeMessage)&&(identical(other.mailbox, mailbox) || other.mailbox == mailbox)&&(identical(other.kdbxEntry, kdbxEntry) || other.kdbxEntry == kdbxEntry));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,emailMessage,mimeMessage,mailbox,kdbxEntry);
+int get hashCode {
+    return Object.hash(runtimeType,emailMessage,mimeMessage,mailbox,kdbxEntry);
+}
 
 @override
 String toString() {
-  return 'EmailViewModel(emailMessage: $emailMessage, mimeMessage: $mimeMessage, mailbox: $mailbox, kdbxEntry: $kdbxEntry)';
+    return 'EmailViewModel(emailMessage: $emailMessage, mimeMessage: $mimeMessage, mailbox: $mailbox, kdbxEntry: $kdbxEntry)';
 }
 
 

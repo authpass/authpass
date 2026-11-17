@@ -46,7 +46,6 @@ import 'package:logging/logging.dart';
 import 'package:macos_secure_bookmarks/macos_secure_bookmarks.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
-import 'package:simple_form_field_validator/simple_form_field_validator.dart';
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
 import 'package:tinycolor/color_extension.dart';
 
@@ -1101,10 +1100,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
                   autovalidateMode: _invalidPassword != null
                       ? AutovalidateMode.always
                       : AutovalidateMode.onUserInteraction,
-                  validator: SValidator.invalidValue(
+                  validator: invalidPasswordValidator(
                     invalidValue: () => _invalidPassword,
                     message: loc.masterPasswordIncorrectValidator,
-                  ).call,
+                  ),
                   onEditingComplete: () async {
                     FocusScope.of(context).unfocus();
 
@@ -1215,12 +1214,10 @@ class _CredentialsScreenState extends State<CredentialsScreen> {
       final stopWatch = Stopwatch();
       try {
         stopWatch.start();
-        final openFileStream = kdbxBloc.openFile(
+        final openFileStream = kdbxBloc.openFileWithPassword(
           widget.kdbxFilePath,
-          Credentials.composite(
-            pw == CharConstants.empty ? null : ProtectedValue.fromString(pw),
-            keyFileContents,
-          ),
+          password: pw,
+          keyFile: keyFileContents,
           addToQuickUnlock: _biometricQuickUnlockActivated ?? false,
         );
         // TODO handle subsequent errors.
