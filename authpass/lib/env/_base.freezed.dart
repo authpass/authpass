@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of '_base.dart';
@@ -9,12 +9,13 @@ part of '_base.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EnvSecrets {
 
- String? get analyticsAmplitudeApiKey; String? get analyticsGoogleAnalyticsId; ({String siteId, String url})? get analyticsMatomo; String? Function()? get googleClientId; String? get googleClientSecret; String? get dropboxKey; String? get dropboxSecret; String? get microsoftClientId; String? get microsoftClientSecret;
+ String? get analyticsAmplitudeApiKey; String? get analyticsGoogleAnalyticsId; ({String siteId, String url,})? get analyticsMatomo; String? Function()? get googleClientId; String? get googleClientSecret; String? get dropboxKey; String? get dropboxSecret; String? get microsoftClientId; String? get microsoftClientSecret;
 /// Create a copy of EnvSecrets
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,21 @@ $EnvSecretsCopyWith<EnvSecrets> get copyWith => _$EnvSecretsCopyWithImpl<EnvSecr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnvSecrets&&(identical(other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) || other.analyticsAmplitudeApiKey == analyticsAmplitudeApiKey)&&(identical(other.analyticsGoogleAnalyticsId, analyticsGoogleAnalyticsId) || other.analyticsGoogleAnalyticsId == analyticsGoogleAnalyticsId)&&(identical(other.analyticsMatomo, analyticsMatomo) || other.analyticsMatomo == analyticsMatomo)&&(identical(other.googleClientId, googleClientId) || other.googleClientId == googleClientId)&&(identical(other.googleClientSecret, googleClientSecret) || other.googleClientSecret == googleClientSecret)&&(identical(other.dropboxKey, dropboxKey) || other.dropboxKey == dropboxKey)&&(identical(other.dropboxSecret, dropboxSecret) || other.dropboxSecret == dropboxSecret)&&(identical(other.microsoftClientId, microsoftClientId) || other.microsoftClientId == microsoftClientId)&&(identical(other.microsoftClientSecret, microsoftClientSecret) || other.microsoftClientSecret == microsoftClientSecret));
+  final _this = this as EnvSecrets;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnvSecrets&&(identical(other.analyticsAmplitudeApiKey, _this.analyticsAmplitudeApiKey) || other.analyticsAmplitudeApiKey == _this.analyticsAmplitudeApiKey)&&(identical(other.analyticsGoogleAnalyticsId, _this.analyticsGoogleAnalyticsId) || other.analyticsGoogleAnalyticsId == _this.analyticsGoogleAnalyticsId)&&(identical(other.analyticsMatomo, _this.analyticsMatomo) || other.analyticsMatomo == _this.analyticsMatomo)&&(identical(other.googleClientId, _this.googleClientId) || other.googleClientId == _this.googleClientId)&&(identical(other.googleClientSecret, _this.googleClientSecret) || other.googleClientSecret == _this.googleClientSecret)&&(identical(other.dropboxKey, _this.dropboxKey) || other.dropboxKey == _this.dropboxKey)&&(identical(other.dropboxSecret, _this.dropboxSecret) || other.dropboxSecret == _this.dropboxSecret)&&(identical(other.microsoftClientId, _this.microsoftClientId) || other.microsoftClientId == _this.microsoftClientId)&&(identical(other.microsoftClientSecret, _this.microsoftClientSecret) || other.microsoftClientSecret == _this.microsoftClientSecret));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,analyticsAmplitudeApiKey,analyticsGoogleAnalyticsId,analyticsMatomo,googleClientId,googleClientSecret,dropboxKey,dropboxSecret,microsoftClientId,microsoftClientSecret);
+int get hashCode {
+  final _this = this as EnvSecrets;
+  return Object.hash(runtimeType,_this.analyticsAmplitudeApiKey,_this.analyticsGoogleAnalyticsId,_this.analyticsMatomo,_this.googleClientId,_this.googleClientSecret,_this.dropboxKey,_this.dropboxSecret,_this.microsoftClientId,_this.microsoftClientSecret);
+}
 
 @override
 String toString() {
-  return 'EnvSecrets(analyticsAmplitudeApiKey: $analyticsAmplitudeApiKey, analyticsGoogleAnalyticsId: $analyticsGoogleAnalyticsId, analyticsMatomo: $analyticsMatomo, googleClientId: $googleClientId, googleClientSecret: $googleClientSecret, dropboxKey: $dropboxKey, dropboxSecret: $dropboxSecret, microsoftClientId: $microsoftClientId, microsoftClientSecret: $microsoftClientSecret)';
+  final _this = this as EnvSecrets;
+  return 'EnvSecrets(analyticsAmplitudeApiKey: ${_this.analyticsAmplitudeApiKey}, analyticsGoogleAnalyticsId: ${_this.analyticsGoogleAnalyticsId}, analyticsMatomo: ${_this.analyticsMatomo}, googleClientId: ${_this.googleClientId}, googleClientSecret: ${_this.googleClientSecret}, dropboxKey: ${_this.dropboxKey}, dropboxSecret: ${_this.dropboxSecret}, microsoftClientId: ${_this.microsoftClientId}, microsoftClientSecret: ${_this.microsoftClientSecret})';
 }
 
 
@@ -45,7 +51,7 @@ abstract mixin class $EnvSecretsCopyWith<$Res>  {
   factory $EnvSecretsCopyWith(EnvSecrets value, $Res Function(EnvSecrets) _then) = _$EnvSecretsCopyWithImpl;
 @useResult
 $Res call({
- String? analyticsAmplitudeApiKey, String? analyticsGoogleAnalyticsId, ({String siteId, String url})? analyticsMatomo, String? Function()? googleClientId, String? googleClientSecret, String? dropboxKey, String? dropboxSecret, String? microsoftClientId, String? microsoftClientSecret
+ String? analyticsAmplitudeApiKey, String? analyticsGoogleAnalyticsId, ({String siteId, String url,})? analyticsMatomo, String? Function()? googleClientId, String? googleClientSecret, String? dropboxKey, String? dropboxSecret, String? microsoftClientId, String? microsoftClientSecret
 });
 
 
@@ -63,11 +69,11 @@ class _$EnvSecretsCopyWithImpl<$Res>
 /// Create a copy of EnvSecrets
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? analyticsAmplitudeApiKey = freezed,Object? analyticsGoogleAnalyticsId = freezed,Object? analyticsMatomo = freezed,Object? googleClientId = freezed,Object? googleClientSecret = freezed,Object? dropboxKey = freezed,Object? dropboxSecret = freezed,Object? microsoftClientId = freezed,Object? microsoftClientSecret = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EnvSecrets(
 analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey ? _self.analyticsAmplitudeApiKey : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
 as String?,analyticsGoogleAnalyticsId: freezed == analyticsGoogleAnalyticsId ? _self.analyticsGoogleAnalyticsId : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
 as String?,analyticsMatomo: freezed == analyticsMatomo ? _self.analyticsMatomo : analyticsMatomo // ignore: cast_nullable_to_non_nullable
-as ({String siteId, String url})?,googleClientId: freezed == googleClientId ? _self.googleClientId : googleClientId // ignore: cast_nullable_to_non_nullable
+as ({String siteId, String url,})?,googleClientId: freezed == googleClientId ? _self.googleClientId : googleClientId // ignore: cast_nullable_to_non_nullable
 as String? Function()?,googleClientSecret: freezed == googleClientSecret ? _self.googleClientSecret : googleClientSecret // ignore: cast_nullable_to_non_nullable
 as String?,dropboxKey: freezed == dropboxKey ? _self.dropboxKey : dropboxKey // ignore: cast_nullable_to_non_nullable
 as String?,dropboxSecret: freezed == dropboxSecret ? _self.dropboxSecret : dropboxSecret // ignore: cast_nullable_to_non_nullable
@@ -158,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? analyticsAmplitudeApiKey,  String? analyticsGoogleAnalyticsId,  ({String siteId, String url})? analyticsMatomo,  String? Function()? googleClientId,  String? googleClientSecret,  String? dropboxKey,  String? dropboxSecret,  String? microsoftClientId,  String? microsoftClientSecret)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? analyticsAmplitudeApiKey,  String? analyticsGoogleAnalyticsId,  ({String siteId, String url,})? analyticsMatomo,  String? Function()? googleClientId,  String? googleClientSecret,  String? dropboxKey,  String? dropboxSecret,  String? microsoftClientId,  String? microsoftClientSecret)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EnvSecrets() when $default != null:
 return $default(_that.analyticsAmplitudeApiKey,_that.analyticsGoogleAnalyticsId,_that.analyticsMatomo,_that.googleClientId,_that.googleClientSecret,_that.dropboxKey,_that.dropboxSecret,_that.microsoftClientId,_that.microsoftClientSecret);case _:
@@ -179,7 +185,7 @@ return $default(_that.analyticsAmplitudeApiKey,_that.analyticsGoogleAnalyticsId,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? analyticsAmplitudeApiKey,  String? analyticsGoogleAnalyticsId,  ({String siteId, String url})? analyticsMatomo,  String? Function()? googleClientId,  String? googleClientSecret,  String? dropboxKey,  String? dropboxSecret,  String? microsoftClientId,  String? microsoftClientSecret)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? analyticsAmplitudeApiKey,  String? analyticsGoogleAnalyticsId,  ({String siteId, String url,})? analyticsMatomo,  String? Function()? googleClientId,  String? googleClientSecret,  String? dropboxKey,  String? dropboxSecret,  String? microsoftClientId,  String? microsoftClientSecret)  $default,) {final _that = this;
 switch (_that) {
 case _EnvSecrets():
 return $default(_that.analyticsAmplitudeApiKey,_that.analyticsGoogleAnalyticsId,_that.analyticsMatomo,_that.googleClientId,_that.googleClientSecret,_that.dropboxKey,_that.dropboxSecret,_that.microsoftClientId,_that.microsoftClientSecret);case _:
@@ -199,7 +205,7 @@ return $default(_that.analyticsAmplitudeApiKey,_that.analyticsGoogleAnalyticsId,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? analyticsAmplitudeApiKey,  String? analyticsGoogleAnalyticsId,  ({String siteId, String url})? analyticsMatomo,  String? Function()? googleClientId,  String? googleClientSecret,  String? dropboxKey,  String? dropboxSecret,  String? microsoftClientId,  String? microsoftClientSecret)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? analyticsAmplitudeApiKey,  String? analyticsGoogleAnalyticsId,  ({String siteId, String url,})? analyticsMatomo,  String? Function()? googleClientId,  String? googleClientSecret,  String? dropboxKey,  String? dropboxSecret,  String? microsoftClientId,  String? microsoftClientSecret)?  $default,) {final _that = this;
 switch (_that) {
 case _EnvSecrets() when $default != null:
 return $default(_that.analyticsAmplitudeApiKey,_that.analyticsGoogleAnalyticsId,_that.analyticsMatomo,_that.googleClientId,_that.googleClientSecret,_that.dropboxKey,_that.dropboxSecret,_that.microsoftClientId,_that.microsoftClientSecret);case _:
@@ -219,7 +225,7 @@ class _EnvSecrets implements EnvSecrets {
 
 @override final  String? analyticsAmplitudeApiKey;
 @override final  String? analyticsGoogleAnalyticsId;
-@override final  ({String siteId, String url})? analyticsMatomo;
+@override final  ({String siteId, String url,})? analyticsMatomo;
 @override final  String? Function()? googleClientId;
 @override final  String? googleClientSecret;
 @override final  String? dropboxKey;
@@ -237,16 +243,18 @@ _$EnvSecretsCopyWith<_EnvSecrets> get copyWith => __$EnvSecretsCopyWithImpl<_Env
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnvSecrets&&(identical(other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) || other.analyticsAmplitudeApiKey == analyticsAmplitudeApiKey)&&(identical(other.analyticsGoogleAnalyticsId, analyticsGoogleAnalyticsId) || other.analyticsGoogleAnalyticsId == analyticsGoogleAnalyticsId)&&(identical(other.analyticsMatomo, analyticsMatomo) || other.analyticsMatomo == analyticsMatomo)&&(identical(other.googleClientId, googleClientId) || other.googleClientId == googleClientId)&&(identical(other.googleClientSecret, googleClientSecret) || other.googleClientSecret == googleClientSecret)&&(identical(other.dropboxKey, dropboxKey) || other.dropboxKey == dropboxKey)&&(identical(other.dropboxSecret, dropboxSecret) || other.dropboxSecret == dropboxSecret)&&(identical(other.microsoftClientId, microsoftClientId) || other.microsoftClientId == microsoftClientId)&&(identical(other.microsoftClientSecret, microsoftClientSecret) || other.microsoftClientSecret == microsoftClientSecret));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnvSecrets&&(identical(other.analyticsAmplitudeApiKey, analyticsAmplitudeApiKey) || other.analyticsAmplitudeApiKey == analyticsAmplitudeApiKey)&&(identical(other.analyticsGoogleAnalyticsId, analyticsGoogleAnalyticsId) || other.analyticsGoogleAnalyticsId == analyticsGoogleAnalyticsId)&&(identical(other.analyticsMatomo, analyticsMatomo) || other.analyticsMatomo == analyticsMatomo)&&(identical(other.googleClientId, googleClientId) || other.googleClientId == googleClientId)&&(identical(other.googleClientSecret, googleClientSecret) || other.googleClientSecret == googleClientSecret)&&(identical(other.dropboxKey, dropboxKey) || other.dropboxKey == dropboxKey)&&(identical(other.dropboxSecret, dropboxSecret) || other.dropboxSecret == dropboxSecret)&&(identical(other.microsoftClientId, microsoftClientId) || other.microsoftClientId == microsoftClientId)&&(identical(other.microsoftClientSecret, microsoftClientSecret) || other.microsoftClientSecret == microsoftClientSecret));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,analyticsAmplitudeApiKey,analyticsGoogleAnalyticsId,analyticsMatomo,googleClientId,googleClientSecret,dropboxKey,dropboxSecret,microsoftClientId,microsoftClientSecret);
+int get hashCode {
+    return Object.hash(runtimeType,analyticsAmplitudeApiKey,analyticsGoogleAnalyticsId,analyticsMatomo,googleClientId,googleClientSecret,dropboxKey,dropboxSecret,microsoftClientId,microsoftClientSecret);
+}
 
 @override
 String toString() {
-  return 'EnvSecrets(analyticsAmplitudeApiKey: $analyticsAmplitudeApiKey, analyticsGoogleAnalyticsId: $analyticsGoogleAnalyticsId, analyticsMatomo: $analyticsMatomo, googleClientId: $googleClientId, googleClientSecret: $googleClientSecret, dropboxKey: $dropboxKey, dropboxSecret: $dropboxSecret, microsoftClientId: $microsoftClientId, microsoftClientSecret: $microsoftClientSecret)';
+    return 'EnvSecrets(analyticsAmplitudeApiKey: $analyticsAmplitudeApiKey, analyticsGoogleAnalyticsId: $analyticsGoogleAnalyticsId, analyticsMatomo: $analyticsMatomo, googleClientId: $googleClientId, googleClientSecret: $googleClientSecret, dropboxKey: $dropboxKey, dropboxSecret: $dropboxSecret, microsoftClientId: $microsoftClientId, microsoftClientSecret: $microsoftClientSecret)';
 }
 
 
@@ -257,7 +265,7 @@ abstract mixin class _$EnvSecretsCopyWith<$Res> implements $EnvSecretsCopyWith<$
   factory _$EnvSecretsCopyWith(_EnvSecrets value, $Res Function(_EnvSecrets) _then) = __$EnvSecretsCopyWithImpl;
 @override @useResult
 $Res call({
- String? analyticsAmplitudeApiKey, String? analyticsGoogleAnalyticsId, ({String siteId, String url})? analyticsMatomo, String? Function()? googleClientId, String? googleClientSecret, String? dropboxKey, String? dropboxSecret, String? microsoftClientId, String? microsoftClientSecret
+ String? analyticsAmplitudeApiKey, String? analyticsGoogleAnalyticsId, ({String siteId, String url,})? analyticsMatomo, String? Function()? googleClientId, String? googleClientSecret, String? dropboxKey, String? dropboxSecret, String? microsoftClientId, String? microsoftClientSecret
 });
 
 
@@ -279,7 +287,7 @@ class __$EnvSecretsCopyWithImpl<$Res>
 analyticsAmplitudeApiKey: freezed == analyticsAmplitudeApiKey ? _self.analyticsAmplitudeApiKey : analyticsAmplitudeApiKey // ignore: cast_nullable_to_non_nullable
 as String?,analyticsGoogleAnalyticsId: freezed == analyticsGoogleAnalyticsId ? _self.analyticsGoogleAnalyticsId : analyticsGoogleAnalyticsId // ignore: cast_nullable_to_non_nullable
 as String?,analyticsMatomo: freezed == analyticsMatomo ? _self.analyticsMatomo : analyticsMatomo // ignore: cast_nullable_to_non_nullable
-as ({String siteId, String url})?,googleClientId: freezed == googleClientId ? _self.googleClientId : googleClientId // ignore: cast_nullable_to_non_nullable
+as ({String siteId, String url,})?,googleClientId: freezed == googleClientId ? _self.googleClientId : googleClientId // ignore: cast_nullable_to_non_nullable
 as String? Function()?,googleClientSecret: freezed == googleClientSecret ? _self.googleClientSecret : googleClientSecret // ignore: cast_nullable_to_non_nullable
 as String?,dropboxKey: freezed == dropboxKey ? _self.dropboxKey : dropboxKey // ignore: cast_nullable_to_non_nullable
 as String?,dropboxSecret: freezed == dropboxSecret ? _self.dropboxSecret : dropboxSecret // ignore: cast_nullable_to_non_nullable

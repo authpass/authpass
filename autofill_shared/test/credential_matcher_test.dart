@@ -23,6 +23,67 @@ void main() {
   CredentialMatchQuality? matchApp(String package, String? entryUrl) =>
       matcher.match(CredentialRequest.application(package), entryUrl);
 
+  group('searchTermFor', () {
+    test('drops the www. prefix browsers report', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['www.paypal.com'],
+          packageNames: ['com.kiwibrowser.browser'],
+        ),
+        'paypal.com',
+      );
+    });
+
+    test('leaves other hosts unchanged', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['mail.example.com'],
+          packageNames: [],
+        ),
+        'mail.example.com',
+      );
+    });
+
+    test('falls back to the package name, skipping android', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['', ''],
+          packageNames: ['android', 'com.example.app'],
+        ),
+        'com.example.app',
+      );
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: [],
+          packageNames: ['android'],
+        ),
+        isNull,
+      );
+    });
+
+    test('keeps a domain hostOf rejects as is', () {
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['not a host'],
+          packageNames: ['com.example.app'],
+        ),
+        'not a host',
+      );
+    });
+
+    test('never searches for nothing', () {
+      // `www.` normalises to the empty string. Searching for it would list
+      // every entry in the vault under a banner naming the requesting site.
+      expect(
+        CredentialMatcher.searchTermFor(
+          webDomains: ['www.'],
+          packageNames: ['com.example.app'],
+        ),
+        'www.',
+      );
+    });
+  });
+
   group('hostOf', () {
     test('extracts the host from a full url', () {
       expect(
@@ -71,6 +132,11 @@ void main() {
       expect(CredentialMatcher.hostOf(''), isNull);
       expect(CredentialMatcher.hostOf('   '), isNull);
       expect(CredentialMatcher.hostOf('some note about the account'), isNull);
+    });
+
+    test('returns null when stripping www leaves nothing', () {
+      expect(CredentialMatcher.hostOf('www.'), isNull);
+      expect(CredentialMatcher.hostOf('https://www.'), isNull);
     });
   });
 

@@ -101,8 +101,8 @@ dependencies:
     path: ../deps/autofill_service
 
   flutter_colorpicker: ^1.1.0
-  flutter_speed_dial: ^7.0.0
-  flutter_email_sender: ^8.0.0
+  flutter_speed_dial: ^8.0.0
+  flutter_email_sender: ^11.2.0
   # 2.x returns a StoreListingOutcome rather than a bool, so a call site can
   # tell "no store on this platform" from "could not resolve the id" from "the
   # launcher refused". It also dropped the iTunes lookup that used to discover
@@ -140,9 +140,9 @@ dependencies:
 
 
   # UI Utilities and Widgets
-  badges: ^3.1.1
+  badges: ^4.0.1
   qr_flutter: ^4.0.0
-  another_flushbar: ^1.10.20
+  another_flushbar: ^2.2.4
   filesystem_picker: ^4.1.0
   #tinycolor: ^1.0.3
   tinycolor: # null-safety https://github.com/FooStudio/tinycolor/pull/13
@@ -174,7 +174,7 @@ dependencies:
   xml: ">=5.5.0 <7.0.0"
 
   # google drive
-  googleapis: ^15.0.0
+  googleapis: ^19.0.0
   googleapis_auth: ^2.0.0
   google_sign_in: ^7.0.0
   google_sign_in_web: ^1.0.0
@@ -191,7 +191,7 @@ dependencies:
   # FDE
   file_selector: ^1.0.0
 
-  macos_secure_bookmarks: ^0.2.0
+  macos_secure_bookmarks: ^0.3.0
 
   # UI Utils
   percent_indicator: ^4.2.2
@@ -217,7 +217,7 @@ dependencies:
 #      url: https://github.com/authpass/flutter_zxing.git
 #      ref: 036c3e387d32d3c8b2f5b3a3ebedb55c6eb69c30
   # https://github.com/crazecoder/open_file/pull/258
-  open_file: ^3.5.10
+  open_file: ^4.0.0
 #  open_filex: ^4.7.0
 #  open_file:
 #    git:
@@ -232,7 +232,7 @@ dependencies:
   mime: ^2.0.0
   ffi: ^2.1.0
   # AuthPass Cloud email deps
-  enough_mail: ^2.1.7
+  enough_mail: ^3.0.0
   flutter_widget_from_html: ^0.17.0
 #  flutter_html: #^2.0.0-nullsafety.1
 #    git:
@@ -241,7 +241,7 @@ dependencies:
   flutter_linkify: ^6.0.0
 #  openapi_base: ^0.1.5+5
   flutter_cache_manager: ^3.3.1
-  cached_network_image: ^3.3.1
+  cached_network_image: ^4.0.7
   authpass_cloud_shared:
     path: ../deps/authpass-cloud/packages/authpass_cloud_shared
   # windows updater
@@ -256,7 +256,7 @@ dependencies:
 
   flutter_markdown_plus: ^1.0.7
 
-  hotkey_manager: ^0.2.3
+  hotkey_manager: ^0.4.0
 #    git:
 #      url: https://github.com/hpoul/hotkey_manager.git
 #      ref: uuid-dep-update
@@ -282,12 +282,12 @@ dev_dependencies:
   build_runner: ^2.7.0
 #  builder_static_text: ^0.1.0
   built_value_generator: ^8.3.3
-  analytics_event_gen: ^2.0.0-dev.1
-  freezed: ^3.2.4
+  analytics_event_gen: ^2.1.0
+  freezed: ^4.0.3
   plugin_platform_interface: ^2.0.0
   file_selector_platform_interface: ^2.7.0
   msix: ^3.6.2
-  string_literal_finder: ^1.1.0+2
+  string_literal_finder: ^2.0.0-dev.2
   flutter_lints: ^6.0.0
 
 dependency_overrides:
@@ -298,7 +298,7 @@ dependency_overrides:
 #  http: ^1.0.0
   # https://github.com/creativecreatorormaybenot/wakelock/pull/203
 #  analytics_event_gen:
-#    path: /Users/herbert/dev/analytics_events/analytics_event_gen
+#    path: ../deps/analytics_events/packages/analytics_event_gen
 #  kdbx:
 #    path: ../deps/kdbx.dart
 #  openapi_base:
