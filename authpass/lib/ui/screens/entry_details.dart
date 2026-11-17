@@ -990,7 +990,9 @@ class _EntryDetailsState extends State<EntryDetails>
         );
 
         if (barcodeResult case ScanResultValid(barcode: final barcode)) {
-          return cleanOtpCodeCode(barcode.text);
+          // awaited, so that a failure parsing the scanned code reaches the
+          // catch below instead of escaping it.
+          return await cleanOtpCodeCode(barcode.text);
         }
 
         //        final scanResult = await barcode.BarcodeScanner.scan();
