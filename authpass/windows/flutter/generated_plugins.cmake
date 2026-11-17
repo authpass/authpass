@@ -5,9 +5,8 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   argon2_ffi
   file_selector_windows
-  hotkey_manager_windows
-  share_plus
   url_launcher_windows
+  share_plus
   window_manager
   winsparkle_flutter
 )

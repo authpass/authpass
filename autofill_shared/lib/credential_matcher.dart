@@ -117,7 +117,31 @@ class CredentialMatcher {
       // free text in the url field shows up here.
       return null;
     }
-    return host.startsWith('www.') ? host.substring(4) : host; // NON-NLS
+    final stripped =
+        host.startsWith('www.') // NON-NLS
+        ? host.substring(4)
+        : host;
+    // `www.` with nothing after it strips to the empty string, which is no
+    // more a host than what the caller started with. Returning it would
+    // defeat every `?? url` fallback, since empty is not null.
+    return stripped.nullIfEmpty;
+  }
+
+  /// The text to put in the search field when no entry matched a fill request:
+  /// the first non-empty web domain, normalised like [hostOf] so a browser's
+  /// `www.` prefix does not hide an entry stored without it, otherwise the
+  /// first application package name which is not the placeholder `android`.
+  static String? searchTermFor({
+    required Iterable<String> webDomains,
+    required Iterable<String> packageNames,
+  }) {
+    final domain = webDomains.where((d) => d.isNotEmpty).firstOrNull;
+    if (domain != null) {
+      return hostOf(domain) ?? domain;
+    }
+    return packageNames
+        .where((p) => p != 'android') // NON-NLS
+        .firstOrNull;
   }
 
   /// The registrable domain (eTLD+1) of [url], or null when there is none.

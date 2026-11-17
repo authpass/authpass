@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' as scanner;
 import 'package:string_literal_finder_annotations/string_literal_finder_annotations.dart';
+
 // import 'package:zxing_scanner/zxing_scanner.dart' as zxing;
 
 final _logger = Logger('barcodescan_screen');
@@ -67,6 +68,12 @@ class BarcodeScanHelper {
         scanner.BarcodeFormat.upcE => BarcodeFormat.upce,
         scanner.BarcodeFormat.upcA => .upca,
         scanner.BarcodeFormat.pdf417 => BarcodeFormat.pdf417,
+        scanner.BarcodeFormat.maxiCode => .maxiCode,
+        scanner.BarcodeFormat.microQrCode => .microQRCode,
+        scanner.BarcodeFormat.dataBar => .dataBar,
+        scanner.BarcodeFormat.dataBarExpanded => .dataBarExpanded,
+        // mobile_scanner 7.5 knows this one, our own enum does not.
+        scanner.BarcodeFormat.dataBarLimited => .unknown,
         // _ => BarcodeFormat.unknown,
         // TODO: Handle this case.
         scanner.BarcodeFormat.unknown || .all || .codabar => .unknown,
