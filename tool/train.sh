@@ -92,19 +92,24 @@ if [ ! -f .dart_tool/package_config.json ]; then
   "$dart" pub get >&2
 fi
 
-if ! grep -q '"name":"cux_train"' .dart_tool/package_config.json 2>/dev/null; then
+# **The space after the colon is not optional.** `package_config.json` is
+# written pretty-printed, so the first version of this grep — `"name":"…"` with
+# no space — never matched and the guard refused even once the dependency was
+# there. A check that cannot pass is worse than no check: it says the thing it
+# names is broken when it is not.
+if ! grep -q '"name": *"cux_train"' .dart_tool/package_config.json 2>/dev/null
+then
   cat >&2 <<EOF
 train: cux_train is not resolvable from $wrapper.
 
-Both prerequisites are in the cux_ship repository; this script's header has
-the detail and the evidence:
+It is declared in that directory's pubspec.yaml as a git dependency. If this
+is a fresh checkout, resolve it:
 
-  1. cux_ship has never published lib/provenance.dart, which cux_train
-     imports, so a consumer resolves it and then cannot compile it.
-  2. cux_train requires cux_ship ^4.5.0-dev.8 and this repository pins ^3.6.0,
-     so the two cannot share this wrapper's lockfile.
+  (cd $wrapper && dart pub upgrade)
 
-Adding the dependency here before those are settled would break ship.sh.
+If that fails, the pin and the dependency have come apart — cux_train needs a
+cux_ship with lib/provenance.dart in it, which is 4.5.0-dev.9 or later, and
+both are resolved by this one lockfile.
 EOF
   exit 1
 fi

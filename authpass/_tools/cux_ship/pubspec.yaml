@@ -29,7 +29,33 @@ dependencies:
   # a lookup that misses names what exists, and a group kind Apple did not
   # report is refused at release rather than guessed. 3.5.1 brought the
   # symlink-aware committed-notes guard this repo's root CHANGELOG.md needs.
-  cux_ship: ^3.6.0
+  # 4.5.0-dev.9: a prerelease, and taken deliberately. `cux_train` — the
+  # release train, below — depends on `package:cux_ship/provenance.dart` for
+  # the tag that records what each destination reached, and that library is
+  # published in no 4.4.x: it first ships in 4.5.0-dev.9. One wrapper and one
+  # lockfile is the arrangement worth keeping, so the two cannot be on
+  # different majors, and a stable 4.5.0 does not exist yet.
+  #
+  # What that means for every other caller of this wrapper: `ship.sh` now runs
+  # 4.5.0-dev.9 rather than 3.6.0 for the uploaders, `secrets`, `deps` and
+  # `release`. See the PR for the 4.x changes that were read against this
+  # repository's scripts before the bump.
+  cux_ship: ^4.5.0-dev.9
+  # The release train: it orders the steps of a release, waits on the ones a
+  # person performs, and records each as a git tag. Run through
+  # `tool/train.sh`, which reads `.cux-train.yaml` at the repository root.
+  #
+  # **A git ref because it is not published**, and pinned to a commit rather
+  # than to a branch: this is release tooling, and a mutable ref would mean
+  # two runs of the same release could use different code. `cux_ship`'s own
+  # CI resolves both packages this way, so the shape is tested there.
+  #
+  # TO BUMP: change `ref` to the new commit, then `dart pub upgrade` here.
+  cux_train:
+    git:
+      url: https://github.com/codeuxdesign/cux_ship.git
+      path: cux_train
+      ref: 9a430873533e8a40aa7b4f6164460c030feb7461
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
