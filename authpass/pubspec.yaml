@@ -285,7 +285,6 @@ dev_dependencies:
   analytics_event_gen: ^2.1.0
   freezed: ^4.0.3
   plugin_platform_interface: ^2.0.0
-  file_selector_platform_interface: ^2.7.0
   msix: ^3.6.2
   string_literal_finder: ^2.0.0-dev.2
   flutter_lints: ^6.0.0
