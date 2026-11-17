@@ -1,30 +1,88 @@
 # Where a release goes, and who acts at each place.
 #
-# Read by `tool/train.sh` (cux_train). This is step 1 of
-# docs/design/authpass-on-the-train.md in the cux_ship repository: every
-# destination declared, and **nothing automated**. The release is performed
-# exactly as it is today — by hand, from README.md's "Releasing" section — but
-# ordered, resumable and recorded, so that the next run knows what the last one
+# Read by `tool/train.sh` (cux_train). This began as step 1 of
+# docs/design/authpass-on-the-train.md in the cux_ship repository — every
+# destination declared and nothing automated — and now carries step 5 as well,
+# the `internal` stage. Every *destination* step is still performed exactly as
+# it is today, by hand from README.md's "Releasing" section, but ordered,
+# resumable and recorded, so that the next run knows what the last one
 # finished.
+#
+# What is no longer by hand is the stage's own step: the `dispatch` below
+# pushes `HEAD:stable`, and `internal` then reads each destination CI fills
+# until the build turns up there.
 #
 # A sibling file rather than a `train:` block in `.cux-ship.yaml`, because that
 # file's parser throws on an unknown key and is read before every `cux_ship`
 # command: a `train:` block there would fail every upload in CI until a release
 # that knows the word. See §4 of the plan.
 #
-# ## Two things this file does not yet say
+# ## What `internal` says, and where it stays silent
 #
-# **`internal` is omitted everywhere, and that is not the same as "nobody
-# acts".** §3's internal column is what CI already does on a `stable` push —
-# it builds every artifact and puts it on the artifact server — and the train's
-# `internal` verb is not wired (it is the last step of the plan). An omitted
-# stage reads as `none`, so `train internal` would report nothing to do. That
-# is honest for today and wrong the day the verb lands; whoever wires it writes
-# the internal rows then.
+# **The stage is declared where a read can prove it.** §3's internal column is
+# what CI already does on a `stable` push, so eight rows below are `wait`: the
+# train spawns the dispatch and then reads each of them until the candidate
+# turns up. A ninth, `direct:macos`, is the step CI cannot take, so it is the
+# one this laptop performs while the others are read. Every read is public —
+# the artifact server's download path and `api.snapcraft.io` — and each was run
+# against build 2196 of 1.9.13 before being written here, which is how the one
+# that answered wrongly was found; see `tool/train-read.sh`.
 #
-# **`read` is omitted everywhere**, so every cell is `attested` at best —
-# `status` shows what the record says, never what a store holds. The reads that
-# need no credential (the artifact server URLs, snapcraft, F-Droid) are step 2.
+# **Five more rows are filled at internal and have no step, for three
+# reasons, and every one of them is the read rather than the stage.** `play`,
+# `appstore:ios` and `appstore:macos` are filled there — the Play internal
+# track and TestFlight — but reading either needs a credential, and a `wait`
+# with no `read` is refused by the parser, correctly: its only remaining exit
+# is the clock. Those three go in with `cux_ship play`/`appstore`'s read-back,
+# the same step that flips their production cells away from `manual` (§8 step
+# 3). `web` is readable and still cannot be waited on — `version.json` answers
+# in the pubspec's numbering rather than the train's — and `packagecloud`
+# cannot be read at all without a token; both are argued where they are
+# declared, below, and they are why only one of §3's three
+# `public-at-internal` rows is marked.
+#
+# **The candidate is named before the dispatch, and this is how.** Every verb
+# takes `--build`, and AuthPass's number is allocated by CI *during* internal,
+# which reads as a catch-22 and is not one — the allocator is idempotent per
+# commit:
+#
+#     authpass/_tools/ship.sh buildnumber generate   # the number for HEAD
+#     tool/train.sh internal --build <that> --release 1.9.13
+#
+# `generate` prints the number this commit already has, or claims one and
+# pushes the ref; CI's own `generate`, running on the commit the dispatch
+# pushed, then answers the same. `buildnumber get` asks without claiming. That
+# is `git-buildnumber`'s documented behaviour and release.sh's own reason for
+# allocating once per build rather than once per phase — it has not been driven
+# through a release here, because no release has been run through the train at
+# all yet.
+#
+# **And for a build CI has not uploaded yet, `internal` takes two runs.** A
+# promotion is recorded against the commit the artifact was built from, which
+# only the candidate's `uploaded/` tag knows — and here that tag is written by
+# CI, after the dispatch. So the run that dispatches cannot also walk
+# `direct:macos`: every refusal is asked before the push, deliberately, and
+# that one would refuse the whole run with `No tag uploaded/v1.9.14+9999 in
+# this checkout` rather than leave the lane for later. The first run asks for
+# the remote lane and the second for the local one, which is the order the work
+# happens in anyway:
+#
+#     tool/train.sh internal --build N --release X.Y.Z \
+#       --store direct:android,direct:windows,direct:linux,snap,amazon,samsung,huawei,microsoft
+#     # CI builds, uploads and tags; then the laptop builds the macOS zip
+#     tool/train.sh internal --build N --release X.Y.Z --store direct:macos
+#
+# Naming eight stores to mean "not that one" is what it costs, and the train is
+# where that cost belongs rather than this file — `--lane remote|local` would
+# say it in a word. Until it exists, the two lines above are the ones to copy.
+#
+# **`read` is still absent from every production row**, so those cells are
+# `attested` at best: `status` shows what the record says, never what a store
+# holds. Two of them are already written and could be read today — the snap's
+# `stable` channel, and `stable.txt` on the artifact server, which says
+# `release=1.9.11_2007` while this file's candidate is 1.9.13 — but nothing
+# reads them yet, so they go in with `status`'s reads (§8 step 2) rather than
+# sitting here unused.
 #
 # ## The order below is load-bearing
 #
@@ -37,6 +95,24 @@
 # The train does not enforce the dependency, only the order — a step that fails
 # does not stop the ones after it. Moving `github` above `direct:android` would
 # publish a GitHub release against a stale index and nothing would say so.
+
+# The push CI reacts to — README step 2, typed by the train. It belongs to the
+# stage rather than to any one destination, which is why it is up here and not
+# under `play`.
+#
+# **It is the step in this file that cannot be taken back.** It sets every CI
+# build going and, at the snap's `edge` channel, the web app and packagecloud,
+# it reaches users rather than testers. `internal` asks before spawning it and
+# names the rows marked `public-at-internal` in the question; `--yes` is what
+# skips that question, so it is the flag to leave off here.
+#
+# `HEAD:stable` exactly as README.md has it, which means HEAD has to be the
+# commit the candidate's build number was allocated for — see the header. The
+# train pushes rather than calling a script, so there is nothing here that has
+# to be kept in step with anything else.
+dispatch:
+  kind: run
+  command: "git push origin HEAD:stable"
 
 # The version tag, spent once every destination below that has a production
 # step is recorded. `--build-number` matters: without it `release finish` tags
@@ -61,6 +137,13 @@ finish:
 
 destinations:
   # ---- the two consoles that will become API destinations (plan step 3) ----
+  #
+  # No `internal` here, and it is the one omission in this file that is not
+  # about the stage being empty: CI uploads to the Play internal track and to
+  # TestFlight on every `stable` push. What is missing is the read, which needs
+  # a credential — see the header. Until it exists these three rows say `n/a`
+  # at internal, which is less than the truth, and a `wait` that could only
+  # ever time out would be worse than less.
   play:
     identity:
       package: design.codeux.authpass
@@ -102,25 +185,69 @@ destinations:
   # One step in the README, four rows here, because they are four artifacts a
   # person can finish separately and the record should say which. The console
   # is the host rather than a page; the note is the command from README.md.
+  #
+  # **The internal read is the artifact's own download URL.** CI puts each file
+  # on this host during internal, under a name carrying `{version}_{build}`, so
+  # "the server holds the candidate" is a HEAD request. That is the weakest
+  # read in this file — it can say *yes* and *not yet* and never *an older
+  # build*, because what it asks about is one exact name — and it is the read
+  # the stage actually needs: at internal the question is whether CI produced
+  # this build's artifact, not which build the download page points at. The
+  # second question is `stable.txt`, and it belongs to production.
   direct:android:
+    read: "tool/train-read.sh artifact {build} authpass-sideload-{version}_{build}.apk"
+    internal: wait
     production:
       kind: manual
       console: "ssh data.authpass.app"
       note: "stable.txt, then update_stable.sh"
 
+  # Two artifacts, one read: the installer, not the portable zip, which CI
+  # builds under its own flavor and which no step here acts on separately.
   direct:windows:
+    read: "tool/train-read.sh artifact {build} AuthPass-setup-{version}_{build}.exe"
+    internal: wait
     production:
       kind: manual
       console: "ssh data.authpass.app"
       note: "stable.txt, then update_stable.sh, then appcast.generate.sh"
 
+  # The tarball rather than the .deb, deliberately: `make_deb` runs after the
+  # linux build and derives the .deb from this file, so the tarball is the one
+  # that says the linux build finished. The wait can therefore end while the
+  # .deb is still a workflow or two behind.
   direct:linux:
+    read: "tool/train-read.sh artifact {build} authpass-linux-{version}_{build}.tar.gz"
+    internal: wait
     production:
       kind: manual
       console: "ssh data.authpass.app"
       note: "stable.txt, then update_stable.sh"
 
+  # **The local lane — the one internal step on this machine.** §5's reason is
+  # the team key: notarization is refused for the app-scoped key the uploaders
+  # use, so CI deliberately does not do this one, and the train walks it while
+  # it reads the rest.
+  #
+  # `manual` rather than `run`, because the three commands are not yet one
+  # script and writing one would mean a build, a notarization and a real upload
+  # to verify it. Flipping it is §8 step 4's shape of work, and the note is the
+  # instruction until then.
+  #
+  # Its read is the same host as its siblings, and nothing consumes it yet — the
+  # wait only reads `wait` rows. It is written because this row's evidence is
+  # exactly what two releases turned out to lack: there is no
+  # `AuthPass.app-1.9.13_2196.zip` and no `AuthPass.app-1.9.12_2184.zip` on the
+  # server, so the step people forget was forgotten twice, and the read that
+  # would have said so is this line.
   direct:macos:
+    read: "tool/train-read.sh artifact {build} AuthPass.app-{version}_{build}.zip"
+    internal:
+      kind: manual
+      console: "this laptop"
+      note: >-
+        _tools/build-macos.sh, then _tools/notarize-macos.sh, then
+        _tools/upload-artifact.sh on the zip it names
     production:
       kind: manual
       console: "ssh data.authpass.app"
@@ -141,29 +268,63 @@ destinations:
       console: "https://devzone.fosshub.com/dashboard/projects"
       note: "_tools/release/fosshub-release.sh"
 
+  # **The one row where `internal` reaches users, and the only one of §3's
+  # three that can say so here.** The `stable` push publishes to `edge`, which
+  # anybody can install, so the flag is true and the confirmation names it.
+  #
+  # The read is the channel, not the file. The snap is on the artifact server
+  # too — for the download page — and that only says CI built it;
+  # `api.snapcraft.io` says what `edge` actually serves, per architecture,
+  # without a credential. One architecture because they diverge: when this was
+  # written `edge` held 2196 on amd64 and 1984 on s390x. The same read against
+  # `stable` answers 1940, from June 2022, which is this row's production cell
+  # waiting to be read rather than attested.
   snap:
+    read: "tool/train-read.sh snap edge amd64"
+    internal: wait
+    public-at-internal: true
     production:
       kind: manual
       console: "https://snapcraft.io/authpass/releases"
       note: "already on edge; release the same revision to stable"
 
   # ---- consoles with nothing ordered before them ----
+  #
+  # **`observed` at internal means the artifact exists, not that the store has
+  # it.** §3's internal cell for these four is "on artifact server": CI builds
+  # each of them — three apks under their own flavors, and the msix — and the
+  # person who later opens the console is the first thing that reaches the
+  # store. So the wait here answers "is there something to take to the
+  # console", which is the honest meaning of internal for a destination with no
+  # API, and it is why their beta column is empty rather than pending.
   amazon:
+    read: "tool/train-read.sh artifact {build} authpass-amazon-{version}_{build}.apk"
+    internal: wait
     production:
       kind: manual
       console: "https://developer.amazon.com/apps-and-games/console/apps/list.html"
 
+  # `authpass-samsungapps-…`: the flavor name, which is what release.sh puts in
+  # the filename, rather than this row's name.
   samsung:
+    read: "tool/train-read.sh artifact {build} authpass-samsungapps-{version}_{build}.apk"
+    internal: wait
     production:
       kind: manual
       console: "https://seller.samsungapps.com/main/sellerMain.as"
 
   huawei:
+    read: "tool/train-read.sh artifact {build} authpass-huawei-{version}_{build}.apk"
+    internal: wait
     production:
       kind: manual
       console: "https://developer.huawei.com/consumer/en/service/josp/agc/index.html"
 
+  # The msix, built by the windows workflow's own flavor and named without a
+  # platform word — `authpass-{version}_{build}.msix`.
   microsoft:
+    read: "tool/train-read.sh artifact {build} authpass-{version}_{build}.msix"
+    internal: wait
     production:
       kind: manual
       console: "https://partner.microsoft.com/en-us/dashboard/windows/overview"
@@ -179,14 +340,21 @@ destinations:
   #
   # `none` is satisfied vacuously by the finish rule: nothing writes a record,
   # so waiting for one would hold the version tag forever.
-  # **`public-at-internal` belongs here and cannot be written yet.** §3 marks
-  # `web`, `packagecloud` and `snap` as reaching the public the moment
-  # `stable` is pushed, which is the most important thing this table could say
-  # about them. The flag is a statement about the *internal* stage, and this
-  # table does not declare that stage — the parser refuses the combination,
-  # correctly: a row claiming "public at internal" while declaring nobody acts
-  # at internal is saying two things that cannot both be true. It goes in with
-  # the internal rows.
+  #
+  # **These two reach users at internal and still cannot say so.** §3 marks
+  # `web`, `packagecloud` and `snap` as public the moment `stable` is pushed;
+  # `snap` carries the flag above, and these two cannot, because the flag is
+  # only meaningful on a row that declares an internal step and neither can
+  # declare one it could not read. For `web` the read exists and answers in the
+  # wrong units — `version.json` gives the pubspec's `build_number`, 167 where
+  # the candidate is 2196 — so a wait would poll until the clock ran out and
+  # then call a deployed build `pending`. The one read that could answer is the
+  # gh-pages deploy commit, which names the source commit the build came from,
+  # and turning that into a build number is a program rather than a URL and a
+  # field. For `packagecloud` there is no public read: the repository API wants
+  # a token. Both are correctly refused by the parser rather than declared and
+  # hoped for, and the dispatch's own comment names all three anyway, so the
+  # one thing an operator must not miss is said whether or not the flag can be.
   web:
     production: none
 
