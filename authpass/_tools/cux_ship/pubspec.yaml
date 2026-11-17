@@ -36,10 +36,14 @@ dependencies:
   # lockfile is the arrangement worth keeping, so the two cannot be on
   # different majors, and a stable 4.5.0 does not exist yet.
   #
-  # What that means for every other caller of this wrapper: `ship.sh` now runs
-  # 4.5.0-dev.9 rather than 3.6.0 for the uploaders, `secrets`, `deps` and
-  # `release`. See the PR for the 4.x changes that were read against this
-  # repository's scripts before the bump.
+  # What that means for every other caller of this lockfile: everything that
+  # runs `cux_ship` gets 4.5.0-dev.9 rather than 3.6.0 — `ship.sh` for
+  # `secrets`, `deps`, `keychain` and `manifest`, and the three uploaders,
+  # which run `dart run cux_ship` from this directory directly rather than
+  # through `ship.sh`. The 4.x changelog was read against this repository's
+  # own invocations before the bump; the PR records what was found, including
+  # the two 4.0.0 items that cannot reach here because no script passes
+  # `--data-safety` or `--metadata`.
   cux_ship: ^4.5.0-dev.9
   # The release train: it orders the steps of a release, waits on the ones a
   # person performs, and records each as a git tag. Run through
