@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection' show HashMap;
 import 'dart:convert';
 import 'dart:core';
 import 'dart:typed_data';
@@ -238,6 +239,25 @@ class KdbxOpenedFile {
   final FileContent kdbxFileContent;
 }
 
+/// What [KdbxBloc.createEntry] knows about an entry it created, to tell later
+/// whether the entry was touched.
+class _NewEntry {
+  _NewEntry({
+    required this.file,
+    required this.parent,
+    required this.lastModified,
+    required this.parentData,
+  });
+
+  final KdbxFile file;
+  final KdbxGroup parent;
+  final DateTime? lastModified;
+
+  /// The parent group's own data right after the entry was added, see
+  /// [KdbxBloc._groupData].
+  final String parentData;
+}
+
 class OpenedKdbxFiles {
   OpenedKdbxFiles(Map<FileSource, KdbxOpenedFile> files)
     : _files = Map.unmodifiable(files);
@@ -285,12 +305,15 @@ class KdbxBloc {
     required this.analytics,
     required this.cloudStorageBloc,
     @visibleForTesting KdbxFormat? kdbxFormat,
+    @visibleForTesting QuickUnlockStorage? quickUnlockStorage,
   }) : _kdbxFormatOverride = kdbxFormat,
-       quickUnlockStorage = QuickUnlockStorage(
-         cloudStorageBloc: cloudStorageBloc,
-         env: env,
-         analytics: analytics,
-       ) {
+       quickUnlockStorage =
+           quickUnlockStorage ??
+           QuickUnlockStorage(
+             cloudStorageBloc: cloudStorageBloc,
+             env: env,
+             analytics: analytics,
+           ) {
     if (AuthPassPlatform.isWeb) {
       KdbxFormat.dartWebWorkaround = true;
     }
@@ -445,6 +468,52 @@ class KdbxBloc {
     }
     _logger.info('new values: ${_openedFiles.value}');
     return newFile;
+  }
+
+  /// Like [openFile], for a password typed in by the user.
+  ///
+  /// A kdbx file can be locked with an *empty password* (the password is part
+  /// of the composite key, hashed as the empty string) or with no password at
+  /// all (only a key file, or nothing). Both look the same in an empty password
+  /// field. So an empty password is tried as "no password" first, and then as
+  /// an empty password, before the credentials are reported as invalid.
+  Stream<OpenFileResult> openFileWithPassword(
+    FileSource file, {
+    required String password,
+    Uint8List? keyFile,
+    bool addToQuickUnlock = false,
+  }) async* {
+    final attempts = <Credentials>[
+      Credentials.composite(
+        password.isEmpty ? null : ProtectedValue.fromString(password),
+        keyFile,
+      ),
+      if (password.isEmpty)
+        Credentials.composite(ProtectedValue.fromString(password), keyFile),
+    ];
+    for (final credentials in attempts) {
+      var yielded = false;
+      try {
+        await for (final result in openFile(
+          file,
+          credentials,
+          addToQuickUnlock: addToQuickUnlock,
+        )) {
+          yielded = true;
+          yield result;
+        }
+        return;
+      } on KdbxInvalidKeyException {
+        // Only a failure of the very first unlock is a wrong guess; later
+        // yields are the same file reloaded in the background.
+        if (yielded || credentials == attempts.last) {
+          rethrow;
+        }
+        _logger.fine(
+          '$file: Invalid key without password, trying with an empty password.',
+        );
+      }
+    }
   }
 
   Stream<OpenFileResult> openFile(
@@ -608,9 +677,9 @@ class KdbxBloc {
   /// watching, while the database is the same one. An earlier attempt at this
   /// guard counted writes on the [FileSource] and was blind to exactly that.
   ///
-  /// [reload] is marked too. It does not write anywhere, but it serializes the
-  /// file to bytes, and `KdbxFormat.save` clears `isDirty` whether or not the
-  /// bytes ever reach a file source.
+  /// [reload] is marked too. It does not write anywhere, but the merge it ends
+  /// with changes the open database, so whatever the origin handed out before
+  /// it is stale.
   final _saveAttempted = Set<KdbxFile>.identity();
 
   void _markSaveAttempted(KdbxFile file) => _saveAttempted.add(file);
@@ -1095,6 +1164,9 @@ class KdbxBloc {
     // no background load left to protect it from, and leaving it in would
     // keep a disposed [KdbxFile] alive in the set for as long as the app runs.
     _saveAttempted.remove(file);
+    // Entries created in this file will never be discarded any more, and the
+    // map would keep the whole decrypted file alive.
+    _newEntries.removeWhere((_, created) => identical(created.file, file));
     // "Not now" only holds for as long as the file is open - reopening a
     // database which still needs repairing asks about it again.
     _duplicateUuidsPending.remove(fileSource);
@@ -1123,6 +1195,7 @@ class KdbxBloc {
     // reach it. Nothing is open after this, so nothing has a background load
     // left to be protected from, and anything still in the set is an orphan.
     _saveAttempted.clear();
+    _newEntries.clear();
     _duplicateUuidsPending.clear();
     _duplicateUuidsAnswered.clear();
     if (clearQuickUnlock) {
@@ -1248,8 +1321,81 @@ class KdbxBloc {
     final rootGroup = group ?? file.body.rootGroup;
     final entry = KdbxEntry.create(file, rootGroup);
     rootGroup.addEntry(entry);
+    _newEntries[entry] = _NewEntry(
+      file: file,
+      parent: rootGroup,
+      lastModified: entry.times.lastModificationTime.get(),
+      parentData: _groupData(rootGroup),
+    );
     return entry;
   }
+
+  /// Entries created by [createEntry] which were not yet handed to
+  /// [discardUntouchedNewEntry].
+  final _newEntries = HashMap<KdbxEntry, _NewEntry>.identity();
+
+  /// Removes [entry] again, if it was created by [createEntry] and nothing was
+  /// entered since: it is still blank, was never saved and was not moved.
+  /// Meant to be called once the user is done with the entry, so that pressing
+  /// the add button and going back does not leave an empty entry behind.
+  ///
+  /// The unsaved state that adding the entry created is dropped with it, on
+  /// the entry and on its group, so a file that had nothing else to save is
+  /// clean again and the save indicator goes away. Anything else the user has
+  /// touched stays unsaved. Returns `true` if the entry was removed.
+  bool discardUntouchedNewEntry(KdbxEntry entry) {
+    final created = _newEntries.remove(entry);
+    if (created == null) {
+      return false;
+    }
+    final parent = created.parent;
+    if (!entry.isDirty ||
+        entry.parent != parent ||
+        !parent.entries.contains(entry) ||
+        entry.times.lastModificationTime.get() != created.lastModified ||
+        !_isBlank(entry)) {
+      return false;
+    }
+    final file = entry.file;
+    // The group might have been renamed or got another icon while the entry
+    // was open. That change is the user's, and it is still unsaved.
+    final parentUntouched = _groupData(parent) == created.parentData;
+    // Records no deleted object, because nothing outside this session ever
+    // held the entry - see `KdbxObject.isKnownOutsideThisSession`.
+    file.deletePermanently(entry);
+    // Only these two, so anything else the user has edited is still waiting to
+    // be saved. The group is left out when it carries a change of its own: a
+    // rename while the entry was open is the user's, and clearing it would
+    // leave it unsaved with nothing left to prompt for it.
+    file.markClean([
+      entry,
+      if (parentUntouched) ...[parent],
+    ]);
+    return true;
+  }
+
+  @visibleForTesting
+  int get newEntryCount => _newEntries.length;
+
+  /// Stops remembering [entry] as new, without touching it. For when its file
+  /// is not open any more, so [discardUntouchedNewEntry] must not act on it.
+  void forgetNewEntry(KdbxEntry entry) => _newEntries.remove(entry);
+
+  /// What the group itself holds (name, notes, icon, ...), as opposed to its
+  /// entries, subgroups and times. The times are not usable to see whether the
+  /// group was edited: they are only stored to the second.
+  static String _groupData(KdbxGroup group) => group.node.childElements
+      .where((e) => !_groupStructureNodes.contains(e.name.local))
+      .map((e) => e.toXmlString())
+      .join();
+
+  @NonNls
+  static const _groupStructureNodes = {'Entry', 'Group', 'Times'};
+
+  static bool _isBlank(KdbxEntry entry) =>
+      entry.history.isEmpty &&
+      entry.binaryEntries.isEmpty &&
+      entry.stringEntries.every((e) => e.value?.getText()?.isEmpty ?? true);
 
   @NonNls
   static const _customDataSaveCount = 'codeux.design.authpass.save';
@@ -1461,8 +1607,9 @@ class KdbxBloc {
         newFile.fileSource: newFile,
       }),
     );
-    // TODO also do not update quick unlock if this file is not in quick unlock.
-    if (_openedFilesQuickUnlock.isNotEmpty) {
+    // Quick unlock is keyed by file source, so it has to follow the move.
+    if (_openedFilesQuickUnlock.remove(oldSource)) {
+      _openedFilesQuickUnlock.add(output);
       try {
         await _updateQuickUnlockStore();
       } on AuthException catch (e, stackTrace) {
@@ -1476,6 +1623,17 @@ class KdbxBloc {
           rethrow;
         }
       }
+    }
+    // Everything else keyed by the source has to follow it too, or [close]
+    // removes the new source and leaves the old entry behind for the life of
+    // the process. For these two that means a database the user answered
+    // "later" for is never asked about again, even on reopening the original
+    // file, which is the opposite of what [_duplicateUuidsAnswered] promises.
+    if (_duplicateUuidsPending.remove(oldSource)) {
+      _duplicateUuidsPending.add(output);
+    }
+    if (_duplicateUuidsAnswered.remove(oldSource)) {
+      _duplicateUuidsAnswered.add(output);
     }
     return newFile;
   }
@@ -1522,47 +1680,45 @@ class KdbxBloc {
   void clearEntryByUuidLookup() => _entryUuidLookup = null;
 
   Stream<ReloadStatus> reload(KdbxOpenedFile file) async* {
-    Uint8List? bytes;
-    final dirtyObjects = file.kdbxFile.dirtyObjects;
-    // Serializing below clears `isDirty` without the bytes going anywhere, so
-    // from here on a background load must not take this file for one nobody
-    // has touched. The mark stays for the rest of the file's life: a reload
-    // merges origin content into the open database, which makes anything the
-    // origin handed out earlier stale as surely as a save would.
+    // The merge below works on the open database itself, so unsaved edits are
+    // merged along with everything else and stay dirty. Do not serialize the
+    // file first: `KdbxFile.save` marks every object clean, and there is no
+    // way to mark them dirty again from here (`KdbxFile.dirtyObject` alone
+    // leaves the objects themselves clean, so a later save could never clear
+    // the file again).
+    //
+    // A reload merges origin content into the open database, which makes
+    // anything the origin handed out earlier stale as surely as a save would,
+    // so a background load must not take this file for one nobody has touched.
+    // The mark stays for the rest of the file's life.
     _markSaveAttempted(file.kdbxFile);
-    try {
-      if (file.kdbxFile.isDirty) {
-        //throw StateError('File must not be dirty for now.');
-        bytes = await file.kdbxFile.save();
-      }
-      yield ReloadStatus.downloading;
-      final reloadedContent = await file.fileSource.content().last;
-      assert(reloadedContent.source == FileContentSource.origin);
-      if (ByteUtils.eq(reloadedContent.content, file.kdbxFileContent.content)) {
-        yield ReloadStatus.didNotChange;
-        return;
-      }
-
-      // try loading the new file.
-      yield ReloadStatus.decrypting;
-      final readArgs = KdbxReadArgs(
-        reloadedContent.content,
-        file.kdbxFile.credentials,
-      );
-      final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
-
-      _logger.info('\n\n\n===========\n\n\n');
-      _logger.info('starting merge.');
-      file.kdbxFile.merge(kdbxReadFile.file!);
-
-      _logger.info('\n\nDONE MERGE\n\n\n\n');
-
-      yield ReloadStatus.merged;
-    } finally {
-      if (bytes != null && !file.kdbxFile.isDirty) {
-        dirtyObjects.forEach(file.kdbxFile.dirtyObject);
-      }
+    yield ReloadStatus.downloading;
+    final reloadedContent = await file.fileSource.content().last;
+    assert(reloadedContent.source == FileContentSource.origin);
+    if (ByteUtils.eq(reloadedContent.content, file.kdbxFileContent.content)) {
+      yield ReloadStatus.didNotChange;
+      return;
     }
+
+    // try loading the new file.
+    yield ReloadStatus.decrypting;
+    final readArgs = KdbxReadArgs(
+      reloadedContent.content,
+      file.kdbxFile.credentials,
+    );
+    final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
+
+    _logger.info('\n\n\n===========\n\n\n');
+    _logger.info('starting merge.');
+    // An unsaved edit which the other copy has a newer version of is kept as
+    // a history revision by the merge itself, and held back from the history
+    // limits until the next save writes it out - see kdbx 2.7.0, which is
+    // where that moved to.
+    file.kdbxFile.merge(kdbxReadFile.file!);
+
+    _logger.info('\n\nDONE MERGE\n\n\n\n');
+
+    yield ReloadStatus.merged;
   }
 
   Future<AttachmentProvider> attachmentProviderForFileSource(

@@ -43,7 +43,11 @@ fail=()
 
 _tools/flutter_run.sh pub get
 
-_tools/flutter_run.sh analyze || fail+=('analyze')
+# `--no-fatal-infos` keeps this gating on errors and warnings, as it did
+# before Flutter 3.50 made infos fatal by default. Deprecating
+# `package:flutter/material.dart` in favour of `package:material_ui` alone
+# emits about fifty infos, and that migration is its own piece of work.
+_tools/flutter_run.sh analyze --no-fatal-infos || fail+=('analyze')
 
 _tools/flutter_run.sh dart format --set-exit-if-changed $(find . -name "*.dart"  \! -name "secrets.dart" \! -name "generated_plugin_registrant.dart" \! -path "./.dart_tool*" \! -path "./lib/l10n-generated/*" | xargs) || fail+=('format')
 

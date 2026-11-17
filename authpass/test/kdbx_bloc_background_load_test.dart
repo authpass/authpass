@@ -148,10 +148,30 @@ class _RenamedFileSource extends FileSource {
   FileSource copyWithDatabaseName(String databaseName) => this;
 }
 
+/// Records what the bloc hands the quick unlock store, so a test can assert
+/// on what the user actually feels - the credentials that are there on the
+/// next start - rather than on in-memory set membership.
+class _RecordingQuickUnlockStorage extends Fake implements QuickUnlockStorage {
+  /// Null until the bloc writes for the first time, so "never touched" and
+  /// "written as empty" stay distinguishable.
+  Map<FileSource, Credentials>? lastWritten;
+
+  @override
+  Future<bool> supportsBiometricKeyStore() async => true;
+
+  @override
+  Future<void> updateQuickUnlockFile(
+    Map<FileSource, Credentials> fileCredentials,
+  ) async {
+    lastWritten = Map.of(fileCredentials);
+  }
+}
+
 /// A second place to save to, with a uuid of its own so it is a genuinely
 /// different [FileSource].
 class _PlainFileSource extends FileSource {
-  _PlainFileSource() : super(databaseName: 'other', uuid: 'other-source');
+  _PlainFileSource({super.uuid = 'other-source'})
+    : super(databaseName: 'other');
 
   Uint8List? written;
 
@@ -333,6 +353,7 @@ void main() {
     AppDataBloc? appDataBloc,
     KdbxFormat? kdbxFormat,
     Analytics? analytics,
+    QuickUnlockStorage? quickUnlockStorage,
   }) async {
     bloc = KdbxBloc(
       env: await TestUtil.createEnv(),
@@ -340,6 +361,7 @@ void main() {
       analytics: analytics ?? _FakeAnalytics(),
       cloudStorageBloc: _FakeCloudStorageBloc(),
       kdbxFormat: kdbxFormat ?? _format,
+      quickUnlockStorage: quickUnlockStorage,
     );
   }
 
@@ -985,6 +1007,72 @@ void main() {
         'cached',
         reason: 'the open database was replaced by pre-save origin content',
       );
+    });
+  });
+
+  group('quick unlock follows a save as', () {
+    late _RecordingQuickUnlockStorage store;
+
+    setUp(() async {
+      // A recording store rather than `debugForceNoBiometricSupport`, which
+      // makes `updateQuickUnlockFile` log and return without writing - so the
+      // symptom of #258, the store losing the database, would never be
+      // exercised and only the in-memory set could be asserted.
+      store = _RecordingQuickUnlockStorage();
+      await newBloc(quickUnlockStorage: store);
+    });
+
+    Future<KdbxOpenedFile> openFirst(bool addToQuickUnlock) async {
+      final source = _PlainFileSource(uuid: 'first-source');
+      source.written = await _format.create(_credentials, 'test').save();
+      final openIt = StreamIterator(
+        bloc.openFile(
+          source,
+          _credentials,
+          addToQuickUnlock: addToQuickUnlock,
+        ),
+      );
+      expect(await openIt.moveNext(), isTrue);
+      final opened = openIt.current.kdbxOpenedFile!;
+      await openIt.cancel();
+      return opened;
+    }
+
+    // Issue #258: the old source stayed in the quick unlock set, the new one
+    // was never added, so `_updateQuickUnlockStore` could not resolve it and
+    // dropped it - with one file open that emptied the store, and the next
+    // start asked for the master password.
+    test('the store ends up holding the new source', () async {
+      final opened = await openFirst(true);
+      expect(store.lastWritten?.keys, [opened.fileSource]);
+
+      final newSource = _PlainFileSource();
+      final moved = await bloc.saveAs(opened, newSource);
+
+      // The assertion that discriminates: before the fix this came back
+      // empty, because the entry was keyed by a source no longer open.
+      expect(store.lastWritten?.keys, [newSource]);
+      expect(store.lastWritten?.keys, isNot(contains(opened.fileSource)));
+      expect(bloc.hasQuickUnlockOpen(), isTrue);
+
+      // The by-kdbx-file index is a stream listener behind; in the app the
+      // user closes long after.
+      await pumpEventQueue();
+      await bloc.close(moved.kdbxFile);
+      expect(bloc.hasQuickUnlockOpen(), isFalse);
+      expect(store.lastWritten, isEmpty);
+    });
+
+    test('does not add a file that was not in quick unlock', () async {
+      final opened = await openFirst(false);
+      expect(bloc.hasQuickUnlockOpen(), isFalse);
+      // Nothing was ever written, so a save as must not start writing - that
+      // would prompt for biometrics on a database the user never opted in.
+      expect(store.lastWritten, isNull);
+
+      await bloc.saveAs(opened, _PlainFileSource());
+      expect(bloc.hasQuickUnlockOpen(), isFalse);
+      expect(store.lastWritten, isNull);
     });
   });
 }

@@ -1,0 +1,214 @@
+# Where a release goes, and who acts at each place.
+#
+# Read by `tool/train.sh` (cux_train). This is step 1 of
+# docs/design/authpass-on-the-train.md in the cux_ship repository: every
+# destination declared, and **nothing automated**. The release is performed
+# exactly as it is today — by hand, from README.md's "Releasing" section — but
+# ordered, resumable and recorded, so that the next run knows what the last one
+# finished.
+#
+# A sibling file rather than a `train:` block in `.cux-ship.yaml`, because that
+# file's parser throws on an unknown key and is read before every `cux_ship`
+# command: a `train:` block there would fail every upload in CI until a release
+# that knows the word. See §4 of the plan.
+#
+# ## Two things this file does not yet say
+#
+# **`internal` is omitted everywhere, and that is not the same as "nobody
+# acts".** §3's internal column is what CI already does on a `stable` push —
+# it builds every artifact and puts it on the artifact server — and the train's
+# `internal` verb is not wired (it is the last step of the plan). An omitted
+# stage reads as `none`, so `train internal` would report nothing to do. That
+# is honest for today and wrong the day the verb lands; whoever wires it writes
+# the internal rows then.
+#
+# **`read` is omitted everywhere**, so every cell is `attested` at best —
+# `status` shows what the record says, never what a store holds. The reads that
+# need no credential (the artifact server URLs, snapcraft, F-Droid) are step 2.
+#
+# ## The order below is load-bearing
+#
+# A run walks destinations in declaration order, so this file's order is §3
+# step 5's order: the Apple and Play consoles, then the artifact-server index,
+# then the two places that *read* that index and would otherwise publish the
+# previous release, then snap, then the consoles that have nothing before them,
+# then the version tag, then F-Droid.
+#
+# The train does not enforce the dependency, only the order — a step that fails
+# does not stop the ones after it. Moving `github` above `direct:android` would
+# publish a GitHub release against a stale index and nothing would say so.
+
+# The version tag, spent once every destination below that has a production
+# step is recorded. `--build-number` matters: without it `release finish` tags
+# HEAD, which is not the commit the build came from. With it the commit is read
+# from the one `uploaded/v*+{build}` tag — for 1.9.13 (2196) that is 50f5d63f,
+# the commit `stable` was built from. That lookup arrived in cux_ship 4.0.1;
+# under the 3.6.0 this repository pinned before, the flag only went into the
+# tag message and HEAD was tagged regardless.
+#
+# `--no-bump` matters as much. Left to itself `release finish` does a second
+# thing after the tag: it moves the branch to the next patch version — rewrites
+# `authpass/pubspec.yaml`, adds a `## X.Y.Z` section to CHANGELOG.md, commits,
+# and pushes that commit straight to `main`. README.md has no such step, the
+# command refuses outright from any branch but `main` (before it tags), and
+# here it comes out half done: the root CHANGELOG.md is a symlink, so the
+# commit carries the pubspec and leaves the changelog edit in the working
+# tree. All three seen in a scratch clone under cux_ship 4.5.0-dev.9. The
+# version is still bumped by hand, as it is today.
+finish:
+  kind: run
+  command: "authpass/_tools/ship.sh release finish --version {version} --build-number {build} --no-bump"
+
+destinations:
+  # ---- the two consoles that will become API destinations (plan step 3) ----
+  play:
+    identity:
+      package: design.codeux.authpass
+    beta:
+      kind: manual
+      console: "https://play.google.com/apps/publish"
+      note: "promote the internal-track build to the beta track"
+    production:
+      kind: manual
+      console: "https://play.google.com/apps/publish"
+      note: "promote the beta build to production"
+
+  appstore:ios:
+    identity:
+      bundle-id: design.codeux.authpass.ios
+    beta:
+      kind: manual
+      console: "https://appstoreconnect.apple.com/apps"
+      note: "release the TestFlight build to the external group"
+    production:
+      kind: manual
+      console: "https://appstoreconnect.apple.com/apps"
+
+  # Not `.macos`: the Mac app is the record with the bare id, and iOS is the
+  # one with a suffix (upload-macos.sh, upload-ios.sh, and both Xcode projects).
+  appstore:macos:
+    identity:
+      bundle-id: design.codeux.authpass
+    beta:
+      kind: manual
+      console: "https://appstoreconnect.apple.com/apps"
+      note: "release the TestFlight build to the external group"
+    production:
+      kind: manual
+      console: "https://appstoreconnect.apple.com/apps"
+
+  # ---- the artifact-server index: everything below reads it ----
+  #
+  # One step in the README, four rows here, because they are four artifacts a
+  # person can finish separately and the record should say which. The console
+  # is the host rather than a page; the note is the command from README.md.
+  direct:android:
+    production:
+      kind: manual
+      console: "ssh data.authpass.app"
+      note: "stable.txt, then update_stable.sh"
+
+  direct:windows:
+    production:
+      kind: manual
+      console: "ssh data.authpass.app"
+      note: "stable.txt, then update_stable.sh, then appcast.generate.sh"
+
+  direct:linux:
+    production:
+      kind: manual
+      console: "ssh data.authpass.app"
+      note: "stable.txt, then update_stable.sh"
+
+  direct:macos:
+    production:
+      kind: manual
+      console: "ssh data.authpass.app"
+      note: >-
+        stable.txt, then update_stable.sh — the zip itself is built and
+        notarized on the laptop and uploaded with _tools/upload-artifact.sh
+
+  # ---- the two that re-host what the index names ----
+  github:
+    production:
+      kind: manual
+      console: "https://github.com/authpass/authpass/releases"
+      note: "create the draft, then _tools/release/github-release.sh"
+
+  fosshub:
+    production:
+      kind: manual
+      console: "https://devzone.fosshub.com/dashboard/projects"
+      note: "_tools/release/fosshub-release.sh"
+
+  snap:
+    production:
+      kind: manual
+      console: "https://snapcraft.io/authpass/releases"
+      note: "already on edge; release the same revision to stable"
+
+  # ---- consoles with nothing ordered before them ----
+  amazon:
+    production:
+      kind: manual
+      console: "https://developer.amazon.com/apps-and-games/console/apps/list.html"
+
+  samsung:
+    production:
+      kind: manual
+      console: "https://seller.samsungapps.com/main/sellerMain.as"
+
+  huawei:
+    production:
+      kind: manual
+      console: "https://developer.huawei.com/consumer/en/service/josp/agc/index.html"
+
+  microsoft:
+    production:
+      kind: manual
+      console: "https://partner.microsoft.com/en-us/dashboard/windows/overview"
+
+  ppa:
+    production:
+      kind: manual
+      console: "https://github.com/authpass/authpass-deb"
+      note: >-
+        docker-compose run bionic ./update.sh focal, then the same for bionic
+
+  # ---- nobody acts at production ----
+  #
+  # `none` is satisfied vacuously by the finish rule: nothing writes a record,
+  # so waiting for one would hold the version tag forever.
+  # **`public-at-internal` belongs here and cannot be written yet.** §3 marks
+  # `web`, `packagecloud` and `snap` as reaching the public the moment
+  # `stable` is pushed, which is the most important thing this table could say
+  # about them. The flag is a statement about the *internal* stage, and this
+  # table does not declare that stage — the parser refuses the combination,
+  # correctly: a row claiming "public at internal" while declaring nobody acts
+  # at internal is saying two things that cannot both be true. It goes in with
+  # the internal rows.
+  web:
+    production: none
+
+  packagecloud:
+    production: none
+
+  # Flathub's bot rebuilds from the published release. Nobody here acts, so
+  # there is nothing to attest and the row's whole content is a read it does
+  # not have yet.
+  flathub:
+    production: none
+
+  # ---- after the version tag ----
+  #
+  # `fdroid-vX.Y.Z` annotates `vX.Y.Z`, so it cannot precede it. This is the
+  # one destination the finish rule does not wait on.
+  fdroid:
+    after-finish: true
+    production:
+      kind: manual
+      console: "https://f-droid.org/packages/design.codeux.authpass.fdroid/"
+      note: >-
+        push fdroid-vX.Y.Z, then update fdroid-version.txt on the artifact
+        server — the changelog file is copied into metadata/android before the
+        stable push
