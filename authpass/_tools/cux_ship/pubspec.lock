@@ -93,8 +93,8 @@ packages:
     dependency: "direct main"
     description:
       path: cux_train
-      ref: "9a430873533e8a40aa7b4f6164460c030feb7461"
-      resolved-ref: "9a430873533e8a40aa7b4f6164460c030feb7461"
+      ref: "0ec09b7c9c2d9ee92cf7f1d7495a8b71557b6c18"
+      resolved-ref: "0ec09b7c9c2d9ee92cf7f1d7495a8b71557b6c18"
       url: "https://github.com/codeuxdesign/cux_ship.git"
     source: git
     version: "0.1.0-dev.1"

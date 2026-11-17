@@ -51,18 +51,27 @@ dependencies:
   #
   # **A git ref because it is not published**, and pinned to a commit rather
   # than to a branch: this is release tooling, and a mutable ref would mean
-  # two runs of the same release could use different code. The commit is the
-  # one tagged `v4.5.0-dev.9` there, so it stays fetchable. `cux_ship`'s CI
+  # two runs of the same release could use different code. A merge commit on
+  # `main` rather than the branch tip it merged, so that the pin stays
+  # fetchable however that branch is later tidied away. `cux_ship`'s CI
   # resolves `cux_ship` as a git dependency and not this package; what tests
   # this shape is this repository's own CI, where every `ship.sh` call
   # resolves the wrapper from a fresh checkout.
+  #
+  # **This pin and `.cux-train.yaml` move together, in one commit.** The ref
+  # below is the first with the `internal` verb, and the table now declares a
+  # `dispatch`, eight `wait` rows and one local step for it. The pin it
+  # replaced
+  # (9a430873, tagged `v4.5.0-dev.9`) refuses that table outright —
+  # `.cux-train.yaml has an unknown key: dispatch` — so a tree carrying one
+  # without the other has no working `tool/train.sh`, `status` included.
   #
   # TO BUMP: change `ref` to the new commit, then `dart pub upgrade` here.
   cux_train:
     git:
       url: https://github.com/codeuxdesign/cux_ship.git
       path: cux_train
-      ref: 9a430873533e8a40aa7b4f6164460c030feb7461
+      ref: 0ec09b7c9c2d9ee92cf7f1d7495a8b71557b6c18
   # The git-buildnumber port, invoked through ship.sh's `buildnumber`
   # dispatch. Replaces the shell script release.sh used to curl from the
   # mutable `stable` branch and execute — unpinned, unhashed, run on a CI
