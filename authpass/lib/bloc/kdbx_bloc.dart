@@ -608,9 +608,9 @@ class KdbxBloc {
   /// watching, while the database is the same one. An earlier attempt at this
   /// guard counted writes on the [FileSource] and was blind to exactly that.
   ///
-  /// [reload] is marked too. It does not write anywhere, but it serializes the
-  /// file to bytes, and `KdbxFormat.save` clears `isDirty` whether or not the
-  /// bytes ever reach a file source.
+  /// [reload] is marked too. It does not write anywhere, but the merge it ends
+  /// with changes the open database, so whatever the origin handed out before
+  /// it is stale.
   final _saveAttempted = Set<KdbxFile>.identity();
 
   void _markSaveAttempted(KdbxFile file) => _saveAttempted.add(file);
@@ -1522,47 +1522,45 @@ class KdbxBloc {
   void clearEntryByUuidLookup() => _entryUuidLookup = null;
 
   Stream<ReloadStatus> reload(KdbxOpenedFile file) async* {
-    Uint8List? bytes;
-    final dirtyObjects = file.kdbxFile.dirtyObjects;
-    // Serializing below clears `isDirty` without the bytes going anywhere, so
-    // from here on a background load must not take this file for one nobody
-    // has touched. The mark stays for the rest of the file's life: a reload
-    // merges origin content into the open database, which makes anything the
-    // origin handed out earlier stale as surely as a save would.
+    // The merge below works on the open database itself, so unsaved edits are
+    // merged along with everything else and stay dirty. Do not serialize the
+    // file first: `KdbxFile.save` marks every object clean, and there is no
+    // way to mark them dirty again from here (`KdbxFile.dirtyObject` alone
+    // leaves the objects themselves clean, so a later save could never clear
+    // the file again).
+    //
+    // A reload merges origin content into the open database, which makes
+    // anything the origin handed out earlier stale as surely as a save would,
+    // so a background load must not take this file for one nobody has touched.
+    // The mark stays for the rest of the file's life.
     _markSaveAttempted(file.kdbxFile);
-    try {
-      if (file.kdbxFile.isDirty) {
-        //throw StateError('File must not be dirty for now.');
-        bytes = await file.kdbxFile.save();
-      }
-      yield ReloadStatus.downloading;
-      final reloadedContent = await file.fileSource.content().last;
-      assert(reloadedContent.source == FileContentSource.origin);
-      if (ByteUtils.eq(reloadedContent.content, file.kdbxFileContent.content)) {
-        yield ReloadStatus.didNotChange;
-        return;
-      }
-
-      // try loading the new file.
-      yield ReloadStatus.decrypting;
-      final readArgs = KdbxReadArgs(
-        reloadedContent.content,
-        file.kdbxFile.credentials,
-      );
-      final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
-
-      _logger.info('\n\n\n===========\n\n\n');
-      _logger.info('starting merge.');
-      file.kdbxFile.merge(kdbxReadFile.file!);
-
-      _logger.info('\n\nDONE MERGE\n\n\n\n');
-
-      yield ReloadStatus.merged;
-    } finally {
-      if (bytes != null && !file.kdbxFile.isDirty) {
-        dirtyObjects.forEach(file.kdbxFile.dirtyObject);
-      }
+    yield ReloadStatus.downloading;
+    final reloadedContent = await file.fileSource.content().last;
+    assert(reloadedContent.source == FileContentSource.origin);
+    if (ByteUtils.eq(reloadedContent.content, file.kdbxFileContent.content)) {
+      yield ReloadStatus.didNotChange;
+      return;
     }
+
+    // try loading the new file.
+    yield ReloadStatus.decrypting;
+    final readArgs = KdbxReadArgs(
+      reloadedContent.content,
+      file.kdbxFile.credentials,
+    );
+    final kdbxReadFile = await readKdbxFile(kdbxFormat, readArgs);
+
+    _logger.info('\n\n\n===========\n\n\n');
+    _logger.info('starting merge.');
+    // An unsaved edit which the other copy has a newer version of is kept as
+    // a history revision by the merge itself, and held back from the history
+    // limits until the next save writes it out - see kdbx 2.7.0, which is
+    // where that moved to.
+    file.kdbxFile.merge(kdbxReadFile.file!);
+
+    _logger.info('\n\nDONE MERGE\n\n\n\n');
+
+    yield ReloadStatus.merged;
   }
 
   Future<AttachmentProvider> attachmentProviderForFileSource(
