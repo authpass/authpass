@@ -305,12 +305,15 @@ class KdbxBloc {
     required this.analytics,
     required this.cloudStorageBloc,
     @visibleForTesting KdbxFormat? kdbxFormat,
+    @visibleForTesting QuickUnlockStorage? quickUnlockStorage,
   }) : _kdbxFormatOverride = kdbxFormat,
-       quickUnlockStorage = QuickUnlockStorage(
-         cloudStorageBloc: cloudStorageBloc,
-         env: env,
-         analytics: analytics,
-       ) {
+       quickUnlockStorage =
+           quickUnlockStorage ??
+           QuickUnlockStorage(
+             cloudStorageBloc: cloudStorageBloc,
+             env: env,
+             analytics: analytics,
+           ) {
     if (AuthPassPlatform.isWeb) {
       KdbxFormat.dartWebWorkaround = true;
     }
@@ -1604,8 +1607,9 @@ class KdbxBloc {
         newFile.fileSource: newFile,
       }),
     );
-    // TODO also do not update quick unlock if this file is not in quick unlock.
-    if (_openedFilesQuickUnlock.isNotEmpty) {
+    // Quick unlock is keyed by file source, so it has to follow the move.
+    if (_openedFilesQuickUnlock.remove(oldSource)) {
+      _openedFilesQuickUnlock.add(output);
       try {
         await _updateQuickUnlockStore();
       } on AuthException catch (e, stackTrace) {
@@ -1619,6 +1623,17 @@ class KdbxBloc {
           rethrow;
         }
       }
+    }
+    // Everything else keyed by the source has to follow it too, or [close]
+    // removes the new source and leaves the old entry behind for the life of
+    // the process. For these two that means a database the user answered
+    // "later" for is never asked about again, even on reopening the original
+    // file, which is the opposite of what [_duplicateUuidsAnswered] promises.
+    if (_duplicateUuidsPending.remove(oldSource)) {
+      _duplicateUuidsPending.add(output);
+    }
+    if (_duplicateUuidsAnswered.remove(oldSource)) {
+      _duplicateUuidsAnswered.add(output);
     }
     return newFile;
   }
