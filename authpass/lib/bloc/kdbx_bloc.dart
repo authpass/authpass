@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection' show HashMap;
 import 'dart:convert';
 import 'dart:core';
 import 'dart:typed_data';
@@ -236,6 +237,25 @@ class KdbxOpenedFile {
   /// The file content as the source last saw it: what [kdbxFile] was read
   /// from, and after that whatever the most recent save wrote.
   final FileContent kdbxFileContent;
+}
+
+/// What [KdbxBloc.createEntry] knows about an entry it created, to tell later
+/// whether the entry was touched.
+class _NewEntry {
+  _NewEntry({
+    required this.file,
+    required this.parent,
+    required this.lastModified,
+    required this.parentData,
+  });
+
+  final KdbxFile file;
+  final KdbxGroup parent;
+  final DateTime? lastModified;
+
+  /// The parent group's own data right after the entry was added, see
+  /// [KdbxBloc._groupData].
+  final String parentData;
 }
 
 class OpenedKdbxFiles {
@@ -1095,6 +1115,9 @@ class KdbxBloc {
     // no background load left to protect it from, and leaving it in would
     // keep a disposed [KdbxFile] alive in the set for as long as the app runs.
     _saveAttempted.remove(file);
+    // Entries created in this file will never be discarded any more, and the
+    // map would keep the whole decrypted file alive.
+    _newEntries.removeWhere((_, created) => identical(created.file, file));
     // "Not now" only holds for as long as the file is open - reopening a
     // database which still needs repairing asks about it again.
     _duplicateUuidsPending.remove(fileSource);
@@ -1123,6 +1146,7 @@ class KdbxBloc {
     // reach it. Nothing is open after this, so nothing has a background load
     // left to be protected from, and anything still in the set is an orphan.
     _saveAttempted.clear();
+    _newEntries.clear();
     _duplicateUuidsPending.clear();
     _duplicateUuidsAnswered.clear();
     if (clearQuickUnlock) {
@@ -1248,8 +1272,81 @@ class KdbxBloc {
     final rootGroup = group ?? file.body.rootGroup;
     final entry = KdbxEntry.create(file, rootGroup);
     rootGroup.addEntry(entry);
+    _newEntries[entry] = _NewEntry(
+      file: file,
+      parent: rootGroup,
+      lastModified: entry.times.lastModificationTime.get(),
+      parentData: _groupData(rootGroup),
+    );
     return entry;
   }
+
+  /// Entries created by [createEntry] which were not yet handed to
+  /// [discardUntouchedNewEntry].
+  final _newEntries = HashMap<KdbxEntry, _NewEntry>.identity();
+
+  /// Removes [entry] again, if it was created by [createEntry] and nothing was
+  /// entered since: it is still blank, was never saved and was not moved.
+  /// Meant to be called once the user is done with the entry, so that pressing
+  /// the add button and going back does not leave an empty entry behind.
+  ///
+  /// The unsaved state that adding the entry created is dropped with it, on
+  /// the entry and on its group, so a file that had nothing else to save is
+  /// clean again and the save indicator goes away. Anything else the user has
+  /// touched stays unsaved. Returns `true` if the entry was removed.
+  bool discardUntouchedNewEntry(KdbxEntry entry) {
+    final created = _newEntries.remove(entry);
+    if (created == null) {
+      return false;
+    }
+    final parent = created.parent;
+    if (!entry.isDirty ||
+        entry.parent != parent ||
+        !parent.entries.contains(entry) ||
+        entry.times.lastModificationTime.get() != created.lastModified ||
+        !_isBlank(entry)) {
+      return false;
+    }
+    final file = entry.file;
+    // The group might have been renamed or got another icon while the entry
+    // was open. That change is the user's, and it is still unsaved.
+    final parentUntouched = _groupData(parent) == created.parentData;
+    // Records no deleted object, because nothing outside this session ever
+    // held the entry - see `KdbxObject.isKnownOutsideThisSession`.
+    file.deletePermanently(entry);
+    // Only these two, so anything else the user has edited is still waiting to
+    // be saved. The group is left out when it carries a change of its own: a
+    // rename while the entry was open is the user's, and clearing it would
+    // leave it unsaved with nothing left to prompt for it.
+    file.markClean([
+      entry,
+      if (parentUntouched) ...[parent],
+    ]);
+    return true;
+  }
+
+  @visibleForTesting
+  int get newEntryCount => _newEntries.length;
+
+  /// Stops remembering [entry] as new, without touching it. For when its file
+  /// is not open any more, so [discardUntouchedNewEntry] must not act on it.
+  void forgetNewEntry(KdbxEntry entry) => _newEntries.remove(entry);
+
+  /// What the group itself holds (name, notes, icon, ...), as opposed to its
+  /// entries, subgroups and times. The times are not usable to see whether the
+  /// group was edited: they are only stored to the second.
+  static String _groupData(KdbxGroup group) => group.node.childElements
+      .where((e) => !_groupStructureNodes.contains(e.name.local))
+      .map((e) => e.toXmlString())
+      .join();
+
+  @NonNls
+  static const _groupStructureNodes = {'Entry', 'Group', 'Times'};
+
+  static bool _isBlank(KdbxEntry entry) =>
+      entry.history.isEmpty &&
+      entry.binaryEntries.isEmpty &&
+      entry.stringEntries.every((e) => e.value?.getText()?.isEmpty ?? true);
 
   @NonNls
   static const _customDataSaveCount = 'codeux.design.authpass.save';

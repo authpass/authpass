@@ -89,11 +89,31 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen>
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final entryDetailsKey = GlobalKey<_EntryDetailsState>();
   EntryViewModel? entryViewModel;
+  KdbxBloc? _kdbxBloc;
+
+  @override
+  void dispose() {
+    // An entry which was just created with the add button, but never edited,
+    // is not worth keeping. Before `super.dispose()`, which ends this state:
+    // afterwards it is defunct, and reading `widget` from it is not something
+    // the framework promises to keep working.
+    final kdbxBloc = _kdbxBloc;
+    if (kdbxBloc != null) {
+      if (kdbxBloc.openedFilesKdbx.contains(widget.entry.file)) {
+        kdbxBloc.discardUntouchedNewEntry(widget.entry);
+      } else {
+        // The file was closed or replaced while the entry was open.
+        kdbxBloc.forgetNewEntry(widget.entry);
+      }
+    }
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final kdbxBloc = context.watch<KdbxBloc>();
+    _kdbxBloc = kdbxBloc;
     if (entryViewModel == null) {
       entryViewModel = EntryViewModel(widget.entry, kdbxBloc);
       handleSubscription(
