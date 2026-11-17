@@ -2,6 +2,20 @@ import 'package:authpass/l10n-generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// Validator which reports [message] for the value which was just rejected as
+/// the master password ([invalidValue]).
+///
+/// An empty password is a valid candidate too (a database can be locked with an
+/// empty password), so unlike `SValidator.invalidValue` this does not skip
+/// empty input. Otherwise a rejected empty password shows no error at all.
+FormFieldValidator<String> invalidPasswordValidator({
+  required String? Function() invalidValue,
+  required String message,
+}) => (value) {
+  final invalid = invalidValue();
+  return invalid != null && (value ?? '') == invalid ? message : null;
+};
+
 /// Password input field which by default is obscured, but displays
 /// a suffix icon to change it to make it visible.
 class PasswordInputField extends StatefulWidget {

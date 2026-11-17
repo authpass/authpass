@@ -16,6 +16,18 @@ class FilePickerStateNoop implements FilePickerState {
   void registerUriHandler(UriHandler uriHandler) {}
 
   @override
+  void registerDropHandler(DropHandler dropHandler) {}
+
+  @override
+  void registerDropHoverHandler(DropHoverHandler hoverHandler) {}
+
+  @override
+  bool removeDropHandler(DropHandler dropHandler) => false;
+
+  @override
+  bool removeDropHoverHandler(DropHoverHandler hoverHandler) => false;
+
+  @override
   void removeErrorEventHandler(ErrorEventHandler errorEventHandler) {}
 
   @override
