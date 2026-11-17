@@ -40,10 +40,11 @@
 
 # The version tag, spent once every destination below that has a production
 # step is recorded. `--build-number` matters: without it `release finish` tags
-# HEAD, which is not the commit the build came from.
-#
-# UNVERIFIED against the pinned cux_ship 3.6.0 — see the note in tool/train.sh
-# about which version this file can run under.
+# HEAD, which is not the commit the build came from. With it the commit is read
+# from the one `uploaded/v*+{build}` tag — for 1.9.13 (2196) that is 50f5d63f,
+# the commit `stable` was built from. That lookup arrived in cux_ship 4.0.1;
+# under the 3.6.0 this repository pinned before, the flag only went into the
+# tag message and HEAD was tagged regardless.
 finish:
   kind: run
   command: "authpass/_tools/ship.sh release finish --version {version} --build-number {build}"
@@ -64,7 +65,7 @@ destinations:
 
   appstore:ios:
     identity:
-      bundle-id: design.codeux.authpass
+      bundle-id: design.codeux.authpass.ios
     beta:
       kind: manual
       console: "https://appstoreconnect.apple.com/apps"
@@ -73,9 +74,11 @@ destinations:
       kind: manual
       console: "https://appstoreconnect.apple.com/apps"
 
+  # Not `.macos`: the Mac app is the record with the bare id, and iOS is the
+  # one with a suffix (upload-macos.sh, upload-ios.sh, and both Xcode projects).
   appstore:macos:
     identity:
-      bundle-id: design.codeux.authpass.macos
+      bundle-id: design.codeux.authpass
     beta:
       kind: manual
       console: "https://appstoreconnect.apple.com/apps"
@@ -194,7 +197,7 @@ destinations:
     after-finish: true
     production:
       kind: manual
-      console: "https://f-droid.org/packages/design.codeux.authpass/"
+      console: "https://f-droid.org/packages/design.codeux.authpass.fdroid/"
       note: >-
         push fdroid-vX.Y.Z, then update fdroid-version.txt on the artifact
         server — the changelog file is copied into metadata/android before the

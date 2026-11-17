@@ -47,8 +47,11 @@ dependencies:
   #
   # **A git ref because it is not published**, and pinned to a commit rather
   # than to a branch: this is release tooling, and a mutable ref would mean
-  # two runs of the same release could use different code. `cux_ship`'s own
-  # CI resolves both packages this way, so the shape is tested there.
+  # two runs of the same release could use different code. The commit is the
+  # one tagged `v4.5.0-dev.9` there, so it stays fetchable. `cux_ship`'s CI
+  # resolves `cux_ship` as a git dependency and not this package; what tests
+  # this shape is this repository's own CI, where every `ship.sh` call
+  # resolves the wrapper from a fresh checkout.
   #
   # TO BUMP: change `ref` to the new commit, then `dart pub upgrade` here.
   cux_train:
