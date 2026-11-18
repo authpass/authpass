@@ -96,6 +96,57 @@
 # does not stop the ones after it. Moving `github` above `direct:android` would
 # publish a GitHub release against a stale index and nothing would say so.
 
+# What has to hold before `internal` spends anything. They run in this order,
+# before the confirmation and before the dispatch below, so a refusal arrives
+# while the release is still free — and `--dry-run` runs them, which is what
+# lets a dry run answer whether the release is ready rather than only what
+# this table declares. Each has to exit zero; the bodies are in
+# `tool/train-gate.sh`.
+#
+# **Each one is here because it either has gone wrong or would go wrong
+# unnoticed.** A stale `--build` does not fail, it quietly succeeds against
+# the previous release's artifacts, because every read and every `uploaded/`
+# tag is named after that number. A pubspec whose version was never bumped
+# has CI stamp a different release than the train is tracking. A missing
+# changelog section hands every store empty release notes.
+#
+# **And the F-Droid one is the gap that already happened.** The newest file in
+# `metadata/android/en-US/changelogs/` is 160.txt, written for 1.9.5 in June
+# 2022, against a pubspec that has since reached 167: seven releases of
+# F-Droid users with no release notes, because nothing ever read those files.
+# It is at `internal` and not at `production` because the `fdroid` row's own
+# note says the changelog is copied into metadata/android *before the stable
+# push* — and the stable push is this stage's dispatch.
+#
+# **It refuses today, and that is the answer rather than a problem to work
+# around.** 1.9.13 shipped on 2026-11-09, so 167.txt would be backfilled
+# paperwork for a release that is already out, and 161 to 166 are history
+# nobody will publish. The file this gate will actually ask for is the next
+# release's, at the moment it is still cheap to write.
+#
+# **`cux_ship verify` is not one of these, and it was the obvious candidate.**
+# It checks everything §3's `pre-build` hook asks for and more, offline and
+# without credentials. It also reports 23 problems on this repository today,
+# and all but two of them are in sections from 1.2.0 to 1.9.10 that will never
+# be published again — as a gate it would refuse every release for history.
+# The part that is about the release at hand is four lines of awk instead.
+#
+# Nothing is declared for `beta` or `production`. A gate that checks nothing
+# passes always, which the parser refuses outright, so an empty key is not an
+# option. What §3 names for `pre-release` is a `release finish --dry-run` —
+# the `finish` step below with a flag — and that is worth declaring once one
+# release has been through `finish` for real, which none has.
+gates:
+  internal:
+    - kind: run
+      command: "tool/train-gate.sh build-number {build}"
+    - kind: run
+      command: "tool/train-gate.sh release-version {version}"
+    - kind: run
+      command: "tool/train-gate.sh changelog-section {version}"
+    - kind: run
+      command: "tool/train-gate.sh fdroid-changelog"
+
 # The push CI reacts to — README step 2, typed by the train. It belongs to the
 # stage rather than to any one destination, which is why it is up here and not
 # under `play`.
