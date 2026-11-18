@@ -2,8 +2,14 @@
 # Orders the steps of a release.
 #
 #   tool/train.sh status --build 2196 --release 1.9.13
+#   tool/train.sh internal --build 2196 --release 1.9.13 --dry-run
 #   tool/train.sh production --build 2196 --release 1.9.13 --dry-run
 #   tool/train.sh production --build 2196 --release 1.9.13
+#
+# `--build` is required and never guessed. The number for the commit about to
+# be released comes from the allocator CI uses, which is idempotent per commit:
+#
+#   authpass/_tools/ship.sh buildnumber generate
 #
 # The table of where a release goes is `.cux-train.yaml` beside this script's
 # parent — the repository root, which is where this runs from and where
@@ -34,12 +40,22 @@
 # one directory, one lockfile. It imports `package:cux_ship/provenance.dart`,
 # which first shipped in cux_ship 4.5.0-dev.9, so the two move together.
 #
-# Every step in `.cux-train.yaml` is `manual` or `none`: the train uploads,
-# promotes and publishes nothing. What a run without `--dry-run` does write is
-# git tags, pushed to origin — a `promoted/<destination>/<stage>/v…+N` record
-# for each step a person confirms (`refused/…` for one they turn down) — and,
-# once every destination is recorded, the table's `finish` step, which tags
-# and pushes `vX.Y.Z`.
+# **The train still uploads, promotes and publishes nothing at a
+# destination.** Every destination step in `.cux-train.yaml` is `manual`,
+# `wait` or `none`: a person acts, or CI does and the train reads until the
+# build turns up.
+#
+# One step is neither, and it is the one to know about. The table's `dispatch`
+# is `git push origin HEAD:stable`, which `internal` spawns — so that verb sets
+# every CI build going, and reaches users at the snap's `edge` channel, the web
+# app and packagecloud. It asks first and names them; `--yes` skips the asking.
+#
+# Otherwise what a run without `--dry-run` writes is git tags, pushed to origin
+# — a `promoted/<destination>/<stage>/v…+N` record for each step a person
+# confirms (`refused/…` for one they turn down) — and, once every destination
+# is recorded, the table's `finish` step, which tags and pushes `vX.Y.Z`.
+# Nothing the `internal` wait sees is recorded: a read says the destination
+# holds the build, where a tag would say somebody claims to have put it there.
 
 set -euo pipefail
 
