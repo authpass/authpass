@@ -86,15 +86,20 @@ enum SecureWindowChannel {
       return
     }
     let center = NotificationCenter.default
+    // The old spelling of these two on purpose. The Runner target still builds
+    // with `SWIFT_VERSION = 4.0` (and `SWIFT_SWIFT3_OBJC_INFERENCE = On`), and
+    // `UIApplication.willResignActiveNotification` arrived in Swift 4.2, so in
+    // this target the compiler rejects it and points back here. Modernising
+    // the names means moving the target off Swift 4 first.
     observers.append(
       center.addObserver(
-        forName: UIApplication.willResignActiveNotification,
+        forName: NSNotification.Name.UIApplicationWillResignActive,
         object: nil,
         queue: nil
       ) { _ in showCover() })
     observers.append(
       center.addObserver(
-        forName: UIApplication.didBecomeActiveNotification,
+        forName: NSNotification.Name.UIApplicationDidBecomeActive,
         object: nil,
         queue: nil
       ) { _ in hideCover() })
