@@ -31,6 +31,7 @@ import 'package:authpass/utils/format_utils.dart';
 import 'package:authpass/utils/logging_utils.dart';
 import 'package:authpass/utils/path_utils.dart';
 import 'package:authpass/utils/platform.dart';
+import 'package:authpass/utils/secure_window.dart';
 import 'package:authpass/utils/winsparkle_init_noop.dart'
     if (dart.library.io) 'package:authpass/utils/winsparkle_init.dart';
 import 'package:collection/collection.dart';
@@ -228,6 +229,7 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
   late final Deps _deps = widget.deps;
   AppData? _appData;
   late final FilePickerState _filePickerState = _initFilePickerState();
+  final _secureWindow = SecureWindow();
 
   GlobalKey<NavigatorState>? get _navigatorKey => widget.navigatorKey;
 
@@ -245,18 +247,27 @@ class _AuthPassAppState extends State<AuthPassApp> with StreamSubscriberMixin {
         }
       }),
     );
-    if (AuthPassPlatform.isAndroid) {
+    // One setting, two mechanisms: Android has a window flag for this, iOS
+    // needs the native side to cover the window while the system photographs
+    // it for the app switcher. Both default to off.
+    if (AuthPassPlatform.isAndroid || AuthPassPlatform.isIOS) {
       handleSubscription(
         _deps.appDataBloc.store.onValueChangedAndLoad
             .map((event) => event.secureWindowOrDefault)
             .distinct()
             .listen((secureWindowOrDefault) {
-              if (secureWindowOrDefault) {
-                FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+              if (AuthPassPlatform.isAndroid) {
+                if (secureWindowOrDefault) {
+                  FlutterWindowManager.addFlags(
+                    FlutterWindowManager.FLAG_SECURE,
+                  );
+                } else {
+                  FlutterWindowManager.clearFlags(
+                    FlutterWindowManager.FLAG_SECURE,
+                  );
+                }
               } else {
-                FlutterWindowManager.clearFlags(
-                  FlutterWindowManager.FLAG_SECURE,
-                );
+                unawaited(_secureWindow.setSecure(secureWindowOrDefault));
               }
             }),
       );
