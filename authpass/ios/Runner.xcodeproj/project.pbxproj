@@ -22,6 +22,7 @@
 		7E5F90EC3DEC4737C52422BA /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCD87F6BFB1AC14DB6FF57E /* CredentialListViewController.swift */; };
 		858567D9768C3C117B23C939 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5B5B0D780E41E31BEEB826 /* CredentialProviderViewController.swift */; };
 		89065F04E9997DB7CBA3ADD0 /* AutofillIdentityChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F19E1041A9BD3CFFA78CBC /* AutofillIdentityChannel.swift */; };
+		5E82F4A1C9B73D06E815A2C7 /* SecureWindowChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C91B2D5E64F08AC12B3D4 /* SecureWindowChannel.swift */; };
 		9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9740EEB21CF90195004384FC /* Debug.xcconfig */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -102,6 +103,7 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		64AC5B79B09ADC150C6CC609 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		67F19E1041A9BD3CFFA78CBC /* AutofillIdentityChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillIdentityChannel.swift; sourceTree = "<group>"; };
+		7A3C91B2D5E64F08AC12B3D4 /* SecureWindowChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SecureWindowChannel.swift; sourceTree = "<group>"; };
 		6B7181CD3CCBF9BF9482CC5C /* AutofillVaultStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutofillVaultStore.swift; sourceTree = "<group>"; };
 		71058C3936FB52ADA9357DDE /* ConfigurationViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigurationViewController.swift; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				67F19E1041A9BD3CFFA78CBC /* AutofillIdentityChannel.swift */,
+				7A3C91B2D5E64F08AC12B3D4 /* SecureWindowChannel.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				89065F04E9997DB7CBA3ADD0 /* AutofillIdentityChannel.swift in Sources */,
+				5E82F4A1C9B73D06E815A2C7 /* SecureWindowChannel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
