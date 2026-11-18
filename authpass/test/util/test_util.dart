@@ -35,8 +35,13 @@ class TestUtil {
   static Future<Env> createEnv() async {
     final secretsFile = filePath('test/_testSecrets.json');
     _logger.fine('Using ${secretsFile.absolute}');
+    // Read synchronously, deliberately. `testWidgets` runs its body inside a
+    // `FakeAsync` zone, where real I/O never completes - the test just hangs
+    // until the 10 minute timeout. The file only exists where blackbox has
+    // decrypted it (CI), so an async read here is a hang that no local run
+    // without the key can show.
     final secretJson = secretsFile.existsSync()
-        ? await secretsFile.readAsString()
+        ? secretsFile.readAsStringSync()
         : '{}';
 
     return TestEnv(
@@ -72,8 +77,9 @@ class CloudStorageHelperMock implements CloudStorageHelperBase {
         final storage = <String, String>{};
         if (_file.existsSync()) {
           _logger.fine('Loading from $_file');
+          // Synchronously, for the reason given in [TestUtil.createEnv].
           storage.addAll(
-            (json.decode(await _file.readAsString()) as Map)
+            (json.decode(_file.readAsStringSync()) as Map)
                 .cast<String, String>(),
           );
         } else {
