@@ -55,15 +55,17 @@ credential returned.
 
 The lookup path:
 
-- `autofill_module` answers `openVaults` (every enabled vault at once) and
-  `matchEntries` (only what matches, ranked across all of them, metadata only).
-  Six tests cover it, including that ranking spans vaults — a weak match in the
-  first database must not outrank an exact one in the second — and that no
-  password crosses the channel until a row is picked.
+- `autofill_module` answers `openVaults` (every enabled vault at once),
+  `matchEntries` (only what matches, ranked across all of them, metadata only)
+  and `searchEntries` (free text over titles, usernames and urls, for when the
+  matcher finds nothing). The tests cover that ranking spans vaults — a weak
+  match in the first database must not outrank an exact one in the second —
+  and that no password crosses the channel until a row is picked.
 - `AutofillVaultStore` reads the manifest from the app group container and the
   cached keys from the shared keychain, skipping any vault whose key went stale.
 - `CredentialListViewController` is the picker, reached from both fill
-  callbacks.
+  callbacks. Its search bar searches every open vault; with no matches it
+  starts focused, so an unmatched site is not a dead end.
 - `ConfigurationViewController` is what Settings shows, reporting the real
   container contents rather than a welcome screen.
 - **Identity store sync** (phase 3) — `lib/autofill/autofill_identities.dart`
