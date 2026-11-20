@@ -103,7 +103,7 @@ class CharacterRange extends CharacterSet {
   }
 
   @override
-  int get length => charCodeEnd - charCodeStart;
+  int get length => charCodeEnd - charCodeStart + 1;
 }
 
 class CharacterString extends CharacterSet {
