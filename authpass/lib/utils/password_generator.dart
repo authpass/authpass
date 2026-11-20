@@ -29,7 +29,7 @@ abstract class CharacterSet {
   // CharacterString('äüößÄÜÖ');
   @NonNls
   static const specialCharacters = CharacterString(
-    r'''@%+\/$'!#$^?:,.(){}[]~-_''',
+    r'''@%+\/$'!#^?:,.(){}[]~-_''',
   );
 
   /// keys used for persisting user selection for default password generator.
