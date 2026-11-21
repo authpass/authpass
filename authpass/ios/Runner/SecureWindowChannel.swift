@@ -93,20 +93,15 @@ enum SecureWindowChannel {
       return
     }
     let center = NotificationCenter.default
-    // The old spelling of these two on purpose. The Runner target still builds
-    // with `SWIFT_VERSION = 4.0` (and `SWIFT_SWIFT3_OBJC_INFERENCE = On`), and
-    // the `UIApplication.didEnterBackgroundNotification` form arrived in Swift
-    // 4.2, so in this target the compiler rejects it and points back at these.
-    // Modernising the names means moving the target off Swift 4 first.
     observers.append(
       center.addObserver(
-        forName: NSNotification.Name.UIApplicationDidEnterBackground,
+        forName: UIApplication.didEnterBackgroundNotification,
         object: nil,
         queue: nil
       ) { _ in showCover() })
     observers.append(
       center.addObserver(
-        forName: NSNotification.Name.UIApplicationWillEnterForeground,
+        forName: UIApplication.willEnterForegroundNotification,
         object: nil,
         queue: nil
       ) { _ in hideCover() })
