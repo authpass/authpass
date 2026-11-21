@@ -51,8 +51,9 @@
 # app and packagecloud. It asks first and names them; `--yes` skips the asking.
 #
 # Before either, `internal` runs the table's `gates` — four checks in
-# `tool/train-gate.sh` that read this repository and spend nothing, which is
-# why `--dry-run` runs them as well. The first one to exit non-zero stops the
+# `tool/train-gate.sh` that spend nothing, which is why `--dry-run` runs them
+# as well. Three read this repository; the build-number one also fetches from
+# origin, since the allocator's refs are not in a default clone. The first one to exit non-zero stops the
 # run before the question and before the push. One of them refuses today on
 # purpose: F-Droid has no changelog file for the pubspec's versionCode, and
 # `.cux-train.yaml` argues there why that is the answer rather than something

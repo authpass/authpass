@@ -112,8 +112,11 @@
 #
 # **And the F-Droid one is the gap that already happened.** The newest file in
 # `metadata/android/en-US/changelogs/` is 160.txt, written for 1.9.5 in June
-# 2022, against a pubspec that has since reached 167: seven releases of
-# F-Droid users with no release notes, because nothing ever read those files.
+# 2022, against a pubspec that has since reached 167: 1.9.6 through 1.9.13
+# went to F-Droid users with no release notes at all, because nothing ever
+# read those files. Eight versions over seven versionCodes — 1.9.9 and 1.9.10
+# both shipped as `+164` — which is also the one hole left in the check, since
+# existence is all it asks.
 # It is at `internal` and not at `production` because the `fdroid` row's own
 # note says the changelog is copied into metadata/android *before the stable
 # push* — and the stable push is this stage's dispatch.
@@ -129,7 +132,7 @@
 # without credentials. It also reports 23 problems on this repository today,
 # and all but two of them are in sections from 1.2.0 to 1.9.10 that will never
 # be published again — as a gate it would refuse every release for history.
-# The part that is about the release at hand is four lines of awk instead.
+# The part that is about the release at hand is four rules of awk instead.
 #
 # Nothing is declared for `beta` or `production`. A gate that checks nothing
 # passes always, which the parser refuses outright, so an empty key is not an

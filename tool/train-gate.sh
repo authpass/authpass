@@ -25,12 +25,18 @@
 # **Two build numbers, and only one of them is `{build}`.** The train's
 # `{build}` is git-buildnumber's, which names every artifact and every store
 # upload and is what `tool/train-read.sh` compares. `authpass/pubspec.yaml`
-# carries a second one in its `+N` — the Android versionCode, and the number
-# the web app reports — bumped by hand and currently three figures where the
-# other is four. The F-Droid changelog file is named by versionCode, so the
-# check for it reads the pubspec and never `{build}`. Mixing the two is the
-# mistake this comment exists to prevent; `.cux-train.yaml` says the same
-# thing where the `web` row explains why it cannot be waited on.
+# carries a second one in its `+N`, bumped by hand and currently three figures
+# where the other is four.
+#
+# **Which of the two is "the versionCode" depends on who runs the build**, and
+# an earlier draft of this comment got it wrong by saying the pubspec's `+N`
+# simply is. `authpass/_tools/release.sh` passes `--build-number $buildnumber`
+# to every Android build CI makes (lines 194, 206 and 232 — apk and both
+# appbundles), so Play and the sideload apk carry the train's number. The
+# pubspec's `+N` is the versionCode for a build that passes no flag, which is
+# F-Droid's own, and it is the number the web app reports. The F-Droid
+# changelog file is named for F-Droid's build, so the check for it reads the
+# pubspec and never `{build}`.
 
 set -euo pipefail
 
@@ -65,9 +71,14 @@ case "${mode}" in
     # **The number the train was told has to be the number the commit owns.**
     # Everything downstream is named after `{build}` — the artifacts the reads
     # look for, the `uploaded/` tag a promotion is recorded against — so a
-    # stale `--build` does not fail, it succeeds against the previous
-    # release's files. That is the one error in this list that would go
-    # unnoticed, which is why it is checked first.
+    # stale `--build` within the release being worked on does not fail, it
+    # succeeds against the previous build's files.
+    #
+    # Not every stale number gets this far: `--release 1.9.12 --build 2250`
+    # is refused by the preflight before the gates run, on the missing
+    # `uploaded/v1.9.12+2250` tag. What that refusal cannot see is a number
+    # from the *same* version, which is the common slip — a second CI build of
+    # the release you are already shipping — and that is what this catches.
     expected="${1:?usage: train-gate.sh build-number <build>}"
     case "${expected}" in
       '' | *[!0-9]*) die "\`${expected}\` is not a build number" ;;
@@ -75,22 +86,52 @@ case "${mode}" in
 
     # `get` asks without claiming, where `generate` would allocate one; a gate
     # that allocated would be spending. Its progress trace goes to stderr, so
-    # stdout is the number alone.
+    # stdout is the number alone, and it is empty for a commit with no number.
     allocated=$("${root}/authpass/_tools/ship.sh" buildnumber get 2>/dev/null) \
       || die 'the build-number allocator could not answer. It fetches from
 origin, so this is usually the network. Nothing was checked.'
 
-    if [ -z "${allocated}" ]; then
-      die "no build number is allocated for this commit yet. Claim the one CI
-will agree on with \`authpass/_tools/ship.sh buildnumber generate\`, and pass
-that as --build."
+    if [ "${allocated}" = "${expected}" ]; then
+      exit 0
     fi
 
-    if [ "${allocated}" != "${expected}" ]; then
-      die "--build is ${expected}, but this commit owns ${allocated}. The
-allocator is idempotent per commit, so ${allocated} is what CI will build and
-what every artifact will be named after."
+    # **Three ways to be wrong, and they need different answers.** The first
+    # version of this said "run `buildnumber generate`" for everything that
+    # was not a match, which is actively harmful in the middle case: there the
+    # number is right and HEAD has moved, and generating would claim a second
+    # number for a commit nobody is releasing.
+    #
+    # Which commit `{build}` belongs to is answered the way cux_train answers
+    # it — the `uploaded/v*+{build}` tag, written by whichever upload got
+    # there first. That is a published ref rather than the allocator's own
+    # storage, and it is the same lookup `finish` does to decide what to tag.
+    tag=$(git -C "${root}" tag -l "uploaded/v*+${expected}" | head -1)
+
+    if [ -n "${tag}" ]; then
+      built_at=$(git -C "${root}" rev-list -n 1 "${tag}")
+      die "--build ${expected} is not this commit's.
+  built from  $(git -C "${root}" log -1 --format='%h  %s' "${built_at}")
+  HEAD is     $(git -C "${root}" log -1 --format='%h  %s' HEAD)
+\`internal\` dispatches HEAD, so this run would set CI building a commit that
+is not the one ${expected} names, and a step taken on this laptop — the
+notarized macOS zip above all — would be built from the wrong tree. To carry
+on with that build, check it out:
+  git checkout ${built_at}
+Or, to release this commit, claim its own number:
+  authpass/_tools/ship.sh buildnumber generate"
     fi
+
+    if [ -z "${allocated}" ]; then
+      die "HEAD owns no build number, and nothing has been uploaded for
+${expected} either, so there is no commit this number belongs to. If you are
+releasing this commit, claim the number CI will agree on with
+\`authpass/_tools/ship.sh buildnumber generate\` and pass that as --build."
+    fi
+
+    die "--build is ${expected}, but this commit owns ${allocated}, and
+nothing has been uploaded for ${expected}. The allocator is idempotent per
+commit, so ${allocated} is what CI will build and what every artifact will be
+named after."
     ;;
 
   release-version)
@@ -113,7 +154,7 @@ would track ${want} while the artifacts said ${declared%%+*}."
     # today it reports 23 problems, all but two of them in sections from 1.2.0
     # to 1.9.10 that will never be published again, so as a gate it would
     # refuse every release for history. The check worth having at release time
-    # is only about the release at hand, and it is four lines.
+    # is only about the release at hand, and it is four awk rules.
     want="${1:?usage: train-gate.sh changelog-section <version>}"
 
     # The root CHANGELOG.md is a symlink to authpass/CHANGELOG.md; this is the
@@ -152,14 +193,30 @@ release."
       die "CHANGELOG.md's \`## ${want}\` section has no entries, so every
 store would be handed empty release notes."
     fi
+
+    # The gate passes on a count it recognises, not on having failed to rule
+    # one out: an awk that said nothing at all is neither `-1` nor `0`.
+    case "${entries}" in
+      '' | *[!0-9]*) die "CHANGELOG.md's \`## ${want}\` entries could not be
+counted — awk answered \`${entries}\`. Nothing was checked." ;;
+    esac
     ;;
 
   fdroid-changelog)
     # **The gap this gate exists for.** F-Droid takes its release notes from a
     # file named after the versionCode, and the newest one in the tree is
     # 160.txt — written for 1.9.5 in June 2022, while the pubspec has since
-    # reached 167. Nothing read those files, so nothing said so, and F-Droid
-    # users have had no notes for seven releases.
+    # reached 167. Nothing read those files, so nothing said so: 1.9.6 through
+    # 1.9.13 went out with no notes, eight versions over the seven
+    # versionCodes 161 to 167.
+    #
+    # **Eight over seven, which is also this check's known hole.** 1.9.9 and
+    # 1.9.10 both shipped as `+164`, because the version was bumped and the
+    # build number was not. Existence is all this asks, so a release that
+    # repeats its predecessor's versionCode passes on its predecessor's file.
+    # Closing it means asserting the file is about this release — its first
+    # line is `# <version> - <date>` by convention — and that is worth doing
+    # when there is a release in flight to try it against.
     #
     # At `internal` rather than at `production`, because the `fdroid` row's
     # own note says the changelog is copied into metadata/android *before the
@@ -180,9 +237,10 @@ store would be handed empty release notes."
       # only ever reaches an error message, so an unmatched glob is harmless.
       newest=$(printf '%s\n' "${root}/${changelogs}"/*.txt \
         | sed -e 's|.*/||' -e 's|\.txt$||' | sort -n | tail -1)
-      die "${file} is missing or empty. F-Droid names its release notes after
-the versionCode, which is the pubspec's +${code} and not the train's build
-number. Write that file — the newest one in the tree is ${newest}."
+      die "${file} is missing or empty.
+F-Droid names its release notes after the versionCode, which is the pubspec's
++${code} and not the train's build number. Write that file — the newest one in
+the tree is ${newest}."
     fi
     ;;
 
