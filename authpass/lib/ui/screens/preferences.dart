@@ -216,9 +216,12 @@ class _PreferencesBodyState extends State<PreferencesBody>
                   },
                 ),
               ]),
-        ...?!AuthPassPlatform.isAndroid
-            ? null
-            : [
+        // iOS cannot stop a screenshot the user takes, only the one the system
+        // takes for the app switcher. The setting is shared all the same —
+        // what it means to the user is "do not show my passwords to anything
+        // that photographs the screen".
+        ...?AuthPassPlatform.isAndroid || AuthPassPlatform.isIOS
+            ? [
                 SwitchListTile(
                   secondary: const Icon(Icons.camera_alt),
                   title: Text(loc.preferenceAllowScreenshots),
@@ -233,7 +236,8 @@ class _PreferencesBodyState extends State<PreferencesBody>
                     );
                   },
                 ),
-              ],
+              ]
+            : null,
         ListTile(
           leading: const FaIcon(
             FontAwesomeIcons.lightbulb,
