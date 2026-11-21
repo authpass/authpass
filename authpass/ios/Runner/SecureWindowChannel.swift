@@ -10,17 +10,24 @@ import UIKit
 ///
 /// iOS has no equivalent of Android's `FLAG_SECURE`, so the only thing that
 /// works is to put an opaque view over the window before the capture happens
-/// and take it away afterwards. `willResignActive` is the last callback that
-/// runs before the capture, which is why the cover goes up there and not in
-/// `didEnterBackground`.
+/// and take it away afterwards. The capture is taken after
+/// `applicationDidEnterBackground` returns — that is what the few seconds
+/// granted there are for — so covering the window on that notification is
+/// early enough.
+///
+/// Not `willResignActive`, although it comes earlier: it fires whenever the
+/// app merely stops being frontmost, so the cover would also appear over the
+/// biometric prompt, the document picker and the share sheet, and the user
+/// would be looking at the launch screen if they dismissed one of those.
 ///
 /// The observers are registered with `queue: nil` on purpose: that delivers
-/// the notification synchronously, while the app is still resigning active.
-/// Handing it to `OperationQueue.main` would schedule the block for the next
-/// turn of the run loop, which is after the capture.
+/// the notification synchronously, while the app is still entering the
+/// background. Handing it to `OperationQueue.main` would schedule the block
+/// for a later turn of the run loop, which may not come before the app is
+/// suspended.
 ///
 /// This cannot be done from Dart. A widget swapped in on
-/// `AppLifecycleState.inactive` is not guaranteed to be painted before the
+/// `AppLifecycleState.paused` is not guaranteed to be painted before the
 /// capture, and a frame that arrives late arrives after the photograph.
 ///
 /// What it does not do: stop the user taking a screenshot, which iOS offers no
@@ -88,18 +95,18 @@ enum SecureWindowChannel {
     let center = NotificationCenter.default
     // The old spelling of these two on purpose. The Runner target still builds
     // with `SWIFT_VERSION = 4.0` (and `SWIFT_SWIFT3_OBJC_INFERENCE = On`), and
-    // `UIApplication.willResignActiveNotification` arrived in Swift 4.2, so in
-    // this target the compiler rejects it and points back here. Modernising
-    // the names means moving the target off Swift 4 first.
+    // the `UIApplication.didEnterBackgroundNotification` form arrived in Swift
+    // 4.2, so in this target the compiler rejects it and points back at these.
+    // Modernising the names means moving the target off Swift 4 first.
     observers.append(
       center.addObserver(
-        forName: NSNotification.Name.UIApplicationWillResignActive,
+        forName: NSNotification.Name.UIApplicationDidEnterBackground,
         object: nil,
         queue: nil
       ) { _ in showCover() })
     observers.append(
       center.addObserver(
-        forName: NSNotification.Name.UIApplicationDidBecomeActive,
+        forName: NSNotification.Name.UIApplicationWillEnterForeground,
         object: nil,
         queue: nil
       ) { _ in hideCover() })
