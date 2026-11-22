@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <!-- Android 12+ reads this file and ignores android:fullBackupContent for
+    device-to-device transfers, so both sections need the same exclusion of the
+    biometric storage prefs. backup_descriptor.xml still covers Android 11. -->
+    <cloud-backup>
+        <exclude
+            domain="sharedpref"
+            path="." />
+    </cloud-backup>
+    <device-transfer>
+        <exclude
+            domain="sharedpref"
+            path="." />
+    </device-transfer>
+</data-extraction-rules>
